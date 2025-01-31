@@ -49,7 +49,7 @@ public static class SkillIDs
     public const long SadisticSearingActivation = -30;
     public const long BladeBurstOrParticleAccelerator = -31;
     public const long RelicOfFireworksBuffLoss = -32;
-    public const long MarkOfBloodOrChillblains = -33;
+    public const long MarkOfBloodOrChillblainsTrigger = -33;
     public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
     public const long NumberOfRangerPets = -35;
     public const long AchievementEligibilityApathetic = -36;
@@ -128,7 +128,7 @@ public static class SkillIDs
     public const long CrashingWaves = 2654;
     public const long Freeze2 = 3138;
     public const long FiendLeechWvW = 3632;
-    public const long ChargeWvW = 3647;
+    public const long ChargeWarhornWvW = 3647;
     public const long BoneSlash = 3652;
     public const long TwistingFangThiefMinion1 = 3661;
     public const long TwistingFangThiefMinion2 = 3662;
@@ -146,7 +146,7 @@ public static class SkillIDs
     public const long CrushingBlowWvW1 = 3822;
     public const long PulverizeWvW1 = 3823;
     public const long ShieldBashWvW = 3825;
-    public const long BodyShotWvW = 3828;
+    public const long BolaShotWvW = 3828;
     public const long CripplingTalonWvW = 3830;
     public const long MaceSmashWvW2 = 3831;
     public const long CrushingBlowWvW2 = 3832;
@@ -235,7 +235,7 @@ public static class SkillIDs
     public const long ThumperTurretUW = 5890;
     public const long NetTurretDamage = 5896;
     public const long POV_GrenadeKitOpen = 5897;
-    public const long FireTurretDamage = 5903;
+    public const long FlameTurretDamage = 5903;
     public const long ToolKit = 5904;
     public const long RocketTurretCast = 5912;
     public const long RocketTurretDamageUW = 5914;
@@ -735,7 +735,7 @@ public static class SkillIDs
     public const long IllusionaryRiposteHit = 10281;
     public const long IllusionaryUnload = 10284;
     public const long Diversion = 10287;
-    public const long SpatialSurge = 10294;
+    public const long SpatialSurgeAdditional = 10294;
     public const long EtherBolt = 10295;
     public const long WindsOfChaosStaffClone = 10296;
     public const long MindSlashSwordClone = 10297;
@@ -3416,7 +3416,7 @@ public static class SkillIDs
     public const long ExitHarbingerShroud = 62540;
     public const long RainOfSwords = 62553;
     public const long CutterBurst = 62554;
-    public const long DoomApproaches = 62558;
+    public const long ApproachingDoom = 62558;
     public const long VitalDraw = 62563;
     public const long EnterHarbingerShroud = 62567;
     public const long VirtuosoBlade2 = 62583;
@@ -4461,7 +4461,7 @@ public static class SkillIDs
     public const long ImaginedImpairment = 73069;
     public const long EnergizeBuff = 73071;
     public const long GalvanizeBuff = 73073;
-    public const long AbyssalRaze2 = 73077;
+    public const long AbyssalRazeUnleash = 73077;
     public const long BlazingBarrage = 73080;
     public const long BarbedSpearRanged = 73082;
     public const long CheetahsStrike = 73087;

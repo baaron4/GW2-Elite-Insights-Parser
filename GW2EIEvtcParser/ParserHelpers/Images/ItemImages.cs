@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParserHelpers;
+﻿using static System.Net.WebRequestMethods;
+
+namespace GW2EIEvtcParser.ParserHelpers;
 
 #pragma warning disable CA1823 // Unused field
 internal static class ItemImages
@@ -6,6 +8,8 @@ internal static class ItemImages
 
     public const string NourishmentFood = "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
     public const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
+    // From runes and sigils
+    public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
 
     #region Sigil
     public const string SuperiorSigilOfAir = "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png";
@@ -48,6 +52,12 @@ internal static class ItemImages
     public const string MajorSigilOfDoom = "https://wiki.guildwars2.com/images/7/78/Major_Sigil_of_Doom.png";
     public const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
     public const string SuperiorSigilOfVision = "https://wiki.guildwars2.com/images/4/4f/Superior_Sigil_of_Vision.png";
+    public const string MinorSigilOfBlood = "https://wiki.guildwars2.com/images/d/d4/Minor_Sigil_of_Blood.png";
+    public const string MajorSigilOfBlood = "https://wiki.guildwars2.com/images/9/9b/Major_Sigil_of_Blood.png";
+    public const string SuperiorSigilOfBlood = "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Blood.png";
+    public const string MajorSigilOfLeeching = "https://wiki.guildwars2.com/images/3/3f/Major_Sigil_of_Leeching.png";
+    public const string SuperiorSigilOfLeeching = "https://wiki.guildwars2.com/images/0/05/Superior_Sigil_of_Leeching.png";
+    public const string SuperiorSigilOfMischief = "https://wiki.guildwars2.com/images/b/b7/Superior_Sigil_of_Mischief.png";
     #endregion Sigil
     #region Rune
     public const string SuperiorRuneOfTheRanger = "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png";
@@ -68,13 +78,19 @@ internal static class ItemImages
     public const string SuperiorRuneOfTheStars = "https://wiki.guildwars2.com/images/8/86/Superior_Rune_of_the_Stars.png";
     public const string SuperiorRuneOfMercy = "https://wiki.guildwars2.com/images/2/23/Superior_Rune_of_Mercy.png";
     public const string SuperiorRuneOfPerplexity = "https://wiki.guildwars2.com/images/1/1e/Superior_Rune_of_Perplexity.png";
-    public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
+    public const string SuperiorRuneOfTormenting = "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png";
+    public const string SuperiorRuneOfTheNightmare = "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png";
+    public const string SuperiorRuneOfTheDolyak = "https://wiki.guildwars2.com/images/2/28/Superior_Rune_of_the_Dolyak.png";
+    public const string SuperiorRuneOfTheMadKing = "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png";
+    public const string SuperiorRuneOfTheCitadel = "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png";
+    public const string SuperiorRuneOfGrenth = "https://wiki.guildwars2.com/images/6/6e/Superior_Rune_of_Grenth.png";
     #endregion Rune
     #region Relic
     public const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
     public const string RelicOfTheAristocracy = "https://wiki.guildwars2.com/images/6/60/Relic_of_the_Aristocracy.png";
     public const string RelicOfTheMonk = "https://wiki.guildwars2.com/images/c/c9/Relic_of_the_Monk.png";
     public const string RelicOfFireworks = "https://wiki.guildwars2.com/images/6/6c/Relic_of_Fireworks.png";
+    public const string RelicOfFireworksLoss = "https://i.imgur.com/o9suJSt.png";
     public const string RelicOfTheThief = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Thief.png";
     public const string RelicOfTheBrawler = "https://wiki.guildwars2.com/images/3/30/Relic_of_the_Brawler.png";
     public const string RelicOfTheDaredevil = "https://wiki.guildwars2.com/images/9/9f/Relic_of_the_Daredevil.png";
@@ -98,7 +114,24 @@ internal static class ItemImages
     public const string RelicOfTheSorrow = "https://wiki.guildwars2.com/images/4/4b/Relic_of_Sorrow.png";
     public const string RelicOfTheBlightbringer = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
     public const string RelicOfTheClaw = "https://wiki.guildwars2.com/images/7/7f/Relic_of_the_Claw.png";
+    public const string RelicOfTheClawLoss = "https://i.imgur.com/x6AU9B4.png";
     public const string RelicOfMountBalrior = "https://wiki.guildwars2.com/images/a/a9/Relic_of_Mount_Balrior.png";
+    public const string RelicOfTheAfflicted = "https://wiki.guildwars2.com/images/9/91/Relic_of_the_Afflicted.png";
+    public const string RelicOfTheCitadel = "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Citadel.png";
+    public const string RelicOfMercy = "https://wiki.guildwars2.com/images/e/ed/Relic_of_Mercy.png";
+    public const string RelicOfTheFlock = "https://wiki.guildwars2.com/images/1/1b/Relic_of_the_Flock.png";
+    public const string RelicOfTheIce = "https://wiki.guildwars2.com/images/5/55/Relic_of_the_Ice.png";
+    public const string RelicOfTheKrait = "https://wiki.guildwars2.com/images/7/7e/Relic_of_the_Krait.png";
+    public const string RelicOfTheNightmare = "https://wiki.guildwars2.com/images/5/51/Relic_of_the_Nightmare.png";
+    public const string RelicOfTheSunless = "https://wiki.guildwars2.com/images/b/b6/Relic_of_the_Sunless.png";
+    public const string RelicOfAkeem = "https://wiki.guildwars2.com/images/5/50/Relic_of_Akeem.png";
+    public const string RelicOfTheWizardsTower  = "https://wiki.guildwars2.com/images/e/ea/Relic_of_the_Wizard%27s_Tower.png";
+    public const string RelicOfTheMirage = "https://wiki.guildwars2.com/images/d/d3/Relic_of_the_Mirage.png";
+    public const string RelicOfKarakosa = "https://wiki.guildwars2.com/images/6/6e/Relic_of_Karakosa.png";
+    public const string RelicOfNayos = "https://wiki.guildwars2.com/images/e/e4/Relic_of_Nayos.png";
+    public const string RelicOfTheFounding = "https://wiki.guildwars2.com/images/8/81/Relic_of_the_Founding.png";
+    public const string RelicOfTheTwinGenerals = "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png";
+    public const string RelicOfTheBeehive = "https://wiki.guildwars2.com/images/4/49/Relic_of_the_Beehive.png";
     #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";
