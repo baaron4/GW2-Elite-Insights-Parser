@@ -593,6 +593,16 @@ internal class Deimos : BastionOfThePenitent
                 break;
             case (int)ArcDPSEnums.TrashID.DemonicBond:
                 replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
+                var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                if (attackTargetEvent != null)
+                {
+                    var attackTarget = attackTargetEvent.AttackTarget;
+                    var lastTargetableState = log.CombatData.GetTargetableEvents(attackTarget).LastOrDefault();
+                    if (lastTargetableState != null && !lastTargetableState.Targetable)
+                    {
+                        replay.Trim(replay.TimeOffsets.start, lastTargetableState.Time);
+                    }
+                } 
                 var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
                 replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                 SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
@@ -676,6 +686,11 @@ internal class Deimos : BastionOfThePenitent
         }
         else
         {
+            SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
+            if (shackledPrisoner != null)
+            {
+                shackledPrisoner.AgentItem.OverrideAwareTimes(shackledPrisoner.FirstAware, _deimos100PercentTime);
+            }
             target.SetManualHealth(37388210, new List<(long hpValue, double percent)>()
                 {
                     (35981456 , 100),
