@@ -125,6 +125,7 @@ internal static class SkillImages
     public const string Harden = "https://wiki.guildwars2.com/images/0/02/Harden.png";
     public const string Fulgor = "https://wiki.guildwars2.com/images/5/53/Fulgor.png";
     public const string FirestormGlyphOfStormsOrFieryGreatsword = "https://i.imgur.com/6BTB3XT.png";
+    public const string RingOfFire = "https://render.guildwars2.com/file/CD08FDC23B56EBB19C90B909C65D9EE4D9FFF8C8/103183.png";
     #endregion Elementalist
     #region Engineer
     public const string ShredderGyro = "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png";
@@ -175,6 +176,7 @@ internal static class SkillImages
     public const string FunctionGyro = "https://render.guildwars2.com/file/42BCB9C83B05D048C0E0BA1804F13D6FAC180DCD/2175057.png";
     public const string DetonateMineField = "https://render.guildwars2.com/file/D97BF56EBB6D074BFEFC11E103D6D1F2360C6A17/102902.png";
     public const string CrashDown = "https://render.guildwars2.com/file/9156D3FECB94F8B27909B3EA904DAAE3C21043F9/2503677.png";
+    public const string ThumperTurret = "https://render.guildwars2.com/file/EA2452FCE71C0F0B9755517324A47680BF45E79E/103201.png";
     #endregion Engineer
     #region Guardian
     public const string SpearOfLight = "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png";
@@ -620,7 +622,63 @@ internal static class SkillImages
     public const string SpearmarshalsSupport = "https://render.guildwars2.com/file/43132DEC934F072272F14B19FC03FB62111502FB/3379203.png";
     #endregion Warrior
     #region WvW
+    public const string TurnLeft = "https://wiki.guildwars2.com/images/4/4c/Turn_Left.png";
+    public const string TurnRight = "https://wiki.guildwars2.com/images/4/4c/Turn_Right.png";
+    public const string DeploySiege = "https://wiki.guildwars2.com/images/b/bb/Deploy_Siege.png";
+    public const string DeployFlameRam_InfiniteSiegeTool = "https://wiki.guildwars2.com/images/3/36/Deploy_Flame_Ram_%28Infinite_Siege_Tool%29.png";
+    public const string DeployCatapult_InfiniteSiegeTool = "https://assets.gw2dat.com/3568389.png";
+    public const string DeploySiegeSuit_InfiniteSiegeTool = "https://wiki.guildwars2.com/images/1/10/Deploy_Siege_Suit_%28Infinite_Siege_Tool%29.png";
+    public const string DeployTrebuchet_InfiniteSiegeTool = "https://assets.gw2dat.com/3568392.png";
+    public const string DeployShieldGenerator_InfiniteSiegeTool = "https://assets.gw2dat.com/3568391.png";
+    public const string DeployArrowCart_InfiniteSiegeTool = "https://wiki.guildwars2.com/images/4/42/Deploy_Arrow_Cart_%28Infinite_Siege_Tool%29.png";
+    public const string DeployBallista_InfiniteSiegeTool = "https://wiki.guildwars2.com/images/e/e9/Deploy_Ballista_%28Infinite_Siege_Tool%29.png";
+    public const string PourOil = "https://wiki.guildwars2.com/images/6/6d/Pour_Oil.png";
+    public const string PourTar = "https://wiki.guildwars2.com/images/1/1a/Pour_Tar.png";
+    public const string FireCannon = "https://wiki.guildwars2.com/images/5/5e/Fire_%28Cannon%29.png";
+    public const string FireGrapeshot = "https://wiki.guildwars2.com/images/4/46/Fire_Grapeshot.png";
+    public const string IceShot = "https://wiki.guildwars2.com/images/9/9f/Ice_Shot.png";
+    public const string FireIncendiaryShells = "https://wiki.guildwars2.com/images/e/e0/Fire_Incendiary_Shells.png";
+    public const string FireExplodingShells = "https://wiki.guildwars2.com/images/2/2a/Fire_Exploding_Shells.png";
+    public const string FireArrowCart = "https://wiki.guildwars2.com/images/b/be/Fire_%28Arrow_Cart%29.png";
+    public const string FireCripplingArrows = "https://wiki.guildwars2.com/images/6/63/Fire_Crippling_Arrows.png";
+    public const string FireBarbedArrows = "https://wiki.guildwars2.com/images/f/f2/Fire_Barbed_Arrows.png";
+    public const string ToxicUnveilingVolley = "https://wiki.guildwars2.com/images/a/a4/Toxic_Unveiling_Volley.png";
+    public const string FireBallista = "https://wiki.guildwars2.com/images/8/8f/Fire_%28Ballista%29.png";
+    public const string FireShatteringBolt = "https://wiki.guildwars2.com/images/6/6b/Fire_Shattering_Bolt.png";
+    public const string FireReinforcedShot = "https://wiki.guildwars2.com/images/8/89/Fire_Reinforced_Shot.png";
+    public const string AntiairBolt = "https://wiki.guildwars2.com/images/5/50/Antiair_Bolt.png";
+    public const string FireBoulder = "https://wiki.guildwars2.com/images/4/4d/Fire_Boulder.png";
+    public const string FireGravel = "https://wiki.guildwars2.com/images/d/dd/Fire_Gravel.png";
+    public const string SiegeBubble = "https://wiki.guildwars2.com/images/4/4d/Siege_Bubble.png";
+    public const string ImpactSlam = "https://wiki.guildwars2.com/images/1/1f/Impact_Slam.png";
+    public const string PunchSiegeGolem = "https://wiki.guildwars2.com/images/8/8f/Punch.png";
+    public const string RocketPunchSiegeGolem = "https://wiki.guildwars2.com/images/6/6b/Rocket_Punch.png";
+    public const string WhirlingAssaultSiegeGolem = "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png";
+    public const string WhirlingInforno = "https://wiki.guildwars2.com/images/1/1b/Whirling_Inferno.png";
+    public const string ShieldBubble = "https://wiki.guildwars2.com/images/e/e3/Shield_Bubble.png";
+    public const string PullSiegeGolem = "https://wiki.guildwars2.com/images/4/41/Pull_%28Siege_Golem%29.png";
+    public const string RocketSalvo = "https://wiki.guildwars2.com/images/8/80/Rocket_Salvo.png";
+    public const string Eject = "https://wiki.guildwars2.com/images/b/ba/Eject.png";
+    public const string ForceBall = "https://wiki.guildwars2.com/images/f/f9/Force_Ball.png";
+    public const string ForceWall = "https://wiki.guildwars2.com/images/3/36/Force_Wall.png";
     public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";
+    public const string FireRottingCow = "https://wiki.guildwars2.com/images/0/00/Fire_Rotting_Cow.png";
+    public const string FireHealingOasis = "https://wiki.guildwars2.com/images/4/49/Healing_Oasis.png";
+    public const string DragonsMight = "https://wiki.guildwars2.com/images/9/9b/Dragon%27s_Might.png";
+    public const string DragonTalon = "https://wiki.guildwars2.com/images/e/e9/Dragon_Talon.png";
+    public const string DragonBlast = "https://wiki.guildwars2.com/images/3/3e/Dragon_Blast.png";
+    public const string DragonsWings = "https://wiki.guildwars2.com/images/4/45/Dragon%27s_Wings.png";
+    public const string DragonsBreath = "https://wiki.guildwars2.com/images/2/29/Dragon%27s_Breath_%28skill%29.png";
+    public const string ShellShock = "https://wiki.guildwars2.com/images/2/2f/Shell_Shock_%28skill%29.png";
+    public const string Shellter = "https://wiki.guildwars2.com/images/a/a4/Shell-ter.png";
+    public const string SavedByTheShell = "https://wiki.guildwars2.com/images/f/fc/Saved_by_the_Shell.png";
+    public const string ShellWall = "https://wiki.guildwars2.com/images/f/f5/Shell_Wall.png";
+    public const string BombShell = "https://wiki.guildwars2.com/images/b/b0/Bomb_Shell.png";
+    public const string SpiritCentaur = "https://wiki.guildwars2.com/images/9/95/Spirit_Centaur.png";
+    public const string StampedeOfArrows = "https://wiki.guildwars2.com/images/f/f8/Stampede_of_Arrows.png";
+    public const string CentaurDash = "https://wiki.guildwars2.com/images/6/6b/Centaur_Dash.png";
+    public const string SpikeBarricade = "https://wiki.guildwars2.com/images/3/3f/Spike_Barricade.png";
+    public const string OutrunACentaur = "https://wiki.guildwars2.com/images/7/7d/Outrun_a_Centaur.png";
     #endregion WvW
     #region Mount
     public const string BondOfLife = "https://wiki.guildwars2.com/images/2/23/Bond_of_Life.png";
