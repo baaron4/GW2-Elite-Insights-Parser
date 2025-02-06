@@ -1,16 +1,17 @@
 /*jshint esversion: 6 */
 "use strict";
 function compileTemplates() {
+    const plotlyConfig = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d'],
+        showEditInChartStudio: true,
+        plotlyServerURL: "https://chart-studio.plotly.com"
+    };
     Vue.component("graph-component", {
         props: ['id', 'layout', 'data'],
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         activated: function () {
             var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout, {
-                modeBarButtonsToRemove: ['select2d', 'lasso2d'],
-                showEditInChartStudio: true,
-                plotlyServerURL: "https://chart-studio.plotly.com"
-            });
+            Plotly.react(div, this.data, this.layout, plotlyConfig);
             var _this = this;
             div.on('plotly_animated', function () {
                 Plotly.relayout(div, _this.layout);
@@ -49,7 +50,7 @@ function compileTemplates() {
                     if (!div) {
                         return;
                     }
-                    Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
+                    Plotly.react(div, this.data, this.layout, plotlyConfig);
                 },
                 deep: true
             }
