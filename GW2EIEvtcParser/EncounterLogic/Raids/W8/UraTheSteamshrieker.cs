@@ -48,8 +48,9 @@ internal class UraTheSteamshrieker : MountBalrior
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
         return new CombatReplayMap(CombatReplayUratheSteamshrieker,
-                        (1833, 1824),
-                        (2900, 6600, 8355, 12028));
+                        (1746, 1860),
+(2550, 6200, 9010, 13082)
+                        );
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
