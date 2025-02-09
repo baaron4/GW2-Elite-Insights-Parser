@@ -49,8 +49,7 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         return new CombatReplayMap(CombatReplayUratheSteamshrieker,
                         (1746, 1860),
-(2550, 6200, 9010, 13082)
-                        );
+                        (2550, 6200, 9010, 13082));
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
