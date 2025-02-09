@@ -101,20 +101,20 @@ internal static class TraitImages
     public const string SelflessDaring = "https://render.guildwars2.com/file/32BAB20860259FF3E8214E784E6BE7521213089C/1012412.png";
     #endregion
     #region Mesmer
-    public const string PsychicRiposte = "https://wiki.guildwars2.com/images/1/16/Psychic_Riposte.png";
-    public const string DangerTime = "https://wiki.guildwars2.com/images/f/fc/Danger_Time.png";
-    public const string ImprovedAlacrity = "https://wiki.guildwars2.com/images/e/e9/Improved_Alacrity.png";
-    public const string ConfoundingSuggestions = "https://wiki.guildwars2.com/images/f/f6/Confounding_Suggestions.png";
-    public const string TemporalEnchanter = "https://wiki.guildwars2.com/images/7/78/Temporal_Enchanter.png";
-    public const string Fragility = "https://wiki.guildwars2.com/images/3/33/Fragility.png";
-    public const string CompoundingPower = "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png";
-    public const string IllusionaryMembrane = "https://wiki.guildwars2.com/images/b/bf/Illusionary_Membrane.png";
-    public const string MirageMantle = "https://wiki.guildwars2.com/images/2/22/Mirage_Mantle.png";
-    public const string MentalFocus = "https://wiki.guildwars2.com/images/d/da/Mental_Focus.png";
-    public const string DeadlyBlades = "https://wiki.guildwars2.com/images/1/15/Deadly_Blades.png";
-    public const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
-    public const string Mistrust = "https://wiki.guildwars2.com/images/5/5f/Mistrust.png";
-    public const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+    public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";
+    public const string DangerTime = "https://render.guildwars2.com/file/E0A1FF012E170754030A0CB6DFDBAED3E81FAB5B/1012479.png";
+    public const string ImprovedAlacrity = "https://render.guildwars2.com/file/C9BC67D77E3D959723393BF0EC9B212B53D8362D/1012478.png";
+    public const string ConfoundingSuggestions = "https://render.guildwars2.com/file/E9CB4990C405C00D34DB07C5C5291FD5E90EF90C/1012486.png";
+    public const string TemporalEnchanter = "https://render.guildwars2.com/file/1503DDC5B62526D71901E3A7F891A6F4445D80C8/1012527.png";
+    public const string Fragility = "https://render.guildwars2.com/file/DBA1050B30E4FBB4CEAFDF01217E7E07D4EF6459/1012497.pn";
+    public const string CompoundingPower = "https://render.guildwars2.com/file/E9BA251055B444E693144A9AF5FD1CF8266BEFA6/1012520.png";
+    public const string IllusionaryMembrane = "https://render.guildwars2.com/file/0DF6A27A24B01D069DCD7609ADD305C7C557A82A/1012472.png";
+    public const string MirageMantle = "https://render.guildwars2.com/file/275DBDFD630099D49A76287DDD237709150C1D73/1769955.png";
+    public const string MentalFocus = "https://render.guildwars2.com/file/B32B3E90552D3AE773E403D6D7AA00F50F750580/2479328.png";
+    public const string DeadlyBlades = "https://render.guildwars2.com/file/C4AFBAAA039152A302C15B805CAD980EA9B5D006/2479337.png";
+    public const string FencersFinesse = "https://render.guildwars2.com/file/4DEE67F2B54D37C8ACEC0F235C94D0C140A77E0F/1012503.png";
+    public const string Mistrust = "https://render.guildwars2.com/file/E002FB5DEC3A010F03F2E8A7D5000DF778215F6C/1012505.png";
+    public const string IllusionaryDefense = "https://render.guildwars2.com/file/0E25FD2E32E05D360DB1785818965A4439C1F445/1012463.png";
     public const string HealingPrism = "https://render.guildwars2.com/file/090D289158520416A4402EBE9C92257E1309020D/1012533.png";
     public const string IllusionaryInspiration = HealingPrism;
     public const string RestorativeMantras = "https://render.guildwars2.com/file/2636BEBF0E35923BC4407739D0DC7DC223932F0C/1012523.png";
