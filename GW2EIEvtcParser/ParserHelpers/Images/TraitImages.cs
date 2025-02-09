@@ -5,36 +5,35 @@ internal static class TraitImages
 {
     // TODO: organize this
     #region Elementalist
-    public const string EarthenBlast = "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png";
-    public const string ElectricDischarge = "https://wiki.guildwars2.com/images/a/a4/Electric_Discharge.png";
-    public const string PersistingFlames = "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png";
-    public const string StoneFlesh = "https://wiki.guildwars2.com/images/b/b9/Stone_Flesh.png";
-    public const string PyromancersTraining = "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png";
-    public const string BoltToTheHeart = "https://wiki.guildwars2.com/images/f/f8/Bolt_to_the_Heart.png";
-    public const string SerratedStones = "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png";
-    public const string EmpoweringAuras = "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png";
-    public const string AquamancersTraining = "https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png";
-    public const string HardyConduit = "https://wiki.guildwars2.com/images/2/25/Hardy_Conduit.png";
-    public const string BurningRage = "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png";
-    public const string ElementalEmpowerment = "https://wiki.guildwars2.com/images/e/e6/Elemental_Empowerment.png";
-    public const string TranscendentTempest = "https://wiki.guildwars2.com/images/a/ac/Transcendent_Tempest_%28effect%29.png";
-    public const string WeaversProwess = "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png";
-    public const string ElementsOfRage = "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png";
-    public const string SwiftRevenge = "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png";
-    public const string HarmoniousConduit = "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png";
-    public const string HealingRipple = "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png";
-    public const string ElementalRefreshment = "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png";
-    public const string HardenedAuras = "https://wiki.guildwars2.com/images/2/23/Hardened_Auras.png";
-    public const string PiercingShards = "https://wiki.guildwars2.com/images/4/4b/Piercing_Shards.png";
-    public const string TempestuousAria = "https://wiki.guildwars2.com/images/2/28/Tempestuous_Aria.png";
-    public const string FreshAir = "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png";
-    public const string SoothingMist = "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png";
-    public const string StoneHeart = "https://wiki.guildwars2.com/images/6/60/Stone_Heart.png";
-    public const string FlowLikeWater = "https://wiki.guildwars2.com/images/0/0a/Flow_like_Water.png";
-    public const string GeomancersTraining = "https://wiki.guildwars2.com/images/b/b6/Geomancer%27s_Training.png";
-    public const string BountifulPower = "https://wiki.guildwars2.com/images/7/75/Bountiful_Power.png";
-    public const string OverShield = "https://wiki.guildwars2.com/images/a/a1/Over_Shield.png";
-    public const string Stormsoul = "https://wiki.guildwars2.com/images/e/e1/Stormsoul.png";
+    public const string EarthenBlast = "https://render.guildwars2.com/file/2531DCAFAEAB452C90C4572E1ADCE8236DCF5636/1012304.pn";
+    public const string ElectricDischarge = "https://render.guildwars2.com/file/F4622EE8300028599369D4084EA7A2774D250DEA/1012280.png";
+    public const string PersistingFlames = "https://render.guildwars2.com/file/38496307B7C27BCB08D6800F2A699B4998DD1935/1012312.png";
+    public const string StoneFlesh = "https://render.guildwars2.com/file/9FACD0F31DF1DF1957C59DA67ED9F76ACB55BEB8/1012303.png";
+    public const string PyromancersTraining = "https://render.guildwars2.com/file/7C751D2FA513070209F24809D5232757000B1546/2175044.png";
+    public const string BoltToTheHeart = "https://render.guildwars2.com/file/3E4E727D6D23DFEF4205F272A15E2136799DE291/1012276.png";
+    public const string SerratedStones = "https://render.guildwars2.com/file/0A2B6F1BC25AC118B67DC31F9A0BA6427ABB6A6A/1012295.png";
+    public const string EmpoweringAuras = "https://render.guildwars2.com/file/C52EDB20EC120936089EC83C54A55A610A075652/2491522.png";
+    public const string AquamancersTraining = "https://render.guildwars2.com/file/C9059194A7A8CFE90D5A7E9831C6E7CACF060A42/2175047.png";
+    public const string HardyConduit = "https://render.guildwars2.com/file/F61B0203A07CDF17A3613731EE93F6C09410E825/1029953.png";
+    public const string BurningRage = "https://render.guildwars2.com/file/AB4E6CB3066DFF2D3C179B026C9BC371799E5D67/2175045.png";
+    public const string ElementalEmpowerment = "https://render.guildwars2.com/file/C3B3C99943ECABFAA936573030C599EE2A974420/2491529.png";
+    public const string TranscendentTempest = "https://render.guildwars2.com/file/0C79A761B446E53CAB6DA4B320D12D656B5E1151/2207773.png";
+    public const string WeaversProwess = "https://render.guildwars2.com/file/78DA4AC17D4EBDA04BBBD325A024C346F59ED150/1769918.png";
+    public const string ElementsOfRage = "https://render.guildwars2.com/file/4269910A34FB0FB861DAE2A13229D594523B0BA0/1769921.png";
+    public const string SwiftRevenge = "https://render.guildwars2.com/file/7B0B0072429031F44DC41404F9BA0D08A5B2EDE2/1769919.png";
+    public const string HarmoniousConduit = "https://render.guildwars2.com/file/DC03410B07E666C9F8AECFEDCE9855C65136E597/1029948.png";
+    public const string HealingRipple = "https://render.guildwars2.com/file/0FB92AC29456276B2FC6E25EFB91DECD93C6694B/1012328.png";
+    public const string ElementalRefreshment = "https://render.guildwars2.com/file/32D4A99DECA90337DC0722ACF84C38B44A93429C/1769925.png";
+    public const string HardenedAuras = "https://render.guildwars2.com/file/07F6DDB8129A05F6DF05E6669CE00C29FF260F80/2491519.png";
+    public const string PiercingShards = "https://render.guildwars2.com/file/7C3004BABE373BC125F6A3195D0C343BC0E702D1/1012319.png";
+    public const string TempestuousAria = "https://render.guildwars2.com/file/0C2A72B848A7FBB596DE6096B4C45814D3266EEB/1029946.png";
+    public const string FreshAir = "https://render.guildwars2.com/file/FA64C9F2750F986E52E8376F22EDBA3844A8C603/1012277.png";
+    public const string SoothingMist = "https://render.guildwars2.com/file/09D12A6041622A94409F276CEEEB2C17AF35A8ED/1012327.png";
+    public const string StoneHeart = "https://render.guildwars2.com/file/22F1BDACFBEBC8FF2BF77B22B3E535D2BA03D140/1012302.png";
+    public const string FlowLikeWater = "https://render.guildwars2.com/file/B60C26726A979893D897B3F2B118CF6913AF554F/2175046.png";
+    public const string GeomancersTraining = "https://render.guildwars2.com/file/3659F1C53B0CF50106ADBC4E6351011A24F59CBA/2175043.png";
+    public const string BountifulPower = "https://render.guildwars2.com/file/F0C7F54A6FC70D079E1628FFE871980CAEBFD70D/1012290.png";
+    public const string Stormsoul = "https://render.guildwars2.com/file/4505D3D02606283B02124C3304697304E663ECAE/1012275.png";
     #endregion
     #region Engineer
     public const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
@@ -70,6 +69,7 @@ internal static class TraitImages
     public const string MedicalDispersionField = "https://render.guildwars2.com/file/4B4FA8FEC9F830DC75F8D1532AE6490B09326D98/1012374.png";
     public const string ImpactSavant = "https://render.guildwars2.com/file/FD7AF757E6B02C7BC55101B0CFDCDAC87E5DBADD/1128528.png";
     public const string SystemShocker = "https://render.guildwars2.com/file/D218686E042F19144D99A11F7205FB4763D053EF/2175050.png";
+    public const string OverShield = "https://render.guildwars2.com/file/F90CB6E3E23B6ECB761C062D92507799694CF4D2/1012366.png";
     #endregion
     #region Guardian
     public const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
