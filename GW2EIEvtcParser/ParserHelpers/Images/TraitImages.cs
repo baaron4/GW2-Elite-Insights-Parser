@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParserHelpers;
+﻿using static System.Net.WebRequestMethods;
+
+namespace GW2EIEvtcParser.ParserHelpers;
 
 #pragma warning disable CA1823 // Unused field
 internal static class TraitImages
@@ -71,29 +73,29 @@ internal static class TraitImages
     public const string OverShield = "https://render.guildwars2.com/file/F90CB6E3E23B6ECB761C062D92507799694CF4D2/1012366.png";
     #endregion
     #region Guardian
-    public const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
-    public const string FieryWrath = "https://wiki.guildwars2.com/images/7/70/Fiery_Wrath.png";
-    public const string SymbolicExposure = "https://wiki.guildwars2.com/images/c/cd/Symbolic_Exposure.png";
-    public const string SymbolicAvenger = "https://wiki.guildwars2.com/images/e/e5/Symbolic_Avenger.png";
-    public const string RetributionTrait = "https://wiki.guildwars2.com/images/d/d7/Retribution_%28trait%29.png";
-    public const string UnscathedContender = "https://wiki.guildwars2.com/images/b/b4/Unscathed_Contender.png";
-    public const string PowerOfTheVirtuous = "https://wiki.guildwars2.com/images/e/ee/Power_of_the_Virtuous.png";
-    public const string InspiredVirtue = "https://wiki.guildwars2.com/images/c/c7/Inspired_Virtue.png";
-    public const string VirtuousSolace = "https://wiki.guildwars2.com/images/8/8f/Virtuous_Solace.png";
-    public const string StrengthInNumbers = "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png";
-    public const string InvigoratedBulwark = "https://wiki.guildwars2.com/images/0/00/Invigorated_Bulwark.png";
-    public const string BattlePresence = "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
-    public const string ForceOfWill = "https://wiki.guildwars2.com/images/d/d2/Force_of_Will.png";
-    public const string ZealotsAggression = "https://wiki.guildwars2.com/images/7/7e/Zealot%27s_Aggression.png";
-    public const string BigGameHunter = "https://wiki.guildwars2.com/images/7/76/Big_Game_Hunter.png";
-    public const string HeavyLight = "https://wiki.guildwars2.com/images/a/a3/Heavy_Light.png";
-    public const string Quickfire = "https://wiki.guildwars2.com/images/d/d6/Quickfire.png";
+    public const string HuntersFortification = "https://render.guildwars2.com/file/2F147CBEA990E470AF0F0D20F652040E67962AB9/1012396.png";
+    public const string FieryWrath = "https://render.guildwars2.com/file/77AF59F6F43203DC1BBC3EBC66153D484AEF084C/1012451.png";
+    public const string SymbolicExposure = "https://render.guildwars2.com/file/613CC440C79367EA7A6804EFA34ECC5F08EF6BE9/1012460.png";
+    public const string SymbolicAvenger = "https://render.guildwars2.com/file/C1A6EBA29894C831AAEE0D1C47080D12F9BA3AA3/1012458.png";
+    public const string RetributionTrait = "https://render.guildwars2.com/file/324CD720BC3A5F1B6B154BD909165F0DB03CBC0D/1012418.png";
+    public const string UnscathedContender = "https://render.guildwars2.com/file/0FF7C102A0F70E6398712C12A62B427A2B6DC05F/1012438.png";
+    public const string PowerOfTheVirtuous = "https://render.guildwars2.com/file/4BA068C09760BD341196A463B7B1D1E1AC3E6098/1012449.png";
+    public const string InspiredVirtue = "https://render.guildwars2.com/file/6FF2B9A0099D3C75FBE97D36CBCC0470F63DFE06/1012447.png";
+    public const string VirtuousSolace = "https://render.guildwars2.com/file/3EC057E1739EF1F22815605956B46142D2669A6D/1466322.png";
+    public const string StrengthInNumbers = "https://render.guildwars2.com/file/B5C9AAF67FA6305CB414C196EB1503493B5E0D59/1012430.png";
+    public const string InvigoratedBulwark = "https://render.guildwars2.com/file/504B1F9EF89652FD5A00D52DE52A52B7023043E9/1012402.png";
+    public const string BattlePresence = "https://render.guildwars2.com/file/33B6DF1FB0AB7C497E3C5467EA22C8ABFFC83D17/1012445.png";
+    public const string ForceOfWill = "https://render.guildwars2.com/file/AA9EDC9B5B343F27372ADDBA320702D3A19CD7D5/1012410.png";
+    public const string ZealotsAggression = "https://render.guildwars2.com/file/31A6960A7357773373CA55D61FC1A62C532EE621/1012391.png";
+    public const string BigGameHunter = "https://render.guildwars2.com/file/1F0205AD3EB24521C9E8FF69340AC8091B0E556F/1012398.png";
+    public const string HeavyLight = "https://render.guildwars2.com/file/725424411D6131431FF9427BA77DCF3F2C5F7C2F/1012397.png";
+    public const string Quickfire = "https://render.guildwars2.com/file/BC32643101E9CEC1D3B4B9709E4969637C283B7A/1769946.png";
     public const string DormantJustice = "https://wiki.guildwars2.com/images/5/55/Dormant_Justice.png";
     public const string DormantCourage = "https://wiki.guildwars2.com/images/7/71/Dormant_Courage.png";
     public const string DormantResolve = "https://wiki.guildwars2.com/images/d/df/Dormant_Resolve.png";
-    public const string LethalTempo = "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png";
-    public const string TyrantsMomentum = "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png";
-    public const string DeathlessCourage = "https://wiki.guildwars2.com/images/9/92/Deathless_Courage.png";
+    public const string LethalTempo = "https://render.guildwars2.com/file/08351965141B6F3013600B3B9CC7F880DEFF05D4/2479325.png";
+    public const string TyrantsMomentum = "https://render.guildwars2.com/file/B436E75A9DD8EA917C3677AE4964A40DFB1BCE67/2479321.png";
+    public const string DeathlessCourage = "https://render.guildwars2.com/file/6640F790796D719F4F7EB5077900AAFCB6A02DB9/2479322.png";
     public const string GlacialHeart = "https://render.guildwars2.com/file/B6B838104E585313E2FA34481FEDBD9F1B6F07B4/1012443.png";
     public const string ShatteredAegis = "https://render.guildwars2.com/file/5D0BC6DF96B62BF5FBA1B41BEC064BD9D4E421F2/1012457.png";
     public const string SelflessDaring = "https://render.guildwars2.com/file/32BAB20860259FF3E8214E784E6BE7521213089C/1012412.png";
