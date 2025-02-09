@@ -123,7 +123,7 @@ internal static class EncounterImages
     internal const string CombatReplayPeerlessQadim = "https://i.imgur.com/Q5R4R6q.png";
     internal const string CombatReplayGreerTheBlightbringer = "https://i.imgur.com/yH1yulA.png";
     internal const string CombatReplayDecimaTheStormsinger = "https://i.imgur.com/4cJAW7r.png";
-    internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/JSCqbRu.png";
+    internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/Vn1JQ3p.png";
 
     #endregion RAIDS
 
