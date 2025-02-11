@@ -72,14 +72,21 @@ internal static class DragonhunterHelper
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2025BalancePatch),
-        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "20% to disabled foes", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "20% to disabled foes", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.All)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.February2025BalancePatch),
-        new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "15% to defiant non disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
+            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "15% to defiant non disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.PvE)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
