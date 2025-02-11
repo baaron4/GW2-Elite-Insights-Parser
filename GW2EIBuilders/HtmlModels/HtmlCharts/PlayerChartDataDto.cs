@@ -16,27 +16,27 @@ internal class PlayerChartDataDto : ActorChartDataDto
         {
             Total = p.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All),
             Taken = p.Get1SDamageTakenList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All),
-            Targets = new(phase.AllTargets.Count)
+            Targets = new(phase.Targets.Count)
         };
         PowerDamage = new PlayerDamageChartDto<int>()
         {
             Total = p.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power),
             Taken = p.Get1SDamageTakenList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power),
-            Targets = new(phase.AllTargets.Count)
+            Targets = new(phase.Targets.Count)
         };
         ConditionDamage = new PlayerDamageChartDto<int>()
         {
             Total = p.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition),
             Taken = p.Get1SDamageTakenList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition),
-            Targets = new(phase.AllTargets.Count)
+            Targets = new(phase.Targets.Count)
         };
         BreakbarDamage = new PlayerDamageChartDto<double>()
         {
             Total = p.Get1SBreakbarDamageList(log, phase.Start, phase.End, null),
             Taken = p.Get1SBreakbarDamageTakenList(log, phase.Start, phase.End, null),
-            Targets = new (phase.AllTargets.Count)
+            Targets = new (phase.Targets.Count)
         };
-        foreach (SingleActor target in phase.AllTargets)
+        foreach (SingleActor target in phase.Targets.Keys)
         {
             Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.All));
             PowerDamage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power));

@@ -228,7 +228,7 @@ internal class Dhuum : HallOfChains
         foreach (PhaseData phase in phases)
         {
             var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
-            phase.AddSecondaryTargets(enforcers);
+            phase.AddTargets(enforcers, PhaseData.TargetPriority.NonBlocking);
         }
         return phases;
     }

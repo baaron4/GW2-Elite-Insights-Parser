@@ -19,18 +19,34 @@ internal static class JsonPhaseBuilder
             Name = phase.Name
         };
         var targets = new List<int>(phase.Targets.Count);
+        var secondaryTargets = new List<int>(phase.Targets.Count);
+        var targetPriorities = new Dictionary<int, string>();
         jsPhase.BreakbarPhase = phase.BreakbarPhase;
-        foreach (SingleActor tar in phase.Targets)
+        foreach (var pair in phase.Targets)
         {
-            targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
-        }
-        var secondaryTargets = new List<int>(phase.SecondaryTargets.Count);
-        foreach (SingleActor tar in phase.SecondaryTargets)
-        {
-            secondaryTargets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+            var tar = pair.Key;
+            var tarIndex = log.FightData.Logic.Targets.IndexOf(tar);
+            if (pair.Value.IsPrioritary(PhaseData.TargetPriority.Blocking))
+            {
+                targets.Add(tarIndex);
+            } 
+            else
+            {
+                secondaryTargets.Add(tarIndex);
+            }
+
+            string priority = pair.Value.Priority switch
+            {
+                PhaseData.TargetPriority.Blocking => "BLOCKING",
+                PhaseData.TargetPriority.Main => "MAIN",
+                PhaseData.TargetPriority.NonBlocking => "NONBLOCKING",
+                _ => throw new NotImplementedException("Support for given priority not implemented"),
+            };
+            targetPriorities[tarIndex] = priority;
         }
         jsPhase.Targets = targets;
         jsPhase.SecondaryTargets = secondaryTargets;
+        jsPhase.TargetPriorities = targetPriorities;
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         if (!jsPhase.BreakbarPhase)
         {

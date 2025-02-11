@@ -97,7 +97,7 @@ internal class SuperKodanBrothers : Bjora
         }
         phases[0].AddTarget(voice);
         phases[0].AddTarget(claw);
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)));
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)), PhaseData.TargetPriority.Blocking);
         long fightEnd = log.FightData.FightEnd;
         if (!requirePhases)
         {

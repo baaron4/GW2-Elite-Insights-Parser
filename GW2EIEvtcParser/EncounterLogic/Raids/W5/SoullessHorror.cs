@@ -165,7 +165,7 @@ internal class SoullessHorror : HallOfChains
         foreach (PhaseData phase in phases)
         {
             var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
-            phase.AddSecondaryTargets(tormentedDeads);
+            phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
         }
 
         return phases;

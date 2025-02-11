@@ -15,8 +15,8 @@ internal class PhaseChartDataDto
     public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
     {
         Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
-        Targets = new(phase.AllTargets.Count);
-        foreach (SingleActor target in phase.AllTargets)
+        Targets = new(phase.Targets.Count);
+        foreach (SingleActor target in phase.Targets.Keys)
         {
             Targets.Add(new TargetChartDataDto(log, phase, target));
         }

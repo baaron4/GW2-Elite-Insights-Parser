@@ -100,7 +100,7 @@ internal class GreerTheBlightbringer : MountBalrior
             (int) ArcDPSEnums.TrashID.Gree,
         };
         var subTitans = Targets.Where(x => x.IsAnySpecies(subTitanIDs));
-        phases[0].AddSecondaryTargets(subTitans);
+        phases[0].AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -119,7 +119,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 phase.Name = "Phase " + (i + 1) / 2;
                 phase.AddTarget(greer);
-                phase.AddSecondaryTargets(subTitans);
+                phase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
             }
         }
         return phases;

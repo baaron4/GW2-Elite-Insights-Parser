@@ -18,13 +18,25 @@ public class PhaseData
 
     public bool BreakbarPhase { get; internal set; } = false;
 
-    public IReadOnlyList<SingleActor> Targets => _targets;
-    private readonly List<SingleActor> _targets = [];
-    public IReadOnlyList<SingleActor> SecondaryTargets => _secondaryTargets;
-    private readonly List<SingleActor> _secondaryTargets = [];
+    public enum TargetPriority
+    {
+        Main = 0,
+        Blocking = 1,
+        NonBlocking = 2,
+    }
 
-    public IReadOnlyList<SingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
-    private readonly List<SingleActor> _allTargets = [];
+    public class PhaseTargetData
+    {
+        public TargetPriority Priority { get; internal set; }
+
+        public bool IsPrioritary(TargetPriority priority)
+        {
+            return (int)Priority <= (int)priority;
+        }
+    }
+
+    public IReadOnlyDictionary<SingleActor, PhaseTargetData> Targets => _targets;
+    private readonly Dictionary<SingleActor, PhaseTargetData> _targets = [];
 
     internal PhaseData(long start, long end)
     {
@@ -52,59 +64,39 @@ public class PhaseData
         return minEnd - maxStart > 0;
     }
 
-    internal void AddTarget(SingleActor? target)
-    {
-        if (target == null || _targets.Contains(target))
-        {
-            return;
-        }
-        _secondaryTargets.Remove(target); // promote to target, all targets stays unchanged
-        _targets.Add(target);
-    }
-
     internal void RemoveTarget(SingleActor target)
     {
         //TODO(Rennorb) @perf
         _targets.Remove(target);
     }
 
-    internal void AddTargets(IEnumerable<SingleActor?> targets)
+    internal void AddTarget(SingleActor? target, TargetPriority priority = TargetPriority.Main)
     {
-        _targets.AddRange(targets.Where(x => x != null)!);
-    }
-
-    internal void AddSecondaryTarget(SingleActor? target)
-    {
-        if (target == null || AllTargets.Contains(target))
+        if (target == null)
         {
             return;
         }
-        _secondaryTargets.Add(target);
-        RefreshAllTargetsList();
+        if (_targets.TryGetValue(target, out var targetData))
+        {
+            if (!targetData.IsPrioritary(priority))
+            {
+                targetData.Priority = priority;
+            }
+        } else
+        {
+            _targets[target] = new PhaseTargetData()
+            {
+                Priority = priority,
+            };
+        }
     }
 
-    public bool IsSecondaryTarget(SingleActor target)
+    internal void AddTargets(IEnumerable<SingleActor?> targets, TargetPriority priority = TargetPriority.Main)
     {
-        return _secondaryTargets.Contains(target);
-    }
-
-    internal void RemoveSecondaryTarget(SingleActor target)
-    {
-        _secondaryTargets.Remove(target);
-        RefreshAllTargetsList();
-    }
-
-    internal void AddSecondaryTargets(IEnumerable<SingleActor?> targets)
-    {
-        _secondaryTargets.AddRange(targets.Where(x => x != null)!);
-        RefreshAllTargetsList();
-    }
-
-    private void RefreshAllTargetsList()
-    {
-        _allTargets.Clear();
-        _allTargets.AddRange(_targets);
-        _allTargets.AddRange(_secondaryTargets);
+        foreach (SingleActor? target in targets)
+        {
+            AddTarget(target, priority);
+        }
     }
 
     internal void OverrideStart(long start)
@@ -141,8 +133,9 @@ public class PhaseData
         if (Targets.Count > 0)
         {
             long start = long.MaxValue;
-            foreach (SingleActor target in Targets)
+            foreach (var pair in Targets)
             {
+                var target = pair.Key;
                 long startTime = target.FirstAware;
                 SpawnEvent? spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
                 if (spawned != null)
@@ -168,8 +161,9 @@ public class PhaseData
         if (Targets.Count > 0)
         {
             long end = long.MinValue;
-            foreach (SingleActor target in Targets)
+            foreach (var pair in Targets)
             {
+                var target = pair.Key;
                 long deadTime = target.LastAware;
                 DeadEvent? died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                 if (died != null)

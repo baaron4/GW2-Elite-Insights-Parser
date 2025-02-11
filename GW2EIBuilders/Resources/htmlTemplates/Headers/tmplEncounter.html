@@ -88,7 +88,7 @@
                 var mainPhase = logData.phases[0];
                 if (!logData.targetless) {
                     for (var i = 0; i < mainPhase.targets.length; i++) {
-                        if (mainPhase.secondaryTargets[i]) {
+                        if (mainPhase.targetPriorities[i] > 0) {
                             continue;
                         }
                         if (targets.length >= 10) {

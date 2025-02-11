@@ -274,7 +274,7 @@ internal class Qadim : MythwrightGambit
                        TrashID.AncientInvokedHydra,
                        TrashID.ApocalypseBringer,
                     };
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -318,7 +318,7 @@ internal class Qadim : MythwrightGambit
                 AddTargetsToPhaseAndFit(phase, ids, log);
                 if (phase.Targets.Count > 0)
                 {
-                    var phaseTarIDs = new HashSet<int>(phase.Targets.Select(x => x.ID));
+                    var phaseTarIDs = new HashSet<int>(phase.Targets.Keys.Select(x => x.ID));
                     if (phaseTarIDs.Contains((int)TrashID.AncientInvokedHydra))
                     {
                         phase.Name = "Hydra";

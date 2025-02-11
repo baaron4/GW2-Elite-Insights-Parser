@@ -310,8 +310,8 @@ public class FightData
         {
             _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
-            _phases.RemoveAll(x => x.AllTargets.Count == 0);
-            if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target))))
+            _phases.RemoveAll(x => x.Targets.Count == 0);
+            if (_phases.Any(phase => phase.Targets.Keys.Any(target => !Logic.Targets.Contains(target))))
             {
                 throw new InvalidOperationException("Phases can only have targets");
             }
@@ -335,7 +335,7 @@ public class FightData
 
     public IReadOnlyList<SingleActor> GetMainTargets(ParsedEvtcLog log)
     {
-        return GetPhases(log)[0].Targets;
+        return GetPhases(log)[0].Targets.Keys.ToList();
     }
 
     // Setters

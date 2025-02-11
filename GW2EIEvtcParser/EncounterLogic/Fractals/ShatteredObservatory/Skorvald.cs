@@ -66,7 +66,7 @@ internal class Skorvald : ShatteredObservatory
             (int)TrashID.FluxAnomalyCM3,
             (int)TrashID.FluxAnomalyCM4,
         };
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
