@@ -343,9 +343,9 @@ public static class ArcDPSEnums
     // this enum is updated regularly to match the in game enum. The matching between the two is simply cosmetic, for clarity while comparing against an updated skill defs
     public enum BuffStackType : byte
     {
-        StackingConditionalLoss = 0, // the same thing as Stacking
+        StackingConditionalLoss = 0, // the same thing as Stacking but individual stacks can be removed
         Queue = 1,
-        StackingTargetUniqueSrc = 2, // This one clearly behaves like an intensity buff (multiple stack actives, any instance can be extended), always come with a stack limit of 999. It is unclear at this time what differentiate this one from the traditional Stacking type.
+        StackingUniquePerSrc = 2, // the same thing as Stacking but individual stacks can be extended and one src can only have one stack active at a time
         Regeneration = 3,
         Stacking = 4,
         Force = 5,

@@ -33,7 +33,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
                 _logic = _forceOverrideLogic;
                 break;
             case BuffStackType.Stacking:
-            case BuffStackType.StackingTargetUniqueSrc:
+            case BuffStackType.StackingUniquePerSrc:
             case BuffStackType.StackingConditionalLoss:
                 _logic = _overrideLogic;
                 break;

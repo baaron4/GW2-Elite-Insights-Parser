@@ -240,7 +240,7 @@ internal static class ElementalistHelper
         new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Seethe),
         new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Ripple),
         new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Energize),
-        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, SkillImages.Fulgor),
+        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Fulgor),
         new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Harden),
     ];
 

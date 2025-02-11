@@ -80,7 +80,7 @@ internal static class RenegadeHelper
         new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, SkillImages.SoulcleavesSummit),
         new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
         new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
-        new Buff("All for One", AllForOne, Source.Renegade, BuffClassification.Other, TraitImages.AllForOne),
+        new Buff("All for One", AllForOne, Source.Renegade, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.AllForOne),
     ];
 
     private static HashSet<int> Minions =
