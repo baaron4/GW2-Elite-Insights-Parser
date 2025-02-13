@@ -105,7 +105,7 @@ internal class Eparch : LonelyTower
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch);
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.IncarnationOfCruelty) || x.IsSpecies(TrashID.IncarnationOfJudgement)));
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.IncarnationOfCruelty) || x.IsSpecies(TrashID.IncarnationOfJudgement)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases || !log.FightData.IsCM)
         {
             return phases;

@@ -250,7 +250,7 @@ internal class Adina : TheKeyOfAhdashim
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
         BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -329,7 +329,7 @@ internal class Adina : TheKeyOfAhdashim
         foreach (PhaseData phase in mainPhases)
         {
             phase.AddTarget(adina);
-            phase.AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)));
+            phase.AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)), PhaseData.TargetPriority.NonBlocking);
         }
         phases.AddRange(mainPhases);
         phases.AddRange(splitPhases);

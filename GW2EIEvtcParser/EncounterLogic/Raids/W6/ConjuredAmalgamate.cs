@@ -282,8 +282,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
         SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
         SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
         phases[0].AddTarget(ca);
-        phases[0].AddSecondaryTarget(leftArm);
-        phases[0].AddSecondaryTarget(rightArm);
+        phases[0].AddTarget(leftArm, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(rightArm, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;

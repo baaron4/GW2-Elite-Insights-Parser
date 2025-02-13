@@ -196,9 +196,10 @@ function mainLoad() {
         for (var j = 0; j < logData.phases.length; j++) {
             var phase = logData.phases[j];
             var phaseTarget = phase.targets.indexOf(i);
+            var priority = phase.targetPriorities[phaseTarget];
             activeArray.push({
-                active: phaseTarget > -1 ? !phase.secondaryTargets[phaseTarget] : false,
-                secondary: !!phase.secondaryTargets[phaseTarget]
+                active: typeof priority !== "undefined" && priority < 2,
+                secondary: typeof priority === "undefined" || priority > 0
             });
         }
         target.id = i;

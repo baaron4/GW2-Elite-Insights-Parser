@@ -90,7 +90,7 @@ internal class ValeGuardian : SpiritVale
             (int) ArcDPSEnums.TrashID.GreenGuardian,
             (int) ArcDPSEnums.TrashID.RedGuardian
         };
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;

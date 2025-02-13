@@ -83,7 +83,7 @@ internal class MAMA : Nightmare
             (int) TrashID.RedKnight,
             (int) TrashID.BlueKnight,
         };
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(knightIds)));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -97,7 +97,7 @@ internal class MAMA : Nightmare
                 AddTargetsToPhaseAndFit(phase, knightIds, log);
                 if (phase.Targets.Count > 0)
                 {
-                    SingleActor phaseTar = phase.Targets[0];
+                    SingleActor phaseTar = phase.Targets.Keys.First();
                     phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string? phaseName) ? phaseName : "Unknown";
                 }
             }

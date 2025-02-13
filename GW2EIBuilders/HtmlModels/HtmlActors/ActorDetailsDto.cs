@@ -39,8 +39,8 @@ internal class ActorDetailsDto
         {
             dto.Rotation.Add(SkillDto.BuildRotationData(log, actor, phase, usedSkills));
             dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, null, phase, usedSkills, usedBuffs));
-            var dmgTargetsDto = new List<DmgDistributionDto>(phase.AllTargets.Count);
-            foreach (SingleActor target in phase.AllTargets)
+            var dmgTargetsDto = new List<DmgDistributionDto>(phase.Targets.Count);
+            foreach (SingleActor target in phase.Targets.Keys)
             {
                 dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, target, phase, usedSkills, usedBuffs));
             }
@@ -67,9 +67,9 @@ internal class ActorDetailsDto
 
         foreach (PhaseData phase in phases)
         {
-            var allTargets = phase.AllTargets;
+            var allTargets = phase.Targets;
             var dmgTargetsDto = new List<DmgDistributionDto>(allTargets.Count);
-            foreach (SingleActor target in allTargets)
+            foreach (SingleActor target in allTargets.Keys)
             {
                 dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
             }
@@ -100,7 +100,7 @@ internal class ActorDetailsDto
         for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (phase.AllTargets.Contains(target))
+            if (phase.Targets.ContainsKey(target))
             {
                 dto.DmgDistributions.Add(DmgDistributionDto.BuildTargetDMGDistData(log, target, phase, usedSkills, usedBuffs));
                 dto.DmgDistributionsTaken.Add(DmgDistributionDto.BuildDMGTakenDistData(log, target, phase, usedSkills, usedBuffs));
@@ -141,7 +141,7 @@ internal class ActorDetailsDto
 
             foreach (PhaseData phase in phases)
             {
-                if (phase.AllTargets.Contains(target))
+                if (phase.Targets.ContainsKey(target))
                 {
                     dmgDistributions.Add(DmgDistributionDto.BuildTargetMinionDMGDistData(log, target, minion, phase, usedSkills, usedBuffs));
                 }

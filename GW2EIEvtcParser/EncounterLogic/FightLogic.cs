@@ -353,31 +353,20 @@ public abstract class FightLogic
         return [ ];
     }
 
-    protected void AddTargetsToPhase(PhaseData phase, List<int> ids)
+    protected void AddTargetsToPhase(PhaseData phase, List<int> ids, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         foreach (SingleActor target in Targets)
         {
             if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
             {
-                phase.AddTarget(target);
+                phase.AddTarget(target, priority);
             }
         }
     }
 
-    protected void AddSecondaryTargetsToPhase(PhaseData phase, List<int> ids)
+    protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
-        foreach (SingleActor target in Targets)
-        {
-            if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
-            {
-                phase.AddSecondaryTarget(target);
-            }
-        }
-    }
-
-    protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log)
-    {
-        AddTargetsToPhase(phase, ids);
+        AddTargetsToPhase(phase, ids, priority);
         phase.OverrideTimes(log);
     }
 

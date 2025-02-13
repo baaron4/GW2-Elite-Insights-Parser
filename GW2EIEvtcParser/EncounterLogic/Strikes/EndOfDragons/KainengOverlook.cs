@@ -174,11 +174,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
         SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
         //
-        phases[0].AddSecondaryTarget(enforcer);
-        phases[0].AddSecondaryTarget(mindblade);
-        phases[0].AddSecondaryTarget(mechRider);
-        phases[0].AddSecondaryTarget(sniper);
-        phases[0].AddSecondaryTarget(ritualist);
+        phases[0].AddTarget(enforcer, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(mindblade, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(mechRider, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(sniper, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(ritualist, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;

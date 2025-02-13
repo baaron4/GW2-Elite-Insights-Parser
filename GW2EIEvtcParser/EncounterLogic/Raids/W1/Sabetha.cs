@@ -75,7 +75,7 @@ internal class Sabetha : SpiritVale
             (int) ArcDPSEnums.TrashID.Knuckles,
             (int) ArcDPSEnums.TrashID.Kernan,
         };
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)));
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -94,7 +94,7 @@ internal class Sabetha : SpiritVale
                     AddTargetsToPhaseAndFit(phase, [miniBossId], log);
                     if (phase.Targets.Count > 0)
                     {
-                        SingleActor phaseTarget = phase.Targets[0];
+                        SingleActor phaseTarget = phase.Targets.Keys.First();
                         if (PhaseNames.TryGetValue(phaseTarget.ID, out var phaseName))
                         {
                             phase.Name = phaseName;
@@ -102,14 +102,14 @@ internal class Sabetha : SpiritVale
                         break; // we found our main target
                     }
                 }
-                AddSecondaryTargetsToPhase(phase, miniBossIds);
+                AddTargetsToPhase(phase, miniBossIds, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 int phaseID = (i + 1) / 2;
                 phase.Name = "Phase " + phaseID;
                 phase.AddTarget(sabetha);
-                AddSecondaryTargetsToPhase(phase, miniBossIds);
+                AddTargetsToPhase(phase, miniBossIds, PhaseData.TargetPriority.NonBlocking);
             }
         }
         return phases;
