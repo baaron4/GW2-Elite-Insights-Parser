@@ -429,6 +429,7 @@ public static class BuffImages
     public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
     public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
     public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
+    public const string RoyalDecree = "https://wiki.guildwars2.com/images/1/1a/Royal_Decree.png";
     #endregion Misc
 
 }

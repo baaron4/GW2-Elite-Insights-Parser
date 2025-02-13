@@ -167,7 +167,8 @@ internal static class EncounterLogicUtils
             var deads = new List<Segment>();
             var downs = new List<Segment>();
             var dcs = new List<Segment>();
-            playerAgent.GetAgentStatus(deads, downs, dcs, combatData);
+            var actives = new List<Segment>();
+            playerAgent.GetAgentStatus(deads, downs, dcs, actives, combatData);
             if (deads.Any(x => x.ContainsPoint(timeToCheck)))
             {
                 playerDeadOrDCCount++;

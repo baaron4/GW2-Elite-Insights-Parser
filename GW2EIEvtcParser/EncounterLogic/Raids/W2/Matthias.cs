@@ -77,7 +77,7 @@ internal class Matthias : SalvationPass
                         playersWithBisque++;
                     }
                 }
-                var (_, _, dcs) = p.GetStatus(log);
+                var (_, _, dcs, _) = p.GetStatus(log);
                 if (!dcs.Any(x => x.ContainsPoint(fightEnd)))
                 {
                     expectedPlayersForSuccess++;

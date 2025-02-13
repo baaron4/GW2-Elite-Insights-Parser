@@ -15,7 +15,16 @@ public class AgentData
     private Dictionary<int, List<AgentItem>> _allNPCsByID;
     private Dictionary<int, List<AgentItem>> _allGadgetsByID;
     private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
-    private bool _dirty = true;
+    [Flags]
+    internal enum AgentDataDirtyStatus
+    {
+        Clean = 0,
+        SpeciesDirty = 1,
+        TypesDirty = 2,
+        AgentsDirty = 4,
+        AllDirty = SpeciesDirty | TypesDirty | AgentsDirty
+    }
+    private AgentDataDirtyStatus _dirty = AgentDataDirtyStatus.AllDirty;
 #if DEBUG
     private Dictionary<string, List<AgentItem>> _allAgentsByName;
 #endif
@@ -29,7 +38,6 @@ public class AgentData
     {
         _apiController = apiController;
         _allAgentsList = allAgentsList;
-        Refresh();
     }
     internal string GetSpec(uint prof, uint elite)
     {
@@ -51,7 +59,7 @@ public class AgentData
         }
         var agent = new AgentItem(agentValue, name, spec, ID, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
         _allAgentsList.Add(agent);
-        _dirty = true;
+        _dirty |= AgentDataDirtyStatus.AgentsDirty;
         return agent;
     }
 
@@ -69,7 +77,10 @@ public class AgentData
     {
         if (agentAddress != 0)
         {
-            Refresh();
+            if ((_dirty & AgentDataDirtyStatus.AgentsDirty) > 0)
+            {
+                Refresh();
+            }
             if (_allAgentsByAgent.TryGetValue(agentAddress, out var agents))
             {
                 foreach (AgentItem a in agents)
@@ -86,7 +97,10 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetNPCsByID(int id)
     {
-        Refresh();
+        if ((_dirty & AgentDataDirtyStatus.AllDirty) > 0)
+        {
+            Refresh();
+        }
         if (_allNPCsByID.TryGetValue(id, out var list))
         {
             return list;
@@ -132,7 +146,10 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
     {
-        Refresh();
+        if ((_dirty & AgentDataDirtyStatus.AllDirty) > 0)
+        {
+            Refresh();
+        }
         if (_allGadgetsByID.TryGetValue(id, out var list))
         {
             return list;
@@ -169,7 +186,10 @@ public class AgentData
     {
         if (instid != 0)
         {
-            Refresh();
+            if ((_dirty & AgentDataDirtyStatus.AgentsDirty) > 0)
+            {
+                Refresh();
+            }
             if (_allAgentsByInstID.TryGetValue(instid, out var agents))
             {
                 foreach (AgentItem a in agents)
@@ -196,13 +216,13 @@ public class AgentData
         {
             _allAgentsList.RemoveAll(toRemove.Contains);
             _allAgentsList.AddRange(toAdd);
-            _dirty = true;
+            _dirty |= AgentDataDirtyStatus.AgentsDirty;
         }
     }
 
-    internal void FlagAsDirty()
+    internal void FlagAsDirty(AgentDataDirtyStatus status)
     {
-        _dirty = true;
+        _dirty |= status;
     }
 
     internal void RemoveAllFrom(HashSet<AgentItem> agents)
@@ -212,28 +232,28 @@ public class AgentData
             return;
         }
         _allAgentsList.RemoveAll(x => agents.Contains(x));
-        _dirty = true;
+        _dirty |= AgentDataDirtyStatus.AgentsDirty;
     }
 
     private void Refresh()
     {
-        if (_dirty)
-        {
-            _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
-            _allNPCsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-            _allGadgetsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-            _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
+        _allNPCsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        _allGadgetsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
 #if DEBUG
-            _allAgentsByName = _allAgentsList.Where(x => !x.Name.Contains("UNKNOWN")).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByName = _allAgentsList.Where(x => !x.Name.Contains("UNKNOWN")).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-            _dirty = false;
-        }
+        _dirty = AgentDataDirtyStatus.Clean;
     }
 
     public IReadOnlyList<AgentItem> GetAgentByType(AgentItem.AgentType type)
     {
-        Refresh();
+        if ((_dirty & AgentDataDirtyStatus.AllDirty) > 0)
+        {
+            Refresh();
+        }
         if (_allAgentsByType.TryGetValue(type, out var list))
         {
             return list;

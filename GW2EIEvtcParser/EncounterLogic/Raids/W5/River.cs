@@ -111,6 +111,14 @@ internal class River : HallOfChains
     {
         FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
+        foreach (var desmina in agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina))
+        {
+            var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(desmina)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
+            if (positions.Any(x => x.XYZ.X >= 7500))
+            {
+                desmina.OverrideID(ArcDPSEnums.IgnoredSpecies, agentData);
+            }
+        }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 

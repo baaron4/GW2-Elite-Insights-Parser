@@ -3,22 +3,24 @@
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Uptime</a>
+                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}"
+                       data-original-title="Buffs upkeep.">Uptime</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }">Generation Self</a>
+                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }"
+                       data-original-title="Buffs applied to yourself.">Generation Self</a>
                 </li>
                 <li v-if="!singlePlayer" class="nav-item">
                     <a class="nav-link" @click="buffMode = 2" :class="{active: buffMode === 2 }"
-                        data-original-title="Self excluded">Generation Group</a>
+                        data-original-title="Buffs applied to your group members. Self excluded.">Generation Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
                     <a class="nav-link" @click="buffMode = 3" :class="{active: buffMode === 3 }"
-                        data-original-title="Self excluded">Generation Off-Group</a>
+                        data-original-title="Buffs applied to your non-group members. Self excluded.">Generation Off-Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
                     <a class="nav-link" @click="buffMode = 4" :class="{active: buffMode === 4 }"
-                        data-original-title="Self excluded">Generation Squad</a>
+                        data-original-title="Buffs applied to the squad. Self excluded.">Generation Squad</a>
                 </li>
             </ul>
         </div>

@@ -35,14 +35,17 @@ internal static class BladeswornHelper
         return _gunsaberForm.Contains(id);
     }
 
+    private static readonly HashSet<long> _gunsaberFormAAs =
+    [
+        SwiftCut,
+        SteelDivide,
+        ExplosiveThrust
+    ];
+
     public static bool IsAutoAttack(ParsedEvtcLog log, long id)
     {
         var build = log.CombatData.GetGW2BuildEvent().Build;
-        var skillIds = new List<long>
-        {
-            SwiftCut, SteelDivide, ExplosiveThrust
-        };
-        return build >= GW2Builds.EODBeta1 && skillIds.Contains(id);
+        return build >= GW2Builds.EODBeta1 && _gunsaberFormAAs.Contains(id);
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

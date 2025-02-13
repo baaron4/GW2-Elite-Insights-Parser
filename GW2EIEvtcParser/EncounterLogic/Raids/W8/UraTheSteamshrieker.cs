@@ -88,24 +88,24 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sulfuricEffectGUID = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraSulfuricGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
+        // Sulfuric geysers
+        var sulfuricAgents = combatData
+            .Where(x => x.IsBuffApply() && x.SkillID == HardenedCrust)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.Gadget)
+            .Distinct();
+        foreach (var sulfuricAgent in sulfuricAgents)
+        {
+            sulfuricAgent.OverrideID(ArcDPSEnums.TrashID.SulfuricGeyser, agentData);
+            sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+        }
+        // Toxic geysers
+        var toxicEffectGUID = combatData
+            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && 
+                ArcDPSEnums.GetContentLocal((byte)x.OverstackValue) == ArcDPSEnums.ContentLocal.Effect && 
+                EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
-        if (sulfuricEffectGUID != null)
-        {
-            var sulfuricAgents = combatData
-                .Where(x => x.IsEffect && x.SkillID == sulfuricEffectGUID.ContentID)
-                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
-                .Distinct();
-            foreach (var sulfuricAgent in sulfuricAgents)
-            {
-                sulfuricAgent.OverrideID(ArcDPSEnums.TrashID.SulfuricGeyser, agentData);
-                sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
-            }
-        }
-        var toxicEffectGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent)).Select(x => new EffectGUIDEvent(x, evtcVersion)).FirstOrDefault();
         if (toxicEffectGUID != null)
         {
             var toxicAgents = combatData
@@ -119,18 +119,38 @@ internal class UraTheSteamshrieker : MountBalrior
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
-        // At this point, toxic and sulfur ones are properly flaggued 
-        // This seems to miss some titan geysers, investigate why some are different (no proper max health)
-        var titanGeysers = combatData
+        // titanspawn geysers
+        var titanGeyserMarkerGUID = combatData
+            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && 
+                ArcDPSEnums.GetContentLocal((byte)x.OverstackValue) == ArcDPSEnums.ContentLocal.Marker && 
+                MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (titanGeyserMarkerGUID != null)
+        {
+            var titanAgents = combatData
+                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var titanAgent in titanAgents)
+            {
+                titanAgent.OverrideID(ArcDPSEnums.TrashID.TitanspawnGeyser, agentData);
+                titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
+        }
+        // Those can only be toxic ones
+        var remainingGeysers = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 448200)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth > 100)
             .Distinct();
-        foreach (var titanAgent in titanGeysers)
+        foreach (var remainingGeyser in remainingGeysers)
         {
-            titanAgent.OverrideID(ArcDPSEnums.TrashID.TitanspawnGeyser, agentData);
-            titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            remainingGeyser.OverrideID(ArcDPSEnums.TrashID.ToxicGeyser, agentData);
+            remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
+        // Bloodstone shards
         var bloodstoneShards = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))

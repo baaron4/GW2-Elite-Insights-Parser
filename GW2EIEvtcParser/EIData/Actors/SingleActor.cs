@@ -77,33 +77,43 @@ public abstract partial class SingleActor : Actor
 
     public bool IsDowned(ParsedEvtcLog log, long time)
     {
-        (_, IReadOnlyList<Segment> downs, _) = GetStatus(log);
+        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
         return downs.Any(x => x.ContainsPoint(time));
     }
     public bool IsDowned(ParsedEvtcLog log, long start, long end)
     {
-        (_, IReadOnlyList<Segment> downs, _) = GetStatus(log);
+        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
         return downs.Any(x => x.Intersects(start, end));
     }
     public bool IsDead(ParsedEvtcLog log, long time)
     {
-        (IReadOnlyList<Segment> deads, _, _) = GetStatus(log);
+        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
         return deads.Any(x => x.ContainsPoint(time));
     }
     public bool IsDead(ParsedEvtcLog log, long start, long end)
     {
-        (IReadOnlyList<Segment> deads, _, _) = GetStatus(log);
+        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
         return deads.Any(x => x.Intersects(start, end));
     }
     public bool IsDC(ParsedEvtcLog log, long time)
     {
-        (_, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
+        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
         return dcs.Any(x => x.ContainsPoint(time));
     }
     public bool IsDC(ParsedEvtcLog log, long start, long end)
     {
-        (_, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
+        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
         return dcs.Any(x => x.Intersects(start, end));
+    }
+    public bool IsActive(ParsedEvtcLog log, long time)
+    {
+        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
+        return actives.Any(x => x.ContainsPoint(time));
+    }
+    public bool IsActive(ParsedEvtcLog log, long start, long end)
+    {
+        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
+        return actives.Any(x => x.Intersects(start, end));
     }
 
     public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
@@ -323,27 +333,6 @@ public abstract partial class SingleActor : Actor
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledRotations(ParsedEvtcLog log)
     {
         return InitCombatReplay(log).PolledRotations;
-    }
-
-    protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
-    {
-        // Trim
-        DespawnEvent? despawnCheck = log.CombatData.GetDespawnEvents(agentItem).LastOrDefault();
-        SpawnEvent? spawnCheck = log.CombatData.GetSpawnEvents(agentItem).LastOrDefault();
-        DeadEvent? deathCheck = log.CombatData.GetDeadEvents(agentItem).LastOrDefault();
-        AliveEvent? aliveCheck = log.CombatData.GetAliveEvents(agentItem).LastOrDefault();
-        if (deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
-        {
-            replay.Trim(agentItem.FirstAware, deathCheck.Time);
-        }
-        else if (despawnCheck != null && (spawnCheck == null || spawnCheck.Time < despawnCheck.Time))
-        {
-            replay.Trim(agentItem.FirstAware, despawnCheck.Time);
-        }
-        else
-        {
-            replay.Trim(agentItem.FirstAware, agentItem.LastAware);
-        }
     }
 
     protected virtual void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)

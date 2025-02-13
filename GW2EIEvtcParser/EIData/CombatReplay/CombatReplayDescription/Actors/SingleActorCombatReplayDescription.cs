@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -73,6 +74,8 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
             }
             Hide = hide;
         }
+        SetStatus(log, actor);
+        SetBreakbarStatus(log, actor);
     }
 
     protected void SetStatus(ParsedEvtcLog log, SingleActor a)
@@ -83,7 +86,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         Down = down;
         var dc = new List<long>();
         Dc = dc;
-        (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) = a.GetStatus(log);
+        (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, _) = a.GetStatus(log);
 
         foreach (Segment seg in deads)
         {

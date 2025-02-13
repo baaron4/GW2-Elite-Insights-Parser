@@ -49,7 +49,7 @@ public static class SkillIDs
     public const long SadisticSearingActivation = -30;
     public const long BladeBurstOrParticleAccelerator = -31;
     public const long RelicOfFireworksBuffLoss = -32;
-    public const long MarkOfBloodOrChillblains = -33;
+    public const long MarkOfBloodOrChillblainsTrigger = -33;
     public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
     public const long NumberOfRangerPets = -35;
     public const long AchievementEligibilityApathetic = -36;
@@ -128,7 +128,7 @@ public static class SkillIDs
     public const long CrashingWaves = 2654;
     public const long Freeze2 = 3138;
     public const long FiendLeechWvW = 3632;
-    public const long ChargeWvW = 3647;
+    public const long ChargeWarhornWvW = 3647;
     public const long BoneSlash = 3652;
     public const long TwistingFangThiefMinion1 = 3661;
     public const long TwistingFangThiefMinion2 = 3662;
@@ -146,7 +146,7 @@ public static class SkillIDs
     public const long CrushingBlowWvW1 = 3822;
     public const long PulverizeWvW1 = 3823;
     public const long ShieldBashWvW = 3825;
-    public const long BodyShotWvW = 3828;
+    public const long BolaShotWvW = 3828;
     public const long CripplingTalonWvW = 3830;
     public const long MaceSmashWvW2 = 3831;
     public const long CrushingBlowWvW2 = 3832;
@@ -235,7 +235,7 @@ public static class SkillIDs
     public const long ThumperTurretUW = 5890;
     public const long NetTurretDamage = 5896;
     public const long POV_GrenadeKitOpen = 5897;
-    public const long FireTurretDamage = 5903;
+    public const long FlameTurretDamage = 5903;
     public const long ToolKit = 5904;
     public const long RocketTurretCast = 5912;
     public const long RocketTurretDamageUW = 5914;
@@ -735,7 +735,7 @@ public static class SkillIDs
     public const long IllusionaryRiposteHit = 10281;
     public const long IllusionaryUnload = 10284;
     public const long Diversion = 10287;
-    public const long SpatialSurge = 10294;
+    public const long SpatialSurgeAdditional = 10294;
     public const long EtherBolt = 10295;
     public const long WindsOfChaosStaffClone = 10296;
     public const long MindSlashSwordClone = 10297;
@@ -1016,6 +1016,7 @@ public static class SkillIDs
     public const long EjectSiegeGolem = 14642;
     public const long GravelShot2 = 14643;
     public const long GravelShotSkill = 14644;
+    public const long BoilingOil2 = 14648;
     public const long CripplingVolley = 14650;
     public const long BarbedVolley = 14651;
     public const long ReinforcedShotDamage = 14655;
@@ -1033,11 +1034,11 @@ public static class SkillIDs
     public const long DeploySuperiorBallista = 14706;
     public const long DeployOmegaSiegeSuit = 14707;
     public const long RocketSalvo = 14708;
-    public const long RocketPunch1 = 14709;
+    public const long RocketPunchSiegeGolem1 = 14709;
     public const long WhirlingInferno = 14710;
     public const long DeploySuperiorFlameRam = 14711;
     public const long SiegeDeploymentBlocked = 14712;
-    public const long RocketPunch2 = 14713;
+    public const long RocketPunchSiegeGolem2 = 14713;
     public const long MinorBorderlandsBloodlust = 14772;
     public const long MajorBorderlandsBloodlust = 14773;
     public const long SuperiorBorderlandsBloodlust = 14774;
@@ -1143,7 +1144,10 @@ public static class SkillIDs
     public const long FireDevastatingArrows = 18867;
     public const long FireMercilessArrows = 18869;
     public const long ToxicUnveilingVolley = 18872;
+    public const long ImprovedBurningOil = 18875;
     public const long ImprovedPouredTar = 18881;
+    public const long ImprovedBurningOil2 = 18883;
+    public const long ImprovedPouredTar2 = 18885;
     public const long EngulfingBurningOil = 18887;
     public const long FieryBlock = 18981;
     public const long IncreasedArmorOilMasteryIII = 19083;
@@ -1157,9 +1161,13 @@ public static class SkillIDs
     public const long DragonsRevelryStarcake = 19451;
     public const long TaintedShacklesTicks = 19501;
     public const long FireBoulder = 19579;
+    public const long FireImpactShells1 = 19593;
     public const long FireExplosiveShellsSkill = 19601;
     public const long FireExplosiveShellsDamage = 19602;
     public const long FirePackedIncendiaryShells = 19604;
+    public const long FireLightweightShells = 19610;
+    public const long FireLightweightIncendiaryShells = 19612;
+    public const long FireImpactShells2 = 19621;
     public const long ConcussionBarrageDamage = 19626;
     public const long ConcussionBarrageSkill = 19627;
     public const long MistForm2 = 19718;
@@ -3416,7 +3424,7 @@ public static class SkillIDs
     public const long ExitHarbingerShroud = 62540;
     public const long RainOfSwords = 62553;
     public const long CutterBurst = 62554;
-    public const long DoomApproaches = 62558;
+    public const long ApproachingDoom = 62558;
     public const long VitalDraw = 62563;
     public const long EnterHarbingerShroud = 62567;
     public const long VirtuosoBlade2 = 62583;
@@ -4462,7 +4470,7 @@ public static class SkillIDs
     public const long ImaginedImpairment = 73069;
     public const long EnergizeBuff = 73071;
     public const long GalvanizeBuff = 73073;
-    public const long AbyssalRaze2 = 73077;
+    public const long AbyssalRazeUnleash = 73077;
     public const long BlazingBarrage = 73080;
     public const long BarbedSpearRanged = 73082;
     public const long CheetahsStrike = 73087;
@@ -4549,6 +4557,7 @@ public static class SkillIDs
     public const long DecimaSpawnsConduitsP3 = 74805;
     public const long SparkingAuraTier2 = 74827;
     public const long FracturedArmor = 74840;
+    public const long DeployShieldGenerator_InfiniteShieldGenerator = 74844;
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
     public const long EnfeeblingMiasma = 74851;
@@ -4562,6 +4571,7 @@ public static class SkillIDs
     public const long HarmonicSensitivity = 74904;
     public const long AuraOfCorruptionReegGreeDamage = 74915;
     public const long CageOfDecay2 = 74917;
+    public const long DeployArrowCart_InfiniteArrowCart = 74921;
     public const long DecimaBeamTargeting = 74922;
     public const long SulfuricFroth = 74931;
     public const long SulfuricAcid = 74933;
@@ -4575,6 +4585,7 @@ public static class SkillIDs
     public const long FullSteam = 74994;
     public const long DecimaSpawnsConduitsP2 = 75015;
     public const long EnlightenedConduitGadgetChargeTier3Buff = 75017;
+    public const long DeployCatapult_InfiniteCatapult = 75021;
     public const long PressureBlastSkill = 75022;
     public const long TargetOrder1JW = 75023;
     public const long CageOfDecay3 = 75025;
@@ -4605,6 +4616,7 @@ public static class SkillIDs
     public const long ToxicGeyser2 = 75149;
     public const long TargetOrder2JW = 75151;
     public const long Fluxlance = 75155;
+    public const long DeployFlameRam_InfiniteFlameRam = 75158;
     public const long ChargeDecima = 75175;
     public const long EruptionOfRot3 = 75182;
     public const long RakeTheRot2 = 75195;
@@ -4614,13 +4626,17 @@ public static class SkillIDs
     public const long EruptionVent = 75200;
     public const long SweepTheMold3 = 75210;
     public const long FulgentAuraTier3 = 75221;
+    public const long DeploySiegeSuit_InfiniteSiegeSuit = 75227;
     public const long RockSmash2 = 75229;
+    public const long DeploySentryTurret = 75238;
     public const long UnstoppableDecima = 75246;
     public const long StompTheGrowth3 = 75248;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
     public const long ScatteringSporeblast2 = 75262;
     public const long SparkingAuraTier3 = 75270;
+    public const long DeployTrebuchet_InfiniteTrebuchet = 75271;
+    public const long DeployBallista_InfiniteBallista = 75278;
     public const long RakeTheRot3 = 75286;
     public const long RotTheWorld = 75287;
     public const long EnfeeblingMiasma2 = 75288;
@@ -4635,6 +4651,13 @@ public static class SkillIDs
     public const long ReverberatingImpact = 75334;
     public const long FluxlanceSalvo5 = 75348;
     public const long EruptionOfRotBuff = 75355; // Stacking buff when standing in a green
+    public const long DeployArrowCart_InfiniteSiegeTool = 75362;
+    public const long DeployShieldGenerator_InfiniteSiegeTool = 75363;
+    public const long DeployFlameRam_InfiniteSiegeTool = 75364;
+    public const long DeploySiegeSuit_InfiniteSiegeTool = 75369;
+    public const long DeployBallista_InfiniteSiegeTool = 75372;
+    public const long DeployCatapult_InfiniteSiegeTool = 75374;
+    public const long DeployTrebuchet_InfiniteSiegeTool = 75375;
     #endregion
 }
 

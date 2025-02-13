@@ -10,6 +10,7 @@ partial class SingleActor
     private List<Segment>? _deads;
     private List<Segment>? _downs;
     private List<Segment>? _dcs;
+    private List<Segment>? _actives;
 
     private List<DeathRecap>? _deathRecaps;
 
@@ -22,16 +23,17 @@ partial class SingleActor
 
 
 
-    public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
+    public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(ParsedEvtcLog log)
     {
         if (_deads == null)
         {
             _deads = [];
             _downs = [];
             _dcs = [];
-            AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData);
+            _actives = [];
+            AgentItem.GetAgentStatus(_deads, _downs, _dcs, _actives, log.CombatData);
         }
-        return (_deads, _downs!, _dcs!);
+        return (_deads, _downs!, _dcs!, _actives!);
     }
 
     public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
@@ -79,7 +81,7 @@ partial class SingleActor
 
     public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
     {
-        var (dead, down, dc) = GetStatus(log);
+        var (dead, down, dc, _) = GetStatus(log);
         return (end - start) -
             (long)dead.Sum(x => x.IntersectingArea(start, end)) -
             (long)dc.Sum(x => x.IntersectingArea(start, end));
@@ -87,7 +89,7 @@ partial class SingleActor
 
     public bool IsDownBeforeNext90(ParsedEvtcLog log, long curTime)
     {
-        (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
+        (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc, _) = GetStatus(log);
 
         // get remaining fight segment
         var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);

@@ -213,21 +213,19 @@ public class Player : PlayerActor
     /// <summary> Calculates a list of positions of the player which are null in places where the player is dead or disconnected. </summary>
     public List<ParametricPoint3D?> GetCombatReplayActivePositions(ParsedEvtcLog log)
     {
-        var (deads, _, dcs) = GetStatus(log);
+        var (_, _, _, actives) = GetStatus(log);
         var positions = GetCombatReplayPolledPositions(log);
         var activePositions = new List<ParametricPoint3D?>(positions.Count);
         for (int i = 0; i < positions.Count; i++)
         {
             var cur = positions[i]!;
-            if (deads.Any(x => x.ContainsPoint(cur.Time)) 
-                || dcs.Any(x => x.ContainsPoint(cur.Time))
-            )
+            if (actives.Any(x => x.ContainsPoint(cur.Time)))
             {
-                activePositions.Add(null);
+                activePositions.Add(cur);
             } 
             else
             {
-                activePositions.Add(positions[i]);
+                activePositions.Add(null);
             }
         }
         return activePositions;

@@ -3,11 +3,11 @@
         <div :key="'activedurationplayer'" class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="activeduration = 0" :class="{active: activeduration === 0}">Phase
-                        duration</a>
+                    <a class="nav-link" @click="activeduration = 0" data-original-title="Buffs volumes applied by each player to the selected player based on currently selected phase."
+                       :class="{active: activeduration === 0}">Phase duration</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="activeduration = 1" data-original-title="Removed dead time and dc time"
+                    <a class="nav-link" @click="activeduration = 1" data-original-title="Buffs volumes applied by each player to the selected player based on currently selected phase. Removed dead and disconnected times."
                         :class="{active: activeduration === 1 }">Phase active duration</a>
                 </li>
             </ul>

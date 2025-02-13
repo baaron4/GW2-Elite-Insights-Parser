@@ -313,16 +313,17 @@ public abstract class FightLogic
         foreach (SingleActor target in Targets)
         {
             int i = 0;
-            var (_, actives, _, _) = target.GetBreakbarStatus(log);
-            foreach (Segment active in actives)
+            var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
+            var (_, _, _, actives) = target.GetStatus(log);
+            foreach (Segment breakbarActive in breakbarActives)
             {
-                if (Math.Abs(active.End - active.Start) < ServerDelayConstant)
+                if (Math.Abs(breakbarActive.End - breakbarActive.Start) < ServerDelayConstant || !actives.Any(x => x.Intersects(breakbarActive)))
                 {
                     continue;
                 }
 
-                long start = Math.Max(active.Start - 2000, log.FightData.FightStart);
-                long end = Math.Min(active.End, log.FightData.FightEnd);
+                long start = Math.Max(breakbarActive.Start - 2000, log.FightData.FightStart);
+                long end = Math.Min(breakbarActive.End, log.FightData.FightEnd);
                 var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                 {
                     BreakbarPhase = true,

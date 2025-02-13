@@ -70,26 +70,24 @@ public class FightData
     static internal FightLogic DetectFight(int id, AgentData agentData, EvtcParserSettings parserSettings, EvtcVersionEvent evtcVersion)
     {
         var targetID = GetTargetID(id);
+        // Special cases
+        switch (targetID)
+        {
+            case TargetID.WorldVersusWorld:
+                if (agentData.GetNPCsByID(TargetID.Desmina).Any())
+                {
+                    return new River((int)TargetID.DummyTarget);
+                }
+                else
+                {
+                    return new WvWFight(id, parserSettings.DetailedWvWParse);
+                }
+            case TargetID.Instance:
+                return new Instance(id);
+        }
         var target = agentData.GetNPCsByID(id).FirstOrDefault() ?? agentData.GetGadgetsByID(id).FirstOrDefault();
         switch (target?.Type)
         {
-            case null:
-                switch (targetID)
-                {
-                    case TargetID.WorldVersusWorld:
-                        if (agentData.GetNPCsByID(TargetID.Desmina).Any())
-                        {
-                            return new River((int)TargetID.DummyTarget);
-                        }
-                        else
-                        {
-                            return new WvWFight(id, parserSettings.DetailedWvWParse);
-                        }
-                    case TargetID.Instance:
-                        return new Instance(id);
-                }
-                break;
-
             case AgentType.NPC:
                 switch (targetID)
                 {
