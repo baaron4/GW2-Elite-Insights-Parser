@@ -149,6 +149,7 @@ internal static class TraitImages
     public const string Vampiric = "https://render.guildwars2.com/file/0DF523B154B8FD9F2E2B95F72A534E7C80352D2A/1012544.png";
     public const string BloodBank = "https://render.guildwars2.com/file/06E563AE1E34AC1D24CCECF301AC70B4B07A330C/2310020.png";
     public const string AuguryOfDeath = "https://render.guildwars2.com/file/CBBA2FA5F20755523E5424D0704B5B6C5F2B7C67/1012570.png";
+    public const string OverflowingThirst = "https://render.guildwars2.com/file/09266890E7D1517B2D634E026A67696ABDBCDBC3/1012535.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";

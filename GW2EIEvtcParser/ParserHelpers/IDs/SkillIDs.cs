@@ -4658,6 +4658,7 @@ public static class SkillIDs
     public const long DeployBallista_InfiniteSiegeTool = 75372;
     public const long DeployCatapult_InfiniteSiegeTool = 75374;
     public const long DeployTrebuchet_InfiniteSiegeTool = 75375;
+    public const long TasteForBlood = 75397;
     #endregion
 }
 
