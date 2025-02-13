@@ -119,6 +119,7 @@ internal static class TraitImages
     public const string RestorativeMantras = "https://render.guildwars2.com/file/2636BEBF0E35923BC4407739D0DC7DC223932F0C/1012523.png";
     public const string PowerBlock = "https://render.guildwars2.com/file/E029766272E10A957B954B12B20FD916474D5A01/1012494.png";
     public const string PersistenceOfMemory = "https://render.guildwars2.com/file/F225A021EB41754E4E0C9FCB46F40F7212DA41CE/1012511.png";
+    public const string NomadsEndurance = "https://render.guildwars2.com/file/EC4E5BEAD50EC6A5A91C312EE521B7C6EC56393B/1769961.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
@@ -148,6 +149,7 @@ internal static class TraitImages
     public const string Vampiric = "https://render.guildwars2.com/file/0DF523B154B8FD9F2E2B95F72A534E7C80352D2A/1012544.png";
     public const string BloodBank = "https://render.guildwars2.com/file/06E563AE1E34AC1D24CCECF301AC70B4B07A330C/2310020.png";
     public const string AuguryOfDeath = "https://render.guildwars2.com/file/CBBA2FA5F20755523E5424D0704B5B6C5F2B7C67/1012570.png";
+    public const string OverflowingThirst = "https://render.guildwars2.com/file/09266890E7D1517B2D634E026A67696ABDBCDBC3/1012535.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";
@@ -223,6 +225,7 @@ internal static class TraitImages
     public const string GenerousAbundance = "https://render.guildwars2.com/file/0F2DC0620428E1235AE6DFA4F0947C5DBE2FB076/2128013.png";
     public const string GlaringResolve = "https://render.guildwars2.com/file/9B49A55EEF5A2B31C2C0DBE0C10E6FFF3F4E2E5D/1012682.png";
     public const string ElevatedCompassion = "https://render.guildwars2.com/file/07A728FDFD275D406F255B08A26BBDCB37F6EE1F/2029284.png";
+    public const string AllForOne = "https://render.guildwars2.com/file/9398D8F8E764A23596E17EDAA35B99961D62F061/1769993.png";
     #endregion
     #region Thief
     public const string ExposedWeakness = "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png";

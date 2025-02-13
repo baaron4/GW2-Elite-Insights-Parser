@@ -33,30 +33,63 @@ internal static class DragonhunterHelper
     [
         new BuffOnFoeDamageModifier(Mod_ZealotsAggression, Crippled, "Zealot's Aggression", "10% on crippled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.ZealotsAggression, DamageModifierMode.All),
         // Pur of Sight unclear. Max is very likely to be 1200, as it is the maximum tooltip range for a DH but what is the distance at witch the minimum is reached? Is the scaling linear?
-        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance)
+            .UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return CheckTether(log, src, dst, x.Time);
         }),
-        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance)
+            .UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return CheckTether(log, src, dst, x.Time);
         }),
-        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2023Balance).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2023Balance)
+            .UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return CheckTether(log, src, dst, x.Time);
         }),
-        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly).WithBuilds(GW2Builds.May2023Balance).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "20% to tethered target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.May2023Balance, GW2Builds.February2025BalancePatch)
+            .UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return CheckTether(log, src, dst, x.Time);
         }),
+        new BuffOnFoeDamageModifier(Mod_BigGameHunter, JusticeDragonhunter, "Big Game Hunter", "25% to tethered target", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, TraitImages.BigGameHunter, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.February2025BalancePatch)
+            .UsingChecker((x, log) => {
+                AgentItem src = x.From;
+                AgentItem dst = x.To;
+                return CheckTether(log, src, dst, x.Time);
+            }),
         //         
-        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.All)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "20% to disabled foes", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.PvE)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.All)
-            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None).UsingApproximate(true).WithBuilds(GW2Builds.November2022Balance),
+            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.November2022Balance, GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
+            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "15% to defiant non disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.PvE)
+            .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2025BalancePatch),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

@@ -48,7 +48,7 @@ public class Buff : IVersionable
         BuffStackType.Force
             => BuffType.Duration,
         BuffStackType.Stacking or
-        BuffStackType.StackingTargetUniqueSrc or
+        BuffStackType.StackingUniquePerSrc or
         BuffStackType.StackingConditionalLoss
             => BuffType.Intensity,
         _ => BuffType.Unknown,

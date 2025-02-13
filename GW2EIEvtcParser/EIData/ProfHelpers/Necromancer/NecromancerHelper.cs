@@ -109,6 +109,7 @@ internal static class NecromancerHelper
         new Buff("Vampiric Strikes", VampiricStrikes, Source.Necromancer, BuffClassification.Other, TraitImages.VampiricPresence),
         new Buff("Last Rites", LastRites, Source.Necromancer, BuffClassification.Defensive, TraitImages.LastRites),
         new Buff("Soul Barbs", SoulBarbs, Source.Necromancer, BuffClassification.Other, TraitImages.SoulBarbs),
+        new Buff("Taste For Blood", TasteForBlood, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Support, TraitImages.OverflowingThirst),
         // Spear
         new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Extirpate),
         new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, SkillImages.SoulShards),

@@ -178,8 +178,8 @@ internal static class CommonBuffs
         new Buff("Gourd Vibrations", GourdVibrations, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
         new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
         // Relics
-        new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetToPlayerBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Hidden, BuffImages.Unknown),
-        new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfTheDragonhunter), // Applied on target
+        new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetToPlayerBuff, Source.Gear, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Hidden, BuffImages.Unknown),
+        new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterTargetBuff, Source.Gear, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfTheDragonhunter), // Applied on target
         new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, ItemImages.RelicOfTheAristocracy),
         new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfTheMonk),
         new Buff("Relic of the Brawler", RelicOfTheBrawler, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheBrawler),
@@ -194,11 +194,11 @@ internal static class CommonBuffs
         new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheZephyrite),
         new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfCerus),
         new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffStackType.Stacking, 1, BuffClassification.Gear, ItemImages.RelicOfDagda),
-        new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfIsgarren),
+        new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfIsgarren),
         new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Defensive, ItemImages.RelicOfLyhr),
         new Buff("Mabon's Strength", MabonsStrength, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfMabon),
         new Buff("Relic of Mabon", RelicOfMabon, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfMabon),
-        new Buff("Relic of Peitha", RelicOfPeithaTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfPeitha),
+        new Buff("Relic of Peitha", RelicOfPeithaTargetBuff, Source.Gear, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfPeitha),
         new Buff("Relic of Vass", RelicOfVass, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, ItemImages.RelicOfVass),
         new Buff("Nourys's Hunger (Active)", NouryssHungerStartGainingStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, ItemImages.RelicOfNourys),
         new Buff("Nourys's Hunger (Stacks)", NouryssHungerStacksBuff, Source.Gear,  BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfNourys),

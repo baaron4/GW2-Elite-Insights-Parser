@@ -76,8 +76,10 @@ internal static class ElementalistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Fire
+        new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.PersistingFlames, DamageModifierMode.All)
+            .WithBuilds( GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.PersistingFlames, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.July2020Balance),
+            .WithBuilds(GW2Builds.July2020Balance, GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_PyromancersTraining, [FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PyromancersTraining, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Mod_BurningRage, Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.BurningRage, DamageModifierMode.PvE)
@@ -238,7 +240,7 @@ internal static class ElementalistHelper
         new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Seethe),
         new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Ripple),
         new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Energize),
-        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, SkillImages.Fulgor),
+        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Fulgor),
         new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Harden),
     ];
 
