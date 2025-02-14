@@ -21,16 +21,29 @@ public class JsonPhase
     public string? Name;
 
     /// <summary>
+    /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
     /// Index of targets tracked during the phase
     /// </summary>
     /// <seealso cref="JsonLog.Targets"/>
     public IReadOnlyList<int>? Targets;
 
     /// <summary>
+    /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
     /// Index of secondary targets tracked during the phase
     /// </summary>
     /// <seealso cref="JsonLog.Targets"/>
     public IReadOnlyList<int>? SecondaryTargets;
+
+
+    /// <summary>
+    /// Dictionary of index, indicating the priority of the target \n
+    /// string in : \n
+    /// "MAIN" is the main target of the phase\n
+    /// "BLOCKING" is an enemy that needs to be dealt with in order to progress the phase \n
+    /// "NONBLOCKING" is a relevant enemy but can be technically ignored \n
+    /// </summary>
+    /// <seealso cref="JsonLog.Targets"/>
+    public IReadOnlyDictionary<int, string>? TargetPriorities;
 
     /// <summary>
     /// Index of sub phases

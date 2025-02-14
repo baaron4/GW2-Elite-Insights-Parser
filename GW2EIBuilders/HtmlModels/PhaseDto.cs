@@ -108,7 +108,7 @@ internal class PhaseDto
     public double Start;
     public double End;
     public List<int> Targets;
-    public List<bool> SecondaryTargets;
+    public List<int> TargetPriorities;
     public bool BreakbarPhase;
 
     public List<DPSStatDataItem> DpsStats;
@@ -150,13 +150,14 @@ internal class PhaseDto
         End           = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
 
-        var allTargets = phase.AllTargets;
+        var allTargets = phase.Targets;
         Targets          = new(allTargets.Count);
-        SecondaryTargets = new(allTargets.Count);
-        foreach (SingleActor target in allTargets)
+        TargetPriorities = new(allTargets.Count);
+        foreach (var pair in allTargets)
         {
+            var target = pair.Key;
             Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
-            SecondaryTargets.Add(phase.IsSecondaryTarget(target));
+            TargetPriorities.Add((int)pair.Value.Priority);
         }
 
         PlayerActiveTimes = new(log.Friendlies.Count);
@@ -373,9 +374,9 @@ internal class PhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            var playerData = new List<DPSStatDataItem>(phase.AllTargets.Count);
+            var playerData = new List<DPSStatDataItem>(phase.Targets.Count);
 
-            foreach (SingleActor target in phase.AllTargets)
+            foreach (SingleActor target in phase.Targets.Keys)
             {
                 playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
             }
@@ -412,8 +413,8 @@ internal class PhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            var playerData = new List<OffensiveStatDataItem>(phase.AllTargets.Count);
-            foreach (SingleActor target in phase.AllTargets)
+            var playerData = new List<OffensiveStatDataItem>(phase.Targets.Count);
+            foreach (SingleActor target in phase.Targets.Keys)
             {
                 FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
                 playerData.Add(GetOffensiveStatData(statsTarget));

@@ -43,17 +43,17 @@ internal class MechanicChartDataDto
         }
         else
         {
-            var targetIndex = new Dictionary<SingleActor, int>(phase.AllTargets.Count);
-            for (int p = 0; p < phase.AllTargets.Count; p++)
-            {
-                targetIndex.Add(phase.AllTargets[p], p);
+            var targetIndex = new Dictionary<SingleActor, int>(phase.Targets.Count);
+            int p = 0;
+            foreach (var pair in phase.Targets) {
+                targetIndex.Add(pair.Key, p++);
                 res.Add([]);
             }
             res.Add([]);
             foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
             {
                 double time = (ml.Time - phase.Start) / 1000.0;
-                if (targetIndex.TryGetValue(ml.Actor, out int p))
+                if (targetIndex.TryGetValue(ml.Actor, out p))
                 {
                     res[p].Add((time, null));
                 }

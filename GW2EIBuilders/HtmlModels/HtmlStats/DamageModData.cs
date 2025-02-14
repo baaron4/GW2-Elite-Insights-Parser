@@ -40,9 +40,9 @@ internal class DamageModData
             }
         }
 
-        var allTargets = phase.AllTargets;
+        var allTargets = phase.Targets;
         DataTarget = new(allTargets.Count);
-        foreach (SingleActor target in allTargets)
+        foreach (SingleActor target in allTargets.Keys)
         {
             var pTarget = new List<DamageModDataItem>(1 + listToUse.Count);
             DataTarget.Add(pTarget);
@@ -102,7 +102,7 @@ internal class DamageModData
         }
 
         DataTarget = new(phase.Targets.Count);
-        foreach (SingleActor target in phase.Targets)
+        foreach (SingleActor target in phase.Targets.Keys)
         {
             var pTarget = new List<DamageModDataItem>(listToUse.Count);
             DataTarget.Add(pTarget);

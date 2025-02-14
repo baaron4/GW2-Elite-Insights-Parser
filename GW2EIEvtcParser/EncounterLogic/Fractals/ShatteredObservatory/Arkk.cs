@@ -120,7 +120,7 @@ internal class Arkk : ShatteredObservatory
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         phases[0].AddTarget(arkk);
-        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.Archdiviner) || x.IsSpecies(TrashID.EliteBrazenGladiator)));
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.Archdiviner) || x.IsSpecies(TrashID.EliteBrazenGladiator)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -166,7 +166,7 @@ internal class Arkk : ShatteredObservatory
         foreach (PhaseData phase in phases)
         {
             var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
-            phase.AddSecondaryTargets(anomalies);
+            phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
         }
 
         return phases;
