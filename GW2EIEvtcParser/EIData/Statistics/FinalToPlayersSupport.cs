@@ -6,25 +6,25 @@ namespace GW2EIEvtcParser.EIData;
 public class FinalToPlayersSupport
 {
     //public long allHeal;
-    public readonly int Resurrects;
+    public readonly int ResurrectCount;
     public readonly double ResurrectTime;
-    public readonly int CondiCleanse;
-    public readonly double CondiCleanseTime;
-    public readonly int CondiCleanseSelf;
-    public readonly double CondiCleanseTimeSelf;
-    public readonly int BoonStrips;
-    public readonly double BoonStripsTime;
-    public readonly int BoonStripsDownContribution;
-    public readonly double BoonStripsDownContributionTime;
-    public readonly int StunBreak;
+    public readonly int ConditionCleanseCount;
+    public readonly double ConditionCleanseTime;
+    public readonly int ConditionCleanseSelfCount;
+    public readonly double ConditionCleanseTimeSelf;
+    public readonly int BoonStripCount;
+    public readonly double BoonStripTime;
+    public readonly int BoonStripDownContribution;
+    public readonly double BoonStripDownContributionTime;
+    public readonly int StunBreakCount;
     public readonly double RemovedStunDuration;
 
     internal FinalToPlayersSupport(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var totals = actor.GetSupportStats(log, start, end);
-        Resurrects = totals.Resurrects;
+        ResurrectCount = totals.ResurrectCount;
         ResurrectTime = totals.ResurrectTime;
-        StunBreak = totals.StunBreak;
+        StunBreakCount = totals.StunBreakCount;
         RemovedStunDuration = totals.RemovedStunDuration;
         FinalSupport self = actor.GetSupportStats(actor, log, start, end);
         foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
@@ -32,18 +32,18 @@ public class FinalToPlayersSupport
             // add everything from total
             if (totals.FoeRemovals.TryGetValue(boon.ID, out (int count, long time) itemFoe))
             {
-                BoonStrips += itemFoe.count;
-                BoonStripsTime += itemFoe.time;
+                BoonStripCount += itemFoe.count;
+                BoonStripTime += itemFoe.time;
             }
             if (totals.FoeRemovalsDownContribution.TryGetValue(boon.ID, out (int count, long time) itemFoeDownContribution))
             {
-                BoonStripsDownContribution += itemFoeDownContribution.count;
-                BoonStripsDownContributionTime += itemFoeDownContribution.time;
+                BoonStripDownContribution += itemFoeDownContribution.count;
+                BoonStripDownContributionTime += itemFoeDownContribution.time;
             }
             if (totals.UnknownRemovals.TryGetValue(boon.ID, out (int count, long time) itemUnknown))
             {
-                BoonStrips += itemUnknown.count;
-                BoonStripsTime += itemUnknown.time;
+                BoonStripCount += itemUnknown.count;
+                BoonStripTime += itemUnknown.time;
             }
         }
         foreach (Buff condition in log.Buffs.BuffsByClassification[BuffClassification.Condition])
@@ -51,8 +51,8 @@ public class FinalToPlayersSupport
             // add everything from self
             if (self.FriendlyRemovals.TryGetValue(condition.ID, out (int count, long time) itemFriend))
             {
-                CondiCleanseSelf += itemFriend.count;
-                CondiCleanseTimeSelf += itemFriend.time;
+                ConditionCleanseSelfCount += itemFriend.count;
+                ConditionCleanseTimeSelf += itemFriend.time;
             }
             foreach (Player p in log.PlayerList)
             {
@@ -64,15 +64,15 @@ public class FinalToPlayersSupport
                 // Add everything from other
                 if (other.FriendlyRemovals.TryGetValue(condition.ID, out itemFriend))
                 {
-                    CondiCleanse += itemFriend.count;
-                    CondiCleanseTime += itemFriend.time;
+                    ConditionCleanseCount += itemFriend.count;
+                    ConditionCleanseTime += itemFriend.time;
                 }
             }
         }
-        CondiCleanseTime = Math.Round(CondiCleanseTime / 1000.0, ParserHelper.TimeDigit);
-        CondiCleanseTimeSelf = Math.Round(CondiCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
-        BoonStripsTime = Math.Round(BoonStripsTime / 1000.0, ParserHelper.TimeDigit);
-        BoonStripsDownContributionTime = Math.Round(BoonStripsDownContributionTime / 1000.0, ParserHelper.TimeDigit);
+        ConditionCleanseTime = Math.Round(ConditionCleanseTime / 1000.0, ParserHelper.TimeDigit);
+        ConditionCleanseTimeSelf = Math.Round(ConditionCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
+        BoonStripTime = Math.Round(BoonStripTime / 1000.0, ParserHelper.TimeDigit);
+        BoonStripDownContributionTime = Math.Round(BoonStripDownContributionTime / 1000.0, ParserHelper.TimeDigit);
     }
 
 }

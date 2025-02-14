@@ -4,35 +4,49 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalOffensiveStats
 {
-    public readonly int TotalDamageCount;
-    public readonly int TotalDmg;
-    public readonly int DirectDamageCount;
-    public readonly int DirectDmg;
-    public readonly int ConnectedDamageCount;
-    public readonly int ConnectedDmg;
+    public readonly int TotalDamageEventCount;
+    public readonly int TotalDamageEventDamage;
+
+    public readonly int DirectDamageEventCount;
+    public readonly int DirectDamageEventDamage;
+
+    public readonly int DamageCount;
+    public readonly int Damage;
+
     public readonly int ConnectedDirectDamageCount;
     public readonly int ConnectedDirectDmg;
+
+    public readonly int PowerCount;
+    public readonly int PowerDamage;
+    public readonly int PowerAbove90HPCount;
+    public readonly int PowerAbove90HPDamage;
+
+    public readonly int LifeLeechDamageCount;
+    public readonly int LifeLeechDamage;
+
+    public readonly int ConditionCount;
+    public readonly int ConditionDamage;
+    public readonly int ConditionAbove90HPCount;
+    public readonly int ConditionAbove90HPDamage;
+
     public readonly int CritableDirectDamageCount;
     public readonly int CriticalCount;
-    public readonly int CriticalDmg;
+    public readonly int CriticalDamage;
+
     public readonly int FlankingCount;
-    public readonly int GlanceCount;
+    public readonly int GlancingCount;
     public readonly int AgainstMovingCount;
-    public readonly int Missed;
-    public readonly int Blocked;
-    public readonly int Evaded;
-    public readonly int Interrupts;
-    public readonly int Invulned;
-    public readonly int Killed;
-    public readonly int Downed;
+    public readonly int MissedCount;
+    public readonly int BlockedCount;
+    public readonly int EvadedCount;
+    public readonly int InterruptCount;
+    public readonly int InvulnedCount;
+
+    public readonly int KilledCount;
+    public readonly int DownedCount;
 
     public readonly int AgainstDownedCount;
     public readonly int AgainstDownedDamage;
-
-    public readonly int ConnectedPowerCount;
-    public readonly int ConnectedPowerAbove90HPCount;
-    public readonly int ConnectedConditionCount;
-    public readonly int ConnectedConditionAbove90HPCount;
 
     public readonly int DownContribution;
 
@@ -49,64 +63,21 @@ public class FinalOffensiveStats
         {
             if (dl.From == actor.AgentItem)
             {
-                if (!(dl is NonDirectHealthDamageEvent))
-                {
-                    if (dl.HasHit)
-                    {
-                        if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
-                        {
-                            if (dl.HasCrit)
-                            {
-                                CriticalCount++;
-                                CriticalDmg += dl.HealthDamage;
-                            }
-                            CritableDirectDamageCount++;
-                        }
-                        if (dl.IsFlanking)
-                        {
-                            FlankingCount++;
-                        }
-
-                        if (dl.HasGlanced)
-                        {
-                            GlanceCount++;
-                        }
-                        ConnectedDirectDamageCount++;
-                        ConnectedDirectDmg += dl.HealthDamage;
-                    }
-
-                    if (dl.IsBlind)
-                    {
-                        Missed++;
-                    }
-                    if (dl.IsEvaded)
-                    {
-                        Evaded++;
-                    }
-                    if (dl.IsBlocked)
-                    {
-                        Blocked++;
-                    }
-                    if (!dl.DoubleProcHit)
-                    {
-                        DirectDamageCount++;
-                        DirectDmg += dl.HealthDamage;
-                    }
-                }
-                if (dl.IsAbsorbed)
-                {
-                    Invulned++;
-                }
                 if (!dl.DoubleProcHit)
                 {
-                    TotalDamageCount++;
-                    TotalDmg += dl.HealthDamage;
+                    TotalDamageEventCount++;
+                    TotalDamageEventDamage += dl.HealthDamage;
+                    if (dl is DirectHealthDamageEvent)
+                    {
+                        DirectDamageEventCount++;
+                        DirectDamageEventDamage += dl.HealthDamage;
+                    }
                 }
 
                 if (dl.HasHit)
                 {
-                    ConnectedDamageCount++;
-                    ConnectedDmg += dl.HealthDamage;
+                    DamageCount++;
+                    Damage += dl.HealthDamage;
                     // Derive down contribution from health updates as they are available after this build
                     if (log.LogData.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.Last90BeforeDownRetired)
                     {
@@ -123,24 +94,46 @@ public class FinalOffensiveStats
                             DownContribution += dl.HealthDamage;
                         }
                     }
-                    if (dl.AgainstMoving)
-                    {
-                        AgainstMovingCount++;
-                    }
                     if (dl.ConditionDamageBased(log))
                     {
-                        ConnectedConditionCount++;
+                        ConditionCount++;
+                        ConditionDamage += dl.HealthDamage;
                         if (dl.IsOverNinety)
                         {
-                            ConnectedConditionAbove90HPCount++;
+                            ConditionAbove90HPCount++;
+                            ConditionAbove90HPDamage += dl.HealthDamage;
                         }
                     }
                     else
                     {
-                        ConnectedPowerCount++;
+                        if (dl is NonDirectHealthDamageEvent ndhd)
+                        {
+                            if (ndhd.IsLifeLeech)
+                            {
+                                LifeLeechDamageCount++;
+                                LifeLeechDamage += dl.HealthDamage;
+                            }
+                        } 
+                        else
+                        {
+                            if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
+                            {
+                                if (dl.HasCrit)
+                                {
+                                    CriticalCount++;
+                                    CriticalDamage += dl.HealthDamage;
+                                }
+                                CritableDirectDamageCount++;
+                            }
+                            ConnectedDirectDamageCount++;
+                            ConnectedDirectDmg += dl.HealthDamage;
+                        }
+                        PowerCount++;
+                        PowerDamage += dl.HealthDamage;
                         if (dl.IsOverNinety)
                         {
-                            ConnectedPowerAbove90HPCount++;
+                            PowerAbove90HPCount++;
+                            PowerAbove90HPDamage += dl.HealthDamage;
                         }
                     }
                     if (dl.AgainstDowned)
@@ -148,23 +141,47 @@ public class FinalOffensiveStats
                         AgainstDownedCount++;
                         AgainstDownedDamage += dl.HealthDamage;
                     }
+                    if (dl.AgainstMoving)
+                    {
+                        AgainstMovingCount++;
+                    }
+                    if (dl.IsFlanking)
+                    {
+                        FlankingCount++;
+                    }
+                    if (dl.HasGlanced)
+                    {
+                        GlancingCount++;
+                    }
+                }
+                if (dl.IsAbsorbed)
+                {
+                    InvulnedCount++;
+                }
+                if (dl.IsBlind)
+                {
+                    MissedCount++;
+                }
+                if (dl.IsEvaded)
+                {
+                    EvadedCount++;
+                }
+                if (dl.IsBlocked)
+                {
+                    BlockedCount++;
                 }
             }
-
-            if (!(dl is NonDirectHealthDamageEvent))
+            if (dl.HasInterrupted)
             {
-                if (dl.HasInterrupted)
-                {
-                    Interrupts++;
-                }
+                InterruptCount++;
             }
             if (dl.HasKilled)
             {
-                Killed++;
+                KilledCount++;
             }
             if (dl.HasDowned)
             {
-                Downed++;
+                DownedCount++;
             }
         }
         var ccs = actor.GetOutgoingCrowdControlEvents(target, log, start, end);
