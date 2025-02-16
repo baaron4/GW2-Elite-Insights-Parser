@@ -1,8 +1,8 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime =
 [
     [ "JsonBuffsUptimeData", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data" ],
-    [ "BuffData", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a5a035b68d9a792395bcc05a07dd4609a", null ],
+    [ "BuffData", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a0b08c6f1fc8a43cf713ac09e35630c57", null ],
     [ "Id", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a19d04082968f54060b04e041c98b2e3c", null ],
-    [ "States", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a30a0e714285f415fa84bc252873e4a2c", null ],
-    [ "StatesPerSource", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#aa9cc783f90ba5b5e7975adfb0ccad169", null ]
+    [ "States", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a9e885e91bd1cd43aa4dd858230779e8d", null ],
+    [ "StatesPerSource", "class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#abd17ac6d8f5ab187c944cc7114dcb3dd", null ]
 ];
