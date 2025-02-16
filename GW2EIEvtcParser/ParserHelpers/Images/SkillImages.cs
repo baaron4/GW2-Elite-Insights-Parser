@@ -177,6 +177,7 @@ internal static class SkillImages
     public const string DetonateMineField = "https://render.guildwars2.com/file/D97BF56EBB6D074BFEFC11E103D6D1F2360C6A17/102902.png";
     public const string CrashDown = "https://render.guildwars2.com/file/9156D3FECB94F8B27909B3EA904DAAE3C21043F9/2503677.png";
     public const string ThumperTurret = "https://render.guildwars2.com/file/EA2452FCE71C0F0B9755517324A47680BF45E79E/103201.png";
+    public const string Overheat = "https://render.guildwars2.com/file/5DC4E10CE03E4D78EFACEEDB6F5FCF4F206BA7E3/1770392.png";
     #endregion Engineer
     #region Guardian
     public const string SpearOfLight = "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png";

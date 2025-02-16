@@ -61,7 +61,7 @@ internal static class HolosmithHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new Buff("Afterburner", Afterburner, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.SolarFocusingLens),
         new Buff("Heat Therapy", HeatTherapy, Source.Holosmith, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.HeatTherapy),
-        new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, TraitImages.Overheat),
+        new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, SkillImages.Overheat),
         new Buff("Photon Barrier", PhotonBarrierBuff, Source.Holosmith, BuffClassification.Defensive, SkillImages.PhotonWall),
         // heat buffs only present in forge
         new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl1),
