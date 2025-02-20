@@ -42,7 +42,7 @@ internal static class SpecterHelper
     [
         new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, SkillImages.EnterShadowShroud),
         new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, SkillImages.EndlessNight),
-        new Buff("Shrouded", Shrouded, Source.Specter, BuffClassification.Support, SkillImages.EnterShadowShroud),
+        new Buff("Shrouded", Shrouded, Source.Specter, BuffStackType.Stacking, 25, BuffClassification.Support, SkillImages.EnterShadowShroud),
         new Buff("Shrouded Ally", ShroudedAlly, Source.Specter, BuffClassification.Other, SkillImages.Siphon),
         new Buff("Rot Wallow Venom", RotWallowVenom, Source.Specter, BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, TraitImages.DarkSentry),
         new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, TraitImages.ConsumeShadows),
