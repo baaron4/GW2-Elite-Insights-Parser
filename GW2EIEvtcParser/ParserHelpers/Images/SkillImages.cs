@@ -292,6 +292,7 @@ internal static class SkillImages
     public const string SplitSurge = "https://render.guildwars2.com/file/66067CFD182ED01761DC5992E679BFA2057B5954/1770507.png";
     public const string FriendlyFire = "https://render.guildwars2.com/file/BAAD0DF6B8C4AAF520B82BE3CEA7931BC2F52DCF/3256358.png";
     public const string PhantasmalSharpshooter = "https://render.guildwars2.com/file/3499040CA6182B68293313C1000C470828CE1532/3256362.png";
+    public const string PhantasmalLancher = "https://render.guildwars2.com/file/5E6C98FA3B942EE76808530B016FF5621A25764F/3379157.png";
     #endregion Mesmer
     #region Necromancer
     public const string HarbingerShroud = "https://wiki.guildwars2.com/images/a/ab/Harbinger_Shroud.png";
@@ -704,6 +705,7 @@ internal static class SkillImages
     #region Fight Specific
     public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
     public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
+    public const string TossSlubling = "https://assets.gw2dat.com/831481.png";
     #endregion Fight Specific
 }
 
