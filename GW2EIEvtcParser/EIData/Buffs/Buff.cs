@@ -79,6 +79,12 @@ public class Buff : IVersionable
         StackType = type;
         Capacity = capacity;
         Classification = nature;
+#if DEBUG
+        if (Classification == BuffClassification.Hidden)
+        {
+            Classification = BuffClassification.Other;
+        }
+#endif
         Link = link;
     }
 
