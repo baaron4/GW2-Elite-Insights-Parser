@@ -244,48 +244,48 @@ internal class PhaseDto
     private static GameplayStatDataItem GetGameplayStatData(FinalGameplayStats stats)
     {
         return [
-                stats.TimeWasted,
-                stats.Wasted,
-                stats.TimeSaved,
-                stats.Saved,
-                stats.SwapCount,
-                Math.Round(stats.StackDist, 2),
-                Math.Round(stats.DistToCom, 2),
+                stats.SkillAnimationInterruptedDuration,
+                stats.SkillAnimationInterruptedCount,
+                stats.SkillAnimationAfterCastInterruptedDuration,
+                stats.SkillAnimationAfterCastInterruptedCount,
+                stats.WeaponSwapCount,
+                Math.Round(stats.DistanceToCenterOfSquad, 2),
+                Math.Round(stats.DistanceToCommander, 2),
                 stats.SkillCastUptime,
-                stats.SkillCastUptimeNoAA
+                stats.SkillCastUptimeNoAutoAttack
         ];
     }
 
     private static OffensiveStatDataItem GetOffensiveStatData(FinalOffensiveStats stats)
     {
         return [
-                stats.DirectDamageCount,
+                stats.DirectDamageEventCount,
                 stats.CritableDirectDamageCount,
                 stats.CriticalCount,
-                stats.CriticalDmg,
+                stats.CriticalDamage,
                 stats.FlankingCount,
-                stats.GlanceCount,
-                stats.Missed,
-                stats.Interrupts,
-                stats.Invulned,
-                stats.Evaded,
-                stats.Blocked,
+                stats.GlancingCount,
+                stats.MissedCount,
+                stats.InterruptCount,
+                stats.InvulnedCount,
+                stats.EvadedCount,
+                stats.BlockedCount,
                 stats.ConnectedDirectDamageCount,
-                stats.Killed,
-                stats.Downed,
+                stats.KilledCount,
+                stats.DownedCount,
                 stats.AgainstMovingCount,
-                stats.ConnectedDamageCount,
-                stats.TotalDamageCount,
+                stats.DamageCount,
+                stats.TotalDamageEventCount,
                 stats.DownContribution,
-                stats.ConnectedDmg,
+                stats.Damage,
                 stats.ConnectedDirectDmg,
-                stats.ConnectedPowerCount,
-                stats.ConnectedPowerAbove90HPCount,
-                stats.ConnectedConditionCount,
-                stats.ConnectedConditionAbove90HPCount,
+                stats.PowerCount,
+                stats.PowerAbove90HPCount,
+                stats.ConditionCount,
+                stats.ConditionAbove90HPCount,
                 stats.AgainstDownedCount,
                 stats.AgainstDownedDamage,
-                stats.TotalDmg,
+                stats.TotalDamageEventDamage,
                 stats.AppliedCrowdControl,
                 stats.AppliedCrowdControlDuration
             ];
@@ -296,7 +296,7 @@ internal class PhaseDto
         return [
                 dpsAll.Damage,
                 dpsAll.PowerDamage,
-                dpsAll.CondiDamage,
+                dpsAll.ConditionDamage,
                 dpsAll.BreakbarDamage
             ];
     }
@@ -304,15 +304,15 @@ internal class PhaseDto
     private static SupportStatDataItem GetSupportStatData(FinalToPlayersSupport support)
     {
         return [
-                support.CondiCleanse,
-                support.CondiCleanseTime,
-                support.CondiCleanseSelf,
-                support.CondiCleanseTimeSelf,
-                support.BoonStrips,
-                support.BoonStripsTime,
-                support.Resurrects,
+                support.ConditionCleanseCount,
+                support.ConditionCleanseTime,
+                support.ConditionCleanseSelfCount,
+                support.ConditionCleanseTimeSelf,
+                support.BoonStripCount,
+                support.BoonStripTime,
+                support.ResurrectCount,
                 support.ResurrectTime,
-                support.StunBreak,
+                support.StunBreakCount,
                 support.RemovedStunDuration
         ];
     }

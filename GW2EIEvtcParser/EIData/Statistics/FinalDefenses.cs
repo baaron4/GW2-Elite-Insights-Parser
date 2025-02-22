@@ -7,23 +7,41 @@ public class FinalDefenses
 {
     //public long allHealReceived;
     public readonly int DamageTaken;
+    public readonly int DamageTakenCount;
+
+    public readonly int DamageBarrier;
+    public readonly int DamageBarrierCount;
+
     public readonly int ConditionDamageTaken;
+    public readonly int ConditionDamageTakenCount;
+
     public readonly int PowerDamageTaken;
+    public readonly int PowerDamageTakenCount;
+
     public readonly int LifeLeechDamageTaken;
+    public readonly int LifeLeechDamageTakenCount;
+
     public readonly int StrikeDamageTaken;
+    public readonly int StrikeDamageTakenCount;
+
     public readonly int DownedDamageTaken;
+    public readonly int DownedDamageTakenCount;
+
     public readonly double BreakbarDamageTaken;
+    public readonly int BreakbarDamageTakenCount;
+
     public readonly int BlockedCount;
     public readonly int MissedCount;
     public readonly int EvadedCount;
     public readonly int DodgeCount;
     public readonly int InvulnedCount;
-    public readonly int DamageBarrier;
     public readonly int InterruptedCount;
+
     public readonly int BoonStrips;
     public readonly double BoonStripsTime;
     public readonly int ConditionCleanses;
     public readonly double ConditionCleansesTime;
+
     public readonly int ReceivedCrowdControl;
     public readonly double ReceivedCrowdControlDuration;
 
@@ -58,28 +76,44 @@ public class FinalDefenses
         var damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
         foreach (HealthDamageEvent damageEvent in damageLogs)
         {
-            DamageTaken += damageEvent.HealthDamage;
-            if (damageEvent is NonDirectHealthDamageEvent ndhd)
+            if (damageEvent.HasHit)
             {
+                DamageTaken += damageEvent.HealthDamage;
+                DamageTakenCount++;
                 if (damageEvent.ConditionDamageBased(log))
                 {
                     ConditionDamageTaken += damageEvent.HealthDamage;
+                    ConditionDamageTakenCount++;
                 }
                 else
                 {
-                    PowerDamageTaken += damageEvent.HealthDamage;
-                    if (ndhd.IsLifeLeech)
+                    if (damageEvent is NonDirectHealthDamageEvent ndhd)
                     {
-                        LifeLeechDamageTaken += damageEvent.HealthDamage;
+                        if (ndhd.IsLifeLeech)
+                        {
+                            LifeLeechDamageTaken += damageEvent.HealthDamage;
+                            LifeLeechDamageTaken++;
+                        }
                     }
+                    else
+                    {
+                        StrikeDamageTaken += damageEvent.HealthDamage;
+                        StrikeDamageTakenCount++;
+                    }
+                    PowerDamageTaken += damageEvent.HealthDamage;
+                    PowerDamageTakenCount++;
+                }
+                if (damageEvent.ShieldDamage > 0)
+                {
+                    DamageBarrier += damageEvent.ShieldDamage;
+                    DamageBarrierCount++;
+                }
+                if (damageEvent.AgainstDowned)
+                {
+                    DownedDamageTaken += damageEvent.HealthDamage;
+                    DownedDamageTakenCount++;
                 }
             }
-            else
-            {
-                StrikeDamageTaken += damageEvent.HealthDamage;
-                PowerDamageTaken += damageEvent.HealthDamage;
-            }
-            DamageBarrier += damageEvent.ShieldDamage;
             if (damageEvent.IsBlocked)
             {
                 BlockedCount++;
@@ -100,10 +134,6 @@ public class FinalDefenses
             {
                 InterruptedCount++;
             }
-            if (damageEvent.AgainstDowned)
-            {
-                DownedDamageTaken += damageEvent.HealthDamage;
-            }
         }
         var ccs = actor.GetIncomingCrowdControlEvents(from, log, start, end);
         foreach (CrowdControlEvent cc in ccs)
@@ -112,7 +142,12 @@ public class FinalDefenses
             ReceivedCrowdControlDuration += cc.Duration;
         }
         DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.Skill.IsDodge(log.SkillData));
-        BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenEvents(from, log, start, end).Sum(x => x.BreakbarDamage), 1);
+        foreach (BreakbarDamageEvent brk in actor.GetBreakbarDamageTakenEvents(from, log, start, end))
+        {
+            BreakbarDamageTaken += brk.BreakbarDamage;
+            BreakbarDamageTakenCount++;
+        }
+        BreakbarDamageTaken = Math.Round(BreakbarDamageTaken, 1);
         (BoonStrips, BoonStripsTime) = GetStripData(log.Buffs.BuffsByClassification[BuffClassification.Boon], log, start, end, actor, from, true);
         (ConditionCleanses, ConditionCleansesTime) = GetStripData(log.Buffs.BuffsByClassification[BuffClassification.Condition], log, start, end, actor, from, false);
     }

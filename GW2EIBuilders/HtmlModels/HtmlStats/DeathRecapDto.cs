@@ -20,7 +20,7 @@ internal class DeathRecapDto
                     item.Time,
                     item.ID,
                     item.Damage,
-                    item.Src,
+                    item.SourceAgent,
                     item.IndirectDamage
             ]);
         }
