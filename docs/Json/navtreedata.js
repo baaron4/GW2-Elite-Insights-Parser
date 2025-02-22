@@ -34,7 +34,7 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Properties", "functions_prop.html", "functions_prop" ]
+        [ "Variables", "functions_vars.html", "functions_vars" ]
       ] ]
     ] ]
   ] ]
@@ -43,10 +43,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#ab026d9c2b92af14428df20012570fe01",
-"class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a1d5cce90498986930346ebb4761e6c52",
-"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af1c3c39224bc30dd54f6c8d686ecea6e",
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#af18d4004a889cbdfcac78aad6b88df2d"
+"class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#aa1fa708744f90014d3d7fe0d1fe6b46a",
+"class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#aae43e3f93a1c58a3889ae01eb858d761",
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aef542a4c7fef69d6241918b5a3adb026",
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#adbb845e8274a18940f2bab7d5faeee36"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

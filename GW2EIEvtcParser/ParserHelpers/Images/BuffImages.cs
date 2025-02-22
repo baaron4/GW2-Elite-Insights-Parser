@@ -48,7 +48,7 @@ public static class BuffImages
     public const string Exhaustion = "https://wiki.guildwars2.com/images/8/88/Exhaustion.png";
     public const string Stealth = "https://wiki.guildwars2.com/images/1/19/Stealth.png";
     public const string Revealed = "https://wiki.guildwars2.com/images/d/db/Revealed.png";
-    public const string Superspeed = "https://wiki.guildwars2.com/images/c/c8/Superspeed.png";
+    public const string Superspeed = "https://render.guildwars2.com/file/E04392C3D8ED985125973AEB99D8460C483263F9/103458.png";
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
     public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
     public const string Daze = "https://render.guildwars2.com/file/9AE125E930C92FEA0DD99E7EBAEDE4CF5EC556B6/433474.png";

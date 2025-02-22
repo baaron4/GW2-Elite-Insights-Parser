@@ -682,6 +682,7 @@ public class SkillItem
             { PersistenceOfMemory, TraitImages.PersistenceOfMemory },
             { FriendlyFireIllu, SkillImages.FriendlyFire },
             { PhantasmalSharpshooterAttack,SkillImages.PhantasmalSharpshooter },
+            { PhantasmalLancerDamage, SkillImages.PhantasmalLancher },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -740,6 +741,7 @@ public class SkillItem
             { ColdSnap_FrostSpiritNPC, SkillImages.ColdSnap },
             { CallLightning_Player, SkillImages.CallLightning },
             { CallLightning_StormSpiritNPC, SkillImages.CallLightning },
+            { CallLightningDamage, SkillImages.CallLightning },
             { NaturesRenewal_Player, SkillImages.NaturesRenewal },
             { NaturesRenewal_SpiritOfNatureRenewalNPC, SkillImages.NaturesRenewal },
             { NaturesRenewalHealing, SkillImages.NaturesRenewal },
@@ -972,6 +974,8 @@ public class SkillItem
             { BerserkEndSkill, SkillImages.BerserkerEnd },
             #endregion WarriorIcons
             #region EncounterIcons
+            // Slothasor
+            { Toss, SkillImages.TossSlubling },
             // River of Souls
             { BombShellRiverOfSouls, SkillImages.BombShell },
             // Silent Surf Fractal

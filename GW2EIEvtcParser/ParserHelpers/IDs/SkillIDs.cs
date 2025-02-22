@@ -1920,6 +1920,7 @@ public static class SkillIDs
     public const long FixatedSlothasor = 34508;
     public const long ShieldAbomination = 34510;
     public const long ZealousBenediction = 34511;
+    public const long Toss = 34513;
     public const long NarcolepsySkill = 34515;
     public const long Halitosis = 34516;
     public const long BloodShield = 34518;
@@ -4037,6 +4038,7 @@ public static class SkillIDs
     public const long AspectedVolleyDeath = 69155;
     public const long AspectTetherBuff = 69161;
     public const long DualOrbitFireAndEarth = 69164;
+    public const long CallLightningDamage = 69178;
     public const long FrighteningSpeedReturn = 69182;
     public const long LesserGuardSkill = 69183;
     public const long DualOrbitFireAndWater = 69184;
@@ -4523,6 +4525,7 @@ public static class SkillIDs
     public const long RelicOfTheClaw = 73955;
     public const long SpearmarshalsSupportBombard = 74290;
     public const long RelicOfSorrowBuff = 74410;
+    public const long PhantasmalLancerDamage = 74619;
     public const long SeismicCrashDamage = 74653;
     public const long GalvanicSensitivity = 74659;
     public const long FluxlanceFusillade = 74660;
