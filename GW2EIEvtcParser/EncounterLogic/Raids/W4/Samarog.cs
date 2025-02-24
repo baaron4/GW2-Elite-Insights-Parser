@@ -168,6 +168,15 @@ internal class Samarog : BastionOfThePenitent
             (int)ArcDPSEnums.TrashID.Guldhem,
         ];
     }
+    protected override Dictionary<int, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<int, int>()
+        {
+            {(int)ArcDPSEnums.TargetID.Samarog, 0 },
+            {(int)ArcDPSEnums.TrashID.Rigom, 1 },
+            {(int)ArcDPSEnums.TrashID.Guldhem, 1 },
+        };
+    }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
