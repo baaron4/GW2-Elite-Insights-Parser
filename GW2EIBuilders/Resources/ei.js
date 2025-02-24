@@ -14,6 +14,21 @@ function compileTemplates() {
             Plotly.react(div, this.data, this.layout, plotlyConfig);
             var _this = this;
             div.on('plotly_animated', function () {
+                if (_this.layout.yaxis.autorange) {
+                    let minRange = Number.MAX_SAFE_INTEGER;
+                    let maxRange = Number.MIN_SAFE_INTEGER;
+                    for (let i = 0; i < _this.data.length; i++) {
+                        let curData = _this.data[i];
+                        if (curData.y && curData.visible !== false && curData.visible !== "legendonly") {
+                            for (let j = 0; j < curData.y.length; j++) {
+                                minRange = Math.min(minRange, curData.y[j]);
+                                maxRange = Math.max(maxRange, curData.y[j]);
+                            }
+                        }
+                    }
+                    _this.layout.yaxis.range[0] = minRange;
+                    _this.layout.yaxis.range[1] = maxRange * 1.06;
+                }
                 Plotly.relayout(div, _this.layout);
             });
         },
