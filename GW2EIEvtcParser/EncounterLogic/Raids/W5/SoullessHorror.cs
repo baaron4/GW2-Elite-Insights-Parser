@@ -243,16 +243,15 @@ internal class SoullessHorror : HallOfChains
                     end = (int)c.EndTime;
                     if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        continue;
+                        float initialAngle = facing.GetRoundedZRotationDeg();
+                        var connector = new AgentConnector(target);
+                        for (int i = 0; i < 8; i++)
+                        {
+                            var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                        }
                     }
 
-                    float initialAngle = facing.GetRoundedZRotationDeg();
-                    var connector = new AgentConnector(target);
-                    for (int i = 0; i < 8; i++)
-                    {
-                        var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
-                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                    }
 
                 }
                 
@@ -264,16 +263,15 @@ internal class SoullessHorror : HallOfChains
                     end = (int)c.EndTime;
                     if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        continue;
+                        float initialAngle = facing.GetRoundedZRotationDeg();
+                        var connector = new AgentConnector(target);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                        }
                     }
 
-                    float initialAngle = facing.GetRoundedZRotationDeg();
-                    var connector = new AgentConnector(target);
-                    for (int i = 0; i < 4; i++)
-                    {
-                        var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
-                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                    }
 
                 }
 
@@ -283,16 +281,15 @@ internal class SoullessHorror : HallOfChains
                     end = (int)c.EndTime;
                     if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        continue;
+                        float initialAngle = facing.GetRoundedZRotationDeg();
+                        var connector = new AgentConnector(target);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
+                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                        }
                     }
                     
-                    float initialAngle = facing.GetRoundedZRotationDeg();
-                    var connector = new AgentConnector(target);
-                    for (int i = 0; i < 4; i++)
-                    {
-                        var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
-                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                    }
 
                 }
                 break;

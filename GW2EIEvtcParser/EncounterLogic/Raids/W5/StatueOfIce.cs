@@ -89,17 +89,16 @@ internal class StatueOfIce : HallOfChains
                     var start = c.Time;
                     if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        continue;
+                        var end = c.EndTime;
+                        uint range = 450;
+                        int angle = 100;
+
+                        var connector = new AgentConnector(target);
+                        var rotationConnector = new AngleConnector(facing);
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
                     }
 
-                    var end = c.EndTime;
-                    uint range = 450;
-                    int angle = 100;
-                    
-                    var connector = new AgentConnector(target);
-                    var rotationConnector = new AngleConnector(facing);
-                    replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
-                    replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
                 }
                 break;
             default:

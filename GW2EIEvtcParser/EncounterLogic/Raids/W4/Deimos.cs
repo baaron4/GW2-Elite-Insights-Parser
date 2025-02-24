@@ -544,23 +544,22 @@ internal class Deimos : BastionOfThePenitent
                     int duration = 120;
                     if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        continue;
-                    }
-
-                    float initialAngle = facing.GetRoundedZRotationDeg();
-                    var connector = new AgentConnector(target);
-                    for (int i = 0; i < 6; i++)
-                    {
-                        var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
-                        replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
-                        replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
-                        if (i % 5 != 0)
+                        float initialAngle = facing.GetRoundedZRotationDeg();
+                        var connector = new AgentConnector(target);
+                        for (int i = 0; i < 6; i++)
                         {
-                            var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                            var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
+                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
+                            if (i % 5 != 0)
+                            {
+                                var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                            }
                         }
                     }
+
                 }
 
                 var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
