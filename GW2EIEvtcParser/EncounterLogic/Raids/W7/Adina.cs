@@ -125,7 +125,7 @@ internal class Adina : TheKeyOfAhdashim
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
-        foreach (SingleActor target in _targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsAnySpecies(new [] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption }))
             {

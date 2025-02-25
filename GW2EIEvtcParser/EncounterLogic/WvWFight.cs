@@ -316,8 +316,8 @@ internal class WvWFight : FightLogic
                     break;
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _nonPlayerFriendlies.AddRange(auxFriendlies.OrderBy(x => x.Character));
         _targets.AddRange(auxTargets.OrderBy(x => x.Character));
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 }
