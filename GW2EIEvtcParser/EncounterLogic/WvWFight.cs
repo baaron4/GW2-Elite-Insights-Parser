@@ -104,7 +104,7 @@ internal class WvWFight : FightLogic
         return mapID.MapID switch
         {
             // EB
-            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 900, -36864 - 1800, 36864 + 900, 36864 - 1800)),
+            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 - 900, -36864 + 1800, 36864 - 900, 36864 + 1800)),
             // Green Alpine
             95 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
             // Blue Alpine
