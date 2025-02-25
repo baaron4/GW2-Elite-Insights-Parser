@@ -41,34 +41,14 @@ public class ParsedEvtcLog
         ParserSettings = parserSettings;
         _operation = operation;
         
-        if (parserSettings.AnonymousPlayers)
-        {
-            operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
-            for (int i = 0; i < playerList.Count; i++)
-            {
-                playerList[i].Anonymize(i + 1);
-            }
-            IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-            var playerAgents = new HashSet<AgentItem>(playerList.Select(x => x.AgentItem));
-            int playerOffset = playerList.Count + 1;
-            foreach (AgentItem playerAgent in allPlayerAgents)
-            {
-                if (!playerAgents.Contains(playerAgent))
-                {
-                    string character = "Player " + playerOffset;
-                    string account = "Account " + (playerOffset++);
-                    playerAgent.OverrideName(character + "\0:" + account + "\00");
-                }
-            }
-        }
-        
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
         CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
 
         if (parserSettings.AnonymousPlayers)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous guilds");
-            IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+            var allPlayerAgents = AgentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
+            allPlayerAgents.AddRange(AgentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             foreach (AgentItem playerAgent in allPlayerAgents)
             {
                 foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
@@ -112,7 +92,7 @@ public class ParsedEvtcLog
         {
             throw new EvtcAgentException("No valid players");
         }
-        PlayerList = activePlayers.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
+        PlayerList = activePlayers.OrderBy(a => a.Group).ToList();
         PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling friendlies");

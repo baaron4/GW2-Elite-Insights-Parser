@@ -765,6 +765,28 @@ public class EvtcParser
         {
             _playerList.ForEach(x => x.MakeSquadless());
         }
+        _playerList = _playerList.OrderBy(a => a.Character).ToList();
+        if (_parserSettings.AnonymousPlayers)
+        {
+            operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
+            for (int i = 0; i < _playerList.Count; i++)
+            {
+                _playerList[i].Anonymize(i + 1);
+            }
+            var allPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
+            allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
+            var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
+            int playerOffset = _playerList.Count + 1;
+            foreach (AgentItem playerAgent in allPlayerAgents)
+            {
+                if (!playerAgents.Contains(playerAgent))
+                {
+                    string character = "Player " + playerOffset;
+                    string account = "Account " + (playerOffset++);
+                    playerAgent.OverrideName(character + "\0:" + account + "\00");
+                }
+            }
+        }
         uint minToughness = _playerList.Min(x => x.Toughness);
         if (minToughness > 0)
         {
@@ -1071,7 +1093,7 @@ public class EvtcParser
         {
             throw new EvtcAgentException("No valid players");
         }
-        
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
         _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
         if (!_fightData.Logic.Targets.Any())

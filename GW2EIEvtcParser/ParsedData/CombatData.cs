@@ -352,7 +352,8 @@ public class CombatData
                 pair.Value.Insert(0, new BreakbarStateEvent(pair.Key, pair.Key.FirstAware, BreakbarState.Active));
             }
         }
-        var players = agentData.GetAgentByType(AgentItem.AgentType.Player);
+        var players = agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
+        players.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
         // master attachements
         operation.UpdateProgressWithCancellationCheck("Parsing: Processing Warrior Gadgets");
         WarriorHelper.ProcessGadgets(players, this);
@@ -364,7 +365,6 @@ public class CombatData
         RevenantHelper.ProcessGadgets(players, this, agentData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Processing Racial Gadget");
         ProfHelper.ProcessRacialGadgets(players, this);
-        
         // Custom events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
         EIBuffParse(players, skillData, fightData, evtcVersion);
