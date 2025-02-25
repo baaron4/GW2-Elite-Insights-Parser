@@ -203,10 +203,9 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     end = (int)c.EndTime;
                     if (target.TryGetCurrentPosition(log, end, out var pylonPosition))
                     {
-                        continue;
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
+                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                     }
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
-                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                 }
                 var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2);
                 foreach (CastEvent c in forceOfHavoc)

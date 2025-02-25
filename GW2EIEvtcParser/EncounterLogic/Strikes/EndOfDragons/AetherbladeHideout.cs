@@ -159,13 +159,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     var offset = new Vector3(range / 2, 0, 0);
 
                     // Get facing direction
-                    if (!target.TryGetCurrentFacingDirection(log, lifespan.start + 100, out var facingDirection, castDuration))
+                    if (target.TryGetCurrentFacingDirection(log, lifespan.start + 100, out var facingDirection, castDuration))
                     {
-                        break;
+                        var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
+                        replay.Decorations.AddWithGrowing(indicator, growing);
                     }
 
-                    var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
-                    replay.Decorations.AddWithGrowing(indicator, growing);
                 }
                 break;
             case (int)TrashID.MaiTrinStrikeDuringEcho:
@@ -288,20 +287,19 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     var offset = new Vector3(range / 2, 0, 0);
 
                     // Get facing direction
-                    if (!target.TryGetCurrentFacingDirection(log, lifespanDamage.start + 100, out var facingDirection, duration))
+                    if (target.TryGetCurrentFacingDirection(log, lifespanDamage.start + 100, out var facingDirection, duration))
                     {
-                        break;
+                        (long start, long end) lifespanIndicator = (lifespanDamage.start - 1520, lifespanDamage.start);
+
+                        var connector = new AgentConnector(target.AgentItem);
+                        var angle = new AngleConnector(facingDirection);
+
+                        var indicator = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanIndicator, Colors.LightOrange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
+                        var damage = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanDamage, Colors.LightBlue, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
+                        replay.Decorations.Add(indicator);
+                        replay.Decorations.Add(damage);
                     }
 
-                    (long start, long end) lifespanIndicator = (lifespanDamage.start - 1520, lifespanDamage.start);
-
-                    var connector = new AgentConnector(target.AgentItem);
-                    var angle = new AngleConnector(facingDirection);
-
-                    var indicator = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanIndicator, Colors.LightOrange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
-                    var damage = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanDamage, Colors.LightBlue, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
-                    replay.Decorations.Add(indicator);
-                    replay.Decorations.Add(damage);
                 }
                 break;
             case (int)TrashID.FerrousBomb:

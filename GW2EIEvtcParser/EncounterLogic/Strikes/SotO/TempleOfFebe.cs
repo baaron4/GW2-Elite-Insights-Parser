@@ -166,14 +166,26 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
-        phases[0].AddTarget(mainTarget);
+        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
+        phases[0].AddTarget(cerus);
+        var embodimentIds = new List<int>
+        {
+            (int)TrashID.EmbodimentOfDespair,
+            (int)TrashID.EmbodimentOfEnvy,
+            (int)TrashID.EmbodimentOfGluttony,
+            (int)TrashID.EmbodimentOfMalice,
+            (int)TrashID.EmbodimentOfRage,
+            (int)TrashID.EmbodimentOfRegret,
+        };
+        var embodiments = Targets.Where(target => embodimentIds.Contains(target.ID));
+        var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
+        phases[0].AddTargets(embodimentsKilled, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
         }
         // Invul check
-        List<PhaseData> invulnPhases = GetPhasesByInvul(log, InvulnerabilityCerus, mainTarget, true, true);
+        List<PhaseData> invulnPhases = GetPhasesByInvul(log, InvulnerabilityCerus, cerus, true, true);
         phases.AddRange(invulnPhases);
         for (int i = 1; i < phases.Count; i++)
         {
@@ -181,36 +193,34 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
-                var ids = new List<int>
+                var killed = embodimentsKilled.Where(target =>
                 {
-                    (int)TrashID.EmbodimentOfDespair,
-                    (int)TrashID.EmbodimentOfEnvy,
-                    (int)TrashID.EmbodimentOfGluttony,
-                    (int)TrashID.EmbodimentOfMalice,
-                    (int)TrashID.EmbodimentOfRage,
-                    (int)TrashID.EmbodimentOfRegret,
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
+                    var invulnApplies = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).OfType<BuffApplyEvent>();
+                    return invulnApplies.Any(apply => phase.InInterval(apply.Time)); // phase interval is unfitted = based on cerus invuln
+                });
+                var priority = killed.Any() ? PhaseData.TargetPriority.NonBlocking : PhaseData.TargetPriority.Main; // default to all as main if none killed
+                AddTargetsToPhaseAndFit(phase, embodimentIds, log, priority);
+                phase.AddTargets(killed); // overwrite priority for killed
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(cerus);
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent? enragedSmash = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
+        CastEvent? enragedSmash = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
         if (enragedSmash != null)
         {
             var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(cerus);
             phases.Add(phase);
             // Sub Phase for 50%-10%
             PhaseData? phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
             if (phase3 != null)
             {
                 var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
-                phase50_10.AddTarget(mainTarget);
+                phase50_10.AddTarget(cerus);
                 phases.Add(phase50_10);
             }
         }

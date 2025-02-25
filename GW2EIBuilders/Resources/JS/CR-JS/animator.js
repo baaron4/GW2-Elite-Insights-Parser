@@ -292,6 +292,7 @@ class Animator {
                     actorSize = 25;
                     mapToFill = this.trashMobData;
                     break;
+                case "FriendlyPlayer":
                 case "Friendly":
                     ActorClass = NonSquadIconDrawable;
                     actorSize = 20;

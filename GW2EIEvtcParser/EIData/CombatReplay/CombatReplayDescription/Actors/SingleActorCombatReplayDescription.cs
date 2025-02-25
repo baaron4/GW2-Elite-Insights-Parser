@@ -26,7 +26,15 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
     {
         if (actor.AgentItem.IsPlayer)
         {
-            return !log.PlayerAgents.Contains(actor.AgentItem) ? "TargetPlayer" : "Player";
+            if (log.PlayerAgents.Contains(actor.AgentItem))
+            {
+                return "Player";
+            }
+            if (log.FightData.Logic.NonPlayerFriendlyAgents.Contains(actor.AgentItem))
+            {
+                return "FriendlyPlayer";
+            }
+            return "TargetPlayer";
         }
         if (log.FightData.Logic.TargetAgents.Contains(actor.AgentItem))
         {

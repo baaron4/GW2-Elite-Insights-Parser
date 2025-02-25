@@ -590,27 +590,25 @@ internal class KainengOverlook : EndOfDragonsStrike
     {
         if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 100, out var facingDirection, duration))
         {
-            return;
+            var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
+            var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
+            replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
+            replay.Decorations.Add(pie.GetBorderDecoration());
         }
 
-        var connector = new AgentConnector(target);
-        var rotationConnector = new AngleConnector(facingDirection);
-        var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
-        replay.Decorations.Add(pie.GetBorderDecoration());
     }
 
     private static void AddDragonSlashWaveDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration)
     {
         if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 100, out var facingDirection, duration))
         {
-            return;
+            var connector = new AgentConnector(target);
+            var rotationConnector = new AngleConnector(facingDirection);
+            var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
+            replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
         }
 
-        var connector = new AgentConnector(target);
-        var rotationConnector = new AngleConnector(facingDirection);
-        var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
     }
 
     private static void AddSharedDestructionDecoration(PlayerActor p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)

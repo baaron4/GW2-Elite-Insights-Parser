@@ -101,24 +101,19 @@ internal class WvWFight : FightLogic
         {
             return base.GetCombatMapInternal(log);
         }
-        switch (mapID.MapID)
+        return mapID.MapID switch
         {
             // EB
-            case 38:
-                return new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864, -36864, 36864, 36864));
+            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 900, -36864 - 1800, 36864 + 900, 36864 - 1800)),
             // Green Alpine
-            case 95:
-                return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
+            95 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
             // Blue Alpine
-            case 96:
-                return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
+            96 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
             // Red Desert
-            case 1099:
-                return new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864));
-            case 968:
-                return new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864));
-        }
-        return base.GetCombatMapInternal(log);
+            1099 => new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)),
+            968 => new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)),
+            _ => base.GetCombatMapInternal(log),
+        };
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
