@@ -333,9 +333,9 @@ internal static class RangerHelper
         new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.HuntersProwess),
     ];
 
-    public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
+    public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
-        var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+        var playerAgents = new HashSet<AgentItem>(players);
         // entangle works fine already
         HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
         HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
@@ -344,9 +344,9 @@ internal static class RangerHelper
         // if only one ranger, could only be that one
         if (rangersCount == 1)
         {
-            Player ranger = rangers.First();
-            SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
-            SetGadgetMaster(blackHoles, ranger.AgentItem);
+            AgentItem ranger = rangers.First();
+            SetGadgetMaster(jacarandaEmbraces, ranger);
+            SetGadgetMaster(blackHoles, ranger);
         }
         else if (rangersCount > 1)
         {

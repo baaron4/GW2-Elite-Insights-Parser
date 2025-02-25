@@ -250,9 +250,9 @@ internal static class ProfHelper
         }
     }
 
-    internal static void ProcessRacialGadgets(IReadOnlyList<Player> players, CombatData combatData)
+    internal static void ProcessRacialGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
-        var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+        var playerAgents = new HashSet<AgentItem>(players);
         // Sylvari stuff
         HashSet<AgentItem> seedTurrets = GetOffensiveGadgetAgents(combatData, SeedTurretDamage, playerAgents);
         HashSet<AgentItem> graspingWines = GetOffensiveGadgetAgents(combatData, GraspingVinesDamage, playerAgents);
@@ -262,10 +262,10 @@ internal static class ProfHelper
     }
 
     //
-    internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<Player> players)
+    internal static IReadOnlyCollection<InstantCastFinder> GetProfessionInstantCastFinders(IReadOnlyList<AgentItem> players)
     {
         var instantCastFinders = new HashSet<InstantCastFinder>(_genericInstantCastFinders);
-        foreach (Player p in players)
+        foreach (AgentItem p in players)
         {
             switch (p.Spec)
             {
@@ -684,7 +684,7 @@ internal static class ProfHelper
     /// </summary>
     /// <param name="actor">actor who is the source of the effect</param>
     /// <param name="startOffset">offset to be applied to the time value of the effect</param>
-    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
+    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
     {
         var res = new List<AnimatedCastEvent>();
         if (combatData.GetAnimatedCastData(skillID).Count > 0)
@@ -693,14 +693,14 @@ internal static class ProfHelper
             return res;
         }
         SkillItem skill = skillData.Get(skillID);
-        if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effect, out var events))
+        if (combatData.TryGetEffectEventsBySrcWithGUID(actor, effect, out var events))
         {
             skillData.NotAccurate.Add(skillID);
-            foreach (EffectEvent @event in events)
+            foreach (EffectEvent effectEvent in events)
             {
-                if (checker == null || checker(events, @event, combatData, skillData))
+                if (checker == null || checker(events, effectEvent, combatData, skillData))
                 {
-                    res.Add(new AnimatedCastEvent(actor.AgentItem, skill, @event.Time + startOffset, castDuration));
+                    res.Add(new AnimatedCastEvent(actor, skill, effectEvent.Time + startOffset, castDuration));
                 }
             }
         }
@@ -738,16 +738,16 @@ internal static class ProfHelper
         return buffs.Select(bae => new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
     }
 
-    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
+    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
     {
         SkillItem skill = skillData.Get(skillId);
-        return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
+        return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor), skill);
     }
 
-    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
+    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
     {
         SkillItem skill = skillData.Get(skillId);
-        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
+        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
     }
 
     internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)

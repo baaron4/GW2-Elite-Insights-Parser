@@ -51,23 +51,23 @@ public class CombatData
     public readonly bool HasBreakbarDamageData = false;
     public readonly bool HasEffectData = false;
 
-    private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
+    private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
     {
         //TODO(Rennorb) @perf @mem: find average complexity
         var toAdd = new List<BuffEvent>(players.Count * 10);
-        foreach (Player p in players)
+        foreach (AgentItem p in players)
         {
             if (p.Spec == Spec.Weaver)
             {
-                toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p.AgentItem), _buffData, p.AgentItem, skillData));
+                toAdd.AddRange(WeaverHelper.TransformWeaverAttunements(GetBuffDataByDst(p), _buffData, p, skillData));
             }
             if (p.Spec == Spec.Virtuoso)
             {
-                toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData, evtcVersion));
+                toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p), p, skillData, evtcVersion));
             }
             if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
             {
-                ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p.AgentItem), _buffData, skillData);
+                ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p), _buffData, skillData);
             }
         }
         toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
@@ -169,11 +169,11 @@ public class CombatData
         return res;
     }
 
-    private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
+    private void EICastParse(IReadOnlyList<AgentItem> players, SkillData skillData, FightData fightData, AgentData agentData)
     {
         List<CastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
         ulong gw2Build = GetGW2BuildEvent().Build;
-        foreach (Player p in players)
+        foreach (AgentItem p in players)
         {
             switch (p.Spec)
             {
@@ -339,7 +339,7 @@ public class CombatData
         _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, evtcVersion));
     }
 
-    private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, EvtcVersionEvent evtcVersion)
+    private void EIExtraEventProcess(SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, EvtcVersionEvent evtcVersion)
     {
         using var _t = new AutoTrace("Process Extra Events");
 
@@ -352,7 +352,7 @@ public class CombatData
                 pair.Value.Insert(0, new BreakbarStateEvent(pair.Key, pair.Key.FirstAware, BreakbarState.Active));
             }
         }
-
+        var players = agentData.GetAgentByType(AgentItem.AgentType.Player);
         // master attachements
         operation.UpdateProgressWithCancellationCheck("Parsing: Processing Warrior Gadgets");
         WarriorHelper.ProcessGadgets(players, this);
@@ -514,10 +514,10 @@ public class CombatData
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
-        //
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
         skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
-        //
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
         List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, fightData);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
@@ -526,7 +526,7 @@ public class CombatData
         _instantCastData = [];
         _instantCastDataById = [];
         _animatedCastDataById = animatedCastData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-        //
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
@@ -545,15 +545,17 @@ public class CombatData
         // buff depend events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Dependent Events");
         BuildBuffDependentContainers();
-        //
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Extension Events");
         foreach (ExtensionHandler handler in extensions.Values)
         {
             handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
         }
-        //
+        operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting player specs and groups based on Enter Combat events");
+        fightData.Logic.UpdatePlayersSpecAndGroup(players, this, fightData);
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
-        EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
+        EIExtraEventProcess(skillData, agentData, fightData, operation, evtcVersion);
     }
 
     private void BuildBuffDependentContainers()

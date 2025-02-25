@@ -192,7 +192,7 @@ internal static class RevenantHelper
         return Minions.Contains(id);
     }
 
-    public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
+    public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData, AgentData agentData)
     {
         var allTablets = new HashSet<AgentItem>();
         if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out var tabletHealEffectEvents))
