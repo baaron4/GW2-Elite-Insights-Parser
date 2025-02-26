@@ -111,7 +111,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         return false;
                     }
-                    if  (evt.Time < upperTimeThreshold)
+                    if (evt.Time < upperTimeThreshold)
                     {
                         // skip events before targetable that are not attack target or position related
                         if (evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable && !evt.IsGeographical())
@@ -310,8 +310,8 @@ internal class Deimos : BastionOfThePenitent
         var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).Select(x => new TargetableEvent(x, agentData));
         (TargetableEvent evt, AgentItem attackTargetAgent, AgentItem targetedAgent) targetable = targetableEvents
             .Select(targetableEvent => (
-                targetableEvent, 
-                targetableEvent.Src, 
+                targetableEvent,
+                targetableEvent.Src,
                 attackTargetEvents
                     .Where(attackTargetEvent => attackTargetEvent.AttackTarget == targetableEvent.Src)
                     .Select(attackTargetEvent => attackTargetEvent.Src).FirstOrDefault())
@@ -576,12 +576,18 @@ internal class Deimos : BastionOfThePenitent
             case (int)ArcDPSEnums.TrashID.Tear:
                 break;
             case (int)ArcDPSEnums.TrashID.Hands:
-                replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
+                if (!log.CombatData.HasEffectData)
+                {
+                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
+                }
                 break;
             case (int)ArcDPSEnums.TrashID.Oil:
-                int delayOil = 3000;
-                replay.Decorations.Add(new CircleDecoration(200, (start, start + delayOil), Colors.Orange, 0.5, new AgentConnector(target)).UsingGrowingEnd(start + delayOil));
-                replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)));
+                if (!log.CombatData.HasEffectData)
+                {
+                    int delayOil = 3000;
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(200, (start, start + delayOil), Colors.LightOrange, 0.5, new AgentConnector(target)), start + delayOil);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)), Colors.Red, 0.2);
+                }
                 break;
             case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
                 SingleActor? Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
@@ -601,7 +607,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         replay.Trim(replay.TimeOffsets.start, lastTargetableState.Time);
                     }
-                } 
+                }
                 var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
                 replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                 SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
@@ -668,6 +674,41 @@ internal class Deimos : BastionOfThePenitent
         replay.Decorations.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        // Rapid Decay - Orange Indicator - Oil
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosRapidDecayIndicator, out var rapidDecayIndicator))
+        {
+            foreach (EffectEvent effect in rapidDecayIndicator)
+            {
+                // Logged duration is 3500, replacing to 3000 for better visual with the Oil.
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                EnvironmentDecorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
+            }
+        }
+
+        // Rapid Decay - Black Indicator - Oil
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay200Radius, 200);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay300Radius, 300);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay400Radius, 400);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay500Radius, 500);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay600Radius, 600);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay700Radius, 700);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay800Radius, 800);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay900Radius, 900);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay1000Radius, 1000);
+
+        // Soul Feast - Hands
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosSoulFeast, out var soulFeasts))
+        {
+            foreach (EffectEvent effect in soulFeasts)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                EnvironmentDecorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+            }
+        }
+    }
+
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
@@ -698,5 +739,24 @@ internal class Deimos : BastionOfThePenitent
         }
 
         return cmStatus;
+    }
+
+    /// <summary>
+    /// Adds Rapid Decay oils to the combat replay.<br></br>
+    /// Each effect lasts 1500ms, a new effect appears every 1000s, giving a 500ms overlap for a pulsating visual effect.
+    /// </summary>
+    /// <param name="log">The log.</param>
+    /// <param name="guid">Effect GUID of the different oil sizes.</param>
+    /// <param name="radius">Radius of the oil, 200 to 1000.</param>
+    private void AddRapidDecayDecoration(ParsedEvtcLog log, GUID guid, uint radius)
+    {
+        if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rapidDecay))
+        {
+            foreach (EffectEvent effect in rapidDecay)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 1500);
+                EnvironmentDecorations.AddWithBorder(new CircleDecoration(radius, lifespan, Colors.Black, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
+            }
+        }
     }
 }
