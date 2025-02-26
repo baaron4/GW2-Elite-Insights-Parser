@@ -509,8 +509,9 @@ internal static class ParserIcons
     private const string MinionJuvenileWolf = "https://i.imgur.com/GQLiFky.png";
     private const string MinionJuvenileHyena = "https://i.imgur.com/XtYVyhH.png";
     private const string MinionJuvenileAetherHunter = "https://i.imgur.com/qMVHHki.png";
-    private const string MinionSkyChakStriker = "https://i.imgur.com/bfmZsdK.png";
-    private const string MinionSpinegazer = "https://i.imgur.com/xCcnGrr.png"; // TODO update this image
+    private const string MinionJuvenileSkyChakStriker = "https://i.imgur.com/bfmZsdK.png";
+    private const string MinionJuvenileSpinegazer = "https://i.imgur.com/mYAH1g7.png";
+    private const string MinionJuvenileWarclaw = "https://i.imgur.com/dYuiG3W.png";
     private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
     private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
     private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -1345,8 +1346,9 @@ internal static class ParserIcons
         { MinionID.JuvenileWolf, MinionJuvenileWolf },
         { MinionID.JuvenileHyena, MinionJuvenileHyena },
         { MinionID.JuvenileAetherHunter, MinionJuvenileAetherHunter },
-        { MinionID.JuvenileSkyChakStriker, MinionSkyChakStriker },
-        { MinionID.JuvenileSpinegazer, MinionSpinegazer },
+        { MinionID.JuvenileSkyChakStriker, MinionJuvenileSkyChakStriker },
+        { MinionID.JuvenileSpinegazer, MinionJuvenileSpinegazer },
+        { MinionID.JuvenileWarclaw, MinionJuvenileWarclaw },
         { MinionID.BloodFiend, MinionBloodFiend },
         { MinionID.BoneFiend, MinionBoneFiend },
         { MinionID.FleshGolem, MinionFleshGolem },
