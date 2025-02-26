@@ -676,6 +676,8 @@ internal class Deimos : BastionOfThePenitent
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
     {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
         // Rapid Decay - Orange Indicator - Oil
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosRapidDecayIndicator, out var rapidDecayIndicator))
         {
