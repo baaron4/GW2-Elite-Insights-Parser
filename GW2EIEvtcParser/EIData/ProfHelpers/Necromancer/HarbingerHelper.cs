@@ -18,6 +18,7 @@ internal static class HarbingerHelper
     [
         new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
         new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud).UsingBeforeWeaponSwap(true),
+        new BuffGainCastFinder(ImplacableFoe, ImplacableFoe).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(CascadingCorruption, CascadingCorruption).UsingDisableWithEffectData().UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinderByDst(CascadingCorruption, EffectGUIDs.HarbingerCascadingCorruption).UsingDstSpecChecker(Spec.Harbinger).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinderByDst(DeathlyHaste, EffectGUIDs.HarbingerDeathlyHaste).UsingDstSpecChecker(Spec.Harbinger).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -42,7 +43,6 @@ internal static class HarbingerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        // Confirm if applied strike and condition
         new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
     ];
 

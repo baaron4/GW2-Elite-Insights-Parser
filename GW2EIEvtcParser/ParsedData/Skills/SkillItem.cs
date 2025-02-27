@@ -126,6 +126,7 @@ public class SkillItem
         { ShatteringIceDamage, "Shattering Ice (Hit)" },
         { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
         { FirestormGlyphOfStormsOrFieryGreatsword, "Firestorm (Glyph of Storms / Fiery Greatsword)" },
+        { FlowLikeWaterHealing, "Flow Like Water (Healing)" },
         #endregion Elementalist
         #region Engineer
         { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
@@ -172,7 +173,7 @@ public class SkillItem
         #region Ranger
         { WindborneNotes, "Windborne Notes" },
         { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
-        { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
+        { VigorousRecovery_LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
         { EntangleDamage, "Entangle (Hit)" },
         { AstralWispAttachment, "Astral Wisp Attachment" },
         { GlyphOfUnityCA, "Glyph of Unity (CA)" },
@@ -548,6 +549,7 @@ public class SkillItem
         { ArcaneShieldDamage, SkillImages.ArcaneShield },
         { ConeOfColdHealing, SkillImages.CondOfCold },
         { HealingRipple, TraitImages.HealingRipple },
+        { HealingRippleWvW, TraitImages.HealingRipple },
         { HealingRain, SkillImages.HealingRain },
         { ElementalRefreshmentBarrier, TraitImages.ElementalRefreshment },
         { FirestormGlyphOfStormsOrFieryGreatsword, SkillImages.FirestormGlyphOfStormsOrFieryGreatsword },
@@ -559,6 +561,7 @@ public class SkillItem
         { FieryRushLeap, SkillImages.FieryRush },
         { LesserCleansingFire, SkillImages.CleansingFire },
         { FlashFreezeDelayed, SkillImages.FlashFreeze },
+        { FlowLikeWaterHealing, TraitImages.FlowLikeWater },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -724,6 +727,8 @@ public class SkillItem
             { ShamblingSlash, SkillImages.ShamblingSlash },
             { AuguryOfDeath, TraitImages.AuguryOfDeath },
             { SoulSpiralHeal, SkillImages.SoulSpiral },
+            { SpitefulRenewal, TraitImages.SpirefulRenewal },
+            { ImplacableFoe, TraitImages.ImplacableFoe },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -759,7 +764,7 @@ public class SkillItem
             { CultivatedSynergyPlayer, TraitImages.CultivatedSynergy },
             { CultivatedSynergyPet, TraitImages.CultivatedSynergy },
             { BloodMoonDaze, TraitImages.BloodMoon },
-            { LiveVicariously, TraitImages.LiveVicariously },
+            { VigorousRecovery_LiveVicariously, TraitImages.LiveVicariously },
             { NaturalHealing, TraitImages.NaturalHealing },
             { GlyphOfUnityCA, SkillImages.GlyphOfUnityCelestialAvatar },
             { ChargeGazelleMergeImpact, SkillImages.ChargeGazelle },
@@ -827,6 +832,9 @@ public class SkillItem
             { TormentingVisionSpinegazer, SkillImages.TormentingVisionSpinegazer },
             { WolfsOnslaughtFollowUp, SkillImages.WolfsOnslaught },
             { EletroctuteJuvenileSkyChak, SkillImages.EletroctuteJuvenileSkyChak },
+            { EvasivePurity, TraitImages.EvasivePurity },
+            { AttackOfOpportunity, TraitImages.MomentOfClarity },
+            { RestorativeStrikes, TraitImages.RestorativeStrikes },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },

@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.DamageModifierIDs;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -46,7 +47,12 @@ internal static class ElementalistHelper
             .UsingDstBaseSpecChecker(Spec.Elementalist),
         //new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
         //new EffectCastFinder(LightningFlash, EffectGUIDs.ElementalistLightningFlash).UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst)
-
+        new EXTHealingCastFinder(HealingRipple, HealingRipple)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(HealingRippleWvW, HealingRippleWvW)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(FlowLikeWaterHealing, FlowLikeWaterHealing)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Elementals
         new MinionCommandCastFinder(FireElementalFlameBarrage, (int) MinionID.FireElemental),
         new MinionCommandCastFinder(WaterElementalCrashingWaves, (int) MinionID.IceElemental),
