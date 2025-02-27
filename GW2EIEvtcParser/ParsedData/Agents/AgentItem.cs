@@ -203,14 +203,26 @@ public class AgentItem
 
         if (cur is DownEvent)
         {
+            if (index == 0)
+            {
+                AddSegment(actives, minTime, cTime);
+            }
             AddSegment(down, cTime, nextTime);
         }
         else if (cur is DeadEvent)
         {
+            if (index == 0)
+            {
+                AddSegment(actives, minTime, cTime);
+            }
             AddSegment(dead, cTime, nextTime);
         }
         else if (cur is DespawnEvent)
         {
+            if (index == 0)
+            {
+                AddSegment(actives, minTime, cTime);
+            }
             AddSegment(dc, cTime, nextTime);
         }
         else
@@ -271,10 +283,6 @@ public class AgentItem
         if (status.Count > 0)
         {
             StatusEvent cur = status.Last();
-            if (status.Count == 1)
-            {
-                AddSegment(actives, FirstAware, cur.Time);
-            }
             AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1); 
             if (cur is DeadEvent)
             {
