@@ -42,8 +42,7 @@ internal static class HarbingerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        // Confirm if applied strike and condition
-        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

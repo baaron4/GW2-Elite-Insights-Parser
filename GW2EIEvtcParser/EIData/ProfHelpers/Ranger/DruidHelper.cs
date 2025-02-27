@@ -20,7 +20,8 @@ internal static class DruidHelper
         new EffectCastFinder(SeedOfLife, EffectGUIDs.DruidSeedOfLife).UsingSrcSpecChecker(Spec.Druid).WithBuilds(GW2Builds.October2022Balance),
         new DamageCastFinder(GlyphOfEquality, GlyphOfEquality).UsingDisableWithEffectData(),
         new EffectCastFinderByDst(GlyphOfEqualityCA, EffectGUIDs.DruidGlyphOfEqualityCA).UsingDstSpecChecker(Spec.Druid),
-        new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid)
+        new EffectCastFinder(GlyphOfEquality, EffectGUIDs.DruidGlyphOfEquality).UsingSrcSpecChecker(Spec.Druid),
+        new EffectCastFinder(BloodMoonDaze, EffectGUIDs.DruidBloodMoon).UsingSrcSpecChecker(Spec.Druid).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
     private static readonly HashSet<long> _celestialAvatar =

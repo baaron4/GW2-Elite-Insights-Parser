@@ -151,6 +151,7 @@ internal static class TraitImages
     public const string BloodBank = "https://render.guildwars2.com/file/06E563AE1E34AC1D24CCECF301AC70B4B07A330C/2310020.png";
     public const string AuguryOfDeath = "https://render.guildwars2.com/file/CBBA2FA5F20755523E5424D0704B5B6C5F2B7C67/1012570.png";
     public const string OverflowingThirst = "https://render.guildwars2.com/file/09266890E7D1517B2D634E026A67696ABDBCDBC3/1012535.png";
+    public const string SpirefulRenewal = "https://render.guildwars2.com/file/EFCE14DF279DDD28C54077500B03DEC1B692120A/1012595.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";
@@ -192,6 +193,8 @@ internal static class TraitImages
     public const string LiveVicariously = "https://render.guildwars2.com/file/F2A3C305087AFA5141FABEF5FB09AD05CCE8A46A/1128540.png";
     public const string NaturalHealing = "https://render.guildwars2.com/file/E10A27535DAC0BBFFCB205BFBBC9D30F68BE0C07/1012611.png";
     public const string PredatorsCunning = "https://render.guildwars2.com/file/25054EAF081EAB14A6B5C53197312F2AE6C32A17/1769977.png";
+    public const string EvasivePurity = "https://render.guildwars2.com/file/C374B3F2C1BCFCB0B164FF0567FB6CC1B31B9651/1012633.png";
+    public const string RestorativeStrikes = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
     #endregion Ranger
     #region Revenant
     public const string CloseQuarters = "https://wiki.guildwars2.com/images/4/43/Close_Quarters.png";

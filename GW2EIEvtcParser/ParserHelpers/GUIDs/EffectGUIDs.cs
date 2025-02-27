@@ -388,6 +388,7 @@ public static class EffectGUIDs
     public static readonly GUID DruidSublimeConversion2 = new("2F74AC468871444BB66AF5D8B25EC870");
     public static readonly GUID DruidGlyphOfTheStars = new("84BD2B25ADE2E34C8E8B508283BE8077");
     public static readonly GUID DruidGlyphOfTheStarsCA = new("6AFF7DBF27F63D45940FEC1CB837475D");
+    public static readonly GUID DruidBloodMoon = new("28346F32FD199C4B8F9B15438F27A434"); // has owner, 1000 duration
     public static readonly GUID SoulbeastEternalBond = new("BF0A5B11A4076A4F98C6E1D655D507B1"); // has owner & target
     public static readonly GUID UntamedMutateConditions = new("D7DCD4ABF9E4A749950AF0175E02EA06");
     public static readonly GUID UntamedUnnaturalTraversal = new("8D36806A690A5442A983308EDCECB018");

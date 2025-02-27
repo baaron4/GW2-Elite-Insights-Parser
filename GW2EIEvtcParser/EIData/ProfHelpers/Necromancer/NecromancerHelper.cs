@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.DamageModifierIDs;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -36,7 +37,7 @@ internal static class NecromancerHelper
             .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(SpectralWalkBuff).OfType<BuffRemoveAllEvent>(), evt.Time + 120).Any())
             .WithBuilds(GW2Builds.December2018Balance),
         new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
-        
+        new EXTHealingCastFinder(SpitefulRenewal, SpitefulRenewal).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Minions
         new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
         new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
