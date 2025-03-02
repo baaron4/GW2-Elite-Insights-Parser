@@ -1602,11 +1602,12 @@ public static class SkillIDs
     public const long BiteSmokescale = 31312;
     public const long PylonAttunementBlue = 31317;
     public const long WingBuffetWyvern = 31321;
+    public const long TimeBombDamage = 31324; // First Bomb
     public const long Firestorm = 31332;
     public const long Rebound = 31337;
     public const long DistributedMagicBlue = 31340;
     public const long GlyphOfAlignmentCA = 31348;
-    public const long HarmoniousConduit = 31353;
+    public const long HarmoniousConduit = 31353; // Historical
     public const long TranscendentTempest = 31353;
     public const long AuguryOfDeath = 31354;
     public const long SolarBeam = 31371;
@@ -1624,6 +1625,7 @@ public static class SkillIDs
     public const long BluePylonPower = 31413;
     public const long MagicStorm = 31419;
     public const long TakedownSmokescale = 31430;
+    public const long KickHeavyBomb = 31435;
     public const long BlackHoleMinion = 31436;
     public const long Determined31450 = 31450;
     public const long MagicAuraRedGuardian = 31462;
@@ -1859,6 +1861,7 @@ public static class SkillIDs
     public const long ShellShocked = 34108;
     public const long SpawnProtection = 34113;
     public const long SoothingBastion = 34136;
+    public const long TimeBombDamage2 = 34152; // Second Bomb, below 50% Sabetha HP
     public const long CallOfTheMists = 34164;
     public const long PeppermintOil = 34187;
     public const long PeppermintOmnomberryBar = 34188;

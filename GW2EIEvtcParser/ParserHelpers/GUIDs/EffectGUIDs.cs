@@ -546,8 +546,16 @@ public static class EffectGUIDs
       
     #region Raids
     // Vale Guardian
-    public static readonly GUID ValeGuardianDistributedMagic = new("43FD739499BB6040BBF9EEF37781B2CE");
-    public static readonly GUID ValeGuardianMagicSpike = new("55364633145D264A934935C3F026B19F");
+    public static readonly GUID ValeGuardianDistributedMagic = new("43FD739499BB6040BBF9EEF37781B2CE"); // 6000 duration
+    public static readonly GUID ValeGuardianMagicSpike = new("55364633145D264A934935C3F026B19F"); // 2000 duration
+    // Gorseval
+    public static readonly GUID GorsevalGhastlyPrison = new("16BBFDBEC55958419CC5564CB1FEED04"); // 2000 duration
+    // Sabetha
+    public static readonly GUID SabethaCannonBarrier = new("3C4BADFCD8987D449715C9A72FDC2149"); // 600.000 duration - Src Cannon Dst Cannon
+    public static readonly GUID SabethaCannonBarrage = new("3ED61C8A1C2E594A8AD2E2E69AF16322"); // 3500 duration - Src Cannon
+    public static readonly GUID SabethaPlatformCrush = new("1EAC8EDCB57CDC4DB19DA7F2D37D25E8"); // 1000 duration - No Src - Platform debris falling
+    public static readonly GUID SabethaFlakShot = new("1D17794F2428F344A5D9755AB8899633"); // 25000 duration - Src Sabetha
+    public static readonly GUID SabethaSapperBombGroundAoE = new("09D5D14BE3AFEA48958B1A8D7634B08A"); // 1000 duration - No Src
     // Escort Glenna
     public static readonly GUID EscortOverHere = new("64CD79C1A121EC42B1278DEF9280ED35");
     // Xera

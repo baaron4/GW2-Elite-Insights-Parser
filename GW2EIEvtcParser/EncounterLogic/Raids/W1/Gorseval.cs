@@ -133,7 +133,7 @@ internal class Gorseval : SpiritVale
         var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in eggs)
         {
-            replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
+            replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.2, new AgentConnector(p)));
         }
 
         // Spectral Darkness - Orbs Debuff Overhead
@@ -235,7 +235,6 @@ internal class Gorseval : SpiritVale
                         {
                             byte pattern = patterns[i];
                             var connector = new PositionConnector(pos);
-                            var color = "rgba(25,25,112, 0.25)";
                             //
                             var nonFullDecorations = new List<FormDecoration>();
                             int tickStartNonFull = start + 4000 * i;
@@ -244,23 +243,23 @@ internal class Gorseval : SpiritVale
                             (int, int) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
                             if ((pattern & first) > 0)
                             {
-                                nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, color, connector));
+                                nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
                             }
                             if ((pattern & second) > 0)
                             {
-                                nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, color, connector));
+                                nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
                             }
                             if ((pattern & third) > 0)
                             {
-                                nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, color, connector));
+                                nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
                             }
                             if ((pattern & fourth) > 0)
                             {
-                                nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, color, connector));
+                                nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
                             }
                             if ((pattern & fifth) > 0)
                             {
-                                nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, color, connector));
+                                nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
                             }
                             foreach (FormDecoration decoration in nonFullDecorations)
                             {
@@ -271,7 +270,7 @@ internal class Gorseval : SpiritVale
                             {
                                 (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
                                 int fullExplosion = explosionNonFull - 1000;
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, Colors.DarkPurpleBlue, 0.25, connector), fullExplosion);
                             }
                         }
                     }
@@ -290,7 +289,7 @@ internal class Gorseval : SpiritVale
                 var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var seg in protection)
                 {
-                    replay.Decorations.Add(new CircleDecoration(300, seg, "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightBlue, 0.5, new AgentConnector(target)));
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.ChargedSoul:
@@ -299,6 +298,21 @@ internal class Gorseval : SpiritVale
                 break;
             default:
                 break;
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GorsevalGhastlyPrison, out var ghstlyPrison))
+        {
+            foreach (EffectEvent effect in ghstlyPrison)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                var circle = new CircleDecoration(80, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+            }
         }
     }
 }

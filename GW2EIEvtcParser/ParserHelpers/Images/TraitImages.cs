@@ -7,7 +7,7 @@ internal static class TraitImages
 {
     // TODO: organize this
     #region Elementalist
-    public const string EarthenBlast = "https://render.guildwars2.com/file/2531DCAFAEAB452C90C4572E1ADCE8236DCF5636/1012304.pn";
+    public const string EarthenBlast = "https://render.guildwars2.com/file/2531DCAFAEAB452C90C4572E1ADCE8236DCF5636/1012304.png";
     public const string ElectricDischarge = "https://render.guildwars2.com/file/F4622EE8300028599369D4084EA7A2774D250DEA/1012280.png";
     public const string PersistingFlames = "https://render.guildwars2.com/file/38496307B7C27BCB08D6800F2A699B4998DD1935/1012312.png";
     public const string StoneFlesh = "https://render.guildwars2.com/file/9FACD0F31DF1DF1957C59DA67ED9F76ACB55BEB8/1012303.png";

@@ -622,6 +622,7 @@ internal static class SkillImages
     public const string MightyThrow = "https://render.guildwars2.com/file/F02129C7049F590E00BB7B09EDC1B258655D9459/3379199.png";
     public const string WildThrow = "https://render.guildwars2.com/file/0B79EB6203654C703FF9DCBEDF2A4BDAB54D35FC/3379204.png";
     public const string SpearmarshalsSupport = "https://render.guildwars2.com/file/43132DEC934F072272F14B19FC03FB62111502FB/3379203.png";
+    public const string Kick = "https://render.guildwars2.com/file/E578C9070BCA270818F56304CBE2800CD4691350/103001.png";
     #endregion Warrior
     #region WvW
     public const string TurnLeft = "https://wiki.guildwars2.com/images/4/4c/Turn_Left.png";

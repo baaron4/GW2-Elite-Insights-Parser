@@ -408,6 +408,7 @@ internal static class ParserIcons
     private const string TrashBloodstoneShard = "https://i.imgur.com/fEp6wEj.png";
     private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
     private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
+    private const string TrashCannon = "https://i.imgur.com/aNe6JUJ.png";
     #endregion
 
     #region Minion
@@ -621,6 +622,7 @@ internal static class ParserIcons
     internal const string EyeOverhead = "https://i.imgur.com/OBfLywE.png";
     internal const string CallTarget = "https://wiki.guildwars2.com/images/e/e9/Call_Target.png";
     internal const string TargetOverhead = "https://wiki.guildwars2.com/images/9/96/Targeted_%28Vishen_Steelshot%29.png";
+    internal const string RedCrossSwordsMarker = "https://i.imgur.com/b7Jxx9C.png";
     // - Bomb Timer
     internal const string BombTimerEmptyOverhead = "https://wiki.guildwars2.com/images/a/a0/Timer_empty_%28overhead_icon%29.png";
     internal const string BombTimerFullOverhead = "https://wiki.guildwars2.com/images/d/d9/Timer_full_%28overhead_icon%29.png";
@@ -1196,6 +1198,8 @@ internal static class ParserIcons
         { TrashID.EnlightenedConduitGadget, NoImage },
         { TrashID.Gree, TrashGree },
         { TrashID.Reeg, TrashReeg },
+        { TrashID.Cannon, TrashCannon },
+        { TrashID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideous image for better visual
     };
 
     /// <summary>
