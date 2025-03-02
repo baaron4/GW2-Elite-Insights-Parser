@@ -130,6 +130,18 @@ internal class Sabetha : SpiritVale
         ];
     }
 
+    protected override Dictionary<int, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<int, int>()
+        {
+            {(int)ArcDPSEnums.TargetID.Sabetha, 0 },
+            {(int)ArcDPSEnums.TrashID.Kernan, 1 },
+            {(int)ArcDPSEnums.TrashID.Knuckles, 1 },
+            {(int)ArcDPSEnums.TrashID.Karde, 1 },
+            {(int)ArcDPSEnums.TrashID.Cannon, 2 },
+        };
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
@@ -199,11 +211,15 @@ internal class Sabetha : SpiritVale
             case (int)ArcDPSEnums.TrashID.Cannon:
                 if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(target.AgentItem, MarkerGUIDs.SabethaCannonRedCrossSwordsMarker, out var swords))
                 {
+                    long hideStart = target.FirstAware;
                     foreach (var marker in swords)
                     {
                         (long start, long end) lifespan = (marker.Time, marker.EndTime);
+                        replay.Hidden.Add(new Segment(hideStart, lifespan.start));
+                        hideStart = lifespan.end;
                         replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.RedCrossSwordsMarker);
                     }
+                    replay.Hidden.Add(new Segment(hideStart, target.LastAware));
                 }
                 break;
             default:
