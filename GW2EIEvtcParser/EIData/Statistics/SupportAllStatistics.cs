@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalSupportAll : FinalSupport
+public class SupportAllStatistics : SupportPerAllyStatistics
 {
     //public long allHeal;
     public readonly int ResurrectCount;
@@ -26,7 +26,7 @@ public class FinalSupportAll : FinalSupport
         return reses;
     }
 
-    internal FinalSupportAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
+    internal SupportAllStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
         var resArray = GetReses(log, actor, start, end);
         ResurrectCount = resArray.Count;

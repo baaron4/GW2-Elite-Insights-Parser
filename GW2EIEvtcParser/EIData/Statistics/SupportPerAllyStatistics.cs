@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalSupport
+public class SupportPerAllyStatistics
 {
     private readonly Dictionary<long, (int count, long time)> _friendlyRemovals = [];
     public IReadOnlyDictionary<long, (int count, long time)> FriendlyRemovals => _friendlyRemovals;
@@ -13,7 +13,7 @@ public class FinalSupport
     private readonly Dictionary<long, (int count, long time)> _unknownRemovals = [];
     public IReadOnlyDictionary<long, (int count, long time)> UnknownRemovals => _unknownRemovals;
 
-    internal FinalSupport(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? to)
+    internal SupportPerAllyStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? to)
     {
         foreach (long buffID in log.Buffs.BuffsByIds.Keys)
         {

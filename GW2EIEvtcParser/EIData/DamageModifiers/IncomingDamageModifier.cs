@@ -12,7 +12,7 @@ public class IncomingDamageModifier : DamageModifier
 
     public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        FinalDefenses defenseData = actor.GetDefenseStats(t, log, start, end);
+        DefensePerTargetStatistics defenseData = actor.GetDefenseStats(t, log, start, end);
         return (CompareType) switch
         {
             DamageType.All                            => defenseData.DamageTaken,

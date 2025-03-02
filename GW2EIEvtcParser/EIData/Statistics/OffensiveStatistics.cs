@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalOffensiveStats
+public class OffensiveStatistics
 {
     public readonly int TotalDamageEventCount;
     public readonly int TotalDamageEventDamage;
@@ -56,7 +56,7 @@ public class FinalOffensiveStats
     public readonly double AppliedCrowdControlDurationDownContribution;
 
 
-    internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
+    internal OffensiveStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         var dls = actor.GetDamageEvents(target, log, start, end);
         foreach (HealthDamageEvent dl in dls)

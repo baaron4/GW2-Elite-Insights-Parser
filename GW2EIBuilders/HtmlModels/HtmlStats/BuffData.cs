@@ -11,7 +11,7 @@ internal class BuffData
     public double Avg { get; set; }
     public List<BuffDataItem> Data { get; set; }
 
-    private BuffData(IReadOnlyDictionary<long, FinalActorBuffs> buffs, IReadOnlyList<Buff> listToUse, double avg)
+    private BuffData(IReadOnlyDictionary<long, BuffStatistics> buffs, IReadOnlyList<Buff> listToUse, double avg)
     {
         Avg = avg;
         Data = new List<BuffDataItem>(listToUse.Count);
@@ -31,7 +31,7 @@ internal class BuffData
         }
     }
 
-    private BuffData(IReadOnlyDictionary<long, FinalBuffsDictionary> buffs, IReadOnlyList<Buff> listToUse, SingleActor actor)
+    private BuffData(IReadOnlyDictionary<long, BuffByActorStatistics> buffs, IReadOnlyList<Buff> listToUse, SingleActor actor)
     {
         Data = new List<BuffDataItem>(listToUse.Count);
         foreach (Buff buff in listToUse)
@@ -63,7 +63,7 @@ internal class BuffData
         }
     }
 
-    private BuffData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
+    private BuffData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, BuffStatistics> uptimes)
     {
         Data = new List<BuffDataItem>(listToUse.Count);
         foreach (Buff buff in listToUse)
@@ -95,7 +95,7 @@ internal class BuffData
         }
     }
 
-    private BuffData(Spec spec, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffs> uptimes)
+    private BuffData(Spec spec, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, BuffStatistics> uptimes)
     {
         Data = new List<BuffDataItem>(buffsBySpec[spec].Count);
         foreach (Buff buff in buffsBySpec[spec])
@@ -209,7 +209,7 @@ internal class BuffData
     // 
     private static List<BuffData> BuildBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
-        IReadOnlyDictionary<long, FinalBuffsDictionary> buffs = player.GetBuffsDictionary(log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffByActorStatistics> buffs = player.GetBuffsDictionary(log, phase.Start, phase.End);
         var list = new List<BuffData>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
@@ -231,7 +231,7 @@ internal class BuffData
 
     private static List<BuffData> BuildActiveBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
-        IReadOnlyDictionary<long, FinalBuffsDictionary> buffs = player.GetActiveBuffsDictionary(log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffByActorStatistics> buffs = player.GetActiveBuffsDictionary(log, phase.Start, phase.End);
         var list = new List<BuffData>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
@@ -253,20 +253,20 @@ internal class BuffData
     }
 
     /////
-    public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, PhaseData phase, SingleActor actor)
+    public static List<BuffData> BuildTargetConditionData(ParsedEvtcLog log, PhaseData phase, SingleActor actor)
     {
         return BuildBuffDictionaryData(log, log.StatisticsHelper.PresentConditions, phase, actor);
     }
 
-    public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
+    public static BuffData BuildTargetConditionUptimeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
-        IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffStatistics> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AverageConditions);
     }
 
     public static BuffData BuildTargetBoonUptimeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
-        IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffStatistics> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AverageBoons);
     }
 }

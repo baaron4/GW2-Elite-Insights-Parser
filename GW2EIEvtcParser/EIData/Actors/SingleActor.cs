@@ -23,12 +23,12 @@ public abstract partial class SingleActor : Actor
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
     private CombatReplay? CombatReplay;
     // Statistics
-    private CachingCollectionWithTarget<FinalDPS>? _dpsStats;
-    private CachingCollectionWithTarget<FinalDefenses>? _defenseStats;
-    private CachingCollectionWithTarget<FinalOffensiveStats>? _offensiveStats;
-    private CachingCollection<FinalGameplayStats>? _gameplayStats;
-    private CachingCollectionWithTarget<FinalSupport>? _supportStats;
-    private CachingCollection<FinalToPlayersSupport>? _toPlayerSupportStats;
+    private CachingCollectionWithTarget<DamageStatistics>? _dpsStats;
+    private CachingCollectionWithTarget<DefensePerTargetStatistics>? _defenseStats;
+    private CachingCollectionWithTarget<OffensiveStatistics>? _offensiveStats;
+    private CachingCollection<GameplayStatistics>? _gameplayStats;
+    private CachingCollectionWithTarget<SupportPerAllyStatistics>? _supportStats;
+    private CachingCollection<SupportToAllyStatistics>? _toPlayerSupportStats;
 
     protected SingleActor(AgentItem agent) : base(agent)
     {
@@ -242,25 +242,25 @@ public abstract partial class SingleActor : Actor
 
     #region BUFFS
 
-    internal virtual (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+    internal virtual (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
     {
         return (type) switch
         {
             BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
             BuffEnum.Squad =>
-                FinalActorBuffs.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
-            _ => FinalActorBuffs.GetBuffsForSelf(log, this, start, end),
+                BuffStatistics.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+            _ => BuffStatistics.GetBuffsForSelf(log, this, start, end),
         };
     }
 
-    internal virtual (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+    internal virtual (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes) ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
     {
         return (type) switch 
         {
             BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
             BuffEnum.Squad => 
-                FinalActorBuffVolumes.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
-            _ => FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end),
+                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+            _ => BuffVolumeStatistics.GetBuffVolumesForSelf(log, this, start, end),
         };
     }
 
@@ -544,93 +544,93 @@ public abstract partial class SingleActor : Actor
 
     #region STATISTICS
 
-    public FinalDPS GetDPSStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public DamageStatistics GetDamageStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        _dpsStats ??= new CachingCollectionWithTarget<FinalDPS>(log);
+        _dpsStats ??= new CachingCollectionWithTarget<DamageStatistics>(log);
 
         if (!_dpsStats.TryGetValue(start, end, target, out var value))
         {
-            value = new FinalDPS(log, start, end, this, target);
+            value = new DamageStatistics(log, start, end, this, target);
             _dpsStats.Set(start, end, target, value);
         }
         return value;
     }
 
-    public FinalDPS GetDPSStats(ParsedEvtcLog log, long start, long end)
+    public DamageStatistics GetDamageStats(ParsedEvtcLog log, long start, long end)
     {
-        return GetDPSStats(null, log, start, end);
+        return GetDamageStats(null, log, start, end);
     }
 
     // Defense Stats
 
-    public FinalDefenses GetDefenseStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public DefensePerTargetStatistics GetDefenseStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        _defenseStats ??= new CachingCollectionWithTarget<FinalDefenses>(log);
+        _defenseStats ??= new CachingCollectionWithTarget<DefensePerTargetStatistics>(log);
 
         if (!_defenseStats.TryGetValue(start, end, target, out var value))
         {
-            value = target != null ? new FinalDefenses(log, start, end, this, target) : new FinalDefensesAll(log, start, end, this);
+            value = target != null ? new DefensePerTargetStatistics(log, start, end, this, target) : new DefenseAllStatistics(log, start, end, this);
             _defenseStats.Set(start, end, target, value);
         }
         return value;
     }
 
-    public FinalDefensesAll GetDefenseStats(ParsedEvtcLog log, long start, long end)
+    public DefenseAllStatistics GetDefenseStats(ParsedEvtcLog log, long start, long end)
     {
-        return (GetDefenseStats(null, log, start, end) as FinalDefensesAll)!;
+        return (GetDefenseStats(null, log, start, end) as DefenseAllStatistics)!;
     }
 
     // Gameplay Stats
 
-    public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, long start, long end)
+    public GameplayStatistics GetGameplayStats(ParsedEvtcLog log, long start, long end)
     {
         _gameplayStats ??= new(log); 
 
         if (!_gameplayStats.TryGetValue(start, end, out var value))
         {
-            value = new FinalGameplayStats(log, start, end, this);
+            value = new GameplayStatistics(log, start, end, this);
             _gameplayStats.Set(start, end, value);
         }
         return value;
     }
 
-    public FinalOffensiveStats GetOffensiveStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public OffensiveStatistics GetOffensiveStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        _offensiveStats ??= new CachingCollectionWithTarget<FinalOffensiveStats>(log);
+        _offensiveStats ??= new CachingCollectionWithTarget<OffensiveStatistics>(log);
 
-        if (!_offensiveStats.TryGetValue(start, end, target, out FinalOffensiveStats? value))
+        if (!_offensiveStats.TryGetValue(start, end, target, out OffensiveStatistics? value))
         {
-            value = new FinalOffensiveStats(log, start, end, this, target);
+            value = new OffensiveStatistics(log, start, end, this, target);
             _offensiveStats.Set(start, end, target, value);
         }
         return value;
     }
 
     // Support stats
-    public FinalSupportAll GetSupportStats(ParsedEvtcLog log, long start, long end)
+    public SupportAllStatistics GetSupportStats(ParsedEvtcLog log, long start, long end)
     {
-        return (GetSupportStats(null, log, start, end) as FinalSupportAll)!;
+        return (GetSupportStats(null, log, start, end) as SupportAllStatistics)!;
     }
 
-    public FinalSupport GetSupportStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public SupportPerAllyStatistics GetSupportStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        _supportStats ??= new CachingCollectionWithTarget<FinalSupport>(log);
+        _supportStats ??= new CachingCollectionWithTarget<SupportPerAllyStatistics>(log);
 
-        if (!_supportStats.TryGetValue(start, end, target, out FinalSupport? value))
+        if (!_supportStats.TryGetValue(start, end, target, out SupportPerAllyStatistics? value))
         {
-            value = target != null ? new FinalSupport(log, start, end, this, target) : new FinalSupportAll(log, start, end, this);
+            value = target != null ? new SupportPerAllyStatistics(log, start, end, this, target) : new SupportAllStatistics(log, start, end, this);
             _supportStats.Set(start, end, target, value);
         }
         return value;
     }
 
-    public FinalToPlayersSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
+    public SupportToAllyStatistics GetToAllySupportStats(ParsedEvtcLog log, long start, long end)
     {
         _toPlayerSupportStats ??= new(log);
 
         if (!_toPlayerSupportStats.TryGetValue(start, end, out var value))
         {
-            value = new FinalToPlayersSupport(log, this, start, end);
+            value = new SupportToAllyStatistics(log, this, start, end);
             _toPlayerSupportStats.Set(start, end, value);
         }
         return value;

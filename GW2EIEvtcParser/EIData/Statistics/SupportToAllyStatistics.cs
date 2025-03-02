@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData;
 
 // to match non generic support stats
-public class FinalToPlayersSupport
+public class SupportToAllyStatistics
 {
     //public long allHeal;
     public readonly int ResurrectCount;
@@ -19,14 +19,14 @@ public class FinalToPlayersSupport
     public readonly int StunBreakCount;
     public readonly double RemovedStunDuration;
 
-    internal FinalToPlayersSupport(ParsedEvtcLog log, SingleActor actor, long start, long end)
+    internal SupportToAllyStatistics(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var totals = actor.GetSupportStats(log, start, end);
         ResurrectCount = totals.ResurrectCount;
         ResurrectTime = totals.ResurrectTime;
         StunBreakCount = totals.StunBreakCount;
         RemovedStunDuration = totals.RemovedStunDuration;
-        FinalSupport self = actor.GetSupportStats(actor, log, start, end);
+        SupportPerAllyStatistics self = actor.GetSupportStats(actor, log, start, end);
         foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
         {
             // add everything from total
@@ -60,7 +60,7 @@ public class FinalToPlayersSupport
                 {
                     continue;
                 }
-                FinalSupport other = actor.GetSupportStats(p, log, start, end);
+                SupportPerAllyStatistics other = actor.GetSupportStats(p, log, start, end);
                 // Add everything from other
                 if (other.FriendlyRemovals.TryGetValue(condition.ID, out itemFriend))
                 {

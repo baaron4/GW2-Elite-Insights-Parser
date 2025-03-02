@@ -8,7 +8,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonStatisticsBuilder
 {
-    public static JsonDefensesAll BuildJsonDefensesAll(FinalDefensesAll defStats)
+    public static JsonDefensesAll BuildJsonDefensesAll(DefenseAllStatistics defStats)
     {
         var jsonDefensesAll = new JsonDefensesAll
         {
@@ -43,7 +43,7 @@ internal static class JsonStatisticsBuilder
     }
 
 
-    public static JsonDPS BuildJsonDPS(FinalDPS dpsStats)
+    public static JsonDPS BuildJsonDPS(DamageStatistics dpsStats)
     {
         var jsonDPS = new JsonDPS
         {
@@ -67,7 +67,7 @@ internal static class JsonStatisticsBuilder
         return jsonDPS;
     }
 
-    private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, FinalOffensiveStats offStats)
+    private static void FillJsonGamePlayStats(JsonGameplayStats jsonGameplayStats, OffensiveStatistics offStats)
     {
         jsonGameplayStats.TotalDamageCount = offStats.TotalDamageEventCount;
         jsonGameplayStats.TotalDmg = offStats.TotalDamageEventDamage;
@@ -101,14 +101,14 @@ internal static class JsonStatisticsBuilder
         jsonGameplayStats.AppliedCrowdControlDuration = offStats.AppliedCrowdControlDuration;
     }
 
-    public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats offStats)
+    public static JsonGameplayStats BuildJsonGameplayStats(OffensiveStatistics offStats)
     {
         var jsonGameplayStats = new JsonGameplayStats();
         FillJsonGamePlayStats(jsonGameplayStats, offStats);
         return jsonGameplayStats;
     }
 
-    public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(FinalGameplayStats gameStats, FinalOffensiveStats offStats)
+    public static JsonGameplayStatsAll BuildJsonGameplayStatsAll(GameplayStatistics gameStats, OffensiveStatistics offStats)
     {
         var jsonGameplayStatsAll = new JsonGameplayStatsAll
         {
@@ -131,7 +131,7 @@ internal static class JsonStatisticsBuilder
     }
 
 
-    public static JsonPlayerSupport BuildJsonPlayerSupport(FinalToPlayersSupport playerToPlayerStats)
+    public static JsonPlayerSupport BuildJsonAllySupport(SupportToAllyStatistics playerToPlayerStats)
     {
         var jsonPlayerSupport = new JsonPlayerSupport
         {

@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalGameplayStats
+public class GameplayStatistics
 {
     // Rates
     public readonly int SkillAnimationInterruptedCount;
@@ -52,7 +52,7 @@ public class FinalGameplayStats
         }
     }
 
-    internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, SingleActor actor)
+    internal GameplayStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor)
     {
         // If dummy actor, stop
         if (actor.IsFakeActor)

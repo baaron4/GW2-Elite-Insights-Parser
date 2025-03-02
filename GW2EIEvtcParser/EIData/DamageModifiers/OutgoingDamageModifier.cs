@@ -13,7 +13,7 @@ public class OutgoingDamageModifier : DamageModifier
 
     public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
+        DamageStatistics damageData = actor.GetDamageStats(t, log, start, end);
         return (CompareType) switch
         {
             DamageType.All                => DmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage,

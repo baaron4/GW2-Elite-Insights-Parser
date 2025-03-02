@@ -142,8 +142,8 @@ internal class BuffsContainerDto
         TargetsBoonUptimes  = new(phase.Targets.Count);
         foreach (SingleActor target in phase.Targets.Keys)
         {
-            TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase, target));
-            TargetsCondiUptimes.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
+            TargetsCondiStats.Add(BuffData.BuildTargetConditionData(log, phase, target));
+            TargetsCondiUptimes.Add(BuffData.BuildTargetConditionUptimeData(log, phase, target));
             TargetsBoonUptimes.Add(BuffData.BuildTargetBoonUptimeData(log, phase, target));
         }
     }

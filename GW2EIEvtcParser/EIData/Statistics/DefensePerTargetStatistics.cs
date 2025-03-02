@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalDefenses
+public class DefensePerTargetStatistics
 {
     //public long allHealReceived;
     public readonly int DamageTaken;
@@ -71,7 +71,7 @@ public class FinalDefenses
         return (strip, stripTime);
     }
 
-    internal FinalDefenses(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? from)
+    internal DefensePerTargetStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? from)
     {
         var damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
         foreach (HealthDamageEvent damageEvent in damageLogs)

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalDPS
+public class DamageStatistics
 {
     // Total
     public readonly int DPS;
@@ -34,7 +34,7 @@ public class FinalDPS
     public readonly int ActorBarrierDamage;
 
 
-    internal FinalDPS(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
+    internal DamageStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         double phaseDuration = (end - start) / 1000.0;
         (Damage, PowerDamage, ConditionDamage, StrikeDamage, LifeLeechDamage, BarrierDamage) = ComputeDamageFrom(log, actor.GetDamageEvents(target, log, start, end));
