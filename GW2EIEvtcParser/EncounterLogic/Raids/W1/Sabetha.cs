@@ -5,6 +5,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -14,40 +15,21 @@ internal class Sabetha : SpiritVale
     {
         MechanicList.AddRange(new List<Mechanic>
         {
+        // NOTE: Time Bomb damage is registered only for the user that has the bomb, damage to others is not logged.
         new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
         new PlayerDstBuffApplyMechanic(SapperBombBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
         new PlayerDstBuffApplyMechanic(TimeBomb, "Time Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
-        /*new PlayerBoonApplyMechanic(31324, "Time Bomb Hit", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
-            (ba, log) =>
-            {
-                List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
-                if (timedBombRemoved.Count > 0)
-                {
-                    return false;
-                }
-                return true;
-           }
-        }),
-        new PlayerBoonApplyMechanic(34152, "Time Bomb Hit", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Timed Bomb Hit","Got hit by Timed Bomb (Expanding circle)", "Timed Bomb Hit",0,
-            (ba, log) =>
-            {
-                List<AbstractBuffEvent> timedBombRemoved = log.CombatData.GetBoonData(31485).Where(x => x.To == ba.To && x is BuffRemoveAllEvent && Math.Abs(ba.Time - x.Time) <= 50).ToList();
-                if (timedBombRemoved.Count > 0)
-                {
-                    return false;
-                }
-                return true;
-           }
-        }),*/
         new PlayerDstSkillMechanic(Firestorm, "Firestorm", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0).UsingChecker((de, log) => de.HasKilled),
+        new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], "Time Bomb", new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkMagenta), "TimeB Down", "Downed by Time Bomb", "Time Bomb Down", 0).UsingChecker((hde, log) => hde.HasDowned),
+        new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], "Time Bomb", new MechanicPlotlySetting(Symbols.HexagramOpen, Colors.DarkMagenta), "TimeB Kill", "Killed by Time Bomb", "Time Bomb Kill", 0).UsingChecker((hde, log) => hde.HasKilled),
         new PlayerDstHitMechanic(FlakShot, "Flak Shot", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.LightOrange), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
         new PlayerDstHitMechanic(CannonBarrage, "Cannon Barrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
         new PlayerDstHitMechanic(FlameBlast, "Flame Blast", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Yellow), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
         new PlayerDstHitMechanic(BanditKick, "Kick", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick","Kicked by Bandit", "Bandit Kick",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+        new PlayerCastStartMechanic(KickHeavyBomb, "Kick Heavy Bomb", new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", 0).UsingChecker((ce, log) => ce.Status != CastEvent.AnimationStatus.Interrupted && ce.Status != CastEvent.AnimationStatus.Unknown),
         new EnemyCastStartMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Platform Quake (Breakbar)","Breakbar",0),
         new EnemyCastEndMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Platform Quake (Breakbar broken) ", "CCed",0).UsingChecker((ce, log) => ce.ActualDuration <= 4400),
         new EnemyCastEndMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0).UsingChecker( (ce,log) =>  ce.ActualDuration > 4400),
-        // Hit by Time Bomb could be implemented by checking if a person is affected by ID 31324 (1st Time Bomb) or 34152 (2nd Time Bomb, only below 50% boss HP) without being attributed a bomb (ID: 31485) 3000ms before (+-50ms). I think the actual heavy hit isn't logged because it may be percentage based. Nothing can be found in the logs.
         });
         Extension = "sab";
         Icon = EncounterIconSabetha;
@@ -62,6 +44,27 @@ internal class Sabetha : SpiritVale
                         (-8587, -162, -1601, 6753)/*,
                         (-15360, -36864, 15360, 39936),
                         (3456, 11012, 4736, 14212)*/);
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        // Cannons
+        var cannons = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        foreach (AgentItem cannon in cannons)
+        {
+            cannon.OverrideType(AgentItem.AgentType.NPC, agentData);
+            cannon.OverrideID(ArcDPSEnums.TrashID.Cannon, agentData);
+        }
+
+        // Heavy Bombs
+        var heavyBombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2);
+        foreach (AgentItem bomb in heavyBombs)
+        {
+            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
+            bomb.OverrideID(ArcDPSEnums.TrashID.HeavyBomb, agentData);
+        }
+
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -123,6 +126,7 @@ internal class Sabetha : SpiritVale
             (int)ArcDPSEnums.TrashID.Kernan,
             (int)ArcDPSEnums.TrashID.Knuckles,
             (int)ArcDPSEnums.TrashID.Karde,
+            (int)ArcDPSEnums.TrashID.Cannon,
         ];
     }
 
@@ -192,7 +196,16 @@ internal class Sabetha : SpiritVale
                     }
                 }
                 break;
-
+            case (int)ArcDPSEnums.TrashID.Cannon:
+                if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(target.AgentItem, MarkerGUIDs.SabethaCannonRedCrossSwordsMarker, out var swords))
+                {
+                    foreach (var marker in swords)
+                    {
+                        (long start, long end) lifespan = (marker.Time, marker.EndTime);
+                        replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.RedCrossSwordsMarker);
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -204,27 +217,80 @@ internal class Sabetha : SpiritVale
         [
             ArcDPSEnums.TrashID.BanditSapper,
             ArcDPSEnums.TrashID.BanditThug,
-            ArcDPSEnums.TrashID.BanditArsonist
+            ArcDPSEnums.TrashID.BanditArsonist,
+            ArcDPSEnums.TrashID.HeavyBomb,
         ];
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        // timed bombs
-        var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent);
-        foreach (BuffEvent c in timedBombs)
+
+        // Timed bombs
+        var timedBombs = p.GetBuffStatus(log, TimeBomb, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        foreach (var seg in timedBombs)
         {
-            int start = (int)c.Time;
-            int end = start + 3000;
-            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
+            // Buff lasts 4000ms, damage event happens at 3000ms.
+            (long start, long end) lifespan = (seg.Start, seg.Start + 3000);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(280, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p)), lifespan.end);
         }
+
         // Sapper bombs
         var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
-            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
+            long growing = seg.Start + 5000;
+            replay.Decorations.AddWithGrowing(new CircleDecoration(180, seg, Colors.Lime, 0.5, new AgentConnector(p)), growing);
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // Cannon Barrage
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaCannonBarrage, out var cannonBarrage))
+        {
+            foreach (EffectEvent effect in cannonBarrage)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3500);
+                var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+            }
+        }
+
+        // Platform Crush - Platform debris falling down
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaPlatformCrush, out var platformCrush))
+        {
+            foreach (EffectEvent effect in platformCrush)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                var circle = new CircleDecoration(80, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+            }
+        }
+
+        // Flak Shot
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaFlakShot, out var flakShot))
+        {
+            foreach (EffectEvent effect in flakShot)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 25000);
+                var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)); // 100 radius aprox.
+                EnvironmentDecorations.AddWithFilled(circle, false);
+            }
+        }
+
+        // Sapper Bomb - Ground AoE (after throw)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaSapperBombGroundAoE, out var sapperBomb))
+        {
+            foreach (EffectEvent effect in sapperBomb)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                var circle = new CircleDecoration(180, lifespan, Colors.Lime, 0.5, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+            }
         }
     }
 

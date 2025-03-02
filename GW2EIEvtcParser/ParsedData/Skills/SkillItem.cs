@@ -242,6 +242,7 @@ public class SkillItem
         { GhastlyRampageBegin,"Ghastly Rampage (Begin)" },
         // Sabetha
         { ShadowStepSabetha, "Shadow Step" },
+        { KickHeavyBomb, "Kick Heavy Bomb" },
         // Slothasor
         { TantrumSkill, "Tantrum Start" },
         { NarcolepsySkill, "Sleeping" },
@@ -980,8 +981,9 @@ public class SkillItem
             { SpearmarshalsSupportBombard, SkillImages.SpearmarshalsSupport },
             { ShrugItOffHeal, TraitImages.ShrugItOff },
             { BerserkEndSkill, SkillImages.BerserkerEnd },
-            #endregion WarriorIcons
+        #endregion WarriorIcons
             #region EncounterIcons
+            { KickHeavyBomb, SkillImages.Kick },
             // Slothasor
             { Toss, SkillImages.TossSlubling },
             // River of Souls
