@@ -152,7 +152,7 @@ internal class Artsariiv : ShatteredObservatory
                 { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
         };
 
-        foreach (var target in _targets)
+        foreach (var target in Targets)
         {
             if (target.IsSpecies(TrashID.CloneArtsariiv))
             {

@@ -15,6 +15,7 @@ internal static class UntamedHelper
     [
         new BuffGainCastFinder(UnleashPet, PetUnleashed),
         new BuffGainCastFinder(UnleashRanger, Unleashed),
+        new BuffGainCastFinder(RestorativeStrikes, RestorativeStrikes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions).UsingDstSpecChecker(Spec.Untamed),
         new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingDstSpecChecker(Spec.Untamed),
 
@@ -83,6 +84,7 @@ internal static class UntamedHelper
         new Buff("Perilous Gift", PerilousGift, Source.Untamed, BuffClassification.Other, SkillImages.PerilousGift),
         new Buff("Forest's Fortification", ForestsFortification, Source.Untamed, BuffClassification.Other, SkillImages.ForestsFortification),
         new Buff("Unleashed Power", UnleashedPowerBuff, Source.Untamed, BuffClassification.Other, TraitImages.UnleashedPower),
+        new Buff("Restorative Strikes", RestorativeStrikes, Source.Untamed, BuffClassification.Other, TraitImages.RestorativeStrikes),
     ];
 
 }

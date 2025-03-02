@@ -113,123 +113,121 @@ public class EvtcParser
         parsingFailureReason = null;
         try
         {
-            using (BinaryReader reader = CreateReader(evtcStream))
+            using BinaryReader reader = CreateReader(evtcStream);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing fight data");
+            ParseFightData(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
+            ParseAgentData(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
+            ParseSkillData(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
+            ParseCombatList(reader, operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
+            CompleteAgents(operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
+            PreProcessEvtcData(operation);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
+            var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
+
+            if (multiThreadAccelerationForBuffs)
             {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
-                operation.UpdateProgressWithCancellationCheck("Parsing: Parsing fight data");
-                ParseFightData(reader, operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
-                ParseAgentData(reader, operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
-                ParseSkillData(reader, operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Parsing combat list");
-                ParseCombatList(reader, operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Linking agents to combat list");
-                CompleteAgents(operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
-                PreProcessEvtcData(operation);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
-                var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
-                //
-                if (multiThreadAccelerationForBuffs)
+                using var _t = new AutoTrace("Buffs?");
+
+                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
+
+                var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
+                friendliesAndTargets.AddRange(log.Friendlies);
+                friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+                Trace.TrackAverageStat("friendliesAndTargets", friendliesAndTargets.Count);
+
+                var friendliesAndTargetsAndMobs = new List<SingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
+                friendliesAndTargetsAndMobs.AddRange(log.FightData.Logic.TrashMobs);
+                friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
+                Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
+
+                _t.Log("Paralell phases");
+                foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
-                    using var _t = new AutoTrace("Buffs?");
-
-                    IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                    operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
-                    
-                    var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
-                    friendliesAndTargets.AddRange(log.Friendlies);
-                    friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
-                    Trace.TrackAverageStat("friendliesAndTargets", friendliesAndTargets.Count);
-
-                    var friendliesAndTargetsAndMobs = new List<SingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
-                    friendliesAndTargetsAndMobs.AddRange(log.FightData.Logic.TrashMobs);
-                    friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
-                    Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
-                    
-                    _t.Log("Paralell phases");
-                    foreach (SingleActor actor in friendliesAndTargetsAndMobs)
-                    {
-                        // that part can't be // due to buff extensions
-                        _t.SetAverageTimeStart();
-                        actor.ComputeBuffMap(log);
-                        _t.TrackAverageTime("Buff");
-                        actor.GetMinions(log);
-                        _t.TrackAverageTime("Minion");
-                    }
-                    _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
-                    Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
-                    _t.Log("friendliesAndTargets GetStatus");
-                    /*if (log.CombatData.HasMovementData)
-                    {
-                        // init all positions
-                        Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                    }*/
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
-                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-                    Parallel.ForEach(friendliesAndTargets, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffDistribution(log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffDistribution");
-                    Parallel.ForEach(friendliesAndTargets, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffPresence(log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("friendliesAndTargets GetBuffPresence");
-                    //
-                    //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
-                    Parallel.ForEach(log.Friendlies, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("Friendlies GetBuffs Self");
-                    Parallel.ForEach(log.PlayerList, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("PlayerList GetBuffs Group");
-                    Parallel.ForEach(log.PlayerList, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("PlayerList GetBuffs OffGroup");
-                    Parallel.ForEach(log.PlayerList, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("PlayerList GetBuffs Squad");
-                    Parallel.ForEach(log.FightData.Logic.Targets, actor =>
-                    {
-                        foreach (PhaseData phase in phases)
-                        {
-                            actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
-                        }
-                    });
-                    _t.Log("FightData.Logic.Targets GetBuffs Self");
+                    // that part can't be // due to buff extensions
+                    _t.SetAverageTimeStart();
+                    actor.ComputeBuffMap(log);
+                    _t.TrackAverageTime("Buff");
+                    actor.GetMinions(log);
+                    _t.TrackAverageTime("Minion");
                 }
+                _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
+                Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
+                _t.Log("friendliesAndTargets GetStatus");
+                /*if (log.CombatData.HasMovementData)
+                {
+                    // init all positions
+                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
+                }*/
+                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
+                _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+                Parallel.ForEach(friendliesAndTargets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffDistribution(log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("friendliesAndTargets GetBuffDistribution");
+                Parallel.ForEach(friendliesAndTargets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffPresence(log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("friendliesAndTargets GetBuffPresence");
                 //
-                return log;
+                //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
+                Parallel.ForEach(log.Friendlies, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("Friendlies GetBuffs Self");
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("PlayerList GetBuffs Group");
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("PlayerList GetBuffs OffGroup");
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("PlayerList GetBuffs Squad");
+                Parallel.ForEach(log.FightData.Logic.Targets, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                    }
+                });
+                _t.Log("FightData.Logic.Targets GetBuffs Self");
             }
+
+            return log;
         }
         catch (Exception ex)
         {
@@ -767,6 +765,28 @@ public class EvtcParser
         {
             _playerList.ForEach(x => x.MakeSquadless());
         }
+        _playerList = _playerList.OrderBy(a => a.Character).ToList();
+        if (_parserSettings.AnonymousPlayers)
+        {
+            operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
+            for (int i = 0; i < _playerList.Count; i++)
+            {
+                _playerList[i].Anonymize(i + 1);
+            }
+            var allPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
+            allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
+            var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
+            int playerOffset = _playerList.Count + 1;
+            foreach (AgentItem playerAgent in allPlayerAgents)
+            {
+                if (!playerAgents.Contains(playerAgent))
+                {
+                    string character = "Player " + playerOffset;
+                    string account = "Account " + (playerOffset++);
+                    playerAgent.OverrideName(character + "\0:" + account + "\00");
+                }
+            }
+        }
         uint minToughness = _playerList.Min(x => x.Toughness);
         if (minToughness > 0)
         {
@@ -783,7 +803,7 @@ public class EvtcParser
         {
             var encounteredNonSquadPlayerInstIDs = new HashSet<ushort>();
             var teamChangeDict = _combatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            //
+            
             IReadOnlyList<AgentItem> squadPlayers = _agentData.GetAgentByType(AgentItem.AgentType.Player);
             ulong greenTeam = ulong.MaxValue;
             var greenTeams = new List<ulong>();
@@ -806,7 +826,7 @@ public class EvtcParser
             var playersToMerge = new Dictionary<AgentItem, AgentItem>();
             var agentsToPlayersToMerge = new Dictionary<ulong, AgentItem>();
 
-            //
+            
             var uniqueNonSquadPlayers = new List<AgentItem>();
             foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
             {
@@ -858,7 +878,7 @@ public class EvtcParser
                 }
             }
         }
-        //
+        
         if (toRemove.Count != 0)
         {
             _agentData.RemoveAllFrom(toRemove);
@@ -1021,7 +1041,7 @@ public class EvtcParser
         {
             a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
         }
-        //
+        
         _fightData.ApplyOffset(offset);
     }
 
@@ -1048,25 +1068,22 @@ public class EvtcParser
                 operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (gone before fight start)");
             }
         }
-        //
-        if (_fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced10)
+
+        foreach (Player p in _playerList)
         {
-            foreach (Player p in _playerList)
+            // check for players who have spawned after fight start
+            if (p.FirstAware > 100)
             {
-                // check for players who have spawned after fight start
-                if (p.FirstAware > 100)
+                // look for a spawn event close to first aware
+                CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
+                    && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
+                if (spawnEvent != null)
                 {
-                    // look for a spawn event close to first aware
-                    CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
-                        && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
-                    if (spawnEvent != null)
+                    var damageEvents = _combatItems.Where(x => x.IsDamage() && (x.SrcMatchesAgent(p.AgentItem) || x.DstMatchesAgent(p.AgentItem)));
+                    if (!damageEvents.Any())
                     {
-                        var damageEvents = _combatItems.Where(x => x.IsDamage() && x.SrcMatchesAgent(p.AgentItem));
-                        if (!damageEvents.Any())
-                        {
-                            agentsToRemove.Add(p.AgentItem);
-                            operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start in 10 men content)");
-                        }
+                        agentsToRemove.Add(p.AgentItem);
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start and did not participate)");
                     }
                 }
             }
@@ -1076,17 +1093,13 @@ public class EvtcParser
         {
             throw new EvtcAgentException("No valid players");
         }
-        //
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
         _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
         if (!_fightData.Logic.Targets.Any())
         {
             throw new MissingKeyActorsException("No Targets found");
         }
-        operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + _playerList.Count);
-        operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + _fightData.Logic.NonPlayerFriendlies.Count);
-        operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + _fightData.Logic.Targets.Count);
-        operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + _fightData.Logic.TrashMobs.Count);
     }
 
     /// <summary>

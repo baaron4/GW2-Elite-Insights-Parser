@@ -223,9 +223,9 @@ internal static class EngineerHelper
         new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, SkillImages.LightningRod),
     ];
 
-    public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
+    public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
-        var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+        var playerAgents = new HashSet<AgentItem>(players);
 
         HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(combatData, FlameTurretDamage, playerAgents);
 
@@ -251,14 +251,14 @@ internal static class EngineerHelper
         // if only one engineer, could only be that one
         if (engineersCount == 1)
         {
-            Player engineer = engineers.First();
-            SetGadgetMaster(flameTurrets, engineer.AgentItem);
-            SetGadgetMaster(netTurrets, engineer.AgentItem);
-            SetGadgetMaster(rocketTurrets, engineer.AgentItem);
-            SetGadgetMaster(rifleTurrets, engineer.AgentItem);
-            SetGadgetMaster(thumperTurrets, engineer.AgentItem);
-            SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
-            SetGadgetMaster(healingTurrets, engineer.AgentItem);
+            AgentItem engineer = engineers.First();
+            SetGadgetMaster(flameTurrets, engineer);
+            SetGadgetMaster(netTurrets, engineer);
+            SetGadgetMaster(rocketTurrets, engineer);
+            SetGadgetMaster(rifleTurrets, engineer);
+            SetGadgetMaster(thumperTurrets, engineer);
+            SetGadgetMaster(harpoonTurrets, engineer);
+            SetGadgetMaster(healingTurrets, engineer);
         }
         else if (engineersCount > 1)
         {

@@ -151,9 +151,9 @@ internal static class WarriorHelper
         return new HashSet<AgentItem>();
     }*/
 
-    public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
+    public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
-        var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+        var playerAgents = new HashSet<AgentItem>(players);
         HashSet<AgentItem> strBanners = GetBannerAgents(combatData, BannerOfStrengthBuff, playerAgents),
             defBanners = GetBannerAgents(combatData, BannerOfDefenseBuff, playerAgents),
             disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
@@ -164,11 +164,11 @@ internal static class WarriorHelper
         // if only one warrior, could only be that one
         if (warriorsCount == 1)
         {
-            Player warrior = warriors.First();
-            ProfHelper.SetGadgetMaster(strBanners, warrior.AgentItem);
-            ProfHelper.SetGadgetMaster(disBanners, warrior.AgentItem);
-            ProfHelper.SetGadgetMaster(tacBanners, warrior.AgentItem);
-            ProfHelper.SetGadgetMaster(defBanners, warrior.AgentItem);
+            AgentItem warrior = warriors.First();
+            ProfHelper.SetGadgetMaster(strBanners, warrior);
+            ProfHelper.SetGadgetMaster(disBanners, warrior);
+            ProfHelper.SetGadgetMaster(tacBanners, warrior);
+            ProfHelper.SetGadgetMaster(defBanners, warrior);
             //SetBannerMaster(battleBanner, warrior.AgentItem);
         }
         else if (warriorsCount > 1)

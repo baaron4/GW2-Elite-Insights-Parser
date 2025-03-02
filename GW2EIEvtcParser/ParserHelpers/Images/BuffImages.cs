@@ -45,9 +45,9 @@ public static class BuffImages
     public const string Unknown = "https://i.imgur.com/nSYuby8.png";
     public const string RangerPets = "https://i.imgur.com/Q8HBNzz.png";
     public const string Downed = "https://wiki.guildwars2.com/images/d/dd/Downed.png";
-    public const string Exhaustion = "https://wiki.guildwars2.com/images/8/88/Exhaustion.png";
-    public const string Stealth = "https://wiki.guildwars2.com/images/1/19/Stealth.png";
-    public const string Revealed = "https://wiki.guildwars2.com/images/d/db/Revealed.png";
+    public const string Exhaustion = "https://render.guildwars2.com/file/C86F3DF92CC1CB66D9B1F90B02C2FBAEC276BC44/1876876.png";
+    public const string Stealth = "https://render.guildwars2.com/file/3BD4670638470439F3325B444FAF7D5FA620CCE5/62777.png";
+    public const string Revealed = "https://render.guildwars2.com/file/62BFF65D1CE99B1B2B0928152BCC596EAC0D372B/102887.png";
     public const string Superspeed = "https://render.guildwars2.com/file/E04392C3D8ED985125973AEB99D8460C483263F9/103458.png";
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
     public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
@@ -65,12 +65,12 @@ public static class BuffImages
     public const string Crazed = "https://wiki.guildwars2.com/images/4/41/Crazed.png";
     public const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
     // Auras
-    public const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
-    public const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
-    public const string FrostAura = "https://wiki.guildwars2.com/images/8/87/Frost_Aura_%28effect%29.png";
-    public const string LightAura = "https://wiki.guildwars2.com/images/5/5a/Light_Aura.png";
-    public const string MagneticAura = "https://wiki.guildwars2.com/images/0/0b/Magnetic_Aura_%28effect%29.png";
-    public const string ShockingAura = "https://wiki.guildwars2.com/images/5/5d/Shocking_Aura_%28effect%29.png";
+    public const string ChaosAura = "https://render.guildwars2.com/file/FEF378D8A91D0523A04A380ED0547F0BF944A967/2261518.png";
+    public const string FireAura = "https://render.guildwars2.com/file/2E7050E44690AFE0A396FA0DAD526699392743F3/2261521.png";
+    public const string FrostAura = "https://render.guildwars2.com/file/719B80E35C276D68EF0AABB79126CF4CD42E3AF6/2261522.png";
+    public const string LightAura = "https://render.guildwars2.com/file/62405ED2322E80A4A95663BA6C6804DB0962E6B0/867451.png";
+    public const string MagneticAura = "https://render.guildwars2.com/file/33D27C7FE0017F70749DE84576F56F381DDF0C30/2261524.png";
+    public const string ShockingAura = "https://render.guildwars2.com/file/79F60BF40AB3F306E7367CF3479A4163F76F3944/2261527.png";
     public const string DarkAura = "https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png";
     // Wing 4
     public const string CrystallineHeart = "https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png";

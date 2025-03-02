@@ -388,6 +388,7 @@ public static class EffectGUIDs
     public static readonly GUID DruidSublimeConversion2 = new("2F74AC468871444BB66AF5D8B25EC870");
     public static readonly GUID DruidGlyphOfTheStars = new("84BD2B25ADE2E34C8E8B508283BE8077");
     public static readonly GUID DruidGlyphOfTheStarsCA = new("6AFF7DBF27F63D45940FEC1CB837475D");
+    public static readonly GUID DruidBloodMoon = new("28346F32FD199C4B8F9B15438F27A434"); // has owner, 1000 duration
     public static readonly GUID SoulbeastEternalBond = new("BF0A5B11A4076A4F98C6E1D655D507B1"); // has owner & target
     public static readonly GUID UntamedMutateConditions = new("D7DCD4ABF9E4A749950AF0175E02EA06");
     public static readonly GUID UntamedUnnaturalTraversal = new("8D36806A690A5442A983308EDCECB018");
@@ -561,6 +562,20 @@ public static class EffectGUIDs
     public static readonly GUID MursaarOverseerProtectBubble = new("17BC358A51ED2D43BF2ABE8AB642B86B"); // Src player
     public static readonly GUID MursaarOverseerClaimMarker = new("94F3501D777FAC439E78E143CE756B0A"); // No Src - No Dst
     public static readonly GUID MursaarOverseerShockwave = new("0F62A1315A00FC438B2F1273E6BC4054");
+    // Deimos
+    public static readonly GUID DeimosRapidDecayIndicator = new("DF5BD0F43A4EDE4D85E54766D6769446"); // No Src - 3500 duration - oil indicator
+    public static readonly GUID DeimosRapidDecay200Radius = new("9339317532713741AA623C0799C55792"); // No Src - 1500 duration - oil - reapplied every 1000ms for 1500ms, leaving 500ms for "pulsing animation"
+    public static readonly GUID DeimosRapidDecay300Radius = new("6640E1F1CD53954D83ACE816ECE6B7DC"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay400Radius = new("91D84AE4AEA30243807F3530AE27B8DE"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay500Radius = new("85526642B1DB2A4BB0AD16AE42F1BB80"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay600Radius = new("1C200007E46EA8479039CF826B05F867"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay700Radius = new("B8A2BEBEF2EBC84A80AD73C9CDE5BD87"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay800Radius = new("A7D9114A6CB9634FB15CDCD6E659FF22"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay900Radius = new("0D9D89CB5D81634493B57CBA36DC4697"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosRapidDecay1000Radius = new("468942D42A459B438D6388859C589D60"); // No src - 1500 duration - oil
+    public static readonly GUID DeimosSoulFeast = new("1BBF189B7174604F822656C5A85FC0D6"); // Src Hands - 2000 duration - hand - reapplied each animation
+    public static readonly GUID DeimosAnnihilateSliceIndicator = new("F5B44356708C9243BE2D67986FDD0CF4"); // Src Deimos - 1500 duration - Pizza slice indicator
+    public static readonly GUID DeimosAnnihilateHit = new("D94547E5FC797B458BF25D06C8E32C68"); // Src Deimos - 1000 duration - Pizza slice hit
     // Broken King
     public static readonly GUID BrokenKingNumbingBreachIndicator = new("5341E83B29B534408E90DBE7BE6F452D");
     public static readonly GUID BrokenKingNumbingBreachDamage = new("1BF014091BFD1E40A11ED36B92601342");

@@ -38,17 +38,17 @@ public class ParsedEvtcLog
         FightData = fightData;
         AgentData = agentData;
         SkillData = skillData;
-        PlayerList = playerList;
-        PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
         ParserSettings = parserSettings;
         _operation = operation;
-        //
+        
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
-        CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
+        CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
+
         if (parserSettings.AnonymousPlayers)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous guilds");
-            IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+            var allPlayerAgents = AgentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
+            allPlayerAgents.AddRange(AgentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             foreach (AgentItem playerAgent in allPlayerAgents)
             {
                 foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
@@ -57,44 +57,15 @@ public class ParsedEvtcLog
                 }
             }
         }
-        //
+        
         operation.UpdateProgressWithCancellationCheck("Parsing: Checking Encounter Status");
         FightData.ProcessEncounterStatus(CombatData, AgentData);
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Setting Fight Name");
         FightData.CompleteFightName(CombatData, AgentData);
-        //
-        FightData.Logic.UpdatePlayersSpecAndGroup(PlayerList, CombatData, FightData);
-        PlayerList = PlayerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
-        //
-        if (parserSettings.AnonymousPlayers)
-        {
-            operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
-            for (int i = 0; i < PlayerList.Count; i++)
-            {
-                PlayerList[i].Anonymize(i + 1);
-            }
-            IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-            int playerOffset = PlayerList.Count + 1;
-            foreach (AgentItem playerAgent in allPlayerAgents)
-            {
-                if (!PlayerAgents.Contains(playerAgent))
-                {
-                    string character = "Player " + playerOffset;
-                    string account = "Account " + (playerOffset++);
-                    playerAgent.OverrideName(character + "\0:" + account + "\00");
-                }
-            }
-        }
-        //
-        var friendlies = new List<SingleActor>();
-        friendlies.AddRange(PlayerList);
-        friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
-        Friendlies = friendlies;
-        FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
-        FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
-        //
+        
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
-        FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, PlayerAgents);
+        FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, agentData.GetAgentByType(AgentItem.AgentType.Player));
         if (FightData.FightDuration <= ParserSettings.TooShortLimit)
         {
             throw new TooShortException(FightData.FightDuration, ParserSettings.TooShortLimit);
@@ -103,15 +74,52 @@ public class ParsedEvtcLog
         {
             throw new SkipException();
         }
+        
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Handling active players");
+        List<Player> activePlayers = [];
+        foreach (Player p in playerList)
+        {
+            if (p.FirstAware < FightData.FightEnd)
+            {
+                activePlayers.Add(p);
+            } 
+            else
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight end)");
+            }
+        }
+        if (activePlayers.Count == 0)
+        {
+            throw new EvtcAgentException("No valid players");
+        }
+        PlayerList = activePlayers.OrderBy(a => a.Group).ToList();
+        PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
+        
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Handling friendlies");
+        var friendlies = new List<SingleActor>();
+        friendlies.AddRange(PlayerList);
+        friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
+        Friendlies = friendlies;
+        FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
+        FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
+        
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + PlayerList.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + FightData.Logic.NonPlayerFriendlies.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + FightData.Logic.Targets.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + FightData.Logic.TrashMobs.Count);
+        
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Log Meta Data");
         LogData = new LogData(evtcVersion, CombatData, FightData.LogEnd - FightData.LogStart, playerList, extensions, operation);
-        //
+        
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Container");
         Buffs = new BuffsContainer(CombatData, operation);
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Modifier Container");
         DamageModifiers = new DamageModifiersContainer(CombatData, fightData.Logic.ParseMode, fightData.Logic.SkillMode, parserSettings);
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Mechanic Data");
         MechanicData = FightData.Logic.GetMechanicData();
+
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
         StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
     }

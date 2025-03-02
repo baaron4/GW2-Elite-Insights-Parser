@@ -89,6 +89,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
+        (int)MinionID.JuvenileWarclaw,
     ];
 
     private static bool IsJuvenilePetID(int id)
@@ -120,9 +121,10 @@ internal static class RangerHelper
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
         new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
         new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        // TODO evasive purity
+        new EXTHealingCastFinder(EvasivePurity, EvasivePurity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTBarrierCastFinder(ProtectMe, ProtectMe),
         new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
         new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -333,9 +335,9 @@ internal static class RangerHelper
         new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.HuntersProwess),
     ];
 
-    public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
+    public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
-        var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
+        var playerAgents = new HashSet<AgentItem>(players);
         // entangle works fine already
         HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
         HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
@@ -344,9 +346,9 @@ internal static class RangerHelper
         // if only one ranger, could only be that one
         if (rangersCount == 1)
         {
-            Player ranger = rangers.First();
-            SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
-            SetGadgetMaster(blackHoles, ranger.AgentItem);
+            AgentItem ranger = rangers.First();
+            SetGadgetMaster(jacarandaEmbraces, ranger);
+            SetGadgetMaster(blackHoles, ranger);
         }
         else if (rangersCount > 1)
         {

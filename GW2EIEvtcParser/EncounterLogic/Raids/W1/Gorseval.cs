@@ -93,7 +93,7 @@ internal class Gorseval : SpiritVale
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
-        foreach (SingleActor target in _targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul))
             {

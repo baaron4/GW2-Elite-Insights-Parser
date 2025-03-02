@@ -150,19 +150,19 @@ internal class SpiritRace : SpiritVale
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
-                    if (posititions.Any(x => (x - position1).Length() < 10)) {
+                    var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
+                    if (positions.Any(x => (x - position1).Length() < 10)) {
                         target.OverrideName(target.Character + " 1" );
                     } 
-                    else if (posititions.Any(x => (x - position2).Length() < 10))
+                    else if (positions.Any(x => (x - position2).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 2");
                     } 
-                    else if (posititions.Any(x => (x - position3).Length() < 10))
+                    else if (positions.Any(x => (x - position3).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 3");
                     } 
-                    else if (posititions.Any(x => (x - position4).Length() < 10))
+                    else if (positions.Any(x => (x - position4).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 4");
                     }

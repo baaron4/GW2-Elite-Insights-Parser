@@ -130,7 +130,7 @@ internal class Skorvald : ShatteredObservatory
         }
 
         int[] nameCount = [0, 0, 0, 0];
-        foreach (NPC target in _targets)
+        foreach (NPC target in Targets)
         {
             switch (target.ID)
             {

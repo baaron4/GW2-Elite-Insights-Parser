@@ -104,7 +104,7 @@ internal class WvWFight : FightLogic
         return mapID.MapID switch
         {
             // EB
-            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 - 900, -36864 + 1800, 36864 - 900, 36864 + 1800)),
+            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250)),
             // Green Alpine
             95 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
             // Blue Alpine
@@ -316,8 +316,8 @@ internal class WvWFight : FightLogic
                     break;
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _nonPlayerFriendlies.AddRange(auxFriendlies.OrderBy(x => x.Character));
         _targets.AddRange(auxTargets.OrderBy(x => x.Character));
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 }

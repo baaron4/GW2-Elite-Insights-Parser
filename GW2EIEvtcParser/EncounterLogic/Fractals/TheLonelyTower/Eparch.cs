@@ -66,7 +66,7 @@ internal class Eparch : LonelyTower
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] miniBossCount = [1, 1, 1, 1];
-        foreach (NPC target in _targets)
+        foreach (NPC target in Targets)
         {
             switch (target.ID)
             {

@@ -952,10 +952,12 @@ public static class SkillIDs
     public const long FleshOfTheMaster = 13810;
     public const long VampiricStrikes2 = 13814;
     public const long BloodBank = 13824;
+    public const long SpitefulRenewal = 13863;
     public const long LesserSpinalShivers = 13906;
     public const long LesserEnfeeble = 13907;
     public const long WindborneNotes = 13980;
     public const long OpeningStrike = 13988;
+    public const long EvasivePurity = 14016;
     public const long NaturalHealing = 14024;
     public const long Spotter = 14055;
     public const long VigorousShouts = 14219;
@@ -1330,14 +1332,16 @@ public static class SkillIDs
     public const long GolemPummelerFinisher = 23997;
     public const long SiegeBubble = 23999;
     public const long Reflection2 = 24014;
-    public const long HealingRipple = 24061;
-    public const long POV_DhuumfireCooldown = 24286;
+    public const long HealingRipple = 24060;
+    public const long HealingRippleWvW = 24061;
     public const long WaveOfHealing_SuperiorSigilOfWater = 24241;
     public const long WaveOfHealing_MinorSigilOfWater = 24242;
     public const long WaveOfHealing_MajorSigilOfWater = 24244;
     public const long Critical = 24278;
+    public const long POV_DhuumfireCooldown = 24286;
     public const long MysticalDragonFinisher = 24290;
     public const long LlamaFinisher = 24291;
+    public const long FlowLikeWaterHealing = 24299;
     public const long StoneHeart = 24304;
     public const long LightningRod = 24305;
     public const long PoisonMasterBuff = 24371;
@@ -1513,7 +1517,7 @@ public static class SkillIDs
     public const long ContinuumSplit = 29830;
     public const long FlashFreezeDelayed = 29844;
     public const long WellOfRecall_Senility = 29856;
-    public const long LiveVicariously = 29863;
+    public const long VigorousRecovery_LiveVicariously = 29863; // The game maps this name incorrectly to "Vigorous Recovery"
     public const long LifeFromDeath = 29901;
     public const long ShieldOfCourageActive = 29906;
     public const long WeakeningCharge = 29911;
@@ -4044,6 +4048,7 @@ public static class SkillIDs
     public const long DualOrbitFireAndWater = 69184;
     public const long DreadVisageAspectSkill = 69185;
     public const long FlareSilentSurf = 69189;
+    public const long RestorativeStrikes = 69193;
     public const long FrighteningSpeedWindup = 69194;
     public const long RendingStormAxeTargetBuff1 = 69195;
     public const long HarrowshotDeath = 69199; // harrowshot is the boon steal attack
@@ -4491,7 +4496,7 @@ public static class SkillIDs
     public const long RendingStrike = 73109;
     public const long MongoosesFrenzy = 73110;
     public const long WyvernsLash = 73112;
-    public const long ImplacableFoe = 73112;
+    public const long ImplacableFoe = 73113;
     public const long SharpEdges = 73114;
     public const long DistressSkill = 73116;
     public const long RippleBuff = 73117;
