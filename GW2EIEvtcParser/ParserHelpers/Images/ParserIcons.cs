@@ -1199,7 +1199,7 @@ internal static class ParserIcons
         { TrashID.Gree, TrashGree },
         { TrashID.Reeg, TrashReeg },
         { TrashID.Cannon, TrashCannon },
-        { TrashID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideous image for better visual
+        { TrashID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideout image for better visual
     };
 
     /// <summary>
