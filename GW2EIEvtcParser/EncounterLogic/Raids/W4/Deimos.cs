@@ -745,7 +745,7 @@ internal class Deimos : BastionOfThePenitent
     /// <summary>
     /// Adds Rapid Decay oils to the combat replay.<br></br>
     /// Each effect lasts 1500ms, a new effect appears every 1000s, giving a 500ms overlap for a pulsating visual effect.
-    /// Duration overriden to 1000ms to remove the pulse effect.
+    /// Duration overriden to 1000ms to remove the pulse effect, a position based check makes sure the "pulses" remain properly connected.
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="guid">Effect GUID of the different oil sizes.</param>
@@ -754,9 +754,28 @@ internal class Deimos : BastionOfThePenitent
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rapidDecay))
         {
+            var positionDict = new Dictionary<float, Dictionary<float, (long start, long end)>>();
             foreach (EffectEvent effect in rapidDecay)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                if (positionDict.TryGetValue(effect.Position.X, out var yDict))
+                {
+                    if (yDict.TryGetValue(effect.Position.Y, out var previousLifeSpan))
+                    {
+                        if (Math.Abs(previousLifeSpan.end - lifespan.start) < 50)
+                        {
+                            lifespan.start = previousLifeSpan.end + 1;
+                        }
+                    } 
+                    yDict[effect.Position.Y] = lifespan;
+                } 
+                else
+                {
+                    positionDict[effect.Position.X] = new Dictionary<float, (long start, long end)>
+                    {
+                        [effect.Position.Y] = lifespan
+                    };
+                }
                 EnvironmentDecorations.AddWithBorder(new CircleDecoration(radius, lifespan, Colors.Black, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }
