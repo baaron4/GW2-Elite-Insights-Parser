@@ -154,8 +154,8 @@ internal class ValeGuardian : SpiritVale
             foreach (EffectEvent distributedMagic in distributedMagicEvents)
             {
                 // Effect duration is 6000, added 700 for the damage.
-                (long start, long end) lifespan = distributedMagic.ComputeLifespan(log, 6700);
-                lifespan.end = Math.Min(lifespan.end, distributedMagic.Src.LastAware);
+                (long start, long end) lifespan = distributedMagic.ComputeLifespan(log, 6000);
+                lifespan.end = Math.Min(lifespan.end + 700, distributedMagic.Src.LastAware);
                 var circle = new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.2, new PositionConnector(distributedMagic.Position));
                 EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
