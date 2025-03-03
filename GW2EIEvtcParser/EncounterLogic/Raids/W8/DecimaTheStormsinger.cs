@@ -4,11 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -34,8 +36,8 @@ internal class DecimaTheStormsinger : MountBalrior
             new PlayerDstHitMechanic(FulgentFence, "Fulgent Fence", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
             new PlayerDstHitMechanic(ReverberatingImpact, "Reverberating Impact", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "RevImpact.H", "Hit by Reverberating Impact (Hit a Conduit)", "Reverberating Impact Hit", 0),
             new PlayerDstHitMechanic([FulgentAuraTier1, FulgentAuraTier2, FulgentAuraTier3], "Fulgent Aura", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Purple), "FulAura.H", "Hit by Fulgent Aura (Conduit AoE)", "Fulgent Aura Hit", 0),
-            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(ArcDPSEnums.GW2Builds.December2024MountBalriorNerfs),
-            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(ArcDPSEnums.GW2Builds.December2024MountBalriorNerfs),
+            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
+            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
             new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed
             new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed
             new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
@@ -61,21 +63,21 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Decima,
+            (int)TargetID.Decima,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.GreenOrb1Player,
-            ArcDPSEnums.TrashID.GreenOrb2Players,
-            ArcDPSEnums.TrashID.GreenOrb3Players,
-            ArcDPSEnums.TrashID.EnlightenedConduit,
-            ArcDPSEnums.TrashID.EnlightenedConduitGadget,
-            ArcDPSEnums.TrashID.DecimaBeamStart,
-            ArcDPSEnums.TrashID.DecimaBeamEnd,
+            TrashID.GreenOrb1Player,
+            TrashID.GreenOrb2Players,
+            TrashID.GreenOrb3Players,
+            TrashID.EnlightenedConduit,
+            TrashID.EnlightenedConduitGadget,
+            TrashID.DecimaBeamStart,
+            TrashID.DecimaBeamEnd,
         ];
     }
 
@@ -90,13 +92,13 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var conduitsGadgets = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 200)
             .Distinct();
         foreach (var conduit in conduitsGadgets)
         {
-            conduit.OverrideID(ArcDPSEnums.TrashID.EnlightenedConduitGadget, agentData);
+            conduit.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
             conduit.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -105,7 +107,7 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
+        SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
         phases[0].AddTarget(decima);
         if (!requirePhases)
         {
@@ -136,7 +138,7 @@ internal class DecimaTheStormsinger : MountBalrior
         var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Decima:
+            case (int)TargetID.Decima:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
@@ -307,7 +309,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb1Player:
+            case (int)TrashID.GreenOrb1Player:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -322,7 +324,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
+            case (int)TrashID.GreenOrb2Players:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(185, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -337,7 +339,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
+            case (int)TrashID.GreenOrb3Players:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(285, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -352,7 +354,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
+            case (int)TrashID.EnlightenedConduit:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
                 AddThunderAoE(target, log, replay);
 
@@ -372,7 +374,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
                 replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
-            case (int)ArcDPSEnums.TrashID.EnlightenedConduitGadget:
+            case (int)TrashID.EnlightenedConduitGadget:
                 // Fulgent Aura - Tier 1 Charge
                 var tier1 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier1.Where(x => x.Value > 0))
@@ -397,8 +399,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder3Overhead);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.DecimaBeamStart:
-                SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
+            case (int)TrashID.DecimaBeamStart:
+                SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
                 var decimaConnector = new AgentConnector(decima);
                 const uint beamLength = 2900;
                 const uint orangeBeamWidth = 80;

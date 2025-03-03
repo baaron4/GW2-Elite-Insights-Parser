@@ -2,9 +2,11 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -15,9 +17,9 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         MechanicList.AddRange(new List<Mechanic>()
         {
-            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TargetID.Greer)).WithBuilds(ArcDPSEnums.GW2Builds.November2024MountBalriorRelease, ArcDPSEnums.GW2Builds.December2024MountBalriorNerfs),
-            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Reeg)).WithBuilds(ArcDPSEnums.GW2Builds.November2024MountBalriorRelease, ArcDPSEnums.GW2Builds.December2024MountBalriorNerfs),
-            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Gree)).WithBuilds(ArcDPSEnums.GW2Builds.November2024MountBalriorRelease, ArcDPSEnums.GW2Builds.December2024MountBalriorNerfs),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Reeg)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Gree)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             new PlayerDstHitMechanic(RotTheWorld, "Rot the World", new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", 0),
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new PlayerDstHitMechanic([RipplesOfRot, RipplesOfRot2], "Ripples of Rot", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
@@ -54,9 +56,9 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Greer,
-            (int)ArcDPSEnums.TrashID.Gree,
-            (int)ArcDPSEnums.TrashID.Reeg,
+            (int)TargetID.Greer,
+            (int)TrashID.Gree,
+            (int)TrashID.Reeg,
         ];
     }
 
@@ -64,9 +66,9 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Greer,
-            (int)ArcDPSEnums.TrashID.Gree,
-            (int)ArcDPSEnums.TrashID.Reeg,
+            (int)TargetID.Greer,
+            (int)TrashID.Gree,
+            (int)TrashID.Reeg,
         ];
     }
 
@@ -74,17 +76,17 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.Greer, 0 },
-            {(int)ArcDPSEnums.TrashID.Gree, 1 },
-            {(int)ArcDPSEnums.TrashID.Reeg, 1 },
+            {(int)TargetID.Greer, 0 },
+            {(int)TrashID.Gree, 1 },
+            {(int)TrashID.Reeg, 1 },
         };
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.EmpoweringBeast,
+            TrashID.EmpoweringBeast,
         ];
     }
 
@@ -92,12 +94,12 @@ internal class GreerTheBlightbringer : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
+        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         phases[0].AddTarget(greer);
         var subTitanIDs = new List<int>
         {
-            (int) ArcDPSEnums.TrashID.Reeg,
-            (int) ArcDPSEnums.TrashID.Gree,
+            (int) TrashID.Reeg,
+            (int) TrashID.Gree,
         };
         var subTitans = Targets.Where(x => x.IsAnySpecies(subTitanIDs));
         phases[0].AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
@@ -131,7 +133,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Greer:
+            case (int)TargetID.Greer:
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddScatteringSporeblast(target, log, replay);
@@ -166,20 +168,20 @@ internal class GreerTheBlightbringer : MountBalrior
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.Reeg:
+            case (int)TrashID.Reeg:
                 AddScatteringSporeblast(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
-            case (int)ArcDPSEnums.TrashID.Gree:
+            case (int)TrashID.Gree:
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
-            case (int)ArcDPSEnums.TrashID.EmpoweringBeast:
+            case (int)TrashID.EmpoweringBeast:
                 // Blighting Stab - Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerBlightingStabIndicator, out var blightingStabIndicator))
                 {

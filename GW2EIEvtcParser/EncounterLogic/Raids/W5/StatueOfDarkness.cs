@@ -1,11 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -21,8 +23,8 @@ internal class StatueOfDarkness : HallOfChains
         new PlayerCastStartMechanic(Flare, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0).UsingChecker( (evt, log) => evt.Status != CastEvent.AnimationStatus.Interrupted),
         new PlayerDstHitMechanic(PiercingShadow, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
         new PlayerDstHitMechanic(DeepAbyss, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
-        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied Daze/Fear/Knockdown on Eye of Fate", "CC Fate",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate)),
-        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied Daze/Fear/Knockdown on Eye of Judgement", "CC Judge",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement)),
+        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied Daze/Fear/Knockdown on Eye of Fate", "CC Fate",50).UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfFate)),
+        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied Daze/Fear/Knockdown on Eye of Judgement", "CC Judge",50).UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfJudgement)),
         //47857 <- teleport + fear skill? 
         }
         );
@@ -41,12 +43,12 @@ internal class StatueOfDarkness : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.LightThieves,
-            ArcDPSEnums.TrashID.MazeMinotaur,
+            TrashID.LightThieves,
+            TrashID.MazeMinotaur,
         ];
     }
 
@@ -55,8 +57,8 @@ internal class StatueOfDarkness : HallOfChains
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.EyeOfFate,
-            (int)ArcDPSEnums.TargetID.EyeOfJudgement
+            (int)TargetID.EyeOfFate,
+            (int)TargetID.EyeOfJudgement
         ];
     }
 
@@ -64,8 +66,8 @@ internal class StatueOfDarkness : HallOfChains
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.EyeOfFate,
-            (int)ArcDPSEnums.TargetID.EyeOfJudgement
+            (int)TargetID.EyeOfFate,
+            (int)TargetID.EyeOfJudgement
         ];
     }
 
@@ -73,15 +75,15 @@ internal class StatueOfDarkness : HallOfChains
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.EyeOfFate,
-            (int)ArcDPSEnums.TargetID.EyeOfJudgement
+            (int)TargetID.EyeOfFate,
+            (int)TargetID.EyeOfJudgement
         ];
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfFate, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.EyeOfFate, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;
         }
@@ -91,10 +93,10 @@ internal class StatueOfDarkness : HallOfChains
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(ArcDPSEnums.TrashID.LightThieves);
+            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(TrashID.LightThieves);
             if (lightThieves.Any())
             {
                 startToUse = lightThieves.Min(x => x.FirstAware);
@@ -145,8 +147,8 @@ internal class StatueOfDarkness : HallOfChains
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
-        SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
+        SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfFate));
+        SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfJudgement));
         if (eyeJudgement == null || eyeFate == null)
         {
             throw new MissingKeyActorsException("Eyes not found");
@@ -163,8 +165,8 @@ internal class StatueOfDarkness : HallOfChains
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
-            SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
+            SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfFate));
+            SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfJudgement));
             if (eyeJudgement == null || eyeFate == null)
             {
                 throw new MissingKeyActorsException("Eyes not found");

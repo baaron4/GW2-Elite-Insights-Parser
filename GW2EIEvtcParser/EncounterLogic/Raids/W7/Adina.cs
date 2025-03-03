@@ -4,11 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -42,13 +44,13 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Sabir).Any(sabir => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(sabir) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+            if (agentData.GetNPCsByID(TargetID.Sabir).Any(sabir => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(sabir) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
             {
-                return new Sabir((int)ArcDPSEnums.TargetID.Sabir);
+                return new Sabir((int)TargetID.Sabir);
             }
         }
         return base.AdjustLogic(agentData, combatData);
@@ -66,10 +68,10 @@ internal class Adina : TheKeyOfAhdashim
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var attackTargetEvents = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget)
+            .Where(x => x.IsStateChange == StateChange.AttackTarget)
             .Select(x => new AttackTargetEvent(x, agentData));
         var targetableEvents = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable)
+            .Where(x => x.IsStateChange == StateChange.Targetable)
             .Select(x => new TargetableEvent(x, agentData))
             .Where(x => x.Src.Type == AgentItem.AgentType.Gadget)
             .GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
@@ -98,14 +100,14 @@ internal class Adina : TheKeyOfAhdashim
             var copyEventsFrom = new List<AgentItem>() { hand };
             var attackOns = targetables.Where(x => x.Targetable);
             var attackOffs = targetables.Where(x => !x.Targetable);
-            CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-            ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
+            CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == StateChange.Position);
+            TrashID id = TrashID.HandOfErosion;
             if (posEvt != null)
             {
                 var pos = MovementEvent.GetPoint3D(posEvt);
                 if (handOfEruptionPositions.Any(x => (x - pos.XY()).Length() < InchDistanceThreshold))
                 {
-                    id = ArcDPSEnums.TrashID.HandOfEruption;
+                    id = TrashID.HandOfEruption;
                 }
             }
 
@@ -127,7 +129,7 @@ internal class Adina : TheKeyOfAhdashim
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
         foreach (SingleActor target in Targets)
         {
-            if (target.IsAnySpecies(new [] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption }))
+            if (target.IsAnySpecies(new [] { TrashID.HandOfErosion, TrashID.HandOfEruption }))
             {
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))
@@ -143,9 +145,9 @@ internal class Adina : TheKeyOfAhdashim
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Adina,
-            (int)ArcDPSEnums.TrashID.HandOfErosion,
-            (int)ArcDPSEnums.TrashID.HandOfEruption
+            (int)TargetID.Adina,
+            (int)TrashID.HandOfErosion,
+            (int)TrashID.HandOfEruption
         ];
     }
 
@@ -153,9 +155,9 @@ internal class Adina : TheKeyOfAhdashim
     {
         return new Dictionary<int, int>()
         {
-            { (int)ArcDPSEnums.TargetID.Adina, 0 },
-            { (int)ArcDPSEnums.TrashID.HandOfErosion, 1 },
-            { (int)ArcDPSEnums.TrashID.HandOfEruption, 1 },
+            { (int)TargetID.Adina, 0 },
+            { (int)TrashID.HandOfErosion, 1 },
+            { (int)TrashID.HandOfEruption, 1 },
         };
     }
 
@@ -173,7 +175,7 @@ internal class Adina : TheKeyOfAhdashim
         int crEnd = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Adina:
+            case (int)TargetID.Adina:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var doubleQuantumQuakes = casts.Where(x => x.SkillId == DoubleRotatingEarthRays);
                 foreach (CastEvent c in doubleQuantumQuakes)
@@ -244,9 +246,9 @@ internal class Adina : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+        SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         phases[0].AddTarget(adina);
-        var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
+        var handIds = new TrashID[] { TrashID.HandOfErosion, TrashID.HandOfEruption };
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
         BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
@@ -270,7 +272,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
                     splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, [(int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption], log);
+                    AddTargetsToPhaseAndFit(splitPhase, [(int)TrashID.HandOfErosion, (int)TrashID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
                 }
             }
@@ -279,7 +281,7 @@ internal class Adina : TheKeyOfAhdashim
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
                 splitPhaseEnds.Add(end);
-                AddTargetsToPhaseAndFit(splitPhase, [(int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption], log);
+                AddTargetsToPhaseAndFit(splitPhase, [(int)TrashID.HandOfErosion, (int)TrashID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
         }
@@ -398,7 +400,7 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         return (target.GetHealth(combatData) > 23e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

@@ -3,10 +3,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -34,7 +35,7 @@ internal class WvWFight : FightLogic
                     return new List<HealthDamageEvent>();
                 }
                 return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
-            }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
+            }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(TargetID.WorldVersusWorld))),
             new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
                 return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
@@ -49,7 +50,7 @@ internal class WvWFight : FightLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -251,7 +252,7 @@ internal class WvWFight : FightLogic
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
+        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, TargetID.WorldVersusWorld, true);
         // Handle non squad players
         IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
         //

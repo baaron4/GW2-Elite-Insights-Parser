@@ -33,7 +33,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
         toExtend.Extend(extension, src);
     }
 
-    public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
+    public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, BuffRemove removeType, uint stackID)
     {
         int toRemoveIdx = -1;
         switch (removeType)

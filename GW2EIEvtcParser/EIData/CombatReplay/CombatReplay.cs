@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -102,7 +103,7 @@ public class CombatReplay
                             velocity = Velocities[velocityTableIndex];
                         }
 
-                        if (nextPos.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
+                        if (nextPos.Time - last.Time > ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
                         {
                             PolledPositions.Add(last.WithChangedTime(t));
                         }
@@ -157,7 +158,7 @@ public class CombatReplay
                     else
                     {
                         ParametricPoint3D last = PolledRotations.Last().Time > rot.Time ? PolledRotations.Last() : rot;
-                        if (nextRot.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate)
+                        if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
                         {
                             PolledRotations.Add(last.WithChangedTime(t));
                         }

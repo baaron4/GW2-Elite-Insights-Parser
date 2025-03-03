@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser;
 
@@ -18,17 +19,17 @@ public class CombatItem
     public readonly ushort SrcMasterInstid;
     public readonly ushort DstMasterInstid;
     public readonly byte IFFByte;
-    public readonly ArcDPSEnums.IFF IFF;
+    public readonly IFF IFF;
     public readonly byte IsBuff;
     public readonly byte Result;
     public readonly byte IsActivationByte;
-    public readonly ArcDPSEnums.Activation IsActivation;
+    public readonly Activation IsActivation;
     public readonly byte IsBuffRemoveByte;
-    public readonly ArcDPSEnums.BuffRemove IsBuffRemove;
+    public readonly BuffRemove IsBuffRemove;
     public readonly byte IsNinety;
     public readonly byte IsFifty;
     public readonly byte IsMoving;
-    public readonly ArcDPSEnums.StateChange IsStateChange;
+    public readonly StateChange IsStateChange;
     public readonly byte IsFlanking;
     public readonly byte IsShields;
     public readonly byte IsOffcycle;
@@ -39,9 +40,9 @@ public class CombatItem
     public readonly byte Pad3;
     public readonly byte Pad4;
 
-    public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension || IsStateChange == ArcDPSEnums.StateChange.ExtensionCombat;
+    public bool IsExtension => IsStateChange == StateChange.Extension || IsStateChange == StateChange.ExtensionCombat;
 
-    public bool IsEffect => IsStateChange == ArcDPSEnums.StateChange.Effect_51 || IsStateChange == ArcDPSEnums.StateChange.Effect_45;
+    public bool IsEffect => IsStateChange == StateChange.Effect_51 || IsStateChange == StateChange.Effect_45;
 
     // Constructor
     public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
@@ -63,17 +64,17 @@ public class CombatItem
         SrcMasterInstid = srcMasterInstid;
         DstMasterInstid = dstMasterInstid;
         IFFByte = iff;
-        IFF = ArcDPSEnums.GetIFF(iff);
+        IFF = GetIFF(iff);
         IsBuff = isBuff;
         Result = result;
         IsActivationByte = isActivation;
-        IsActivation = ArcDPSEnums.GetActivation(isActivation);
+        IsActivation = GetActivation(isActivation);
         IsBuffRemoveByte = isBuffRemove;
-        IsBuffRemove = ArcDPSEnums.GetBuffRemove(isBuffRemove);
+        IsBuffRemove = GetBuffRemove(isBuffRemove);
         IsNinety = isNinety;
         IsFifty = isFifty;
         IsMoving = isMoving;
-        IsStateChange = ArcDPSEnums.GetStateChange(isStateChange);
+        IsStateChange = GetStateChange(isStateChange);
         IsFlanking = isFlanking;
         IsShields = isShields;
         IsOffcycle = isOffcycle;
@@ -127,10 +128,10 @@ public class CombatItem
     {
         return SrcIsAgent()
             || DstIsAgent()
-            || IsStateChange == ArcDPSEnums.StateChange.Reward
-            || IsStateChange == ArcDPSEnums.StateChange.TickRate
-            || IsStateChange == ArcDPSEnums.StateChange.SquadMarker
-            || IsStateChange == ArcDPSEnums.StateChange.InstanceStart
+            || IsStateChange == StateChange.Reward
+            || IsStateChange == StateChange.TickRate
+            || IsStateChange == StateChange.SquadMarker
+            || IsStateChange == StateChange.InstanceStart
             ;
     }
 
@@ -145,26 +146,26 @@ public class CombatItem
 
     internal bool IsGeographical()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.Position ||
-                IsStateChange == ArcDPSEnums.StateChange.Rotation ||
-                IsStateChange == ArcDPSEnums.StateChange.Velocity
+        return IsStateChange == StateChange.Position ||
+                IsStateChange == StateChange.Rotation ||
+                IsStateChange == StateChange.Velocity
                 ;
     }
 
     internal bool IsDamage()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None &&
-                    IsActivation == ArcDPSEnums.Activation.None &&
-                    IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+        return IsStateChange == StateChange.None &&
+                    IsActivation == Activation.None &&
+                    IsBuffRemove == BuffRemove.None &&
                     ((IsBuff != 0 && Value == 0) || (IsBuff == 0))
                     ;
     }
 
     internal bool IsDamagingDamage()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None &&
-                    IsActivation == ArcDPSEnums.Activation.None &&
-                    IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+        return IsStateChange == StateChange.None &&
+                    IsActivation == Activation.None &&
+                    IsBuffRemove == BuffRemove.None &&
                     ((IsBuff != 0 && Value == 0 && BuffDmg > 0) || (IsBuff == 0 && Value > 0))
                     ;
     }
@@ -189,53 +190,53 @@ public class CombatItem
 
     internal bool IsPhysicalDamage()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None &&
-                    IsActivation == ArcDPSEnums.Activation.None &&
-                    IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+        return IsStateChange == StateChange.None &&
+                    IsActivation == Activation.None &&
+                    IsBuffRemove == BuffRemove.None &&
                     IsBuff == 0
                     ;
     }
 
     internal bool IsBuffDamage()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None &&
-                    IsActivation == ArcDPSEnums.Activation.None &&
-                    IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
+        return IsStateChange == StateChange.None &&
+                    IsActivation == Activation.None &&
+                    IsBuffRemove == BuffRemove.None &&
                     IsBuff != 0 && Value == 0
                     ;
     }
 
     internal bool SrcIsAgent()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None
-            || IsStateChange == ArcDPSEnums.StateChange.EnterCombat
-            || IsStateChange == ArcDPSEnums.StateChange.ExitCombat
-            || IsStateChange == ArcDPSEnums.StateChange.ChangeUp
-            || IsStateChange == ArcDPSEnums.StateChange.ChangeDead
-            || IsStateChange == ArcDPSEnums.StateChange.ChangeDown
-            || IsStateChange == ArcDPSEnums.StateChange.Spawn
-            || IsStateChange == ArcDPSEnums.StateChange.Despawn
-            || IsStateChange == ArcDPSEnums.StateChange.HealthUpdate
-            || IsStateChange == ArcDPSEnums.StateChange.WeaponSwap
-            || IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate
-            || IsStateChange == ArcDPSEnums.StateChange.PointOfView
-            || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
+        return IsStateChange == StateChange.None
+            || IsStateChange == StateChange.EnterCombat
+            || IsStateChange == StateChange.ExitCombat
+            || IsStateChange == StateChange.ChangeUp
+            || IsStateChange == StateChange.ChangeDead
+            || IsStateChange == StateChange.ChangeDown
+            || IsStateChange == StateChange.Spawn
+            || IsStateChange == StateChange.Despawn
+            || IsStateChange == StateChange.HealthUpdate
+            || IsStateChange == StateChange.WeaponSwap
+            || IsStateChange == StateChange.MaxHealthUpdate
+            || IsStateChange == StateChange.PointOfView
+            || IsStateChange == StateChange.BuffInitial
             || IsGeographical()
-            || IsStateChange == ArcDPSEnums.StateChange.TeamChange
-            || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
-            || IsStateChange == ArcDPSEnums.StateChange.Targetable
-            || IsStateChange == ArcDPSEnums.StateChange.StackActive
-            || IsStateChange == ArcDPSEnums.StateChange.StackReset
-            || IsStateChange == ArcDPSEnums.StateChange.Guild
-            || IsStateChange == ArcDPSEnums.StateChange.BreakbarState
-            || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
-            || IsStateChange == ArcDPSEnums.StateChange.Marker
-            || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
-            || IsStateChange == ArcDPSEnums.StateChange.Last90BeforeDown
-            || IsStateChange == ArcDPSEnums.StateChange.Effect_45
-            || IsStateChange == ArcDPSEnums.StateChange.Effect_51
-            || IsStateChange == ArcDPSEnums.StateChange.Glider
-            || IsStateChange == ArcDPSEnums.StateChange.StunBreak
+            || IsStateChange == StateChange.TeamChange
+            || IsStateChange == StateChange.AttackTarget
+            || IsStateChange == StateChange.Targetable
+            || IsStateChange == StateChange.StackActive
+            || IsStateChange == StateChange.StackReset
+            || IsStateChange == StateChange.Guild
+            || IsStateChange == StateChange.BreakbarState
+            || IsStateChange == StateChange.BreakbarPercent
+            || IsStateChange == StateChange.Marker
+            || IsStateChange == StateChange.BarrierUpdate
+            || IsStateChange == StateChange.Last90BeforeDown
+            || IsStateChange == StateChange.Effect_45
+            || IsStateChange == StateChange.Effect_51
+            || IsStateChange == StateChange.Glider
+            || IsStateChange == StateChange.StunBreak
             ;
     }
 
@@ -250,12 +251,12 @@ public class CombatItem
 
     internal bool DstIsAgent()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None
-            || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
-            || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
-            || IsStateChange == ArcDPSEnums.StateChange.Effect_45
-            || IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate
-            || IsStateChange == ArcDPSEnums.StateChange.Effect_51
+        return IsStateChange == StateChange.None
+            || IsStateChange == StateChange.AttackTarget
+            || IsStateChange == StateChange.BuffInitial
+            || IsStateChange == StateChange.Effect_45
+            || IsStateChange == StateChange.LogNPCUpdate
+            || IsStateChange == StateChange.Effect_51
         ;
     }
 
@@ -270,12 +271,12 @@ public class CombatItem
 
     internal bool IsBuffApply()
     {
-        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove == ArcDPSEnums.BuffRemove.None && IsStateChange == ArcDPSEnums.StateChange.None) || IsStateChange == ArcDPSEnums.StateChange.BuffInitial;
+        return (IsBuff != 0 && BuffDmg == 0 && Value > 0 && IsActivation == Activation.None && IsBuffRemove == BuffRemove.None && IsStateChange == StateChange.None) || IsStateChange == StateChange.BuffInitial;
     }
 
     internal bool IsBuffRemoval()
     {
-        return IsStateChange == ArcDPSEnums.StateChange.None && IsActivation == ArcDPSEnums.Activation.None && IsBuffRemove != ArcDPSEnums.BuffRemove.None;
+        return IsStateChange == StateChange.None && IsActivation == Activation.None && IsBuffRemove != BuffRemove.None;
     }
 
     internal bool DstMatchesAgent(AgentItem agentItem, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -316,20 +317,20 @@ public class CombatItem
 
     internal bool StartCasting()
     {
-        if (IsStateChange != ArcDPSEnums.StateChange.None)
+        if (IsStateChange != StateChange.None)
         {
             return false;
         }
-        return IsActivation == ArcDPSEnums.Activation.Normal || IsActivation == ArcDPSEnums.Activation.Quickness;
+        return IsActivation == Activation.Normal || IsActivation == Activation.Quickness;
     }
 
     internal bool EndCasting()
     {
-        if (IsStateChange != ArcDPSEnums.StateChange.None)
+        if (IsStateChange != StateChange.None)
         {
             return false;
         }
-        return IsActivation == ArcDPSEnums.Activation.CancelFire || IsActivation == ArcDPSEnums.Activation.Reset || IsActivation == ArcDPSEnums.Activation.CancelCancel;
+        return IsActivation == Activation.CancelFire || IsActivation == Activation.Reset || IsActivation == Activation.CancelCancel;
     }
 
     ///

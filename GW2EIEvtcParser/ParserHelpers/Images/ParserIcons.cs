@@ -1,5 +1,6 @@
 ﻿using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
@@ -847,16 +848,16 @@ internal static class ParserIcons
         { TrashID.Braham, TrashBraham },
         { TrashID.Caithe, TrashCaithe },
         { TrashID.BlightedRytlock, TrashBlightedRytlock },
-        //{ ArcDPSEnums.TrashID.BlightedCanach, TrashBlightedCanach },
+        //{ TrashID.BlightedCanach, TrashBlightedCanach },
         { TrashID.BlightedBraham, TrashBlightedBraham },
         { TrashID.BlightedMarjory, TrashBlightedMarjory },
         { TrashID.BlightedCaithe, TrashBlightedCaithe },
         { TrashID.BlightedForgal, TrashBlightedForgal },
         { TrashID.BlightedSieran, TrashBlightedSieran },
-        //{ ArcDPSEnums.TrashID.BlightedTybalt, TrashBlightedTybalt },
-        //{ ArcDPSEnums.TrashID.BlightedPaleTree, TrashBlightedPaleTree },
-        //{ ArcDPSEnums.TrashID.BlightedTrahearne, TrashBlightedTrahearne },
-        //{ ArcDPSEnums.TrashID.BlightedEir, TrashBlightedEir },
+        //{ TrashID.BlightedTybalt, TrashBlightedTybalt },
+        //{ TrashID.BlightedPaleTree, TrashBlightedPaleTree },
+        //{ TrashID.BlightedTrahearne, TrashBlightedTrahearne },
+        //{ TrashID.BlightedEir, TrashBlightedEir },
         { TrashID.Spirit, TrashSpiritDemonSoul },
         { TrashID.Spirit2, TrashSpiritDemonSoul },
         { TrashID.ChargedSoul, TrashSpiritDemonSoul },
@@ -1005,11 +1006,11 @@ internal static class ParserIcons
         { TrashID.VoltaicWisp, TrashVoltaicWisp },
         { TrashID.ParalyzingWisp, TrashParalyzingWisp },
         { TrashID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
-        //{ ArcDPSEnums.TrashID.PeerlessQadimAuraPylon, TrashPeerlessQadimAuraPylon },
+        //{ TrashID.PeerlessQadimAuraPylon, TrashPeerlessQadimAuraPylon },
         { TrashID.EntropicDistortion, TrashEntropicDistortion },
-        //{ ArcDPSEnums.TrashID.Brandstorm, GenericEnemyIcon },
+        //{ TrashID.Brandstorm, GenericEnemyIcon },
         { TrashID.GiantQadimThePeerless, TrashGiantQadimThePeerless },
-        //{ ArcDPSEnums.TrashID.DummyPeerlessQadim, GenericEnemyIcon },
+        //{ TrashID.DummyPeerlessQadim, GenericEnemyIcon },
         { TrashID.SmallJumpyTornado, TrashSmallJumpyTornado },
         { TrashID.OrbSpider, TrashOrbSpider },
         { TrashID.Seekers, TrashSeekers },
@@ -1106,7 +1107,7 @@ internal static class ParserIcons
         { TrashID.VoidBrandscale1, TrashVoidBrandscale },
         { TrashID.VoidBrandscale2, TrashVoidBrandscale },
         { TrashID.VoidFrostwing, TrashVoidFrostwing },
-        //{ ArcDPSEnums.TrashID.CastleFountain, TrashCastleFountain },
+        //{ TrashID.CastleFountain, TrashCastleFountain },
         { TrashID.HauntingStatue, TrashHauntingStatue },
         { TrashID.GreenKnight, TrashRGBKnight },
         { TrashID.RedKnight, TrashRGBKnight },

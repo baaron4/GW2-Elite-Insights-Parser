@@ -3,10 +3,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -56,15 +58,15 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.Slubling1,
-            ArcDPSEnums.TrashID.Slubling2,
-            ArcDPSEnums.TrashID.Slubling3,
-            ArcDPSEnums.TrashID.Slubling4,
-            ArcDPSEnums.TrashID.PoisonMushroom
+            TrashID.Slubling1,
+            TrashID.Slubling2,
+            TrashID.Slubling3,
+            TrashID.Slubling4,
+            TrashID.PoisonMushroom
         ];
     }
 
@@ -81,7 +83,7 @@ internal class Slothasor : SalvationPass
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -107,7 +109,7 @@ internal class Slothasor : SalvationPass
     {
         // Mushrooms
         var mushroomAgents = combatData
-            .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+            .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300)
             .ToList();
@@ -121,7 +123,7 @@ internal class Slothasor : SalvationPass
                     continue;
                 }
                 var copyEventsFrom = new List<AgentItem>() { mushroom };
-                var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate);
+                var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == StateChange.HealthUpdate);
                 var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100).ToList();
                 var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
                 long lastDeadTime = long.MinValue;
@@ -136,7 +138,7 @@ internal class Slothasor : SalvationPass
                     {
                         lastDeadTime = deadEvent.Time;
                     }
-                    AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, ArcDPSEnums.TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
+                    AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
                     copyEventsFrom.Add(aliveMushroom);
                 }
@@ -149,7 +151,7 @@ internal class Slothasor : SalvationPass
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Slothasor:
+            case (int)TargetID.Slothasor:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -191,7 +193,7 @@ internal class Slothasor : SalvationPass
                     replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.PoisonMushroom:
+            case (int)TrashID.PoisonMushroom:
                 break;
             default:
                 break;

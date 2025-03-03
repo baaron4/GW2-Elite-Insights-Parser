@@ -4,6 +4,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -53,12 +54,12 @@ internal static class ProfHelper
         new BuffGainCastFinder(MajorSigilOfLeeching, MajorSigilOfLeeching)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(SuperiorSigilOfLeeching, LeechBuff)
-            .WithBuilds(ArcDPSEnums.GW2Builds.November2018Rune)
+            .WithBuilds(GW2Builds.November2018Rune)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(SuperiorSigilOfVision, SuperiorSigilOfVision)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(SuperiorSigilOfConcentration, SuperiorSigilOfConcentration)
-            .WithBuilds(ArcDPSEnums.GW2Builds.StartOfLife, ArcDPSEnums.GW2Builds.November2018Rune)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(WaveOfHealing_MinorSigilOfWater, WaveOfHealing_MinorSigilOfWater)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -627,31 +628,31 @@ internal static class ProfHelper
     private static readonly HashSet<int> CommonMinions =
     [
         // Racial Summons
-        (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
-        (int)ArcDPSEnums.MinionID.SnowWurm,
-        (int)ArcDPSEnums.MinionID.DruidSpirit,
-        (int)ArcDPSEnums.MinionID.SylvanHound,
-        (int)ArcDPSEnums.MinionID.IronLegionSoldier,
-        (int)ArcDPSEnums.MinionID.IronLegionMarksman,
-        (int)ArcDPSEnums.MinionID.BloodLegionSoldier,
-        (int)ArcDPSEnums.MinionID.BloodLegionMarksman,
-        (int)ArcDPSEnums.MinionID.AshLegionSoldier,
-        (int)ArcDPSEnums.MinionID.AshLegionMarksman,
-        (int)ArcDPSEnums.MinionID.STAD007,
-        (int)ArcDPSEnums.MinionID.STA7012,
+        (int)MinionID.HoundOfBalthazar,
+        (int)MinionID.SnowWurm,
+        (int)MinionID.DruidSpirit,
+        (int)MinionID.SylvanHound,
+        (int)MinionID.IronLegionSoldier,
+        (int)MinionID.IronLegionMarksman,
+        (int)MinionID.BloodLegionSoldier,
+        (int)MinionID.BloodLegionMarksman,
+        (int)MinionID.AshLegionSoldier,
+        (int)MinionID.AshLegionMarksman,
+        (int)MinionID.STAD007,
+        (int)MinionID.STA7012,
         // GW2 Digital Deluxe
-        (int)ArcDPSEnums.MinionID.MistfireWolf,
+        (int)MinionID.MistfireWolf,
         // Rune Summons
-        (int)ArcDPSEnums.MinionID.RuneJaggedHorror,
-        (int)ArcDPSEnums.MinionID.RuneRockDog,
-        (int)ArcDPSEnums.MinionID.RuneMarkIGolem,
-        (int)ArcDPSEnums.MinionID.RuneTropicalBird,
+        (int)MinionID.RuneJaggedHorror,
+        (int)MinionID.RuneRockDog,
+        (int)MinionID.RuneMarkIGolem,
+        (int)MinionID.RuneTropicalBird,
         // Consumables with summons
-        (int)ArcDPSEnums.MinionID.Ember,
-        (int)ArcDPSEnums.MinionID.HawkeyeGriffon,
-        (int)ArcDPSEnums.MinionID.SousChef,
-        (int)ArcDPSEnums.MinionID.SunspearParagonSupport,
-        (int)ArcDPSEnums.MinionID.RavenSpiritShadow,
+        (int)MinionID.Ember,
+        (int)MinionID.HawkeyeGriffon,
+        (int)MinionID.SousChef,
+        (int)MinionID.SunspearParagonSupport,
+        (int)MinionID.RavenSpiritShadow,
     ];
 
     internal static bool IsKnownMinionID(int id)

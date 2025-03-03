@@ -1,10 +1,12 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -62,7 +64,7 @@ internal class Cairn : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
+        SingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
         phases[0].AddTarget(cairn);
         if (!requirePhases)
         {
@@ -108,7 +110,7 @@ internal class Cairn : BastionOfThePenitent
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Cairn:
+            case (int)TargetID.Cairn:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep);
                 foreach (CastEvent c in swordSweep)
@@ -168,12 +170,12 @@ internal class Cairn : BastionOfThePenitent
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Cairn, out var cairn))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Cairn, out var cairn))
         {
             throw new MissingKeyActorsException("Cairn not found");
         }
         // spawn protection loss -- most reliable
-        CombatItem? spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
+        CombatItem? spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
         if (spawnProtectionLoss != null)
         {
             return spawnProtectionLoss.Time;

@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -11,11 +12,11 @@ public abstract class SkillEvent : TimeCombatEvent
 
     public readonly SkillItem Skill;
     public long SkillId => Skill.ID;
-    private readonly ArcDPSEnums.IFF _iff;
+    private readonly IFF _iff;
 
-    public bool ToFriendly => _iff == ArcDPSEnums.IFF.Friend;
-    public bool ToFoe => _iff == ArcDPSEnums.IFF.Foe;
-    public bool ToUnknown => _iff == ArcDPSEnums.IFF.Unknown;
+    public bool ToFriendly => _iff == IFF.Friend;
+    public bool ToFoe => _iff == IFF.Foe;
+    public bool ToUnknown => _iff == IFF.Unknown;
 
 
     internal SkillEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem.Time)

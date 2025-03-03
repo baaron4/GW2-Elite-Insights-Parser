@@ -3,10 +3,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -69,7 +71,7 @@ internal class Samarog : BastionOfThePenitent
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        SingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         IReadOnlyList<HealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
         var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
         var fanaticalResilienceSegments = new List<Segment>();
@@ -97,9 +99,9 @@ internal class Samarog : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         phases[0].AddTarget(mainTarget);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) || x.IsSpecies(ArcDPSEnums.TrashID.Rigom)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.Guldhem) || x.IsSpecies(TrashID.Rigom)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -114,8 +116,8 @@ internal class Samarog : BastionOfThePenitent
                 phase.Name = "Split " + i / 2;
                 var ids = new List<int>
                 {
-                   (int) ArcDPSEnums.TrashID.Rigom,
-                   (int) ArcDPSEnums.TrashID.Guldhem
+                   (int) TrashID.Rigom,
+                   (int) TrashID.Guldhem
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -131,15 +133,15 @@ internal class Samarog : BastionOfThePenitent
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // With lingering agents, last aware of the spears are properly set
-        if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
+        if (evtcVersion.Build >= ArcDPSBuilds.LingeringAgents)
         {
-            var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+            var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
             if (spearAgents.Any())
             {
                 foreach (AgentItem spear in spearAgents)
                 {
                     spear.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion, agentData);
+                    spear.OverrideID((int)TrashID.SpearAggressionRevulsion, agentData);
                 }
             }
         }
@@ -148,11 +150,11 @@ internal class Samarog : BastionOfThePenitent
         int curRigom = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TrashID.Guldhem))
+            if (target.IsSpecies(TrashID.Guldhem))
             {
                 target.OverrideName(target.Character + " " + curGuldhem++);
             }
-            if (target.IsSpecies(ArcDPSEnums.TrashID.Rigom))
+            if (target.IsSpecies(TrashID.Rigom))
             {
                 target.OverrideName(target.Character + " " + curRigom++);
             }
@@ -163,25 +165,25 @@ internal class Samarog : BastionOfThePenitent
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Samarog,
-            (int)ArcDPSEnums.TrashID.Rigom,
-            (int)ArcDPSEnums.TrashID.Guldhem,
+            (int)TargetID.Samarog,
+            (int)TrashID.Rigom,
+            (int)TrashID.Guldhem,
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.Samarog, 0 },
-            {(int)ArcDPSEnums.TrashID.Rigom, 1 },
-            {(int)ArcDPSEnums.TrashID.Guldhem, 1 },
+            {(int)TargetID.Samarog, 0 },
+            {(int)TrashID.Rigom, 1 },
+            {(int)TrashID.Guldhem, 1 },
         };
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return [
-            ArcDPSEnums.TrashID.SpearAggressionRevulsion
+            TrashID.SpearAggressionRevulsion
         ];
     }
 
@@ -191,7 +193,7 @@ internal class Samarog : BastionOfThePenitent
         // TODO: facing information (shock wave)
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Samarog:
+            case (int)TargetID.Samarog:
                 var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in brutalize)
                 {
@@ -199,10 +201,10 @@ internal class Samarog : BastionOfThePenitent
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.Rigom:
-            case (int)ArcDPSEnums.TrashID.Guldhem:
+            case (int)TrashID.Rigom:
+            case (int)TrashID.Guldhem:
                 break;
-            case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
+            case (int)TrashID.SpearAggressionRevulsion:
                 var spearLifespan = new Segment(target.FirstAware, target.LastAware, 1);
                 replay.Decorations.Add(new CircleDecoration(240, spearLifespan, Colors.Orange, 0.1, new AgentConnector(target)));
                 if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Any())
@@ -252,7 +254,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedGuldhem)
         {
             long mid = (seg.Start + seg.End) / 2;
-            SingleActor? guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor? guldhem = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
             if (guldhem != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(guldhem)));
@@ -263,7 +265,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedRigom)
         {
             long mid = (seg.Start + seg.End) / 2;
-            SingleActor? rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor? rigom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
             if (rigom != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(rigom)));
@@ -273,7 +275,7 @@ internal class Samarog : BastionOfThePenitent
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         return (target.GetHealth(combatData) > 30e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

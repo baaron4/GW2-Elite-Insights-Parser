@@ -1,22 +1,24 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
+
+namespace GW2EIEvtcParser.ParsedData;
 
 public class DirectHealthDamageEvent : HealthDamageEvent
 {
-    internal DirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.PhysicalResult result) : base(evtcItem, agentData, skillData)
+    internal DirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, PhysicalResult result) : base(evtcItem, agentData, skillData)
     {
         HealthDamage = evtcItem.Value;
         AgainstDowned = evtcItem.IsOffcycle == 1;
-        IsAbsorbed = result == ArcDPSEnums.PhysicalResult.Absorb;
-        IsBlind = result == ArcDPSEnums.PhysicalResult.Blind;
-        IsBlocked = result == ArcDPSEnums.PhysicalResult.Block;
-        HasCrit = result == ArcDPSEnums.PhysicalResult.Crit;
-        HasDowned = result == ArcDPSEnums.PhysicalResult.Downed;
-        IsEvaded = result == ArcDPSEnums.PhysicalResult.Evade;
-        HasGlanced = result == ArcDPSEnums.PhysicalResult.Glance;
-        HasKilled = result == ArcDPSEnums.PhysicalResult.KillingBlow;
-        HasInterrupted = result == ArcDPSEnums.PhysicalResult.Interrupt;
+        IsAbsorbed = result == PhysicalResult.Absorb;
+        IsBlind = result == PhysicalResult.Blind;
+        IsBlocked = result == PhysicalResult.Block;
+        HasCrit = result == PhysicalResult.Crit;
+        HasDowned = result == PhysicalResult.Downed;
+        IsEvaded = result == PhysicalResult.Evade;
+        HasGlanced = result == PhysicalResult.Glance;
+        HasKilled = result == PhysicalResult.KillingBlow;
+        HasInterrupted = result == PhysicalResult.Interrupt;
         ShieldDamage = evtcItem.IsShields > 0 ? (int)evtcItem.OverstackValue : 0;
-        HasHit = result == ArcDPSEnums.PhysicalResult.Normal || HasGlanced || HasCrit; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
+        HasHit = result == PhysicalResult.Normal || HasGlanced || HasCrit; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
         DoubleProcHit = HasDowned || HasInterrupted || HasKilled;
     }
 

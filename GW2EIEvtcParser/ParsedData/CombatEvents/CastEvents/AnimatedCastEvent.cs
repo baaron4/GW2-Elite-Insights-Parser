@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -14,7 +15,7 @@ public class AnimatedCastEvent : CastEvent
     private AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData) : base(startItem, agentData, skillData)
     {
         ExpectedDuration = startItem.BuffDmg > 0 ? startItem.BuffDmg : startItem.Value;
-        if (startItem.IsActivation == ArcDPSEnums.Activation.Quickness)
+        if (startItem.IsActivation == Activation.Quickness)
         {
             Acceleration = 1;
         }
@@ -51,14 +52,14 @@ public class AnimatedCastEvent : CastEvent
         {
             switch (endItem.IsActivation)
             {
-                case ArcDPSEnums.Activation.CancelCancel:
+                case Activation.CancelCancel:
                     Status = AnimationStatus.Interrupted;
                     SavedDuration = -ActualDuration;
                     break;
-                case ArcDPSEnums.Activation.Reset:
+                case Activation.Reset:
                     Status = AnimationStatus.Full;
                     break;
-                case ArcDPSEnums.Activation.CancelFire:
+                case Activation.CancelFire:
                     int scaledExpectedDuration = (int)Math.Round(ExpectedDuration / nonScaledToScaledRatio);
                     SavedDuration = Math.Max(scaledExpectedDuration - ActualDuration, 0);
                     Status = AnimationStatus.Reduced;

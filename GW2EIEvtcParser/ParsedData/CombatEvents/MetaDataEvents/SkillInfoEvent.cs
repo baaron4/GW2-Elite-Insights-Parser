@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 public class SkillInfoEvent : MetaDataEvent
 {
@@ -29,10 +30,10 @@ public class SkillInfoEvent : MetaDataEvent
         }
         switch (evtcItem.IsStateChange)
         {
-            case ArcDPSEnums.StateChange.SkillTiming:
+            case StateChange.SkillTiming:
                 BuildFromSkillTiming(evtcItem);
                 break;
-            case ArcDPSEnums.StateChange.SkillInfo:
+            case StateChange.SkillInfo:
                 BuildFromSkillInfo(evtcItem);
                 break;
             default:

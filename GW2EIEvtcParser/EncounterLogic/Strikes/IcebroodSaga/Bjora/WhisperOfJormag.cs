@@ -1,8 +1,9 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -58,7 +59,7 @@ internal class WhisperOfJormag : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
+        SingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
         phases[0].AddTarget(woj);
         if (!requirePhases)
         {
@@ -107,29 +108,29 @@ internal class WhisperOfJormag : Bjora
         return phases;
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.WhisperEcho,
-            ArcDPSEnums.TrashID.DoppelgangerElementalist,
-            ArcDPSEnums.TrashID.DoppelgangerElementalist2,
-            ArcDPSEnums.TrashID.DoppelgangerEngineer,
-            ArcDPSEnums.TrashID.DoppelgangerEngineer2,
-            ArcDPSEnums.TrashID.DoppelgangerGuardian,
-            ArcDPSEnums.TrashID.DoppelgangerGuardian2,
-            ArcDPSEnums.TrashID.DoppelgangerMesmer,
-            ArcDPSEnums.TrashID.DoppelgangerMesmer2,
-            ArcDPSEnums.TrashID.DoppelgangerNecromancer,
-            ArcDPSEnums.TrashID.DoppelgangerNecromancer2,
-            ArcDPSEnums.TrashID.DoppelgangerRanger,
-            ArcDPSEnums.TrashID.DoppelgangerRanger2,
-            ArcDPSEnums.TrashID.DoppelgangerRevenant,
-            ArcDPSEnums.TrashID.DoppelgangerRevenant2,
-            ArcDPSEnums.TrashID.DoppelgangerThief,
-            ArcDPSEnums.TrashID.DoppelgangerThief2,
-            ArcDPSEnums.TrashID.DoppelgangerWarrior,
-            ArcDPSEnums.TrashID.DoppelgangerWarrior2,
+            TrashID.WhisperEcho,
+            TrashID.DoppelgangerElementalist,
+            TrashID.DoppelgangerElementalist2,
+            TrashID.DoppelgangerEngineer,
+            TrashID.DoppelgangerEngineer2,
+            TrashID.DoppelgangerGuardian,
+            TrashID.DoppelgangerGuardian2,
+            TrashID.DoppelgangerMesmer,
+            TrashID.DoppelgangerMesmer2,
+            TrashID.DoppelgangerNecromancer,
+            TrashID.DoppelgangerNecromancer2,
+            TrashID.DoppelgangerRanger,
+            TrashID.DoppelgangerRanger2,
+            TrashID.DoppelgangerRevenant,
+            TrashID.DoppelgangerRevenant2,
+            TrashID.DoppelgangerThief,
+            TrashID.DoppelgangerThief2,
+            TrashID.DoppelgangerWarrior,
+            TrashID.DoppelgangerWarrior2,
         ];
     }
 }

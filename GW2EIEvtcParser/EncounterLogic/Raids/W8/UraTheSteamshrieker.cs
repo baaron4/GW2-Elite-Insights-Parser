@@ -4,10 +4,12 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -32,7 +34,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerDstBuffApplyMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Pres.Blast.Up", "Lifted in a bubble by Pressure Blast", "Pressure Blast Bubble", 0),
             new PlayerDstBuffApplyMechanic(SulfuricAcid, "Sulfuric Acid", new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Purple), "SulfAcid.A", "Received Sulfuric Acid", "Sulfuric Acid Application", 0),
             new PlayerSrcBuffRemoveFromMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Dispel.P", "Dispelled Player (Removed Pressure Blast)", "Dispelled Player", 0).UsingChecker((brae, log) => brae.To.IsPlayer),
-            new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightOrange), "Dispel.G", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0).UsingChecker((brae, log) => brae.To.IsSpecies(ArcDPSEnums.TrashID.SulfuricGeyser)),
+            new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightOrange), "Dispel.G", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0).UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.SulfuricGeyser)),
             new PlayerDstEffectMechanic(EffectGUIDs.UraSteamPrisonIndicator, "Steam Prison", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "Ste.Prison.T", "Targeted by Steam Prison (Ring)", "Steam Prison Target", 0),
             new PlayerDstEffectMechanic(EffectGUIDs.UraSulfuricGeyserTarget, "Sulfuric Geyser", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
             new EnemySrcSkillMechanic(Return, "Return", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 0),
@@ -61,20 +63,20 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Ura,
-            (int)ArcDPSEnums.TrashID.ChampionFumaroller,
-            (int)ArcDPSEnums.TrashID.EliteFumaroller,
+            (int)TargetID.Ura,
+            (int)TrashID.ChampionFumaroller,
+            (int)TrashID.EliteFumaroller,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.SulfuricGeyser,
-            ArcDPSEnums.TrashID.TitanspawnGeyser,
-            ArcDPSEnums.TrashID.ToxicGeyser,
-            ArcDPSEnums.TrashID.UraGadget_BloodstoneShard,
+            TrashID.SulfuricGeyser,
+            TrashID.TitanspawnGeyser,
+            TrashID.ToxicGeyser,
+            TrashID.UraGadget_BloodstoneShard,
         ];
     }
 
@@ -96,13 +98,13 @@ internal class UraTheSteamshrieker : MountBalrior
             .Distinct();
         foreach (var sulfuricAgent in sulfuricAgents)
         {
-            sulfuricAgent.OverrideID(ArcDPSEnums.TrashID.SulfuricGeyser, agentData);
+            sulfuricAgent.OverrideID(TrashID.SulfuricGeyser, agentData);
             sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Toxic geysers
         var toxicEffectGUID = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && 
-                ArcDPSEnums.GetContentLocal((byte)x.OverstackValue) == ArcDPSEnums.ContentLocal.Effect && 
+            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID && 
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect && 
                 EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
@@ -115,50 +117,50 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Distinct();
             foreach (var toxicAgent in toxicAgents)
             {
-                toxicAgent.OverrideID(ArcDPSEnums.TrashID.ToxicGeyser, agentData);
+                toxicAgent.OverrideID(TrashID.ToxicGeyser, agentData);
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         // titanspawn geysers
         var titanGeyserMarkerGUID = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && 
-                ArcDPSEnums.GetContentLocal((byte)x.OverstackValue) == ArcDPSEnums.ContentLocal.Marker && 
+            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID && 
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker && 
                 MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (titanGeyserMarkerGUID != null)
         {
             var titanAgents = combatData
-                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();
             foreach (var titanAgent in titanAgents)
             {
-                titanAgent.OverrideID(ArcDPSEnums.TrashID.TitanspawnGeyser, agentData);
+                titanAgent.OverrideID(TrashID.TitanspawnGeyser, agentData);
                 titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         // Those can only be toxic ones
         var remainingGeysers = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 448200)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 448200)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth > 100)
             .Distinct();
         foreach (var remainingGeyser in remainingGeysers)
         {
-            remainingGeyser.OverrideID(ArcDPSEnums.TrashID.ToxicGeyser, agentData);
+            remainingGeyser.OverrideID(TrashID.ToxicGeyser, agentData);
             remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Bloodstone shards
         var bloodstoneShards = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2 && x.FirstAware > 0)
             .Distinct();
         foreach (var shard in bloodstoneShards)
         {
-            shard.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard, agentData);
+            shard.OverrideID(TrashID.UraGadget_BloodstoneShard, agentData);
             shard.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -168,10 +170,10 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TrashID.EliteFumaroller:
+                case (int)TrashID.EliteFumaroller:
                     target.OverrideName("Elite " + target.Character + " " + curFumarollers[0]++);
                     break;
-                case (int)ArcDPSEnums.TrashID.ChampionFumaroller:
+                case (int)TrashID.ChampionFumaroller:
                     target.OverrideName("Champion " + target.Character + " " + curFumarollers[1]++);
                     break;
                 default:
@@ -184,7 +186,7 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Ura:
+            case (int)TargetID.Ura:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Create Titanspawn Geyser - Ura jumps in places and creates an AoE underneath
@@ -261,16 +263,16 @@ internal class UraTheSteamshrieker : MountBalrior
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.ToxicGeyser:
+            case (int)TrashID.ToxicGeyser:
                 replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.SulfuricGeyser:
+            case (int)TrashID.SulfuricGeyser:
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.TitanspawnGeyser:
+            case (int)TrashID.TitanspawnGeyser:
 
                 break;
-            case (int)ArcDPSEnums.TrashID.ChampionFumaroller:
+            case (int)TrashID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraFumarollerBreakingGround, out var breakingGrounds))
                 {
@@ -282,7 +284,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.EliteFumaroller:
+            case (int)TrashID.EliteFumaroller:
 
                 break;
             default:

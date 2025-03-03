@@ -3,11 +3,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -44,7 +45,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
             return condition;
         }),
-        new SpawnMechanic((int) ArcDPSEnums.TrashID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+        new SpawnMechanic((int) TrashID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
         new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
         new PlayerDstHitMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
         new PlayerDstBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
@@ -52,7 +53,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         new PlayerDstHitMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0).UsingChecker((de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
         new PlayerDstHitMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0).UsingChecker((de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
         new PlayerDstHitMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0).UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-        new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000).UsingChecker((de, log) => de.To.IsSpecies(ArcDPSEnums.TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
+        new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000).UsingChecker((de, log) => de.To.IsSpecies(TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
         });
         Extension = "kc";
         Icon = EncounterIconKeepConstruct;
@@ -83,7 +84,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         long end = 0;
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -201,44 +202,44 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.KeepConstruct,
-            (int)ArcDPSEnums.TrashID.Jessica,
-            (int)ArcDPSEnums.TrashID.Olson,
-            (int)ArcDPSEnums.TrashID.Engul,
-            (int)ArcDPSEnums.TrashID.Faerla,
-            (int)ArcDPSEnums.TrashID.Caulle,
-            (int)ArcDPSEnums.TrashID.Henley,
-            (int)ArcDPSEnums.TrashID.Galletta,
-            (int)ArcDPSEnums.TrashID.Ianim,
+            (int)TargetID.KeepConstruct,
+            (int)TrashID.Jessica,
+            (int)TrashID.Olson,
+            (int)TrashID.Engul,
+            (int)TrashID.Faerla,
+            (int)TrashID.Caulle,
+            (int)TrashID.Henley,
+            (int)TrashID.Galletta,
+            (int)TrashID.Ianim,
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.KeepConstruct, 0 },
-            {(int)ArcDPSEnums.TrashID.Jessica, 1 },
-            {(int)ArcDPSEnums.TrashID.Olson, 1 },
-            {(int)ArcDPSEnums.TrashID.Engul, 1 },
-            {(int)ArcDPSEnums.TrashID.Faerla, 1 },
-            {(int)ArcDPSEnums.TrashID.Caulle, 1 },
-            {(int)ArcDPSEnums.TrashID.Henley, 1 },
-            {(int)ArcDPSEnums.TrashID.Galletta, 1 },
-            {(int)ArcDPSEnums.TrashID.Ianim, 1 },
+            {(int)TargetID.KeepConstruct, 0 },
+            {(int)TrashID.Jessica, 1 },
+            {(int)TrashID.Olson, 1 },
+            {(int)TrashID.Engul, 1 },
+            {(int)TrashID.Faerla, 1 },
+            {(int)TrashID.Caulle, 1 },
+            {(int)TrashID.Henley, 1 },
+            {(int)TrashID.Galletta, 1 },
+            {(int)TrashID.Ianim, 1 },
         };
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.KeepConstructCore,
-            ArcDPSEnums.TrashID.GreenPhantasm,
-            ArcDPSEnums.TrashID.InsidiousProjection,
-            ArcDPSEnums.TrashID.UnstableLeyRift,
-            ArcDPSEnums.TrashID.RadiantPhantasm,
-            ArcDPSEnums.TrashID.CrimsonPhantasm,
-            ArcDPSEnums.TrashID.RetrieverProjection
+            TrashID.KeepConstructCore,
+            TrashID.GreenPhantasm,
+            TrashID.InsidiousProjection,
+            TrashID.UnstableLeyRift,
+            TrashID.RadiantPhantasm,
+            TrashID.CrimsonPhantasm,
+            TrashID.RetrieverProjection
         ];
     }
 
@@ -248,14 +249,14 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var countDict = new Dictionary<int, int>();
         var bigPhantasmIDs = new HashSet<int>
         {
-            (int)ArcDPSEnums.TrashID.Jessica,
-            (int)ArcDPSEnums.TrashID.Olson,
-            (int)ArcDPSEnums.TrashID.Engul,
-            (int)ArcDPSEnums.TrashID.Faerla,
-            (int)ArcDPSEnums.TrashID.Caulle,
-            (int)ArcDPSEnums.TrashID.Henley,
-            (int)ArcDPSEnums.TrashID.Galletta,
-            (int)ArcDPSEnums.TrashID.Ianim,
+            (int)TrashID.Jessica,
+            (int)TrashID.Olson,
+            (int)TrashID.Engul,
+            (int)TrashID.Faerla,
+            (int)TrashID.Caulle,
+            (int)TrashID.Henley,
+            (int)TrashID.Galletta,
+            (int)TrashID.Ianim,
         };
         foreach (SingleActor target in Targets)
         {
@@ -282,7 +283,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         int end = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.KeepConstruct:
+            case (int)TargetID.KeepConstruct:
 
                 var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
@@ -376,16 +377,16 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.KeepConstructCore:
+            case (int)TrashID.KeepConstructCore:
                 break;
-            case (int)ArcDPSEnums.TrashID.Jessica:
-            case (int)ArcDPSEnums.TrashID.Olson:
-            case (int)ArcDPSEnums.TrashID.Engul:
-            case (int)ArcDPSEnums.TrashID.Faerla:
-            case (int)ArcDPSEnums.TrashID.Caulle:
-            case (int)ArcDPSEnums.TrashID.Henley:
-            case (int)ArcDPSEnums.TrashID.Galletta:
-            case (int)ArcDPSEnums.TrashID.Ianim:
+            case (int)TrashID.Jessica:
+            case (int)TrashID.Olson:
+            case (int)TrashID.Engul:
+            case (int)TrashID.Faerla:
+            case (int)TrashID.Caulle:
+            case (int)TrashID.Henley:
+            case (int)TrashID.Galletta:
+            case (int)TrashID.Ianim:
                 replay.Decorations.Add(new CircleDecoration(600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                 if (replay.PolledPositions.Count > 0)
@@ -393,15 +394,15 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     replay.Decorations.AddWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenPhantasm:
+            case (int)TrashID.GreenPhantasm:
                 int lifetime = 8000;
                 replay.Decorations.AddWithGrowing(new CircleDecoration(210, (start, start + lifetime), Colors.Green, 0.2, new AgentConnector(target)), start + lifetime);
                 break;
-            case (int)ArcDPSEnums.TrashID.RetrieverProjection:
-            case (int)ArcDPSEnums.TrashID.InsidiousProjection:
-            case (int)ArcDPSEnums.TrashID.UnstableLeyRift:
-            case (int)ArcDPSEnums.TrashID.RadiantPhantasm:
-            case (int)ArcDPSEnums.TrashID.CrimsonPhantasm:
+            case (int)TrashID.RetrieverProjection:
+            case (int)TrashID.InsidiousProjection:
+            case (int)TrashID.UnstableLeyRift:
+            case (int)TrashID.RadiantPhantasm:
+            case (int)TrashID.CrimsonPhantasm:
                 break;
             default:
                 break;
@@ -446,7 +447,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             int hasHitKc = 0;
             foreach (Player p in log.PlayerList)
             {
-                if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+                if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Any())
                 {
                     hasHitKc++;
                 }

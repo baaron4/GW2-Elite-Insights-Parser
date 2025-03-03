@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 public static class ExtensionHelper
 {
@@ -8,7 +9,7 @@ public static class ExtensionHelper
 
     internal static ExtensionHandler? GetExtensionHandler(CombatItem c)
     {
-        if (c.IsStateChange != ArcDPSEnums.StateChange.Extension || c.Pad != 0)
+        if (c.IsStateChange != StateChange.Extension || c.Pad != 0)
         {
             return null;
         }

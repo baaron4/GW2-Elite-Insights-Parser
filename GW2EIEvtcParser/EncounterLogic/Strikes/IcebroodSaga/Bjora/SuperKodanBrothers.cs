@@ -2,11 +2,13 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -49,8 +51,8 @@ internal class SuperKodanBrothers : Bjora
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ClawOfTheFallen, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.VoiceOfTheFallen, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.ClawOfTheFallen, fightData.FightStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.VoiceOfTheFallen, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;
         }
@@ -60,11 +62,11 @@ internal class SuperKodanBrothers : Bjora
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem mainTarget = (agentData.GetNPCsByID(ArcDPSEnums.TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
-            CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
+            AgentItem mainTarget = (agentData.GetNPCsByID(TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
+            CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
             if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
             {
                 startToUse = firstCast.Time;
@@ -79,7 +81,7 @@ internal class SuperKodanBrothers : Bjora
         int voiceAndClawCount = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw))
+            if (target.IsSpecies(TargetID.VoiceAndClaw))
             {
                 target.OverrideName(target.Character + " " + voiceAndClawCount++);
             }
@@ -89,15 +91,15 @@ internal class SuperKodanBrothers : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor? voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
-        SingleActor? claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
+        SingleActor? voice = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ClawOfTheFallen));
+        SingleActor? claw = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VoiceOfTheFallen));
         if (voice == null || claw == null)
         {
             throw new MissingKeyActorsException("Claw or Voice not found");
         }
         phases[0].AddTarget(voice);
         phases[0].AddTarget(claw);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)), PhaseData.TargetPriority.Blocking);
         long fightEnd = log.FightData.FightEnd;
         if (!requirePhases)
         {
@@ -114,7 +116,7 @@ internal class SuperKodanBrothers : Bjora
         phases.AddRange(unmergedPhases);
         //
         int voiceAndClawCount = 0;
-        foreach (SingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)))
+        foreach (SingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)))
         {
             EnterCombatEvent? enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
             long phaseStart = 0;
@@ -143,7 +145,7 @@ internal class SuperKodanBrothers : Bjora
         foreach (CastEvent teleport in teleports)
         {
             long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
-            SingleActor? voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
+            SingleActor? voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
             if (voiceAndClaw != null)
             {
                 long oldEnd = preTPPhaseEnd;
@@ -215,8 +217,8 @@ internal class SuperKodanBrothers : Bjora
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
-            (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
+            (int)TargetID.ClawOfTheFallen,
+            (int)TargetID.VoiceOfTheFallen,
         ];
     }
 
@@ -224,8 +226,8 @@ internal class SuperKodanBrothers : Bjora
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
-            (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
+            (int)TargetID.ClawOfTheFallen,
+            (int)TargetID.VoiceOfTheFallen,
         ];
     }
 
@@ -233,9 +235,9 @@ internal class SuperKodanBrothers : Bjora
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
-            (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
-            (int)ArcDPSEnums.TargetID.VoiceAndClaw,
+            (int)TargetID.VoiceOfTheFallen,
+            (int)TargetID.ClawOfTheFallen,
+            (int)TargetID.VoiceAndClaw,
         ];
     }
 }

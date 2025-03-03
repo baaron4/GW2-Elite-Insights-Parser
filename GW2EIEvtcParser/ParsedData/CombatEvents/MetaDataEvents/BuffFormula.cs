@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ArcDPSEnums.BuffAttribute;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -7,12 +8,12 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class BuffFormula
 {
-    private static string GetAttributeString(ArcDPSEnums.BuffAttribute attribute)
+    private static string GetAttributeString(BuffAttribute attribute)
     {
         return BuffAttributesStrings.TryGetValue(attribute, out var output) ? output : "";
     }
 
-    private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute, int type)
+    private static string GetVariableStat(BuffAttribute attribute, int type)
     {
         switch (attribute)
         {
@@ -30,7 +31,7 @@ public class BuffFormula
         }
     }
 
-    private static string GetPercent(ArcDPSEnums.BuffAttribute attribute1, ArcDPSEnums.BuffAttribute attribute2)
+    private static string GetPercent(BuffAttribute attribute1, BuffAttribute attribute2)
     {
         if (attribute2 != Unknown && attribute2 != None)
         {
@@ -43,9 +44,9 @@ public class BuffFormula
     public readonly int Type;
     // Effect attributes
     public readonly byte ByteAttr1;
-    public ArcDPSEnums.BuffAttribute Attr1 { get; private set; }
+    public BuffAttribute Attr1 { get; private set; }
     public readonly byte ByteAttr2;
-    public ArcDPSEnums.BuffAttribute Attr2 { get; private set; }
+    public BuffAttribute Attr2 { get; private set; }
     // Effect parameters
     public readonly float ConstantOffset;
     public readonly float LevelOffset;
@@ -111,8 +112,8 @@ public class BuffFormula
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
             ByteAttr2 = (byte)formulaFloats[2];
-            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion.Build);
-            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion.Build);
+            Attr1 = GetBuffAttribute(ByteAttr1, evtcVersion.Build);
+            Attr2 = GetBuffAttribute(ByteAttr2, evtcVersion.Build);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];
@@ -126,9 +127,9 @@ public class BuffFormula
         ExtraNumberState = evtcItem.Pad1;
     }
 
-    internal void AdjustUnknownFormulaAttributes(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
+    internal void AdjustUnknownFormulaAttributes(Dictionary<byte, BuffAttribute> solved)
     {
-        if (Attr1 == Unknown && solved.TryGetValue(ByteAttr1, out ArcDPSEnums.BuffAttribute solvedAttr))
+        if (Attr1 == Unknown && solved.TryGetValue(ByteAttr1, out BuffAttribute solvedAttr))
         {
             Attr1 = solvedAttr;
         }

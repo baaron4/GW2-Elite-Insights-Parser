@@ -3,11 +3,13 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -23,7 +25,7 @@ internal class River : HallOfChains
         }
         );
         GenericFallBackMethod = FallBackMethod.ChestGadget;
-        ChestID = ArcDPSEnums.ChestID.ChestOfSouls;
+        ChestID = ChestID.ChestOfSouls;
         Extension = "river";
         Targetless = true;
         Icon = EncounterIconRiver;
@@ -40,16 +42,16 @@ internal class River : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.Enervator,
-            ArcDPSEnums.TrashID.HollowedBomber,
-            ArcDPSEnums.TrashID.RiverOfSouls,
-            ArcDPSEnums.TrashID.SpiritHorde1,
-            ArcDPSEnums.TrashID.SpiritHorde2,
-            ArcDPSEnums.TrashID.SpiritHorde3
+            TrashID.Enervator,
+            TrashID.HollowedBomber,
+            TrashID.RiverOfSouls,
+            TrashID.SpiritHorde1,
+            TrashID.SpiritHorde2,
+            TrashID.SpiritHorde3
         ];
     }
 
@@ -57,7 +59,7 @@ internal class River : HallOfChains
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Desmina
+            (int)TargetID.Desmina
         ];
     }
 
@@ -65,17 +67,17 @@ internal class River : HallOfChains
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Desmina
+            (int)TargetID.Desmina
         ];
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator);
+            IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(TrashID.Enervator);
             if (!enervators.Any())
             {
                 throw new MissingKeyActorsException("Enervators not found");
@@ -91,7 +93,7 @@ internal class River : HallOfChains
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out var desmina))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Desmina, out var desmina))
         {
             throw new MissingKeyActorsException("Desmina not found");
         }
@@ -110,13 +112,13 @@ internal class River : HallOfChains
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)ArcDPSEnums.TargetID.DummyTarget, true);
-        foreach (var desmina in agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina))
+        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
+        foreach (var desmina in agentData.GetNPCsByID(TargetID.Desmina))
         {
-            var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(desmina)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
+            var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(desmina)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
             if (positions.Any(x => x.XYZ.X >= 7500))
             {
-                desmina.OverrideID(ArcDPSEnums.IgnoredSpecies, agentData);
+                desmina.OverrideID(IgnoredSpecies, agentData);
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -124,29 +126,29 @@ internal class River : HallOfChains
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(brokenKing))))
+            if (agentData.GetNPCsByID(TargetID.BrokenKing).Any(brokenKing => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(brokenKing))))
             {
-                return new StatueOfIce((int)ArcDPSEnums.TargetID.BrokenKing);
+                return new StatueOfIce((int)TargetID.BrokenKing);
             }
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(soulEater))))
+            if (agentData.GetNPCsByID(TargetID.EaterOfSouls).Any(soulEater => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(soulEater))))
             {
-                return new StatueOfDeath((int)ArcDPSEnums.TargetID.EaterOfSouls);
+                return new StatueOfDeath((int)TargetID.EaterOfSouls);
             }
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfFate))))
+            if (agentData.GetNPCsByID(TargetID.EyeOfFate).Any(eyeOfFate => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfFate))))
             {
-                return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
+                return new StatueOfDarkness((int)TargetID.EyeOfFate);
             }
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfJudgement))))
+            if (agentData.GetNPCsByID(TargetID.EyeOfJudgement).Any(eyeOfJudgement => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(eyeOfJudgement))))
             {
-                return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfJudgement);
+                return new StatueOfDarkness((int)TargetID.EyeOfJudgement);
             }
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsDamagingDamage() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
+            if (agentData.GetNPCsByID(TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsDamagingDamage() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
             {
-                return new Dhuum((int)ArcDPSEnums.TargetID.Dhuum);
+                return new Dhuum((int)TargetID.Dhuum);
             }
         }
         return base.AdjustLogic(agentData, combatData);
@@ -162,7 +164,7 @@ internal class River : HallOfChains
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Desmina:
+            case (int)TargetID.Desmina:
                 var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var asylum in asylums)
                 {
@@ -170,7 +172,7 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.HollowedBomber:
+            case (int)TrashID.HollowedBomber:
                 ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstBomberMovement.XYZ != default)
                 {
@@ -188,7 +190,7 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.RiverOfSouls:
+            case (int)TrashID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstRiverMovement.XYZ != default)
                 {
@@ -203,11 +205,11 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.Enervator:
+            case (int)TrashID.Enervator:
             // TODO Line actor between desmina and enervator. Missing skillID
-            case (int)ArcDPSEnums.TrashID.SpiritHorde1:
-            case (int)ArcDPSEnums.TrashID.SpiritHorde2:
-            case (int)ArcDPSEnums.TrashID.SpiritHorde3:
+            case (int)TrashID.SpiritHorde1:
+            case (int)TrashID.SpiritHorde2:
+            case (int)TrashID.SpiritHorde3:
                 break;
             default:
                 break;
@@ -216,7 +218,7 @@ internal class River : HallOfChains
     }
     internal override int GetTriggerID()
     {
-        return (int)ArcDPSEnums.TargetID.Desmina;
+        return (int)TargetID.Desmina;
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {

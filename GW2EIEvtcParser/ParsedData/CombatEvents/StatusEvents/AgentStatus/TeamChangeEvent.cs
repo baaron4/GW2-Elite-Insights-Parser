@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 public class TeamChangeEvent : StatusEvent
 {
@@ -9,7 +10,7 @@ public class TeamChangeEvent : StatusEvent
     internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
     {
         TeamIDInto = GetTeamIDInto(evtcItem);
-        if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+        if (evtcVersion.Build >= ArcDPSBuilds.TeamChangeOnDespawn)
         {
             TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
         }

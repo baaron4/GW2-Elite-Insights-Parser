@@ -3,10 +3,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -51,8 +53,8 @@ internal class TwinLargos : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Nikare,
-            (int)ArcDPSEnums.TargetID.Kenut
+            (int)TargetID.Nikare,
+            (int)TargetID.Kenut
         ];
     }
 
@@ -69,8 +71,8 @@ internal class TwinLargos : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Nikare,
-            (int)ArcDPSEnums.TargetID.Kenut
+            (int)TargetID.Nikare,
+            (int)TargetID.Kenut
         ];
     }
 
@@ -126,8 +128,8 @@ internal class TwinLargos : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Kenut,
-            (int)ArcDPSEnums.TargetID.Nikare
+            (int)TargetID.Kenut,
+            (int)TargetID.Nikare
         ];
     }
 
@@ -217,9 +219,9 @@ internal class TwinLargos : MythwrightGambit
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
+        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         phases[0].AddTarget(nikare);
-        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
             phases[0].AddTarget(kenut);
@@ -242,8 +244,8 @@ internal class TwinLargos : MythwrightGambit
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Kenut, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Nikare, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.Kenut, fightData.FightStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.Nikare, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;
         }
@@ -254,8 +256,8 @@ internal class TwinLargos : MythwrightGambit
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // discard hp update events after determined apply
-        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        var nikareHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem));
+        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
+        var nikareHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem));
         if (nikareHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
         {
             CombatItem lastHPUpdate = nikareHPUpdates.Last();
@@ -264,10 +266,10 @@ internal class TwinLargos : MythwrightGambit
                 lastHPUpdate.OverrideSrcAgent(0);
             }
         }
-        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
-            var kenutHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem));
+            var kenutHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem));
             if (kenutHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
             {
                 CombatItem lastHPUpdate = kenutHPUpdates.Last();
@@ -284,7 +286,7 @@ internal class TwinLargos : MythwrightGambit
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Nikare:
+            case (int)TargetID.Nikare:
                 //CC
                 var barrageN = cls.Where(x => x.SkillId == AquaticBarrage);
                 foreach (CastEvent c in barrageN)
@@ -302,7 +304,7 @@ internal class TwinLargos : MythwrightGambit
                     replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.Kenut:
+            case (int)TargetID.Kenut:
                 //CC
                 var barrageK = cls.Where(x => x.SkillId == AquaticBarrage);
                 foreach (CastEvent c in barrageK)
@@ -387,14 +389,14 @@ internal class TwinLargos : MythwrightGambit
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
+        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillId == AquaticDomain);
         if (nikareHasCastAquaticDomain) // aquatic domain only present in CM
         {
             return FightData.EncounterMode.CM;
         }
         FightData.EncounterMode mode = (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare;
-        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
             if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillId == AquaticDomain)) // aquatic domain only present in CM

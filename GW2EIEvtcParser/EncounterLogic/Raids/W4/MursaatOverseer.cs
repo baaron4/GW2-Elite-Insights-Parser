@@ -2,10 +2,11 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -46,11 +47,11 @@ internal class MursaatOverseer : BastionOfThePenitent
                         (11774, 4480, 14078, 5376)*/);
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.Jade
+            TrashID.Jade
         ];
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -65,7 +66,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -85,7 +86,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TrashID.Jade:
+            case (int)TrashID.Jade:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint shieldRadius = 100;
@@ -118,7 +119,7 @@ internal class MursaatOverseer : BastionOfThePenitent
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.EIData.BuffSimulators;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -94,7 +95,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
             return;
         }
         NewDuration -= activeTime;
-        if (evtcVersion.Build < ArcDPSEnums.ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.BuffExtensionBroken)
+        if (evtcVersion.Build < ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion.Build >= ArcDPSBuilds.BuffExtensionBroken)
         {
             ExtendedDuration = Math.Max(ExtendedDuration - activeTime, 0);
         }

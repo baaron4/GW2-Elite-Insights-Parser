@@ -1,9 +1,11 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -43,31 +45,31 @@ internal class StatueOfDeath : HallOfChains
             new DamageCastFinder(HungeringAura , HungeringAura ), // Hungering Aura
         ];
     }
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.OrbSpider,
-            ArcDPSEnums.TrashID.SpiritHorde1,
-            ArcDPSEnums.TrashID.SpiritHorde2,
-            ArcDPSEnums.TrashID.SpiritHorde3,
-            ArcDPSEnums.TrashID.GreenSpirit1,
-            ArcDPSEnums.TrashID.GreenSpirit2
+            TrashID.OrbSpider,
+            TrashID.SpiritHorde1,
+            TrashID.SpiritHorde2,
+            TrashID.SpiritHorde3,
+            TrashID.GreenSpirit1,
+            TrashID.GreenSpirit2
         ];
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.EaterOfSouls, out var eaterOfSouls))
+        if (!agentData.TryGetFirstAgentItem(TargetID.EaterOfSouls, out var eaterOfSouls))
         {
             throw new MissingKeyActorsException("Eater of Souls not found");
         }
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var peasants = new List<AgentItem>(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant1));
-            peasants.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant2));
+            var peasants = new List<AgentItem>(agentData.GetNPCsByID(TrashID.AscalonianPeasant1));
+            peasants.AddRange(agentData.GetNPCsByID(TrashID.AscalonianPeasant2));
             if (peasants.Count != 0)
             {
                 startToUse = peasants.Max(x => x.LastAware);
@@ -86,7 +88,7 @@ internal class StatueOfDeath : HallOfChains
         int end = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.EaterOfSouls: {
+            case (int)TargetID.EaterOfSouls: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var breakbar = cls.Where(x => x.SkillId == Imbibe);
                 foreach (CastEvent c in breakbar)
@@ -117,8 +119,8 @@ internal class StatueOfDeath : HallOfChains
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(end));
                 }
             } break;
-            case (int)ArcDPSEnums.TrashID.GreenSpirit1:
-            case (int)ArcDPSEnums.TrashID.GreenSpirit2: {
+            case (int)TrashID.GreenSpirit1:
+            case (int)TrashID.GreenSpirit2: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var green = cls.Where(x => x.SkillId == GreensEaterofSouls);
                 foreach (CastEvent c in green)
@@ -129,10 +131,10 @@ internal class StatueOfDeath : HallOfChains
                     replay.Decorations.AddWithGrowing(circle, gend);
                 }
             } break;
-            case (int)ArcDPSEnums.TrashID.SpiritHorde1:
-            case (int)ArcDPSEnums.TrashID.SpiritHorde2:
-            case (int)ArcDPSEnums.TrashID.SpiritHorde3:
-            case (int)ArcDPSEnums.TrashID.OrbSpider:
+            case (int)TrashID.SpiritHorde1:
+            case (int)TrashID.SpiritHorde2:
+            case (int)TrashID.SpiritHorde3:
+            case (int)TrashID.OrbSpider:
                 break;
             default:
                 break;
