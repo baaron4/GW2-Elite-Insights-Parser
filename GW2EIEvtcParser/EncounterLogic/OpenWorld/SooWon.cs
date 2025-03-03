@@ -2,10 +2,12 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic.OpenWorld;
 
@@ -30,7 +32,7 @@ internal class SooWon : OpenWorldLogic
         new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", 0).UsingChecker((bre, log) => !bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
         new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", 0).UsingChecker((bre, log) => bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
         new EnemyDstBuffApplyMechanic(DamageImmunity, "Damage Immunity", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
-        new EnemyDstBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
+        new EnemyDstBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
         });
         Extension = "soowon";
         Icon = EncounterIconSooWon;
@@ -41,10 +43,10 @@ internal class SooWon : OpenWorldLogic
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault() ?? throw new EvtcAgentException("SooWon not found"));
+            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new EvtcAgentException("SooWon not found"));
         }
         return startToUse;
     }
@@ -52,8 +54,8 @@ internal class SooWon : OpenWorldLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
-        SingleActor? tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
+        SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SooWonOW));
+        SingleActor? tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.SooWonTail));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -161,8 +163,8 @@ internal class SooWon : OpenWorldLogic
                 case 5:
                     phase.Name = "First Champions";
                     phase.AddTargets(Targets.Where(x =>
-                        x.IsSpecies(ArcDPSEnums.TrashID.VoidGiant2) ||
-                        x.IsSpecies(ArcDPSEnums.TrashID.VoidTimeCaster2)));
+                        x.IsSpecies(TrashID.VoidGiant2) ||
+                        x.IsSpecies(TrashID.VoidTimeCaster2)));
                     break;
                 case 6:
                     phase.Name = "60% - 40%";
@@ -185,9 +187,9 @@ internal class SooWon : OpenWorldLogic
                 case 10:
                     phase.Name = "Second Champions";
                     phase.AddTargets(Targets.Where(x =>
-                        x.IsSpecies(ArcDPSEnums.TrashID.VoidBrandstalker) ||
-                        x.IsSpecies(ArcDPSEnums.TrashID.VoidColdsteel2) ||
-                        x.IsSpecies(ArcDPSEnums.TrashID.VoidObliterator2)));
+                        x.IsSpecies(TrashID.VoidBrandstalker) ||
+                        x.IsSpecies(TrashID.VoidColdsteel2) ||
+                        x.IsSpecies(TrashID.VoidObliterator2)));
                     break;
                 case 11:
                     phase.Name = "20% - 0%";
@@ -201,7 +203,7 @@ internal class SooWon : OpenWorldLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData,
         AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW);
+        IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(TargetID.SooWonOW);
         if (!sooWons.Any())
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -210,14 +212,14 @@ internal class SooWon : OpenWorldLogic
         foreach (AgentItem sooWon in sooWons)
         {
             sooWon.OverrideType(AgentItem.AgentType.NPC, agentData);
-            sooWon.OverrideID(ArcDPSEnums.TargetID.SooWonOW, agentData);
+            sooWon.OverrideID(TargetID.SooWonOW, agentData);
         }
 
-        IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(ArcDPSEnums.TrashID.SooWonTail);
+        IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(TrashID.SooWonTail);
         foreach (AgentItem sooWonTail in sooWonTails)
         {
             sooWonTail.OverrideType(AgentItem.AgentType.NPC, agentData);
-            sooWonTail.OverrideID(ArcDPSEnums.TrashID.SooWonTail, agentData);
+            sooWonTail.OverrideID(TrashID.SooWonTail, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
@@ -225,7 +227,7 @@ internal class SooWon : OpenWorldLogic
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData,
         IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.Daily && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -236,13 +238,13 @@ internal class SooWon : OpenWorldLogic
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.SooWonOW,
-            (int)ArcDPSEnums.TrashID.SooWonTail,
-            (int)ArcDPSEnums.TrashID.VoidGiant2,
-            (int)ArcDPSEnums.TrashID.VoidTimeCaster2,
-            (int)ArcDPSEnums.TrashID.VoidBrandstalker,
-            (int)ArcDPSEnums.TrashID.VoidColdsteel2,
-            (int)ArcDPSEnums.TrashID.VoidObliterator2,
+            (int)TargetID.SooWonOW,
+            (int)TrashID.SooWonTail,
+            (int)TrashID.VoidGiant2,
+            (int)TrashID.VoidTimeCaster2,
+            (int)TrashID.VoidBrandstalker,
+            (int)TrashID.VoidColdsteel2,
+            (int)TrashID.VoidObliterator2,
         ];
     }
 
@@ -250,60 +252,60 @@ internal class SooWon : OpenWorldLogic
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.SooWonOW,
-            (int)ArcDPSEnums.TrashID.SooWonTail,
-            (int)ArcDPSEnums.TrashID.VoidGiant2,
-            (int)ArcDPSEnums.TrashID.VoidTimeCaster2,
-            (int)ArcDPSEnums.TrashID.VoidBrandstalker,
-            (int)ArcDPSEnums.TrashID.VoidColdsteel2,
-            (int)ArcDPSEnums.TrashID.VoidObliterator2,
+            (int)TargetID.SooWonOW,
+            (int)TrashID.SooWonTail,
+            (int)TrashID.VoidGiant2,
+            (int)TrashID.VoidTimeCaster2,
+            (int)TrashID.VoidBrandstalker,
+            (int)TrashID.VoidColdsteel2,
+            (int)TrashID.VoidObliterator2,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.VoidAbomination,
-            ArcDPSEnums.TrashID.VoidAbomination2,
-            ArcDPSEnums.TrashID.VoidBomber,
-            ArcDPSEnums.TrashID.VoidBrandbeast,
-            ArcDPSEnums.TrashID.VoidBrandcharger1,
-            ArcDPSEnums.TrashID.VoidBrandcharger2,
-            ArcDPSEnums.TrashID.VoidBrandfang1,
-            ArcDPSEnums.TrashID.VoidBrandfang2,
-            ArcDPSEnums.TrashID.VoidBrandscale1,
-            ArcDPSEnums.TrashID.VoidBrandscale2,
-            ArcDPSEnums.TrashID.VoidColdsteel,
-            ArcDPSEnums.TrashID.VoidColdsteel3,
-            ArcDPSEnums.TrashID.VoidCorpseknitter1,
-            ArcDPSEnums.TrashID.VoidCorpseknitter2,
-            ArcDPSEnums.TrashID.VoidDespoiler1,
-            ArcDPSEnums.TrashID.VoidDespoiler2,
-            ArcDPSEnums.TrashID.VoidFiend1,
-            ArcDPSEnums.TrashID.VoidFiend2,
-            ArcDPSEnums.TrashID.VoidFoulmaw,
-            ArcDPSEnums.TrashID.VoidFrostwing,
-            ArcDPSEnums.TrashID.VoidGlacier1,
-            ArcDPSEnums.TrashID.VoidGlacier2,
-            ArcDPSEnums.TrashID.VoidInfested1,
-            ArcDPSEnums.TrashID.VoidInfested2,
-            ArcDPSEnums.TrashID.VoidMelter1,
-            ArcDPSEnums.TrashID.VoidMelter2,
-            ArcDPSEnums.TrashID.VoidRimewolf1,
-            ArcDPSEnums.TrashID.VoidRimewolf2,
-            ArcDPSEnums.TrashID.VoidRotspinner1,
-            ArcDPSEnums.TrashID.VoidRotswarmer,
-            ArcDPSEnums.TrashID.VoidStorm,
-            ArcDPSEnums.TrashID.VoidStormseer,
-            ArcDPSEnums.TrashID.VoidStormseer2,
-            ArcDPSEnums.TrashID.VoidStormseer3,
-            ArcDPSEnums.TrashID.VoidTangler,
-            ArcDPSEnums.TrashID.VoidTangler2,
-            ArcDPSEnums.TrashID.VoidThornheart1,
-            ArcDPSEnums.TrashID.VoidThornheart2,
-            ArcDPSEnums.TrashID.VoidWarforged2,
-            ArcDPSEnums.TrashID.VoidWorm,
+            TrashID.VoidAbomination,
+            TrashID.VoidAbomination2,
+            TrashID.VoidBomber,
+            TrashID.VoidBrandbeast,
+            TrashID.VoidBrandcharger1,
+            TrashID.VoidBrandcharger2,
+            TrashID.VoidBrandfang1,
+            TrashID.VoidBrandfang2,
+            TrashID.VoidBrandscale1,
+            TrashID.VoidBrandscale2,
+            TrashID.VoidColdsteel,
+            TrashID.VoidColdsteel3,
+            TrashID.VoidCorpseknitter1,
+            TrashID.VoidCorpseknitter2,
+            TrashID.VoidDespoiler1,
+            TrashID.VoidDespoiler2,
+            TrashID.VoidFiend1,
+            TrashID.VoidFiend2,
+            TrashID.VoidFoulmaw,
+            TrashID.VoidFrostwing,
+            TrashID.VoidGlacier1,
+            TrashID.VoidGlacier2,
+            TrashID.VoidInfested1,
+            TrashID.VoidInfested2,
+            TrashID.VoidMelter1,
+            TrashID.VoidMelter2,
+            TrashID.VoidRimewolf1,
+            TrashID.VoidRimewolf2,
+            TrashID.VoidRotspinner1,
+            TrashID.VoidRotswarmer,
+            TrashID.VoidStorm,
+            TrashID.VoidStormseer,
+            TrashID.VoidStormseer2,
+            TrashID.VoidStormseer3,
+            TrashID.VoidTangler,
+            TrashID.VoidTangler2,
+            TrashID.VoidThornheart1,
+            TrashID.VoidThornheart2,
+            TrashID.VoidWarforged2,
+            TrashID.VoidWorm,
         ];
     }
 }

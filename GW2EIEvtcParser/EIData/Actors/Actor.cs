@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -85,22 +87,22 @@ public abstract class Actor
         return AgentItem.IsSpecies(id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.TrashID id)
+    public bool IsSpecies(TrashID id)
     {
         return AgentItem.IsSpecies(id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.TargetID id)
+    public bool IsSpecies(TargetID id)
     {
         return AgentItem.IsSpecies(id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.MinionID id)
+    public bool IsSpecies(MinionID id)
     {
         return AgentItem.IsSpecies(id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.ChestID id)
+    public bool IsSpecies(ChestID id)
     {
         return AgentItem.IsSpecies(id);
     }
@@ -110,22 +112,22 @@ public abstract class Actor
         return AgentItem.IsAnySpecies(ids);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
+    public bool IsAnySpecies(IEnumerable<TrashID> ids)
     {
         return AgentItem.IsAnySpecies(ids);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TargetID> ids)
+    public bool IsAnySpecies(IEnumerable<TargetID> ids)
     {
         return AgentItem.IsAnySpecies(ids);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.MinionID> ids)
+    public bool IsAnySpecies(IEnumerable<MinionID> ids)
     {
         return AgentItem.IsAnySpecies(ids);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.ChestID> ids)
+    public bool IsAnySpecies(IEnumerable<ChestID> ids)
     {
         return AgentItem.IsAnySpecies(ids);
     }

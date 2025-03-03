@@ -3,11 +3,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -72,8 +74,8 @@ internal class Xera : StrongholdOfTheFaithful
         var res = new List<BuffEvent>();
         if (_xeraSecondPhaseStartTime != 0)
         {
-            res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown, 1, int.MaxValue));
-            res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown));
+            res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue));
+            res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown));
         }
         return res;
     }
@@ -102,8 +104,8 @@ internal class Xera : StrongholdOfTheFaithful
             if (_xeraFirstPhaseStart > 0)
             {
                 var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
-                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardButton) || x.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardRift)));
-                phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget)));
+                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TrashID.BloodstoneShardButton) || x.IsSpecies(TrashID.BloodstoneShardRift)));
+                phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
                 phases.Add(phasePreEvent);
                 var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddTarget(mainTarget);
@@ -119,14 +121,14 @@ internal class Xera : StrongholdOfTheFaithful
 
                 long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
                 var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.ChargedBloodstone)));
+                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TrashID.ChargedBloodstone)));
                 phases.Add(glidingPhase);
 
                 if (_xeraSecondPhaseStartTime > 0)
                 {
                     var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
                     phase2.AddTarget(mainTarget);
-                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(ArcDPSEnums.TrashID.BloodstoneShardMainFight)));
+                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TrashID.BloodstoneShardMainFight)));
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(phase2);
                 }
@@ -135,7 +137,7 @@ internal class Xera : StrongholdOfTheFaithful
         return phases;
     }
 
-    private SingleActor? GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
+    private SingleActor? GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Xera));
 
     private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
     {
@@ -145,26 +147,26 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out var xera))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var xera))
         {
             throw new MissingKeyActorsException("Xera not found");
         }
         // enter combat
-        CombatItem? enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+        CombatItem? enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == StateChange.EnterCombat);
         if (enterCombat != null)
         {
-            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out var fakeXera))
+            if (agentData.TryGetFirstAgentItem(TrashID.FakeXera, out var fakeXera))
             {
                 _hasPreEvent = true;
                 long encounterStart = fakeXera.LastAware;
-                CombatItem ?death = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
+                CombatItem ?death = combatData.LastOrDefault(x => x.IsStateChange == StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
                 if (death != null)
                 {
                     encounterStart = death.Time + 1000;
                 } 
                 else
                 {
-                    CombatItem? exitCombat = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
+                    CombatItem? exitCombat = combatData.LastOrDefault(x => x.IsStateChange == StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
                     if (exitCombat != null)
                     {
                         encounterStart = exitCombat.Time + 1000;
@@ -182,33 +184,33 @@ internal class Xera : StrongholdOfTheFaithful
     {
         bool mayRequireDummy = true;
         // find target
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out var firstXera))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var firstXera))
         {
             throw new MissingKeyActorsException("Xera not found");
         }
         _xeraFirstPhaseEndTime = firstXera.LastAware;
         //
-        var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData));
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData));
         //
         var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneFragments)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment, agentData);
+            gadget.OverrideID(TrashID.BloodstoneFragment, agentData);
         }
         //
         var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardMainFight, agentData);
+            gadget.OverrideID(TrashID.BloodstoneShardMainFight, agentData);
         }
         //
         var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardButton, agentData);
+            gadget.OverrideID(TrashID.BloodstoneShardButton, agentData);
             mayRequireDummy = false;
         }
         //
@@ -216,7 +218,7 @@ internal class Xera : StrongholdOfTheFaithful
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardRift, agentData);
+            gadget.OverrideID(TrashID.BloodstoneShardRift, agentData);
             mayRequireDummy = false;
         }
         //
@@ -228,16 +230,16 @@ internal class Xera : StrongholdOfTheFaithful
                 continue;
             }
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone, agentData);
+            gadget.OverrideID(TrashID.ChargedBloodstone, agentData);
         }
         if (_hasPreEvent && mayRequireDummy)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         // find split
-        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out var secondXera))
+        if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
         {
-            CombatItem? move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
+            CombatItem? move = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
             if (move != null)
             {
                 _xeraSecondPhaseStartTime = move.Time;
@@ -275,28 +277,28 @@ internal class Xera : StrongholdOfTheFaithful
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return [
-            (int)ArcDPSEnums.TargetID.Xera,
-            (int)ArcDPSEnums.TargetID.DummyTarget,
-            (int)ArcDPSEnums.TrashID.BloodstoneShardMainFight,
-            (int)ArcDPSEnums.TrashID.BloodstoneShardRift,
-            (int)ArcDPSEnums.TrashID.BloodstoneShardButton,
-            (int)ArcDPSEnums.TrashID.ChargedBloodstone,
+            (int)TargetID.Xera,
+            (int)TargetID.DummyTarget,
+            (int)TrashID.BloodstoneShardMainFight,
+            (int)TrashID.BloodstoneShardRift,
+            (int)TrashID.BloodstoneShardButton,
+            (int)TrashID.ChargedBloodstone,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.WhiteMantleSeeker1,
-            ArcDPSEnums.TrashID.WhiteMantleSeeker2,
-            ArcDPSEnums.TrashID.WhiteMantleKnight1,
-            ArcDPSEnums.TrashID.WhiteMantleKnight2,
-            ArcDPSEnums.TrashID.WhiteMantleBattleMage1,
-            ArcDPSEnums.TrashID.WhiteMantleBattleMage2,
-            ArcDPSEnums.TrashID.BloodstoneFragment,
-            ArcDPSEnums.TrashID.ExquisiteConjunction,
-            ArcDPSEnums.TrashID.XerasPhantasm,
+            TrashID.WhiteMantleSeeker1,
+            TrashID.WhiteMantleSeeker2,
+            TrashID.WhiteMantleKnight1,
+            TrashID.WhiteMantleKnight2,
+            TrashID.WhiteMantleBattleMage1,
+            TrashID.WhiteMantleBattleMage2,
+            TrashID.BloodstoneFragment,
+            TrashID.ExquisiteConjunction,
+            TrashID.XerasPhantasm,
         ];
     }
 
@@ -304,7 +306,7 @@ internal class Xera : StrongholdOfTheFaithful
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Xera:
+            case (int)TargetID.Xera:
                 var cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
                 var summon = cls.Where(x => x.SkillId == SummonFragments);
                 foreach (CastEvent c in summon)
@@ -316,7 +318,7 @@ internal class Xera : StrongholdOfTheFaithful
                     replay.Hidden.Add(new(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
+            case (int)TrashID.ChargedBloodstone:
                 if (_xeraFirstPhaseEndTime != 0)
                 {
                     long end = replay.TimeOffsets.end;
@@ -328,7 +330,7 @@ internal class Xera : StrongholdOfTheFaithful
                     replay.Trim(_xeraFirstPhaseEndTime + 12000, end);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
+            case (int)TrashID.BloodstoneFragment:
                 replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                 break;
             default:

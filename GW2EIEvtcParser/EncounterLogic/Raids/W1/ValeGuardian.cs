@@ -3,9 +3,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -62,33 +64,33 @@ internal class ValeGuardian : SpiritVale
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.ValeGuardian,
-            (int)ArcDPSEnums.TrashID.RedGuardian,
-            (int)ArcDPSEnums.TrashID.BlueGuardian,
-            (int)ArcDPSEnums.TrashID.GreenGuardian
+            (int)TargetID.ValeGuardian,
+            (int)TrashID.RedGuardian,
+            (int)TrashID.BlueGuardian,
+            (int)TrashID.GreenGuardian
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.ValeGuardian, 0 },
-            {(int)ArcDPSEnums.TrashID.RedGuardian, 1 },
-            {(int)ArcDPSEnums.TrashID.BlueGuardian, 1 },
-            {(int)ArcDPSEnums.TrashID.GreenGuardian, 1 },
+            {(int)TargetID.ValeGuardian, 0 },
+            {(int)TrashID.RedGuardian, 1 },
+            {(int)TrashID.BlueGuardian, 1 },
+            {(int)TrashID.GreenGuardian, 1 },
         };
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget);
         var splitGuardianIds = new List<int>
         {
-            (int) ArcDPSEnums.TrashID.BlueGuardian,
-            (int) ArcDPSEnums.TrashID.GreenGuardian,
-            (int) ArcDPSEnums.TrashID.RedGuardian
+            (int) TrashID.BlueGuardian,
+            (int) TrashID.GreenGuardian,
+            (int) TrashID.RedGuardian
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -122,26 +124,26 @@ internal class ValeGuardian : SpiritVale
         int curGreen = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TrashID.RedGuardian))
+            if (target.IsSpecies(TrashID.RedGuardian))
             {
                 target.OverrideName(target.Character + " " + curRed++);
             }
-            if (target.IsSpecies(ArcDPSEnums.TrashID.BlueGuardian))
+            if (target.IsSpecies(TrashID.BlueGuardian))
             {
                 target.OverrideName(target.Character + " " + curBlue++);
             }
-            if (target.IsSpecies(ArcDPSEnums.TrashID.GreenGuardian))
+            if (target.IsSpecies(TrashID.GreenGuardian))
             {
                 target.OverrideName(target.Character + " " + curGreen++);
             }
         }
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-           ArcDPSEnums.TrashID.Seekers
+           TrashID.Seekers
         ];
     }
 
@@ -178,7 +180,7 @@ internal class ValeGuardian : SpiritVale
 
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.ValeGuardian:
+            case (int)TargetID.ValeGuardian:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
                 foreach (CastEvent c in magicStorms)
@@ -232,16 +234,16 @@ internal class ValeGuardian : SpiritVale
                     CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                 #endif
                 break;
-            case (int)ArcDPSEnums.TrashID.BlueGuardian:
+            case (int)TrashID.BlueGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenGuardian:
+            case (int)TrashID.GreenGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Green, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.RedGuardian:
+            case (int)TrashID.RedGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.Seekers:
+            case (int)TrashID.Seekers:
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
             default:

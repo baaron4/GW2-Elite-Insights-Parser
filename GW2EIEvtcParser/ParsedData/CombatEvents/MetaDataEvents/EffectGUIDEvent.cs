@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 public class EffectGUIDEvent : IDToGUIDEvent
 {
@@ -7,7 +8,7 @@ public class EffectGUIDEvent : IDToGUIDEvent
     internal static EffectGUIDEvent DummyEffectGUID = new();
     internal EffectGUIDEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
-        if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ExtraDataInGUIDEvents)
+        if (evtcVersion.Build > ArcDPSBuilds.ExtraDataInGUIDEvents)
         {
             EffectType = evtcItem.SrcInstid;
             DefaultDuration = Convert.ToSingle(evtcItem.BuffDmg);

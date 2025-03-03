@@ -1,8 +1,10 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -39,7 +41,7 @@ internal class ColdWar : IcebroodSagaStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor varinia = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VariniaStormsounder)) ?? throw new MissingKeyActorsException("Varinia Stormsounder not found");
+        SingleActor varinia = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VariniaStormsounder)) ?? throw new MissingKeyActorsException("Varinia Stormsounder not found");
         phases[0].AddTarget(varinia);
         //
         // TODO - add phases if applicable
@@ -52,22 +54,22 @@ internal class ColdWar : IcebroodSagaStrike
     }
 
     // TODO - complete IDs
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.PropagandaBallon,
-            ArcDPSEnums.TrashID.DominionBladestorm,
-            ArcDPSEnums.TrashID.DominionStalker,
-            ArcDPSEnums.TrashID.DominionSpy1,
-            ArcDPSEnums.TrashID.DominionSpy2,
-            ArcDPSEnums.TrashID.DominionAxeFiend,
-            ArcDPSEnums.TrashID.DominionEffigy,
-            ArcDPSEnums.TrashID.FrostLegionCrusher,
-            ArcDPSEnums.TrashID.FrostLegionMusketeer,
-            ArcDPSEnums.TrashID.BloodLegionBlademaster,
-            ArcDPSEnums.TrashID.CharrTank,
-            ArcDPSEnums.TrashID.SonsOfSvanirHighShaman,
+            TrashID.PropagandaBallon,
+            TrashID.DominionBladestorm,
+            TrashID.DominionStalker,
+            TrashID.DominionSpy1,
+            TrashID.DominionSpy2,
+            TrashID.DominionAxeFiend,
+            TrashID.DominionEffigy,
+            TrashID.FrostLegionCrusher,
+            TrashID.FrostLegionMusketeer,
+            TrashID.BloodLegionBlademaster,
+            TrashID.CharrTank,
+            TrashID.SonsOfSvanirHighShaman,
         ];
     }
 }

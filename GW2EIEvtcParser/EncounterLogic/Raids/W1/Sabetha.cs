@@ -1,11 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
-using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -49,19 +51,19 @@ internal class Sabetha : SpiritVale
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Cannons
-        var cannons = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
+        var cannons = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem cannon in cannons)
         {
             cannon.OverrideType(AgentItem.AgentType.NPC, agentData);
-            cannon.OverrideID(ArcDPSEnums.TrashID.Cannon, agentData);
+            cannon.OverrideID(TrashID.Cannon, agentData);
         }
 
         // Heavy Bombs
-        var heavyBombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2);
+        var heavyBombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2);
         foreach (AgentItem bomb in heavyBombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(ArcDPSEnums.TrashID.HeavyBomb, agentData);
+            bomb.OverrideID(TrashID.HeavyBomb, agentData);
         }
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -70,13 +72,13 @@ internal class Sabetha : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
+        SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
         phases[0].AddTarget(sabetha);
         var miniBossIds = new List<int>
         {
-            (int) ArcDPSEnums.TrashID.Karde, // reverse order for mini boss phase detection
-            (int) ArcDPSEnums.TrashID.Knuckles,
-            (int) ArcDPSEnums.TrashID.Kernan,
+            (int) TrashID.Karde, // reverse order for mini boss phase detection
+            (int) TrashID.Knuckles,
+            (int) TrashID.Kernan,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -122,11 +124,11 @@ internal class Sabetha : SpiritVale
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Sabetha,
-            (int)ArcDPSEnums.TrashID.Kernan,
-            (int)ArcDPSEnums.TrashID.Knuckles,
-            (int)ArcDPSEnums.TrashID.Karde,
-            (int)ArcDPSEnums.TrashID.Cannon,
+            (int)TargetID.Sabetha,
+            (int)TrashID.Kernan,
+            (int)TrashID.Knuckles,
+            (int)TrashID.Karde,
+            (int)TrashID.Cannon,
         ];
     }
 
@@ -134,11 +136,11 @@ internal class Sabetha : SpiritVale
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.Sabetha, 0 },
-            {(int)ArcDPSEnums.TrashID.Kernan, 1 },
-            {(int)ArcDPSEnums.TrashID.Knuckles, 1 },
-            {(int)ArcDPSEnums.TrashID.Karde, 1 },
-            {(int)ArcDPSEnums.TrashID.Cannon, 2 },
+            {(int)TargetID.Sabetha, 0 },
+            {(int)TrashID.Kernan, 1 },
+            {(int)TrashID.Knuckles, 1 },
+            {(int)TrashID.Karde, 1 },
+            {(int)TrashID.Cannon, 2 },
         };
     }
 
@@ -147,7 +149,7 @@ internal class Sabetha : SpiritVale
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Sabetha:
+            case (int)TargetID.Sabetha:
                 var flameWall = cls.Where(x => x.SkillId == Firestorm);
                 foreach (CastEvent c in flameWall)
                 {
@@ -164,7 +166,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.Kernan:
+            case (int)TrashID.Kernan:
                 var bulletHail = cls.Where(x => x.SkillId == BulletHail);
                 foreach (CastEvent c in bulletHail)
                 {
@@ -187,7 +189,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.Knuckles:
+            case (int)TrashID.Knuckles:
                 var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
                 foreach (CastEvent c in breakbar)
                 {
@@ -195,7 +197,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.Karde:
+            case (int)TrashID.Karde:
                 var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
                 foreach (CastEvent c in flameBlast)
                 {
@@ -208,7 +210,7 @@ internal class Sabetha : SpiritVale
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.Cannon:
+            case (int)TrashID.Cannon:
                 if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(target.AgentItem, MarkerGUIDs.SabethaCannonRedCrossSwordsMarker, out var swords))
                 {
                     long hideStart = target.FirstAware;
@@ -227,14 +229,14 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.BanditSapper,
-            ArcDPSEnums.TrashID.BanditThug,
-            ArcDPSEnums.TrashID.BanditArsonist,
-            ArcDPSEnums.TrashID.HeavyBomb,
+            TrashID.BanditSapper,
+            TrashID.BanditThug,
+            TrashID.BanditArsonist,
+            TrashID.HeavyBomb,
         ];
     }
 
@@ -314,17 +316,17 @@ internal class Sabetha : SpiritVale
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Sabetha,
-            (int)ArcDPSEnums.TrashID.Kernan,
-            (int)ArcDPSEnums.TrashID.Karde,
-            (int)ArcDPSEnums.TrashID.Knuckles,
+            (int)TargetID.Sabetha,
+            (int)TrashID.Kernan,
+            (int)TrashID.Karde,
+            (int)TrashID.Knuckles,
         ];
     }
 
     private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
     {
-        { (int)ArcDPSEnums.TrashID.Kernan, "Kernan" },
-        { (int)ArcDPSEnums.TrashID.Karde, "Karde" },
-        { (int)ArcDPSEnums.TrashID.Knuckles, "Knuckles" }
+        { (int)TrashID.Kernan, "Kernan" },
+        { (int)TrashID.Karde, "Karde" },
+        { (int)TrashID.Knuckles, "Knuckles" }
     };
 }

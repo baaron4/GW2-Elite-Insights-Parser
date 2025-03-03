@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.EncounterLogic.OpenWorld;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -248,15 +249,15 @@ public class FightData
                             case TrashID.WallOfGhosts:
                                 return new SpiritRace(id);
                             case TrashID.HauntingStatue:
-                                return new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
+                                return new TwistedCastle((int)TargetID.DummyTarget);
                             case TrashID.VoidAmalgamate:
                                 return new HarvestTemple(id);
                             case TrashID.AncientInvokedHydra:
-                                return new Qadim((int)ArcDPSEnums.TargetID.Qadim);
+                                return new Qadim((int)TargetID.Qadim);
                             case TrashID.VoidMelter:
-                                if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
+                                if (agentData.GetNPCsByID(TrashID.VoidAmalgamate).Any())
                                 {
-                                    return new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
+                                    return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                                 }
                                 break;
                         }

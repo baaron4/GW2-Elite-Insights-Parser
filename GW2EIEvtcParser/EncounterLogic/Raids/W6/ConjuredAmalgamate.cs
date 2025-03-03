@@ -4,11 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -16,7 +18,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
 {
     private readonly bool _cn;
     private static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
-    public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
+    public ConjuredAmalgamate(int triggerID) : base((int)TargetID.ConjuredAmalgamate)
     {
         MechanicList.AddRange([
             new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
@@ -33,13 +35,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
             new EnemyDstBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
             new EnemyDstBuffApplyMechanic(ShieldedCA, "Shielded", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
         ]);
-        _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
+        _cn = triggerID != (int)TargetID.ConjuredAmalgamate;
         Extension = "ca";
         GenericFallBackMethod = FallBackMethod.ChestGadget;
         Icon = EncounterIconConjuredAmalgamate;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
-        ChestID = ArcDPSEnums.ChestID.CAChest;
+        ChestID = ChestID.CAChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -54,7 +56,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
-        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID);
+        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.EffectIDToGUID);
         if (effectIDToGUIDs.Any())
         {
             CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
@@ -63,11 +65,11 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 CombatItem? firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
                 if (firstArmSmash != null)
                 {
-                    CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+                    CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
                     if (logStartNPCUpdate != null)
                     {
                         // we couldn't have hit CA before the initial smash
-                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                     }
                     else
                     {
@@ -84,7 +86,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
         // Can be improved
-        if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ConjuredAmalgamate, fightData.FightStart, combatData, Targets, 90))
+        if (TargetHPPercentUnderThreshold(TargetID.ConjuredAmalgamate, fightData.FightStart, combatData, Targets, 90))
         {
             return FightData.EncounterStartStatus.Late;
         }
@@ -95,18 +97,18 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.ConjuredAmalgamate,
-            (int)ArcDPSEnums.TargetID.CARightArm,
-            (int)ArcDPSEnums.TargetID.CALeftArm
+            (int)TargetID.ConjuredAmalgamate,
+            (int)TargetID.CARightArm,
+            (int)TargetID.CALeftArm
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.ConjuredGreatsword,
-            ArcDPSEnums.TrashID.ConjuredShield
+            TrashID.ConjuredGreatsword,
+            TrashID.ConjuredShield
         ];
     }
 
@@ -114,37 +116,37 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TrashID.ConjuredPlayerSword
+            (int)TrashID.ConjuredPlayerSword
         ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // make those into npcs
-        IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate);
+        IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate);
         if (!cas.Any())
         {
             throw new MissingKeyActorsException("Conjured Amalgamate not found");
         }
-        IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.CALeftArm_CHINA : ArcDPSEnums.TargetID.CALeftArm);
-        IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.CARightArm_CHINA : ArcDPSEnums.TargetID.CARightArm);
+        IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? TargetID.CALeftArm_CHINA : TargetID.CALeftArm);
+        IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? TargetID.CARightArm_CHINA : TargetID.CARightArm);
         foreach (AgentItem ca in cas)
         {
             ca.OverrideType(AgentItem.AgentType.NPC, agentData);
-            ca.OverrideID(ArcDPSEnums.TargetID.ConjuredAmalgamate, agentData);
+            ca.OverrideID(TargetID.ConjuredAmalgamate, agentData);
         }
         foreach (AgentItem leftArm in leftArms)
         {
             leftArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            leftArm.OverrideID(ArcDPSEnums.TargetID.CALeftArm, agentData);
+            leftArm.OverrideID(TargetID.CALeftArm, agentData);
         }
         foreach (AgentItem rightArm in rightArms)
         {
             rightArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm, agentData);
+            rightArm.OverrideID(TargetID.CARightArm, agentData);
         }
         FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
+        AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TrashID.ConjuredPlayerSword, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (CombatItem c in combatData)
         {
@@ -168,9 +170,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.ConjuredAmalgamate,
-            (int)ArcDPSEnums.TargetID.CALeftArm,
-            (int)ArcDPSEnums.TargetID.CARightArm
+            (int)TargetID.ConjuredAmalgamate,
+            (int)TargetID.CALeftArm,
+            (int)TargetID.CARightArm
         ];
     }
 
@@ -178,7 +180,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
+            case (int)TargetID.ConjuredAmalgamate:
                 var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint CAShieldRadius = 500;
                 foreach (Segment seg in shieldCA)
@@ -186,12 +188,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     replay.Decorations.Add(new CircleDecoration(CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.CALeftArm:
-            case (int)ArcDPSEnums.TargetID.CARightArm:
+            case (int)TargetID.CALeftArm:
+            case (int)TargetID.CARightArm:
                 break;
-            case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
+            case (int)TrashID.ConjuredGreatsword:
                 break;
-            case (int)ArcDPSEnums.TrashID.ConjuredShield:
+            case (int)TrashID.ConjuredShield:
                 var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint ShieldShieldRadius = 100;
                 foreach (Segment seg in shieldShield)
@@ -209,14 +211,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
-            SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-            SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+            SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate));
+            SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
+            SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            AgentItem? zommoros = agentData.GetNPCsByID(ArcDPSEnums.TrashID.ChillZommoros).LastOrDefault();
+            AgentItem? zommoros = agentData.GetNPCsByID(TrashID.ChillZommoros).LastOrDefault();
             if (zommoros == null)
             {
                 return;
@@ -278,9 +280,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-        SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+        SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
+        SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
         phases[0].AddTarget(ca);
         phases[0].AddTarget(leftArm, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(rightArm, PhaseData.TargetPriority.Blocking);
@@ -364,7 +366,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
         return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

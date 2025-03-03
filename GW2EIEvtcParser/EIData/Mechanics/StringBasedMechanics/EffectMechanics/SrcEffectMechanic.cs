@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -10,7 +11,7 @@ internal abstract class SrcEffectMechanic : EffectMechanic
     {
         if (effectEvt.Src.IsUnamedSpecies())
         {
-            return agentData.GetNPCsByID(ArcDPSEnums.TrashID.Environment).FirstOrDefault()!;
+            return agentData.GetNPCsByID(TrashID.Environment).FirstOrDefault()!;
         }
         return effectEvt.Src;
     }

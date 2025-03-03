@@ -1,10 +1,12 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -26,15 +28,15 @@ internal class Instance : FightLogic
 
     private void FillSubLogics(AgentData agentData)
     {
-        var allTargetIDs = Enum.GetValues(typeof(ArcDPSEnums.TargetID)).Cast<int>();
+        var allTargetIDs = Enum.GetValues(typeof(TargetID)).Cast<int>();
         var blackList = new HashSet<int>()
         {
-            (int) ArcDPSEnums.TargetID.Artsariiv,
-            (int) ArcDPSEnums.TargetID.Deimos,
-            (int) ArcDPSEnums.TargetID.ConjuredAmalgamate,
-            (int) ArcDPSEnums.TargetID.CALeftArm_CHINA,
-            (int) ArcDPSEnums.TargetID.CARightArm_CHINA,
-            (int) ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA,
+            (int)TargetID.Artsariiv,
+            (int)TargetID.Deimos,
+            (int)TargetID.ConjuredAmalgamate,
+            (int)TargetID.CALeftArm_CHINA,
+            (int)TargetID.CARightArm_CHINA,
+            (int)TargetID.ConjuredAmalgamate_CHINA,
         };
         foreach (int targetID in allTargetIDs)
         {
@@ -48,7 +50,7 @@ internal class Instance : FightLogic
                 _targetIDs.Add(targetID);
                 /*switch (targetID)
                 {
-                    case (int)ArcDPSEnums.TargetID.AiKeeperOfThePeak:
+                    case (int)TargetID.AiKeeperOfThePeak:
                         //_subLogics.Add(new AiKeeperOfThePeak(targetID));
                         break;
                     default:
@@ -96,8 +98,8 @@ internal class Instance : FightLogic
             _trashMobs.AddRange(logic.TrashMobs);
             _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
         }
-        _targets.RemoveAll(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget));
-        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.Instance, true);
+        _targets.RemoveAll(x => x.IsSpecies(TargetID.DummyTarget));
+        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
@@ -269,7 +271,7 @@ internal class Instance : FightLogic
         }
         return new[] { GenericTriggerID };
     }
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return [];
     }
