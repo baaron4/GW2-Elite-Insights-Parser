@@ -5,81 +5,6 @@ public static class ArcDPSEnums
 
     public const int ArcDPSPollingRate = 300;
 
-    internal static class GW2Builds
-    {
-        internal const ulong StartOfLife = ulong.MinValue;
-        //
-        internal const ulong HoTRelease = 54485;
-        internal const ulong November2016NightmareRelease = 69591;
-        internal const ulong February2017Balance = 72781;
-        internal const ulong May2017Balance = 76706;
-        internal const ulong July2017ShatteredObservatoryRelease = 79873;
-        internal const ulong September2017PathOfFireRelease = 82356;
-        internal const ulong December2017Balance = 84832;
-        internal const ulong February2018Balance = 86181;
-        internal const ulong May2018Balance = 88541;
-        internal const ulong July2018Balance = 90455;
-        internal const ulong August2018Balance = 92069;
-        internal const ulong October2018Balance = 92715;
-        internal const ulong November2018Rune = 93543;
-        internal const ulong December2018Balance = 94051;
-        internal const ulong March2019Balance = 95535;
-        internal const ulong April2019Balance = 96406;
-        internal const ulong June2019RaidRewards = 97235;
-        internal const ulong July2019Balance = 97950;
-        internal const ulong July2019Balance2 = 98248;
-        internal const ulong October2019Balance = 99526;
-        internal const ulong December2019Balance = 100690;
-        internal const ulong February2020Balance = 102321;
-        internal const ulong February2020Balance2 = 102389;
-        internal const ulong March2020Balance = 102724;
-        internal const ulong July2020Balance = 104844;
-        internal const ulong September2020SunquaPeakRelease = 106277;
-        internal const ulong May2021Balance = 115190;
-        internal const ulong May2021BalanceHotFix = 115728;
-        internal const ulong June2021Balance = 116210;
-        internal const ulong EODBeta1 = 118697;
-        internal const ulong EODBeta2 = 119939;
-        internal const ulong EODBeta3 = 121168;
-        internal const ulong EODBeta4 = 122479;
-        internal const ulong EODRelease = 125589;
-        internal const ulong March2022Balance = 126520;
-        internal const ulong March2022Balance2 = 127285;
-        internal const ulong May2022Balance = 128773;
-        internal const ulong June2022Balance = 130910;
-        internal const ulong June2022BalanceHotFix = 131084;
-        internal const ulong July2022FractalInstabilitiesRework = 131720;
-        internal const ulong August2022BalanceHotFix = 132359;
-        internal const ulong August2022Balance = 133322;
-        internal const ulong October2022Balance = 135242;
-        internal const ulong October2022BalanceHotFix = 135930;
-        internal const ulong November2022Balance = 137943;
-        internal const ulong February2023Balance = 141374;
-        internal const ulong May2023Balance = 145038;
-        internal const ulong May2023BalanceHotFix = 146069;
-        internal const ulong June2023Balance = 147734;
-        internal const ulong SOTOBetaAndSilentSurfNM = 147830;
-        internal const ulong July2023BalanceAndSilentSurfCM = 148697;
-        internal const ulong SOTOReleaseAndBalance = 150431;
-        internal const ulong September2023Balance = 151966;
-        internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
-        internal const ulong November2023Balance = 154949;
-        internal const ulong January2024Balance = 157732;
-        internal const ulong February2024NewWeapons = 158837;
-        internal const ulong February2024CerusCMHPFix = 158968;
-        internal const ulong March2024BalanceAndCerusLegendary = 159951;
-        internal const ulong May2024LonelyTowerFractalRelease = 163141;
-        internal const ulong June2024LonelyTowerCMRelease = 163807;
-        internal const ulong June2024Balance = 164824;
-        internal const ulong August2024JWRelease = 167136;
-        internal const ulong October2024Balance = 169300;
-        internal const ulong November2024MountBalriorRelease = 171452;
-        internal const ulong December2024MountBalriorNerfs = 172309;
-        internal const ulong February2025BalancePatch = 175086;
-        //
-        internal const ulong EndOfLife = ulong.MaxValue;
-    }
-
     internal static class ArcDPSBuilds
     {
         internal const int StartOfLife = int.MinValue;
@@ -552,26 +477,4 @@ public static class ArcDPSEnums
         return bt < (byte)IFF.Unknown ? (IFF)bt : IFF.Unknown;
     }
 
-    private const int ChestOfSouls = -29;
-    private const int SiegeChest = -34;
-    private const int CAChest = -41;
-    private const int ChestOfDesmina = -42;
-    private const int ChestOfPrisonCamp = -44;
-    private const int GrandStrikeChest = -52;
-
-    public enum ChestID : int
-    {
-        ChestOfPrisonCamp = ArcDPSEnums.ChestOfPrisonCamp,
-        ChestOfDesmina = ArcDPSEnums.ChestOfDesmina,
-        ChestOfSouls = ArcDPSEnums.ChestOfSouls,
-        SiegeChest = ArcDPSEnums.SiegeChest,
-        CAChest = ArcDPSEnums.CAChest,
-        GrandStrikeChest = ArcDPSEnums.GrandStrikeChest,
-        //
-        None = int.MaxValue,
-    };
-    public static ChestID GetChestID(int id)
-    {
-        return Enum.IsDefined(typeof(ChestID), id) ? (ChestID)id : ChestID.None;
-    }
 }

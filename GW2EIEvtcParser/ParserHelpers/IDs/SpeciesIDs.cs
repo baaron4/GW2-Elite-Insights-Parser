@@ -1,5 +1,9 @@
 ﻿namespace GW2EIEvtcParser;
 
+/// <summary>
+/// NPC and Gadget IDs.<br></br>
+/// Gadgets are stabilized with custom IDs.
+/// </summary>
 public static class SpeciesIDs
 {
     public enum TargetID : int
@@ -944,6 +948,18 @@ public static class SpeciesIDs
         Unknown,
     }
 
+    public enum ChestID : int
+    {
+        ChestOfPrisonCamp = SpeciesIDs.ChestOfPrisonCamp,
+        ChestOfDesmina = SpeciesIDs.ChestOfDesmina,
+        ChestOfSouls = SpeciesIDs.ChestOfSouls,
+        SiegeChest = SpeciesIDs.SiegeChest,
+        CAChest = SpeciesIDs.CAChest,
+        GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
+
+        None = int.MaxValue,
+    };
+
     public static TargetID GetTargetID(int id)
     {
         return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
@@ -959,8 +975,12 @@ public static class SpeciesIDs
         return Enum.IsDefined(typeof(MinionID), id) ? (MinionID)id : MinionID.Unknown;
     }
 
-    #region Custom IDs
+    public static ChestID GetChestID(int id)
+    {
+        return Enum.IsDefined(typeof(ChestID), id) ? (ChestID)id : ChestID.None;
+    }
 
+    #region Custom IDs
     private const int DummyTarget = -1;
     private const int HandOfErosion = -2;
     private const int HandOfEruption = -3;
@@ -989,22 +1009,22 @@ public static class SpeciesIDs
     private const int PoisonMushroom = -26;
     private const int SpearAggressionRevulsion = -27;
     private const int DragonOrb = -28;
-    
+    private const int ChestOfSouls = -29;
     private const int ShackledPrisoner = -30;
     private const int DemonicBond = -31;
     private const int BloodstoneShardRift = -32;
     private const int BloodstoneShardButton = -33;
-    
+    private const int SiegeChest = -34;
     private const int Mine = -35;
     private const int Environment = -36;
     private const int FerrousBomb = -37;
     private const int SanctuaryPrism = -38;
     private const int Torch = -39;
     private const int BoundIcebroodElemental = -40;
-    
-
+    private const int CAChest = -41;
+    private const int ChestOfDesmina = -42;
     private const int UnknownAnomaly = -43;
-    
+    private const int ChestOfPrisonCamp = -44;
     private const int SnowPile = -45;
     private const int Cage = -46;
     private const int Bombs = -47;
@@ -1012,7 +1032,7 @@ public static class SpeciesIDs
     private const int QadimPlatform = -49;
     private const int GravityBall = -50;
     private const int JormagMovingFrostBeam = -51;
-
+    private const int GrandStrikeChest = -52;
     private const int PermanentEmbodimentOfGluttony = -53;
     private const int PermanentEmbodimentOfRage = -54;
     private const int PermanentEmbodimentOfDespair = -55;
@@ -1030,6 +1050,5 @@ public static class SpeciesIDs
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
-
     #endregion
 }
