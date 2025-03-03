@@ -151,28 +151,23 @@ internal class ValeGuardian : SpiritVale
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out var distributedMagicEvents))
         {
-            int distributedMagicDuration = 6700;
-            //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
             foreach (EffectEvent distributedMagic in distributedMagicEvents)
             {
-                int start = (int)distributedMagic.Time;
-                int expectedEnd = start + distributedMagicDuration;
-                int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
-                var circle = new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(distributedMagic.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(expectedEnd));
+                // Effect duration is 6000, added 700 for the damage.
+                (long start, long end) lifespan = distributedMagic.ComputeLifespan(log, 6000);
+                lifespan.end = Math.Min(lifespan.end + 700, distributedMagic.Src.LastAware);
+                var circle = new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.2, new PositionConnector(distributedMagic.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
+
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out var magicSpikeEvents))
         {
-            //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
             foreach (EffectEvent magicSpike in magicSpikeEvents)
             {
-                int start = (int)magicSpike.Time;
-                int end = start + 2000;
-                var circle = new CircleDecoration(90, (start, end), Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
+                (long start, long end) lifespan = magicSpike.ComputeLifespan(log, 2000);
+                var circle = new CircleDecoration(90, lifespan, Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }
@@ -180,7 +175,7 @@ internal class ValeGuardian : SpiritVale
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
-        //var knownEffectsIDs = new HashSet<long>();
+
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.ValeGuardian:

@@ -576,10 +576,7 @@ internal class Deimos : BastionOfThePenitent
             case (int)ArcDPSEnums.TrashID.Tear:
                 break;
             case (int)ArcDPSEnums.TrashID.Hands:
-                if (!log.CombatData.HasEffectData)
-                {
-                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
-                }
+                replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.Oil:
                 if (!log.CombatData.HasEffectData)
@@ -700,8 +697,9 @@ internal class Deimos : BastionOfThePenitent
         AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay900Radius, 900);
         AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay1000Radius, 1000);
 
+        // This causes a discreet rendering + ghosting effect when Deimos pulls them in
         // Soul Feast - Hands
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosSoulFeast, out var soulFeasts))
+        /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosSoulFeast, out var soulFeasts))
         {
             foreach (EffectEvent effect in soulFeasts)
             {
@@ -709,6 +707,7 @@ internal class Deimos : BastionOfThePenitent
                 EnvironmentDecorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
+        */
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -746,6 +745,7 @@ internal class Deimos : BastionOfThePenitent
     /// <summary>
     /// Adds Rapid Decay oils to the combat replay.<br></br>
     /// Each effect lasts 1500ms, a new effect appears every 1000s, giving a 500ms overlap for a pulsating visual effect.
+    /// Duration overriden to 1000ms to remove the pulse effect, a position based check makes sure the "pulses" remain properly connected.
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="guid">Effect GUID of the different oil sizes.</param>
@@ -754,9 +754,28 @@ internal class Deimos : BastionOfThePenitent
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rapidDecay))
         {
+            var positionDict = new Dictionary<float, Dictionary<float, (long start, long end)>>();
             foreach (EffectEvent effect in rapidDecay)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 1500);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                if (positionDict.TryGetValue(effect.Position.X, out var yDict))
+                {
+                    if (yDict.TryGetValue(effect.Position.Y, out var previousLifeSpan))
+                    {
+                        if (Math.Abs(previousLifeSpan.end - lifespan.start) < 50)
+                        {
+                            lifespan.start = previousLifeSpan.end + 1;
+                        }
+                    } 
+                    yDict[effect.Position.Y] = lifespan;
+                } 
+                else
+                {
+                    positionDict[effect.Position.X] = new Dictionary<float, (long start, long end)>
+                    {
+                        [effect.Position.Y] = lifespan
+                    };
+                }
                 EnvironmentDecorations.AddWithBorder(new CircleDecoration(radius, lifespan, Colors.Black, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }

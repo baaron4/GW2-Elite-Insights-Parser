@@ -74,6 +74,8 @@ public static class MarkerGUIDs
         XOverhead
     };
 
-    // Other
+    // Sabetha
+    internal static readonly GUID SabethaCannonRedCrossSwordsMarker = new("09C2D6DFE68B004D928B1C76EF77D47E");
+    // Ura
     internal static readonly GUID UraTitanspawnGeyserMarker = new("2818A92C67388940B74D627979000D39");
 }

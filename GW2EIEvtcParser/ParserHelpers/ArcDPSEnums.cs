@@ -568,7 +568,7 @@ public static class ArcDPSEnums
     private const int PyreGuardianResolution = -13;
     private const int CASword = -14;
     private const int SubArtsariiv = -15;
-
+    private const int Cannon = -16;
     private const int TheDragonVoidZhaitan = -17;
     private const int TheDragonVoidSooWon = -18;
     private const int TheDragonVoidKralkatorrik = -19;
@@ -612,7 +612,7 @@ public static class ArcDPSEnums
     private const int PermanentEmbodimentOfEnvy = -57;
     private const int PermanentEmbodimentOfMalice = -58;
     private const int KryptisRift = -59;
-
+    private const int HeavyBomb = -60;
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
@@ -667,6 +667,8 @@ public static class ArcDPSEnums
         BanditSapper = 15423,
         BanditThug = 15397,
         BanditArsonist = 15421,
+        Cannon = ArcDPSEnums.Cannon,
+        HeavyBomb = ArcDPSEnums.HeavyBomb,
         // Slothasor
         Slubling1 = 16064,
         Slubling2 = 16071,
@@ -1225,7 +1227,6 @@ public static class ArcDPSEnums
         Nikare = 21105,
         Kenut = 21089,
         Qadim = 20934,
-        Freezie = 21333,
         Adina = 22006,
         Sabir = 21964,
         PeerlessQadim = 22000,
@@ -1233,6 +1234,7 @@ public static class ArcDPSEnums
         Decima = 26774,
         Ura = 26712,
         // Strike Missions
+        Freezie = 21333,
         IcebroodConstruct = 22154,
         VoiceOfTheFallen = 22343,
         ClawOfTheFallen = 22481,
