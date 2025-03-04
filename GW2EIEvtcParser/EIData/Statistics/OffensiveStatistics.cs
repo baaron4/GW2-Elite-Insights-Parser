@@ -13,24 +13,24 @@ public class OffensiveStatistics
     public readonly int DamageCount;
     public readonly int Damage;
 
-    public readonly int ConnectedDirectDamageCount;
-    public readonly int ConnectedDirectDmg;
+    public readonly int DirectDamageCount;
+    public readonly int DirectDamage;
 
-    public readonly int PowerCount;
+    public readonly int PowerDamageCount;
     public readonly int PowerDamage;
-    public readonly int PowerAbove90HPCount;
-    public readonly int PowerAbove90HPDamage;
+    public readonly int PowerDamageAbove90HPCount;
+    public readonly int PowerDamageAbove90HP;
 
     public readonly int LifeLeechDamageCount;
     public readonly int LifeLeechDamage;
 
-    public readonly int ConditionCount;
+    public readonly int ConditionDamageCount;
     public readonly int ConditionDamage;
-    public readonly int ConditionAbove90HPCount;
-    public readonly int ConditionAbove90HPDamage;
+    public readonly int ConditionDamageAbove90HPCount;
+    public readonly int ConditionDamageAbove90HP;
 
     public readonly int CritableDirectDamageCount;
-    public readonly int CriticalCount;
+    public readonly int CriticalDamageCount;
     public readonly int CriticalDamage;
 
     public readonly int FlankingCount;
@@ -45,15 +45,15 @@ public class OffensiveStatistics
     public readonly int KilledCount;
     public readonly int DownedCount;
 
-    public readonly int AgainstDownedCount;
+    public readonly int AgainstDownedDamageCount;
     public readonly int AgainstDownedDamage;
 
     public readonly int DownContribution;
+    public readonly int AppliedCrowdControlDownContribution;
+    public readonly double AppliedCrowdControlDurationDownContribution;
 
     public readonly int AppliedCrowdControl;
     public readonly double AppliedCrowdControlDuration;
-    public readonly int AppliedCrowdControlDownContribution;
-    public readonly double AppliedCrowdControlDurationDownContribution;
 
 
     internal OffensiveStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
@@ -96,12 +96,12 @@ public class OffensiveStatistics
                     }
                     if (dl.ConditionDamageBased(log))
                     {
-                        ConditionCount++;
+                        ConditionDamageCount++;
                         ConditionDamage += dl.HealthDamage;
                         if (dl.IsOverNinety)
                         {
-                            ConditionAbove90HPCount++;
-                            ConditionAbove90HPDamage += dl.HealthDamage;
+                            ConditionDamageAbove90HPCount++;
+                            ConditionDamageAbove90HP += dl.HealthDamage;
                         }
                     }
                     else
@@ -120,25 +120,25 @@ public class OffensiveStatistics
                             {
                                 if (dl.HasCrit)
                                 {
-                                    CriticalCount++;
+                                    CriticalDamageCount++;
                                     CriticalDamage += dl.HealthDamage;
                                 }
                                 CritableDirectDamageCount++;
                             }
-                            ConnectedDirectDamageCount++;
-                            ConnectedDirectDmg += dl.HealthDamage;
+                            DirectDamageCount++;
+                            DirectDamage += dl.HealthDamage;
                         }
-                        PowerCount++;
+                        PowerDamageCount++;
                         PowerDamage += dl.HealthDamage;
                         if (dl.IsOverNinety)
                         {
-                            PowerAbove90HPCount++;
-                            PowerAbove90HPDamage += dl.HealthDamage;
+                            PowerDamageAbove90HPCount++;
+                            PowerDamageAbove90HP += dl.HealthDamage;
                         }
                     }
                     if (dl.AgainstDowned)
                     {
-                        AgainstDownedCount++;
+                        AgainstDownedDamageCount++;
                         AgainstDownedDamage += dl.HealthDamage;
                     }
                     if (dl.AgainstMoving)

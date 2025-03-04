@@ -83,15 +83,33 @@ internal static class JsonStatisticsBuilder
     {
         jsonGameplayStats.TotalDamageCount = offStats.TotalDamageEventCount;
         jsonGameplayStats.TotalDmg = offStats.TotalDamageEventDamage;
+
         jsonGameplayStats.DirectDamageCount = offStats.DirectDamageEventCount;
         jsonGameplayStats.DirectDmg = offStats.DirectDamageEventDamage;
-        jsonGameplayStats.ConnectedDirectDamageCount = offStats.ConnectedDirectDamageCount;
-        jsonGameplayStats.ConnectedDirectDmg = offStats.ConnectedDirectDmg;
+
         jsonGameplayStats.ConnectedDamageCount = offStats.DamageCount;
         jsonGameplayStats.ConnectedDmg = offStats.Damage;
+
+        jsonGameplayStats.ConnectedDirectDamageCount = offStats.DirectDamageCount;
+        jsonGameplayStats.ConnectedDirectDmg = offStats.DirectDamage;
+
+        jsonGameplayStats.ConnectedPowerCount = offStats.PowerDamageCount;
+        jsonGameplayStats.ConnectedPowerDamage = offStats.PowerDamage;
+        jsonGameplayStats.ConnectedPowerAbove90HPCount = offStats.PowerDamageAbove90HPCount;
+        jsonGameplayStats.ConnectedPowerAbove90HPDamage = offStats.PowerDamageAbove90HP;
+
+        jsonGameplayStats.ConnectedLifeLeechCount = offStats.LifeLeechDamageCount;
+        jsonGameplayStats.ConnectedLifeLeechDamage = offStats.LifeLeechDamage;
+
+        jsonGameplayStats.ConnectedConditionCount = offStats.ConditionDamageCount;
+        jsonGameplayStats.ConnectedConditionDamage = offStats.ConditionDamage;
+        jsonGameplayStats.ConnectedConditionAbove90HPCount = offStats.ConditionDamageAbove90HPCount;
+        jsonGameplayStats.ConnectedConditionAbove90HPDamage = offStats.ConditionDamageAbove90HP;
+
         jsonGameplayStats.CritableDirectDamageCount = offStats.CritableDirectDamageCount;
-        jsonGameplayStats.CriticalRate = offStats.CriticalCount;
+        jsonGameplayStats.CriticalRate = offStats.CriticalDamageCount;
         jsonGameplayStats.CriticalDmg = offStats.CriticalDamage;
+
         jsonGameplayStats.FlankingRate = offStats.FlankingCount;
         jsonGameplayStats.GlanceRate = offStats.GlancingCount;
         jsonGameplayStats.AgainstMovingRate = offStats.AgainstMovingCount;
@@ -100,15 +118,17 @@ internal static class JsonStatisticsBuilder
         jsonGameplayStats.Evaded = offStats.EvadedCount;
         jsonGameplayStats.Interrupts = offStats.InterruptCount;
         jsonGameplayStats.Invulned = offStats.InvulnedCount;
+
         jsonGameplayStats.Killed = offStats.KilledCount;
         jsonGameplayStats.Downed = offStats.DownedCount;
-        jsonGameplayStats.DownContribution = offStats.DownContribution;
-        jsonGameplayStats.ConnectedConditionCount = offStats.ConditionCount;
-        jsonGameplayStats.ConnectedConditionAbove90HPCount = offStats.ConditionAbove90HPCount;
-        jsonGameplayStats.ConnectedPowerAbove90HPCount = offStats.PowerAbove90HPCount;
-        jsonGameplayStats.ConnectedPowerCount = offStats.PowerCount;
-        jsonGameplayStats.AgainstDownedCount = offStats.AgainstDownedCount;
+
+        jsonGameplayStats.AgainstDownedCount = offStats.AgainstDownedDamageCount;
         jsonGameplayStats.AgainstDownedDamage = offStats.AgainstDownedDamage;
+
+        jsonGameplayStats.DownContribution = offStats.DownContribution;
+        jsonGameplayStats.AppliedCrowdControlDownContribution = offStats.AppliedCrowdControlDownContribution;
+        jsonGameplayStats.AppliedCrowdControlDurationDownContribution = offStats.AppliedCrowdControlDurationDownContribution;
+
         jsonGameplayStats.AppliedCrowdControl = offStats.AppliedCrowdControl;
         jsonGameplayStats.AppliedCrowdControlDuration = offStats.AppliedCrowdControlDuration;
     }

@@ -270,11 +270,11 @@ public class CSVBuilder
             }
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
-            Math.Round((double)(statsBoss.CriticalCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalCount.ToString(),statsBoss.CriticalDamage.ToString(),
+            Math.Round((double)(statsBoss.CriticalDamageCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalDamageCount.ToString(),statsBoss.CriticalDamage.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-            Math.Round(statsBoss.FlankingCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
-            Math.Round(statsBoss.GlancingCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.GlancingCount.ToString(),
+            Math.Round(statsBoss.FlankingCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
+            Math.Round(statsBoss.GlancingCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.GlancingCount.ToString(),
             Math.Round(statsBoss.MissedCount / (double)statsBoss.DirectDamageEventCount * 100,1).ToString(),statsBoss.MissedCount.ToString(),
             statsBoss.DirectDamageEventCount.ToString(),
             statsBoss.InterruptCount.ToString(),statsBoss.InvulnedCount.ToString(),stats.SkillAnimationInterruptedDuration.ToString(),stats.SkillAnimationAfterCastInterruptedDuration.ToString(),stats.WeaponSwapCount.ToString() ]);
@@ -317,11 +317,11 @@ public class CSVBuilder
             }
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
-            Math.Round((double)(offStats.CriticalCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalCount.ToString(),offStats.CriticalDamage.ToString(),
+            Math.Round((double)(offStats.CriticalDamageCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalDamageCount.ToString(),offStats.CriticalDamage.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-            Math.Round(offStats.FlankingCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.FlankingCount.ToString(),
-            Math.Round(offStats.GlancingCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.GlancingCount.ToString(),
+            Math.Round(offStats.FlankingCount / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.FlankingCount.ToString(),
+            Math.Round(offStats.GlancingCount / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.GlancingCount.ToString(),
             Math.Round(offStats.MissedCount / (double)offStats.DirectDamageEventCount * 100,1).ToString(),offStats.MissedCount.ToString(),
             offStats.DirectDamageEventCount.ToString(),
             offStats.InterruptCount.ToString(),offStats.InvulnedCount.ToString(),gameplayStats.SkillAnimationInterruptedDuration.ToString(),gameplayStats.SkillAnimationAfterCastInterruptedDuration.ToString(),gameplayStats.WeaponSwapCount.ToString() ]);
