@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalBuffVolumesDictionary
+public class BuffVolumeByActorStatistics
 {
     private Dictionary<SingleActor, double> _incomingBy = [];
     public IReadOnlyDictionary<SingleActor, double> IncomingBy => _incomingBy;
@@ -11,13 +11,13 @@ public class FinalBuffVolumesDictionary
     public IReadOnlyDictionary<SingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
 
 
-    internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, SingleActor dstActor, long start, long end)
+    internal static (BuffVolumeByActorStatistics, BuffVolumeByActorStatistics) GetBuffVolumeByActor(ParsedEvtcLog log, Buff buff, SingleActor dstActor, long start, long end)
     {
         long phaseDuration = end - start;
         long activePhaseDuration = dstActor.GetActiveDuration(log, start, end);
 
-        var buffs = new FinalBuffVolumesDictionary();
-        var buffsActive = new FinalBuffVolumesDictionary();
+        var buffs = new BuffVolumeByActorStatistics();
+        var buffsActive = new BuffVolumeByActorStatistics();
 
         var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>();
         foreach ( var appliesEvent in applies)

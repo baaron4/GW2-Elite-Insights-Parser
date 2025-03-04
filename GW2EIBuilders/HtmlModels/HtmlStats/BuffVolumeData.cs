@@ -10,7 +10,7 @@ internal class BuffVolumeData
 {
     public List<BuffVolumeDataItem> Data { get; set; }
 
-    private BuffVolumeData(IReadOnlyDictionary<long, FinalActorBuffVolumes> buffVolumes, IReadOnlyList<Buff> listToUse)
+    private BuffVolumeData(IReadOnlyDictionary<long, BuffVolumeStatistics> buffVolumes, IReadOnlyList<Buff> listToUse)
     {
         Data = new List<BuffVolumeDataItem>(listToUse.Count);
         foreach (Buff buff in listToUse)
@@ -27,7 +27,7 @@ internal class BuffVolumeData
         }
     }
 
-    private BuffVolumeData(IReadOnlyDictionary<long, FinalBuffVolumesDictionary> buffVolumes, IReadOnlyList<Buff> listToUse, SingleActor actor)
+    private BuffVolumeData(IReadOnlyDictionary<long, BuffVolumeByActorStatistics> buffVolumes, IReadOnlyList<Buff> listToUse, SingleActor actor)
     {
         Data = new List<BuffVolumeDataItem>(listToUse.Count);
         foreach (Buff buff in listToUse)
@@ -51,7 +51,7 @@ internal class BuffVolumeData
         }
     }
 
-    private BuffVolumeData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, FinalActorBuffVolumes> volumes)
+    private BuffVolumeData(IReadOnlyList<Buff> listToUse, IReadOnlyDictionary<long, BuffVolumeStatistics> volumes)
     {
         Data = new List<BuffVolumeDataItem>(listToUse.Count);
         foreach (Buff buff in listToUse)
@@ -75,7 +75,7 @@ internal class BuffVolumeData
         }
     }
 
-    private BuffVolumeData(Spec spec, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, FinalActorBuffVolumes> volumes)
+    private BuffVolumeData(Spec spec, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, IReadOnlyDictionary<long, BuffVolumeStatistics> volumes)
     {
         Data = new List<BuffVolumeDataItem>(buffsBySpec[spec].Count);
         foreach (Buff buff in buffsBySpec[spec])
@@ -169,7 +169,7 @@ internal class BuffVolumeData
     // 
     private static List<BuffVolumeData> BuildBuffVolumeDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
-        IReadOnlyDictionary<long, FinalBuffVolumesDictionary> buffs = player.GetBuffVolumesDictionary(log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffVolumeByActorStatistics> buffs = player.GetBuffVolumesDictionary(log, phase.Start, phase.End);
         var list = new List<BuffVolumeData>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
@@ -191,7 +191,7 @@ internal class BuffVolumeData
 
     private static List<BuffVolumeData> BuildActiveBuffVolumeDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
-        IReadOnlyDictionary<long, FinalBuffVolumesDictionary> buffs = player.GetActiveBuffVolumesDictionary(log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffVolumeByActorStatistics> buffs = player.GetActiveBuffVolumesDictionary(log, phase.Start, phase.End);
         var list = new List<BuffVolumeData>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
@@ -213,20 +213,20 @@ internal class BuffVolumeData
     }
 
     /////
-    public static List<BuffVolumeData> BuildTargetCondiVolumeData(ParsedEvtcLog log, PhaseData phase, SingleActor actor)
+    public static List<BuffVolumeData> BuildTargetConditionVolumeData(ParsedEvtcLog log, PhaseData phase, SingleActor actor)
     {
         return BuildBuffVolumeDictionaryData(log, log.StatisticsHelper.PresentConditions, phase, actor);
     }
 
-    public static BuffVolumeData BuildTargetCondiIncomingVolumeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
+    public static BuffVolumeData BuildTargetConditionIncomingVolumeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
-        IReadOnlyDictionary<long, FinalActorBuffVolumes> buffs = target.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffVolumeStatistics> buffs = target.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffVolumeData(buffs, log.StatisticsHelper.PresentConditions);
     }
 
     public static BuffVolumeData BuildTargetBoonIncomingVolumeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
-        IReadOnlyDictionary<long, FinalActorBuffVolumes> buffs = target.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffVolumeStatistics> buffs = target.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffVolumeData(buffs, log.StatisticsHelper.PresentBoons);
     }
 }

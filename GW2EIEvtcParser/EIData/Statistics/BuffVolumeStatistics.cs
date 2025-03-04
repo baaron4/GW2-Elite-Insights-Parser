@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData;
 
 
-public class FinalActorBuffVolumes
+public class BuffVolumeStatistics
 {
     public double Incoming { get; internal set; }
     public double IncomingByExtension { get; internal set; }
@@ -12,7 +12,7 @@ public class FinalActorBuffVolumes
     public double Outgoing { get; internal set; }
     public double OutgoingByExtension { get; internal set; }
 
-    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForPlayers(IEnumerable<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+    internal static (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes) GetBuffVolumesForPlayers(IEnumerable<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
     {
 
         long phaseDuration = end - start;
@@ -26,8 +26,8 @@ public class FinalActorBuffVolumes
         }
 
         //TODO(Rennorb) @perf
-        var buffs = new Dictionary<long, FinalActorBuffVolumes>();
-        var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
+        var buffs = new Dictionary<long, BuffVolumeStatistics>();
+        var activeBuffs = new Dictionary<long, BuffVolumeStatistics>();
 
         foreach (Buff buff in buffsToTrack)
         {
@@ -83,8 +83,8 @@ public class FinalActorBuffVolumes
             totalOutgoingByExtension /= phaseDuration;
 
             //TODO(Rennorb) @perf
-            var uptime = new FinalActorBuffVolumes();
-            var uptimeActive = new FinalActorBuffVolumes();
+            var uptime = new BuffVolumeStatistics();
+            var uptimeActive = new BuffVolumeStatistics();
             buffs[buff.ID] = uptime;
             activeBuffs[buff.ID] = uptimeActive;
             if (buff.Type == BuffType.Duration)
@@ -115,10 +115,10 @@ public class FinalActorBuffVolumes
     }
 
 
-    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
+    internal static (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
     {
-        var buffs = new Dictionary<long, FinalActorBuffVolumes>();
-        var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
+        var buffs = new Dictionary<long, BuffVolumeStatistics>();
+        var activeBuffs = new Dictionary<long, BuffVolumeStatistics>();
 
         long phaseDuration = end - start;
         long playerActiveDuration = dstActor.GetActiveDuration(log, start, end);
@@ -189,8 +189,8 @@ public class FinalActorBuffVolumes
             totalOutgoing /= phaseDuration;
             totalOutgoingByExtension /= phaseDuration;
 
-            var uptime = new FinalActorBuffVolumes();
-            var uptimeActive = new FinalActorBuffVolumes();
+            var uptime = new BuffVolumeStatistics();
+            var uptimeActive = new BuffVolumeStatistics();
             buffs[buff.ID] = uptime;
             activeBuffs[buff.ID] = uptimeActive;
             if (buff.Type == BuffType.Duration)

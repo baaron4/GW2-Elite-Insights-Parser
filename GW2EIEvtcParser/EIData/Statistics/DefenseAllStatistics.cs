@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalDefensesAll : FinalDefenses
+public class DefenseAllStatistics : DefensePerTargetStatistics
 {
     public readonly int DownCount;
     public readonly long DownDuration;
@@ -11,7 +11,7 @@ public class FinalDefensesAll : FinalDefenses
     public readonly int DcCount;
     public readonly long DcDuration;
 
-    public FinalDefensesAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
+    public DefenseAllStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
         (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc, _) = actor.GetStatus(log);
 

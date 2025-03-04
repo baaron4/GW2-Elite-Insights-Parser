@@ -8,7 +8,7 @@ public class DeathRecap
     {
         public long ID { get; internal set; }
         public bool IndirectDamage { get; internal set; }
-        public string Src { get; internal set; }
+        public string SourceAgent { get; internal set; }
         public int Damage { get; internal set; }
         public int Time { get; internal set; }
     }
@@ -46,7 +46,7 @@ public class DeathRecap
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
                     ID = dl.SkillId,
                     Damage = dl.HealthDamage,
-                    Src = log.FindActor(ag).Character
+                    SourceAgent = log.FindActor(ag).Character
                 };
                 damage += dl.HealthDamage;
                 ToDown!.Add(item);
@@ -67,7 +67,7 @@ public class DeathRecap
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
                     ID = dl.SkillId,
                     Damage = dl.HealthDamage,
-                    Src = log.FindActor(ag).Character
+                    SourceAgent = log.FindActor(ag).Character
                 };
                 ToKill!.Add(item);
             }
@@ -88,7 +88,7 @@ public class DeathRecap
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
                     ID = dl.SkillId,
                     Damage = dl.HealthDamage,
-                    Src = log.FindActor(ag).Character
+                    SourceAgent = log.FindActor(ag).Character
                 };
                 damage += dl.HealthDamage;
                 ToKill!.Add(item);

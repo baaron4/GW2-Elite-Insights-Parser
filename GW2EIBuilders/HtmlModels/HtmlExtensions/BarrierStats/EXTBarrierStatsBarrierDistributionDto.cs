@@ -66,7 +66,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
         long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
         if (clList != null)
         {
-            (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
+            (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DamageDistributionDto.GetCastValues(clList, phase);
         }
 
         return [

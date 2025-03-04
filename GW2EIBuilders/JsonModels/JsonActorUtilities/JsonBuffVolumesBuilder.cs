@@ -20,7 +20,7 @@ internal static class JsonBuffVolumesBuilder
         return res;
     }
 
-    public static JsonBuffVolumesData BuildJsonBuffVolumesData(FinalActorBuffVolumes buffs, FinalBuffVolumesDictionary buffsDictionary)
+    public static JsonBuffVolumesData BuildJsonBuffVolumesData(BuffVolumeStatistics buffs, BuffVolumeByActorStatistics buffsDictionary)
     {
         var jsonBuffsUptimeData = new JsonBuffVolumesData
         {
