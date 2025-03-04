@@ -13,29 +13,41 @@ internal static class JsonStatisticsBuilder
         var jsonDefensesAll = new JsonDefensesAll
         {
             DamageTaken = defStats.DamageTaken,
+            DamageTakenCount = defStats.DamageTakenCount,
+            DamageBarrier = defStats.DamageBarrier,
+            DamageBarrierCount = defStats.DamageBarrierCount,
             ConditionDamageTaken = defStats.ConditionDamageTaken,
-            StrikeDamageTaken = defStats.StrikeDamageTaken,
-            LifeLeechDamageTaken = defStats.LifeLeechDamageTaken,
+            ConditionDamageTakenCount = defStats.ConditionDamageTakenCount,
             PowerDamageTaken = defStats.PowerDamageTaken,
+            PowerDamageTakenCount = defStats.PowerDamageTakenCount,
+            LifeLeechDamageTaken = defStats.LifeLeechDamageTaken,
+            LifeLeechDamageTakenCount = defStats.LifeLeechDamageTakenCount,
+            StrikeDamageTaken = defStats.StrikeDamageTaken,
+            StrikeDamageTakenCount = defStats.StrikeDamageTakenCount,
             DownedDamageTaken = defStats.DownedDamageTaken,
+            DownedDamageTakenCount = defStats.DownedDamageTakenCount,
             BreakbarDamageTaken = defStats.BreakbarDamageTaken,
+            BreakbarDamageTakenCount = defStats.BreakbarDamageTakenCount,
+
             BlockedCount = defStats.BlockedCount,
             DodgeCount = defStats.DodgeCount,
             MissedCount = defStats.MissedCount,
             EvadedCount = defStats.EvadedCount,
             InvulnedCount = defStats.InvulnedCount,
-            DamageBarrier = defStats.DamageBarrier,
             InterruptedCount = defStats.InterruptedCount,
+
             DownCount = defStats.DownCount,
             DownDuration = defStats.DownDuration,
             DeadCount = defStats.DeadCount,
             DeadDuration = defStats.DeadDuration,
             DcCount = defStats.DcCount,
             DcDuration = defStats.DcDuration,
+
             BoonStrips = defStats.BoonStrips,
             BoonStripsTime = defStats.BoonStripsTime,
             ConditionCleanses = defStats.ConditionCleanses,
             ConditionCleansesTime = defStats.ConditionCleansesTime,
+
             ReceivedCrowdControl = defStats.ReceivedCrowdControl,
             ReceivedCrowdControlDuration = defStats.ReceivedCrowdControlDuration
         };

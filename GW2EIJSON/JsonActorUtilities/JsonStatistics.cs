@@ -15,63 +15,88 @@ public static class JsonStatistics
         /// <summary>
         /// Total damage taken
         /// </summary>
-        public long DamageTaken;
+        public int DamageTaken;
+        /// <summary>
+        /// Number of damage taken events
+        /// </summary>
+        public int DamageTakenCount;
         /// <summary>
         /// Total condition damage taken
         /// </summary>
-        public long ConditionDamageTaken;
+        public int ConditionDamageTaken;
+        /// <summary>
+        /// Number of condition damage taken events
+        /// </summary>
+        public int ConditionDamageTakenCount;
         /// <summary>
         /// Total power damage taken
         /// </summary>
-        public long PowerDamageTaken;
+        public int PowerDamageTaken;
+        /// <summary>
+        /// Number of power damage taken events
+        /// </summary>
+        public int PowerDamageTakenCount;
         /// <summary>
         /// Total strike damage taken
         /// </summary>
-        public long StrikeDamageTaken;
+        public int StrikeDamageTaken;
+        /// <summary>
+        /// Number of strike damage taken events
+        /// </summary>
+        public int StrikeDamageTakenCount;
         /// <summary>
         /// Total life leech damage taken
         /// </summary>
-        public long LifeLeechDamageTaken;
+        public int LifeLeechDamageTaken;
+        /// <summary>
+        /// Number of life leech damage taken event
+        /// </summary>
+        public int LifeLeechDamageTakenCount;
         /// <summary>
         /// Total damage taken while downed
         /// </summary>
-        public long DownedDamageTaken;
-
+        public int DownedDamageTaken;
+        /// <summary>
+        /// Number of damage taken while downed event
+        /// </summary>
+        public int DownedDamageTakenCount;
+        /// <summary>
+        /// Total barrier damage taken
+        /// </summary>
+        public long DamageBarrier;
+        /// <summary>
+        /// Number of barrier damage taken events
+        /// </summary>
+        public int DamageBarrierCount;
         /// <summary>
         /// Total breakbar damage taken
         /// </summary>
         public double BreakbarDamageTaken;
+        /// <summary>
+        /// Number of breakbar damage taken events
+        /// </summary>
+        public int BreakbarDamageTakenCount;
 
         /// <summary>
         /// Number of blocks
         /// </summary>
         public int BlockedCount;
-
         /// <summary>
         /// Number of evades
         /// </summary>
         public int EvadedCount;
-
         /// <summary>
         /// Number of misses
         /// </summary>
         public int MissedCount;
-
         /// <summary>
         /// Number of dodges
         /// </summary>
         public int DodgeCount;
-
         /// <summary>
         /// Number of time an incoming attack was negated by invul
         /// </summary>
         public int InvulnedCount;
-
-        /// <summary>
-        /// Damage done against barrier
-        /// </summary>
-        public int DamageBarrier;
-
         /// <summary>
         /// Number of time interrupted
         /// </summary>
@@ -81,31 +106,27 @@ public static class JsonStatistics
         /// Number of time downed
         /// </summary>
         public int DownCount;
-
         /// <summary>
         /// Time passed in downstate
         /// </summary>
         public long DownDuration;
-
         /// <summary>
         /// Number of time died
         /// </summary>
         public int DeadCount;
-
         /// <summary>
         /// Time passed in dead state
         /// </summary>
         public long DeadDuration;
-
         /// <summary>
         /// Number of time disconnected
         /// </summary>
         public int DcCount;
-
         /// <summary>
         /// Time passed in disconnected state
         /// </summary>
         public long DcDuration;
+
         /// <summary>
         /// Number of time boons were stripped
         /// </summary>
@@ -122,6 +143,7 @@ public static class JsonStatistics
         /// Total duration of conditions cleansed
         /// </summary>
         public double ConditionCleansesTime;
+
         /// <summary>
         /// Number of time crowd controlled
         /// </summary>
