@@ -34,7 +34,7 @@ internal abstract class ShatteredObservatory : FractalLogic
         {
             ( GW2Builds.July2017ShatteredObservatoryRelease, 100),
             ( GW2Builds.September2020SunquaPeakRelease, 99),
-            ( GW2Builds.SOTOBetaAndSilentSurfNM, 98),
+            ( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, 98),
         });
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }

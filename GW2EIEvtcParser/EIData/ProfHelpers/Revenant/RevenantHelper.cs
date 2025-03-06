@@ -150,8 +150,8 @@ internal static class RevenantHelper
         new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryDwarfStance),
         new Buff("Legendary Demon Stance", LegendaryDemonStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryDemonStance),
         new Buff("Legendary Assassin Stance", LegendaryAssassinStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryAssassinStance),
-        new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Traits
         new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, TraitImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),

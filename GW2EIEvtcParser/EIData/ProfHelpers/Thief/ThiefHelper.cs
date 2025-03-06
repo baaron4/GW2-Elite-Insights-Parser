@@ -77,7 +77,7 @@ internal static class ThiefHelper
         // Skills
         new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, SkillImages.PrepareShadowPortal),
         new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.ShadowPortal),
-        new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, SkillImages.Kneel).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, SkillImages.Kneel).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Signets
         new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, SkillImages.SignetOfMalice),
         new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, SkillImages.AssassinsSignet),

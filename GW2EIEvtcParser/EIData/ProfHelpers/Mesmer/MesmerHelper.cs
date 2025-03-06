@@ -161,7 +161,7 @@ internal static class MesmerHelper
         new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, SkillImages.PortalEnter),
         new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PortalEnter),
         new Buff("Illusion of Life", IllusionOfLifeBuff, Source.Mesmer, BuffClassification.Support, SkillImages.IllusionOfLife),
-        new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, SkillImages.DimensionalAperture),
         // Traits
         new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.FencersFinesse),

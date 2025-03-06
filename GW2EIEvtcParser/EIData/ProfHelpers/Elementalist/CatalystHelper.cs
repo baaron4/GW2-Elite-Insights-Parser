@@ -16,18 +16,18 @@ internal static class CatalystHelper
     [
         new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(InvigoratingAirSkill, InvigoratingAirBuff)
-            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new EffectCastFinder(DeployJadeSphereFire, EffectGUIDs.CatalystDeployFireJadeSphere)
             .UsingSrcSpecChecker(Spec.Catalyst),
         new EffectCastFinder(DeployJadeSphereAir, EffectGUIDs.CatalystDeployAirJadeSphere)
@@ -44,7 +44,7 @@ internal static class CatalystHelper
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.March2022Balance2, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.March2022Balance2, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance),
         new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.PvE)
@@ -70,13 +70,13 @@ internal static class CatalystHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, SkillImages.FlameWheel)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Icy Coil", IcyCoilBuff, Source.Catalyst, BuffClassification.Other, SkillImages.IcyCoil)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Crescent Wind", CrescentWindBuff, Source.Catalyst, BuffClassification.Other, SkillImages.CrescentWind)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Rocky Loop", RockyLoopBuff, Source.Catalyst, BuffClassification.Other, SkillImages.RockyLoop)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Relentless Fire", RelentlessFire, Source.Catalyst, BuffClassification.Other, SkillImages.RelentlessFire),
         new Buff("Shattering Ice", ShatteringIce, Source.Catalyst, BuffClassification.Other, SkillImages.ShatteringIce),
         new Buff("Invigorating Air", InvigoratingAirBuff, Source.Catalyst, BuffClassification.Other, SkillImages.InvigoratingAir),

@@ -152,10 +152,7 @@ public static class GW2Builds
     internal const ulong May2023BalanceHotFix = 146069;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2023-06-27
-    internal const ulong June2023Balance = 147734;
-
-    // https://wiki.guildwars2.com/wiki/Game_updates/2023-06-27
-    internal const ulong SOTOBetaAndSilentSurfNM = 147734;
+    internal const ulong June2023BalanceAndSOTOBetaAndSilentSurfNM = 147734;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2023-07-18
     internal const ulong July2023BalanceAndSilentSurfCM = 148697;

@@ -176,7 +176,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.All)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
+            .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -184,7 +184,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -192,7 +192,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.PvE)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -217,7 +217,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() > 600
             , DamageModifierMode.All)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
+            .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -225,7 +225,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() > 600
             , DamageModifierMode.PvE)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -233,7 +233,7 @@ internal static class RangerHelper
                 && (currentPosition - currentTargetPosition).Length() > 600
             , DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -254,8 +254,8 @@ internal static class RangerHelper
         // Skirmishing
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
         // Nature Magic
         // We can't check buffs on minions yet
@@ -316,7 +316,7 @@ internal static class RangerHelper
         new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SharpenSpines),
         new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.Guard),
         new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, SkillImages.SearchAndRescue),
-        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Traits
         new Buff("Attack of Opportunity", AttackOfOpportunity, Source.Ranger, BuffClassification.Other, TraitImages.MomentOfClarity),
         new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, TraitImages.ClarionBond),

@@ -19,7 +19,7 @@ internal abstract class SunquaPeak : FractalLogic
         AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
         {
             ( GW2Builds.September2020SunquaPeakRelease, 100),
-            ( GW2Builds.SOTOBetaAndSilentSurfNM, 99),
+            ( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, 99),
         });
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }

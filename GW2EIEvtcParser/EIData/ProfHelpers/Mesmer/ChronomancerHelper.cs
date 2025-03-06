@@ -37,7 +37,7 @@ internal static class ChronomancerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.ContinuumSplit),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];

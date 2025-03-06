@@ -80,7 +80,7 @@ internal static class HeraldHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [         
         // Skills
-        new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Facets
         new Buff("Facet of Light", FacetOfLightBuff, Source.Herald, BuffClassification.Other, SkillImages.FacetOfLight),
         new Buff("Facet of Light (Traited)", FacetOfLightTraited, Source.Herald, BuffClassification.Other, SkillImages.FacetOfLight), //Lingering buff with Draconic Echo trait

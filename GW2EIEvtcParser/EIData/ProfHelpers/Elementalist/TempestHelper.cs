@@ -34,9 +34,9 @@ internal static class TempestHelper
         new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.June2023Balance),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_TempestuousAriaStrike, TempestuousAria, "Tempestuous Aria (Strike)", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_TempestuousAriaCondition, TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
@@ -59,7 +59,7 @@ internal static class TempestHelper
         new Buff("Static Charge", StaticCharge, Source.Tempest, BuffClassification.Offensive, SkillImages.OverloadAir),
         new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, SkillImages.HeatSync),
         new Buff("Tempestuous Aria", TempestuousAria, Source.Tempest, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.TempestuousAria)
-            .WithBuilds(GW2Builds.June2023Balance),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
 
 

@@ -91,7 +91,7 @@ internal static class DeadeyeHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, SkillImages.Kneel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Kneeling", Kneeling, Source.Deadeye, BuffClassification.Other, SkillImages.Kneel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, SkillImages.DeadeyesMark),
     ];
 

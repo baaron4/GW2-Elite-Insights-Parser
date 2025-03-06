@@ -63,19 +63,19 @@ internal static class ElementalistHelper
         new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
             .UsingToNotSpecChecker(Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
             .UsingToNotSpecChecker(Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
             .UsingToNotSpecChecker(Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
             .UsingToNotSpecChecker(Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Spear
         new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
     ];
@@ -135,7 +135,7 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.December2018Balance)
             .UsingApproximate(true),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM, GW2Builds.November2023Balance),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.PvE)
@@ -221,13 +221,13 @@ internal static class ElementalistHelper
         new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfElementalPowerEarth),
         // Hammer
         new Buff("Flame Wheel", FlameWheelBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FlameWheel)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Icy Coil", IcyCoilBuff, Source.Elementalist, BuffClassification.Other, SkillImages.IcyCoil)
-            .WithBuilds( GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Crescent Wind", CrescentWindBuff, Source.Elementalist, BuffClassification.Other, SkillImages.CrescentWind)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, SkillImages.RockyLoop)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Pistol
         new Buff("Fire Bullet", FireBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
             .WithBuilds(GW2Builds.February2024NewWeapons),

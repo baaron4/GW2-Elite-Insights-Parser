@@ -21,9 +21,9 @@ internal static class GearDamageModifiers
         new DamageLogDamageModifier(Mod_EagleRune, "Eagle Rune", "6% if target <50% HP", DamageSource.NoPets, 6.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.SuperiorRuneOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
         new DamageLogDamageModifier(Mod_ThiefRune, "Thief Rune", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_ThiefRune, "Thief Rune", "10% while flanking or against defiant", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.June2023Balance, GW2Builds.SOTOReleaseAndBalance),
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_StrengthRune, Might, "Strength Rune", "5% under might", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_FireRune, FireAura, "Fire Rune", "10% under fire aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfFire, DamageModifierMode.All)
