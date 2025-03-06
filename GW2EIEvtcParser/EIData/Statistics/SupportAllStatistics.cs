@@ -2,13 +2,13 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalSupportAll : FinalSupport
+public class SupportAllStatistics : SupportPerAllyStatistics
 {
     //public long allHeal;
-    public readonly int Resurrects;
+    public readonly int ResurrectCount;
     public readonly double ResurrectTime;
 
-    public readonly int StunBreak;
+    public readonly int StunBreakCount;
     public readonly double RemovedStunDuration;
 
     private static (int Count, long Duration) GetReses(ParsedEvtcLog log, SingleActor actor, long start, long end)
@@ -26,14 +26,14 @@ public class FinalSupportAll : FinalSupport
         return reses;
     }
 
-    internal FinalSupportAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
+    internal SupportAllStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
         var resArray = GetReses(log, actor, start, end);
-        Resurrects = resArray.Count;
+        ResurrectCount = resArray.Count;
         ResurrectTime = Math.Round((double)resArray.Duration / 1000, ParserHelper.TimeDigit);
         foreach (StunBreakEvent sbe in log.CombatData.GetStunBreakEvents(actor.AgentItem))
         {
-            StunBreak++;
+            StunBreakCount++;
             RemovedStunDuration += sbe.RemainingDuration;
         }
         RemovedStunDuration = Math.Round(RemovedStunDuration / 1000, ParserHelper.TimeDigit);

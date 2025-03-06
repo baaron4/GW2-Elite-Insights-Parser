@@ -8,7 +8,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities;
 /// </summary>
 internal static class JsonPlayerBuffOutgoingVolumesBuilder
 {
-    public static JsonBuffOutgoingVolumesData BuildJsonBuffsOutgoingVolumesData(FinalActorBuffVolumes stats)
+    public static JsonBuffOutgoingVolumesData BuildJsonBuffsOutgoingVolumesData(BuffVolumeStatistics stats)
     {
         var jsonBuffsGenerationData = new JsonBuffOutgoingVolumesData
         {

@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 namespace GW2EIEvtcParser.EIData;
 
 
-public class FinalActorBuffs
+public class BuffStatistics
 {
     public double Uptime { get; internal set; }
     public double Presence { get; internal set; }
@@ -15,7 +15,7 @@ public class FinalActorBuffs
     public double ByExtension { get; internal set; }
     public double Extended { get; internal set; }
 
-    internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
     {
         long phaseDuration = end - start;
 
@@ -30,8 +30,8 @@ public class FinalActorBuffs
 
         var buffsToTrack = new HashSet<Buff>(buffDistributionPerPlayer.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
 
-        var buffs = new Dictionary<long, FinalActorBuffs>();
-        var activeBuffs = new Dictionary<long, FinalActorBuffs>();
+        var buffs = new Dictionary<long, BuffStatistics>();
+        var activeBuffs = new Dictionary<long, BuffStatistics>();
 
         foreach (Buff boon in buffsToTrack)
         {
@@ -93,8 +93,8 @@ public class FinalActorBuffs
                 totalExtension        /= phaseDuration;
                 totalExtended         /= phaseDuration;
 
-                var uptime = new FinalActorBuffs();
-                var uptimeActive = new FinalActorBuffs();
+                var uptime = new BuffStatistics();
+                var uptimeActive = new BuffStatistics();
                 buffs[boon.ID] = uptime;
                 activeBuffs[boon.ID] = uptimeActive;
                 if (boon.Type == BuffType.Duration)
@@ -142,10 +142,10 @@ public class FinalActorBuffs
     }
 
 
-    internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) GetBuffsForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
+    internal static (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs) GetBuffsForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
     {
-        var buffs = new Dictionary<long, FinalActorBuffs>();
-        var activeBuffs = new Dictionary<long, FinalActorBuffs>();
+        var buffs = new Dictionary<long, BuffStatistics>();
+        var activeBuffs = new Dictionary<long, BuffStatistics>();
 
         BuffDistribution buffDistribution = dstActor.GetBuffDistribution(log, start, end);
         IReadOnlyDictionary<long, long> buffPresence = dstActor.GetBuffPresence(log, start, end);
@@ -156,7 +156,7 @@ public class FinalActorBuffs
         {
             if (buffDistribution.HasBuffID(buff.ID))
             {
-                var uptime = new FinalActorBuffs
+                var uptime = new BuffStatistics
                 {
                     Uptime = 0,
                     Generation = 0,
@@ -166,7 +166,7 @@ public class FinalActorBuffs
                     ByExtension = 0,
                     Extended = 0
                 };
-                var uptimeActive = new FinalActorBuffs
+                var uptimeActive = new BuffStatistics
                 {
                     Uptime = 0,
                     Generation = 0,

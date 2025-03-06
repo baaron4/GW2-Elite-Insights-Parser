@@ -241,83 +241,83 @@ internal class PhaseDto
 
     // helper methods
 
-    private static GameplayStatDataItem GetGameplayStatData(FinalGameplayStats stats)
+    private static GameplayStatDataItem GetGameplayStatData(GameplayStatistics stats)
     {
         return [
-                stats.TimeWasted,
-                stats.Wasted,
-                stats.TimeSaved,
-                stats.Saved,
-                stats.SwapCount,
-                Math.Round(stats.StackDist, 2),
-                Math.Round(stats.DistToCom, 2),
+                stats.SkillAnimationInterruptedDuration,
+                stats.SkillAnimationInterruptedCount,
+                stats.SkillAnimationAfterCastInterruptedDuration,
+                stats.SkillAnimationAfterCastInterruptedCount,
+                stats.WeaponSwapCount,
+                Math.Round(stats.DistanceToCenterOfSquad, 2),
+                Math.Round(stats.DistanceToCommander, 2),
                 stats.SkillCastUptime,
-                stats.SkillCastUptimeNoAA
+                stats.SkillCastUptimeNoAutoAttack
         ];
     }
 
-    private static OffensiveStatDataItem GetOffensiveStatData(FinalOffensiveStats stats)
+    private static OffensiveStatDataItem GetOffensiveStatData(OffensiveStatistics stats)
     {
         return [
-                stats.DirectDamageCount,
+                stats.DirectDamageEventCount,
                 stats.CritableDirectDamageCount,
-                stats.CriticalCount,
-                stats.CriticalDmg,
+                stats.CriticalDamageCount,
+                stats.CriticalDamage,
                 stats.FlankingCount,
-                stats.GlanceCount,
-                stats.Missed,
-                stats.Interrupts,
-                stats.Invulned,
-                stats.Evaded,
-                stats.Blocked,
-                stats.ConnectedDirectDamageCount,
-                stats.Killed,
-                stats.Downed,
+                stats.GlancingCount,
+                stats.MissedCount,
+                stats.InterruptCount,
+                stats.InvulnedCount,
+                stats.EvadedCount,
+                stats.BlockedCount,
+                stats.DirectDamageCount,
+                stats.KilledCount,
+                stats.DownedCount,
                 stats.AgainstMovingCount,
-                stats.ConnectedDamageCount,
-                stats.TotalDamageCount,
+                stats.DamageCount,
+                stats.TotalDamageEventCount,
                 stats.DownContribution,
-                stats.ConnectedDmg,
-                stats.ConnectedDirectDmg,
-                stats.ConnectedPowerCount,
-                stats.ConnectedPowerAbove90HPCount,
-                stats.ConnectedConditionCount,
-                stats.ConnectedConditionAbove90HPCount,
-                stats.AgainstDownedCount,
+                stats.Damage,
+                stats.DirectDamage,
+                stats.PowerDamageCount,
+                stats.PowerDamageAbove90HPCount,
+                stats.ConditionDamageCount,
+                stats.ConditionDamageAbove90HPCount,
+                stats.AgainstDownedDamageCount,
                 stats.AgainstDownedDamage,
-                stats.TotalDmg,
+                stats.TotalDamageEventDamage,
                 stats.AppliedCrowdControl,
                 stats.AppliedCrowdControlDuration
             ];
     }
 
-    private static DPSStatDataItem GetDPSStatData(FinalDPS dpsAll)
+    private static DPSStatDataItem GetDPSStatData(DamageStatistics dpsAll)
     {
         return [
                 dpsAll.Damage,
                 dpsAll.PowerDamage,
-                dpsAll.CondiDamage,
+                dpsAll.ConditionDamage,
                 dpsAll.BreakbarDamage
             ];
     }
 
-    private static SupportStatDataItem GetSupportStatData(FinalToPlayersSupport support)
+    private static SupportStatDataItem GetSupportStatData(SupportStatistics support)
     {
         return [
-                support.CondiCleanse,
-                support.CondiCleanseTime,
-                support.CondiCleanseSelf,
-                support.CondiCleanseTimeSelf,
-                support.BoonStrips,
-                support.BoonStripsTime,
-                support.Resurrects,
+                support.ConditionCleanseCount,
+                support.ConditionCleanseTime,
+                support.ConditionCleanseSelfCount,
+                support.ConditionCleanseTimeSelf,
+                support.BoonStripCount,
+                support.BoonStripTime,
+                support.ResurrectCount,
                 support.ResurrectTime,
-                support.StunBreak,
+                support.StunBreakCount,
                 support.RemovedStunDuration
         ];
     }
 
-    private static DefensiveStatDataItem GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
+    private static DefensiveStatDataItem GetDefenseStatData(DefenseAllStatistics defenses, PhaseData phase)
     {
         int downCount = 0;
         string downTooltip = "0% Downed";
@@ -362,7 +362,7 @@ internal class PhaseDto
         var list = new List<DPSStatDataItem>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
-            FinalDPS dpsAll = actor.GetDPSStats(log, phase.Start, phase.End);
+            DamageStatistics dpsAll = actor.GetDamageStats(log, phase.Start, phase.End);
             list.Add(GetDPSStatData(dpsAll));
         }
         return list;
@@ -378,7 +378,7 @@ internal class PhaseDto
 
             foreach (SingleActor target in phase.Targets.Keys)
             {
-                playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
+                playerData.Add(GetDPSStatData(actor.GetDamageStats(target, log, phase.Start, phase.End)));
             }
             list.Add(playerData);
         }
@@ -390,7 +390,7 @@ internal class PhaseDto
         var list = new List<GameplayStatDataItem>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
-            FinalGameplayStats stats = actor.GetGameplayStats(log, phase.Start, phase.End);
+            GameplayStatistics stats = actor.GetGameplayStats(log, phase.Start, phase.End);
             list.Add(GetGameplayStatData(stats));
         }
         return list;
@@ -401,7 +401,7 @@ internal class PhaseDto
         var list = new List<OffensiveStatDataItem>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
-            FinalOffensiveStats stats = actor.GetOffensiveStats(null, log, phase.Start, phase.End);
+            OffensiveStatistics stats = actor.GetOffensiveStats(null, log, phase.Start, phase.End);
             list.Add(GetOffensiveStatData(stats));
         }
         return list;
@@ -416,7 +416,7 @@ internal class PhaseDto
             var playerData = new List<OffensiveStatDataItem>(phase.Targets.Count);
             foreach (SingleActor target in phase.Targets.Keys)
             {
-                FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
+                OffensiveStatistics statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
                 playerData.Add(GetOffensiveStatData(statsTarget));
             }
             list.Add(playerData);
@@ -430,7 +430,7 @@ internal class PhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            FinalDefensesAll defenses = actor.GetDefenseStats(log, phase.Start, phase.End);
+            DefenseAllStatistics defenses = actor.GetDefenseStats(log, phase.Start, phase.End);
             list.Add(GetDefenseStatData(defenses, phase));
         }
 
@@ -443,7 +443,7 @@ internal class PhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            FinalToPlayersSupport support = actor.GetToPlayerSupportStats(log, phase.Start, phase.End);
+            SupportStatistics support = actor.GetToAllySupportStats(log, phase.Start, phase.End);
             list.Add(GetSupportStatData(support));
         }
         return list;

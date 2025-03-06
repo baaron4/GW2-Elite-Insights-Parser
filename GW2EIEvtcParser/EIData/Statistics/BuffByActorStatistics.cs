@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class FinalBuffsDictionary
+public class BuffByActorStatistics
 {
     private readonly Dictionary<SingleActor, double> _generatedBy = [];
     public IReadOnlyDictionary<SingleActor, double> GeneratedBy => _generatedBy;
@@ -18,10 +18,10 @@ public class FinalBuffsDictionary
     public IReadOnlyDictionary<SingleActor, double> ExtendedFrom => _extendedFrom;
 
 
-    internal static (FinalBuffsDictionary, FinalBuffsDictionary) GetFinalBuffsDictionary(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
+    internal static (BuffByActorStatistics, BuffByActorStatistics) GetBuffByActor(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
     {
-        var buffs = new FinalBuffsDictionary();
-        var buffsActive = new FinalBuffsDictionary();
+        var buffs = new BuffByActorStatistics();
+        var buffsActive = new BuffByActorStatistics();
         foreach (SingleActor actor in buffDistribution.GetSrcs(buff.ID, log))
         {
             long gen = buffDistribution.GetGeneration(buff.ID, actor.AgentItem);

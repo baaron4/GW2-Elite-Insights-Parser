@@ -13,16 +13,16 @@ public class OutgoingDamageModifier : DamageModifier
 
     public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
-        FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
+        DamageStatistics damageData = actor.GetDamageStats(t, log, start, end);
         return (CompareType) switch
         {
             DamageType.All                => DmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage,
-            DamageType.Condition          => DmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage,
+            DamageType.Condition          => DmgSrc == DamageSource.All ? damageData.ConditionDamage : damageData.ActorConditionDamage,
             DamageType.Power              => DmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage,
             DamageType.LifeLeech          => DmgSrc == DamageSource.All ? damageData.LifeLeechDamage : damageData.ActorLifeLeechDamage,
             DamageType.Strike             => DmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage,
-            DamageType.StrikeAndCondition => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage,
-            DamageType.StrikeAndConditionAndLifeLeech => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage + damageData.ActorLifeLeechDamage,
+            DamageType.StrikeAndCondition => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.ConditionDamage : damageData.ActorStrikeDamage + damageData.ActorConditionDamage,
+            DamageType.StrikeAndConditionAndLifeLeech => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.ConditionDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage,
             _ => throw new NotImplementedException("Not implemented damage type " + CompareType),
         };
     }

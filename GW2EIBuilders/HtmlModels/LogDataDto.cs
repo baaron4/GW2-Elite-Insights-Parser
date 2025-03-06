@@ -158,7 +158,7 @@ internal class LogDataDto
             {
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
-                    IReadOnlyDictionary<long, FinalActorBuffs> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
+                    IReadOnlyDictionary<long, BuffStatistics> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(actor))
                     {
                         if (boons.TryGetValue(boon.ID, out var uptime))
