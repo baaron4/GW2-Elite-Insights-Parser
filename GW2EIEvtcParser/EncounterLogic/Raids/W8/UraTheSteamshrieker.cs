@@ -151,15 +151,24 @@ internal class UraTheSteamshrieker : MountBalrior
             remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Bloodstone shards
-        var bloodstoneShards = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2 && x.FirstAware > 0)
-            .Distinct();
-        foreach (var shard in bloodstoneShards)
+        var bloodstoneShardMarkerGUID = combatData
+            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID &&
+                ArcDPSEnums.GetContentLocal((byte)x.OverstackValue) == ArcDPSEnums.ContentLocal.Marker &&
+                MarkerGUIDs.UraBloodstoneShardMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (bloodstoneShardMarkerGUID != null)
         {
-            shard.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard, agentData);
-            shard.OverrideType(AgentItem.AgentType.NPC, agentData);
+            var bloodstoneShardAgents = combatData
+                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == bloodstoneShardMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var toxicAgent in bloodstoneShardAgents)
+            {
+                toxicAgent.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard, agentData);
+                toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 

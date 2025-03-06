@@ -78,4 +78,5 @@ public static class MarkerGUIDs
     internal static readonly GUID SabethaCannonRedCrossSwordsMarker = new("09C2D6DFE68B004D928B1C76EF77D47E");
     // Ura
     internal static readonly GUID UraTitanspawnGeyserMarker = new("2818A92C67388940B74D627979000D39");
+    internal static readonly GUID UraBloodstoneShardMarker = new("27BBF2F636CEE64683A0AF5BEB7A9E54");
 }
