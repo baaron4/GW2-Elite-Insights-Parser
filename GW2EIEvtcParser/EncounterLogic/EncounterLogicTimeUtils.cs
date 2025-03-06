@@ -1,7 +1,9 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -46,10 +48,10 @@ internal static class EncounterLogicTimeUtils
     {
         AgentItem mainTarget = (agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? agentData.GetNPCsByID(id).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
         upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, upperLimit, mainTarget);
-        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
+        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
         if (enterCombat != null)
         {
-            CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
+            CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
             if (exitCombat != null)
             {
                 return mainTarget.FirstAware;
@@ -102,9 +104,9 @@ internal static class EncounterLogicTimeUtils
         }
     }
 
-    internal static void SetSuccessByChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, FightData fightData)
+    internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, FightData fightData)
     {
-        if (chestID == ArcDPSEnums.ChestID.None)
+        if (chestID == ChestID.None)
         {
             return;
         }

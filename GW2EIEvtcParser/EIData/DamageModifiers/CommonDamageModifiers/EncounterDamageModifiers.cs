@@ -1,8 +1,8 @@
 ﻿using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 

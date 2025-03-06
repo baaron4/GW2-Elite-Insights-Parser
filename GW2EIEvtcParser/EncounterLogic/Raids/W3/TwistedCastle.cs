@@ -2,10 +2,12 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -41,7 +43,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -50,14 +52,14 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID(ArcDPSEnums.TrashID.HauntingStatue);
+            IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID(TrashID.HauntingStatue);
             long start = long.MaxValue;
             foreach (AgentItem statue in statues)
             {
-                CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(statue));
+                CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(statue));
                 if (enterCombat != null)
                 {
                     start = Math.Min(start, enterCombat.Time);
@@ -76,15 +78,15 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-           ArcDPSEnums.TrashID.HauntingStatue,
+           TrashID.HauntingStatue,
            //ParseEnum.TrashIDS.CastleFountain
         ];
     }
@@ -97,7 +99,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
     {
         switch (npc.ID)
         {
-            case (int)ArcDPSEnums.TrashID.HauntingStatue:
+            case (int)TrashID.HauntingStatue:
                 var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                 if (replay.Rotations.Count != 0)
                 {
@@ -135,7 +137,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override int GetTriggerID()
     {
-        return (int)ArcDPSEnums.TrashID.HauntingStatue;
+        return (int)TrashID.HauntingStatue;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

@@ -2,8 +2,10 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -59,7 +61,7 @@ internal static class EncounterLogicUtils
         return hpUpdate.HealthPercent < threshold - 2;
     }
 
-    internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
+    internal static bool TargetHPPercentUnderThreshold(TargetID targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
     }
@@ -107,7 +109,7 @@ internal static class EncounterLogicUtils
 
     internal static ErrorEvent? GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
     {
-        if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
+        if (evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation)
         {
             return null;
         }
@@ -139,7 +141,7 @@ internal static class EncounterLogicUtils
         if (padEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
         {
             BuffEvent last = filtered.Last();
-            filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+            filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
         }
         return filtered;
     }
@@ -188,15 +190,15 @@ internal static class EncounterLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static AgentItem? FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
+    internal static AgentItem? FindChestGadget(ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
     {
-        if (chestID == ArcDPSEnums.ChestID.None)
+        if (chestID == ChestID.None)
         {
             return null;
         }
 
         var positions = combatData.Where(evt => {
-            if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
+            if (evt.IsStateChange != StateChange.Position)
             {
                 return false;
             }
@@ -217,7 +219,7 @@ internal static class EncounterLogicUtils
         });
 
         var velocities = combatData.Where(evt => {
-            if (evt.IsStateChange == ArcDPSEnums.StateChange.Velocity)
+            if (evt.IsStateChange == StateChange.Velocity)
             {
                 AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
                 if (agent.Type != AgentItem.AgentType.Gadget)
@@ -243,7 +245,7 @@ internal static class EncounterLogicUtils
 
     internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
     {
-        var positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+        var positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == StateChange.Position);
         if (positionEvt != null)
         {
             var position = MovementEvent.GetPoint3D(positionEvt).XY();

@@ -2,12 +2,14 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -26,7 +28,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
             new PlayerDstHitMechanic([VoidPoolNM, VoidPoolCM], "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
             new PlayerDstSkillMechanic([HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM], "Targeted Expulsion", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Targeted Expulsion (Spread)", "Targeted Expulsion (Spread)", 150).UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
-            new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0).UsingChecker((de, log) => (de.To.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || de.To.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
+            new PlayerSrcAllHitsMechanic("Orb Push", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0).UsingChecker((de, log) => (de.To.IsSpecies(TrashID.PushableVoidAmalgamate) || de.To.IsSpecies(TrashID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
             new PlayerDstHitMechanic([Shockwave, TsunamiSlam1, TsunamiSlam2], "Shockwaves", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150).UsingAchievementEligibility(true),
             new PlayerDstHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], "Void Explosion", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
             new PlayerDstHitMechanic(MagicDischarge, "Magic Discharge", new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
@@ -92,7 +94,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             new PlayerDstHitMechanic(GlacialSlam, "Glacial Slam", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
         ]);
         Icon = EncounterIconHarvestTemple;
-        ChestID = ArcDPSEnums.ChestID.GrandStrikeChest;
+        ChestID = ChestID.GrandStrikeChest;
         Extension = "harvsttmpl";
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000004;
@@ -115,32 +117,32 @@ internal class HarvestTemple : EndOfDragonsStrike
             long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TrashID.VoidGiant:
+                case (int)TrashID.VoidGiant:
                     giants.Add(target);
                     break;
-                case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
-                case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
-                case (int)ArcDPSEnums.TrashID.VoidObliterator:
-                case (int)ArcDPSEnums.TrashID.VoidGoliath:
+                case (int)TrashID.VoidSaltsprayDragon:
+                case (int)TrashID.VoidTimeCaster:
+                case (int)TrashID.VoidObliterator:
+                case (int)TrashID.VoidGoliath:
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, target.Character, target, false));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                case (int)TargetID.TheDragonVoidJormag:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Jormag", target, true));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                case (int)TargetID.TheDragonVoidKralkatorrik:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Kralkatorrik", target, true));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                case (int)TargetID.TheDragonVoidMordremoth:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target, true));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
+                case (int)TargetID.TheDragonVoidPrimordus:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordus", target, true));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target, true));
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
@@ -163,7 +165,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                case (int)TargetID.TheDragonVoidZhaitan:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target, true));
                     break;
@@ -197,7 +199,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             phases.Add(subPhase);
         }
         int purificationID = 0;
-        foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)))
+        foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(TrashID.PushableVoidAmalgamate) || x.IsSpecies(TrashID.KillableVoidAmalgamate)))
         {
             long end;
             DeadEvent? deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
@@ -238,10 +240,10 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem firstAmalgamate = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).MinBy(x => x.FirstAware);
+            AgentItem firstAmalgamate = agentData.GetNPCsByID(TrashID.VoidAmalgamate).MinBy(x => x.FirstAware);
             if (firstAmalgamate != null)
             {
                 startToUse = firstAmalgamate.FirstAware;
@@ -254,19 +256,19 @@ internal class HarvestTemple : EndOfDragonsStrike
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
-            (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon,
-            (int)ArcDPSEnums.TrashID.VoidObliterator,
-            (int)ArcDPSEnums.TrashID.VoidGoliath,
-            (int)ArcDPSEnums.TrashID.VoidTimeCaster,
-            (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
-            (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate,
-            (int)ArcDPSEnums.TrashID.VoidGiant
+            (int)TargetID.TheDragonVoidJormag,
+            (int)TargetID.TheDragonVoidKralkatorrik,
+            (int)TargetID.TheDragonVoidMordremoth,
+            (int)TargetID.TheDragonVoidPrimordus,
+            (int)TargetID.TheDragonVoidSooWon,
+            (int)TargetID.TheDragonVoidZhaitan,
+            (int)TrashID.VoidSaltsprayDragon,
+            (int)TrashID.VoidObliterator,
+            (int)TrashID.VoidGoliath,
+            (int)TrashID.VoidTimeCaster,
+            (int)TrashID.PushableVoidAmalgamate,
+            (int)TrashID.KillableVoidAmalgamate,
+            (int)TrashID.VoidGiant
         ];
     }
 
@@ -274,19 +276,19 @@ internal class HarvestTemple : EndOfDragonsStrike
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidJormag, 0 },
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik, 0 },
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth, 0 },
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus, 0 },
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan, 0 },
-            {(int)ArcDPSEnums.TargetID.TheDragonVoidSooWon, 0 },
-            {(int)ArcDPSEnums.TrashID.PushableVoidAmalgamate, 1 },
-            {(int)ArcDPSEnums.TrashID.KillableVoidAmalgamate, 1 },
-            {(int)ArcDPSEnums.TrashID.VoidSaltsprayDragon, 1 },
-            {(int)ArcDPSEnums.TrashID.VoidObliterator, 1 },
-            {(int)ArcDPSEnums.TrashID.VoidGoliath, 1 },
-            {(int)ArcDPSEnums.TrashID.VoidTimeCaster, 1 },
-            {(int)ArcDPSEnums.TrashID.VoidGiant, 1},
+            {(int)TargetID.TheDragonVoidJormag, 0 },
+            {(int)TargetID.TheDragonVoidKralkatorrik, 0 },
+            {(int)TargetID.TheDragonVoidMordremoth, 0 },
+            {(int)TargetID.TheDragonVoidPrimordus, 0 },
+            {(int)TargetID.TheDragonVoidZhaitan, 0 },
+            {(int)TargetID.TheDragonVoidSooWon, 0 },
+            {(int)TrashID.PushableVoidAmalgamate, 1 },
+            {(int)TrashID.KillableVoidAmalgamate, 1 },
+            {(int)TrashID.VoidSaltsprayDragon, 1 },
+            {(int)TrashID.VoidObliterator, 1 },
+            {(int)TrashID.VoidGoliath, 1 },
+            {(int)TrashID.VoidTimeCaster, 1 },
+            {(int)TrashID.VoidGiant, 1},
         };
     }
 
@@ -295,29 +297,29 @@ internal class HarvestTemple : EndOfDragonsStrike
         return [ ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.ZhaitansReach,
-            ArcDPSEnums.TrashID.VoidAbomination,
-            ArcDPSEnums.TrashID.VoidAmalgamate,
-            ArcDPSEnums.TrashID.VoidBrandbomber,
-            ArcDPSEnums.TrashID.VoidBurster,
-            ArcDPSEnums.TrashID.VoidColdsteel,
-            ArcDPSEnums.TrashID.VoidMelter,
-            ArcDPSEnums.TrashID.VoidRotswarmer,
-            ArcDPSEnums.TrashID.VoidSkullpiercer,
-            ArcDPSEnums.TrashID.VoidStormseer,
-            ArcDPSEnums.TrashID.VoidTangler,
-            ArcDPSEnums.TrashID.VoidWarforged1,
-            ArcDPSEnums.TrashID.VoidWarforged2,
-            ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate,
-            ArcDPSEnums.TrashID.DragonEnergyOrb,
-            ArcDPSEnums.TrashID.GravityBall,
-            ArcDPSEnums.TrashID.JormagMovingFrostBeam,
-            ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth,
-            ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter,
+            TrashID.ZhaitansReach,
+            TrashID.VoidAbomination,
+            TrashID.VoidAmalgamate,
+            TrashID.VoidBrandbomber,
+            TrashID.VoidBurster,
+            TrashID.VoidColdsteel,
+            TrashID.VoidMelter,
+            TrashID.VoidRotswarmer,
+            TrashID.VoidSkullpiercer,
+            TrashID.VoidStormseer,
+            TrashID.VoidTangler,
+            TrashID.VoidWarforged1,
+            TrashID.VoidWarforged2,
+            TrashID.DragonBodyVoidAmalgamate,
+            TrashID.DragonEnergyOrb,
+            TrashID.GravityBall,
+            TrashID.JormagMovingFrostBeam,
+            TrashID.JormagMovingFrostBeamNorth,
+            TrashID.JormagMovingFrostBeamCenter,
         ];
     }
 
@@ -329,7 +331,7 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         // no bouny chest detection, the reward is delayed
-        SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
+        SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
         if (soowon != null)
         {
             AttackTargetEvent? attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
@@ -376,7 +378,7 @@ internal class HarvestTemple : EndOfDragonsStrike
     {
         FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
         var maxHPEvents = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
             .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key);
         //
@@ -385,24 +387,24 @@ internal class HarvestTemple : EndOfDragonsStrike
             foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
             {
                 AgentItem dragonOrb = dragonOrbMaxHP.Src;
-                if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
+                if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                 {
                     dragonOrb.OverrideName("Dragon Orb");
-                    dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb, agentData);
+                    dragonOrb.OverrideID(TrashID.DragonEnergyOrb, agentData);
                 }
             }
         }
         //
-        var idsToUse = new List<ArcDPSEnums.TargetID> {
-            ArcDPSEnums.TargetID.TheDragonVoidJormag,
-            ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-            ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
-            ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-            ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
-            ArcDPSEnums.TargetID.TheDragonVoidSooWon,
+        var idsToUse = new List<TargetID> {
+            TargetID.TheDragonVoidJormag,
+            TargetID.TheDragonVoidPrimordus,
+            TargetID.TheDragonVoidKralkatorrik,
+            TargetID.TheDragonVoidMordremoth,
+            TargetID.TheDragonVoidZhaitan,
+            TargetID.TheDragonVoidSooWon,
         };
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
-        var targetableEvents = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var targetableEvents = combatData.Where(y => y.IsStateChange == StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
         attackTargetEvents = attackTargetEvents.Where(x =>
         {
             AgentItem atAgent = x.AttackTarget;
@@ -436,12 +438,12 @@ internal class HarvestTemple : EndOfDragonsStrike
                 {
                     break;
                 }
-                ArcDPSEnums.TargetID id = idsToUse[index++];
+                TargetID id = idsToUse[index++];
                 long start = targetOn.Time;
                 long end = dragonVoid.LastAware;
                 TargetableEvent? targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                 // Don't split Soo won into two
-                if (targetOff != null && id != ArcDPSEnums.TargetID.TheDragonVoidSooWon)
+                if (targetOff != null && id != TargetID.TheDragonVoidSooWon)
                 {
                     end = targetOff.Time;
                 }
@@ -450,7 +452,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                     (evt, from, to) =>
                     {
-                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
+                        if (evt.IsStateChange == StateChange.HealthUpdate)
                         {
                             double healthPercent = HealthUpdateEvent.GetHealthPercent(evt);
                             // Avoid making the gadget go back to 100% hp on "death"
@@ -470,51 +472,51 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         //
-        IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate);
+        IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID(TrashID.VoidAmalgamate);
         foreach (AgentItem voidAmal in voidAmalgamates)
         {
             if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
             {
-                voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate, agentData);
+                voidAmal.OverrideID(TrashID.PushableVoidAmalgamate, agentData);
             }
         }
         AgentItem dragonBodyVoidAmalgamate = voidAmalgamates.MaxBy(x => x.LastAware - x.FirstAware);
         if (dragonBodyVoidAmalgamate != null)
         {
-            dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate, agentData);
+            dragonBodyVoidAmalgamate.OverrideID(TrashID.DragonBodyVoidAmalgamate, agentData);
         }
         // Gravity Ball - Timecaster gadget
-        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out var timecaster))
+        if (agentData.TryGetFirstAgentItem(TrashID.VoidTimeCaster, out var timecaster))
         {
             if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
             {
                 var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src);
-                var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y)));
+                var candidateVelocities = combatData.Where(x => x.IsStateChange == StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y)));
                 const int referenceLength = 200;
                 var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
                 foreach (AgentItem ball in gravityBalls_)
                 {
                     ball.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    ball.OverrideID(ArcDPSEnums.TrashID.GravityBall, agentData);
+                    ball.OverrideID(TrashID.GravityBall, agentData);
                     ball.SetMaster(timecaster);
                 }
             }
         }
         {
-            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.TheDragonVoidJormag, out var jormagAgent))
+            if (agentData.TryGetFirstAgentItem(TargetID.TheDragonVoidJormag, out var jormagAgent))
             {
                 var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                     .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
                     .Distinct()
-                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && MovementEvent.GetPointXY(evt) != default) > 2);
+                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == StateChange.Velocity && MovementEvent.GetPointXY(evt) != default) > 2);
                 foreach (AgentItem frostBeam in frostBeams)
                 {
-                    frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam, agentData);
+                    frostBeam.OverrideID(TrashID.JormagMovingFrostBeam, agentData);
                     frostBeam.OverrideType(AgentItem.AgentType.NPC, agentData);
                     frostBeam.SetMaster(jormagAgent);
                 }
-                var knownFrostBeams = agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth).ToList();
-                knownFrostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter));
+                var knownFrostBeams = agentData.GetNPCsByID(TrashID.JormagMovingFrostBeamNorth).ToList();
+                knownFrostBeams.AddRange(agentData.GetNPCsByID(TrashID.JormagMovingFrostBeamCenter));
                 knownFrostBeams.ForEach(x => x.SetMaster(jormagAgent));
             }
         }
@@ -538,7 +540,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         {
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+                case (int)TargetID.TheDragonVoidJormag:
                     target.OverrideName("The JormagVoid");
                     jormag = target;
                     needRedirect = true;
@@ -552,7 +554,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     jormagDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && jormagAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+                case (int)TargetID.TheDragonVoidKralkatorrik:
                     target.OverrideName("The KralkatorrikVoid");
                     kralk = target;
                     needRedirect = true;
@@ -564,7 +566,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     kralkDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && kralkAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+                case (int)TargetID.TheDragonVoidMordremoth:
                     target.OverrideName("The MordremothVoid");
                     mord = target;
                     needRedirect = true;
@@ -575,7 +577,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     mordDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && mordAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
+                case (int)TargetID.TheDragonVoidPrimordus:
                     target.OverrideName("The PrimordusVoid");
                     primordus = target;
                     needRedirect = true;
@@ -586,7 +588,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     primordusDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && primordusAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+                case (int)TargetID.TheDragonVoidSooWon:
                     target.OverrideName("The SooWonVoid");
                     soowon = target;
                     needRedirect = true;
@@ -603,7 +605,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     soowonDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && soowonAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+                case (int)TargetID.TheDragonVoidZhaitan:
                     target.OverrideName("The ZhaitanVoid");
                     zhaitan = target;
                     needRedirect = true;
@@ -616,8 +618,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                     };
                     zhaitanDamagingAgents = new HashSet<ulong>(combatData.Where(x => x.IsDamage() && zhaiAttacks.Contains(x.SkillID)).Select(x => x.SrcAgent));
                     break;
-                case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
-                case (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate:
+                case (int)TrashID.PushableVoidAmalgamate:
+                case (int)TrashID.KillableVoidAmalgamate:
                     target.OverrideName("Heart " + (++purificationID));
                     break;
             }
@@ -706,7 +708,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate:
+            case (int)TrashID.PushableVoidAmalgamate:
                 // Purification Zones
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationZones, out var purificationZoneEffects))
                 {
@@ -828,7 +830,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 // Breakbar Active
-                BreakbarStateEvent? breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
+                BreakbarStateEvent? breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == BreakbarState.Active);
                 if (breakbar != null)
                 {
                     var breakbarStates = log.CombatData.GetBreakbarPercentEvents(target.AgentItem).Where(x => x.Time >= breakbar.Time);
@@ -837,7 +839,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:
+            case (int)TargetID.TheDragonVoidJormag:
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField, out var meteorEffects))
                 {
                     foreach (EffectEvent effect in meteorEffects)
@@ -863,9 +865,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeam:
-            case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth:
-            case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter:
+            case (int)TrashID.JormagMovingFrostBeam:
+            case (int)TrashID.JormagMovingFrostBeamNorth:
+            case (int)TrashID.JormagMovingFrostBeamCenter:
                 VelocityEvent? frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
                 // Beams are immobile at spawn for around 3 seconds
                 if (frostBeamMoveStartVelocity != null)
@@ -881,11 +883,11 @@ internal class HarvestTemple : EndOfDragonsStrike
                     replay.Trim(0, 0);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
+            case (int)TrashID.DragonEnergyOrb:
                 (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
                 replay.Decorations.Add(new CircleDecoration(160, (dragonOrbStart, dragonOrbEnd), "rgba(200, 50, 0, 0.5)", new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus:
+            case (int)TargetID.TheDragonVoidPrimordus:
                 // Lava Slam - Chin Indicator
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePrimordusLavaSlamIndicator, out var lavaSlams))
                 {
@@ -941,7 +943,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik:
+            case (int)TargetID.TheDragonVoidKralkatorrik:
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamIndicator, out var kralkBeamEffects))
                 {
                     foreach (EffectEvent effect in kralkBeamEffects)
@@ -987,9 +989,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate:
+            case (int)TrashID.DragonBodyVoidAmalgamate:
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidAmalgamate:
+            case (int)TrashID.VoidAmalgamate:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleInfluenceOfTheVoidPool, out var poolEffects))
                 {
                     if (poolEffects.Count != 0)
@@ -1010,7 +1012,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         EffectEvent lastEffect = poolEffects.Last();
                         (long start, long end) lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
                         (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
-                        SingleActor? nextPurificationOrb = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
+                        SingleActor? nextPurificationOrb = Targets.Where(x => x.IsSpecies(TrashID.PushableVoidAmalgamate) || x.IsSpecies(TrashID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
                         long nextPurifcationOrbStart = long.MaxValue;
                         if (nextPurificationOrb != null)
                         {
@@ -1026,7 +1028,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth:
+            case (int)TargetID.TheDragonVoidMordremoth:
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact, out var mordremothPoisonEffects))
                 {
                     foreach (EffectEvent effect in mordremothPoisonEffects)
@@ -1047,7 +1049,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan:
+            case (int)TargetID.TheDragonVoidZhaitan:
                 // Putrid Deluge
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeImpact, out var putridDelugeImpacts))
                 {
@@ -1092,7 +1094,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
+            case (int)TargetID.TheDragonVoidSooWon:
                 // Claw Swipe
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonClaw, out var sooWonClawEffects))
                 {
@@ -1276,13 +1278,13 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidWarforged1:
-            case (int)ArcDPSEnums.TrashID.VoidWarforged2:
+            case (int)TrashID.VoidWarforged1:
+            case (int)TrashID.VoidWarforged2:
                 #if DEBUG_EFFECTS
                     CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
                 #endif
                 break;
-            case (int)ArcDPSEnums.TrashID.ZhaitansReach:
+            case (int)TrashID.ZhaitansReach:
                 // Thrash - Circle that pulls in
                 var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashHT1 || x.SkillId == ZhaitansReachThrashHT2);
                 foreach (CastEvent c in thrash)
@@ -1301,7 +1303,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidBrandbomber:
+            case (int)TrashID.VoidBrandbomber:
                 // Branded Artillery
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidBrandbomberBrandedArtillery, out var brandedArtilleryAoEs))
                 {
@@ -1327,7 +1329,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidTimeCaster:
+            case (int)TrashID.VoidTimeCaster:
                 // Gravity Crush - Indicator
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidTimecasterGravityCrushIndicator, out var gravityCrushIndicators))
                 {
@@ -1349,13 +1351,13 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.GravityBall:
+            case (int)TrashID.GravityBall:
                 // Setting the first aware to + 1600 due to the duration of the warning effect
                 (long start, long end) lifespanBall = (target.FirstAware + 1600, target.LastAware);
                 var perimeter = (CircleDecoration)new CircleDecoration(320, 300, lifespanBall, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false);
                 replay.Decorations.Add(perimeter);
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidGiant:
+            case (int)TrashID.VoidGiant:
                 // Death Scream - Fear
                 var deathScreams = casts.Where(x => x.SkillId == DeathScream);
                 foreach (CastEvent c in deathScreams)
@@ -1396,7 +1398,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidSaltsprayDragon:
+            case (int)TrashID.VoidSaltsprayDragon:
                 // Call Lightning
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidSaltsprayDragonCallLightning, out var callLightnings))
                 {
@@ -1518,7 +1520,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidAbomination:
+            case (int)TrashID.VoidAbomination:
                 // Abomination Swipe - Launch
                 var abominationSwipes = casts.Where(x => x.SkillId == AbominationSwipe);
                 foreach (CastEvent c in abominationSwipes)
@@ -1534,7 +1536,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     replay.Decorations.AddWithGrowing(cone, supposedEndCast);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidObliterator:
+            case (int)TrashID.VoidObliterator:
                 // Charge - Indicator
                 var charges = casts.Where(x => x.SkillId == VoidObliteratorChargeWindup);
                 foreach (CastEvent c in charges)
@@ -1632,7 +1634,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.VoidGoliath:
+            case (int)TrashID.VoidGoliath:
                 // Glacial Slam - Cast Indicator
                 var glacialSlams = casts.Where(x => x.SkillId == GlacialSlam);
                 foreach (CastEvent c in glacialSlams)
@@ -1669,12 +1671,12 @@ internal class HarvestTemple : EndOfDragonsStrike
     private SingleActor? FindActiveOrNextDragonVoid(long time)
     {
         var dragonVoidIDs = new List<int> {
-            (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
-            (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
+            (int)TargetID.TheDragonVoidJormag,
+            (int)TargetID.TheDragonVoidPrimordus,
+            (int)TargetID.TheDragonVoidKralkatorrik,
+            (int)TargetID.TheDragonVoidMordremoth,
+            (int)TargetID.TheDragonVoidZhaitan,
+            (int)TargetID.TheDragonVoidSooWon,
         };
         SingleActor? activeDragon = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
         return activeDragon ?? FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware >= time);
@@ -1820,17 +1822,17 @@ internal class HarvestTemple : EndOfDragonsStrike
     {
         var targetIDs = new HashSet<int>()
             {
-                (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
-                (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
+                (int)TargetID.TheDragonVoidJormag,
+                (int)TargetID.TheDragonVoidKralkatorrik,
+                (int)TargetID.TheDragonVoidMordremoth,
+                (int)TargetID.TheDragonVoidPrimordus,
+                (int)TargetID.TheDragonVoidZhaitan,
             };
         if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
         {
             return FightData.EncounterMode.CM;
         }
-        IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidMelter);
+        IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID(TrashID.VoidMelter);
         if (voidMelters.Count > 5)
         {
             long firstAware = voidMelters[0].FirstAware;
@@ -1840,7 +1842,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         // fallback for late logs
-        if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+        if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen) != null || agentData.GetNPCsByID(TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
         {
             return FightData.EncounterMode.CM;
         }
@@ -1867,7 +1869,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     private static bool CustomCheckVoidwalkerEligibility(ParsedEvtcLog log)
     {
-        IReadOnlyList<AgentItem> orbs = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TrashID.PushableVoidAmalgamate);
+        IReadOnlyList<AgentItem> orbs = log.AgentData.GetNPCsByID((int)TrashID.PushableVoidAmalgamate);
 
         foreach (AgentItem orb in orbs)
         {

@@ -2,10 +2,12 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -37,27 +39,27 @@ internal class SpiritRace : SpiritVale
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.DummyTarget,
-            (int)ArcDPSEnums.TargetID.EtherealBarrier,
+            (int)TargetID.DummyTarget,
+            (int)TargetID.EtherealBarrier,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.WallOfGhosts,
-            ArcDPSEnums.TrashID.AngeredSpiritSR,
-            ArcDPSEnums.TrashID.AngeredSpiritSR2,
-            ArcDPSEnums.TrashID.EnragedSpiritSR,
-            ArcDPSEnums.TrashID.DerangedSpiritSR,
-            ArcDPSEnums.TrashID.DerangedSpiritSR2,
+            TrashID.WallOfGhosts,
+            TrashID.AngeredSpiritSR,
+            TrashID.AngeredSpiritSR2,
+            TrashID.EnragedSpiritSR,
+            TrashID.DerangedSpiritSR,
+            TrashID.DerangedSpiritSR2,
         ];
     }
 
     internal override int GetTriggerID()
     {
-        return (int)ArcDPSEnums.TrashID.WallOfGhosts;
+        return (int)TrashID.WallOfGhosts;
     }
 
     protected override ReadOnlySpan<int> GetUniqueNPCIDs()
@@ -67,7 +69,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -81,14 +83,14 @@ internal class SpiritRace : SpiritVale
             return base.GetPhases(log, requirePhases);
         }
         List<PhaseData> phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.EtherealBarrier)));
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EtherealBarrier)));
         return phases;
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
 
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TrashID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts == null)
         {
             return FightData.EncounterStartStatus.Late;
@@ -105,10 +107,10 @@ internal class SpiritRace : SpiritVale
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TrashID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
-            foreach(var @event in combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
+            foreach(var @event in combatData.Where(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
             {
                 if(MovementEvent.GetPointXY(@event) != default)
                 {
@@ -123,7 +125,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var maxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000);
+        var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000);
         bool needsDummy = true;
         foreach (CombatItem maxHP in maxHPs)
         {
@@ -131,13 +133,13 @@ internal class SpiritRace : SpiritVale
             if (candidate.Type == AgentItem.AgentType.Gadget)
             {
                 needsDummy = false;
-                candidate.OverrideID(ArcDPSEnums.TargetID.EtherealBarrier, agentData);
+                candidate.OverrideID(TargetID.EtherealBarrier, agentData);
                 candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         if (needsDummy)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Spirit Race", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Spirit Race", Spec.NPC, TargetID.DummyTarget, true);
             Targetless = true;
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -149,8 +151,8 @@ internal class SpiritRace : SpiritVale
         {
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                    var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
+                case (int)TargetID.EtherealBarrier:
+                    var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
                     if (positions.Any(x => (x - position1).Length() < 10)) {
                         target.OverrideName(target.Character + " 1" );
                     } 
@@ -184,14 +186,14 @@ internal class SpiritRace : SpiritVale
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.EtherealBarrier:
+            case (int)TargetID.EtherealBarrier:
                 HealthUpdateEvent? hpZeroUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent == 0);
                 if (hpZeroUpdate != null)
                 {
                     replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.WallOfGhosts:
+            case (int)TrashID.WallOfGhosts:
                 (long, long) lifespan = (target.FirstAware, target.LastAware);
                 uint innerRadius = 400;
                 uint outerRadius = 500;

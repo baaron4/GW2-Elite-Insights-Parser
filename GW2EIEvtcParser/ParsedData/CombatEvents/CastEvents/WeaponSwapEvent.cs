@@ -1,4 +1,5 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 public class WeaponSwapEvent : CastEvent
 {
@@ -11,7 +12,7 @@ public class WeaponSwapEvent : CastEvent
         Status = AnimationStatus.Instant;
         SwappedTo = (int)evtcItem.DstAgent;
         SwappedFrom = -1;
-        if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
+        if (evtcVersion.Build >= ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
         {
             SwappedFrom = evtcItem.Value;
         }
