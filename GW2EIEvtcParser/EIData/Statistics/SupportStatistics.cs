@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData;
 
 // to match non generic support stats
-public class SupportToAllyStatistics
+public class SupportStatistics
 {
     //public long allHeal;
     public readonly int ResurrectCount;
@@ -19,7 +19,7 @@ public class SupportToAllyStatistics
     public readonly int StunBreakCount;
     public readonly double RemovedStunDuration;
 
-    internal SupportToAllyStatistics(ParsedEvtcLog log, SingleActor actor, long start, long end)
+    internal SupportStatistics(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var totals = actor.GetSupportStats(log, start, end);
         ResurrectCount = totals.ResurrectCount;

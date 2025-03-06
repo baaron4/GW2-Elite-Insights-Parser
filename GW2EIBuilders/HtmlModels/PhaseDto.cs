@@ -301,7 +301,7 @@ internal class PhaseDto
             ];
     }
 
-    private static SupportStatDataItem GetSupportStatData(SupportToAllyStatistics support)
+    private static SupportStatDataItem GetSupportStatData(SupportStatistics support)
     {
         return [
                 support.ConditionCleanseCount,
@@ -443,7 +443,7 @@ internal class PhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            SupportToAllyStatistics support = actor.GetToAllySupportStats(log, phase.Start, phase.End);
+            SupportStatistics support = actor.GetToAllySupportStats(log, phase.Start, phase.End);
             list.Add(GetSupportStatData(support));
         }
         return list;

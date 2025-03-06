@@ -163,7 +163,7 @@ internal static class JsonStatisticsBuilder
     }
 
 
-    public static JsonPlayerSupport BuildJsonAllySupport(SupportToAllyStatistics playerToPlayerStats)
+    public static JsonPlayerSupport BuildJsonAllySupport(SupportStatistics playerToPlayerStats)
     {
         var jsonPlayerSupport = new JsonPlayerSupport
         {
@@ -175,6 +175,8 @@ internal static class JsonStatisticsBuilder
             CondiCleanseTimeSelf = playerToPlayerStats.ConditionCleanseTimeSelf,
             BoonStrips = playerToPlayerStats.BoonStripCount,
             BoonStripsTime = playerToPlayerStats.BoonStripTime,
+            BoonStripDownContribution = playerToPlayerStats.BoonStripDownContribution,
+            BoonStripDownContributionTime = playerToPlayerStats.BoonStripDownContributionTime,
             StunBreak = playerToPlayerStats.StunBreakCount,
             RemovedStunDuration = playerToPlayerStats.RemovedStunDuration
         };

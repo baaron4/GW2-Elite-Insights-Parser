@@ -363,7 +363,7 @@ public class CSVBuilder
         int count = 0;
         foreach (Player player in _noFakePlayers)
         {
-            SupportToAllyStatistics support = player.GetToAllySupportStats(_log, phase.Start, phase.End);
+            SupportStatistics support = player.GetToAllySupportStats(_log, phase.Start, phase.End);
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
             support.ConditionCleanseCount.ToString(),support.ConditionCleanseTime.ToString(), support.ConditionCleanseSelfCount.ToString(), support.ConditionCleanseTimeSelf.ToString(), support.BoonStripCount.ToString(), support.BoonStripTime.ToString(), support.ResurrectCount.ToString(),support.ResurrectTime.ToString() ]);

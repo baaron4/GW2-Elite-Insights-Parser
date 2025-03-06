@@ -28,7 +28,7 @@ public abstract partial class SingleActor : Actor
     private CachingCollectionWithTarget<OffensiveStatistics>? _offensiveStats;
     private CachingCollection<GameplayStatistics>? _gameplayStats;
     private CachingCollectionWithTarget<SupportPerAllyStatistics>? _supportStats;
-    private CachingCollection<SupportToAllyStatistics>? _toPlayerSupportStats;
+    private CachingCollection<SupportStatistics>? _toPlayerSupportStats;
 
     protected SingleActor(AgentItem agent) : base(agent)
     {
@@ -624,13 +624,13 @@ public abstract partial class SingleActor : Actor
         return value;
     }
 
-    public SupportToAllyStatistics GetToAllySupportStats(ParsedEvtcLog log, long start, long end)
+    public SupportStatistics GetToAllySupportStats(ParsedEvtcLog log, long start, long end)
     {
         _toPlayerSupportStats ??= new(log);
 
         if (!_toPlayerSupportStats.TryGetValue(start, end, out var value))
         {
-            value = new SupportToAllyStatistics(log, this, start, end);
+            value = new SupportStatistics(log, this, start, end);
             _toPlayerSupportStats.Set(start, end, value);
         }
         return value;

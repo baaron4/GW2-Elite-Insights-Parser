@@ -514,9 +514,19 @@ public static class JsonStatistics
         public long BoonStrips;
 
         /// <summary>
-        /// Total duration of boons stripped from self
+        /// Total duration of boons stripped
         /// </summary>
         public double BoonStripsTime;
+
+        /// <summary>
+        /// Relevant for WvW, defined as the number of boon strips from 90% to down that led to a death
+        /// </summary>
+        public long BoonStripDownContribution;
+
+        /// <summary>
+        /// Relevant for WvW, defined as the total duration of boons stripped from 90% to down that led to a death
+        /// </summary>
+        public double BoonStripDownContributionTime;
         /// <summary>
         /// Number of time stun was broken, by self or others
         /// </summary>
