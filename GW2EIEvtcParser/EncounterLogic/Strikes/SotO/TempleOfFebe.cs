@@ -14,9 +14,14 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class TempleOfFebe : SecretOfTheObscureStrike
 {
-    private static HashSet<long> UnboundOptimismSkillIDs =
+    private static readonly HashSet<long> UnboundOptimismSkillIDs =
     [
         WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM
+    ];
+
+    private static readonly long[] Boons =
+    [
+        Aegis, Alacrity, Fury, Might, Protection, Quickness, Regeneration, Resistance, Resolution, Stability, Swiftness, Vigor
     ];
 
     public TempleOfFebe(int triggerID) : base(triggerID)
@@ -74,6 +79,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)
                 .UsingAchievementEligibility(true),
             new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targeted by Malicious Intent", 0),
+            new PlayerDstBuffRemoveMechanic(Boons, "Envious Gaze", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "EnvGaze.Strip", "Boons removed by Envious Gaze (Any)", "Envious Gaze Boon Removal", 100).UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Cerus, (int)TrashID.EmbodimentOfEnvy, (int)TrashID.PermanentEmbodimentOfEnvy])),
             new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, "Empowered Despair", new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredEnvyCerus, "Empowered Envy", new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "EmpEnvy.A", "Gained Empowered Envy", "Empowered Envy Application", 0),
@@ -691,6 +697,10 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM);
         foreach (CastEvent cast in enviousGaze)
         {
+            if (cast.Status == CastEvent.AnimationStatus.Unknown)
+            {
+                continue;
+            }
             bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM;
             long indicatorDuration = 1500;
             (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
