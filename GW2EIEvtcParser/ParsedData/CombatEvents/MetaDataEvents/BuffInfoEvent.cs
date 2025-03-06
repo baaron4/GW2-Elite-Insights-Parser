@@ -10,7 +10,7 @@ public class BuffInfoEvent : MetaDataEvent
 
     public bool ProbablyInvert { get; private set; }
 
-    //public ArcDPSEnums.BuffCategory Category { get; private set; }
+    //public BuffCategory Category { get; private set; }
 
     public byte CategoryByte { get; private set; }
 
@@ -52,7 +52,7 @@ public class BuffInfoEvent : MetaDataEvent
     {
         ProbablyInvul = evtcItem.IsFlanking > 0;
         ProbablyInvert = evtcItem.IsShields > 0;
-        //Category = ArcDPSEnums.GetBuffCategory(evtcItem.IsOffcycle);
+        //Category = GetBuffCategory(evtcItem.IsOffcycle);
         CategoryByte = evtcItem.IsOffcycle;
         MaxStacks = evtcItem.SrcMasterInstid;
         DurationCap = evtcItem.OverstackValue;

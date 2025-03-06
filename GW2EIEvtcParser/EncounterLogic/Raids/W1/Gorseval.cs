@@ -1,13 +1,14 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
-using System.Numerics;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -51,9 +52,9 @@ internal class Gorseval : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
         phases[0].AddTarget(mainTarget);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.ChargedSoul)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -72,7 +73,7 @@ internal class Gorseval : SpiritVale
                 phase.Name = "Split " + (i) / 2;
                 var ids = new List<int>
                 {
-                   (int) ArcDPSEnums.TrashID.ChargedSoul
+                   (int) TrashID.ChargedSoul
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -95,7 +96,7 @@ internal class Gorseval : SpiritVale
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul))
+            if (target.IsSpecies(TrashID.ChargedSoul))
             {
                 // 2nd split souls spawn further out, check in larger radius
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, SoulLocations, 300);
@@ -112,17 +113,17 @@ internal class Gorseval : SpiritVale
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Gorseval,
-            (int)ArcDPSEnums.TrashID.ChargedSoul
+            (int)TargetID.Gorseval,
+            (int)TrashID.ChargedSoul
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.EnragedSpirit,
-            ArcDPSEnums.TrashID.AngeredSpirit
+            TrashID.EnragedSpirit,
+            TrashID.AngeredSpirit
         ];
     }
 
@@ -145,7 +146,7 @@ internal class Gorseval : SpiritVale
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Gorseval:
+            case (int)TargetID.Gorseval:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var worldEaters = cls.Where(x => x.SkillId == GorsevalWorldEater);
                 foreach (CastEvent c in worldEaters)
@@ -292,7 +293,7 @@ internal class Gorseval : SpiritVale
                     replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightBlue, 0.5, new AgentConnector(target)));
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.ChargedSoul:
+            case (int)TrashID.ChargedSoul:
                 var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                 replay.Decorations.Add(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;

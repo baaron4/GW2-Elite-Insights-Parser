@@ -1,7 +1,8 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
-using static System.Net.Mime.MediaTypeNames;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -16,7 +17,7 @@ public class AgentItem
 
     // Fields
     public readonly ulong Agent;
-    public int ID { get; protected set; } = ArcDPSEnums.NonIdentifiedSpecies;
+    public int ID { get; protected set; } = NonIdentifiedSpecies;
     /// <remarks>Nondeterministic.</remarks>
     public readonly int UniqueID;
     public AgentItem? Master { get; protected set; }
@@ -143,22 +144,22 @@ public class AgentItem
         ID = id;
     }
 
-    internal void OverrideID(ArcDPSEnums.TrashID id, AgentData agentData)
+    internal void OverrideID(TrashID id, AgentData agentData)
     {
         OverrideID((int)id, agentData);
     }
 
-    internal void OverrideID(ArcDPSEnums.TargetID id, AgentData agentData)
+    internal void OverrideID(TargetID id, AgentData agentData)
     {
         OverrideID((int)id, agentData);
     }
 
-    internal void OverrideID(ArcDPSEnums.MinionID id, AgentData agentData)
+    internal void OverrideID(MinionID id, AgentData agentData)
     {
         OverrideID((int)id, agentData);
     }
 
-    internal void OverrideID(ArcDPSEnums.ChestID id, AgentData agentData)
+    internal void OverrideID(ChestID id, AgentData agentData)
     {
         OverrideID((int)id, agentData);
     }
@@ -319,16 +320,16 @@ public class AgentItem
             BreakbarStateEvent next = status[i + 1];
             switch (cur.State)
             {
-                case ArcDPSEnums.BreakbarState.Active:
+                case BreakbarState.Active:
                     AddSegment(actives, cur.Time, next.Time);
                     break;
-                case ArcDPSEnums.BreakbarState.Immune:
+                case BreakbarState.Immune:
                     AddSegment(immunes, cur.Time, next.Time);
                     break;
-                case ArcDPSEnums.BreakbarState.None:
+                case BreakbarState.None:
                     AddSegment(nones, cur.Time, next.Time);
                     break;
-                case ArcDPSEnums.BreakbarState.Recover:
+                case BreakbarState.Recover:
                     AddSegment(recovering, cur.Time, next.Time);
                     break;
             }
@@ -341,16 +342,16 @@ public class AgentItem
             {
                 switch (cur.State)
                 {
-                    case ArcDPSEnums.BreakbarState.Active:
+                    case BreakbarState.Active:
                         AddSegment(actives, cur.Time, LastAware);
                         break;
-                    case ArcDPSEnums.BreakbarState.Immune:
+                    case BreakbarState.Immune:
                         AddSegment(immunes, cur.Time, LastAware);
                         break;
-                    case ArcDPSEnums.BreakbarState.None:
+                    case BreakbarState.None:
                         AddSegment(nones, cur.Time, LastAware);
                         break;
-                    case ArcDPSEnums.BreakbarState.Recover:
+                    case BreakbarState.Recover:
                         AddSegment(recovering, cur.Time, LastAware);
                         break;
                 }
@@ -513,7 +514,7 @@ public class AgentItem
         return log.FindActor(this).TryGetCurrentFacingDirection(log, time, out facing, forwardWindow);
     }
 
-    public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
     {
         return log.FindActor(this).GetCurrentBreakbarState(log, time);
     }
@@ -529,7 +530,7 @@ public class AgentItem
 
     public bool IsNonIdentifiedSpecies()
     {
-        return IsSpecies(ArcDPSEnums.NonIdentifiedSpecies);
+        return IsSpecies(NonIdentifiedSpecies);
     }
 
     public bool IsSpecies(int id)
@@ -537,22 +538,22 @@ public class AgentItem
         return !IsPlayer && ID == id;
     }
 
-    public bool IsSpecies(ArcDPSEnums.TrashID id)
+    public bool IsSpecies(TrashID id)
     {
         return IsSpecies((int)id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.TargetID id)
+    public bool IsSpecies(TargetID id)
     {
         return IsSpecies((int)id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.MinionID id)
+    public bool IsSpecies(MinionID id)
     {
         return IsSpecies((int)id);
     }
 
-    public bool IsSpecies(ArcDPSEnums.ChestID id)
+    public bool IsSpecies(ChestID id)
     {
         return IsSpecies((int)id);
     }
@@ -562,22 +563,22 @@ public class AgentItem
         return ids.Any(IsSpecies);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
+    public bool IsAnySpecies(IEnumerable<TrashID> ids)
     {
         return ids.Any(IsSpecies);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TargetID> ids)
+    public bool IsAnySpecies(IEnumerable<TargetID> ids)
     {
         return ids.Any(IsSpecies);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.MinionID> ids)
+    public bool IsAnySpecies(IEnumerable<MinionID> ids)
     {
         return ids.Any(IsSpecies);
     }
 
-    public bool IsAnySpecies(IEnumerable<ArcDPSEnums.ChestID> ids)
+    public bool IsAnySpecies(IEnumerable<ChestID> ids)
     {
         return ids.Any(IsSpecies);
     }

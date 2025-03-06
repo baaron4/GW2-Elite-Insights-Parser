@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
 

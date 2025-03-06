@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
@@ -71,7 +72,7 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
 
     public abstract void Add(long duration, AgentItem src, long time, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID);
 
-    public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID);
+    public abstract void Remove(AgentItem by, long removedDuration, int removedStacks, long time, BuffRemove removeType, uint stackID);
 
     public abstract void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID);
 

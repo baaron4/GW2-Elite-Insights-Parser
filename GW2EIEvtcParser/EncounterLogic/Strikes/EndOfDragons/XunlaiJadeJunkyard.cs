@@ -4,11 +4,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -64,7 +66,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         phases[0].AddTarget(ankka);
         if (!requirePhases)
         {
@@ -128,7 +130,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+            SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
             var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000);
             if (buffApplies.Count() == 3)
             {
@@ -141,7 +143,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Ankka,
+            (int)TargetID.Ankka,
         ];
     }
 
@@ -149,9 +151,9 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Ankka,
-            (int)ArcDPSEnums.TrashID.ReanimatedAntipathy,
-            (int)ArcDPSEnums.TrashID.ReanimatedSpite,
+            (int)TargetID.Ankka,
+            (int)TrashID.ReanimatedAntipathy,
+            (int)TrashID.ReanimatedSpite,
         ];
     }
 
@@ -159,32 +161,32 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         return new Dictionary<int, int>()
         {
-            {(int)ArcDPSEnums.TargetID.Ankka, 0 },
-            {(int)ArcDPSEnums.TrashID.ReanimatedAntipathy, 1 },
-            {(int)ArcDPSEnums.TrashID.ReanimatedSpite, 1 },
+            {(int)TargetID.Ankka, 0 },
+            {(int)TrashID.ReanimatedAntipathy, 1 },
+            {(int)TrashID.ReanimatedSpite, 1 },
         };
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.Ankka,
-            ArcDPSEnums.TrashID.ReanimatedMalice1,
-            ArcDPSEnums.TrashID.ReanimatedMalice2,
-            ArcDPSEnums.TrashID.ReanimatedHatred,
-            ArcDPSEnums.TrashID.ZhaitansReach,
-            ArcDPSEnums.TrashID.KraitsHallucination,
-            ArcDPSEnums.TrashID.LichHallucination,
-            ArcDPSEnums.TrashID.QuaggansHallucinationNM,
-            ArcDPSEnums.TrashID.QuaggansHallucinationCM,
-            ArcDPSEnums.TrashID.SanctuaryPrism,
+            TrashID.Ankka,
+            TrashID.ReanimatedMalice1,
+            TrashID.ReanimatedMalice2,
+            TrashID.ReanimatedHatred,
+            TrashID.ZhaitansReach,
+            TrashID.KraitsHallucination,
+            TrashID.LichHallucination,
+            TrashID.QuaggansHallucinationNM,
+            TrashID.QuaggansHallucinationCM,
+            TrashID.SanctuaryPrism,
         ];
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == 1434)
         {
@@ -195,12 +197,12 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16);
+        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16);
         foreach (AgentItem sanctuary in sanctuaryPrism)
         {
-            IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
+            IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC, agentData);
-            sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism, agentData);
+            sanctuary.OverrideID(TrashID.SanctuaryPrism, agentData);
             sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -218,7 +220,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     private static bool CustomCheckGazeIntoTheVoidEligibility(ParsedEvtcLog log)
     {
-        IReadOnlyList<AgentItem> agents = log.AgentData.GetNPCsByID((int)ArcDPSEnums.TargetID.Ankka);
+        IReadOnlyList<AgentItem> agents = log.AgentData.GetNPCsByID((int)TargetID.Ankka);
 
         foreach (AgentItem agent in agents)
         {
@@ -236,7 +238,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Ankka:
+            case (int)TargetID.Ankka:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var deathsEmbraces = casts.Where(x => x.SkillId == DeathsEmbraceSkill);
@@ -335,7 +337,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.KraitsHallucination:
+            case (int)TrashID.KraitsHallucination:
                 // Wall of Fear
                 long firstMovementTime = target.FirstAware + 2550;
                 uint kraitsRadius = 420;
@@ -344,7 +346,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                 break;
 
-            case (int)ArcDPSEnums.TrashID.LichHallucination:
+            case (int)TrashID.LichHallucination:
                 // Terrifying Apparition
                 long awareTime = target.FirstAware + 1000;
                 uint lichRadius = 280;
@@ -353,7 +355,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                 break;
 
-            case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
+            case (int)TrashID.QuaggansHallucinationNM:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM);
@@ -367,7 +369,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM:
+            case (int)TrashID.QuaggansHallucinationCM:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM);
@@ -381,7 +383,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.ZhaitansReach:
+            case (int)TrashID.ZhaitansReach:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     // Thrash - Circle that pulls in
@@ -407,10 +409,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)ArcDPSEnums.TrashID.ReanimatedSpite:
+            case (int)TrashID.ReanimatedSpite:
                 break;
 
-            case (int)ArcDPSEnums.TrashID.SanctuaryPrism:
+            case (int)TrashID.SanctuaryPrism:
                 if (!log.FightData.IsCM)
                 {
                     replay.Trim(log.FightData.LogStart, log.FightData.LogStart);
@@ -455,7 +457,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
-        replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)ArcDPSEnums.TargetID.Ankka, (int)ArcDPSEnums.TrashID.ReanimatedHatred, Colors.Magenta, 0.5);
+        replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TrashID.ReanimatedHatred, Colors.Magenta, 0.5);
     }
 
     private static void AddDeathsHandDecoration(CombatReplay replay, Vector3 position, int start, int delay, uint radius, int duration)

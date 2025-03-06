@@ -3,6 +3,7 @@ using System.Numerics;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -116,30 +117,30 @@ public abstract partial class SingleActor : Actor
         return actives.Any(x => x.Intersects(start, end));
     }
 
-    public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
+    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
     {
         var (nones, actives, immunes, recoverings) = GetBreakbarStatus(log);
         if (nones.Any(x => x.ContainsPoint(time)))
         {
-            return ArcDPSEnums.BreakbarState.None;
+            return BreakbarState.None;
         }
 
         if (actives.Any(x => x.ContainsPoint(time)))
         {
-            return ArcDPSEnums.BreakbarState.Active;
+            return BreakbarState.Active;
         }
 
         if (immunes.Any(x => x.ContainsPoint(time)))
         {
-            return ArcDPSEnums.BreakbarState.Immune;
+            return BreakbarState.Immune;
         }
 
         if (recoverings.Any(x => x.ContainsPoint(time)))
         {
-            return ArcDPSEnums.BreakbarState.Recover;
+            return BreakbarState.Recover;
         }
 
-        return ArcDPSEnums.BreakbarState.None;
+        return BreakbarState.None;
     }
 
 
