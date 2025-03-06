@@ -8,7 +8,9 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using Tracing;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIEvtcParser;
@@ -578,7 +580,7 @@ public class EvtcParser
                 continue;
             }
             
-            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.ArcBuild)
+            if (combatItem.IsStateChange == StateChange.ArcBuild)
             {
                 EvtcVersionEvent oldEvent = _evtcVersion;
                 try
@@ -604,12 +606,12 @@ public class EvtcParser
 
             _combatItems.Add(combatItem);
 
-            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
+            if (combatItem.IsStateChange == StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
             {
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd)
             {
                 keepOnlyExtensionEvents = true;
             }
@@ -638,7 +640,7 @@ public class EvtcParser
     /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
     private bool IsValid(CombatItem combatItem, ParserController operation)
     {
-        if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
+        if (combatItem.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
         {
             // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
             // If it is more than 200% health ignore this record
@@ -648,7 +650,7 @@ public class EvtcParser
         {
             // Generic versioning check, we expect that the first event that'll be sent by an addon will always be meta data
             // Can't be ExtensionCombat
-            if (combatItem.Pad == 0 && combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
+            if (combatItem.Pad == 0 && combatItem.IsStateChange == StateChange.Extension)
             {
                 ExtensionHandler? handler = ExtensionHelper.GetExtensionHandler(combatItem);
                 if (handler != null)
@@ -664,7 +666,7 @@ public class EvtcParser
                 return _enabledExtensions.ContainsKey(combatItem.Pad);
             }
         }
-        if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ArcDPSEnums.IFF.Unknown && !combatItem.IsEffect)
+        if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == IFF.Unknown && !combatItem.IsEffect)
         {
             return false;
         }
@@ -802,7 +804,7 @@ public class EvtcParser
         if (nonSquadPlayerAgents.Any())
         {
             var encounteredNonSquadPlayerInstIDs = new HashSet<ushort>();
-            var teamChangeDict = _combatItems.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
+            var teamChangeDict = _combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
             
             IReadOnlyList<AgentItem> squadPlayers = _agentData.GetAgentByType(AgentItem.AgentType.Player);
             ulong greenTeam = ulong.MaxValue;
@@ -812,7 +814,7 @@ public class EvtcParser
                 if (teamChangeDict.TryGetValue(a.Agent, out var teamChangeList))
                 {
                     greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
-                    if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                    if (_evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
                     {
                         greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
                     }
@@ -833,7 +835,7 @@ public class EvtcParser
                 if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
                 {
                     var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
-                    if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                    if (_evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
                     {
                         team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
                     }
@@ -906,7 +908,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");
         foreach (ulong missingAgentValue in allAgentValues)
         {
-            _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, ArcDPSEnums.NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
+            _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
         }
         var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
         //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
@@ -967,7 +969,7 @@ public class EvtcParser
         _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
-        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
+        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, TrashID.Environment, true);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
@@ -1032,7 +1034,7 @@ public class EvtcParser
             {
                 c.OverrideTime(c.Time - offset);
             }
-            if (c.IsStateChange == ArcDPSEnums.StateChange.InstanceStart)
+            if (c.IsStateChange == StateChange.InstanceStart)
             {
                 c.OverrideSrcAgent((ulong)(offset - (long)c.SrcAgent));
             }
@@ -1075,7 +1077,7 @@ public class EvtcParser
             if (p.FirstAware > 100)
             {
                 // look for a spawn event close to first aware
-                CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
+                CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn
                     && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
                 if (spawnEvent != null)
                 {

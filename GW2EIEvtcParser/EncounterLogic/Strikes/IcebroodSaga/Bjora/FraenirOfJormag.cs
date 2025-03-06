@@ -2,10 +2,12 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -55,9 +57,9 @@ internal class FraenirOfJormag : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.FraenirOfJormag)) ?? throw new MissingKeyActorsException("Fraenir of Jormag not found");
+        SingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.FraenirOfJormag)) ?? throw new MissingKeyActorsException("Fraenir of Jormag not found");
         phases[0].AddTarget(fraenir);
-        SingleActor? icebrood = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
+        SingleActor? icebrood = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.IcebroodConstructFraenir));
         if (icebrood != null)
         {
             phases[0].AddTarget(icebrood);
@@ -127,29 +129,29 @@ internal class FraenirOfJormag : Bjora
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.FraenirOfJormag,
-            (int)ArcDPSEnums.TargetID.IcebroodConstructFraenir,
+            (int)TargetID.FraenirOfJormag,
+            (int)TargetID.IcebroodConstructFraenir,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.IcebroodElemental,
-            ArcDPSEnums.TrashID.BoundIcebroodElemental,
+            TrashID.IcebroodElemental,
+            TrashID.BoundIcebroodElemental,
         ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
-        IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(ArcDPSEnums.TrashID.IcebroodElemental);
+        var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
+        IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(TrashID.IcebroodElemental);
         foreach (AgentItem boundElemental in boundElementals)
         {
-            IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
+            IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             boundElemental.OverrideType(AgentItem.AgentType.NPC, agentData);
-            boundElemental.OverrideID(ArcDPSEnums.TrashID.BoundIcebroodElemental, agentData);
+            boundElemental.OverrideID(TrashID.BoundIcebroodElemental, agentData);
 
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
             if (boundElementalKilled.Any())
@@ -164,8 +166,8 @@ internal class FraenirOfJormag : Bjora
                 // When they match, override the Bound's LastAware to the Elemental's FirstAware
                 foreach (AgentItem spawnedElemental in spawnedElementals)
                 {
-                    CombatItem? itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                    CombatItem? itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                    CombatItem? itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.Position);
+                    CombatItem? itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == StateChange.Position);
                     if (itemBound != null && itemElem != null)
                     {
                         var bound3D = MovementEvent.GetPoint3D(itemBound);

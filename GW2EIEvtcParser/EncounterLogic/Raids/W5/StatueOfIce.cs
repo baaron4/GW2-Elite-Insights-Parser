@@ -1,9 +1,11 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -38,12 +40,12 @@ internal class StatueOfIce : HallOfChains
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.BrokenKing, out var brokenKing))
+        if (!agentData.TryGetFirstAgentItem(TargetID.BrokenKing, out var brokenKing))
         {
             throw new MissingKeyActorsException("Broken King not found");
         }
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             CombatItem? initialCast = combatData.FirstOrDefault(x => x.StartCasting() && x.SkillID == BrokenKingFirstCast && x.SrcMatchesAgent(brokenKing));
@@ -81,7 +83,7 @@ internal class StatueOfIce : HallOfChains
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.BrokenKing:
+            case (int)TargetID.BrokenKing:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards);
                 foreach (CastEvent c in Cone)
@@ -167,7 +169,7 @@ internal class StatueOfIce : HallOfChains
             new DamageCastFinder(BitingAura, BitingAura),
             new EffectCastFinder(Hailstorm, EffectGUIDs.BrokenKingHailstormGreen),
             new EffectCastFinder(IceBreaker, EffectGUIDs.BrokenKingIceBreakerGreenExplosion)
-                .UsingAgentRedirectionIfUnknown((int)ArcDPSEnums.TargetID.BrokenKing),
+                .UsingAgentRedirectionIfUnknown((int)TargetID.BrokenKing),
         ];
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

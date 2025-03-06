@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -79,7 +80,7 @@ public class OffensiveStatistics
                     DamageCount++;
                     Damage += dl.HealthDamage;
                     // Derive down contribution from health updates as they are available after this build
-                    if (log.LogData.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.Last90BeforeDownRetired)
+                    if (log.LogData.EvtcBuild < ArcDPSBuilds.Last90BeforeDownRetired)
                     {
                         IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
                         if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))

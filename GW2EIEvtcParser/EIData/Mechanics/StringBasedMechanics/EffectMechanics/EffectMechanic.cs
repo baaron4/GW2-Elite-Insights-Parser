@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -43,7 +44,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                 foreach (EffectEvent effectEvent in effects)
                 {
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
-                    if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
+                    if (agentItem.IsSpecies(TrashID.Environment) && Keep(effectEvent, log))
                     {
                         SingleActor? actor = log.FindActor(agentItem, true);
                         if (actor != null)

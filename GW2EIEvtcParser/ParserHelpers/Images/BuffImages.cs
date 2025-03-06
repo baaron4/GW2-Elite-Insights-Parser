@@ -1,6 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-
-namespace GW2EIEvtcParser.ParserHelpers;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 /// <summary>
 /// Class containing URL <see cref="string"/> for buff icons.

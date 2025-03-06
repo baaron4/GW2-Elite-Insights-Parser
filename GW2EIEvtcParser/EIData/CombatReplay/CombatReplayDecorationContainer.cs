@@ -341,8 +341,8 @@ internal class CombatReplayDecorationContainer
     /// <param name="log">The log.</param>
     /// <param name="player">The player to tether to <paramref name="toTetherAgentId"/>.</param>
     /// <param name="buffId">ID of the buff sourced by <paramref name="buffSrcAgentId"/>.</param>
-    /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
-    /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+    /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="TargetID"/> or <see cref="TrashID"/>.</param>
+    /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="TargetID"/> or <see cref="TrashID"/>.</param>
     /// <param name="color">Color of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
     internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, PlayerActor player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
@@ -374,8 +374,8 @@ internal class CombatReplayDecorationContainer
     /// <param name="log">The log.</param>
     /// <param name="player">The player to tether to <paramref name="toTetherAgentId"/>.</param>
     /// <param name="buffId">ID of the buff sourced by <paramref name="buffSrcAgentId"/>.</param>
-    /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
-    /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
+    /// <param name="buffSrcAgentId">ID of the agent sourcing the <paramref name="buffId"/>. Either <see cref="TargetID"/> or <see cref="TrashID"/>.</param>
+    /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="TargetID"/> or <see cref="TrashID"/>.</param>
     /// <param name="color">Color of the tether.</param>
     /// <param name="opacity">Opacity of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>

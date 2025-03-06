@@ -1,9 +1,10 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -17,11 +18,11 @@ internal class Mordremoth : StoryInstance
         EncounterID |= 0x000201;
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.SmotheringShadow,
+            TrashID.SmotheringShadow,
         ];
     }
 
@@ -35,7 +36,7 @@ internal class Mordremoth : StoryInstance
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -56,24 +57,24 @@ internal class Mordremoth : StoryInstance
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Mordremoth,
-            (int)ArcDPSEnums.TrashID.BlightedRytlock,
-            //ArcDPSEnums.TrashID.BlightedCanach,
-            (int)ArcDPSEnums.TrashID.BlightedBraham,
-            (int)ArcDPSEnums.TrashID.BlightedMarjory,
-            (int)ArcDPSEnums.TrashID.BlightedCaithe,
-            (int)ArcDPSEnums.TrashID.BlightedForgal,
-            (int)ArcDPSEnums.TrashID.BlightedSieran,
-            //ArcDPSEnums.TrashID.BlightedTybalt,
-            //ArcDPSEnums.TrashID.BlightedPaleTree,
-            //ArcDPSEnums.TrashID.BlightedTrahearne,
-            //ArcDPSEnums.TrashID.BlightedEir,
+            (int)TargetID.Mordremoth,
+            (int)TrashID.BlightedRytlock,
+            //TrashID.BlightedCanach,
+            (int)TrashID.BlightedBraham,
+            (int)TrashID.BlightedMarjory,
+            (int)TrashID.BlightedCaithe,
+            (int)TrashID.BlightedForgal,
+            (int)TrashID.BlightedSieran,
+            //TrashID.BlightedTybalt,
+            //TrashID.BlightedPaleTree,
+            //TrashID.BlightedTrahearne,
+            //TrashID.BlightedEir,
         ];
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new EvtcAgentException("Mordremoth not found");
+        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new EvtcAgentException("Mordremoth not found");
         BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, mordremoth.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (buffApply != null)
         {
@@ -83,7 +84,7 @@ internal class Mordremoth : StoryInstance
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
+        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
         return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
     }
 
@@ -91,9 +92,9 @@ internal class Mordremoth : StoryInstance
     {
         return
         [
-            (int)ArcDPSEnums.TrashID.Canach,
-            (int)ArcDPSEnums.TrashID.Braham,
-            (int)ArcDPSEnums.TrashID.Caithe,
+            (int)TrashID.Canach,
+            (int)TrashID.Braham,
+            (int)TrashID.Caithe,
         ];
     }
 
@@ -101,21 +102,21 @@ internal class Mordremoth : StoryInstance
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Mordremoth,
-            (int)ArcDPSEnums.TrashID.Canach,
-            (int)ArcDPSEnums.TrashID.Braham,
-            (int)ArcDPSEnums.TrashID.Caithe,
-            (int)ArcDPSEnums.TrashID.BlightedRytlock,
-            //ArcDPSEnums.TrashID.BlightedCanach,
-            (int)ArcDPSEnums.TrashID.BlightedBraham,
-            (int)ArcDPSEnums.TrashID.BlightedMarjory,
-            (int)ArcDPSEnums.TrashID.BlightedCaithe,
-            (int)ArcDPSEnums.TrashID.BlightedForgal,
-            (int)ArcDPSEnums.TrashID.BlightedSieran,
-            //ArcDPSEnums.TrashID.BlightedTybalt,
-            //ArcDPSEnums.TrashID.BlightedPaleTree,
-            //ArcDPSEnums.TrashID.BlightedTrahearne,
-            //ArcDPSEnums.TrashID.BlightedEir,           
+            (int)TargetID.Mordremoth,
+            (int)TrashID.Canach,
+            (int)TrashID.Braham,
+            (int)TrashID.Caithe,
+            (int)TrashID.BlightedRytlock,
+            //TrashID.BlightedCanach,
+            (int)TrashID.BlightedBraham,
+            (int)TrashID.BlightedMarjory,
+            (int)TrashID.BlightedCaithe,
+            (int)TrashID.BlightedForgal,
+            (int)TrashID.BlightedSieran,
+            //TrashID.BlightedTybalt,
+            //TrashID.BlightedPaleTree,
+            //TrashID.BlightedTrahearne,
+            //TrashID.BlightedEir,           
         ];
     }
 }

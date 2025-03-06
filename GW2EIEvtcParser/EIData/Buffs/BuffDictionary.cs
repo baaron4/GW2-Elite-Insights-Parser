@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -123,7 +124,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
             lastDespawn = dsp.Time;
             foreach (var pair in _buffIdToEvents)
             {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
         }
 
@@ -131,7 +132,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         {
             foreach (var pair in _buffIdToEvents)
             {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
         }
 
@@ -139,7 +140,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         {
             foreach (var pair in _buffIdToEvents)
             {
-                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
+                pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
         }
 

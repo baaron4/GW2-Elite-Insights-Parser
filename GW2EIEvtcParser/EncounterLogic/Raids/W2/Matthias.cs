@@ -3,9 +3,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -103,7 +105,7 @@ internal class Matthias : SalvationPass
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -155,11 +157,11 @@ internal class Matthias : SalvationPass
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // has breakbar state into
-        if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
+        if (combatData.Any(x => x.IsStateChange == StateChange.BreakbarState))
         {
-            var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == ArcDPSEnums.BuffRemove.All || x.IsBuffApply()));
-            var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
-            var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
+            var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
+            var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
+            var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
             var copies = new List<CombatItem>();
             for (int i = 0; i < sacrificeStartList.Count; i++)
             {
@@ -172,7 +174,7 @@ internal class Matthias : SalvationPass
                 {
                     continue;
                 }
-                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, ArcDPSEnums.TrashID.MatthiasSacrificeCrystal, false);
+                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, TrashID.MatthiasSacrificeCrystal, false);
                 foreach (CombatItem cbt in combatData)
                 {
                     if (!sacrificeCrystal.InAwareTimes(cbt.Time))
@@ -217,7 +219,7 @@ internal class Matthias : SalvationPass
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TrashID.MatthiasSacrificeCrystal))
+            if (target.IsSpecies(TrashID.MatthiasSacrificeCrystal))
             {
                 target.SetManualHealth(100000);
             }
@@ -228,20 +230,20 @@ internal class Matthias : SalvationPass
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.Matthias,
-            (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal
+            (int)TargetID.Matthias,
+            (int)TrashID.MatthiasSacrificeCrystal
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.Storm,
-            ArcDPSEnums.TrashID.Spirit,
-            ArcDPSEnums.TrashID.Spirit2,
-            ArcDPSEnums.TrashID.IcePatch,
-            ArcDPSEnums.TrashID.Tornado
+            TrashID.Storm,
+            TrashID.Spirit,
+            TrashID.Spirit2,
+            TrashID.IcePatch,
+            TrashID.Tornado
         ];
     }
 
@@ -260,7 +262,7 @@ internal class Matthias : SalvationPass
         int end = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Matthias:
+            case (int)TargetID.Matthias:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 AddMatthiasBubbles(BloodShield, target, log, replay);
                 AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
@@ -287,17 +289,17 @@ internal class Matthias : SalvationPass
                     }
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.Storm:
+            case (int)TrashID.Storm:
                 replay.Decorations.Add(new CircleDecoration(260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)ArcDPSEnums.TrashID.Spirit:
-            case (int)ArcDPSEnums.TrashID.Spirit2:
+            case (int)TrashID.Spirit:
+            case (int)TrashID.Spirit2:
                 replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.IcePatch:
+            case (int)TrashID.IcePatch:
                 replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.Tornado:
+            case (int)TrashID.Tornado:
                 replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
             default:

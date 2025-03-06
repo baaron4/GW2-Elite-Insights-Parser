@@ -2,12 +2,14 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -37,27 +39,27 @@ internal class Sabir : TheKeyOfAhdashim
         EncounterID |= 0x000002;
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [
-            ArcDPSEnums.TrashID.ParalyzingWisp,
-            ArcDPSEnums.TrashID.VoltaicWisp,
-            ArcDPSEnums.TrashID.SmallKillerTornado,
-            ArcDPSEnums.TrashID.SmallJumpyTornado,
-            ArcDPSEnums.TrashID.BigKillerTornado
+            TrashID.ParalyzingWisp,
+            TrashID.VoltaicWisp,
+            TrashID.SmallKillerTornado,
+            TrashID.SmallJumpyTornado,
+            TrashID.BigKillerTornado
         ];
     }
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
-            if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
+            if (agentData.GetNPCsByID(TargetID.Adina).Any(adina => combatData.Any(evt => evt.IsDamagingDamage() && evt.DstMatchesAgent(adina) && agentData.GetAgent(evt.SrcAgent, evt.Time).GetFinalMaster().IsPlayer)))
             {
-                return new Adina((int)ArcDPSEnums.TargetID.Adina);
+                return new Adina((int)TargetID.Adina);
             }
         }
         return base.AdjustLogic(agentData, combatData);
@@ -88,7 +90,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -150,7 +152,7 @@ internal class Sabir : TheKeyOfAhdashim
         int crEnd = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.Sabir:
+            case (int)TargetID.Sabir:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.TargetedLocust);
@@ -177,15 +179,15 @@ internal class Sabir : TheKeyOfAhdashim
                     replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
                 }
                 break;
-            case (int)ArcDPSEnums.TrashID.BigKillerTornado:
+            case (int)TrashID.BigKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
+            case (int)TrashID.SmallKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
-            case (int)ArcDPSEnums.TrashID.ParalyzingWisp:
-            case (int)ArcDPSEnums.TrashID.VoltaicWisp:
+            case (int)TrashID.SmallJumpyTornado:
+            case (int)TrashID.ParalyzingWisp:
+            case (int)TrashID.VoltaicWisp:
                 break;
             default:
                 break;
@@ -195,14 +197,14 @@ internal class Sabir : TheKeyOfAhdashim
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out var sabir))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Sabir, out var sabir))
         {
             throw new MissingKeyActorsException("Sabir not found");
         }
-        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
+        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
         if (enterCombat == null)
         {
-            CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+            CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate == null)
             {
                 return GetGenericFightOffset(fightData);
@@ -225,7 +227,7 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
         return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

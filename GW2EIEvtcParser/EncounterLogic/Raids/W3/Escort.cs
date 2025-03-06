@@ -4,12 +4,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -21,7 +23,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         MechanicList.AddRange(new List<Mechanic>
         {
-            new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(ArcDPSEnums.TrashID.Mine)),
+            new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TrashID.Mine)),
             new PlayerDstSkillMechanic(GlennaBombHit, "Bomb Explosion", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
             new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
             new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, "Radiant Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
@@ -31,7 +33,7 @@ internal class Escort : StrongholdOfTheFaithful
             new EnemyCastStartMechanic(TeleportDisplacementField, "Teleport Displacement Field", new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
         }
         );
-        ChestID = ArcDPSEnums.ChestID.SiegeChest;
+        ChestID = ChestID.SiegeChest;
         Extension = "escort";
         Icon = EncounterIconEscort;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
@@ -72,8 +74,8 @@ internal class Escort : StrongholdOfTheFaithful
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
-                SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
-                SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
+                SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
+                SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
                 phase.AddTarget(whiteMcLeod);
                 phase.AddTarget(redMcLeod);
                 phase.OverrideTimes(log);
@@ -91,13 +93,13 @@ internal class Escort : StrongholdOfTheFaithful
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
+        SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
         phases[0].AddTarget(mcLeod);
         if (!requirePhases)
         {
             return phases;
         }
-        var wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound));
+        var wargs = Targets.Where(x => x.IsSpecies(TrashID.WargBloodhound));
         if (_hasPreEvent)
         {
             var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
@@ -106,7 +108,7 @@ internal class Escort : StrongholdOfTheFaithful
                 Name = "Escort",
             };
             preEventPhase.AddTargets(preEventWargs);
-            preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.DummyTarget));
+            preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget));
             phases.Add(preEventPhase);
         }
         phases.AddRange(GetMcLeodPhases(mcLeod, log));
@@ -128,31 +130,31 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out var mcLeod))
+        if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
         {
             throw new MissingKeyActorsException("McLeod not found");
         }
         FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         //
-        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
         foreach (AgentItem mine in mineAgents)
         {
-            mine.OverrideID(ArcDPSEnums.TrashID.Mine, agentData);
+            mine.OverrideID(TrashID.Mine, agentData);
             mine.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         var duplicateGlennaPosition = new Vector3(-4326.979f, 13687.298f, -5561.857f);
-        foreach (var glenna in agentData.GetNPCsByID(ArcDPSEnums.TrashID.Glenna))
+        foreach (var glenna in agentData.GetNPCsByID(TrashID.Glenna))
         {
-            var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(glenna)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
+            var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(glenna)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
             if (positions.Any(x => (duplicateGlennaPosition.XY() - x.XYZ.XY()).LengthSquared() < 10))
             {
-                glenna.OverrideID(ArcDPSEnums.IgnoredSpecies, agentData);
+                glenna.OverrideID(IgnoredSpecies, agentData);
             }
         }
         // to keep the pre event as we need targets
-        if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
+        if (_hasPreEvent && !agentData.GetNPCsByID(TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int curCrimson = 1;
@@ -160,15 +162,15 @@ internal class Escort : StrongholdOfTheFaithful
         int curWarg = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound))
+            if (target.IsSpecies(TrashID.WargBloodhound))
             {
                 target.OverrideName(target.Character + " " + curWarg++);
             }
-            if (target.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod))
+            if (target.IsSpecies(TrashID.CrimsonMcLeod))
             {
                 target.OverrideName("Crimson " + target.Character + " " + curCrimson++);
             }
-            if (target.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod))
+            if (target.IsSpecies(TrashID.RadiantMcLeod))
             {
                 target.OverrideName("Radiant " + target.Character + " " + curRadiant++);
             }
@@ -177,12 +179,12 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out var mcLeod))
+        if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
         {
             throw new MissingKeyActorsException("McLeod not found");
         }
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
@@ -197,7 +199,7 @@ internal class Escort : StrongholdOfTheFaithful
             }
             else
             {
-                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)ArcDPSEnums.TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
+                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
             }
         }
         return startToUse;
@@ -207,7 +209,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         if (_hasPreEvent)
         {
-            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Glenna, out var glenna))
+            if (!agentData.TryGetFirstAgentItem(TrashID.Glenna, out var glenna))
             {
                 throw new MissingKeyActorsException("Glenna not found");
             }
@@ -235,39 +237,39 @@ internal class Escort : StrongholdOfTheFaithful
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.McLeodTheSilent,
-            (int)ArcDPSEnums.TrashID.Glenna
+            (int)TargetID.McLeodTheSilent,
+            (int)TrashID.Glenna
         ];
     }
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
-            (int)ArcDPSEnums.TargetID.McLeodTheSilent,
-            (int)ArcDPSEnums.TrashID.RadiantMcLeod,
-            (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
-            (int)ArcDPSEnums.TrashID.WargBloodhound,
-            (int)ArcDPSEnums.TargetID.DummyTarget,
+            (int)TargetID.McLeodTheSilent,
+            (int)TrashID.RadiantMcLeod,
+            (int)TrashID.CrimsonMcLeod,
+            (int)TrashID.WargBloodhound,
+            (int)TargetID.DummyTarget,
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return [
-            ArcDPSEnums.TrashID.MushroomCharger,
-            ArcDPSEnums.TrashID.MushroomKing,
-            ArcDPSEnums.TrashID.MushroomSpikeThrower,
-            ArcDPSEnums.TrashID.WhiteMantleBattleMage1Escort,
-            ArcDPSEnums.TrashID.WhiteMantleBattleMage2Escort,
-            ArcDPSEnums.TrashID.WhiteMantleBattleCultist1,
-            ArcDPSEnums.TrashID.WhiteMantleBattleCultist2,
-            ArcDPSEnums.TrashID.WhiteMantleBattleKnight1,
-            ArcDPSEnums.TrashID.WhiteMantleBattleKnight2,
-            ArcDPSEnums.TrashID.WhiteMantleBattleCleric1,
-            ArcDPSEnums.TrashID.WhiteMantleBattleCleric2,
-            ArcDPSEnums.TrashID.WhiteMantleBattleSeeker1,
-            ArcDPSEnums.TrashID.WhiteMantleBattleSeeker2,
-            ArcDPSEnums.TrashID.Mine,
+            TrashID.MushroomCharger,
+            TrashID.MushroomKing,
+            TrashID.MushroomSpikeThrower,
+            TrashID.WhiteMantleBattleMage1Escort,
+            TrashID.WhiteMantleBattleMage2Escort,
+            TrashID.WhiteMantleBattleCultist1,
+            TrashID.WhiteMantleBattleCultist2,
+            TrashID.WhiteMantleBattleKnight1,
+            TrashID.WhiteMantleBattleKnight2,
+            TrashID.WhiteMantleBattleCleric1,
+            TrashID.WhiteMantleBattleCleric2,
+            TrashID.WhiteMantleBattleSeeker1,
+            TrashID.WhiteMantleBattleSeeker2,
+            TrashID.Mine,
         ];
     }
 
@@ -275,7 +277,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         return
         [
-            (int)ArcDPSEnums.TrashID.Glenna
+            (int)TrashID.Glenna
         ];
     }
 
@@ -294,7 +296,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         switch (target.ID)
         {
-            case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+            case (int)TargetID.McLeodTheSilent:
                 replay.AddHideByBuff(target, log, Invulnerability757);
                 break;
         }
