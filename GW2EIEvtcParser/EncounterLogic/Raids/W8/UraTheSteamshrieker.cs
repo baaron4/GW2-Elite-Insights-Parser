@@ -154,7 +154,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var bloodstoneShards = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2 && x.FirstAware > 0)
+            .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2 && x.FirstAware > 50) // 50ms delay to prevent collisions with other gadgets
             .Distinct();
         foreach (var shard in bloodstoneShards)
         {
