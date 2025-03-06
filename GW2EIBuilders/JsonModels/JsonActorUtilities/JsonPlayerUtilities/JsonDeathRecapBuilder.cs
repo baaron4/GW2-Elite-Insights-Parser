@@ -15,7 +15,7 @@ internal static class JsonDeathRecapBuilder
         {
             Id = item.ID,
             IndirectDamage = item.IndirectDamage,
-            Src = item.Src,
+            Src = item.SourceAgent,
             Damage = item.Damage,
             Time = item.Time
         };

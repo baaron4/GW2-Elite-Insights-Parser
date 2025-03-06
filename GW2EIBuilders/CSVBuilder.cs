@@ -199,9 +199,9 @@ public class CSVBuilder
         int count = 0;
         foreach (Player player in _log.PlayerList)
         {
-            FinalDPS dps = player.GetDPSStats(_log, phase.Start, phase.End);
-            FinalDefensesAll defense = player.GetDefenseStats(_log, phase.Start, phase.End);
-            FinalDPS dpsBoss = player.GetDPSStats(_legacyTarget, _log, phase.Start, phase.End);
+            DamageStatistics dps = player.GetDamageStats(_log, phase.Start, phase.End);
+            DefenseAllStatistics defense = player.GetDefenseStats(_log, phase.Start, phase.End);
+            DamageStatistics dpsBoss = player.GetDamageStats(_legacyTarget, _log, phase.Start, phase.End);
             string deathString = defense.DeadCount.ToString();
             string deadthTooltip = "";
             if (defense.DeadCount > 0)
@@ -228,8 +228,8 @@ public class CSVBuilder
                 build += " Toughness:" + player.Toughness;
             }
             WriteLine([ player.Group.ToString(), player.Spec.ToString(),build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
-            dpsBoss.Dps.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDps.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.CondiDps.ToString(),dpsBoss.CondiDamage.ToString(),
-            dps.Dps.ToString(),dps.Damage.ToString(),dps.PowerDps.ToString(),dps.PowerDamage.ToString(),dps.CondiDps.ToString(),dps.CondiDamage.ToString(),
+            dpsBoss.DPS.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDPS.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.ConditionDPS.ToString(),dpsBoss.ConditionDamage.ToString(),
+            dps.DPS.ToString(),dps.Damage.ToString(),dps.PowerDPS.ToString(),dps.PowerDamage.ToString(),dps.ConditionDPS.ToString(),dps.ConditionDamage.ToString(),
             defense.DownCount.ToString(), deathString, deadthTooltip]);
             count++;
         }
@@ -255,8 +255,8 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            FinalGameplayStats stats = player.GetGameplayStats(_log, phase.Start, phase.End);
-            FinalOffensiveStats statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
+            GameplayStatistics stats = player.GetGameplayStats(_log, phase.Start, phase.End);
+            OffensiveStatistics statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
             IReadOnlyDictionary<int, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -270,14 +270,14 @@ public class CSVBuilder
             }
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
-            Math.Round((double)(statsBoss.CriticalCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalCount.ToString(),statsBoss.CriticalDmg.ToString(),
+            Math.Round((double)(statsBoss.CriticalDamageCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalDamageCount.ToString(),statsBoss.CriticalDamage.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-            Math.Round(statsBoss.FlankingCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
-            Math.Round(statsBoss.GlanceCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.GlanceCount.ToString(),
-            Math.Round(statsBoss.Missed / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.Missed.ToString(),
-            statsBoss.DirectDamageCount.ToString(),
-            statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() ]);
+            Math.Round(statsBoss.FlankingCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.FlankingCount.ToString(),
+            Math.Round(statsBoss.GlancingCount / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.GlancingCount.ToString(),
+            Math.Round(statsBoss.MissedCount / (double)statsBoss.DirectDamageEventCount * 100,1).ToString(),statsBoss.MissedCount.ToString(),
+            statsBoss.DirectDamageEventCount.ToString(),
+            statsBoss.InterruptCount.ToString(),statsBoss.InvulnedCount.ToString(),stats.SkillAnimationInterruptedDuration.ToString(),stats.SkillAnimationAfterCastInterruptedDuration.ToString(),stats.WeaponSwapCount.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -302,8 +302,8 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            FinalGameplayStats gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
-            FinalOffensiveStats offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
+            GameplayStatistics gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
+            OffensiveStatistics offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
             IReadOnlyDictionary<int, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
@@ -317,14 +317,14 @@ public class CSVBuilder
             }
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
-            Math.Round((double)(offStats.CriticalCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalCount.ToString(),offStats.CriticalDmg.ToString(),
+            Math.Round((double)(offStats.CriticalDamageCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalDamageCount.ToString(),offStats.CriticalDamage.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
-            Math.Round(offStats.FlankingCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.FlankingCount.ToString(),
-            Math.Round(offStats.GlanceCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.GlanceCount.ToString(),
-            Math.Round(offStats.Missed / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.Missed.ToString(),
-            offStats.DirectDamageCount.ToString(),
-            offStats.Interrupts.ToString(),offStats.Invulned.ToString(),gameplayStats.TimeWasted.ToString(),gameplayStats.TimeSaved.ToString(),gameplayStats.SwapCount.ToString() ]);
+            Math.Round(offStats.FlankingCount / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.FlankingCount.ToString(),
+            Math.Round(offStats.GlancingCount / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.GlancingCount.ToString(),
+            Math.Round(offStats.MissedCount / (double)offStats.DirectDamageEventCount * 100,1).ToString(),offStats.MissedCount.ToString(),
+            offStats.DirectDamageEventCount.ToString(),
+            offStats.InterruptCount.ToString(),offStats.InvulnedCount.ToString(),gameplayStats.SkillAnimationInterruptedDuration.ToString(),gameplayStats.SkillAnimationAfterCastInterruptedDuration.ToString(),gameplayStats.WeaponSwapCount.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -342,7 +342,7 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            FinalDefensesAll defenses = player.GetDefenseStats(_log, phase.Start, phase.End);
+            DefenseAllStatistics defenses = player.GetDefenseStats(_log, phase.Start, phase.End);
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
             defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() ]);
@@ -363,10 +363,10 @@ public class CSVBuilder
         int count = 0;
         foreach (Player player in _noFakePlayers)
         {
-            FinalToPlayersSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
+            SupportStatistics support = player.GetToAllySupportStats(_log, phase.Start, phase.End);
 
             WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
-            support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() ]);
+            support.ConditionCleanseCount.ToString(),support.ConditionCleanseTime.ToString(), support.ConditionCleanseSelfCount.ToString(), support.ConditionCleanseTimeSelf.ToString(), support.BoonStripCount.ToString(), support.BoonStripTime.ToString(), support.ResurrectCount.ToString(),support.ResurrectTime.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -391,10 +391,10 @@ public class CSVBuilder
         int count = 0;
         foreach (Player player in _noFakePlayers)
         {
-            IReadOnlyDictionary<long, FinalActorBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, BuffStatistics> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
             WriteCell(player.Character);
-            WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
+            WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AverageBoons.ToString());
             foreach (Buff boon in listToUse)
             {
                 if (uptimes.TryGetValue(boon.ID, out var value))
@@ -437,7 +437,7 @@ public class CSVBuilder
         int count = 0;
         foreach (Player player in _noFakePlayers)
         {
-            IReadOnlyDictionary<long, FinalActorBuffs> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, BuffStatistics> uptimes = player.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
             WriteCell(player.Character);
             foreach (Buff boon in listToUse)
@@ -487,7 +487,7 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, BuffStatistics> boons = player.GetBuffs(BuffEnum.Group, _log, phase.Start, phase.End);
 
             WriteCell(player.Character);
             foreach (Buff boon in listToUse)
@@ -538,7 +538,7 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, BuffStatistics> boons = player.GetBuffs(BuffEnum.OffGroup, _log, phase.Start, phase.End);
 
             WriteCell(player.Character);
             foreach (Buff boon in listToUse)
@@ -589,7 +589,7 @@ public class CSVBuilder
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
-            IReadOnlyDictionary<long, FinalActorBuffs> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<long, BuffStatistics> boons = player.GetBuffs(BuffEnum.Squad, _log, phase.Start, phase.End);
             WriteCell(player.Character);
             foreach (Buff boon in listToUse)
             {
@@ -702,7 +702,7 @@ public class CSVBuilder
     {
         NPC boss = _legacyTarget;
         PhaseData phase = _phases[phaseIndex];
-        IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffStatistics> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
 
         WriteCell("Name");
         WriteCell("Avg");
@@ -714,7 +714,7 @@ public class CSVBuilder
         NewLine();
         int count = 0;
         WriteCell(boss.Character);
-        WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phase.Start, phase.End).AvgConditions, 1).ToString());
+        WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phase.Start, phase.End).AverageConditions, 1).ToString());
         foreach (Buff boon in _statistics.PresentConditions)
         {
             if (conditions.TryGetValue(boon.ID, out var uptime))
@@ -745,7 +745,7 @@ public class CSVBuilder
     {
         NPC boss = _legacyTarget;
         PhaseData phase = _phases[phaseIndex];
-        IReadOnlyDictionary<long, FinalActorBuffs> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffStatistics> conditions = _legacyTarget.GetBuffs(BuffEnum.Self, _log, phase.Start, phase.End);
         WriteCell("Name");
         WriteCell("Avg");
         foreach (Buff boon in _statistics.PresentBoons)
@@ -785,7 +785,7 @@ public class CSVBuilder
     private void CreateCondiGen(int phaseIndex)
     {
         PhaseData phase = _phases[phaseIndex];
-        IReadOnlyDictionary<long, FinalBuffsDictionary> conditions = _legacyTarget.GetBuffsDictionary(_log, phase.Start, phase.End);
+        IReadOnlyDictionary<long, BuffByActorStatistics> conditions = _legacyTarget.GetBuffsDictionary(_log, phase.Start, phase.End);
         //bool hasBoons = false;
         int count = 0;
         WriteCell("Name");

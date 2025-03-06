@@ -15,63 +15,88 @@ public static class JsonStatistics
         /// <summary>
         /// Total damage taken
         /// </summary>
-        public long DamageTaken;
+        public int DamageTaken;
+        /// <summary>
+        /// Number of damage taken events
+        /// </summary>
+        public int DamageTakenCount;
         /// <summary>
         /// Total condition damage taken
         /// </summary>
-        public long ConditionDamageTaken;
+        public int ConditionDamageTaken;
+        /// <summary>
+        /// Number of condition damage taken events
+        /// </summary>
+        public int ConditionDamageTakenCount;
         /// <summary>
         /// Total power damage taken
         /// </summary>
-        public long PowerDamageTaken;
+        public int PowerDamageTaken;
+        /// <summary>
+        /// Number of power damage taken events
+        /// </summary>
+        public int PowerDamageTakenCount;
         /// <summary>
         /// Total strike damage taken
         /// </summary>
-        public long StrikeDamageTaken;
+        public int StrikeDamageTaken;
+        /// <summary>
+        /// Number of strike damage taken events
+        /// </summary>
+        public int StrikeDamageTakenCount;
         /// <summary>
         /// Total life leech damage taken
         /// </summary>
-        public long LifeLeechDamageTaken;
+        public int LifeLeechDamageTaken;
+        /// <summary>
+        /// Number of life leech damage taken event
+        /// </summary>
+        public int LifeLeechDamageTakenCount;
         /// <summary>
         /// Total damage taken while downed
         /// </summary>
-        public long DownedDamageTaken;
-
+        public int DownedDamageTaken;
+        /// <summary>
+        /// Number of damage taken while downed event
+        /// </summary>
+        public int DownedDamageTakenCount;
+        /// <summary>
+        /// Total barrier damage taken
+        /// </summary>
+        public long DamageBarrier;
+        /// <summary>
+        /// Number of barrier damage taken events
+        /// </summary>
+        public int DamageBarrierCount;
         /// <summary>
         /// Total breakbar damage taken
         /// </summary>
         public double BreakbarDamageTaken;
+        /// <summary>
+        /// Number of breakbar damage taken events
+        /// </summary>
+        public int BreakbarDamageTakenCount;
 
         /// <summary>
         /// Number of blocks
         /// </summary>
         public int BlockedCount;
-
         /// <summary>
         /// Number of evades
         /// </summary>
         public int EvadedCount;
-
         /// <summary>
         /// Number of misses
         /// </summary>
         public int MissedCount;
-
         /// <summary>
         /// Number of dodges
         /// </summary>
         public int DodgeCount;
-
         /// <summary>
         /// Number of time an incoming attack was negated by invul
         /// </summary>
         public int InvulnedCount;
-
-        /// <summary>
-        /// Damage done against barrier
-        /// </summary>
-        public int DamageBarrier;
-
         /// <summary>
         /// Number of time interrupted
         /// </summary>
@@ -81,31 +106,27 @@ public static class JsonStatistics
         /// Number of time downed
         /// </summary>
         public int DownCount;
-
         /// <summary>
         /// Time passed in downstate
         /// </summary>
         public long DownDuration;
-
         /// <summary>
         /// Number of time died
         /// </summary>
         public int DeadCount;
-
         /// <summary>
         /// Time passed in dead state
         /// </summary>
         public long DeadDuration;
-
         /// <summary>
         /// Number of time disconnected
         /// </summary>
         public int DcCount;
-
         /// <summary>
         /// Time passed in disconnected state
         /// </summary>
         public long DcDuration;
+
         /// <summary>
         /// Number of time boons were stripped
         /// </summary>
@@ -122,6 +143,7 @@ public static class JsonStatistics
         /// Total duration of conditions cleansed
         /// </summary>
         public double ConditionCleansesTime;
+
         /// <summary>
         /// Number of time crowd controlled
         /// </summary>
@@ -232,15 +254,6 @@ public static class JsonStatistics
         public int DirectDmg;
 
         /// <summary>
-        /// Number of connected direct damage hit
-        /// </summary>
-        public int ConnectedDirectDamageCount;
-        /// <summary>
-        /// Total connected direct damage
-        /// </summary>
-        public int ConnectedDirectDmg;
-
-        /// <summary>
         /// Number of connected damage hit
         /// </summary>
         public int ConnectedDamageCount;
@@ -250,15 +263,65 @@ public static class JsonStatistics
         public int ConnectedDmg;
 
         /// <summary>
+        /// Number of connected direct damage hit
+        /// </summary>
+        public int ConnectedDirectDamageCount;
+        /// <summary>
+        /// Total connected direct damage
+        /// </summary>
+        public int ConnectedDirectDmg;
+
+        /// <summary>
+        /// Number of connected power damage hit
+        /// </summary>
+        public int ConnectedPowerCount;
+        /// <summary>
+        /// Total connected power damage
+        /// </summary>
+        public int ConnectedPowerDamage;
+        /// <summary>
+        /// Number of connected power damage hit while above 90% hp
+        /// </summary>
+        public int ConnectedPowerAbove90HPCount;
+        /// <summary>
+        /// Total connected power damage while above 90% hp
+        /// </summary>
+        public int ConnectedPowerAbove90HPDamage;
+
+        /// <summary>
+        /// Number of connected life leech damage hit
+        /// </summary>
+        public int ConnectedLifeLeechCount;
+        /// <summary>
+        /// Total connected life leech damage
+        /// </summary>
+        public int ConnectedLifeLeechDamage;
+
+        /// <summary>
+        /// Number of connected condition damage hit
+        /// </summary>
+        public int ConnectedConditionCount;
+        /// <summary>
+        /// Total connected condition damage
+        /// </summary>
+        public int ConnectedConditionDamage;
+        /// <summary>
+        /// Number of connected condition damage hit while above 90% hp
+        /// </summary>
+        public int ConnectedConditionAbove90HPCount;
+        /// <summary>
+        /// Total connected condition damage while above 90% hp
+        /// </summary>
+        public int ConnectedConditionAbove90HPDamage;
+
+        /// <summary>
         /// Number of critable hit
         /// </summary>
         public int CritableDirectDamageCount;
-
         /// <summary>
         /// Number of crit
         /// </summary>
         public int CriticalRate;
-
         /// <summary>
         /// Total critical damage
         /// </summary>
@@ -268,71 +331,44 @@ public static class JsonStatistics
         /// Number of hits while flanking
         /// </summary>
         public int FlankingRate;
-
         /// <summary>
         /// Number of hits while target was moving
         /// </summary>
         public int AgainstMovingRate;
-
         /// <summary>
         /// Number of glanced hits
         /// </summary>
         public int GlanceRate;
-
         /// <summary>
         /// Number of missed hits
         /// </summary>
         public int Missed;
-
         /// <summary>
         /// Number of evaded hits
         /// </summary>
         public int Evaded;
-
         /// <summary>
         /// Number of blocked hits
         /// </summary>
         public int Blocked;
-
         /// <summary>
         /// Number of hits that interrupted a skill
         /// </summary>
         public int Interrupts;
-
         /// <summary>
         /// Number of hits against invulnerable targets
         /// </summary>
         public int Invulned;
+
         /// <summary>
         /// Number of times killed target
         /// </summary>
         public int Killed;
-
         /// <summary>
         /// Number of times downed target
         /// </summary>
         public int Downed;
-        /// <summary>
-        /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death \n
-        /// </summary>
-        public int DownContribution;
 
-        /// <summary>
-        /// Number of times a Power based damage skill hits
-        /// </summary>
-        public int ConnectedPowerCount;
-        /// <summary>
-        /// Number of times a Power based damage skill hits while source is above 90% hp
-        /// </summary>
-        public int ConnectedPowerAbove90HPCount;
-        /// <summary>
-        /// Number of times a Condition based damage skill hits
-        /// </summary>
-        public int ConnectedConditionCount;
-        /// <summary>
-        /// Number of times a Condition based damage skill hits while source is above 90% hp
-        /// </summary>
-        public int ConnectedConditionAbove90HPCount;
         /// <summary>
         /// Number of times a skill hits while target is downed is downed
         /// </summary>
@@ -341,6 +377,20 @@ public static class JsonStatistics
         /// Damage done against downed target
         /// </summary>
         public int AgainstDownedDamage;
+
+        /// <summary>
+        /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death
+        /// </summary>
+        public int DownContribution;
+        /// <summary>
+        /// Relevant for WvW, defined as the number of CC applied from 90% to down that led to a death
+        /// </summary>
+        public int AppliedCrowdControlDownContribution;
+        /// <summary>
+        /// Relevant for WvW, defined as the total duration of CC applied from 90% to down that led to a death, in ms
+        /// </summary>
+        public double AppliedCrowdControlDurationDownContribution;
+
         /// <summary>
         /// Number of time applied a cc.
         /// </summary>
@@ -464,9 +514,19 @@ public static class JsonStatistics
         public long BoonStrips;
 
         /// <summary>
-        /// Total duration of boons stripped from self
+        /// Total duration of boons stripped
         /// </summary>
         public double BoonStripsTime;
+
+        /// <summary>
+        /// Relevant for WvW, defined as the number of boon strips from 90% to down that led to a death
+        /// </summary>
+        public long BoonStripDownContribution;
+
+        /// <summary>
+        /// Relevant for WvW, defined as the total duration of boons stripped from 90% to down that led to a death
+        /// </summary>
+        public double BoonStripDownContributionTime;
         /// <summary>
         /// Number of time stun was broken, by self or others
         /// </summary>
