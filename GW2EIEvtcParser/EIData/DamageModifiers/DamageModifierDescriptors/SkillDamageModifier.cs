@@ -43,7 +43,7 @@ internal class SkillDamageModifier : DamageModifierDescriptor
         return res;
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph>? bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         gain = 0;
         if (dl.SkillId != _skillID)

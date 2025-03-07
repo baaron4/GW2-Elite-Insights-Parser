@@ -126,7 +126,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return false;
     }
 
-    protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain);
+    protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffGraph> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain);
 
     internal DamageModifierDescriptor UsingApproximate(bool approximate)
     {

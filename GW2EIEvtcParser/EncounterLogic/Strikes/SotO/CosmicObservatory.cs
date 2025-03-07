@@ -495,10 +495,10 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
             foreach (Player player in log.PlayerList)
             {
-                IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
                 if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out var bgm))
                 {
-                    if (bgm.BuffChart.Any(x => x.Value == 1))
+                    if (bgm.Values.Any(x => x.Value == 1))
                     {
                         buffCounter++;
                     }

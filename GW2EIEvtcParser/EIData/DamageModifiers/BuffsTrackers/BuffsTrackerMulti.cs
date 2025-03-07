@@ -4,7 +4,7 @@ internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
 {
     private readonly HashSet<long> _ids = buffsIds;
 
-    public override int GetStack(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long time)
+    public override int GetStack(IReadOnlyDictionary<long, BuffGraph> bgms, long time)
     {
         int stack = 0;
         foreach (long key in bgms.Keys.Intersect(_ids))
@@ -14,7 +14,7 @@ internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
         return stack;
     }
 
-    public override bool Has(IReadOnlyDictionary<long, BuffsGraphModel> bgms)
+    public override bool Has(IReadOnlyDictionary<long, BuffGraph> bgms)
     {
         return bgms.Keys.Intersect(_ids).Any();
     }

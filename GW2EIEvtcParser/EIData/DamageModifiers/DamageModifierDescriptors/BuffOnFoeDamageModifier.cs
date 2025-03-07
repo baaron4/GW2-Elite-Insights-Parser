@@ -45,7 +45,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return this;
     }
 
-    protected bool CheckActor(IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource, long time)
+    protected bool CheckActor(IReadOnlyDictionary<long, BuffGraph> bgmsSource, long time)
     {
         return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource!.GetStack(bgmsSource, time)) > 0.0;
     }
@@ -62,7 +62,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
-        IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
+        IReadOnlyDictionary<long, BuffGraph> bgmsSource = actor.GetBuffGraphs(log);
         if (_trackerSource != null)
         {
             if (Skip(_trackerSource, bgmsSource, _gainComputerSource!))
@@ -80,7 +80,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
             {
                 continue;
             }
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = target.GetBuffGraphs(log);
             if (Skip(Tracker, bgms, GainComputer))
             {
                 ignoredTargets.Add(target);

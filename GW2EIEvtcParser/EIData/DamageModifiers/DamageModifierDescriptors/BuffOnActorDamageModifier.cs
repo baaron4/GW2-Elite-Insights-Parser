@@ -32,21 +32,21 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         int stack = Tracker.GetStack(bgms, dl.Time);
         gain = GainComputer.ComputeGain(ComputeAdjustedGain(dl, log), stack);
         return gain != 0;
     }
 
-    protected static bool Skip(BuffsTracker tracker, IReadOnlyDictionary<long, BuffsGraphModel> bgms, GainComputer gainComputer)
+    protected static bool Skip(BuffsTracker tracker, IReadOnlyDictionary<long, BuffGraph> bgms, GainComputer gainComputer)
     {
         return (!tracker.Has(bgms) && gainComputer != ByAbsence) || (tracker.Has(bgms) && gainComputer == ByAbsence);
     }
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
-        IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
+        IReadOnlyDictionary<long, BuffGraph> bgms = actor.GetBuffGraphs(log);
         if (Skip(Tracker, bgms, GainComputer))
         {
             return [];

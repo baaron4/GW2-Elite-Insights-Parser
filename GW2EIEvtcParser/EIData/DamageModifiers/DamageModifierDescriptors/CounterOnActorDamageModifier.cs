@@ -33,7 +33,7 @@ internal class CounterOnActorDamageModifier : BuffOnActorDamageModifier
         throw new InvalidOperationException("Not Possible to adjust gain for counter damage modifiers");
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         gain = 0;
         int stack = Tracker.GetStack(bgms, dl.Time);

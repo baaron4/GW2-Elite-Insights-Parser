@@ -31,4 +31,5 @@ public struct GenericSegment<T>(long start, long end, T? value)
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool ContainsPoint(long time) => Start <= time && time <= End;
+
 }

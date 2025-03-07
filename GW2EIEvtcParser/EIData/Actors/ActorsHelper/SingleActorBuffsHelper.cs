@@ -13,8 +13,8 @@ partial class SingleActor
     // Boons
     private HashSet<Buff>? _trackedBuffs;
     private BuffDictionary? _buffMap;
-    private Dictionary<long, BuffsGraphModel>? _buffGraphs;
-    private Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>? _buffGraphsPerAgent;
+    private Dictionary<long, BuffGraph>? _buffGraphs;
+    private Dictionary<AgentItem, Dictionary<long, BuffGraph>>? _buffGraphsPerAgent;
     private CachingCollection<BuffDistribution>? _buffDistribution;
     private CachingCollection<Dictionary<long, long>>? _buffPresence;
     private CachingCollectionCustom<BuffEnum, (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs)>? _buffStats;
@@ -91,13 +91,13 @@ partial class SingleActor
         return buffPresence;
     }
 
-    public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
+    public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log)
     {
         ComputeBuffGraphs(log);
         return _buffGraphs;
     }
 
-    public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
+    public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         AgentItem agent = by.AgentItem;
         ComputeBuffGraphs(log);
@@ -106,13 +106,13 @@ partial class SingleActor
         if (!_buffGraphsPerAgent.ContainsKey(agent))
         {
             var trackedBuffs = GetTrackedBuffs(log);
-            var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
+            var buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count);
             _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
             //
-            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
-            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
+            var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+            var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             //
             foreach (Buff buff in trackedBuffs)
             {
@@ -145,10 +145,10 @@ partial class SingleActor
                     {
                         graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
                     }
-                    buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
+                    buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
                     if (updateBoonPresence || updateCondiPresence)
                     {
-                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].BuffChart);
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].Values);
                     }
 
                 }
@@ -170,7 +170,7 @@ partial class SingleActor
             throw new InvalidOperationException($"Buff id {buffId} must be simulated");
         }
 
-        IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
+        IReadOnlyDictionary<long, BuffGraph> bgms = GetBuffGraphs(log);
         return bgms.TryGetValue(buffId, out var bgm) && bgm.IsPresent(time, window);
     }
 
@@ -184,13 +184,13 @@ partial class SingleActor
             throw new InvalidOperationException($"Buff id {buffId} must be simulated");
         }
 
-        IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log, by);
+        IReadOnlyDictionary<long, BuffGraph> bgms = GetBuffGraphs(log, by);
         return bgms.TryGetValue(buffId, out var bgm) && bgm.IsPresent(time);
     }
 
     private static readonly Segment _emptySegment = new(long.MinValue, long.MaxValue, 0);
 
-    private static Segment GetBuffStatus(long buffId, long time, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
+    private static Segment GetBuffStatus(long buffId, long time, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
         return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(time) : _emptySegment;
     }
@@ -213,7 +213,7 @@ partial class SingleActor
         return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
     }
 
-    private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
+    private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
         return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
     }
@@ -344,12 +344,12 @@ partial class SingleActor
         }
 
         var trackedBuffs = GetTrackedBuffs(log);
-        _buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count + 5);
-        var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
-        var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
-        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
-        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
-        var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
+        _buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count + 5);
+        var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+        var activeCombatMinionsGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
+        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
+        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
+        var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
         var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
         var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
 
@@ -413,10 +413,10 @@ partial class SingleActor
                     graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
                 }
 
-                _buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
+                _buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
                 if (updateBoonPresence || updateCondiPresence)
                 {
-                    (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(_buffGraphs[buffID].BuffChart);
+                    (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(_buffGraphs[buffID].Values);
                 }
 
             }
@@ -446,15 +446,15 @@ partial class SingleActor
                 }
             }
         }
-        if (activeCombatMinionsGraph.BuffChart.Any())
+        if (activeCombatMinionsGraph.Values.Any())
         {
             _buffGraphs[SkillIDs.NumberOfActiveCombatMinions] = activeCombatMinionsGraph;
         }
-        if (numberOfClonesGraph != null && numberOfClonesGraph.BuffChart.Any())
+        if (numberOfClonesGraph != null && numberOfClonesGraph.Values.Any())
         {
             _buffGraphs[SkillIDs.NumberOfClones] = numberOfClonesGraph;
         }
-        if (numberOfRangerPets != null && numberOfRangerPets.BuffChart.Any())
+        if (numberOfRangerPets != null && numberOfRangerPets.Values.Any())
         {
             _buffGraphs[SkillIDs.NumberOfRangerPets] = numberOfRangerPets;
         }

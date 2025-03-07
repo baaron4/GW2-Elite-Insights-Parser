@@ -62,10 +62,10 @@ internal static class JsonPlayerBuilder
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                damageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.All);
-                powerDamageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.Power);
-                conditionDamageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.Condition);
-                breakbarDamageTaken1S[i] = player.Get1SBreakbarDamageTakenList(log, phase.Start, phase.End, null);
+                damageTaken1S[i] = player.GetDamageTakenGraph(log, phase.Start, phase.End, null, DamageType.All).Values;
+                powerDamageTaken1S[i] = player.GetDamageTakenGraph(log, phase.Start, phase.End, null, DamageType.Power).Values;
+                conditionDamageTaken1S[i] = player.GetDamageTakenGraph(log, phase.Start, phase.End, null, DamageType.Condition).Values;
+                breakbarDamageTaken1S[i] = player.GetBreakbarDamageTakenGraph(log, phase.Start, phase.End, null)?.Values;
             }
             jsonPlayer.DamageTaken1S = damageTaken1S;
             jsonPlayer.PowerDamageTaken1S = powerDamageTaken1S;
@@ -85,10 +85,10 @@ internal static class JsonPlayerBuilder
                 PhaseData phase = phases[i];
                 if (settings.RawFormatTimelineArrays)
                 {
-                    graph1SDamageList[i] = player.Get1SDamageList(log, phase.Start, phase.End, target, DamageType.All);
-                    graph1SPowerDamageList[i] = player.Get1SDamageList(log, phase.Start, phase.End, target, DamageType.Power);
-                    graph1SConditionDamageList[i] = player.Get1SDamageList(log, phase.Start, phase.End, target, DamageType.Condition);
-                    graph1SBreakbarDamageList[i] = player.Get1SBreakbarDamageList(log, phase.Start, phase.End, target);
+                    graph1SDamageList[i] = player.GetDamageGraph(log, phase.Start, phase.End, target, DamageType.All).Values;
+                    graph1SPowerDamageList[i] = player.GetDamageGraph(log, phase.Start, phase.End, target, DamageType.Power).Values;
+                    graph1SConditionDamageList[i] = player.GetDamageGraph(log, phase.Start, phase.End, target, DamageType.Condition).Values;
+                    graph1SBreakbarDamageList[i] = player.GetBreakbarDamageGraph(log, phase.Start, phase.End, target)?.Values;
                 }
                 targetDamageDistList[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
                     player.GetJustActorDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
@@ -115,7 +115,7 @@ internal static class JsonPlayerBuilder
             jsonPlayer.TargetPowerDamage1S = targetPowerDamage1S;
             jsonPlayer.TargetConditionDamage1S = targetConditionDamage1S;
             jsonPlayer.TargetBreakbarDamage1S = targetBreakbarDamage1S;
-            IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = player.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> buffGraphs = player.GetBuffGraphs(log);
             if (buffGraphs.TryGetValue(SkillIDs.NumberOfClones, out var states))
             {
                 jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();

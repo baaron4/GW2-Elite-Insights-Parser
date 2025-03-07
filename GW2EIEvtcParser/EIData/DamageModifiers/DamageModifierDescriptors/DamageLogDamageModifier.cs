@@ -12,7 +12,7 @@ internal class DamageLogDamageModifier : DamageModifierDescriptor
         base.UsingChecker(checker);
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, HealthDamageEvent? dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph>? bgms, HealthDamageEvent? dl, ParsedEvtcLog log, out double gain)
     {
         gain = GainComputer.ComputeGain(GainPerStack, 1);
         return true;

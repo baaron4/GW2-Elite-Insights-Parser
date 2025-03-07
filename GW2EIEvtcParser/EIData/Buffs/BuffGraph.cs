@@ -1,34 +1,34 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-public class BuffsGraphModel
+public class BuffGraph
 {
     public readonly Buff Buff;
 
-    public IReadOnlyList<Segment> BuffChart => _buffChart;
-    private List<Segment> _buffChart;
+    public IReadOnlyList<Segment> Values => _buffChart.Values;
+    private StateGraph<double> _buffChart;
 
     // Constructor
-    internal BuffsGraphModel(Buff buff)
+    internal BuffGraph(Buff buff)
     {
         Buff = buff;
-        _buffChart = [ ];
+        _buffChart = new StateGraph<double>();
     }
-    internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
+    internal BuffGraph(Buff buff, List<Segment> buffChartWithSource)
     {
         Buff = buff;
-        _buffChart = buffChartWithSource;
-        FuseSegments();
+        _buffChart = new StateGraph<double>(buffChartWithSource);
+        _buffChart.FuseSegments();
     }
 
     public Segment GetBuffStatus(long time)
     {
-        if (BuffChart.Count == 0)
+        if (Values.Count == 0)
         {
             return new Segment(long.MinValue, long.MaxValue, 0);
         }
         
-        int foundIndex = BuffChart.BinarySearchRecursive(time, 0, BuffChart.Count - 1);
-        Segment found = BuffChart[foundIndex];
+        int foundIndex = Values.BinarySearchRecursive(time, 0, Values.Count - 1);
+        Segment found = Values[foundIndex];
         if (found.ContainsPoint(time))
         {
             return found;
@@ -39,7 +39,7 @@ public class BuffsGraphModel
 
     public IEnumerable<Segment> GetBuffStatus(long start, long end)
     {
-        return BuffChart.Where(seg => seg.Intersects(start, end));
+        return Values.Where(seg => seg.Intersects(start, end));
     }
 
     public int GetStackCount(long time)
@@ -58,30 +58,20 @@ public class BuffsGraphModel
         return GetStackCount(time) > 0;
     }
 
-    //TODO(Rennorb) @perf
-    /// <summary>
-    /// Fuse consecutive segments with same value
-    /// </summary>
-    internal void FuseSegments()
-    {
-        _buffChart.RemoveAll(x => x.Start > x.End);
-        _buffChart.FuseConsecutive();
-    }
-
     /// <summary>
     /// This method will integrate the graph "from" to "to"
     /// It is going to add +1 to "to" when "from" has a value > 0
     /// </summary>
     internal void MergePresenceInto(IReadOnlyList<Segment> from)
     {
-        if (_buffChart.Count == 0)
+        if (_buffChart.Values.Count == 0)
         {
-            _buffChart.AddRange(from.Select(x => new Segment(x.Start, x.End, x.Value > 0 ? 1 : 0)));
+            _buffChart = new StateGraph<double>(from.Select(x => new Segment(x.Start, x.End, x.Value > 0 ? 1 : 0)));
         }
         else
         {
             //TODO(Rennorb) @perf
-            var segmentsToFill = new LinkedList<Segment>(_buffChart);
+            var segmentsToFill = new LinkedList<Segment>(_buffChart.Values);
             var node = segmentsToFill.First;
             foreach (Segment seg in from)
             {
@@ -139,10 +129,10 @@ public class BuffsGraphModel
                     }
                 }
             }
-            _buffChart = segmentsToFill.ToList();
+            _buffChart = new StateGraph<double>(segmentsToFill.ToList());
         }
         // Merge consecutive segments with same value, otherwise expect exponential growth
-        FuseSegments();
+        _buffChart.FuseSegments();
     }
 
 }

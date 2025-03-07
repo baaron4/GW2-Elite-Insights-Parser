@@ -5,11 +5,12 @@ namespace GW2EIEvtcParser.EIData;
 
 partial class SingleActor
 {
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = [];
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageList1S = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<InterpolatedGraph<int>>> _damageTakenList1S = [];
 
-    private CachingCollectionWithTarget<double[]>? _breakbarDamageList1S;
-    private CachingCollectionWithTarget<double[]>? _breakbarDamageTakenList1S;
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageList1S;
+    private CachingCollectionWithTarget<InterpolatedGraph<double>>? _breakbarDamageTakenList1S;
+
     private IReadOnlyList<Segment>? _healthUpdates;
     private IReadOnlyList<Segment>? _breakbarPercentUpdates;
     private IReadOnlyList<Segment>? _barrierUpdates;
@@ -82,11 +83,10 @@ partial class SingleActor
         return res;
     }
 
-    private static int[] ComputeDamageGraph(IEnumerable<HealthDamageEvent> dls, long start, long end)
+    private static InterpolatedGraph<int> ComputeDamageGraph(IEnumerable<HealthDamageEvent> dls, long start, long end)
     {
-        int durationInMS = (int)(end - start);
-        int durationInS = durationInMS / 1000;
-        var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+        var graph = new InterpolatedGraph<int>(start, end, 1000);
+        var graphValues = graph._values;
         // fill the graph
         int previousTime = 0;
         foreach (HealthDamageEvent dl in dls)
@@ -96,26 +96,26 @@ partial class SingleActor
             {
                 for (int i = previousTime + 1; i <= time; i++)
                 {
-                    graph[i] = graph[previousTime];
+                    graphValues[i] = graphValues[previousTime];
                 }
             }
             previousTime = time;
-            graph[time] += dl.HealthDamage;
+            graphValues[time] += dl.HealthDamage;
         }
 
-        for (int i = previousTime + 1; i < graph.Length; i++)
+        for (int i = previousTime + 1; i < graphValues.Length; i++)
         {
-            graph[i] = graph[previousTime];
+            graphValues[i] = graphValues[previousTime];
         }
 
         return graph;
     }
 
-    public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    public InterpolatedGraph<int> GetDamageGraph(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
         if (!_damageList1S.TryGetValue(damageType, out var graphs))
         {
-            graphs = new CachingCollectionWithTarget<int[]>(log);
+            graphs = new CachingCollectionWithTarget<InterpolatedGraph<int>>(log);
             _damageList1S[damageType] = graphs;
         }
 
@@ -129,11 +129,11 @@ partial class SingleActor
         return graph;
     }
 
-    public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    public InterpolatedGraph<int> GetDamageTakenGraph(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
         if (!_damageTakenList1S.TryGetValue(damageType, out var graphs))
         {
-            graphs = new CachingCollectionWithTarget<int[]>(log);
+            graphs = new CachingCollectionWithTarget<InterpolatedGraph<int>>(log);
             _damageTakenList1S[damageType] = graphs;
         }
 
@@ -147,11 +147,10 @@ partial class SingleActor
         return graph;
     }
 
-    private static double[] ComputeBreakbarDamageGraph(IEnumerable<BreakbarDamageEvent> dls, long start, long end)
+    private static InterpolatedGraph<double> ComputeBreakbarDamageGraph(IEnumerable<BreakbarDamageEvent> dls, long start, long end)
     {
-        int durationInMS = (int)(end - start);
-        int durationInS = durationInMS / 1000;
-        double[] graph = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
+        var graph = new InterpolatedGraph<double>(start, end, 1000);
+        var graphValue = graph._values;
         // fill the graph
         int previousTime = 0;
         foreach (BreakbarDamageEvent dl in dls)
@@ -161,29 +160,29 @@ partial class SingleActor
             {
                 for (int i = previousTime + 1; i <= time; i++)
                 {
-                    graph[i] = graph[previousTime];
+                    graphValue[i] = graphValue[previousTime];
                 }
             }
             previousTime = time;
-            graph[time] += dl.BreakbarDamage;
+            graphValue[time] += dl.BreakbarDamage;
         }
 
-        for (int i = previousTime + 1; i < graph.Length; i++)
+        for (int i = previousTime + 1; i < graphValue.Length; i++)
         {
-            graph[i] = graph[previousTime];
+            graphValue[i] = graphValue[previousTime];
         }
 
         return graph;
     }
 
-    public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target)
+    public InterpolatedGraph<double>? GetBreakbarDamageGraph(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
         if (!log.CombatData.HasBreakbarDamageData)
         {
             return null;
         }
 
-        _breakbarDamageList1S ??= new CachingCollectionWithTarget<double[]>(log);
+        _breakbarDamageList1S ??= new CachingCollectionWithTarget<InterpolatedGraph<double>>(log);
 
         if (_breakbarDamageList1S.TryGetValue(start, end, target, out var res))
         {
@@ -195,14 +194,14 @@ partial class SingleActor
         return brkDmgList;
     }
 
-    public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target)
+    public InterpolatedGraph<double>? GetBreakbarDamageTakenGraph(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
         if (!log.CombatData.HasBreakbarDamageData)
         {
             return null;
         }
 
-        _breakbarDamageTakenList1S ??= new CachingCollectionWithTarget<double[]>(log);
+        _breakbarDamageTakenList1S ??= new CachingCollectionWithTarget<InterpolatedGraph<double>>(log);
 
         if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out var res))
         {

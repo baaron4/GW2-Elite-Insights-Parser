@@ -64,13 +64,13 @@ internal static class JsonBuffsUptimeBuilder
         }
         return jsonBuffsUptime;
     }
-    public static IEnumerable<(long Time, int BoonCount)> GetBuffStates(BuffsGraphModel? bgm)
+    public static IEnumerable<(long Time, int BoonCount)> GetBuffStates(BuffGraph? bgm)
     {
-        if (bgm == null || bgm.BuffChart.Count == 0)
+        if (bgm == null || bgm.Values.Count == 0)
         {
             return [];
         }
 
-        return bgm.BuffChart.Select(x => (x.Start, (int)x.Value));
+        return bgm.Values.Select(x => (x.Start, (int)x.Value));
     }
 }

@@ -117,7 +117,7 @@ public abstract class FightLogic
         {
             if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
             {
-                return graph.BuffChart.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
+                return graph.Values.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
             }
             else
             {

@@ -224,10 +224,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
         foreach (AgentItem agent in agents)
         {
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(agent).GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out var bgm))
             {
-                if (bgm.BuffChart.Any(x => x.Value == 6)) { return true; }
+                if (bgm.Values.Any(x => x.Value == 6)) { return true; }
             }
         }
         return false;
@@ -429,7 +429,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         base.ComputePlayerCombatReplayActors(p, log, replay);
         if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out var value))
         {
-            foreach (Segment segment in value.BuffChart)
+            foreach (Segment segment in value.Values)
             {
                 //TODO(Rennorb) @correctnes: there was a null check here, i have no clue why.
                 if (!segment.IsEmpty() && segment.Value == 1)

@@ -1873,10 +1873,10 @@ internal class HarvestTemple : EndOfDragonsStrike
 
         foreach (AgentItem orb in orbs)
         {
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(orb).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(orb).GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out var bgm))
             {
-                if (bgm.BuffChart.Any(x => x.Value >= 3))
+                if (bgm.Values.Any(x => x.Value >= 3))
                 {
                     return false;
                 }

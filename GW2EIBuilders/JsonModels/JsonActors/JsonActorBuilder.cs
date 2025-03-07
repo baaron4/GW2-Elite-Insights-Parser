@@ -66,10 +66,10 @@ internal static class JsonActorBuilder
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                damage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All);
-                powerDamage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power);
-                conditionDamage1S[i] = actor.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition);
-                breakbarDamage1S[i] = actor.Get1SBreakbarDamageList(log, phase.Start, phase.End, null);
+                damage1S[i] = actor.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.All).Values;
+                powerDamage1S[i] = actor.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power).Values;
+                conditionDamage1S[i] = actor.GetDamageGraph(log, phase.Start, phase.End, null, ParserHelper.DamageType.Condition).Values;
+                breakbarDamage1S[i] = actor.GetBreakbarDamageGraph(log, phase.Start, phase.End, null)?.Values;
             }
             jsonActor.Damage1S = damage1S;
             jsonActor.PowerDamage1S = powerDamage1S;
@@ -86,7 +86,7 @@ internal static class JsonActorBuilder
         //
         if (settings.RawFormatTimelineArrays)
         {
-            IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> buffGraphs = actor.GetBuffGraphs(log);
             jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons])?.ToList();
             jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions])?.ToList();
             if (buffGraphs.TryGetValue(SkillIDs.NumberOfActiveCombatMinions, out var states))

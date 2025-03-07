@@ -941,7 +941,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
         foreach (AgentItem player in log.PlayerAgents)
         {
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(player).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(player).GetBuffGraphs(log);
             foreach (long buff in beamsBuffs)
             {
                 beamsSegments = GetBuffSegments(bgms, buff, beamsSegments).OrderBy(x => x.Start).ToList();
@@ -950,7 +950,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
         foreach (AgentItem agent in log.AgentData.GetNPCsByID(TrashID.FerrousBomb))
         {
-            IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(agent).GetBuffGraphs(log);
             bombInvulnSegments = GetBuffSegments(bgms, FailSafeActivated, bombInvulnSegments).OrderBy(x => x.Start).ToList();
         }
 
@@ -973,11 +973,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return counter == 8;
     }
 
-    private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long buff, List<Segment> segments)
+    private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffGraph> bgms, long buff, List<Segment> segments)
     {
         if (bgms != null && bgms.TryGetValue(buff, out var bgm))
         {
-            foreach (Segment s in bgm.BuffChart)
+            foreach (Segment s in bgm.Values)
             {
                 if (s.Value == 1)
                 {

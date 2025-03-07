@@ -71,10 +71,10 @@ internal class Matthias : SalvationPass
             long fightStart = log.FightData.FightStart + ParserHelper.ServerDelayConstant;
             foreach (Player p in log.PlayerList)
             {
-                IReadOnlyDictionary<long, BuffsGraphModel> graphs = p.GetBuffGraphs(log);
+                IReadOnlyDictionary<long, BuffGraph> graphs = p.GetBuffGraphs(log);
                 if (graphs.TryGetValue(BloodstoneBisque, out var graph))
                 {
-                    if (!graph.BuffChart.Any(x => x.Value == 0 && x.Intersects(fightStart, fightEnd)))
+                    if (!graph.Values.Any(x => x.Value == 0 && x.Intersects(fightStart, fightEnd)))
                     {
                         playersWithBisque++;
                     }

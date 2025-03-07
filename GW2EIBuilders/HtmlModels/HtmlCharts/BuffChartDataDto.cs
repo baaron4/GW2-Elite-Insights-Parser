@@ -39,7 +39,7 @@ internal class BuffChartDataDto
         };
     }
 
-    private BuffChartDataDto(BuffsGraphModel bgm, IReadOnlyList<GenericSegment<double>> bChart, PhaseData phase)
+    private BuffChartDataDto(BuffGraph bgm, IReadOnlyList<GenericSegment<double>> bChart, PhaseData phase)
     {
         Id = bgm.Buff.ID;
         Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");
@@ -47,9 +47,9 @@ internal class BuffChartDataDto
         States = bChart.ToObjectList(phase.Start, phase.End);
     }
 
-    private static BuffChartDataDto? BuildBuffGraph(BuffsGraphModel bgm, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+    private static BuffChartDataDto? BuildBuffGraph(BuffGraph bgm, PhaseData phase, Dictionary<long, Buff> usedBuffs)
     {
-        var bChart = bgm.BuffChart.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
+        var bChart = bgm.Values.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
         if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
         {
             return null;
@@ -58,7 +58,7 @@ internal class BuffChartDataDto
         return new BuffChartDataDto(bgm, bChart, phase);
     }
 
-    private static void BuildBoonGraphData(List<BuffChartDataDto> list, IReadOnlyList<Buff> listToUse, Dictionary<long, BuffsGraphModel> boonGraphData, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+    private static void BuildBoonGraphData(List<BuffChartDataDto> list, IReadOnlyList<Buff> listToUse, Dictionary<long, BuffGraph> boonGraphData, PhaseData phase, Dictionary<long, Buff> usedBuffs)
     {
         foreach (Buff buff in listToUse)
         {
@@ -73,7 +73,7 @@ internal class BuffChartDataDto
         }
     }
 
-    private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, PhaseData phase, Dictionary<long, BuffsGraphModel> buffGraphData, Dictionary<long, Buff> usedBuffs)
+    private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, PhaseData phase, Dictionary<long, BuffGraph> buffGraphData, Dictionary<long, Buff> usedBuffs)
     {
         var list = new List<BuffChartDataDto>(
             log.StatisticsHelper.PresentBoons.Count +
@@ -99,7 +99,7 @@ internal class BuffChartDataDto
         BuildBoonGraphData(footList, log.StatisticsHelper.PresentNourishements, buffGraphData, phase, usedBuffs);
         BuildBoonGraphData(footList, log.StatisticsHelper.PresentEnhancements, buffGraphData, phase, usedBuffs);
         BuildBoonGraphData(footList, log.StatisticsHelper.PresentOtherConsumables, buffGraphData, phase, usedBuffs);
-        foreach (BuffsGraphModel bgm in buffGraphData.Values)
+        foreach (BuffGraph bgm in buffGraphData.Values)
         {
             if (bgm.Buff.Classification == Buff.BuffClassification.Hidden)
             {

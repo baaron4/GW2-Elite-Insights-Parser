@@ -14,10 +14,10 @@ public static class SegmentExt {
     /// <summary>
     /// Fuse consecutive segments with same value. The list should not be empty.
     /// </summary>
-    public static void FuseConsecutive(this List<Segment> segments)
+    public static void FuseConsecutive<T>(this List<GenericSegment<T>> segments)
     {
 
-        Segment last = segments[0];
+        GenericSegment<T> last = segments[0];
         int lastIndex = 0;
         for(int i = 1; i < segments.Count; i++)
         {
@@ -28,7 +28,7 @@ public static class SegmentExt {
                 continue;
             }
 
-            if (current.Value == last.Value)
+            if (current.Value != null && current.Value.Equals(last.Value))
             {
                 last.End = current.End;
                 segments[lastIndex] = last;
@@ -43,38 +43,6 @@ public static class SegmentExt {
         segments[lastIndex++] = last;
 
         segments.RemoveRange(lastIndex, segments.Count - lastIndex);
-    }
-
-    /// <summary>
-    /// Fuse consecutive segments with same value. The list should not be empty.
-    /// </summary>
-    public static List<Segment> FuseConsecutive(this IReadOnlyList<Segment> input)
-    {
-        //TODO(Rennorb) @mem could be trimmed if desired. dont always do it
-        var newChart = new List<Segment>(input.Count);
-
-        Segment last = input.First();
-        foreach (Segment seg in input.Skip(1))
-        {
-            //TODO(Rennorb) perf
-            if (seg.Start == seg.End)
-            {
-                continue;
-            }
-
-            if (seg.Value == last.Value)
-            {
-                last.End = seg.End;
-            }
-            else
-            {
-                newChart.Add(last);
-                last = seg;
-            }
-        }
-        newChart.Add(last);
-
-        return newChart;
     }
 
     //TODO(Rennorb) @cleanup @perf
