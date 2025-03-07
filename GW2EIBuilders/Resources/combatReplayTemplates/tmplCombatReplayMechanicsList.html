@@ -125,7 +125,7 @@
                         if (tarId >= 0) {
                             var target = logData.targets[tarId];
                             for (var i = 0; i < points.length; i++) {
-                                var time = points[i]; // when mechanic occured in seconds
+                                var time = points[i][0]; // when mechanic occured in seconds
                                 mechanicEvents.push({
                                     time: time * 1000,
                                     actor: { name: target.name, enemy: true, id: -1 }, // target selection not supported
