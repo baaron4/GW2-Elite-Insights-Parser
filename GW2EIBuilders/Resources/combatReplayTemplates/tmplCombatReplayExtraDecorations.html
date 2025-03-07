@@ -143,19 +143,19 @@
         },
         mounted() {
             $('#circle1Text').on("input ", function () {
-                animator.setRangeRadius(0, $(this).val());
+                animator.setRangeRadius(0, Number.parseFloat($(this).val()));
             });
             $('#circle2Text').on("input ", function () {
-                animator.setRangeRadius(1, $(this).val());
+                animator.setRangeRadius(1, Number.parseFloat($(this).val()));
             });
             $('#circle3Text').on("input ", function () {
-                animator.setRangeRadius(2, $(this).val());
+                animator.setRangeRadius(2, Number.parseFloat($(this).val()));
             });
             $('#coneRadiusText').on("input ", function () {
-                animator.setConeRadius($(this).val());
+                animator.setConeRadius(Number.parseFloat($(this).val()));
             });
             $('#coneAngleText').on("input ", function () {
-                animator.setConeAngle($(this).val());
+                animator.setConeAngle(Number.parseFloat($(this).val()));
             });
         }
     });

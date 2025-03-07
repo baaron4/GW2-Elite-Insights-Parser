@@ -74,6 +74,8 @@ public class HTMLAssets
     {
         var templates = new List<string>
         {
+            Properties.Resources.tmplGraph,
+            //
             Properties.Resources.tmplBuffStats,
             Properties.Resources.tmplBuffStatsPlayer,
             Properties.Resources.tmplBuffStatsTarget,

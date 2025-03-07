@@ -67,10 +67,10 @@
         mounted() {
             var _this = this;
             $('#customDPS').on("input ", function () {
-                _this.data.dpsmode = Math.ceil($(this).val() / 2) * 2;
+                _this.data.dpsmode = Math.ceil(Number.parseFloat($(this).val()) / 2) * 2;
             });
             $('#customDPS').on("click ", function () {
-                _this.data.dpsmode = Math.ceil($(this).val() / 2) * 2;
+                _this.data.dpsmode = Math.ceil(Number.parseFloat($(this).val()) / 2) * 2;
             });
         },
         computed: {

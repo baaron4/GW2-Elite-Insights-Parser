@@ -1,0 +1,139 @@
+<template>
+    <div>
+        <div class="d-flex flex-row align-items-center">
+            <span>X: </span>
+            <custom-numberform-component style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMin'"
+                :placeholderValue="0"></custom-numberform-component>
+            <custom-numberform-component style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMax'"
+                :placeholderValue="0"></custom-numberform-component>
+        </div>
+        <div :id="id" class="d-flex flex-row justify-content-center"></div>
+    </div>
+</template>
+
+<script>
+    const plotlyConfig = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d'],
+        showEditInChartStudio: true,
+        plotlyServerURL: "https://chart-studio.plotly.com"
+    };
+    Vue.component("graph-component", {
+        props: ['id', 'layout', 'data'],
+        template: `${template}`,
+        activated: function () {
+            var div = document.querySelector(this.queryID);
+            Plotly.react(div, this.data, this.layout, plotlyConfig);
+            var _this = this;
+            div.on('plotly_animated', function () {
+                $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
+                $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);
+                // to be safe
+                for (let yAxisIndex = 0; yAxisIndex < 8; yAxisIndex++) {
+                    let yAxisName = 'yaxis' + (yAxisIndex > 0 ? yAxisIndex : '');
+                    let yAxisDataName = 'y' + (yAxisIndex > 0 ? yAxisIndex : '');
+                    if (!_this.layout[yAxisName]) {
+                        continue;
+                    }
+                    if (_this.layout[yAxisName].autorange) {
+                        let minRange = Number.MAX_SAFE_INTEGER;
+                        let maxRange = Number.MIN_SAFE_INTEGER;
+                        for (let i = 0; i < _this.data.length; i++) {
+                            let curData = _this.data[i];
+                            if (yAxisIndex === 0) {
+                                if (curData.yaxis && curData.yaxis !== yAxisDataName) {
+                                    continue;
+                                }
+                            } else if (curData.yaxis !== yAxisDataName) {
+                                continue;
+                            }
+                            if (curData.y && curData.visible !== false && curData.visible !== "legendonly") {
+                                for (let j = 0; j < curData.y.length; j++) {
+                                    minRange = Math.min(minRange, curData.y[j]);
+                                    maxRange = Math.max(maxRange, curData.y[j]);
+                                }
+                            }
+                        }
+                        if (maxRange === Number.MIN_SAFE_INTEGER) {
+                            maxRange = 1;
+                            minRange = 0;
+                        }
+                        _this.layout[yAxisName].range[0] = minRange * 1.06;
+                        _this.layout[yAxisName].range[1] = maxRange * 1.06;
+                    }
+                }
+                Plotly.relayout(div, _this.layout);
+            });
+            div.on('plotly_hover', function () {
+                $(_this.queryID + 'xMin').val(_this.layout.xaxis.range[0]);
+                $(_this.queryID + 'xMax').val(_this.layout.xaxis.range[1]);          
+            });
+        },
+        computed: {
+            queryID: function () {
+                return "#" + this.id;
+            },
+        },
+        mounted() {
+            const _this = this;
+            const layout = this.layout;
+            const div = document.querySelector(this.queryID);
+            $(this.queryID + 'xMin').on("input ", function () {
+                let value = Number.parseFloat($(this).val());
+                let currentXMax = layout.xaxis.range[1];
+                if (value >= currentXMax) {
+                    currentXMax = value + 1;
+                }
+                layout.xaxis.autorange = false;
+                layout.xaxis.range[0] = value;
+                layout.xaxis.range[1] = currentXMax;
+                $(_this.queryID + 'xMax').val(currentXMax);
+                Plotly.relayout(div, _this.layout);
+            });
+            $(this.queryID + 'xMax').on("input ", function () {
+                let value = Number.parseFloat($(this).val());
+                let currentXMin = layout.xaxis.range[0];
+                if (currentXMin >= value) {
+                    currentXMin = value - 1;
+                }
+                layout.xaxis.autorange = false;
+                layout.xaxis.range[0] = currentXMin;
+                layout.xaxis.range[1] = value;
+                $(_this.queryID + 'xMin').val(currentXMin);
+                Plotly.relayout(div, _this.layout);
+            });
+        },
+        watch: {
+            layout: {
+                handler: function () {
+                    var div = document.querySelector(this.queryID);
+                    if (!div) {
+                        return;
+                    }
+                    var duration = 1000;
+                    Plotly.animate(div, {
+                        data: this.data
+                    }, {
+                        transition: {
+                            duration: duration,
+                            easing: 'cubic-in-out'
+                        },
+                        frame: {
+                            duration: 0.75 * duration
+                        }
+                    });
+                },
+                deep: true
+            },
+            data: {
+                handler: function () {
+                    var div = document.querySelector(this.queryID);
+                    if (!div) {
+                        return;
+                    }
+                    Plotly.react(div, this.data, this.layout, plotlyConfig);
+                },
+                deep: true
+            }
+        }
+    });
+</script>

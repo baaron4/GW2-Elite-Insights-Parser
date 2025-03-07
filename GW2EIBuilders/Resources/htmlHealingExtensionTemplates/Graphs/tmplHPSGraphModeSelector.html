@@ -76,10 +76,10 @@
         mounted() {
             var _this = this;
             $('#customHPS').on("input ", function () {
-                _this.data.hpsmode = Math.ceil($(this).val() / 2) * 2;
+                _this.data.hpsmode = Math.ceil(Number.parseFloat($(this).val()) / 2) * 2;
             });
             $('#customHPS').on("click ", function () {
-                _this.data.hpsmode = Math.ceil($(this).val() / 2) * 2;
+                _this.data.hpsmode = Math.ceil(Number.parseFloat($(this).val()) / 2) * 2;
             });
         },
         computed: {
