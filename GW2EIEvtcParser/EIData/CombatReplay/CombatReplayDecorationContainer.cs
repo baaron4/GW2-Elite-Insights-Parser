@@ -220,7 +220,7 @@ internal class CombatReplayDecorationContainer
             else if (tether is BuffRemoveAllEvent)
             {
                 int tetherEnd = (int)tether.Time;
-                if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
+                if (!src.IsUnknown && !dst.IsUnknown)
                 {
                     Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)).WithThickess(thickness, worldSizeThickess));
                     src = ParserHelper._unknownAgent;
@@ -265,7 +265,7 @@ internal class CombatReplayDecorationContainer
             else if (tether is BuffRemoveAllEvent)
             {
                 int tetherEnd = (int)tether.Time;
-                if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
+                if (!src.IsUnknown && !dst.IsUnknown)
                 {
                     var srcConnector = srcConnectorBuilder(log, src, tetherStart, tetherEnd);
                     var dstConnector = dstConnectorBuilder(log, dst, tetherStart, tetherEnd);
@@ -314,7 +314,7 @@ internal class CombatReplayDecorationContainer
             lifespan = (effect.Time, effect.Time + duration);
         }
 
-        if (effect.Src != ParserHelper._unknownAgent && effect.Dst != ParserHelper._unknownAgent)
+        if (!effect.Src.IsUnknown && !effect.Dst.IsUnknown)
         {
             Add(new LineDecoration(lifespan, color, new AgentConnector(effect.Dst), new AgentConnector(effect.Src)));
         }

@@ -7,7 +7,7 @@ internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
 {
     protected override bool Keep(HealthDamageEvent c, ParsedEvtcLog log)
     {
-        return c.From != ParserHelper._unknownAgent && base.Keep(c, log) && GetFirstHit(c.From, log) == c;
+        return !c.From.IsUnknown && base.Keep(c, log) && GetFirstHit(c.From, log) == c;
     }
 
     private readonly Dictionary<AgentItem, HealthDamageEvent?> _firstHits = [];

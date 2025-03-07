@@ -282,7 +282,7 @@ internal class Kanaxai : SilentSurf
         AgentItem tetherAspect = _unknownAgent;
         foreach (BuffApplyEvent apply in tetherApplies)
         {
-            tetherAspect = apply.By == _unknownAgent ? tetherAspect : apply.By;
+            tetherAspect = apply.By.IsUnknown ? tetherAspect : apply.By;
             int start = (int)apply.Time;
             BuffApplyEvent? replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
             BuffRemoveAllEvent? remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);

@@ -8,7 +8,7 @@ public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     public uint BuffInstance { get; protected set; }
 
     private readonly bool _byShouldntBeUnknown;
-    internal bool OverstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
+    internal bool OverstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy.IsUnknown && !_byShouldntBeUnknown);
 
     internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {

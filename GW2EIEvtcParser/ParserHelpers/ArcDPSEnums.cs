@@ -5,33 +5,33 @@ public static class ArcDPSEnums
 
     public const int ArcDPSPollingRate = 300;
 
-    internal static class ArcDPSBuilds
+    public static class ArcDPSBuilds
     {
-        internal const int StartOfLife = int.MinValue;
+        public const int StartOfLife = int.MinValue;
         //
-        internal const int ProperConfusionDamageSimulation = 20210529;
-        internal const int ScoringSystemChange = 20210800; // was somewhere around there
-        internal const int DirectX11Update = 20210923;
-        internal const int InternalSkillIDsChange = 20220304;
-        internal const int BuffAttrFlatIncRemoved = 20220308;
-        internal const int FunctionalIDToGUIDEvents = 20220709;
-        internal const int NewLogStart = 20221111;
-        internal const int Effect2Events = 20230718;
-        internal const int FunctionalEffect2Events = 20230719;
-        internal const int BuffExtensionBroken = 20230905;
-        internal const int BuffExtensionOverstackValueChanged = 20231107;
-        internal const int LingeringAgents = 20231110;
-        internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
-        internal const int NewMarkerEventBehavior = 20240418;
-        internal const int Last90BeforeDownRetired = 20240529;
-        internal const int StackType0ActiveChange = 20240609;
-        internal const int TeamChangeOnDespawn = 20240612;
-        internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
-        internal const int MovementSkillDetection = 20240709;
-        internal const int EICanDoManualBuffAttributes = 20240716;
-        internal const int ExtraDataInGUIDEvents = 20241030;
+        public const int ProperConfusionDamageSimulation = 20210529;
+        public const int ScoringSystemChange = 20210800; // was somewhere around there
+        public const int DirectX11Update = 20210923;
+        public const int InternalSkillIDsChange = 20220304;
+        public const int BuffAttrFlatIncRemoved = 20220308;
+        public const int FunctionalIDToGUIDEvents = 20220709;
+        public const int NewLogStart = 20221111;
+        public const int Effect2Events = 20230718;
+        public const int FunctionalEffect2Events = 20230719;
+        public const int BuffExtensionBroken = 20230905;
+        public const int BuffExtensionOverstackValueChanged = 20231107;
+        public const int LingeringAgents = 20231110;
+        public const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
+        public const int NewMarkerEventBehavior = 20240418;
+        public const int Last90BeforeDownRetired = 20240529;
+        public const int StackType0ActiveChange = 20240609;
+        public const int TeamChangeOnDespawn = 20240612;
+        public const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
+        public const int MovementSkillDetection = 20240709;
+        public const int EICanDoManualBuffAttributes = 20240716;
+        public const int ExtraDataInGUIDEvents = 20241030;
         //
-        internal const int EndOfLife = int.MaxValue;
+        public const int EndOfLife = int.MaxValue;
     }
 
     public static class WeaponSetIDs
@@ -63,29 +63,29 @@ public static class ArcDPSEnums
     /// <summary>
     /// Class containing <see cref="int"/> reward types.
     /// </summary>
-    internal static class RewardTypes
+    public static class RewardTypes
     {
-        internal const int Daily = 13;
-        internal const int OldRaidReward1 = 55821; // On each kill
-        internal const int OldRaidReward2 = 60685; // On each kill
-        internal const int CurrentRaidReward = 22797; // Once per week
-        internal const int PostEoDStrikeReward = 29453;
+        public const int Daily = 13;
+        public const int OldRaidReward1 = 55821; // On each kill
+        public const int OldRaidReward2 = 60685; // On each kill
+        public const int CurrentRaidReward = 22797; // Once per week
+        public const int PostEoDStrikeReward = 29453;
     }
 
     /// <summary>
     /// Class containing <see cref="ulong"/> reward IDs.
     /// </summary>
-    internal static class RewardIDs
+    public static class RewardIDs
     {
-        internal const ulong FreezieChest = 914;
-        internal const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
-        internal const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
-        internal const ulong KodansCurrentChest1 = 1028; // Current, once a day
-        internal const ulong KodansCurrentChest2 = 1032; // Current, once a day
-        internal const ulong KodansCurrentRepeatableChest = 1091; // Current, repeatable
-        internal const ulong FraenirRepeatableChest = 1007;
-        internal const ulong BoneskinnerRepeatableChest = 1031;
-        internal const ulong WhisperRepeatableChest = 1052;
+        public const ulong FreezieChest = 914;
+        public const ulong ShiverpeaksPassChests = 993; // Three chests, once a day
+        public const ulong KodansOldAndCurrentChest = 1035; // Old repeatable chest, now only once a day
+        public const ulong KodansCurrentChest1 = 1028; // Current, once a day
+        public const ulong KodansCurrentChest2 = 1032; // Current, once a day
+        public const ulong KodansCurrentRepeatableChest = 1091; // Current, repeatable
+        public const ulong FraenirRepeatableChest = 1007;
+        public const ulong BoneskinnerRepeatableChest = 1031;
+        public const ulong WhisperRepeatableChest = 1052;
     }
 
     // Activation
@@ -101,7 +101,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static Activation GetActivation(byte bt)
+    public static Activation GetActivation(byte bt)
     {
         return bt < (byte)Activation.Unknown ? (Activation)bt : Activation.Unknown;
     }
@@ -117,7 +117,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static BuffRemove GetBuffRemove(byte bt)
+    public static BuffRemove GetBuffRemove(byte bt)
     {
         return bt < (byte)BuffRemove.Unknown ? (BuffRemove)bt : BuffRemove.Unknown;
     }
@@ -134,7 +134,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static BuffCycle GetBuffCycle(byte bt)
+    public static BuffCycle GetBuffCycle(byte bt)
     {
         return bt < (byte)BuffCycle.Unknown ? (BuffCycle)bt : BuffCycle.Unknown;
     }
@@ -160,7 +160,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static PhysicalResult GetPhysicalResult(byte bt)
+    public static PhysicalResult GetPhysicalResult(byte bt)
     {
         return bt < (byte)PhysicalResult.Unknown ? (PhysicalResult)bt : PhysicalResult.Unknown;
     }
@@ -176,7 +176,7 @@ public static class ArcDPSEnums
 
         Unknown
     };
-    internal static ConditionResult GetConditionResult(byte bt)
+    public static ConditionResult GetConditionResult(byte bt)
     {
         return bt < (byte)ConditionResult.Unknown ? (ConditionResult)bt : ConditionResult.Unknown;
     }
@@ -244,7 +244,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static StateChange GetStateChange(byte bt)
+    public static StateChange GetStateChange(byte bt)
     {
         return bt < (byte)StateChange.Unknown ? (StateChange)bt : StateChange.Unknown;
     }
@@ -258,7 +258,7 @@ public static class ArcDPSEnums
         None = 3,
         Unknown
     };
-    internal static BreakbarState GetBreakbarState(int value)
+    public static BreakbarState GetBreakbarState(int value)
     {
         return value < (int)BreakbarState.Unknown ? (BreakbarState)value : BreakbarState.Unknown;
     }
@@ -276,7 +276,7 @@ public static class ArcDPSEnums
         Force = 5,
         Unknown,
     };
-    internal static BuffStackType GetBuffStackType(byte bt)
+    public static BuffStackType GetBuffStackType(byte bt)
     {
         return bt < (byte)BuffStackType.Unknown ? (BuffStackType)bt : BuffStackType.Unknown;
     }
@@ -368,7 +368,7 @@ public static class ArcDPSEnums
         AllStatsPercent = -36,
     }
 
-    internal static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
+    public static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
     {
         if (evtcBuild >= ArcDPSBuilds.EICanDoManualBuffAttributes)
         {
@@ -414,7 +414,7 @@ public static class ArcDPSEnums
         Stance = 16,
         Unknown = byte.MaxValue
     }
-    internal static BuffCategory GetBuffCategory(byte bt)
+    public static BuffCategory GetBuffCategory(byte bt)
     {
         return Enum.IsDefined(typeof(BuffCategory), bt) ? (BuffCategory)bt : BuffCategory.Unknown;
     }*/
@@ -425,7 +425,7 @@ public static class ArcDPSEnums
         AnimationCompleted = 5,
         Unknown = byte.MaxValue,
     }
-    internal static SkillAction GetSkillAction(byte bt)
+    public static SkillAction GetSkillAction(byte bt)
     {
         return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
     }
@@ -445,7 +445,7 @@ public static class ArcDPSEnums
         X = 7,
         Unknown
     }
-    internal static SquadMarkerIndex GetSquadMarkerIndex(byte bt)
+    public static SquadMarkerIndex GetSquadMarkerIndex(byte bt)
     {
         return bt < (byte)SquadMarkerIndex.Unknown ? (SquadMarkerIndex)bt : SquadMarkerIndex.Unknown;
     }
@@ -457,7 +457,7 @@ public static class ArcDPSEnums
         Marker = 1,
         Unknown
     }
-    internal static ContentLocal GetContentLocal(byte bt)
+    public static ContentLocal GetContentLocal(byte bt)
     {
         return bt < (byte)ContentLocal.Unknown ? (ContentLocal)bt : ContentLocal.Unknown;
     }
@@ -472,7 +472,7 @@ public static class ArcDPSEnums
         Unknown
     };
 
-    internal static IFF GetIFF(byte bt)
+    public static IFF GetIFF(byte bt)
     {
         return bt < (byte)IFF.Unknown ? (IFF)bt : IFF.Unknown;
     }

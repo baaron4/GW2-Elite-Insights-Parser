@@ -10,10 +10,6 @@ public abstract class BuffStackEvent : BuffEvent
         By = ParserHelper._unknownAgent;
     }
 
-    internal override void TryFindSrc(ParsedEvtcLog log)
-    {
-    }
-
     /*internal override int CompareTo(AbstractBuffEvent abe)
     {
         if (abe is AbstractBuffApplyEvent)

@@ -26,7 +26,7 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
                     0,
                     0, 0, 0, 0, cDur));
             }
-            if (_src == ParserHelper._unknownAgent)
+            if (_src.IsUnknown)
             {
                 if (distribution.TryGetValue(_seedSrc, out toModify))
                 {

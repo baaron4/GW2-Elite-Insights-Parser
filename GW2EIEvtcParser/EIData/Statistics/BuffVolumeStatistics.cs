@@ -163,7 +163,7 @@ public class BuffVolumeStatistics
                                 totalOutgoingByExtension += bee.ExtendedDuration;
                             }
                             totalIncomingByExtension += bee.ExtendedDuration;
-                            if (abe.CreditedBy == ParserHelper._unknownAgent)
+                            if (abe.CreditedBy.IsUnknown)
                             {
                                 totalIncomingByUnknownExtension += bee.ExtendedDuration;
                             }

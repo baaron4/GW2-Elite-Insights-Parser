@@ -15,6 +15,8 @@ public class AgentItem
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
     public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
+    public bool IsUnknown { get; private set; } = false;
+
     // Fields
     public readonly ulong Agent;
     public int ID { get; protected set; } = NonIdentifiedSpecies;
@@ -109,6 +111,7 @@ public class AgentItem
     internal AgentItem()
     {
         UniqueID = ++AgentCount;
+        IsUnknown = true;
     }
 
     internal void OverrideSpec(ParserHelper.Spec spec)
@@ -530,7 +533,7 @@ public class AgentItem
 
     public bool IsNonIdentifiedSpecies()
     {
-        return IsSpecies(NonIdentifiedSpecies);
+        return IsUnknown || IsSpecies(NonIdentifiedSpecies);
     }
 
     public bool IsSpecies(int id)

@@ -37,10 +37,6 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
         _addedActive = addedActive;
     }
 
-    internal override void TryFindSrc(ParsedEvtcLog log)
-    {
-    }
-
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
         simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);

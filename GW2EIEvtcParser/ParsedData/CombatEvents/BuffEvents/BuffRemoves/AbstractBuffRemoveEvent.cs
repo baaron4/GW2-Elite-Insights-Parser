@@ -24,8 +24,4 @@ public abstract class AbstractBuffRemoveEvent : BuffEvent
     {
         RemovedDuration = Math.Max(removedDuration, 0);
     }
-
-    internal override void TryFindSrc(ParsedEvtcLog log)
-    {
-    }
 }

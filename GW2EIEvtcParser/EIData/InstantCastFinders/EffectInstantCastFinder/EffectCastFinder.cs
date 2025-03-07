@@ -133,7 +133,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
             var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
             foreach (var group in effects)
             {
-                if (group.Key == _unknownAgent)
+                if (group.Key.IsUnknown)
                 {
                     continue;
                 }

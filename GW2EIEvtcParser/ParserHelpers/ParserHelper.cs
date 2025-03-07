@@ -27,9 +27,9 @@ public static class ParserHelper
     internal const int DamageModGainDigit = 3;
     internal const int AccelerationDigit = 3;
     internal const int CombatReplayDataDigit = 3;
-    internal const int TimeDigit = 3;
+    public const int TimeDigit = 3;
 
-    internal const long ServerDelayConstant = 10;
+    public const long ServerDelayConstant = 10;
     internal const long BuffSimulatorDelayConstant = 15;
     internal const long BuffSimulatorStackActiveDelayConstant = 50;
     internal const long WeaponSwapDelayConstant = 75;

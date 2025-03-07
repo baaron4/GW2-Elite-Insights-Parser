@@ -43,7 +43,10 @@ public abstract class BuffEvent : TimeCombatEvent
 
     internal abstract void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive);
 
-    internal abstract void TryFindSrc(ParsedEvtcLog log);
+    internal virtual void TryFindSrc(ParsedEvtcLog log)
+    {
+
+    }
 
     internal virtual bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
     {

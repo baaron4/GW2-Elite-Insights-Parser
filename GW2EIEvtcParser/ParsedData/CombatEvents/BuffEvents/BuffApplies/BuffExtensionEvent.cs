@@ -22,7 +22,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
 
     internal override void TryFindSrc(ParsedEvtcLog log)
     {
-        if (!_sourceFinderRan && By == ParserHelper._unknownAgent)
+        if (!_sourceFinderRan && By.IsUnknown)
         {
             _sourceFinderRan = true;
             if (ExtendedDuration > 1)

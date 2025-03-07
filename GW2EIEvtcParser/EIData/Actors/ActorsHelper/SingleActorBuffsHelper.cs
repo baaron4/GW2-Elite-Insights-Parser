@@ -296,7 +296,7 @@ partial class SingleActor
     internal void ComputeBuffMap(ParsedEvtcLog log)
     {
         _buffMap = new BuffDictionary(64, 256, 32, 1);
-        if (AgentItem == _unknownAgent)
+        if (AgentItem.IsUnknown)
         {
             _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
             return;

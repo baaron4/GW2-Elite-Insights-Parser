@@ -387,7 +387,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
             {
                 AgentItem dragonOrb = dragonOrbMaxHP.Src;
-                if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
+                if (!dragonOrb.IsUnknown && combatData.Count(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                 {
                     dragonOrb.OverrideName("Dragon Orb");
                     dragonOrb.OverrideID(TrashID.DragonEnergyOrb, agentData);

@@ -94,7 +94,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
                 toRemove.Shift(0, Math.Abs(removedDuration - toRemove.TotalDuration));
             }
             // Removed due to override
-            if (by == ParserHelper._unknownAgent)
+            if (by.IsUnknown)
             {
                 WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
                 if (toRemove.Extensions.Count != 0)

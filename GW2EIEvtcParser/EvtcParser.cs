@@ -715,10 +715,10 @@ public class EvtcParser
     private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
     {
         AgentItem master = _agentData.GetAgentByInstID(masterInstid, logTime);
-        if (master != _unknownAgent)
+        if (!master.IsUnknown)
         {
             AgentItem minion = _agentData.GetAgent(minionAgent, logTime);
-            if (minion != _unknownAgent && minion.Master == null)
+            if (!minion.IsUnknown && minion.Master == null)
             {
                 minion.SetMaster(master);
             }
