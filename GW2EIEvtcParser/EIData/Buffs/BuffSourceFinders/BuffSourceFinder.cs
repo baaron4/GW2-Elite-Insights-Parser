@@ -25,7 +25,7 @@ internal abstract class BuffSourceFinder
             _extensionSkills = [];
             foreach (Player p in log.PlayerList)
             {
-                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != CastEvent.AnimationStatus.Interrupted));
+                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.IsInterrupted));
             }
         }
         return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);

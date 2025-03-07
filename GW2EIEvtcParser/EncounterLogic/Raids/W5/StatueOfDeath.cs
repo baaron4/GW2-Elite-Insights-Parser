@@ -17,11 +17,7 @@ internal class StatueOfDeath : HallOfChains
         MechanicList.AddRange([
             new PlayerDstHitMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
             new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, "Reclaimed Energy", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected","Applied when taking a light orb", "Light Orb",0),
-            new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0)
-                .UsingChecker((evt, log) =>
-                {
-                    return evt.Status != CastEvent.AnimationStatus.Interrupted;
-                }),
+            new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0).UsingChecker((evt, log) => !evt.IsInterrupted),
             new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
         ]);
         Extension = "souleater";

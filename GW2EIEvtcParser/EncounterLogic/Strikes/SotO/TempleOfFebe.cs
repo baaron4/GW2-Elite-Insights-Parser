@@ -697,7 +697,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM);
         foreach (CastEvent cast in enviousGaze)
         {
-            if (cast.Status == CastEvent.AnimationStatus.Unknown)
+            if (cast.IsUnknown)
             {
                 continue;
             }

@@ -20,7 +20,7 @@ internal class StatueOfDarkness : HallOfChains
         {
         new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared","Feared by Eye Teleport Skill", "Feared",0),
         new PlayerDstBuffApplyMechanic(LightCarrier, "Light Carrier", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb","Light Carrier (picked up a light orb)", "Picked up orb",0),
-        new PlayerCastStartMechanic(Flare, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0).UsingChecker( (evt, log) => evt.Status != CastEvent.AnimationStatus.Interrupted),
+        new PlayerCastStartMechanic(Flare, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0).UsingChecker((evt, log) => !evt.IsInterrupted),
         new PlayerDstHitMechanic(PiercingShadow, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
         new PlayerDstHitMechanic(DeepAbyss, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
         new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied Daze/Fear/Knockdown on Eye of Fate", "CC Fate",50).UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfFate)),

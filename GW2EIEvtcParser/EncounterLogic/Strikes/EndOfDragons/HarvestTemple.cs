@@ -1529,7 +1529,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     int angle = 40;
                     long castDuration = 2368;
                     long supposedEndCast = c.Time + castDuration;
-                    long actualEndCast = c.Status == CastEvent.AnimationStatus.Interrupted && c.EndTime < c.Time + castDuration ? c.EndTime : supposedEndCast;
+                    long actualEndCast = c.IsInterrupted && c.EndTime < c.Time + castDuration ? c.EndTime : supposedEndCast;
                     (long start, long end) lifespan = (c.Time, actualEndCast);
                     var agentConnector = new AgentConnector(c.Caster);
                     var cone = new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector);
