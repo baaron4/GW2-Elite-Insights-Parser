@@ -3,7 +3,7 @@ namespace GW2EIEvtcParser.EIData;
 public class StateGraph<T>
 {
     public IReadOnlyList<GenericSegment<T>> Values => _values;
-    private List<GenericSegment<T>> _values;
+    private readonly List<GenericSegment<T>> _values;
 
     public StateGraph()
     {

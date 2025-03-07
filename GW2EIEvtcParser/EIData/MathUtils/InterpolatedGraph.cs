@@ -4,7 +4,7 @@ public class InterpolatedGraph<T>
 {
     public IReadOnlyList<T> Values => _values;
 
-    internal T[] _values;
+    internal readonly T[] _values;
 
     public readonly int First;
     public readonly int Last;
