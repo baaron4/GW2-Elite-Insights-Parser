@@ -83,7 +83,7 @@ public class GameplayStatistics
         //
         foreach (CastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
         {
-            if (cl.Status == CastEvent.AnimationStatus.Interrupted || cl.Status == CastEvent.AnimationStatus.Unknown)
+            if (cl.IsInterrupted || cl.IsUnknown)
             {
                 continue;
             }

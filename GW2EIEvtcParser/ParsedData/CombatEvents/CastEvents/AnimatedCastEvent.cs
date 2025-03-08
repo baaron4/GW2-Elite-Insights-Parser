@@ -120,7 +120,7 @@ public class AnimatedCastEvent : CastEvent
 
     internal void CutAt(long maxEnd)
     {
-        if (EndTime > maxEnd && Status == AnimationStatus.Unknown)
+        if (EndTime > maxEnd && IsUnknown)
         {
             ActualDuration = (int)(maxEnd - Time);
         }

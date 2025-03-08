@@ -13,6 +13,12 @@ public abstract class CastEvent : TimeCombatEvent
     public readonly AgentItem Caster;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
+    public bool IsUnknown => Status == AnimationStatus.Unknown;
+    public bool IsReduced => Status == AnimationStatus.Reduced;
+    public bool IsInterrupted => Status == AnimationStatus.Interrupted;
+    public bool IsFull => Status == AnimationStatus.Full;
+    public bool IsInstant => Status == AnimationStatus.Instant;
+
     public int SavedDuration { get; protected set; }
 
     public int ExpectedDuration { get; protected set; }

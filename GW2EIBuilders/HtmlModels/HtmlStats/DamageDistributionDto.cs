@@ -38,7 +38,7 @@ internal class DamageDistributionDto
                         timeSaved += cl.SavedDuration;
                         break;
                 }
-                if (cl.Status == CastEvent.AnimationStatus.Reduced || cl.Status == CastEvent.AnimationStatus.Full)
+                if (cl.IsReduced || cl.IsFull)
                 {
                     timeSpentCastingNoInterrupt += cl.ActualDuration;
                     numberOfCastNoInterrupt++;

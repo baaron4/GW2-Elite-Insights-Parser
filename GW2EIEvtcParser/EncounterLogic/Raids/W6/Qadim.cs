@@ -504,7 +504,7 @@ internal class Qadim : MythwrightGambit
                     replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), Colors.Red, 0.5, new AgentConnector(target)));
                 }
                 //Big Hit
-                var maceShockwave = cls.Where(x => x.SkillId == BigHit && x.Status != CastEvent.AnimationStatus.Interrupted);
+                var maceShockwave = cls.Where(x => x.SkillId == BigHit && !x.IsInterrupted);
                 foreach (CastEvent c in maceShockwave)
                 {
                     int start = (int)c.Time;
