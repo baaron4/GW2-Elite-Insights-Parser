@@ -79,26 +79,16 @@
             const div = document.querySelector(this.queryID);
             $(this.queryID + 'xMin').on("input ", function () {
                 let value = Number.parseFloat($(this).val());
-                let currentXMax = layout.xaxis.range[1];
-                if (value >= currentXMax) {
-                    currentXMax = value + 1;
-                }
                 layout.xaxis.autorange = false;
                 layout.xaxis.range[0] = value;
-                layout.xaxis.range[1] = currentXMax;
-                $(_this.queryID + 'xMax').val(currentXMax);
+                layout.xaxis.range[1] = Math.max(Number.parseFloat($(_this.queryID + 'xMax').val()), value + 1e-6);
                 Plotly.relayout(div, _this.layout);
             });
             $(this.queryID + 'xMax').on("input ", function () {
                 let value = Number.parseFloat($(this).val());
-                let currentXMin = layout.xaxis.range[0];
-                if (currentXMin >= value) {
-                    currentXMin = value - 1;
-                }
                 layout.xaxis.autorange = false;
-                layout.xaxis.range[0] = currentXMin;
+                layout.xaxis.range[0] = Math.min(Number.parseFloat($(_this.queryID + 'xMin').val()), value - 1e-6);
                 layout.xaxis.range[1] = value;
-                $(_this.queryID + 'xMin').val(currentXMin);
                 Plotly.relayout(div, _this.layout);
             });
         },
