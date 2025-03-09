@@ -27,10 +27,11 @@ var searchData=
   ['statespersource_24',['StatesPerSource',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#abd17ac6d8f5ab187c944cc7114dcb3dd',1,'GW2EIJSON::JsonBuffsUptime']]],
   ['statsall_25',['StatsAll',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#afde88b5a944f7a1d183649a7a5dbe621',1,'GW2EIJSON::JsonActor']]],
   ['statstargets_26',['StatsTargets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aa24ef8f2cfcec0f5278cf19eb439c2af',1,'GW2EIJSON::JsonPlayer']]],
-  ['strikedamagetaken_27',['StrikeDamageTaken',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#acfd2268080e7b364bcc66fb6485b1e3e',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
-  ['stunbreak_28',['StunBreak',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a4dc248f3f96641f692f52fff36f28977',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
-  ['subphases_29',['SubPhases',['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a0b15954c9d57530236d6b3a8b528d059',1,'GW2EIJSON::JsonPhase']]],
-  ['success_30',['Success',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad3a5ec959a120ce2016a7463dd447742',1,'GW2EIJSON::JsonLog']]],
-  ['support_31',['Support',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a397b1cb4cb8eef6fc8af4c33920e6024',1,'GW2EIJSON::JsonPlayer']]],
-  ['swapcount_32',['SwapCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab6586c29718477cff38d520b03bd2178',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]]
+  ['strikedamagetaken_27',['StrikeDamageTaken',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a4b6d48a8edc223bf76599cbdef13aebf',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
+  ['strikedamagetakencount_28',['StrikeDamageTakenCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a184a31c7c99ccd522aad6c3ed4d11f81',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
+  ['stunbreak_29',['StunBreak',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a4dc248f3f96641f692f52fff36f28977',1,'GW2EIJSON::JsonStatistics::JsonPlayerSupport']]],
+  ['subphases_30',['SubPhases',['../class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a0b15954c9d57530236d6b3a8b528d059',1,'GW2EIJSON::JsonPhase']]],
+  ['success_31',['Success',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad3a5ec959a120ce2016a7463dd447742',1,'GW2EIJSON::JsonLog']]],
+  ['support_32',['Support',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a397b1cb4cb8eef6fc8af4c33920e6024',1,'GW2EIJSON::JsonPlayer']]],
+  ['swapcount_33',['SwapCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab6586c29718477cff38d520b03bd2178',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]]
 ];

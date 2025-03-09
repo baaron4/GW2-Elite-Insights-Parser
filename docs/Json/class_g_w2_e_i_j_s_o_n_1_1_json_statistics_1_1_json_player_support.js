@@ -1,5 +1,7 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support =
 [
+    [ "BoonStripDownContribution", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#aaf794c7c147828364c0673f7cedea570", null ],
+    [ "BoonStripDownContributionTime", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#ae214809d1919d8c6f4080e4ee1a00dc0", null ],
     [ "BoonStrips", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#adbb845e8274a18940f2bab7d5faeee36", null ],
     [ "BoonStripsTime", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a716993d309daba77afa21fcf1b88c12c", null ],
     [ "CondiCleanse", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#a819f14555f08904c23fe2b1d53a21471", null ],
