@@ -275,11 +275,11 @@ public class Minions : Actor
 
     internal bool IsActive(ParsedEvtcLog log)
     {
-        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+        if (ParserHelper.IsKnownMinionID(ReferenceAgentItem, Master.Spec))
         {
             return true;
         }
-        if (ParserHelper.IsKnownMinionID(ReferenceAgentItem, Master.Spec))
+        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any())
         {
             return true;
         }
@@ -291,7 +291,7 @@ public class Minions : Actor
         {
             return true;
         }
-        if (GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
+        if (GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponStow && x.SkillId != SkillIDs.WeaponDraw && x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
         {
             return true;
         }
