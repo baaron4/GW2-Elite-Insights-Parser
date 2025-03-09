@@ -142,7 +142,7 @@ public class StabilityTestEvtc
     }
 
     [Test]
-    public void TestEvtc()
+    public void TestEvtc([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
     {
 
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
@@ -151,7 +151,7 @@ public class StabilityTestEvtc
             Directory.CreateDirectory(testLocation);
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
         Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
         GenerateCrashData(toCheck, "evtc", true);
@@ -160,7 +160,7 @@ public class StabilityTestEvtc
     }
 
     [Test]
-    public void TestEvtcZip()
+    public void TestEvtcZip([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
     {
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
         if (!Directory.Exists(testLocation))
@@ -168,7 +168,7 @@ public class StabilityTestEvtc
             Directory.CreateDirectory(testLocation);
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
         Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
         GenerateCrashData(toCheck, "evtczip", true);
@@ -177,7 +177,7 @@ public class StabilityTestEvtc
     }
 
     [Test]
-    public void TestZevtc()
+    public void TestZevtc([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
     {
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
         if (!Directory.Exists(testLocation))
@@ -186,7 +186,7 @@ public class StabilityTestEvtc
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
         Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
         GenerateCrashData(toCheck, "zevtc", true);
