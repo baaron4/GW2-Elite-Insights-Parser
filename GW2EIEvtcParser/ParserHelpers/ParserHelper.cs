@@ -20,8 +20,6 @@ public static class ParserHelper
     internal const uint CombatReplayOverheadProgressBarMajorSizeInPixel = 35;
     internal const float CombatReplayOverheadDefaultOpacity = 0.8f;
 
-    public const int MinionLimit = 1500;
-
     //TODO(Rennorb) @cleanup: Rename this whole block. These are rounding precisions, maybe 'digits' if im being generous.
     internal const int BuffDigit = 3;
     internal const int DamageModGainDigit = 3;
