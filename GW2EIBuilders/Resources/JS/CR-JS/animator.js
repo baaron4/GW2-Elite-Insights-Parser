@@ -74,6 +74,116 @@ var sliderDelimiter = {
 let InchToPixel = 10;
 let PollingRate = 150;
 
+// Scenegraph
+
+function standardDraw(drawable) {
+    drawable.draw();
+}
+
+function selectableDraw(drawable) {
+    if (!drawable.isSelected()) {
+        drawable.draw();
+        animator._drawActorOrientation(drawable.id);
+    }
+}
+
+function selectablePickingDraw(drawable) {
+    if (!drawable.isSelected()) {
+        drawable.drawPicking();
+    }
+}
+
+class RenderablesBranch {
+    constructor(start, end) {
+        this.start = start;
+        this.end = end;
+        this.halfPoint = (end - start) * 0.5 + start;
+        this.left = null;
+        this.right = null;
+        this.renderables = [];
+    }
+
+    add(item) {
+        if (this.end - this.start < 30000) {
+            this.renderables.push(item);
+            return;
+        }
+        if (item.end <= this.halfPoint) {
+            if (!this.left) {
+                this.left = new RenderablesBranch(this.start, this.halfPoint);
+            }
+            this.left.add(item);
+        } else if (item.start > this.halfPoint && item.end <= this.end) {
+            if (!this.right) {
+                this.right = new RenderablesBranch(this.halfPoint, this.end);
+            }
+            this.right.add(item);
+        } else {
+            this.renderables.push(item);
+        }
+    }
+
+    forEach(cb) {  
+        for (let i = 0; i < this.renderables.length; i++) {
+            cb(this.renderables[i]);
+        }
+        if (this.left) {
+            this.left.forEach(cb);
+        }
+        if (this.right) {
+            this.right.forEach(cb);
+        }
+    }
+
+    draw(drawFunction) {
+        var time = animator.reactiveDataStatus.time;
+        if (this.start > time || this.end < time) {
+            return;
+        }
+        for (let i = 0; i < this.renderables.length; i++) {
+            drawFunction(this.renderables[i]);
+        }
+        if (this.left) {
+            this.left.draw(drawFunction);
+        }
+        if (this.right) {
+            this.right.draw(drawFunction);
+        }
+    }
+}
+
+class RenderablesRoot extends RenderablesBranch{
+    constructor(start, end) {
+        super(start, end);
+        this._allRenderables = [];
+    }
+
+    add(item) {
+        super.add(item);
+        this._allRenderables.push(item);
+    }
+}
+
+class MappedRenderablesRoot extends RenderablesRoot {
+    constructor(start, end) {
+        super(start, end);
+        this.map = new Map();
+    }
+
+    add(item) {
+        super.add(item);
+        this.map.set(item.id, item);
+    }
+
+    get(id) {
+        return this.map.get(id);
+    }
+    
+    has(id) {
+        return this.map.has(id);
+    }
+}
+
 //
 
 class Animator {
@@ -106,19 +216,24 @@ class Animator {
             radius: 360,
         };
         // actors
-        this.targetData = new Map();
-        this.playerData = new Map();
-        this.trashMobData = new Map();
-        this.friendlyMobData = new Map();
+        const start = logData.phases[0].start * 1000;
+        const end = logData.phases[0].end * 1000;
+        this.targetData = new MappedRenderablesRoot(start, end);
+        this.playerData = new MappedRenderablesRoot(start, end);
+        this.trashMobData = new MappedRenderablesRoot(start, end);
+        this.friendlyMobData = new MappedRenderablesRoot(start, end);
         this.decorationMetadata = new Map();
-        this.overheadActorData = [];
-        this.mechanicActorData = [];
-        this.skillMechanicActorData = [];
+        this.overheadActorData = new RenderablesRoot(start, end);
+        this.squadMarkerData = new RenderablesRoot(start, end);
+        this.overheadSquadMarkerData = new RenderablesRoot(start, end);
+        this.mechanicActorData = new RenderablesRoot(start, end);
+        this.skillMechanicActorData = new RenderablesRoot(start, end);
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
-        this.screenSpaceActorData = [];
-        this.backgroundImages = [];
+        this.screenSpaceActorData = new RenderablesRoot(start, end);
         this.selectedActor = null;
+        // maps
+        this.backgroundImages = [];
         // animation
         this.needBGUpdate = false;
         this.prevBGImage = null;
@@ -206,16 +321,6 @@ class Animator {
     }
 
     _initActors(actors, decorationRenderings, decorationMetadata) {
-        this.playerData.clear();
-        this.targetData.clear();
-        this.trashMobData.clear();
-        this.friendlyMobData.clear();
-        this.actorOrientationData.clear();
-        this.decorationMetadata.clear();
-        this.overheadActorData = [];
-        this.mechanicActorData = [];
-        this.squadMarkerData = [];
-        this.overheadSquadMarkerData = [];
         for (let i = 0; i < decorationMetadata.length; i++) {
             const metadata = decorationMetadata[i];
             let MetadataClass = null;
@@ -301,7 +406,7 @@ class Animator {
                 default:
                     throw "Unknown decoration type " + actor.type;
             }
-            mapToFill.set(actor.id, new ActorClass(actor, actorSize));
+            mapToFill.add(new ActorClass(actor, actorSize));
         }
         for (let i = 0; i < decorationRenderings.length; i++) {
             const decorationRendering = {};
@@ -326,7 +431,7 @@ class Animator {
                 switch (decorationRendering.type) {
                     case "Text":
                         if (decorationRendering.connectedTo.isScreenSpace) {
-                            this.screenSpaceActorData.push(new TextDrawable(decorationRendering));
+                            this.screenSpaceActorData.add(new TextDrawable(decorationRendering));
                             continue;
                         }
                         DecorationClass = TextDrawable;
@@ -353,25 +458,25 @@ class Animator {
                         DecorationClass = IconMechanicDrawable;
                         break;
                     case "IconOverhead":
-                        this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        this.overheadActorData.add(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     case "OverheadProgressBar":
-                        this.overheadActorData.push(new OverheadProgressBarMechanicDrawable(decorationRendering));
+                        this.overheadActorData.add(new OverheadProgressBarMechanicDrawable(decorationRendering));
                         continue;
                     case "SquadMarker":
-                        this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
+                        this.squadMarkerData.add(new IconMechanicDrawable(decorationRendering));
                         continue;
                     case "OverheadSquadMarker":
-                        this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        this.overheadSquadMarkerData.add(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     default:
                         throw "Unknown decoration type " + decorationRendering.type;
                 }
                 const decoration = new DecorationClass(decorationRendering);
                 if (decorationRendering.skillMode) {
-                    this.skillMechanicActorData.push(decoration);
+                    this.skillMechanicActorData.add(decoration);
                 } else {
-                    this.mechanicActorData.push(decoration);
+                    this.mechanicActorData.add(decoration);
                 }
             }
         }
@@ -475,12 +580,12 @@ class Animator {
 
     getActiveActorMarkers(actorID) {
         let res = [];
-        for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
-            var marker = this.overheadSquadMarkerData[i];
-            if (marker.canDraw() && marker.getPosition() && marker.master === this.getActorData(actorID)) {
+        const _this = this;
+        this.overheadSquadMarkerData.forEach((marker) => {
+            if (marker.canDraw() && marker.getPosition() && marker.master === _this.getActorData(actorID)) {
                 res.push(marker);
             }
-        }
+        });
         return res;
     }
 
@@ -853,39 +958,19 @@ class Animator {
         {
             ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
 
-            this.friendlyMobData.forEach(function (value, key, map) {
-                if (!value.isSelected()) {
-                    value.drawPicking();
-                }
-            });
+            this.friendlyMobData.draw(selectablePickingDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
-                this.playerData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.drawPicking();
-                    }
-                });
+                this.playerData.draw(selectablePickingDraw);
             }
 
             if (this.displaySettings.displayTrashMobs) {
-                this.trashMobData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.drawPicking();
-                    }
-                });
+                this.trashMobData.draw(selectablePickingDraw);
             }
 
-            this.targetData.forEach(function (value, key, map) {
-                if (!value.isSelected()) {
-                    value.drawPicking();
-                }
-            });
+            this.targetData.draw(selectablePickingDraw);
             if (this.displaySettings.useActorHitboxWidth) {
-                this.playerData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.drawPicking();
-                    }
-                });
+                this.playerData.draw(selectablePickingDraw);
             }
             if (this.selectedActor !== null) {
                 this.selectedActor.drawPicking();
@@ -919,80 +1004,43 @@ class Animator {
                 animator.backgroundActorData[i].draw();
             }
             if (this.displaySettings.displayMechanics) {
-                for (let i = 0; i < this.mechanicActorData.length; i++) {
-                    this.mechanicActorData[i].draw();
-                }
+                this.mechanicActorData.draw(standardDraw);
             }
 
             if (this.displaySettings.displaySkillMechanics) {
-                for (let i = 0; i < this.skillMechanicActorData.length; i++) {
-                    this.skillMechanicActorData[i].draw();
-                }
+                this.skillMechanicActorData.draw(standardDraw);
             }
 
-            this.friendlyMobData.forEach(function (value, key, map) {
-                if (!value.isSelected()) {
-                    value.draw();
-                    _this._drawActorOrientation(key);
-                }
-            });
+            this.friendlyMobData.draw(selectableDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
-                this.playerData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.draw();
-                        _this._drawActorOrientation(key);
-                    }
-                });
+                this.playerData.draw(selectableDraw);
             }
 
             if (this.displaySettings.displayTrashMobs) {
-                this.trashMobData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.draw();
-                        _this._drawActorOrientation(key);
-                    }
-                });
+                this.trashMobData.draw(selectableDraw);
             }
 
-            this.targetData.forEach(function (value, key, map) {
-                if (!value.isSelected()) {
-                    value.draw();
-                    _this._drawActorOrientation(key);
-                }
-            });
+            this.targetData.draw(selectableDraw);
             if (this.displaySettings.useActorHitboxWidth) {
-                this.playerData.forEach(function (value, key, map) {
-                    if (!value.isSelected()) {
-                        value.draw();
-                        _this._drawActorOrientation(key);
-                    }
-                });
+                this.playerData.draw(selectableDraw);
             }
             if (this.selectedActor !== null) {
                 this.selectedActor.draw();
-                this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
+                this._drawActorOrientation(this.selectedActor.id);
             }
             if (this.displaySettings.displayMechanics) {
-                for (let i = 0; i < this.overheadActorData.length; i++) {
-                    this.overheadActorData[i].draw();
-                }
+                this.overheadActorData.draw(standardDraw);
             }
             if (this.displaySettings.displaySquadMarkers) {
-                for (let i = 0; i < this.squadMarkerData.length; i++) {
-                    this.squadMarkerData[i].draw();
-                }
-                for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
-                    this.overheadSquadMarkerData[i].draw();
-                }
+                this.squadMarkerData.draw(standardDraw);
+                this.overheadSquadMarkerData.draw(standardDraw);
             }
             ctx.save();
             {
                 ctx.setTransform(1, 0, 0, 1, 0, 0);
                 // Screen space actors
-                for (let i = 0; i < animator.screenSpaceActorData.length; i++) {
-                    animator.screenSpaceActorData[i].draw();
-                }
+                this.screenSpaceActorData.draw(standardDraw);
             }
             ctx.restore()
         }
