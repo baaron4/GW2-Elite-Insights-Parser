@@ -1,13 +1,14 @@
 <template>
     <div>
-        <div class="d-flex flex-row align-items-center">
-            <span>X: </span>
-            <custom-numberform-component style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMin'"
-                :placeholderValue="0"></custom-numberform-component>
-            <custom-numberform-component style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMax'"
-                :placeholderValue="0"></custom-numberform-component>
-        </div>
         <div :id="id" class="d-flex flex-row justify-content-center"></div>
+        <div v-if="!removerangecontrol" style="position:absolute; margin-top: -60px;margin-left: 100px; z-index: 1;">
+            <div class="d-flex flex-row align-items-center">
+                <custom-numberform-component class="mr-1" style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMin'"
+                    :placeholderValue="0"></custom-numberform-component>
+                <custom-numberform-component style="width: 100px;" :minValue="-1e6" :maxValue="1e6" :id="id+'xMax'"
+                    :placeholderValue="0"></custom-numberform-component>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -18,7 +19,7 @@
         plotlyServerURL: "https://chart-studio.plotly.com"
     };
     Vue.component("graph-component", {
-        props: ['id', 'layout', 'data'],
+        props: ['id', 'layout', 'data', 'removerangecontrol'],
         template: `${template}`,
         activated: function () {
             var div = document.querySelector(this.queryID);
