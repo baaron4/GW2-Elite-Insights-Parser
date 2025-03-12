@@ -400,50 +400,55 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             case (int)TrashID.DecimaBeamStart:
-                SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
-                var decimaConnector = new AgentConnector(decima);
-                const uint beamLength = 2900;
+                const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
                 var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
-                AddBeamWarning(log, target, replay, decima, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                replay.Decorations.AddTetherWithConnectors(log, orangeBeams, Colors.LightOrange, 0.5, 
-                    (log, agent, start, end) =>
-                    {
-                        if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
-                        {
-                            return new PositionConnector(pos);
-                        }
-                        return null;
-                    },
-                    (log, agent, start, end) =>
-                    {
-                        return decimaConnector;
-                    },
-                    orangeBeamWidth, true);
+                AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
                 var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
-                AddBeamWarning(log, target, replay, decima, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                replay.Decorations.AddTetherWithConnectors(log, redBeams, Colors.Red, 0.5,
-                    (log, agent, start, end) =>
-                    {
-                        if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
-                        {
-                            return new PositionConnector(pos);
-                        }
-                        return null;
-                    },
-                    (log, agent, start, end) =>
-                    {
-                        return decimaConnector;
-                    },
-                    redBeamWidth, true);
+                AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
+                AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
                 break;
             default:
                 break;
         }
     }
 
-    private static void AddBeamWarning(ParsedEvtcLog log, SingleActor target, CombatReplay replay, SingleActor attachActor, long buffID, uint beamWidth, uint beamLength, IEnumerable<BuffApplyEvent> beamFireds, Color color)
+    private static void AddBeam(ParsedEvtcLog log, CombatReplay replay, uint beamWidth, IEnumerable<BuffEvent> beams, Color color)
+    {
+        int tetherStart = 0;
+        AgentItem src = _unknownAgent;
+        AgentItem dst = _unknownAgent;
+        foreach (BuffEvent tether in beams)
+        {
+            if (tether is BuffApplyEvent)
+            {
+                tetherStart = (int)tether.Time;
+                src = tether.By;
+                dst = tether.To;
+            }
+            else if (tether is BuffRemoveAllEvent)
+            {
+                int tetherEnd = (int)tether.Time;
+                if (!src.IsUnknown && !dst.IsUnknown)
+                {
+                    if (src.TryGetCurrentInterpolatedPosition(log, tetherStart, out var posSrc))
+                    {
+                        // Get the position before movement happened
+                        if (dst.TryGetCurrentInterpolatedPosition(log, tetherStart - 500, out var posDst))
+                        {
+                            replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, 0.5, new PositionConnector(posSrc), new PositionConnector(posDst)).WithThickess(beamWidth, true));
+                        }
+                        src = _unknownAgent;
+                        dst = _unknownAgent;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void AddBeamWarning(ParsedEvtcLog log, SingleActor target, CombatReplay replay, long buffID, uint beamWidth, uint beamLength, IEnumerable<BuffApplyEvent> beamFireds, Color color)
     {
         var beamWarnings = target.AgentItem.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
         foreach (var beamWarning in beamWarnings)
@@ -452,9 +457,13 @@ internal class DecimaTheStormsinger : MountBalrior
             {
                 long start = beamWarning.Start;
                 long end = beamFireds.FirstOrDefault(x => x.Time >= start)?.Time ?? beamWarning.End;
-                var connector = (AgentConnector)new AgentConnector(attachActor).WithOffset(new(beamLength / 2, 0, 0), true);
-                var rotationConnector = new AgentFacingConnector(target);
-                replay.Decorations.Add(new RectangleDecoration(beamLength, beamWidth, (start, end), color, 0.2, connector).UsingRotationConnector(rotationConnector));
+                // We ignore the movement of the agent, it moves closer to target before firing
+                if (target.TryGetCurrentInterpolatedPosition(log, start, out var posDst))
+                {
+                    var connector = new PositionConnector(posDst).WithOffset(new(beamLength / 2, 0, 0), true);
+                    var rotationConnector = new AgentFacingConnector(target);
+                    replay.Decorations.Add(new RectangleDecoration(beamLength, beamWidth, (start, end), color, 0.2, connector).UsingRotationConnector(rotationConnector));
+                }
             }
         }
     }
