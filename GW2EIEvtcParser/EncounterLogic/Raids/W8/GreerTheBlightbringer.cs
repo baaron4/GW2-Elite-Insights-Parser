@@ -138,7 +138,7 @@ internal class GreerTheBlightbringer : MountBalrior
         return ereg != null ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
     }
 
-    private static void SetPhaseNameForHP(ParsedEvtcLog log, PhaseData damageImmunityPhase, double hpPercent)
+    private static void SetPhaseNameForHP(PhaseData damageImmunityPhase, double hpPercent)
     {
         if (hpPercent > 81)
         {
@@ -160,14 +160,11 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             damageImmunityPhase.Name = "35% - 20%";
         }
-        else if (hpPercent > 11 && log.FightData.IsCM)
+        else
         {
-            damageImmunityPhase.Name = "20% - 10%";
+            damageImmunityPhase.Name = "20% - 0%";
         }
-        else if (hpPercent > 0)
-        {
-            damageImmunityPhase.Name = log.FightData.IsCM ? "10% - 0%" : "20% - 0%";
-        }
+
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -189,7 +186,8 @@ internal class GreerTheBlightbringer : MountBalrior
 
         // The Proto-Greelings can respawn during 10%
         var protoGreelings = Targets.Where(x => x.IsSpecies(TrashID.ProtoGreerling));
-        var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(3);
+        var damageImmunity3ApplyCount = log.CombatData.GetBuffData(DamageImmunity3).Count(x => x is BuffApplyEvent bae && bae.To == greer.AgentItem);
+        var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(damageImmunity3ApplyCount * 3);
         phases[0].AddTargets(filteredProtoGreelings, PhaseData.TargetPriority.Blocking);
 
         if (!requirePhases)
@@ -215,7 +213,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 phase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
             }
         }
-        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3], greer, false, true);
+        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true);
         foreach (var damageImmunityPhase in damageImmunityPhases)
         {
             var currentMainPhase = phases.LastOrDefault(x => x.Start <= damageImmunityPhase.Start && x.Name.Contains("Phase"));
@@ -228,12 +226,12 @@ internal class GreerTheBlightbringer : MountBalrior
                     damageImmunityPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
                     damageImmunityPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
                     phases.Add(damageImmunityPhase);
-                    SetPhaseNameForHP(log, damageImmunityPhase, hpAtStart);
+                    SetPhaseNameForHP(damageImmunityPhase, hpAtStart);
                 } 
                 else
                 {
                     var beforeShieldPhase = new PhaseData(damageImmunityPhase.Start, currentMainPhase.End);
-                    SetPhaseNameForHP(log, beforeShieldPhase, hpAtStart);
+                    SetPhaseNameForHP(beforeShieldPhase, hpAtStart);
                     beforeShieldPhase.AddTarget(greer);
                     beforeShieldPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
                     beforeShieldPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
@@ -242,7 +240,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     if (nextMainPhase != null)
                     {
                         var afterShieldPhase = new PhaseData(nextMainPhase.Start, damageImmunityPhase.End);
-                        SetPhaseNameForHP(log, afterShieldPhase, greer.GetCurrentHealthPercent(log, afterShieldPhase.Start));
+                        SetPhaseNameForHP(afterShieldPhase, greer.GetCurrentHealthPercent(log, afterShieldPhase.Start));
                         afterShieldPhase.AddTarget(greer);
                         afterShieldPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
                         afterShieldPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
@@ -250,6 +248,10 @@ internal class GreerTheBlightbringer : MountBalrior
                     } 
                 }
             } 
+        }
+        if (log.FightData.IsCM && damageImmunity3ApplyCount > 0)
+        {
+
         }
 
         return phases;
