@@ -206,7 +206,7 @@ public static class GW2Builds
     public const ulong February2025BalancePatch = 175086;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-03-11
-    public const ulong March2025MountBalriorCM = 176750;
+    public const ulong March2025W8CMReleaseAndNewCoreRelics = 176750;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }
