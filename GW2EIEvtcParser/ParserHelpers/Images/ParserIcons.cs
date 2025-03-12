@@ -410,6 +410,8 @@ internal static class ParserIcons
     private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
     private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
     private const string TrashCannon = "https://i.imgur.com/aNe6JUJ.png";
+    private const string TrashProtoGreerling = "https://i.imgur.com/B1v91mQ.png";
+    private const string TrashEmpoweringBeast = "https://i.imgur.com/HRmRRq1.png";
     #endregion
 
     #region Minion
@@ -1182,7 +1184,7 @@ internal static class ParserIcons
         { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
         { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         { TrashID.Tribocharge, TrashTribocharge },
-        { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
+        { TrashID.EmpoweringBeast, TrashEmpoweringBeast },
         { TrashID.EnlightenedConduit, TrashEnlightenedConduit },
         { TrashID.EliteVentshot, TrashVentshot },
         { TrashID.EliteFumaroller, TrashFumaroller },
@@ -1201,6 +1203,7 @@ internal static class ParserIcons
         { TrashID.Reeg, TrashReeg },
         { TrashID.Cannon, TrashCannon },
         { TrashID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideout image for better visual
+        { TrashID.ProtoGreerling, TrashProtoGreerling },
     };
 
     /// <summary>

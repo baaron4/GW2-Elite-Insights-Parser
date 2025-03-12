@@ -651,7 +651,8 @@ public static class EffectGUIDs
     public static readonly GUID GreerEnfeeblingMiasmaGasMoving = new("44DDA7CFF5C5C549822FFF54648915B6"); // 4000 duration
     public static readonly GUID GreerCageOfDecayArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // 5000 duration
     public static readonly GUID GreerCageOfDecayCircleIndicator = new("3A77C01985706240BCB7D04B82124F63"); // 5000 duration
-    public static readonly GUID GreerCageOfDecayCircleDamage = new("E05331E90885E649A730BE79BE3DD14F"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight)
+    public static readonly GUID GreerCageOfDecayCircleDamage = new("E05331E90885E649A730BE79BE3DD14F"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight) - Stopped working on 11 March 2025
+    public static readonly GUID GreerCageOfDecayCircleDamageNew = new("D2EDADF505469B4CA9B434F68A1552C5"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight)
     public static readonly GUID GreerCageOfDecayCircleWalls = new("6F34E94792DB1541A836C80153E957DE"); // 23000 duration
     public static readonly GUID GreerCageOfDecayMovingWalls = new("8E1B3D2867A1614281C06E46C73F5873"); // 2000 duration
     public static readonly GUID GreerCageOfDecayRoots = new("A106AF30128BE543ACFDD7B667364274"); // 2000 duration (Cage of Decay + Noxious Blight)

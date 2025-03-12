@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -12,7 +13,13 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
+    private const string NameCM = "Godspoil Greer";
     private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores]; // Legacy, no longer reflectable.
+    private static readonly long[] Boons =
+    [
+        Aegis, Alacrity, Fury, Might, Protection, Quickness, Regeneration, Resistance, Resolution, Stability, Swiftness, Vigor
+    ];
+
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>()
@@ -20,26 +27,32 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Reeg)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Gree)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
-            new PlayerDstHitMechanic(RotTheWorld, "Rot the World", new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", 0),
+            new PlayerDstHitMechanic([RotTheWorld, RotTheWorldCM], "Rot the World", new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", 0),
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
-            new PlayerDstHitMechanic([RipplesOfRot, RipplesOfRot2], "Ripples of Rot", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
+            new PlayerDstHitMechanic([SeedsOfDecay, SeedsOfDecay2, SeedsOfDecay3], "Seeds of Decay", new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.Sand), "SeedsDec.H", "Hit by Seeds of Decay (Greer's Armor Falling)", "Seeds of Decay Hit", 0),
+            new PlayerDstHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], "Ripples of Rot", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
             new PlayerDstHitMechanic([RainOfSpores, RainOfSpores2], "Rain of Spores", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Green), "RainSpore.H", "Hit by Rain of Spores", "Rain of Spores Hit", 0),
-            new PlayerDstHitMechanic([NoxiousBlight, NoxiousBlight2], "Noxious Blight", new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.DarkPink), "NoxBlight.H", "Hit by Noxious Blight", "Noxious Blight Hit", 0),
-            new PlayerDstHitMechanic([EnfeeblingMiasma, EnfeeblingMiasma2], "Enfeebling Miasma", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightPurple), "EnfMiasma.H", "Hit by Enfeebling Miasma", "Enfeebling Miasma Hit", 0),
+            new PlayerDstHitMechanic([NoxiousBlight, NoxiousBlight2, NoxiousBlightCM, NoxiousBlightCM2], "Noxious Blight", new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.DarkPink), "NoxBlight.H", "Hit by Noxious Blight", "Noxious Blight Hit", 0),
+            new PlayerDstHitMechanic([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4], "Enfeebling Miasma", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightPurple), "EnfMiasma.H", "Hit by Enfeebling Miasma", "Enfeebling Miasma Hit", 0),
             new PlayerDstHitMechanic([ScatteringSporeblast, ScatteringSporeblast2], "Scattering Sporeblast", new MechanicPlotlySetting(Symbols.SquareOpen, Colors.GreenishYellow), "ScatSpore.H", "Hit by Scattering Sporeblast", "Scattering Sporeblast Hit", 0),
-            new PlayerDstHitMechanic([AuraOfCorruptionReegGreeDamage, AuraOfCorruptionGreerDamage], "Aura of Corruption", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", 0),
+            new PlayerDstHitMechanic([AuraOfCorruptionDamage_ReegGreeEreg, AuraOfCorruptionDamage_Greer], "Aura of Corruption", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", 0),
             new PlayerDstHitMechanic([RakeTheRot, RakeTheRot2, RakeTheRot3], "Rake the Rot", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "Rake.H", "Hit by Rake the Rot", "Rake the Rot Hit", 0),
-            new PlayerDstHitMechanic([CageOfDecay, CageOfDecay2, CageOfDecay3], "Cage of Decay", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightPurple), "Cage.H", "Hit by Cage of Decay", "Cage of Decay Hit", 0),
+            new PlayerDstHitMechanic([CageOfDecay, CageOfDecay2, CageOfDecay3, CageOfDecay4, CageOfDecay5], "Cage of Decay", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightPurple), "Cage.H", "Hit by Cage of Decay", "Cage of Decay Hit", 0),
             new PlayerDstHitMechanic([SweepTheMold, SweepTheMold2, SweepTheMold3], "Sweep the Mold", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "Sweep.H", "Hit by Sweep the Mold", "Sweep the Mold Hit", 0),
             new PlayerDstHitMechanic([BlobOfBlight, BlobOfBlight2, BlobOfBlight3], "Blob of Blight", new MechanicPlotlySetting(Symbols.Star, Colors.CobaltBlue), "BlobBlight.H", "Hit by Blob of Blight", "Blob of Blight Hit", 0),
-            new PlayerDstHitMechanic([EruptionOfRot, EruptionOfRot2, EruptionOfRot3], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Hexagram, Colors.GreenishYellow), "ErupRot.H", "Hit by Eruption of Rot", "Eruption of Rot Hit", 0),
+            new PlayerDstHitMechanic([EruptionOfRot, EruptionOfRot2, EruptionOfRot3, EruptionOfRot4, EruptionOfRot5, EruptionOfRot6], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Hexagram, Colors.GreenishYellow), "ErupRot.H", "Hit by Eruption of Rot", "Eruption of Rot Hit", 0),
             new PlayerDstHitMechanic([StompTheGrowth, StompTheGrowth2, StompTheGrowth3], "Stomp the Growth", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "Stomp.H", "Hit by Stomp the Growth", "Stomp the Growth Hit", 0),
+            new PlayerDstHitMechanic([RotEruption, RotEruptionCM], "Rot Eruption", new MechanicPlotlySetting(Symbols.TriangleSEOpen, Colors.DarkBlue), "RotErup", "Hit by Rot Eruption", "Rot Eruption Hit", 0),
             new PlayerDstBuffApplyMechanic(TargetBuff, "Target", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightBlue), "BlobBlight.T", "Targeted by Blob of Blight", "Blob of Blight Target", 0),
             new PlayerDstBuffApplyMechanic(InfectiousRotBuff, "Infectious Rot", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Hit by Noxious Blight)", "Infectious Rot Target", 0),
             new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, "Eruption of Rot", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightBrown), "ErupRot.S", "Stood in Eruption of Rot (Green)", "Stood in Eruption of Rot", 0),
             new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, "Eruption of Rot", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.LightBrown), "ErupRot.Dwn", "Downed by stacking Eruption of Rot (Green)", "Downed by Eruption of Rot", 0).UsingChecker((bae, log) => bae.To.IsDowned(log, bae.Time)),
+            new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
+            new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Elibigility: Guaranteed Plague Free", "Achiv Unplagued", 0).UsingChecker((bae, log) => log.FightData.IsCM).UsingAchievementEligibility(true),
+            new PlayerDstBuffRemoveMechanic(Boons, "Boon Corrupt", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted", 100).UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TrashID.Gree, (int)TrashID.Reeg, (int)TrashID.Ereg])),
             new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredGreer, "Empowered", new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", 0),
+            new EnemyCastStartMechanic(TheWorldEndsInDecay, "The World Ends in Decay", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "Enrage", "The World Ends in Decay (Enrage)", "The World Ends in Decay (Enrage)", 0),
         });
         Extension = "greer";
         Icon = EncounterIconGreer;
@@ -52,6 +65,14 @@ internal class GreerTheBlightbringer : MountBalrior
                         (1912, 1845),
                         (11300, -10621, 18374, -3794));
     }
+
+    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    {
+        var greer = agentData.GetNPCsByID(TargetID.Greer).FirstOrDefault();
+        var ereg = agentData.GetNPCsByID(TrashID.Ereg).FirstOrDefault();
+        return ereg != null && greer != null ? NameCM : "Greer, the Blightbringer";
+    }
+
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
@@ -59,6 +80,8 @@ internal class GreerTheBlightbringer : MountBalrior
             (int)TargetID.Greer,
             (int)TrashID.Gree,
             (int)TrashID.Reeg,
+            (int)TrashID.Ereg,
+            (int)TrashID.ProtoGreerling,
         ];
     }
 
@@ -69,6 +92,7 @@ internal class GreerTheBlightbringer : MountBalrior
             (int)TargetID.Greer,
             (int)TrashID.Gree,
             (int)TrashID.Reeg,
+            (int)TrashID.Ereg,
         ];
     }
 
@@ -76,9 +100,11 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         return new Dictionary<int, int>()
         {
-            {(int)TargetID.Greer, 0 },
-            {(int)TrashID.Gree, 1 },
-            {(int)TrashID.Reeg, 1 },
+            { (int)TargetID.Greer, 0 },
+            { (int)TrashID.Gree, 1 },
+            { (int)TrashID.Reeg, 1 },
+            { (int)TrashID.Ereg, 1 },
+            { (int)TrashID.ProtoGreerling, 2 },
         };
     }
 
@@ -90,6 +116,35 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+
+        // Renaming Greer for CM
+        SingleActor? greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer));
+        SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
+        if (greer != null && ereg != null)
+        {
+            greer.OverrideName(NameCM);
+        }
+
+        // Enumerating Proto-Greerlings
+        int cur = 1;
+        foreach (SingleActor target in Targets)
+        {
+            if (target.IsSpecies(TrashID.ProtoGreerling))
+            {
+                target.OverrideName("Champion " + target.Character + " " + cur++);
+            }
+        }
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
+        SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
+        return ereg != null ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -103,6 +158,16 @@ internal class GreerTheBlightbringer : MountBalrior
         };
         var subTitans = Targets.Where(x => x.IsAnySpecies(subTitanIDs));
         phases[0].AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
+
+        // Ereg is present in CM
+        var ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
+        phases[0].AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
+
+        // The Proto-Greelings can respawn during 10%
+        var protoGreelings = Targets.Where(x => x.IsSpecies(TrashID.ProtoGreerling));
+        var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(3);
+        phases[0].AddTargets(filteredProtoGreelings, PhaseData.TargetPriority.Blocking);
+
         if (!requirePhases)
         {
             return phases;
@@ -124,6 +189,9 @@ internal class GreerTheBlightbringer : MountBalrior
                 phase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
             }
         }
+
+
+
         return phases;
     }
 
@@ -144,7 +212,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
 
                 // Getting breakbar times to filter some effects of different sizes appearing at the end of it.
-                var breakbars = target.GetBuffStatus(log, DamageImmunity, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var breakbars = target.GetBuffStatus(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var breakbar in breakbars)
                 {
                     // Rot the World
@@ -180,6 +248,17 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddRipplesOfRot(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
+                break;
+            case (int)TrashID.Ereg:
+                AddScatteringSporeblast(target, log, replay);
+                AddEnfeeblingMiasma(target, log, replay);
+                AddRainOfSpores(target, log, replay);
+                AddBlobOfBlight(target, log, replay);
+                break;
+            case (int)TrashID.ProtoGreerling:
+                AddSweepTheMoldRakeTheRot(target, log, replay);
+                AddStompTheGrowth(target, log, replay);
+                AddScatteringSporeblast(target, log, replay);
                 break;
             case (int)TrashID.EmpoweringBeast:
                 // Blighting Stab - Indicator
@@ -225,8 +304,8 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
 
-        // Infectious Rot - Failed Green AoE
-        var infectiousRot = player.GetBuffStatus(log, InfectiousRotBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        // Infectious Rot - Failed Green AoE | Plague Rot - Failed Green AoE CM
+        var infectiousRot = player.GetBuffStatus(log, [InfectiousRotBuff, PlagueRot], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (var segment in infectiousRot)
         {
             replay.Decorations.Add(new CircleDecoration(200, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(player)));
@@ -381,7 +460,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Cage of Decay + Noxious Blight - Circle Damage
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerCageOfDecayCircleDamage, out var cageOfDecayCirclesDamage))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.GreerCageOfDecayCircleDamage, EffectGUIDs.GreerCageOfDecayCircleDamageNew], out var cageOfDecayCirclesDamage))
         {
             foreach (EffectEvent effect in cageOfDecayCirclesDamage)
             {
@@ -520,6 +599,22 @@ internal class GreerTheBlightbringer : MountBalrior
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2315);
                 replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
             }
+        }
+    }
+
+    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    {
+        base.SetInstanceBuffs(log);
+
+        if (log.FightData.Success && log.FightData.IsCM)
+        {
+            // The buff elegibility remains on players even if Ereg is dead
+            AgentItem? ereg = log.AgentData.GetNPCsByID((int)TrashID.Ereg).FirstOrDefault();
+            if (ereg != null && !log.CombatData.GetDeadEvents(ereg).Any())
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilitySpareTheEreg], 1));
+            }
+            
         }
     }
 }

@@ -1093,6 +1093,8 @@ public static class SkillIDs
     public const long BowlOfBlueberryChocolateChunkIceCream = 16505;
     public const long BowlOfChocolateChipIceCream = 16506;
     public const long BowlOfCandyCornIceCream = 16523;
+    public const long MightUnstrippable = 16536; // Used for Greer
+    public const long ProtectionUnstrippable = 16537; // Used for Greer
     public const long PortalUses = 16553;
     public const long GravelShot3 = 16711;
     public const long VirtueOfResolveBattlePresence = 17046;
@@ -3775,7 +3777,7 @@ public static class SkillIDs
     public const long HarvestTempleTargetedExpulsionCM = 65680;
     public const long JawsOfDestruction = 65704;
     public const long BlindingRetreat = 65712;
-    public const long DamageImmunity = 65716;
+    public const long DamageImmunity1 = 65716;
     public const long TargetOrder5 = 65717;
     public const long VoidRepulsion1 = 65729;
     public const long NightmareFusilladeMain = 65749;
@@ -4544,7 +4546,7 @@ public static class SkillIDs
     public const long FluxlanceSalvo1 = 74705;
     public const long ChorusOfThunderDamage = 74706;
     public const long RisingPressure = 74707;
-    public const long AuraOfCorruptionBuff = 74709;
+    public const long AuraOfCorruptionBuff_Greer = 74709;
     public const long StompTheGrowth = 74710;
     public const long SteamPrison = 74711;
     public const long TargetOrder4JW = 74712;
@@ -4563,10 +4565,12 @@ public static class SkillIDs
     public const long TargetOrder3JW = 74789;
     public const long FluxNova = 74790;
     public const long NovaShield = 74791;
+    public const long SeedsOfDecay = 74792;
     public const long RelicOfMountBalrior = 74793;
     public const long SweepTheMold = 74804;
     public const long DecimaSpawnsConduitsP3 = 74805;
     public const long SparkingAuraTier2 = 74827;
+    public const long NoxiousBlightCM = 74829;
     public const long FracturedArmor = 74840;
     public const long DeployShieldGenerator_InfiniteShieldGenerator = 74844;
     public const long FluxlanceRedArrowTargetBuff = 74845;
@@ -4576,11 +4580,12 @@ public static class SkillIDs
     public const long SeismicCrashHitboxDamage = 74870;
     public const long ThrummingPresenceDamage = 74872;
     public const long BlobOfBlight3 = 74881; // Not reflectable damage
+    public const long PlagueRot = 74883;
     public const long Foreshock = 74887;
     public const long SparkingAuraTier1 = 74898;
     public const long InfectiousRotBuff = 74900;
     public const long HarmonicSensitivity = 74904;
-    public const long AuraOfCorruptionReegGreeDamage = 74915;
+    public const long AuraOfCorruptionDamage_ReegGreeEreg = 74915;
     public const long CageOfDecay2 = 74917;
     public const long DeployArrowCart_InfiniteArrowCart = 74921;
     public const long DecimaBeamTargeting = 74922;
@@ -4600,6 +4605,7 @@ public static class SkillIDs
     public const long PressureBlastSkill = 75022;
     public const long TargetOrder1JW = 75023;
     public const long CageOfDecay3 = 75025;
+    public const long NoxiousBlightCM2 = 75026;
     public const long BreakingGround = 75027;
     public const long TargetOrder5JW = 75034;
     public const long RakeTheRot = 75036;
@@ -4614,12 +4620,13 @@ public static class SkillIDs
     public const long CreateTitanspawnGeyser = 75077;
     public const long MantleGrinder = 75078;
     public const long SulfuricEruption = 75080;
+    public const long SeedsOfDecay2 = 75082;
     public const long BlobOfBlight = 75089;
     public const long DecimaRedBeamLoading = 75090;
     public const long RockSmash1 = 75108;
     public const long FulgentAuraTier2 = 75114;
     public const long RipplesOfRot = 75123;
-    public const long AuraOfCorruptionBuff2 = 75127;
+    public const long AuraOfCorruptionBuff_Reeg = 75127;
     public const long EnlightenedConduitGadgetChargeTier2Buff = 75128;
     public const long ScaldingAura = 75134;
     public const long ToxicGeyser1 = 75139;
@@ -4633,9 +4640,10 @@ public static class SkillIDs
     public const long RakeTheRot2 = 75195;
     public const long Earthrend = 75197;
     public const long DecimaBeamLoading = 75198;
-    public const long AuraOfCorruptionGreerDamage = 75199;
+    public const long AuraOfCorruptionDamage_Greer = 75199;
     public const long EruptionVent = 75200;
     public const long SweepTheMold3 = 75210;
+    public const long AuraOfCorruptionBuff_Gree = 75220;
     public const long FulgentAuraTier3 = 75221;
     public const long DeploySiegeSuit_InfiniteSiegeSuit = 75227;
     public const long RockSmash2 = 75229;
@@ -4660,16 +4668,36 @@ public static class SkillIDs
     public const long ScatteringSporeblast = 75330;
     public const long RipplesOfRot2 = 75332;
     public const long ReverberatingImpact = 75334;
+    public const long SeedsOfDecay3 = 75343;
     public const long FluxlanceSalvo5 = 75348;
     public const long EruptionOfRotBuff = 75355; // Stacking buff when standing in a green
     public const long DeployArrowCart_InfiniteSiegeTool = 75362;
     public const long DeployShieldGenerator_InfiniteSiegeTool = 75363;
     public const long DeployFlameRam_InfiniteSiegeTool = 75364;
+    public const long DamageImmunity2 = 75368;
     public const long DeploySiegeSuit_InfiniteSiegeTool = 75369;
     public const long DeployBallista_InfiniteSiegeTool = 75372;
     public const long DeployCatapult_InfiniteSiegeTool = 75374;
     public const long DeployTrebuchet_InfiniteSiegeTool = 75375;
     public const long TasteForBlood = 75397;
+    public const long EruptionOfRot4 = 75414;
+    public const long RotTheWorldCM = 75425;
+    public const long RelicOfTHorns = 75432;
+    public const long RipplesOfRotCM = 75456;
+    public const long RipplesOfRotCM2 = 75519;
+    public const long EruptionOfRot5 = 75532;
+    public const long CageOfDecay4 = 75554;
+    public const long AuraOfCorruptionBuff_Ereg = 75592;
+    public const long EruptionOfRot6 = 75607;
+    public const long AchievementEligibilitySpareTheEreg = 75629;
+    public const long TheWorldEndsInDecay = 75665;
+    public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
+    public const long EnfeeblingMiasma3 = 75749;
+    public const long DamageImmunity3 = 75754;
+    public const long ResolutionGreer = 75755;
+    public const long RotEruptionCM = 75866;
+    public const long CageOfDecay5 = 75873;
+    public const long EnfeeblingMiasma4 = 75919;
     #endregion
 }
 

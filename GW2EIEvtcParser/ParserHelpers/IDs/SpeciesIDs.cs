@@ -398,7 +398,9 @@ public static class SpeciesIDs
         // - Greer
         Reeg = 26742,
         Gree = 26771,
+        Ereg = 26859,
         EmpoweringBeast = 26776,
+        ProtoGreerling = 26862,
         // - Decima
         EnlightenedConduit = 26709,
         EnlightenedConduitGadget = SpeciesIDs.EnlightenedConduitGadget,
