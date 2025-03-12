@@ -70,6 +70,10 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfNourys, DamageModifierMode.sPvPWvW),
         new BuffOnActorDamageModifier(Mod_RelicOfTheClaw, RelicOfTheClaw, "Relic of the Claw", "7% after disabling a foe", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheClaw, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RelicOfMountBalrior, RelicOfMountBalrior, "Relic of Mount Balrior", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfMountBalrior, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfFire, FireAura, "Relic of Fire", "10% under fire aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfFire, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.March2025W8CMReleaseAndNewCoreRelics),
+        new DamageLogDamageModifier(Mod_RelicOfTheEagle,"Relic of the Eagle", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.RelicOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.March2025W8CMReleaseAndNewCoreRelics),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

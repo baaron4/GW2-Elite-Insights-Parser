@@ -328,5 +328,7 @@ public static class DamageModifierIDs
     public const int Mod_NomadsEndurance = 315;
     public const int Mod_BurstOfStrengthCondition = 316;
     public const int Mod_AllForOne = 317;
+    public const int Mod_RelicOfFire = 318;
+    public const int Mod_RelicOfTheEagle = 319;
 }
 

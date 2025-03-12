@@ -130,6 +130,9 @@ internal static class ItemImages
     public const string RelicOfTheFounding = "https://wiki.guildwars2.com/images/8/81/Relic_of_the_Founding.png";
     public const string RelicOfTheTwinGenerals = "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png";
     public const string RelicOfTheBeehive = "https://wiki.guildwars2.com/images/4/49/Relic_of_the_Beehive.png";
+    public const string RelicOfFire = "https://render.guildwars2.com/file/00E5051DCC0EDD58395DF9CEA3456466EA4FD347/3592834.png";
+    public const string RelicOfThorns = "https://render.guildwars2.com/file/B6166933459C27FE500FCC23B572A7AE2A0F4DDA/3592841.png";
+    public const string RelicOfTheEagle = "https://render.guildwars2.com/file/DFF4EB43AD0803F60D105658052321A0BE1AF02C/3592832.png";
     #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";
