@@ -164,10 +164,13 @@ internal class Arkk : ShatteredObservatory
         phases.AddRange(bloomPhases);
 
         // Add anomalies as secondary target to the phases
+        var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk));
         foreach (PhaseData phase in phases)
         {
-            var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
-            phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
+            if (phase.CanBeSubPhase)
+            {
+                phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
+            }
         }
 
         return phases;

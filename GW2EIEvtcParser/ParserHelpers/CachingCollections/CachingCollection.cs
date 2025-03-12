@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser;
 
 public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection<T>(log)
 {
-		readonly int _initialSecondaryCap = log.FightData.GetPhases(log).Count;
-    private readonly Dictionary<long, Dictionary<long, T>> _cache = new(log.FightData.GetPhases(log).Count);
+    readonly int _initialSecondaryCap = 20;
+    private readonly Dictionary<long, Dictionary<long, T>> _cache = new(20);
 
     public bool TryGetValue(long start, long end, [NotNullWhen(true)] out T? value)
     {

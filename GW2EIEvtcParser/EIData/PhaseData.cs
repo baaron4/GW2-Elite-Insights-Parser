@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -73,6 +74,10 @@ public class PhaseData
     internal void AddTarget(SingleActor? target, TargetPriority priority = TargetPriority.Main)
     {
         if (target == null)
+        {
+            return;
+        }
+        if (!IntersectsWindow(target.FirstAware, target.LastAware))
         {
             return;
         }
