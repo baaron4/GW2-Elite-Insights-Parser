@@ -66,13 +66,6 @@ internal class GreerTheBlightbringer : MountBalrior
                         (11300, -10621, 18374, -3794));
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
-    {
-        var greer = agentData.GetNPCsByID(TargetID.Greer).FirstOrDefault();
-        var ereg = agentData.GetNPCsByID(TrashID.Ereg).FirstOrDefault();
-        return ereg != null && greer != null ? NameCM : "Greer, the Blightbringer";
-    }
-
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
@@ -121,9 +114,9 @@ internal class GreerTheBlightbringer : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Renaming Greer for CM
-        SingleActor? greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer));
+        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found") ;
         SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
-        if (greer != null && ereg != null)
+        if (ereg != null)
         {
             greer.OverrideName(NameCM);
         }
@@ -141,9 +134,40 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
         return ereg != null ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
+    }
+
+    private static void SetPhaseNameForHP(ParsedEvtcLog log, PhaseData damageImmunityPhase, double hpPercent)
+    {
+        if (hpPercent > 81)
+        {
+            damageImmunityPhase.Name = "100% - 80%";
+        }
+        else if (hpPercent > 66)
+        {
+            damageImmunityPhase.Name = "80% - 65%";
+        }
+        else if (hpPercent > 51)
+        {
+            damageImmunityPhase.Name = "65% - 50%";
+        }
+        else if (hpPercent > 36)
+        {
+            damageImmunityPhase.Name = "50% - 35%";
+        }
+        else if (hpPercent > 21 )
+        {
+            damageImmunityPhase.Name = "35% - 20%";
+        }
+        else if (hpPercent > 11 && log.FightData.IsCM)
+        {
+            damageImmunityPhase.Name = "20% - 10%";
+        }
+        else if (hpPercent > 0)
+        {
+            damageImmunityPhase.Name = log.FightData.IsCM ? "10% - 0%" : "20% - 0%";
+        }
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -181,16 +205,52 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 phase.Name = "Split " + (i) / 2;
                 phase.AddTargets(subTitans);
+                phase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
                 phase.AddTarget(greer);
                 phase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
+                phase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
             }
         }
-
-
+        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3], greer, false, true);
+        foreach (var damageImmunityPhase in damageImmunityPhases)
+        {
+            var currentMainPhase = phases.LastOrDefault(x => x.Start <= damageImmunityPhase.Start && x.Name.Contains("Phase"));
+            var hpAtStart = greer.GetCurrentHealthPercent(log, damageImmunityPhase.Start);
+            if (currentMainPhase != null)
+            {
+                if (currentMainPhase.End > damageImmunityPhase.End)
+                {
+                    damageImmunityPhase.AddTarget(greer);
+                    damageImmunityPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
+                    damageImmunityPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
+                    phases.Add(damageImmunityPhase);
+                    SetPhaseNameForHP(log, damageImmunityPhase, hpAtStart);
+                } 
+                else
+                {
+                    var beforeShieldPhase = new PhaseData(damageImmunityPhase.Start, currentMainPhase.End);
+                    SetPhaseNameForHP(log, beforeShieldPhase, hpAtStart);
+                    beforeShieldPhase.AddTarget(greer);
+                    beforeShieldPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
+                    beforeShieldPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
+                    phases.Add(beforeShieldPhase);
+                    var nextMainPhase = phases.FirstOrDefault(x => x.Start >= damageImmunityPhase.Start && x.Name.Contains("Phase"));
+                    if (nextMainPhase != null)
+                    {
+                        var afterShieldPhase = new PhaseData(nextMainPhase.Start, damageImmunityPhase.End);
+                        SetPhaseNameForHP(log, afterShieldPhase, greer.GetCurrentHealthPercent(log, afterShieldPhase.Start));
+                        afterShieldPhase.AddTarget(greer);
+                        afterShieldPhase.AddTargets(subTitans, PhaseData.TargetPriority.Blocking);
+                        afterShieldPhase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
+                        phases.Add(afterShieldPhase);
+                    } 
+                }
+            } 
+        }
 
         return phases;
     }
