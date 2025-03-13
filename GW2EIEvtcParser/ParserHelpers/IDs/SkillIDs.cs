@@ -4695,11 +4695,13 @@ public static class SkillIDs
     public const long PealOfHarmonyCM = 75535;
     public const long ThrummingPresenceDamageCM = 75536;
     public const long CageOfDecay4 = 75554;
+    public const long DecimaCMUngaBungaCast = 75585;
     public const long ThrummingPresenceBuffCM = 75588;
     public const long AuraOfCorruptionBuff_Ereg = 75592;
     public const long EruptionOfRot6 = 75607;
     public const long FracturedArmorCM = 75616;
     public const long AchievementEligibilitySpareTheEreg = 75629;
+    public const long SeismicRepositionInvul = 75632;
     public const long EnlightenedConduitGadgetChargeTier3BuffCM = 75654;
     public const long TheWorldEndsInDecay = 75665;
     public const long TitanicResistance = 75680;

@@ -380,6 +380,7 @@ internal static class EncounterBuffs
             // Decima
             new Buff("Fractured Armor", FracturedArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Fractured Armor CM", FracturedArmorCM, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Seismic Reposition Invul", SeismicRepositionInvul, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Nova Shield", NovaShield, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Nova Shield CM", NovaShieldCM, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Tracked),

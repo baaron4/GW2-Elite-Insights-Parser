@@ -172,24 +172,40 @@ internal class DecimaTheStormsinger : MountBalrior
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true));
+        phases.AddRange(GetPhasesByInvul(log, isCM ? [NovaShieldCM, FracturedArmorCM] : [NovaShield, FracturedArmor], decima, true, true));
+        var currentMainPhase = 1;
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (i % 2 == 0)
+            if (i % 3 == 0)
             {
-                phase.Name = "Split " + (i) / 2;
+                phase.Name = "Split " + (currentMainPhase++);
+                phase.OverrideStart(phases[i - 1].Start);
                 phase.AddTarget(decima);
             }
-            else
+            else if (i % 3 == 1)
             {
-                phase.Name = "Phase " + (i + 1) / 2;
+                phase.Name = "Phase " + (currentMainPhase);
                 phase.AddTarget(decima);
             }
         }
-        // Boulder phases
+        // Final phases + Boulder phases
         if (isCM)
         {
+            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To == decima.AgentItem);
+            if (finalSeismicJumpEvent != null)
+            {
+                var preFinalPhase = new PhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
+                preFinalPhase.AddTarget(Decima);
+                phases.Add(preFinalPhase);
+                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllData(SeismicRepositionInvul).FirstOrDefault(x => x.To == decima.AgentItem);
+                if (finalPhaseStartEvent != null)
+                {
+                    var finalPhase = new PhaseData(finalPhaseStartEvent.Time, log.FightData.FightEnd, "10% - 0%");
+                    finalPhase.AddTarget(Decima);
+                    phases.Add(finalPhase);
+                }
+            }
             var boulders = Targets.Where(x => x.IsSpecies(TrashID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
             var firstBoulders = boulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
