@@ -24,6 +24,7 @@ public class CombatData
     private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
     private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataByDst;
+    private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
@@ -75,12 +76,18 @@ public class CombatData
         toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
 
         var buffIDsToSort = new HashSet<long>(toAdd.Count);
-        var buffAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
+        var buffDstAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
+        var buffSrcAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
         foreach (BuffEvent bf in toAdd)
         {
             //TODO(Rennorb) @perf @mem: find average complexity
             _buffDataByDst.AddToList(bf.To, bf, toAdd.Count / 4);
-            buffAgentsToSort.Add(bf.To);
+            buffDstAgentsToSort.Add(bf.To);
+            if (bf is not BuffExtensionEvent)
+            {
+                _buffDataBySrc.AddToList(bf.By, bf, toAdd.Count / 4);
+                buffSrcAgentsToSort.Add(bf.By);
+            }
 
             //TODO(Rennorb) @perf @mem: find average complexity
             _buffData.AddToList(bf.BuffID, bf, toAdd.Count / 4);
@@ -92,9 +99,14 @@ public class CombatData
             _buffData[buffID].SortByTime();
         }
 
-        foreach (AgentItem a in buffAgentsToSort)
+        foreach (AgentItem a in buffDstAgentsToSort)
         {
             _buffDataByDst[a].SortByTime();
+        }
+
+        foreach (AgentItem a in buffSrcAgentsToSort)
+        {
+            _buffDataBySrc[a].SortByTime();
         }
 
         if (toAdd.Count != 0)
@@ -531,6 +543,7 @@ public class CombatData
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+        _buffDataBySrc = buffEvents.Where(x => !(x is BuffExtensionEvent)).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
         OffsetBuffExtensionEvents(evtcVersion);
         // damage events
@@ -845,6 +858,15 @@ public class CombatData
     public IReadOnlyList<BuffEvent> GetBuffData(long buffID)
     {
         return _buffData.GetValueOrEmpty(buffID);
+    }
+    /// <summary>
+    /// Won't return Buff Extension events
+    /// </summary>
+    /// <param name="src"></param>
+    /// <returns></returns>
+    public IReadOnlyList<BuffEvent> GetBuffDataBySrc(AgentItem src)
+    {
+        return _buffDataBySrc.GetValueOrEmpty(src);
     }
 
     /// <summary>
