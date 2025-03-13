@@ -1,6 +1,7 @@
 ﻿
 using System.Numerics;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -54,10 +55,6 @@ internal class UraTheSteamshrieker : MountBalrior
                         (2550, 6200, 9010, 13082));
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
-    {
-        return "Ura, the Steamshrieker";
-    }
 
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
@@ -365,5 +362,17 @@ internal class UraTheSteamshrieker : MountBalrior
                 EnvironmentDecorations.AddWithBorder(new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position)), Colors.Red, 0.4);
             }
         }
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
+        if (target.GetHealth(combatData) > 70e6)
+        {
+            target.OverrideName("Godscream Ura");
+            return FightData.EncounterMode.CMNoName;
+        }
+        target.OverrideName("Ura, the Streamshrieker");
+        return FightData.EncounterMode.Normal;
     }
 }

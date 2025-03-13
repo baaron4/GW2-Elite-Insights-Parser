@@ -13,7 +13,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
-    private const string NameCM = "Godspoil Greer";
     private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores]; // Legacy, no longer reflectable.
     private static readonly long[] Boons =
     [
@@ -113,14 +112,6 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
-        // Renaming Greer for CM
-        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found") ;
-        SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
-        if (ereg != null)
-        {
-            greer.OverrideName(NameCM);
-        }
-
         // Enumerating Proto-Greerlings
         int cur = 1;
         foreach (SingleActor target in Targets)
@@ -134,8 +125,14 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
-        return ereg != null ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
+        if (ereg != null)
+        {
+            greer.OverrideName("Godspoil Greer");
+            return FightData.EncounterMode.CMNoName;
+        }
+        return FightData.EncounterMode.Normal;
     }
 
     private static void SetPhaseNameForHP(PhaseData damageImmunityPhase, double hpPercent)

@@ -4700,6 +4700,7 @@ public static class SkillIDs
     public const long FracturedArmorCM = 75616;
     public const long AchievementEligibilitySpareTheEreg = 75629;
     public const long TheWorldEndsInDecay = 75665;
+    public const long TitanicResistance = 75680;
     public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long NovaShieldCM = 75690;
     public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
