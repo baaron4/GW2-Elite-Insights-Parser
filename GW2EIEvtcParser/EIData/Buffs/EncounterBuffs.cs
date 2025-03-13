@@ -405,7 +405,9 @@ internal static class EncounterBuffs
             new Buff("Enlightened Conduit Charge (T1)", EnlightenedConduitGadgetChargeTier1Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge CM (T1)", EnlightenedConduitGadgetChargeTier1BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T2)", EnlightenedConduitGadgetChargeTier2Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Enlightened Conduit Charge CM (T2)", EnlightenedConduitGadgetChargeTier2BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T3)", EnlightenedConduitGadgetChargeTier3Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Enlightened Conduit Charge CM (T3)", EnlightenedConduitGadgetChargeTier3BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Charged Leap (W8)", ChargedLeapW8, Source.FightSpecific, BuffClassification.Other, BuffImages.IgniteArrowsDominion),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),

@@ -459,7 +459,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var gadgetConnectorAgent = (isCM ? target.AgentItem.Master : target.AgentItem)!;
                 // Fulgent Aura - Tier 1 Charge
                 var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
-                var tier1 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier1BuffCM :EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
+                var tier1 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier1BuffCM : EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier1.Where(x => x.Value > 0))
                 {
                     replay.Decorations.AddWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
@@ -467,7 +467,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Fulgent Aura - Tier 2 Charge
-                var tier2 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
+                var tier2 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier2BuffCM : EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier2.Where(x => x.Value > 0))
                 {
                     replay.Decorations.AddWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
@@ -475,7 +475,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Fulgent Aura - Tier 3 Charge
-                var tier3 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
+                var tier3 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier3BuffCM : EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier3.Where(x => x.Value > 0))
                 {
                     replay.Decorations.AddWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);

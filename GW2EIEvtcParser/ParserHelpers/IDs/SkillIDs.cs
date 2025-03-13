@@ -4684,6 +4684,7 @@ public static class SkillIDs
     public const long EruptionOfRot4 = 75414;
     public const long RotTheWorldCM = 75425;
     public const long RelicOfTHorns = 75432;
+    public const long EnlightenedConduitGadgetChargeTier2BuffCM = 75433;
     public const long FluxlanceTargetBuffCM1 = 75441;
     public const long RipplesOfRotCM = 75456;
     public const long DecimaConduitWallBuffCM = 75479;
@@ -4699,6 +4700,7 @@ public static class SkillIDs
     public const long EruptionOfRot6 = 75607;
     public const long FracturedArmorCM = 75616;
     public const long AchievementEligibilitySpareTheEreg = 75629;
+    public const long EnlightenedConduitGadgetChargeTier3BuffCM = 75654;
     public const long TheWorldEndsInDecay = 75665;
     public const long TitanicResistance = 75680;
     public const long DecimaConduitWallWarningBuffCM = 75763;
