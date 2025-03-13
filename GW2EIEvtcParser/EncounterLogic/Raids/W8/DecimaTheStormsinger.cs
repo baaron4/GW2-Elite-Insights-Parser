@@ -78,8 +78,11 @@ internal class DecimaTheStormsinger : MountBalrior
         return
         [
             TrashID.GreenOrb1Player,
+            TrashID.GreenOrb1PlayerCM,
             TrashID.GreenOrb2Players,
+            TrashID.GreenOrb2PlayersCM,
             TrashID.GreenOrb3Players,
+            TrashID.GreenOrb3PlayersCM,
             TrashID.EnlightenedConduitCM,
             TrashID.EnlightenedConduit,
             TrashID.EnlightenedConduitGadget,
@@ -144,6 +147,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
+        var tst = log.AgentData._allAgentsList.Where(x => x.Name.Contains("ch") && x.Type == AgentItem.AgentType.NPC && !x.IsSpecies(TrashID.GreenOrb1PlayerCM) && !x.IsSpecies(TrashID.GreenOrb2PlayersCM)).Select(x => log.CombatData.GetDamageData(x).Where(y => y.To.IsPlayer).ToList()).Where(x => x.Count > 0).ToList();
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor decima = Decima;
         phases[0].AddTarget(decima);
@@ -364,6 +368,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             case (int)TrashID.GreenOrb1Player:
+            case (int)TrashID.GreenOrb1PlayerCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -379,6 +384,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TrashID.GreenOrb2Players:
+            case (int)TrashID.GreenOrb2PlayersCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(185, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -394,6 +400,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TrashID.GreenOrb3Players:
+            case (int)TrashID.GreenOrb3PlayersCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(285, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
