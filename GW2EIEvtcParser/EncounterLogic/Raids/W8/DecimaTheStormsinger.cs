@@ -107,10 +107,27 @@ internal class DecimaTheStormsinger : MountBalrior
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 200)
             .Distinct();
-        foreach (var conduit in conduitsGadgets)
+        var effects = isCM ? combatData.Where(x => x.IsEffect) : [];
+        foreach (var conduitGadget in conduitsGadgets)
         {
-            conduit.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
-            conduit.OverrideType(AgentItem.AgentType.NPC, agentData);
+            if (isCM)
+            {
+                var effectByConduitOnGadget = effects
+                    .Where(x => x.DstMatchesAgent(conduitGadget)
+                                && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TrashID.EnlightenedConduitCM)
+                    ).FirstOrDefault();
+                if (effectByConduitOnGadget != null)
+                {
+                    conduitGadget.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
+                    conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
+                }
+            } 
+            else
+            {
+                conduitGadget.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
+                conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int cur = 1;
@@ -147,7 +164,6 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        var tst = log.AgentData._allAgentsList.Where(x => x.Name.Contains("ch") && x.Type == AgentItem.AgentType.NPC && !x.IsSpecies(TrashID.GreenOrb1PlayerCM) && !x.IsSpecies(TrashID.GreenOrb2PlayersCM)).Select(x => log.CombatData.GetDamageData(x).Where(y => y.To.IsPlayer).ToList()).Where(x => x.Count > 0).ToList();
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor decima = Decima;
         phases[0].AddTarget(decima);
@@ -419,7 +435,6 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)TrashID.EnlightenedConduitCM:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
                 AddThunderAoE(target, log, replay);
-
                 // Focused Fluxlance - Green Arrow from Decima to the Conduit
                 var greenArrow = GetFilteredList(log.CombatData, isCM ? FluxlanceTargetBuffCM1 : FluxlanceTargetBuff1, target, true, true).Where(x => x is BuffApplyEvent);
                 foreach (var apply in greenArrow)
@@ -437,28 +452,34 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             case (int)TrashID.EnlightenedConduitGadget:
+                if (isCM && target.AgentItem.Master == null)
+                {
+                    break;
+                }
+                var gadgetConnectorAgent = (isCM ? target.AgentItem.Master : target.AgentItem)!;
                 // Fulgent Aura - Tier 1 Charge
-                var tier1 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
+                var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
+                var tier1 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier1BuffCM :EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier1.Where(x => x.Value > 0))
                 {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder1Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder1Overhead);
                 }
 
                 // Fulgent Aura - Tier 2 Charge
                 var tier2 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier2.Where(x => x.Value > 0))
                 {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder2Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder2Overhead);
                 }
 
                 // Fulgent Aura - Tier 3 Charge
                 var tier3 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier3.Where(x => x.Value > 0))
                 {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder3Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder3Overhead);
                 }
                 break;
             case (int)TrashID.DecimaBeamStart:

@@ -403,6 +403,7 @@ internal static class EncounterBuffs
             new Buff("Fluxlance Target (Buff 2)", FluxlanceTargetBuff2, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Target),
             new Buff("Fluxlance Target (Red Arrow)", FluxlanceRedArrowTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target2),
             new Buff("Enlightened Conduit Charge (T1)", EnlightenedConduitGadgetChargeTier1Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Enlightened Conduit Charge CM (T1)", EnlightenedConduitGadgetChargeTier1BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T2)", EnlightenedConduitGadgetChargeTier2Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T3)", EnlightenedConduitGadgetChargeTier3Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Charged Leap (W8)", ChargedLeapW8, Source.FightSpecific, BuffClassification.Other, BuffImages.IgniteArrowsDominion),

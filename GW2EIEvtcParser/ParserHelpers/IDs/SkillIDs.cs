@@ -4710,6 +4710,7 @@ public static class SkillIDs
     public const long RotEruptionCM = 75866;
     public const long CageOfDecay5 = 75873;
     public const long EnfeeblingMiasma4 = 75919;
+    public const long EnlightenedConduitGadgetChargeTier1BuffCM = 75963;
     #endregion
 }
 
