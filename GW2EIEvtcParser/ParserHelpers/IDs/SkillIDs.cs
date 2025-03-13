@@ -4686,6 +4686,7 @@ public static class SkillIDs
     public const long RelicOfTHorns = 75432;
     public const long EnlightenedConduitGadgetChargeTier2BuffCM = 75433;
     public const long FluxlanceTargetBuffCM1 = 75441;
+    public const long DecimaRedBeamLoadingCM2 = 75451;
     public const long RipplesOfRotCM = 75456;
     public const long DecimaConduitWallBuffCM = 75479;
     public const long RipplesOfRotCM2 = 75519;
@@ -4700,13 +4701,15 @@ public static class SkillIDs
     public const long AuraOfCorruptionBuff_Ereg = 75592;
     public const long EruptionOfRot6 = 75607;
     public const long FracturedArmorCM = 75616;
+    public const long DecimaRedBeamTargetingCM = 75619;
     public const long AchievementEligibilitySpareTheEreg = 75629;
     public const long SeismicRepositionInvul = 75632;
     public const long EnlightenedConduitGadgetChargeTier3BuffCM = 75654;
     public const long TheWorldEndsInDecay = 75665;
     public const long TitanicResistance = 75680;
-    public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long NovaShieldCM = 75690;
+    public const long DecimaBeamTargetingCM = 75726;
+    public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
     public const long EnfeeblingMiasma3 = 75749;
     public const long DamageImmunity3 = 75754;
@@ -4714,7 +4717,10 @@ public static class SkillIDs
     public const long RotEruptionCM = 75866;
     public const long CageOfDecay5 = 75873;
     public const long EnfeeblingMiasma4 = 75919;
+    public const long DecimaBeamLoadingCM2 = 75956;
+    public const long DecimaBeamLoadingCM1 = 75960;
     public const long EnlightenedConduitGadgetChargeTier1BuffCM = 75963;
+    public const long DecimaRedBeamLoadingCM1 = 75986;
     #endregion
 }
 

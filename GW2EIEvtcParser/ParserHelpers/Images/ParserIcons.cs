@@ -1198,6 +1198,8 @@ internal static class ParserIcons
         { TrashID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
         { TrashID.DecimaBeamStart, NoImage },
         { TrashID.DecimaBeamEnd, NoImage },
+        { TrashID.DecimaBeamStartCM, NoImage },
+        { TrashID.DecimaBeamEndCM, NoImage },
         { TrashID.GreenOrb1Player, NoImage },
         { TrashID.GreenOrb2Players, NoImage },
         { TrashID.GreenOrb3Players, NoImage },

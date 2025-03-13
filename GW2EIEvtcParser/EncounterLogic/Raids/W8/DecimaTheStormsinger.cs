@@ -103,7 +103,9 @@ internal class DecimaTheStormsinger : MountBalrior
             TrashID.EnlightenedConduit,
             TrashID.EnlightenedConduitGadget,
             TrashID.DecimaBeamStart,
+            TrashID.DecimaBeamStartCM,
             TrashID.DecimaBeamEnd,
+            TrashID.DecimaBeamEndCM,
         ];
     }
 
@@ -515,15 +517,32 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             case (int)TrashID.DecimaBeamStart:
+            case (int)TrashID.DecimaBeamStartCM:
                 const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
-                var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
-                AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
-                var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
-                AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
+                if (isCM)
+                {
+                    var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
+                    AddBeamWarning(log, target, replay, DecimaBeamLoadingCM1, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                    AddBeamWarning(log, target, replay, DecimaBeamLoadingCM2, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                    AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
+
+                    var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
+                    AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM1, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
+                    AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM2, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
+                    AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
+                } 
+                else
+                {
+                    var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
+                    AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                    AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
+
+                    var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
+                    AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
+                    AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
+                }
                 break;
             default:
                 break;

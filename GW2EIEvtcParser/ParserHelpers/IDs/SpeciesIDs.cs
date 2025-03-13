@@ -412,7 +412,9 @@ public static class SpeciesIDs
         GreenOrb3Players = 26727,
         GreenOrb3PlayersCM = 26871,
         DecimaBeamEnd = 26793,
+        DecimaBeamEndCM = 26845,
         DecimaBeamStart = 26708,
+        DecimaBeamStartCM = 26858,
         EnlightenedConduitCM = 26826,
         TranscendentBoulder = 26856,
         // - Ura
