@@ -120,6 +120,28 @@ internal class DecimaTheStormsinger : MountBalrior
         }
     }
 
+    private static PhaseData GetBoulderPhase(ParsedEvtcLog log, IEnumerable<SingleActor> boulders, string name, SingleActor decima)
+    {
+        long start = long.MaxValue;
+        long end = long.MinValue;
+        foreach (SingleActor boulder in boulders) {
+            start = Math.Min(boulder.FirstAware, start);
+            var deadEvent = log.CombatData.GetDeadEvents(boulder.AgentItem).FirstOrDefault();
+            if (deadEvent != null)
+            {
+                end = Math.Max(deadEvent.Time, end);
+            } 
+            else
+            {
+                end = Math.Max(boulder.LastAware, end);
+            }
+        }
+        var phase = new PhaseData(start, end, name);
+        phase.AddTargets(boulders);
+        phase.AddTarget(decima, PhaseData.TargetPriority.Blocking);
+        return phase;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -143,6 +165,21 @@ internal class DecimaTheStormsinger : MountBalrior
             {
                 phase.Name = "Phase " + (i + 1) / 2;
                 phase.AddTarget(decima);
+            }
+        }
+        // Boulder phases
+        if (isCM)
+        {
+            var boulders = Targets.Where(x => x.IsSpecies(TrashID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
+            var firstBoulders = boulders.Take(new Range(0, 2));
+            if (firstBoulders.Any())
+            {
+                phases.Add(GetBoulderPhase(log, firstBoulders, "Boulders 1", decima));
+                var secondBoulders = boulders.Take(new Range(2, 4));
+                if (secondBoulders.Any())
+                {
+                    phases.Add(GetBoulderPhase(log, secondBoulders, "Boulders 2", decima));
+                }
             }
         }
         return phases;
