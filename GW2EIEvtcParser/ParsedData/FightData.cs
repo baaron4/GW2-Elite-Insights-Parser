@@ -174,6 +174,7 @@ public class FightData
                     case TargetID.Greer:
                         return new GreerTheBlightbringer(id);
                     case TargetID.Decima:
+                    case TargetID.DecimaCM:
                         return new DecimaTheStormsinger(id);
                     case TargetID.Ura:
                         return new UraTheSteamshrieker(id);

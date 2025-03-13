@@ -838,6 +838,7 @@ internal static class ParserIcons
         { TargetID.EparchLonelyTower, TargetEparch },
         { TargetID.Greer, TargetGreer },
         { TargetID.Decima, TargetDecima },
+        { TargetID.DecimaCM, TargetDecima },
         { TargetID.Ura, TargetUra },
     };
 
@@ -1186,6 +1187,8 @@ internal static class ParserIcons
         { TrashID.Tribocharge, TrashTribocharge },
         { TrashID.EmpoweringBeast, TrashEmpoweringBeast },
         { TrashID.EnlightenedConduit, TrashEnlightenedConduit },
+        { TrashID.EnlightenedConduitCM, TrashEnlightenedConduit },
+        { TrashID.TranscendentBoulder, TrashGenericRedEnemySkull },
         { TrashID.EliteVentshot, TrashVentshot },
         { TrashID.EliteFumaroller, TrashFumaroller },
         { TrashID.ChampionFumaroller, TrashFumaroller },

@@ -16,6 +16,9 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class DecimaTheStormsinger : MountBalrior
 {
+    private readonly bool isCM = false;
+
+    private SingleActor Decima => Targets.FirstOrDefault(x => isCM ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
     public DecimaTheStormsinger(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>()
@@ -51,6 +54,7 @@ internal class DecimaTheStormsinger : MountBalrior
         Icon = EncounterIconDecima;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
+        isCM = triggerID == (int)TargetID.DecimaCM;
     }
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
@@ -64,6 +68,8 @@ internal class DecimaTheStormsinger : MountBalrior
         return
         [
             (int)TargetID.Decima,
+            (int)TargetID.DecimaCM,
+            (int)TrashID.TranscendentBoulder,
         ];
     }
 
@@ -74,6 +80,7 @@ internal class DecimaTheStormsinger : MountBalrior
             TrashID.GreenOrb1Player,
             TrashID.GreenOrb2Players,
             TrashID.GreenOrb3Players,
+            TrashID.EnlightenedConduitCM,
             TrashID.EnlightenedConduit,
             TrashID.EnlightenedConduitGadget,
             TrashID.DecimaBeamStart,
@@ -86,6 +93,7 @@ internal class DecimaTheStormsinger : MountBalrior
         return
         [
             new DamageCastFinder(ThrummingPresenceBuff, ThrummingPresenceDamage),
+            new DamageCastFinder(ThrummingPresenceBuffCM, ThrummingPresenceDamageCM),
         ];
     }
 
@@ -102,19 +110,27 @@ internal class DecimaTheStormsinger : MountBalrior
             conduit.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        int cur = 1;
+        foreach (SingleActor target in Targets)
+        {
+            if (target.IsSpecies(TrashID.TranscendentBoulder))
+            {
+                target.OverrideName(target.Character + " " + cur++);
+            }
+        }
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
+        SingleActor decima = Decima;
         phases[0].AddTarget(decima);
         if (!requirePhases)
         {
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, NovaShield, decima, true, true));
+        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
@@ -139,6 +155,7 @@ internal class DecimaTheStormsinger : MountBalrior
         switch (target.ID)
         {
             case (int)TargetID.Decima:
+            case (int)TargetID.DecimaCM:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
@@ -355,11 +372,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TrashID.EnlightenedConduit:
+            case (int)TrashID.EnlightenedConduitCM:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
                 AddThunderAoE(target, log, replay);
 
                 // Focused Fluxlance - Green Arrow from Decima to the Conduit
-                var greenArrow = GetFilteredList(log.CombatData, FluxlanceTargetBuff1, target, true, true).Where(x => x is BuffApplyEvent);
+                var greenArrow = GetFilteredList(log.CombatData, isCM ? FluxlanceTargetBuffCM1 : FluxlanceTargetBuff1, target, true, true).Where(x => x is BuffApplyEvent);
                 foreach (var apply in greenArrow)
                 {
                     replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
@@ -367,11 +385,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Warning indicator of walls spawning between Conduits.
-                var wallsWarnings = GetFilteredList(log.CombatData, DecimaConduitWallWarningBuff, target, true, true);
+                var wallsWarnings = GetFilteredList(log.CombatData, isCM ? DecimaConduitWallWarningBuffCM : DecimaConduitWallWarningBuff, target, true, true);
                 replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
 
                 // Walls connecting Conduits to each other.
-                var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
+                var walls = GetFilteredList(log.CombatData, isCM ? DecimaConduitWallBuffCM: DecimaConduitWallBuff, target, true, true);
                 replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             case (int)TrashID.EnlightenedConduitGadget:
@@ -509,5 +527,10 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(actor)), growing);
             }
         }
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
     }
 }

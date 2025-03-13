@@ -57,6 +57,7 @@ public static class SpeciesIDs
         Greer = 26725,
         Decima = 26774,
         Ura = 26712,
+        DecimaCM = 26867,
         // Strike Missions
         // - Festival
         Freezie = 21333,
@@ -409,6 +410,8 @@ public static class SpeciesIDs
         GreenOrb3Players = 26727,
         DecimaBeamEnd = 26793,
         DecimaBeamStart = 26708,
+        EnlightenedConduitCM = 26826,
+        TranscendentBoulder = 26856,
         // - Ura
         EliteFumaroller = 26797,
         ChampionFumaroller = 26744,
