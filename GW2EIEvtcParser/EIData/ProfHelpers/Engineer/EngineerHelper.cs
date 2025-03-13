@@ -218,7 +218,7 @@ internal static class EngineerHelper
         */
         // Spear
         new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, SkillImages.ConduitSurge),
-        new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, SkillImages.ElectricArtillery),
+        new Buff("Electric Artillery", ElectricArtilleryBuff, Source.Engineer, BuffClassification.Other, SkillImages.ElectricArtillery),
         new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, SkillImages.Focused),
         new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, SkillImages.LightningRod),
     ];

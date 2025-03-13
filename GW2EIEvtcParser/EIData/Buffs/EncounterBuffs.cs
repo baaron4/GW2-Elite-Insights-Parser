@@ -379,15 +379,20 @@ internal static class EncounterBuffs
             //////////////////////////////////////////////
             // Decima
             new Buff("Fractured Armor", FracturedArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Fractured Armor CM", FracturedArmorCM, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
             new Buff("Nova Shield", NovaShield, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
+            new Buff("Nova Shield CM", NovaShieldCM, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Tracked),
             new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
             new Buff("Thrumming Presence", ThrummingPresenceBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
+            new Buff("Thrumming Presence CM", ThrummingPresenceBuffCM, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
             new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
             new Buff("Decima Beam Targeting", DecimaBeamLoading, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Decima Red Beam Targeting", DecimaRedBeamLoading, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
             new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
+            new Buff("Peal of Harmony CM", PealOfHarmonyCM, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
+            new Buff("Peal of Discord CM", PealOfDiscordCM, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
             new Buff("Target Order: 1 (JW)", TargetOrder1JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder1),
             new Buff("Target Order: 2 (JW)", TargetOrder2JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder2),
             new Buff("Target Order: 3 (JW)", TargetOrder3JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder3),
@@ -400,6 +405,7 @@ internal static class EncounterBuffs
             new Buff("Enlightened Conduit Charge (T1)", EnlightenedConduitGadgetChargeTier1Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T2)", EnlightenedConduitGadgetChargeTier2Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T3)", EnlightenedConduitGadgetChargeTier3Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Charged Leap (W8)", ChargedLeapW8, Source.FightSpecific, BuffClassification.Other, BuffImages.IgniteArrowsDominion),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Might (Greer)", MightUnstrippable, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Might),

@@ -83,6 +83,7 @@ internal static class MechanistHelper
         new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, SkillImages.SuperconductingSignet),
         new Buff("Overclock Signet", OverclockSignetBuff, Source.Mechanist, BuffClassification.Other, SkillImages.OverclockSignet),
         new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, TraitImages.MechanicalGenius),
+        new Buff("Mechanical Genius (Remain)", MechanicalGeniusRemain, Source.Mechanist, BuffClassification.Other, TraitImages.MechanicalGenius),
         new Buff("Exigency Protocols", ExigencyProtocol, Source.PetSpecific, BuffClassification.Other, TraitImages.ExigencyProtocol),
         //
         //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
