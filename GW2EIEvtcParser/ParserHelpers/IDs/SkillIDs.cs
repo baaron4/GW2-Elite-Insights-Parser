@@ -4683,7 +4683,7 @@ public static class SkillIDs
     public const long TasteForBlood = 75397;
     public const long EruptionOfRot4 = 75414;
     public const long RotTheWorldCM = 75425;
-    public const long RelicOfTHorns = 75432;
+    public const long RelicOfThorns = 75432;
     public const long EnlightenedConduitGadgetChargeTier2BuffCM = 75433;
     public const long FluxlanceTargetBuffCM1 = 75441;
     public const long DecimaRedBeamLoadingCM2 = 75451;
@@ -4711,6 +4711,7 @@ public static class SkillIDs
     public const long DecimaBeamTargetingCM = 75726;
     public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long AchievementEligibilityGuaranteedPlagueFree = 75716;
+    public const long RelicOfTheHolosmith = 75748;
     public const long EnfeeblingMiasma3 = 75749;
     public const long DamageImmunity3 = 75754;
     public const long ResolutionGreer = 75755;
