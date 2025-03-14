@@ -53,6 +53,7 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfTheBeehive2 = new("85B0BB9E723EB444AC4C2CCD06B3C606"); // Duration 3500, Player Src, has Dst and Effect End
     public static readonly GUID RelicOfMountBalrior1 = new("7CD892DAA47D194CA3FE962ADE6F626F"); // Duration 6000, Player Src, ground effect
     public static readonly GUID RelicOfMountBalrior2 = new("1558621A51FE5F4B848A8B252AFE616C"); // Duration infinite, Player Src, ground effect with effect end
+    public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
     #endregion
 
     #region Mesmer
@@ -643,6 +644,7 @@ public static class EffectGUIDs
     // Greer
     public static readonly GUID GreerEruptionOfRotGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src Gree
     public static readonly GUID GreerEruptionOfRotGreen2 = new("3E7B9E8C7FFF3A42B02F8FE8E5AC4709"); // 8000 duration - Src Greer
+    public static readonly GUID GreerEruptionofRotGreen3 = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // 8000 duration
     public static readonly GUID GreerScatteringSporeblastIndicator = new("C0D32EEEDFAA0E40B3342DD9B82AC94E"); // Dynamic duration - Src NPC
     public static readonly GUID GreerSweepTheMoldRakeTheRotIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // 3000/4000 duration
     public static readonly GUID GreerEnfeeblingMiasma = new("BBA33A70B7D2A94589DE81B1F35D3D69"); // 6000 duration

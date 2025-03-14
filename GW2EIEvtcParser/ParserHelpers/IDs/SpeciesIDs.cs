@@ -718,11 +718,11 @@ public static class SpeciesIDs
         STA7012 = 10146,
         // GW2 Digital Deluxe
         MistfireWolf = 9801,
-        // Rune Summons
-        RuneJaggedHorror = 21314,
-        RuneRockDog = 8836,
-        RuneMarkIGolem = 8837,
-        RuneTropicalBird = 8838,
+        // Rune / Relic Summons
+        JaggedHorror = 21314,
+        RockDog = 8836,
+        MarkIGolem = 8837,
+        TropicalBird = 8838,
         // Consumables with summons
         Ember = 1454,
         HawkeyeGriffon = 5614,

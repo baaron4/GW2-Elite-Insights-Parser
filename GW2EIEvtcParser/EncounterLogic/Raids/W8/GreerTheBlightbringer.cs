@@ -396,14 +396,16 @@ internal class GreerTheBlightbringer : MountBalrior
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
         // Eruption of Rot - Green AoE
-        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], out var noxiousBlight))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, 
+            [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], 
+            out var noxiousBlight))
         {
             foreach (EffectEvent effect in noxiousBlight)
             {
                 long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.1, new AgentConnector(player));
+                var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(player));
                 replay.Decorations.AddWithGrowing(circle, growing, true);
             }
         }

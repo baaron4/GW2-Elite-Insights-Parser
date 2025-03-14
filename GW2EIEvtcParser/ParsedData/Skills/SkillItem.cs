@@ -525,6 +525,7 @@ public class SkillItem
         { RelicOfTheStormsingerChain, ItemImages.RelicOfTheStormsinger },
         { RelicOfTheBeehive, ItemImages.RelicOfTheBeehive },
         { RelicOfMountBalrior, ItemImages.RelicOfMountBalrior },
+        { RelicOfTheHolosmith, ItemImages.RelicOfTheHolosmith },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, SkillImages.FireAttunement },
