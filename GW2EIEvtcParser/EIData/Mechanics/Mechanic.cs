@@ -39,7 +39,7 @@ public class MechanicPlotlySetting
 
 }
 
-public abstract class Mechanic
+public abstract class Mechanic : MechanicContainer
 {
     public readonly int InternalCooldown;
     public readonly MechanicPlotlySetting PlotlySetting;
@@ -158,5 +158,8 @@ public abstract class Mechanic
     {
         return IsAchievementEligibility && log.FightData.Success;
     }
-
+    public override IReadOnlyList<Mechanic> GetMechanics()
+    {
+        return [this];
+    }
 }
