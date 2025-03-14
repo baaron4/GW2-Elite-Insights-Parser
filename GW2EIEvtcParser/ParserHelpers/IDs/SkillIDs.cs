@@ -4445,6 +4445,7 @@ public static class SkillIDs
     public const long HarriersTossAdrenalineLevel3 = 73006;
     public const long Extirpate = 73007;
     public const long PanthersProwl = 73008;
+    public const long OakenCudgelPetHeal = 72309;
     public const long SpearSwipe = 73009;
     public const long Fissure = 73010;
     public const long SeetheBuff = 73011;
@@ -4646,6 +4647,7 @@ public static class SkillIDs
     public const long SweepTheMold3 = 75210;
     public const long AuraOfCorruptionBuff_Gree = 75220;
     public const long FulgentAuraTier3 = 75221;
+    public const long ToxicBuildup = 75222;
     public const long DeploySiegeSuit_InfiniteSiegeSuit = 75227;
     public const long RockSmash2 = 75229;
     public const long DeploySentryTurret = 75238;
@@ -4682,12 +4684,15 @@ public static class SkillIDs
     public const long DeployTrebuchet_InfiniteSiegeTool = 75375;
     public const long TasteForBlood = 75397;
     public const long EruptionOfRot4 = 75414;
+    public const long LinkedDecimaAdd1 = 75420;
     public const long RotTheWorldCM = 75425;
     public const long RelicOfTHorns = 75432;
     public const long EnlightenedConduitGadgetChargeTier2BuffCM = 75433;
+    public const long LinkedDecima1 = 75436;
     public const long FluxlanceTargetBuffCM1 = 75441;
     public const long DecimaRedBeamLoadingCM2 = 75451;
     public const long RipplesOfRotCM = 75456;
+    public const long AchievementEligibilityCalmBeforeTheStorm = 75468;
     public const long DecimaConduitWallBuffCM = 75479;
     public const long RipplesOfRotCM2 = 75519;
     public const long ChargedLeapW8 = 75520;
@@ -4704,6 +4709,7 @@ public static class SkillIDs
     public const long DecimaRedBeamTargetingCM = 75619;
     public const long AchievementEligibilitySpareTheEreg = 75629;
     public const long SeismicRepositionInvul = 75632;
+    public const long Defibrillate = 75642;
     public const long EnlightenedConduitGadgetChargeTier3BuffCM = 75654;
     public const long TheWorldEndsInDecay = 75665;
     public const long TitanicResistance = 75680;
@@ -4716,11 +4722,17 @@ public static class SkillIDs
     public const long ResolutionGreer = 75755;
     public const long RotEruptionCM = 75866;
     public const long CageOfDecay5 = 75873;
+    public const long AchievementEligibilityNoGeysersNoProblems = 75880;
+    public const long LinkedDecimaAdd2 = 75882;
+    public const long AchievementEligibilityHopscotchMaster = 75887;
     public const long EnfeeblingMiasma4 = 75919;
     public const long DecimaBeamLoadingCM2 = 75956;
     public const long DecimaBeamLoadingCM1 = 75960;
     public const long EnlightenedConduitGadgetChargeTier1BuffCM = 75963;
+    public const long LinkedDecima2 = 75980;
     public const long DecimaRedBeamLoadingCM1 = 75986;
+    public const long AchievementEligibilityThisBugCanDance = 76042;
+    //
     #endregion
 }
 

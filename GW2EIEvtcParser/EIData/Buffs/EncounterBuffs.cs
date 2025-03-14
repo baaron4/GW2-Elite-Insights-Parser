@@ -413,7 +413,14 @@ internal static class EncounterBuffs
             new Buff("Enlightened Conduit Charge CM (T2)", EnlightenedConduitGadgetChargeTier2BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge (T3)", EnlightenedConduitGadgetChargeTier3Buff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Enlightened Conduit Charge CM (T3)", EnlightenedConduitGadgetChargeTier3BuffCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
-            new Buff("Charged Leap (W8)", ChargedLeapW8, Source.FightSpecific, BuffClassification.Other, BuffImages.IgniteArrowsDominion),
+            new Buff("Charged Leap (W8)", ChargedLeapW8, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Other, BuffImages.IgniteArrowsDominion),
+            new Buff("Linked 1 (Decima)", LinkedDecima1, Source.FightSpecific, BuffClassification.Other, BuffImages.SinisterThread),
+            new Buff("Linked 2 (Decima)", LinkedDecima2, Source.FightSpecific, BuffClassification.Other, BuffImages.SinisterThread),
+            new Buff("Linked 1 (Boulder)", LinkedDecimaAdd1, Source.FightSpecific, BuffClassification.Other, BuffImages.SinisterThread),
+            new Buff("Linked 2 (Boulder)", LinkedDecimaAdd2, Source.FightSpecific, BuffClassification.Other, BuffImages.SinisterThread),
+            new Buff("Defibrillate", Defibrillate, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Achievement Eligibility: Calm Before the Storm", AchievementEligibilityCalmBeforeTheStorm, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: This Bug Can Dance", AchievementEligibilityThisBugCanDance, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Might (Greer)", MightUnstrippable, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Might),
@@ -442,6 +449,9 @@ internal static class EncounterBuffs
             new Buff("Rising Pressure", RisingPressure, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RisingPressure),
             new Buff("Hardened Crust", HardenedCrust, Source.FightSpecific, BuffClassification.Other, BuffImages.HardenedCrust),
             new Buff("Fire", Fire, Source.FightSpecific, BuffClassification.Other, BuffImages.FireEffect),
+            new Buff("Achievement Eligibility: No Geysers, No Problems", AchievementEligibilityNoGeysersNoProblems, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: Hopscotch Master", AchievementEligibilityHopscotchMaster, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Toxic Buildup", ToxicBuildup, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
             //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
