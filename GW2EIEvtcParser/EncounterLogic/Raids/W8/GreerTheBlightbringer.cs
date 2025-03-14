@@ -41,7 +41,7 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Elibigility: Guaranteed Plague Free", "Achiv Unplagued", 0)
                 .UsingChecker((bae, log) => log.FightData.IsCM).UsingAchievementEligibility(true),
-            new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
+            new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
 
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
 
