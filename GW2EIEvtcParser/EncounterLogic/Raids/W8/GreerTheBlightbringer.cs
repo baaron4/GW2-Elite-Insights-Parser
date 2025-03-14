@@ -41,7 +41,7 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Elibigility: Guaranteed Plague Free", "Achiv Unplagued", 0)
                 .UsingChecker((bae, log) => log.FightData.IsCM).UsingAchievementEligibility(true),
-            new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
+            new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
 
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
 
@@ -396,14 +396,16 @@ internal class GreerTheBlightbringer : MountBalrior
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
         // Eruption of Rot - Green AoE
-        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], out var noxiousBlight))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, 
+            [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], 
+            out var noxiousBlight))
         {
             foreach (EffectEvent effect in noxiousBlight)
             {
                 long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.1, new AgentConnector(player));
+                var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(player));
                 replay.Decorations.AddWithGrowing(circle, growing, true);
             }
         }
