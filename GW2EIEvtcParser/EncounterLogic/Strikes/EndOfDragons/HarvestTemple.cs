@@ -117,6 +117,9 @@ internal class HarvestTemple : EndOfDragonsStrike
             long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
             switch (target.ID)
             {
+                case (int)TrashID.KillableVoidAmalgamate:
+                    phases[0].AddTarget(target, PhaseData.TargetPriority.Blocking);
+                    break;
                 case (int)TrashID.VoidGiant:
                     giants.Add(target);
                     break;
@@ -185,42 +188,34 @@ internal class HarvestTemple : EndOfDragonsStrike
                 start = Math.Min(start, giant.FirstAware);
                 end = Math.Max(end, giant.LastAware);
             }
-            var subPhase = new PhaseData(start, end, "Giants");
+            var subPhase = new PhaseData(start, end, "Giants")
+            {
+                CanBeSubPhase = false
+            };
             subPhase.AddTargets(giants);
             subPhase.OverrideEndTime(log);
             phases.Add(subPhase);
         }
-
+        var subPhaseNonBlockings = Targets.Where(x => x.IsSpecies(TrashID.VoidGoliath) || x.IsSpecies(TrashID.VoidObliterator) || x.IsSpecies(TrashID.VoidGiant));
         foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
         {
-            var subPhase = new PhaseData(start, end, name);
-            subPhase.CanBeSubPhase = canBeSubPhase;
+            var subPhase = new PhaseData(start, end, name)
+            {
+                CanBeSubPhase = canBeSubPhase
+            };
             subPhase.AddTarget(target);
+            subPhase.OverrideEndTime(log);
+            subPhase.AddTargets(subPhaseNonBlockings, PhaseData.TargetPriority.NonBlocking);
             phases.Add(subPhase);
         }
         int purificationID = 0;
+        var purificationNonBlockings = Targets.Where(x => x.IsSpecies(TrashID.VoidTimeCaster) || x.IsSpecies(TrashID.VoidSaltsprayDragon));
         foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(TrashID.PushableVoidAmalgamate) || x.IsSpecies(TrashID.KillableVoidAmalgamate)))
         {
-            long end;
-            DeadEvent? deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
-            if (deadEvent == null)
-            {
-                DespawnEvent? despawnEvent = log.CombatData.GetDespawnEvents(voidAmal.AgentItem).LastOrDefault();
-                if (despawnEvent == null)
-                {
-                    end = voidAmal.LastAware;
-                }
-                else
-                {
-                    end = despawnEvent.Time;
-                }
-            }
-            else
-            {
-                end = deadEvent.Time;
-            }
-            var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), Math.Min(end, log.FightData.FightEnd), "Purification " + (++purificationID));
+            var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), voidAmal.LastAware, "Purification " + (++purificationID));
             purificationPhase.AddTarget(voidAmal);
+            purificationPhase.OverrideEndTime(log);
+            purificationPhase.AddTargets(purificationNonBlockings, PhaseData.TargetPriority.NonBlocking);
             phases.Add(purificationPhase);
         }
         return phases;
