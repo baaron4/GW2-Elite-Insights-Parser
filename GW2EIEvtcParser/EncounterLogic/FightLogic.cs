@@ -358,7 +358,7 @@ public abstract class FightLogic
     {
         foreach (SingleActor target in Targets)
         {
-            if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
+            if (ids.Contains(target.ID))
             {
                 phase.AddTarget(target, priority);
             }

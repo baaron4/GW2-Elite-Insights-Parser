@@ -336,6 +336,7 @@ public static class BuffImages
     public const string SulfuricAcid = "https://wiki.guildwars2.com/images/a/ab/Grasp_of_Joko_%28effect%29.png";
     public const string HardenedCrust = "https://wiki.guildwars2.com/images/4/4e/Branded_Crystal_Shield.png";
     public const string FireEffect = "https://wiki.guildwars2.com/images/e/eb/Fire_%28effect%29.png";
+    public const string SinisterThread = "https://wiki.guildwars2.com/images/d/d7/Sinister_Thread.png";
     // Fractal
     public const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
     public const string ReflectiveShielding = "https://wiki.guildwars2.com/images/c/c6/Reflective_Shielding.png";
@@ -428,6 +429,7 @@ public static class BuffImages
     public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
     public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
     public const string RoyalDecree = "https://wiki.guildwars2.com/images/1/1a/Royal_Decree.png";
+    public const string LowlandExpertise = "https://wiki.guildwars2.com/images/7/7c/Lowland_Expertise.png";
     #endregion Misc
 
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-row justify-content-center flex-wrap" style="width: 500px;">
-        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 500px;">
+        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 400px;">
             <div v-for="target in mainTargets">
                 <img class="icon-lg mr-2 ml-2 target-cell" 
                     :src="getTargetData(target.id).icon" 
@@ -11,8 +11,8 @@
                 <target-data-component :targetid="target.id"></target-data-component>
             </div>
         </div>
-        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center">           
-            <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 350px;">
+        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" style="max-width: 400px;">           
+            <div class="d-flex flex-row justify-content-center align-items-center flex-wrap">
                 <div v-for="target in secondaryTargets">
                     <img class=" icon-ll mr-2 ml-2 target-cell" 
                         :src="getTargetData(target.id).icon" 

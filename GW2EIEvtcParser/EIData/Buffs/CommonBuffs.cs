@@ -118,6 +118,8 @@ internal static class CommonBuffs
         new Buff("Open Access", OpenAccessBuff, Source.Common, BuffClassification.Other, BuffImages.OpenAccessEffect),
         // Gliding
         new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
+        // OW Consumables     
+        new Buff("Lowland Expertise", LowlandExpertise, Source.Common, BuffStackType.Stacking, 7, BuffClassification.Other, BuffImages.LowlandExpertise),
         // Consumable Portal
         new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingWhiteMantleWatchwork, Source.Common, BuffClassification.Other, SkillImages.PortalEnter),
         new Buff("Portal Uses (Xera/Watchwork)", PortalUsesWhiteMantleWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PortalEnter),
@@ -208,6 +210,7 @@ internal static class CommonBuffs
         new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, ItemImages.RelicOfTheBlightbringer),
         new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheClaw),
         new Buff("Relic of Mount Balrior", RelicOfMountBalrior, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfMountBalrior),
+        new Buff("Relic of Thorns", RelicOfThorns, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfThorns),
     ];
 
 }

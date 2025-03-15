@@ -409,7 +409,10 @@ internal static class ParserIcons
     private const string TrashBloodstoneShard = "https://i.imgur.com/fEp6wEj.png";
     private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
     private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
+    private const string TrashEreg = "https://i.imgur.com/Aurldvp.png";
     private const string TrashCannon = "https://i.imgur.com/aNe6JUJ.png";
+    private const string TrashProtoGreerling = "https://i.imgur.com/B1v91mQ.png";
+    private const string TrashEmpoweringBeast = "https://i.imgur.com/HRmRRq1.png";
     #endregion
 
     #region Minion
@@ -422,10 +425,10 @@ internal static class ParserIcons
     private const string MinionDSeries = "https://i.imgur.com/hLGtfGX.png";
     private const string Minion7Series = "https://i.imgur.com/9KLoDPh.png";
     private const string MinionMistfireWolf = "https://i.imgur.com/61qeJrW.png";
-    private const string MinionRuneJaggedHorror = "https://i.imgur.com/opMTn10.png";
-    private const string MinionRuneRockDog = "https://i.imgur.com/gWZUfrB.png";
-    private const string MinionRuneMarkIGolem = "https://i.imgur.com/0ePg7eN.png";
-    private const string MinionTropicalBird = "https://i.imgur.com/zBePi2S.png";
+    private const string MinionJaggedHorror = "https://i.imgur.com/NBmL7nG.png";
+    private const string MinionRockDog = "https://i.imgur.com/JhMo4Jz.png";
+    private const string MinionMarkIGolem = "https://i.imgur.com/ZHaZElK.png";
+    private const string MinionTropicalBird = "https://i.imgur.com/9ZueHAK.png";
     private const string MinionMesmerClone = "https://i.imgur.com/5Hknsa6.png";
     private const string MinionIllusionarySwordsman = "https://i.imgur.com/ReUwrAL.png";
     private const string MinionIllusionaryBerserker = "https://i.imgur.com/VNcYhXZ.png";
@@ -836,6 +839,7 @@ internal static class ParserIcons
         { TargetID.EparchLonelyTower, TargetEparch },
         { TargetID.Greer, TargetGreer },
         { TargetID.Decima, TargetDecima },
+        { TargetID.DecimaCM, TargetDecima },
         { TargetID.Ura, TargetUra },
     };
 
@@ -1182,8 +1186,10 @@ internal static class ParserIcons
         { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
         { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         { TrashID.Tribocharge, TrashTribocharge },
-        { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
+        { TrashID.EmpoweringBeast, TrashEmpoweringBeast },
         { TrashID.EnlightenedConduit, TrashEnlightenedConduit },
+        { TrashID.EnlightenedConduitCM, TrashEnlightenedConduit },
+        { TrashID.TranscendentBoulder, TrashGenericRedEnemySkull },
         { TrashID.EliteVentshot, TrashVentshot },
         { TrashID.EliteFumaroller, TrashFumaroller },
         { TrashID.ChampionFumaroller, TrashFumaroller },
@@ -1193,14 +1199,21 @@ internal static class ParserIcons
         { TrashID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
         { TrashID.DecimaBeamStart, NoImage },
         { TrashID.DecimaBeamEnd, NoImage },
+        { TrashID.DecimaBeamStartCM, NoImage },
+        { TrashID.DecimaBeamEndCM, NoImage },
         { TrashID.GreenOrb1Player, NoImage },
         { TrashID.GreenOrb2Players, NoImage },
         { TrashID.GreenOrb3Players, NoImage },
+        { TrashID.GreenOrb1PlayerCM, NoImage },
+        { TrashID.GreenOrb2PlayersCM, NoImage },
+        { TrashID.GreenOrb3PlayersCM, NoImage },
         { TrashID.EnlightenedConduitGadget, NoImage },
         { TrashID.Gree, TrashGree },
         { TrashID.Reeg, TrashReeg },
+        { TrashID.Ereg, TrashEreg },
         { TrashID.Cannon, TrashCannon },
         { TrashID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideout image for better visual
+        { TrashID.ProtoGreerling, TrashProtoGreerling },
     };
 
     /// <summary>
@@ -1221,10 +1234,10 @@ internal static class ParserIcons
         { MinionID.STAD007, MinionDSeries },
         { MinionID.STA7012, Minion7Series },
         { MinionID.MistfireWolf, MinionMistfireWolf },
-        { MinionID.RuneJaggedHorror, MinionRuneJaggedHorror },
-        { MinionID.RuneRockDog, MinionRuneRockDog },
-        { MinionID.RuneMarkIGolem, MinionRuneMarkIGolem },
-        { MinionID.RuneTropicalBird, MinionTropicalBird },
+        { MinionID.JaggedHorror, MinionJaggedHorror },
+        { MinionID.RockDog, MinionRockDog },
+        { MinionID.MarkIGolem, MinionMarkIGolem },
+        { MinionID.TropicalBird, MinionTropicalBird },
         { MinionID.Ember, MinionEmber },
         { MinionID.HawkeyeGriffon, MinionHawkeyeGriffon },
         { MinionID.SousChef, MinionSousChef },

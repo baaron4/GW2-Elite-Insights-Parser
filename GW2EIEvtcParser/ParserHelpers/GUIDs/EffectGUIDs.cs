@@ -53,6 +53,7 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfTheBeehive2 = new("85B0BB9E723EB444AC4C2CCD06B3C606"); // Duration 3500, Player Src, has Dst and Effect End
     public static readonly GUID RelicOfMountBalrior1 = new("7CD892DAA47D194CA3FE962ADE6F626F"); // Duration 6000, Player Src, ground effect
     public static readonly GUID RelicOfMountBalrior2 = new("1558621A51FE5F4B848A8B252AFE616C"); // Duration infinite, Player Src, ground effect with effect end
+    public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
     #endregion
 
     #region Mesmer
@@ -641,8 +642,9 @@ public static class EffectGUIDs
     public static readonly GUID QadimPeerlessMagmaLandingExplosion = new("6617FA23565EE646ADAA7A646C895927"); // 1000 duration - No Src
     public static readonly GUID QadimPeerlessMagmaDamagingAoE = new("BABE69EC5AC7AF48A2F14A9FB8920C7F"); // 600000 duration - Src Qadim
     // Greer
-    public static readonly GUID GreerEruptionOfRotGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src Gree
-    public static readonly GUID GreerEruptionOfRotGreen2 = new("3E7B9E8C7FFF3A42B02F8FE8E5AC4709"); // 8000 duration - Src Greer
+    public static readonly GUID GreerEruptionOfRotGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src Gree - 2 players
+    public static readonly GUID GreerEruptionOfRotGreen2 = new("3E7B9E8C7FFF3A42B02F8FE8E5AC4709"); // 8000 duration - Src Greer - 2 players
+    public static readonly GUID GreerEruptionofRotGreen3 = new("BC9F7038322C6B4DBD8C4C4F8B68EE70"); // 8000 duration - Src Green (CM) - 3 players
     public static readonly GUID GreerScatteringSporeblastIndicator = new("C0D32EEEDFAA0E40B3342DD9B82AC94E"); // Dynamic duration - Src NPC
     public static readonly GUID GreerSweepTheMoldRakeTheRotIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // 3000/4000 duration
     public static readonly GUID GreerEnfeeblingMiasma = new("BBA33A70B7D2A94589DE81B1F35D3D69"); // 6000 duration
@@ -651,7 +653,8 @@ public static class EffectGUIDs
     public static readonly GUID GreerEnfeeblingMiasmaGasMoving = new("44DDA7CFF5C5C549822FFF54648915B6"); // 4000 duration
     public static readonly GUID GreerCageOfDecayArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // 5000 duration
     public static readonly GUID GreerCageOfDecayCircleIndicator = new("3A77C01985706240BCB7D04B82124F63"); // 5000 duration
-    public static readonly GUID GreerCageOfDecayCircleDamage = new("E05331E90885E649A730BE79BE3DD14F"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight)
+    public static readonly GUID GreerCageOfDecayCircleDamage = new("E05331E90885E649A730BE79BE3DD14F"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight) - Stopped working on 11 March 2025
+    public static readonly GUID GreerCageOfDecayCircleDamageNew = new("D2EDADF505469B4CA9B434F68A1552C5"); // 23000 duration / 8000 duration (Cage of Decay + Noxious Blight)
     public static readonly GUID GreerCageOfDecayCircleWalls = new("6F34E94792DB1541A836C80153E957DE"); // 23000 duration
     public static readonly GUID GreerCageOfDecayMovingWalls = new("8E1B3D2867A1614281C06E46C73F5873"); // 2000 duration
     public static readonly GUID GreerCageOfDecayRoots = new("A106AF30128BE543ACFDD7B667364274"); // 2000 duration (Cage of Decay + Noxious Blight)

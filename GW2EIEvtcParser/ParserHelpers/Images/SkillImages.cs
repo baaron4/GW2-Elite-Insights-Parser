@@ -369,6 +369,7 @@ internal static class SkillImages
     public const string ForestsFortification = "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png";
     public const string ForceOfNature = "https://wiki.guildwars2.com/images/2/29/Force_of_Nature.png";
     public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
+    public const string OakenCudgel = "https://render.guildwars2.com/file/AF04C49117A8634CDDAA1AB3B35B25111B394FEC/3256385.png";
     public const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
     public const string SearchAndRescue = "https://wiki.guildwars2.com/images/9/9b/%22Search_and_Rescue%21%22.png";
     public const string UnflinchingFortitude = "https://wiki.guildwars2.com/images/d/d6/Unflinching_Fortitude.png";

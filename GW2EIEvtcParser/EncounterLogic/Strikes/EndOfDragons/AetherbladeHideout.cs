@@ -514,11 +514,6 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    private IEnumerable<SingleActor> GetHPScarletPhantoms(PhaseData phase)
-    {
-        return Targets.Where(x => (x.IsSpecies(TrashID.ScarletPhantomHP) || x.IsSpecies(TrashID.ScarletPhantomHPCM)) && phase.IntersectsWindow(x.FirstAware, x.LastAware));
-    }
-
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -560,7 +555,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     else
                     {
                         subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
-                        subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                        AddTargetsToPhase(subPhase, [(int)TrashID.ScarletPhantomHP, (int)TrashID.ScarletPhantomHPCM]);
                     }
                 }
                 phases.AddRange(maiPhases);
@@ -584,7 +579,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 else
                 {
                     subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
-                    subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                    AddTargetsToPhase(subPhase, [(int)TrashID.ScarletPhantomHP, (int)TrashID.ScarletPhantomHPCM]);
                 }
             }
             phases.AddRange(echoPhases);

@@ -57,6 +57,7 @@ public static class SpeciesIDs
         Greer = 26725,
         Decima = 26774,
         Ura = 26712,
+        DecimaCM = 26867,
         // Strike Missions
         // - Festival
         Freezie = 21333,
@@ -398,15 +399,24 @@ public static class SpeciesIDs
         // - Greer
         Reeg = 26742,
         Gree = 26771,
+        Ereg = 26859,
         EmpoweringBeast = 26776,
+        ProtoGreerling = 26862,
         // - Decima
         EnlightenedConduit = 26709,
         EnlightenedConduitGadget = SpeciesIDs.EnlightenedConduitGadget,
         GreenOrb1Player = 26798,
+        GreenOrb1PlayerCM = 26884,
         GreenOrb2Players = 26783,
+        GreenOrb2PlayersCM = 26813,
         GreenOrb3Players = 26727,
+        GreenOrb3PlayersCM = 26871,
         DecimaBeamEnd = 26793,
+        DecimaBeamEndCM = 26845,
         DecimaBeamStart = 26708,
+        DecimaBeamStartCM = 26858,
+        EnlightenedConduitCM = 26826,
+        TranscendentBoulder = 26856,
         // - Ura
         EliteFumaroller = 26797,
         ChampionFumaroller = 26744,
@@ -710,11 +720,11 @@ public static class SpeciesIDs
         STA7012 = 10146,
         // GW2 Digital Deluxe
         MistfireWolf = 9801,
-        // Rune Summons
-        RuneJaggedHorror = 21314,
-        RuneRockDog = 8836,
-        RuneMarkIGolem = 8837,
-        RuneTropicalBird = 8838,
+        // Rune / Relic Summons
+        JaggedHorror = 21314,
+        RockDog = 8836,
+        MarkIGolem = 8837,
+        TropicalBird = 8838,
         // Consumables with summons
         Ember = 1454,
         HawkeyeGriffon = 5614,

@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser;
 public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int initialTertiaryCapacity) 
     : AbstractCachingCollection<T>(log)
 {
-    private readonly int _initialSecondaryCapacity = log.FightData.GetPhases(log).Count;
+    private readonly int _initialSecondaryCapacity = 20;
     private readonly int _initialTertiaryCapacity = initialTertiaryCapacity;
     private readonly Q _nullValue = nullValue;
 
-    internal readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(log.FightData.GetPhases(log).Count);
+    internal readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(20);
 
     public bool TryGetValue(long start, long end, Q? q, [NotNullWhen(true)] out T? value)
     {

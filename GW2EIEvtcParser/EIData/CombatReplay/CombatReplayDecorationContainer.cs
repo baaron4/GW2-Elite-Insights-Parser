@@ -69,6 +69,14 @@ internal class CombatReplayDecorationContainer
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, lifespan, new AgentConnector(actor)));
     }
+    internal void AddOverheadIcon(Segment segment, AgentItem actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    {
+        Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
+    }
+    internal void AddOverheadIcon((long start, long end) lifespan, AgentItem actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    {
+        Add(new IconOverheadDecoration(icon, pixelSize, opacity, lifespan, new AgentConnector(actor)));
+    }
 
     /// <summary>
     /// Add an overhead icon decoration
@@ -240,56 +248,6 @@ internal class CombatReplayDecorationContainer
     internal void AddTether(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
     {
         AddTether(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
-    }
-
-    /// <summary>
-    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
-    /// </summary>
-    /// <param name="tethers">Buff events of the tethers.</param>
-    /// <param name="color">color of the tether</param>
-    /// <param name="thickness">thickness of the tether</param>
-    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherWithConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
-    {
-        int tetherStart = 0;
-        AgentItem src = ParserHelper._unknownAgent;
-        AgentItem dst = ParserHelper._unknownAgent;
-        foreach (BuffEvent tether in tethers)
-        {
-            if (tether is BuffApplyEvent)
-            {
-                tetherStart = (int)tether.Time;
-                src = tether.By;
-                dst = tether.To;
-            }
-            else if (tether is BuffRemoveAllEvent)
-            {
-                int tetherEnd = (int)tether.Time;
-                if (!src.IsUnknown && !dst.IsUnknown)
-                {
-                    var srcConnector = srcConnectorBuilder(log, src, tetherStart, tetherEnd);
-                    var dstConnector = dstConnectorBuilder(log, dst, tetherStart, tetherEnd);
-                    if (srcConnector != null && dstConnector != null)
-                    {
-                        Add(new LineDecoration((tetherStart, tetherEnd), color, dstConnector, srcConnector).WithThickess(thickness, worldSizeThickess));
-                        src = ParserHelper._unknownAgent;
-                        dst = ParserHelper._unknownAgent;
-                    }
-                }
-            }
-        }
-    }
-    /// <summary>
-    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
-    /// </summary>
-    /// <param name="tethers">Buff events of the tethers.</param>
-    /// <param name="color">color of the tether</param>
-    /// <param name="opacity">opacity of the tether</param>
-    /// <param name="thickness">thickness of the tether</param>
-    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherWithConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
-    {
-        AddTetherWithConnectors(log, tethers, color.WithAlpha(opacity).ToString(true), srcConnectorBuilder, dstConnectorBuilder, thickness, worldSizeThickess);
     }
 
     /// <summary>

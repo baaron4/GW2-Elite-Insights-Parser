@@ -332,6 +332,8 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new Buff("Tapped Out", TappedOut, Source.Ranger, BuffClassification.Other, SkillImages.TappedOut)
             .WithBuilds(GW2Builds.February2024NewWeapons),
+        new Buff("Pet Heal (Oaken Cudgel)", OakenCudgelPetHeal, Source.Ranger, BuffClassification.Other, SkillImages.OakenCudgel)
+            .WithBuilds(GW2Builds.February2024NewWeapons),
         // Spear
         new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.HuntersProwess),
     ];

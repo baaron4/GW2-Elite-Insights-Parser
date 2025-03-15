@@ -163,6 +163,8 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfMountBalrior, EffectGUIDs.RelicOfMountBalrior1)
             .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfMountBalrior2)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfTheHolosmith, EffectGUIDs.RelicOfTheHolosmith)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
@@ -642,11 +644,11 @@ internal static class ProfHelper
         (int)MinionID.STA7012,
         // GW2 Digital Deluxe
         (int)MinionID.MistfireWolf,
-        // Rune Summons
-        (int)MinionID.RuneJaggedHorror,
-        (int)MinionID.RuneRockDog,
-        (int)MinionID.RuneMarkIGolem,
-        (int)MinionID.RuneTropicalBird,
+        // Rune / Relic Summons
+        (int)MinionID.JaggedHorror,
+        (int)MinionID.RockDog,
+        (int)MinionID.MarkIGolem,
+        (int)MinionID.TropicalBird,
         // Consumables with summons
         (int)MinionID.Ember,
         (int)MinionID.HawkeyeGriffon,
