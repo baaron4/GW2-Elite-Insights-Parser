@@ -4531,6 +4531,7 @@ public static class SkillIDs
     public const long NoxiousBlight = 73496;
     public const long HuntersProwess = 73541;
     public const long NoxiousBlight2 = 73663;
+    public const long LowlandExpertise = 73663;
     public const long RelicOfSorrowHeal = 73714;
     public const long RelicOfTheBlightbringer = 73794;
     public const long RelicOfTheStormsingerChain = 73851;
