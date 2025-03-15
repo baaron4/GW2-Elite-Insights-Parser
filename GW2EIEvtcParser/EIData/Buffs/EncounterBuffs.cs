@@ -424,8 +424,8 @@ internal static class EncounterBuffs
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Might (Greer)", MightUnstrippable, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Might),
-            new Buff("Protection (Greer)", ProtectionUnstrippable, Source.FightSpecific, BuffClassification.Other, BuffImages.Protection),
-            new Buff("Resolution (Greer)", ResolutionGreer, Source.FightSpecific, BuffClassification.Other, BuffImages.Resolution),
+            new Buff("Protection (Greer)", ProtectionUnstrippable, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Protection),
+            new Buff("Resolution (Greer)", ResolutionGreer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other, BuffImages.Resolution),
             new Buff("Damage Immunity 1", DamageImmunity1, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
             new Buff("Damage Immunity 2", DamageImmunity2, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
             new Buff("Damage Immunity 3", DamageImmunity3, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
@@ -436,7 +436,7 @@ internal static class EncounterBuffs
             new Buff("Infectious Rot", InfectiousRotBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InfectiousRot),
             new Buff("Plague Rot", PlagueRot, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.InfectiousRot),
             new Buff("Target", TargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
-            new Buff("Eruption of Rot (Stood in it)", EruptionOfRotBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.MonsterSkill),
+            new Buff("Eruption of Rot (Stood in it)", EruptionOfRotBuff, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.MonsterSkill),
             new Buff("Achievement Eligibility: Spare the Ereg", AchievementEligibilitySpareTheEreg, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Guaranteed Plague Free", AchievementEligibilityGuaranteedPlagueFree, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Ura
