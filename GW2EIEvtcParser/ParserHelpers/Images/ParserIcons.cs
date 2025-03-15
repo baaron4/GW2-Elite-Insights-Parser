@@ -1208,6 +1208,7 @@ internal static class ParserIcons
         { TrashID.GreenOrb2PlayersCM, NoImage },
         { TrashID.GreenOrb3PlayersCM, NoImage },
         { TrashID.EnlightenedConduitGadget, NoImage },
+        { TrashID.BigEnlightenedConduitGadget, TrashGenericRedEnemySkull },
         { TrashID.Gree, TrashGree },
         { TrashID.Reeg, TrashReeg },
         { TrashID.Ereg, TrashEreg },

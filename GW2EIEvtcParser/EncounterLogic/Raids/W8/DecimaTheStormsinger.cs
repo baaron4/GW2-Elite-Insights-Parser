@@ -102,6 +102,7 @@ internal class DecimaTheStormsinger : MountBalrior
             TrashID.EnlightenedConduitCM,
             TrashID.EnlightenedConduit,
             TrashID.EnlightenedConduitGadget,
+            TrashID.BigEnlightenedConduitGadget,
             TrashID.DecimaBeamStart,
             TrashID.DecimaBeamStartCM,
             TrashID.DecimaBeamEnd,
@@ -146,6 +147,17 @@ internal class DecimaTheStormsinger : MountBalrior
                 conduitGadget.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
                 conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
+        }
+        var bigConduitsGadgets = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.Gadget )
+            .Distinct();
+
+        foreach (var conduitGadget in conduitsGadgets)
+        {
+            conduitGadget.OverrideID(TrashID.BigEnlightenedConduitGadget, agentData);
+            conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int cur = 1;

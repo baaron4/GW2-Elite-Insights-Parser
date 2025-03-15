@@ -405,6 +405,7 @@ public static class SpeciesIDs
         // - Decima
         EnlightenedConduit = 26709,
         EnlightenedConduitGadget = SpeciesIDs.EnlightenedConduitGadget,
+        BigEnlightenedConduitGadget = SpeciesIDs.BigEnlightenedConduitGadget,
         GreenOrb1Player = 26798,
         GreenOrb1PlayerCM = 26884,
         GreenOrb2Players = 26783,
@@ -1057,6 +1058,7 @@ public static class SpeciesIDs
     private const int TitanspawnGeyser = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
+    private const int BigEnlightenedConduitGadget = -67;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
