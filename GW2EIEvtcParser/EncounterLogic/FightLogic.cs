@@ -30,17 +30,17 @@ public abstract class FightLogic
     }
 
 
-    private CombatReplayMap _map;
+    private CombatReplayMap Map;
     protected readonly List<MechanicContainer> MechanicList;//Resurrects (start), Resurrect
     public ParseModeEnum ParseMode { get; protected set; } = ParseModeEnum.Unknown;
     public SkillModeEnum SkillMode { get; protected set; } = SkillModeEnum.PvE;
-    public string Extension { get; protected set; }
-    public string Icon { get; protected set; }
+    public string Extension { get; protected set; } = "";
+    public string Icon { get; protected set; } = "";
     private readonly int _basicMechanicsCount;
     public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
-    public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; }
-    public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; }
-    public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; }
+    public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; } = [];
+    public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; } = [];
+    public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; } = [];
     public IReadOnlyList<NPC> TrashMobs => _trashMobs;
     public IReadOnlyList<SingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
     public IReadOnlyList<SingleActor> Targets => _targets;
@@ -114,12 +114,12 @@ public abstract class FightLogic
 
     public CombatReplayMap GetCombatReplayMap(ParsedEvtcLog log)
     {
-        if (_map == null)
+        if (Map == null)
         {
-            _map = GetCombatMapInternal(log);
-            _map.ComputeBoundingBox(log);
+            Map = GetCombatMapInternal(log);
+            Map.ComputeBoundingBox(log);
         }
-        return _map;
+        return Map;
     }
 
     [MemberNotNull(nameof(InstanceBuffs))]
