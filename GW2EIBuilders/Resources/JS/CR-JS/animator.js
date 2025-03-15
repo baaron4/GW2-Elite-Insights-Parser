@@ -101,11 +101,22 @@ class RenderablesBranch {
         this.left = null;
         this.right = null;
         this.renderables = [];
+        // Expected leaf based on duration
+        this.leaf = this.end - this.start < 30000;
     }
 
     add(item) {
-        if (this.end - this.start < 30000) {
+        if (this.leaf) {
             this.renderables.push(item);
+            // If too many renderables, remove leaf and redistribute
+            if (this.renderables.length > 50) {
+                this.leaf = false;
+                const renderablesToRedistribute = this.renderables;
+                this.renderables = [];
+                for (let i = 0; i < renderablesToRedistribute.length; i++) {
+                    this.add(renderablesToRedistribute[i]);
+                }
+            }
             return;
         }
         if (item.end <= this.halfPoint) {
