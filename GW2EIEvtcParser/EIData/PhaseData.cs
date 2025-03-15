@@ -142,15 +142,18 @@ public class PhaseData
             {
                 var target = pair.Key;
                 long startTime = target.FirstAware;
-                SpawnEvent? spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
-                if (spawned != null)
-                {
-                    startTime = spawned.Time;
-                }
                 EnterCombatEvent? enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
                 if (enterCombat != null)
                 {
                     startTime = enterCombat.Time;
+                } 
+                else
+                {
+                    SpawnEvent? spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
+                    if (spawned != null)
+                    {
+                        startTime = spawned.Time;
+                    }
                 }
                 start = Math.Min(start, startTime);
             }
@@ -169,13 +172,21 @@ public class PhaseData
             foreach (var pair in Targets)
             {
                 var target = pair.Key;
-                long deadTime = target.LastAware;
-                DeadEvent? died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                long endTime = target.LastAware;
+                var died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                 if (died != null)
                 {
-                    deadTime = died.Time;
+                    endTime = died.Time;
+                } 
+                else
+                {
+                    var despawned = log.CombatData.GetDespawnEvents(target.AgentItem).LastOrDefault();
+                    if (despawned != null)
+                    {
+                        endTime = despawned.Time;
+                    }
                 }
-                end = Math.Max(end, deadTime);
+                end = Math.Max(end, endTime);
             }
             OverrideEnd(Math.Min(Math.Min(End, end), log.FightData.FightEnd));
         }
