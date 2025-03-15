@@ -101,15 +101,16 @@ class RenderablesBranch {
         this.left = null;
         this.right = null;
         this.renderables = [];
-        // Expected leaf based on duration
-        this.leaf = this.end - this.start < 30000;
+        this.leaf = true;
+        // Won't allow leaf below this
+        this.finalLeaf = this.end - this.start < 10000;
     }
 
     add(item) {
         if (this.leaf) {
             this.renderables.push(item);
             // If too many renderables, remove leaf and redistribute
-            if (this.renderables.length > 50) {
+            if (this.renderables.length > 50 && !this.finalLeaf) {
                 this.leaf = false;
                 const renderablesToRedistribute = this.renderables;
                 this.renderables = [];
