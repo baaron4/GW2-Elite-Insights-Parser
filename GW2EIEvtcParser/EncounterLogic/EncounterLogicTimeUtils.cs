@@ -44,21 +44,40 @@ internal static class EncounterLogicTimeUtils
         return mainTarget.FirstAware;
     }
 
+    internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, int[] ids, ulong agent)
+    {
+        long start = long.MaxValue;
+        foreach (int id in ids)
+        {
+            AgentItem target = (agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? agentData.GetNPCsByID(id).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
+            upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, upperLimit, target);
+            CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(target) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
+            if (enterCombat != null)
+            {
+                CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.ExitCombat && x.SrcMatchesAgent(target) && x.Time <= enterCombat.Time);
+                if (exitCombat != null)
+                {
+                    start = Math.Min(target.FirstAware, start);
+                } 
+                else
+                {
+                    start = Math.Min(enterCombat.Time, start);
+                }
+            } else
+            {
+                start = Math.Min(target.FirstAware, start);
+            }
+        }
+        if (start == long.MaxValue)
+        {
+            return fightData.FightStart;
+        }
+        return start;
+    }
+
     internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, int id, ulong agent)
     {
-        AgentItem mainTarget = (agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? agentData.GetNPCsByID(id).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
-        upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, upperLimit, mainTarget);
-        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
-        if (enterCombat != null)
-        {
-            CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
-            if (exitCombat != null)
-            {
-                return mainTarget.FirstAware;
-            }
-            return enterCombat.Time;
-        }
-        return mainTarget.FirstAware;
+        return GetEnterCombatTime(fightData, agentData, combatData, upperLimit, [id], agent);
     }
 
     internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
