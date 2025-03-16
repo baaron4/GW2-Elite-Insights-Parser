@@ -23,44 +23,52 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         MechanicList.AddRange(new List<Mechanic>()
         {
-            new PlayerDstHitMechanic(ChorusOfThunderDamage, "Chorus of Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", 0),
+            new PlayerDstHitMechanic([ChorusOfThunderDamage, ChorusOfThunderCM], "Chorus of Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", 0),
             new PlayerDstEffectMechanic(EffectGUIDs.DecimaChorusOfThunderAoE, "Chorus of Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.LightGrey), "ChorThun.T", "Targeted by Chorus of Thunder (Spreads)", "Chorus of Thunder Target", 0),
 
-            new PlayerDstHitMechanic(SeismicCrashDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0),
-            new PlayerDstHitMechanic(SeismicCrashDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0)
+            new PlayerDstHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], "Seismic Crash", new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0),
+            new PlayerDstHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], "Seismic Crash", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0)
                 .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
-            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0)
-                .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed
             new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0)
                 .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
+            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0)
+                .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed in NM, not logged in CM
 
-            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0)
-                .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed
-            new PlayerDstHitMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0),
-            new PlayerDstHitMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0)
+            new PlayerDstHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], "Seismic Reposition", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.White), "SeisRepos.H", "Hit by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition Hit", 0),
+            new PlayerDstHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], "Seismic Reposition", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkWhite), "SeisRepos.CC", "CC by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition CC", 0)
+                .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
+
+            new PlayerDstHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], "Earthrend", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0),
+            new PlayerDstHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], "Earthrend", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0)
                 .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
             new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0)
                 .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
+            new PlayerDstSkillMechanic([Earthrend], "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0)
+                .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed in NM, not logged in CM
 
             new PlayerDstHitMechanic(Fluxlance, "Fluxlance", new MechanicPlotlySetting(Symbols.StarSquare, Colors.LightOrange), "Fluxlance.H", "Hit by Fluxlance (Single Orange Arrow)", "Fluxlance Hit", 0),
-            new PlayerDstHitMechanic(FluxlanceFusillade, "Fluxlance Fusillade", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "FluxFusi.H", "Hit by Fluxlance Fusillade (Sequential Orange Arrows)", "Fluxlance Fusillade Hit", 0),
-            new PlayerDstHitMechanic([FluxlanceSalvo1, FluxlanceSalvo2, FluxlanceSalvo3, FluxlanceSalvo4, FluxlanceSalvo5], "Fluxlance Salvo", new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.LightOrange), "FluxSalvo.H", "Hit by Fluxlance Salvo (Simultaneous Orange Arrows)", "Fluxlance Salvo Hit", 0),
-            new PlayerDstHitMechanic([Fluxlance, FluxlanceFusillade, FluxlanceSalvo1, FluxlanceSalvo2, FluxlanceSalvo3, FluxlanceSalvo4, FluxlanceSalvo5], "Fluxlance", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkMagenta), "FluxInc.H", "Hit by Fluxlance with Harmonic Sensitivity", "Fluxlance with Harmonic Sensitivity Hit", 0)
-                    .UsingChecker((hde, log) => hde.To.HasBuff(log, HarmonicSensitivity, hde.Time, ServerDelayConstant)),
-            new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
+            new PlayerDstHitMechanic([FluxlanceFusillade, FluxlanceFusilladeCM], "Fluxlance Fusillade", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "FluxFusi.H", "Hit by Fluxlance Fusillade (Sequential Orange Arrows)", "Fluxlance Fusillade Hit", 0),
+            new PlayerDstHitMechanic([FluxlanceSalvo1, FluxlanceSalvoCM1, FluxlanceSalvo2, FluxlanceSalvoCM2, FluxlanceSalvo3, FluxlanceSalvoCM3, FluxlanceSalvo4, FluxlanceSalvoCM4, FluxlanceSalvo5, FluxlanceSalvoCM5], "Fluxlance Salvo", new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.LightOrange), "FluxSalvo.H", "Hit by Fluxlance Salvo (Simultaneous Orange Arrows)", "Fluxlance Salvo Hit", 0),
+            new PlayerDstHitMechanic([Fluxlance, FluxlanceFusillade, FluxlanceFusilladeCM, FluxlanceSalvo1, FluxlanceSalvoCM1, FluxlanceSalvo2, FluxlanceSalvoCM2, FluxlanceSalvo3, FluxlanceSalvoCM3, FluxlanceSalvo4, FluxlanceSalvoCM4, FluxlanceSalvo5, FluxlanceSalvoCM5], "Fluxlance", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkMagenta), "FluxInc.H", "Hit by Fluxlance with Harmonic Sensitivity", "Fluxlance with Harmonic Sensitivity Hit", 0)
+                .UsingChecker((hde, log) => hde.To.HasBuff(log, HarmonicSensitivity, hde.Time, ServerDelayConstant)),
             new PlayerDstBuffApplyMechanic(FluxlanceTargetBuff1, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Orange), "Fluxlance.T", "Targeted by Fluxlance", "Fluxlance Target", 0),
             new PlayerDstBuffApplyMechanic(FluxlanceRedArrowTargetBuff, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Red), "FluxRed.T", "Targeted by Fluxlance (Red Arrow)", "Fluxlance (Red Arrow)", 0),
+            new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
 
-            new PlayerDstHitMechanic(SparkingAuraTier1, "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "SparkAura1.H", "Sparking Aura (Absorbed Tier 1 Green Damage)", "Absorbed Tier 1 Green", 0),
-            new PlayerDstHitMechanic(SparkingAuraTier2, "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightMilitaryGreen), "SparkAura2.H", "Sparking Aura (Absorbed Tier 2 Green Damage)", "Absorbed Tier 2 Green", 0),
-            new PlayerDstHitMechanic(SparkingAuraTier3, "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "SparkAura3.H", "Sparking Aura (Absorbed Tier 3 Green Damage)", "Absorbed Tier 3 Green", 0),
-            new PlayerDstHitMechanic([SparkingAuraTier1, SparkingAuraTier2, SparkingAuraTier3], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.MilitaryGreen), "SparkAuraInc.H", "Hit by Sparking Aura with Galvanic Sensitivity", "Sparking Aura with Galvanic Sensitivity Hit", 0)
-                    .UsingChecker((hde, log) => hde.To.HasBuff(log, GalvanicSensitivity, hde.Time, ServerDelayConstant)),
+            new PlayerDstHitMechanic([SparkingAuraTier1, SparkingAuraTier1CM], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "SparkAura1.H", "Sparking Aura (Absorbed Tier 1 Green Damage)", "Absorbed Tier 1 Green", 0),
+            new PlayerDstHitMechanic([SparkingAuraTier2, SparkingAuraTier2CM], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightMilitaryGreen), "SparkAura2.H", "Sparking Aura (Absorbed Tier 2 Green Damage)", "Absorbed Tier 2 Green", 0),
+            new PlayerDstHitMechanic([SparkingAuraTier3, SparkingAuraTier3CM], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "SparkAura3.H", "Sparking Aura (Absorbed Tier 3 Green Damage)", "Absorbed Tier 3 Green", 0),
+            new PlayerDstHitMechanic([SparkingAuraTier1, SparkingAuraTier1CM, SparkingAuraTier2, SparkingAuraTier2CM, SparkingAuraTier3, SparkingAuraTier3CM], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.MilitaryGreen), "SparkAuraInc.H", "Hit by Sparking Aura with Galvanic Sensitivity", "Sparking Aura with Galvanic Sensitivity Hit", 0)
+                .UsingChecker((hde, log) => hde.To.HasBuff(log, GalvanicSensitivity, hde.Time, ServerDelayConstant)),
 
-            new PlayerDstHitMechanic(FulgentFence, "Fulgent Fence", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
-            new PlayerDstHitMechanic([FulgentAuraTier1, FulgentAuraTier2, FulgentAuraTier3], "Fulgent Aura", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Purple), "FulAura.H", "Hit by Fulgent Aura (Conduit AoE)", "Fulgent Aura Hit", 0),
+            new PlayerDstHitMechanic([FulgentFence, FulgentFenceCM], "Fulgent Fence", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
+            new PlayerDstHitMechanic([FulgentAuraTier1, FulgentAuraTier1CM, FulgentAuraTier2, FulgentAuraTier2CM, FulgentAuraTier3, FulgentAuraTier3CM], "Fulgent Aura", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Purple), "FulAura.H", "Hit by Fulgent Aura (Conduit AoE)", "Fulgent Aura Hit", 0),
 
-            new PlayerDstHitMechanic(ReverberatingImpact, "Reverberating Impact", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "RevImpact.H", "Hit by Reverberating Impact (Hit a Conduit)", "Reverberating Impact Hit", 0),
+            new PlayerDstHitMechanic([ReverberatingImpact, ReverberatingImpactCM], "Reverberating Impact", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "RevImpact.H", "Hit by Reverberating Impact (Hit a Conduit)", "Reverberating Impact Hit", 0),
+
+            new PlayerDstHitMechanic(Earthfall, "Earthfall", new MechanicPlotlySetting(Symbols.YUp, Colors.LightPink), "Earthfall.H", "Hit by Earthfall (Transcendent Boudlers Jump)", "Earthfall Hit", 0),
+            new PlayerDstHitMechanic(Sparkwave, "Sparkwave", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightOrange), "Sparkwave.H", "Hit by Sparkwave (Transcendent Boulders Cone)", "Sparkwave Hit", 0),
+            new PlayerDstHitMechanic(ChargedGround, "Charged Ground", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "CharGrnd.H", "Hit by Charged Ground (Transcendent Boulders AoEs)", "Charged Ground Hit", 0),
 
             new EnemyDstBuffApplyMechanic(ChargeDecima, "Charge", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
 
@@ -270,7 +278,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                var thrummingSegments = target.GetBuffStatus(log, ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                long buffId = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
+                var thrummingSegments = target.GetBuffStatus(log, buffId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var segment in thrummingSegments)
                 {
                     replay.Decorations.Add(new CircleDecoration(700, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
@@ -284,7 +293,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Mainshock - Pizza Indicator
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.DecimaMainshockIndicator, EffectGUIDs.DecimaMainshockIndicatorCM], out var mainshockSlices))
                 {
                     foreach (EffectEvent effect in mainshockSlices)
                     {
@@ -299,14 +308,14 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // For some reason the effects all start at the same time
                 // We sequence them using the skill cast
-                var foreshock = casts.Where(x => x.SkillId == Foreshock);
+                var foreshock = casts.Where(x => x.SkillId == Foreshock || x.SkillId == ForeshockCM1 || x.SkillId == ForeshockCM2 || x.SkillId == ForeshockCM3 || x.SkillId == ForeshockCM4);
                 foreach (var cast in foreshock)
                 {
                     (long start, long end) = (cast.Time, cast.Time + cast.ActualDuration + 3000); // 3s padding as safety
                     long nextStartTime = 0;
 
                     // Decima's Left Side
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaForeshockLeft, out var foreshockLeft))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.DecimaForeshockLeft, EffectGUIDs.DecimaForeshockLeftCM], out var foreshockLeft))
                     {
                         foreach (EffectEvent effect in foreshockLeft.Where(x => x.Time >= start && x.Time < end))
                         {
@@ -319,7 +328,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
 
                     // Decima's Right Side
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaForeshockRight, out var foreshockRight))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.DecimaForeshockRight, EffectGUIDs.DecimaForeshockRightCM], out var foreshockRight))
                     {
                         foreach (EffectEvent effect in foreshockRight.Where(x => x.Time >= start && x.Time < end))
                         {
@@ -333,7 +342,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
 
                     // Decima's Frontal
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaForeshockFrontal, out var foreshockFrontal))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.DecimaForeshockFrontal, EffectGUIDs.DecimaForeshockFrontalCM], out var foreshockFrontal))
                     {
                         foreach (EffectEvent effect in foreshockFrontal.Where(x => x.Time >= start && x.Time < end))
                         {
@@ -394,8 +403,9 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
                 }
 
-                // Aftershock - Moving AoEs - 4 Cascades 
-                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaAftershockAoE, out var aftershock, 12000))
+                // Aftershock - Moving AoEs - 4 Cascades
+                GUID guid = isCM ? EffectGUIDs.DecimaAftershockAoECM : EffectGUIDs.DecimaAftershockAoE;
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, guid, out var aftershock, 12000))
                 {
                     // All the AoEs take roughly 11-12 seconds to appear
                     // There are 10 AoEs of radius 200, then 10 of 240, 10 of 280 and 10 of 320. When they bounce back to Decima they restart at 200 radius.
@@ -436,6 +446,23 @@ internal class DecimaTheStormsinger : MountBalrior
                         }
                     }
                 }
+
+                // Flux Nova - Breakbar
+                var fluxNovaCasts = casts.Where(x => x.SkillId == FluxNova || x.SkillId == FluxNovaCM_70 || x.SkillId == FluxNovaCM_40);
+                var fractureArmorCasts = casts.Where(x => x.SkillId == FractureArmor || x.SkillId== FractureArmorCM);
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                foreach (CastEvent fluxNova in fluxNovaCasts)
+                {
+                    var fractureArmor = fractureArmorCasts.FirstOrDefault(x => x.Time > fluxNova.Time);
+                    var endCast = fractureArmor != null ? fractureArmor.Time : fluxNova.EndTime;
+                    (long start, long end) lifespanFlux = (fluxNova.Time, endCast);
+
+                    var bar = new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespanFlux, Colors.BreakbarBlue, 0.8, Colors.Black, 0.6,
+                        breakbarUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                        .UsingRotationConnector(new AngleConnector(180));
+                    replay.Decorations.Add(bar);
+                }
                 break;
             case (int)TrashID.GreenOrb1Player:
             case (int)TrashID.GreenOrb1PlayerCM:
@@ -443,7 +470,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.GreenMarkerSize1Overhead);
 
                 // Hp Bar
                 var hpUpdatesOrb1 = target.GetHealthUpdates(log);
@@ -459,7 +486,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.Add(new CircleDecoration(185, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.GreenMarkerSize2Overhead);
 
                 // Hp Bar
                 var hpUpdatesOrb2 = target.GetHealthUpdates(log);
@@ -475,7 +502,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.Add(new CircleDecoration(285, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.GreenMarkerSize3Overhead);
 
                 // Hp Bar
                 var hpUpdatesOrb3 = target.GetHealthUpdates(log);
@@ -488,7 +515,11 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)TrashID.EnlightenedConduit:
             case (int)TrashID.EnlightenedConduitCM:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
-                AddThunderAoE(target, log, replay);
+                if (!isCM)
+                {
+                    AddThunderAoE(target, log, replay);
+                }
+
                 // Focused Fluxlance - Green Arrow from Decima to the Conduit
                 var greenArrow = GetFilteredList(log.CombatData, isCM ? FluxlanceTargetBuffCM1 : FluxlanceTargetBuff1, target, true, true).Where(x => x is BuffApplyEvent);
                 foreach (var apply in greenArrow)
@@ -511,6 +542,13 @@ internal class DecimaTheStormsinger : MountBalrior
                     break;
                 }
                 var gadgetConnectorAgent = (isCM ? target.AgentItem.Master : target.AgentItem)!;
+
+                // Chorus of Thunder / Discordant Thunder - Orange AoE
+                if (isCM)
+                {
+                    AddThunderAoE(target, log, replay);
+                }
+
                 // Fulgent Aura - Tier 1 Charge
                 var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
                 var tier1 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier1BuffCM : EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
@@ -562,6 +600,56 @@ internal class DecimaTheStormsinger : MountBalrior
                     var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                     AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
                     AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
+                }
+                break;
+            case (int)TrashID.TranscendentBoulder:
+                var boulderCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+
+                // Sparking Reverberation - Breakbar
+                var sparkingReverberation = boulderCasts.Where(x => x.SkillId == SparkingReverberation);
+                foreach (var cast in sparkingReverberation)
+                {
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaSparkingReverberation, out var effects))
+                    {
+                        foreach (var effect in effects.Where(x => x.Time > cast.Time && x.Time < cast.Time + 2000)) // 2000ms margin
+                        {
+                            uint radius = 800;
+                            long warningDuration = effect.Time - cast.Time;
+                            (long start, long end) lifespanWarning = (cast.Time, effect.Time);
+                            (long start, long end) lifespanDamage = effect.ComputeDynamicLifespan(log, 30000);
+                            lifespanWarning.end = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, warningDuration); // Cast can be interrupted
+
+                            var warningIndicator = new CircleDecoration(radius, lifespanWarning, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.AddWithGrowing(warningIndicator, effect.Time);
+
+                            var damageField = new CircleDecoration(radius, lifespanDamage, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(damageField);
+                        }
+                    }
+                }
+
+                // Sparkwave - Cone
+                var sparkwave = boulderCasts.Where(x => x.SkillId == Sparkwave);
+                foreach (var cast in sparkwave)
+                {
+                    long castDuration = 1800;
+                    (long start, long end) lifespanSparkwave = (cast.Time, Math.Min(cast.EndTime, cast.Time + castDuration));
+                    if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
+                    {
+                        var cone = (PieDecoration)new PieDecoration(6000, 120, lifespanSparkwave, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing));
+                        replay.Decorations.AddWithGrowing(cone, cast.Time + castDuration);
+                    }
+                }
+
+                // Charged Ground - AoEs from Sparkwave
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGround, out var chargedGround))
+                {
+                    foreach (var effect in chargedGround)
+                    {
+                        (long start, long end) lifespanChargedGround = effect.ComputeLifespan(log, 5500);
+                        var circle = new CircleDecoration(400, lifespanChargedGround, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
+                    }
                 }
                 break;
             default:
@@ -655,12 +743,13 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
+            AgentItem dst = (log.FightData.IsCM && !actor.AgentItem.IsPlayer ? actor.AgentItem.Master : actor.AgentItem)!;
             foreach (var effect in thunders)
             {
                 long duration = 5000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(actor)), growing);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(dst)), growing);
             }
         }
     }

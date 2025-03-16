@@ -406,6 +406,7 @@ internal static class ParserIcons
     private const string TrashFumaroller = "https://i.imgur.com/STEJmlN.png";
     private const string TrashVentshot = "https://i.imgur.com/B0gDZQv.png";
     private const string TrashEnlightenedConduit = "https://i.imgur.com/FrfY7UU.png";
+    private const string TrashBigEnlightenedConduit = "https://i.imgur.com/1WagUS0.png";
     private const string TrashBloodstoneShard = "https://i.imgur.com/fEp6wEj.png";
     private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
     private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
@@ -648,6 +649,11 @@ internal static class ParserIcons
     internal const string TargetOrder3Overhead = "https://wiki.guildwars2.com/images/d/d8/Target_Order-3_%28overhead_icon%29.png";
     internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
     internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
+    // - Green Marker
+    internal const string GreenMarkerSize1Overhead = "https://i.imgur.com/eBgZ07h.png";
+    internal const string GreenMarkerSize2Overhead = "https://i.imgur.com/mJ73L0s.png";
+    internal const string GreenMarkerSize3Overhead = "https://i.imgur.com/WxeUYl7.png";
+    internal const string GreenMarkerSize5Overhead = "https://i.imgur.com/kMUvmwz.png";
     #endregion
 
     // NPC / Gadgets Icons not private
@@ -1208,7 +1214,7 @@ internal static class ParserIcons
         { TrashID.GreenOrb2PlayersCM, NoImage },
         { TrashID.GreenOrb3PlayersCM, NoImage },
         { TrashID.EnlightenedConduitGadget, NoImage },
-        { TrashID.BigEnlightenedConduitGadget, TrashGenericRedEnemySkull },
+        { TrashID.BigEnlightenedConduitGadget, TrashBigEnlightenedConduit },
         { TrashID.Gree, TrashGree },
         { TrashID.Reeg, TrashReeg },
         { TrashID.Ereg, TrashEreg },
