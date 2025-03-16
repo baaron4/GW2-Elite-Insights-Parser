@@ -1,6 +1,4 @@
-﻿using System.Net.Mime;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 /// <summary>
 /// Pool of skill IDs used in the parser, custom or official.
