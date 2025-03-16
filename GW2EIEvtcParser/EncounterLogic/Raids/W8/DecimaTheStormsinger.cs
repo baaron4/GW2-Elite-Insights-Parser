@@ -395,8 +395,6 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
                 }
 
-                var check = log.CombatData.GetEffectEvents().Where(x => x.Src.IsSpecies(TargetID.DecimaCM));
-
                 // Aftershock - Moving AoEs - 4 Cascades
                 GUID guid = isCM ? EffectGUIDs.DecimaAftershockAoECM : EffectGUIDs.DecimaAftershockAoE;
                 if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, guid, out var aftershock, 12000))
@@ -737,9 +735,9 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
+            AgentItem dst = (log.FightData.IsCM && !actor.AgentItem.IsPlayer ? actor.AgentItem.Master : actor.AgentItem)!;
             foreach (var effect in thunders)
             {
-                AgentItem dst = (log.FightData.IsCM && !actor.AgentItem.IsPlayer ? actor.AgentItem.Master : actor.AgentItem)!;
                 long duration = 5000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
