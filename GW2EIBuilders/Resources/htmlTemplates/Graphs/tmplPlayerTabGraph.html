@@ -178,8 +178,10 @@
                 if (!logData.targetless) {
                     this.data[this.playerOffset + 1].y = data[2];
                     this.data[this.playerOffset + 2].y = data[1];
+                    this.data[this.playerOffset + 3].y = data[0];
+                } else {                
+                    this.data[this.playerOffset + 1].y = data[0];
                 }
-                this.data[this.playerOffset + 3].y = data[0];
                 var offset = 4;
                 for (var i = this.graphOffset; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
