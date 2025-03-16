@@ -101,6 +101,8 @@ internal class Instance : FightLogic
         AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
+
+        Targetless = _targets.Count == 1;
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
     }
 
