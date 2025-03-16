@@ -207,11 +207,18 @@ internal class DecimaTheStormsinger : MountBalrior
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (i % 3 == 0)
+            if (i % 3 == 2)
             {
                 phase.Name = "Split " + (currentMainPhase++);
-                phase.OverrideStart(phases[i - 1].Start);
-                phase.AddTarget(decima);
+                if (i < phases.Count - 1)
+                {
+                    phase.OverrideEnd(phases[i + 1].End);
+                }
+                // Decima gets nova shield during enrage, not a phase
+                if (decima.GetBuffStatus(log, ChargeDecima, phase.Start + ServerDelayConstant).Value < 10)
+                {
+                    phase.AddTarget(decima);
+                }
             }
             else if (i % 3 == 1)
             {
@@ -237,6 +244,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
             }
             var boulders = Targets.Where(x => x.IsSpecies(TrashID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
+            phases[0].AddTargets(boulders, PhaseData.TargetPriority.Blocking);
             var firstBoulders = boulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {
