@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser;
+﻿using GW2EIEvtcParser.ParsedData;
+
+namespace GW2EIEvtcParser;
 
 public static class EffectGUIDs
 {
@@ -679,15 +681,23 @@ public static class EffectGUIDs
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
     public static readonly GUID DecimaMainshockIndicator = new("E9196E3A25E11F4FB66EFC47CE3593D1"); // 2300 duration - Src Decima
     public static readonly GUID DecimaMainshockDamage = new("8079A224EB97804EBD2B19963BF21F6F"); // 1000 duration - Src Decima
+    public static readonly GUID DecimaMainshockIndicatorCM = new("0E938533B6CAA0409A57C9A8AF7A31E0"); // 2300 duration - Src Godsquall Decima
+    public static readonly GUID DecimaMainshockDamageCM = new("250FD5E75158304F807062133431892B"); // 1000 duration - Src Godsquall Decima
     public static readonly GUID DecimaRedRing = new("C9AD859A4AE01D4FB807D99642379B5D"); // 0 duration - No End Event - Dst Decima
-    public static readonly GUID DecimaChorusOfThunderAoE = new("BDF708225224C64183BA3CE2A609D37F"); // 5000 duration - Src Decima - Dst Player / Enlightened Conduit
+    public static readonly GUID DecimaChorusOfThunderAoE = new("BDF708225224C64183BA3CE2A609D37F"); // 5000 duration - Src Decima - Dst Player / Enlightened Conduit (NPC NM, Gadget CM)
     public static readonly GUID DecimaForeshockLeft = new("FAB2EE3F1CE369499B652A5B7FEE3816"); // 1967 duration - Src Decima
     public static readonly GUID DecimaForeshockRight = new("7918C9097C4B7E4A97B21E332A63C5D1"); // 3000 duration - Src Decima
     public static readonly GUID DecimaForeshockFrontal = new("1E284D31368A7048B3E9E73398E64B1A"); // 5100 duration - Src Decima
+    public static readonly GUID DecimaForeshockLeftCM = new("673D3A429296FA47AA1DFF41E6D24BD0"); // 1967 duration - Src Godsquall Decima
+    public static readonly GUID DecimaForeshockRightCM = new("81329C36EA5536489ECBA5EDBB7D9C31"); // 3000 duration - Src Godsquall Decima
+    public static readonly GUID DecimaForeshockFrontalCM = new("086C0135CC2B7C45ADBE2C947B178986"); // 5100 duration - Src Godsquall Decima
     public static readonly GUID DecimaEarthrendDoughnutSlice = new("88A721E87033E34C88143D116DBA9120"); // 2800 duration - Src Decima
     public static readonly GUID DecimaJumpAoEUnderneath = new("D8F954A4C2D5DB48A4E2951958C33FAE"); // 3000 duration - Src Decima
     public static readonly GUID DecimaSeismicCrashRings = new("E10DD1D759499749B880B99945C823B5"); // 3000 duration - Src Decima
     public static readonly GUID DecimaAftershockAoE = new("FBABC6679768DC439AD844BFB94D9C74"); // 1500 duration - Src Decima
+    public static readonly GUID DecimaAftershockAoECM = new("B438122328E462488F5B1BD417653C42"); // 1500 duration - Src Godsquall Decima
+    public static readonly GUID DecimaSparkingReverberation = new("9CF7F3E43A32774E82F650A2EE9BF756"); // 30000 duration - Has end event - Src Transcendent Boulder
+    public static readonly GUID DecimaChargedGround = new("FD07306664C7984C86A4D177CAD60FEC"); // 5500 duration - Has end event - Src Transcendent Boulder
     // Ura
     public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
     public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");
