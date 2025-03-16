@@ -423,7 +423,7 @@ public static class SpeciesIDs
         ChampionFumaroller = 26744,
         ToxicGeyser = SpeciesIDs.ToxicGeyser,
         SulfuricGeyser = SpeciesIDs.SulfuricGeyser,
-        TitanspawnGeyser = SpeciesIDs.TitanspawnGeyser,
+        TitanspawnGeyser = 26741,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         // Strike Missions
         // - Freezie
@@ -1055,7 +1055,7 @@ public static class SpeciesIDs
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
-    private const int TitanspawnGeyser = -64;
+    // -64 removed
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
     private const int BigEnlightenedConduitGadget = -67;

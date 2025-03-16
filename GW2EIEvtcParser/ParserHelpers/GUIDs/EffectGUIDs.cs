@@ -698,6 +698,7 @@ public static class EffectGUIDs
     public static readonly GUID DecimaChargedGround = new("FD07306664C7984C86A4D177CAD60FEC"); // 5500 duration - Has end event - Src Transcendent Boulder
     // Ura
     public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
+    public static readonly GUID UraToxicGeyserSpawnCM = new("4A69CA27E8B3684CA0E492B3E5C7512F");
     public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");
     public static readonly GUID UraSlamCone = new("BBA33A70B7D2A94589DE81B1F35D3D69");
     public static readonly GUID UraSteamPrisonIndicator = new("093D22A7DBFB0D4ABA9424225954DB68"); // 3000 duration - Src Ura - Dst Player

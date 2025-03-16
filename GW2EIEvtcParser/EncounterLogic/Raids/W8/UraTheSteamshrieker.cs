@@ -103,22 +103,11 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // Sulfuric geysers
-        var sulfuricAgents = combatData
-            .Where(x => x.IsBuffApply() && x.SkillID == HardenedCrust)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget)
-            .Distinct();
-        foreach (var sulfuricAgent in sulfuricAgents)
-        {
-            sulfuricAgent.OverrideID(TrashID.SulfuricGeyser, agentData);
-            sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
-        }
         // Toxic geysers
         var toxicEffectGUID = combatData
-            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID && 
-                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect && 
-                EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
+            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Effect &&
+                (EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent) || EffectGUIDs.UraToxicGeyserSpawnCM.Equals(x.SrcAgent, x.DstAgent)))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (toxicEffectGUID != null)
@@ -136,8 +125,8 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         // titanspawn geysers
         var titanGeyserMarkerGUID = combatData
-            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID && 
-                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker && 
+            .Where(x => x.IsStateChange == StateChange.EffectIDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
                 MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
@@ -153,6 +142,17 @@ internal class UraTheSteamshrieker : MountBalrior
                 titanAgent.OverrideID(TrashID.TitanspawnGeyser, agentData);
                 titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
+        }
+        // Sulfuric geysers
+        var sulfuricAgents = combatData
+            .Where(x => x.IsBuffApply() && x.SkillID == HardenedCrust)
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => x.Type == AgentItem.AgentType.Gadget)
+            .Distinct();
+        foreach (var sulfuricAgent in sulfuricAgents)
+        {
+            sulfuricAgent.OverrideID(TrashID.SulfuricGeyser, agentData);
+            sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Those can only be toxic ones
         var remainingGeysers = combatData

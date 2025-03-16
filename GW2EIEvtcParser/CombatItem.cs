@@ -44,6 +44,11 @@ public class CombatItem
 
     public bool IsEffect => IsStateChange == StateChange.Effect_51 || IsStateChange == StateChange.Effect_45;
 
+#if DEBUG
+    // For debugging, to get rid of statechanges seen generally on all agents
+    public bool IsSpecial => IsStateChange != StateChange.None && IsStateChange != StateChange.Position && IsStateChange != StateChange.Rotation && IsStateChange != StateChange.Velocity && IsStateChange != StateChange.HealthUpdate && IsStateChange != StateChange.BarrierUpdate && IsStateChange != StateChange.EnterCombat && IsStateChange != StateChange.ExitCombat && IsStateChange != StateChange.BreakbarPercent && IsStateChange != StateChange.BreakbarState && IsStateChange != StateChange.Spawn && IsStateChange != StateChange.Despawn && IsStateChange != StateChange.TeamChange && IsStateChange != StateChange.StackActive;
+#endif
+
     // Constructor
     public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
            uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
