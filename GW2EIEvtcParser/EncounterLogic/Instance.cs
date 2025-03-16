@@ -118,7 +118,7 @@ internal class Instance : FightLogic
         }
         else
         {
-            return evt.TimeOffsetFromInstanceCreation > 1000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+            return evt.TimeOffsetFromInstanceCreation > ParserHelper.MinimumInCombatDuration ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
         }
     }
 
