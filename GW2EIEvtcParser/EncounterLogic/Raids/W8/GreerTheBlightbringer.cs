@@ -416,10 +416,15 @@ internal class GreerTheBlightbringer : MountBalrior
             foreach (EffectEvent effect in noxiousBlight)
             {
                 long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
+                string icon = 
+                    effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen 
+                    || effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen2 
+                    ? ParserIcons.GreenMarkerSize2Overhead : ParserIcons.GreenMarkerSize3Overhead;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(player));
                 replay.Decorations.AddWithGrowing(circle, growing, true);
+                replay.Decorations.AddOverheadIcon(lifespan, player, icon);
             }
         }
 
