@@ -114,7 +114,8 @@ internal class HarvestTemple : EndOfDragonsStrike
         var giants = new List<NPC>();
         foreach (NPC target in Targets)
         {
-            long mainPhaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
+            long phaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
+            long phaseStart = Math.Max(target.FirstAware, log.FightData.FightStart);
             switch (target.ID)
             {
                 case (int)TrashID.KillableVoidAmalgamate:
@@ -127,27 +128,27 @@ internal class HarvestTemple : EndOfDragonsStrike
                 case (int)TrashID.VoidTimeCaster:
                 case (int)TrashID.VoidObliterator:
                 case (int)TrashID.VoidGoliath:
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, target.Character, target, false));
+                    subPhasesData.Add((phaseStart, phaseEnd, target.Character, target, false));
                     break;
                 case (int)TargetID.TheDragonVoidJormag:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Jormag", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Jormag", target, true));
                     break;
                 case (int)TargetID.TheDragonVoidKralkatorrik:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Kralkatorrik", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Kralkatorrik", target, true));
                     break;
                 case (int)TargetID.TheDragonVoidMordremoth:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Mordremoth", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Mordremoth", target, true));
                     break;
                 case (int)TargetID.TheDragonVoidPrimordus:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Primordus", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Primordus", target, true));
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, true));
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
@@ -170,7 +171,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     break;
                 case (int)TargetID.TheDragonVoidZhaitan:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Zhaitan", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Zhaitan", target, true));
                     break;
             }
         }
@@ -518,7 +519,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         // Add missing agents
         for (int i = index; i < idsToUse.Count; i++)
         {
-            agentData.AddCustomNPCAgent(int.MaxValue - idsToUse.Count + i, int.MaxValue, "Dragonvoid", Spec.NPC, idsToUse[i], false);
+            agentData.AddCustomNPCAgent(fightData.FightStart + index, fightData.FightStart + index + 1, "Dragonvoid", Spec.NPC, idsToUse[i], false);
         }
         //
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
