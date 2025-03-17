@@ -210,17 +210,23 @@ internal class DecimaTheStormsinger : MountBalrior
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, isCM ? [NovaShieldCM, FracturedArmorCM] : [NovaShield, FracturedArmor], decima, true, true));
+        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true));
         var currentMainPhase = 1;
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (i % 3 == 2)
+            if (i % 2 == 0)
             {
                 phase.Name = "Split " + (currentMainPhase++);
-                if (i < phases.Count - 1)
+                if (isCM && i < phases.Count - 1)
                 {
-                    phase.OverrideEnd(phases[i + 1].End);
+                    var nextMainPhase = phases[i + 1];
+                    var fractureArmorStatus = decima.GetBuffStatus(log, FracturedArmorCM, nextMainPhase.Start + ServerDelayConstant);
+                    if (fractureArmorStatus.Value > 0)
+                    {
+                        phase.OverrideEnd(fractureArmorStatus.End);
+                        nextMainPhase.OverrideStart(fractureArmorStatus.End);
+                    }
                 }
                 // Decima gets nova shield during enrage, not a phase
                 if (decima.GetBuffStatus(log, ChargeDecima, phase.Start + ServerDelayConstant).Value < 10)
@@ -228,7 +234,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     phase.AddTarget(decima);
                 }
             }
-            else if (i % 3 == 1)
+            else if (i % 2 == 1)
             {
                 phase.Name = "Phase " + (currentMainPhase);
                 phase.AddTarget(decima);
