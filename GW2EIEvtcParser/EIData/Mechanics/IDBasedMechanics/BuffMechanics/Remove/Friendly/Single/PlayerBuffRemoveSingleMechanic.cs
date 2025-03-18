@@ -19,22 +19,18 @@ internal abstract class PlayerBuffRemoveSingleMechanic : PlayerBuffRemoveMechani
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(mechanicID))
             {
-                if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
+                if (c is AbstractBuffRemoveEvent abre && TryGetActor(log, GetAgentItem(abre), regroupedMobs, out var amp) && Keep(abre, log))
                 {
-                    SingleActor? amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
-                    if (amp != null)
+                    if (abre is BuffRemoveAllEvent brae)
                     {
-                        if (abre is BuffRemoveAllEvent brae)
+                        for (int i = 0; i < brae.RemovedStacks; i++)
                         {
-                            for (int i = 0; i < brae.RemovedStacks; i++)
-                            {
-                                AddMechanic(log, mechanicLogs, brae, amp);
-                            }
+                            AddMechanic(log, mechanicLogs, brae, amp);
                         }
-                        else if (abre is BuffRemoveSingleEvent brse)
-                        {
-                            AddMechanic(log, mechanicLogs, brse, amp);
-                        }
+                    }
+                    else if (abre is BuffRemoveSingleEvent brse)
+                    {
+                        AddMechanic(log, mechanicLogs, brse, amp);
                     }
                 }
             }

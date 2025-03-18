@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -15,8 +16,9 @@ internal abstract class EnemyBuffApplyMechanic : BuffApplyMechanic
     {
         IsEnemyMechanic = true;
     }
-    protected override SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
+    protected override bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor)
     {
-        return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+        actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+        return actor != null;
     }
 }

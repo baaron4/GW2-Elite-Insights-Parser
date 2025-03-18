@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -13,9 +14,10 @@ internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<
     public EnemyBuffRemoveSingleMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, 0)
     {
     }
-    protected override SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
+    protected override bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor)
     {
-        return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+        actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+        return actor != null;
     }
     internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
@@ -23,22 +25,18 @@ internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(mechanicID))
             {
-                if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
+                if (c is AbstractBuffRemoveEvent abre && TryGetActor(log, GetAgentItem(abre), regroupedMobs, out var amp) && Keep(abre, log))
                 {
-                    SingleActor? amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
-                    if (amp != null)
+                    if (abre is BuffRemoveAllEvent brae)
                     {
-                        if (abre is BuffRemoveAllEvent brae)
+                        for (int i = 0; i < brae.RemovedStacks; i++)
                         {
-                            for (int i = 0; i < brae.RemovedStacks; i++)
-                            {
-                                AddMechanic(log, mechanicLogs, brae, amp);
-                            }
+                            AddMechanic(log, mechanicLogs, brae, amp);
                         }
-                        else if (abre is BuffRemoveSingleEvent brse)
-                        {
-                            AddMechanic(log, mechanicLogs, brse, amp);
-                        }
+                    }
+                    else if (abre is BuffRemoveSingleEvent brse)
+                    {
+                        AddMechanic(log, mechanicLogs, brse, amp);
                     }
                 }
             }

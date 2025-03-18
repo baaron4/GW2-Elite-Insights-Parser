@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -17,7 +18,8 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
 
 
     protected abstract AgentItem GetAgentItem(BuffApplyEvent ba);
-    protected abstract SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs);
+
+    protected abstract bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor);
 
     protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, SingleActor actor)
     {
@@ -31,13 +33,9 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(mechanicID))
             {
-                if (c is BuffApplyEvent ba && Keep(ba, log))
+                if (c is BuffApplyEvent ba && TryGetActor(log, GetAgentItem(ba), regroupedMobs, out var amp) && Keep(ba, log))
                 {
-                    SingleActor? amp = GetActor(log, GetAgentItem(ba), regroupedMobs);
-                    if (amp != null)
-                    {
-                        AddMechanic(log, mechanicLogs, ba, amp);
-                    }
+                    AddMechanic(log, mechanicLogs, ba, amp);
                 }
             }
         }
