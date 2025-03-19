@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -332,7 +333,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 var breakbars = target.GetBuffStatus(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var breakbar in breakbars)
                 {
-                    // Rot the World
+                    // Rot the World - AoEs
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerRotTheWorld, out var rotTheWorld))
                     {
                         foreach (EffectEvent effect in rotTheWorld.Where(x => x.Time >= breakbar.Start && x.Time <= breakbar.End))
@@ -341,6 +342,28 @@ internal class GreerTheBlightbringer : MountBalrior
                             replay.Decorations.AddWithBorder(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), Colors.LightOrange, 0.2);
                         }
                     }
+                }
+
+                // Rot the World - Breakbar
+                var rotTheWorldCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == RotTheWorld || x.SkillId == RotTheWorldCM).ToList();
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                List<BuffEvent> barrierRemovals =
+                [
+                    .. log.CombatData.GetBuffData(DamageImmunity1),
+                    .. log.CombatData.GetBuffData(DamageImmunity2),
+                    .. log.CombatData.GetBuffData(DamageImmunity3),
+                ];
+                foreach (CastEvent rotTheWorld in rotTheWorldCasts)
+                {
+                    long start = breakbarUpdates.FirstOrDefault(x => x.Start > rotTheWorld.Time)!.Start;
+                    long end = barrierRemovals != null ? barrierRemovals.FirstOrDefault(x => x.Time > rotTheWorld.Time)!.Time : rotTheWorld.EndTime;
+                    (long start, long end) lifespanRotTheWorld = (start, end);
+
+                    var bar = new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespanRotTheWorld, Colors.BreakbarBlue, 0.8, Colors.Black, 0.6,
+                        breakbarUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                        .UsingRotationConnector(new AngleConnector(180));
+                    replay.Decorations.Add(bar);
                 }
 
                 // Invulnerable Barrier

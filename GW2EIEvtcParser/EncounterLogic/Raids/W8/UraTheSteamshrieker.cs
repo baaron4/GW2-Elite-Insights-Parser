@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -44,7 +45,6 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerDstHitMechanic(BreakingGround, "Breaking Ground", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "BreGround.H", "Hit by Breaking Ground (8 pointed star)", "Breaking Ground Hit", 0),
 
             new PlayerDstBuffApplyMechanic(Deterrence, "Deterrence", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Pick-up Shard", "Picked up the Bloodstone Shard", "Bloodstone Shard Pick-up", 0),
-
             new PlayerDstBuffApplyMechanic(BloodstoneSaturation, "Bloodstone Saturation", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Dispel", "Used Dispel (SAK)", "Used Dispel", 0),
 
             new PlayerDstBuffApplyMechanic(PressureBlastTargetBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightBlue), "Pres.Blast.T", "Targeted by Pressure Blast (Bubbles)", "Pressure Blast Target", 0),
@@ -57,6 +57,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
 
             new EnemyDstBuffApplyMechanic(RisingPressure, "Rising Pressure", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "Rising Pressure", "Applied Rising Pressure", "Rising Pressure", 0),
+            new EnemyDstBuffApplyMechanic(TitanicResistance, "Titanic Resistance", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "Titanic Resistance", "Applied Titanic Resistance", "Titanitc Resistance", 0),
         });
         Extension = "ura";
         Icon = EncounterIconUra;
@@ -204,6 +205,57 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found"); ;
+        phases[0].AddTarget(ura);
+        if (!requirePhases)
+        {
+            return phases;
+        }
+
+        bool isCm = log.FightData.IsCM;
+        long start = log.FightData.FightStart;
+        long end = log.FightData.FightEnd;
+        var hpUpdates = ura.GetHealthUpdates(log);
+
+        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
+        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
+        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
+
+        // 100-70
+        var before70 = hp70.Value > 0 ? new PhaseData(start, hp70.Start, "100-70%") : new PhaseData(log.FightData.FightStart, end, "100-70%");
+        before70.AddTarget(ura);
+        phases.Add(before70);
+
+        // 70-40
+        if (hp70.Value > 0)
+        {
+            var after70 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70-40%");
+            after70.AddTarget(ura);
+            phases.Add(after70);
+        }
+
+        // 40 - 1 CM / 40 - 0 NM
+        if (hp40.Value > 0)
+        {
+            var after40 = isCm && hp1 != null ? new PhaseData(hp40.Start, Math.Min(hp1.Time, end), "40-1%") : new PhaseData(hp40.Start, end, "40-0%");
+            after40.AddTarget(ura);
+            phases.Add(after40);
+        }
+
+        // Healed CM
+        if (hp1 != null)
+        {
+            var after1 = new PhaseData(hp1.Time, end, "Healed");
+            after1.AddTarget(ura);
+            phases.Add(after1);
+        }
+
+        return phases;
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         switch (target.ID)
@@ -286,7 +338,26 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 break;
             case (int)TrashID.ToxicGeyser:
-                replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                if (log.FightData.IsCM)
+                {
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraToxicGeyserGrowing, out var effects))
+                    {
+                        uint initialRadius = 480;
+                        uint radiusIncrease = 12; // Aprox
+                        uint counter = 0;
+                        foreach (var effect in effects)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                            uint radius = initialRadius + (radiusIncrease * counter);
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                            counter++;
+                        }
+                    }
+                }
+                else
+                {
+                    replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                }
                 break;
             case (int)TrashID.SulfuricGeyser:
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
@@ -390,5 +461,28 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         target.OverrideName("Ura, the Streamshrieker");
         return FightData.EncounterMode.Normal;
+    }
+
+    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    {
+        base.SetInstanceBuffs(log);
+
+        if (log.FightData.Success && log.FightData.IsCM)
+        {
+            var toxicGeysers = log.AgentData.GetNPCsByID(TrashID.ToxicGeyser);
+            bool eligible = true;
+            foreach (var geyser in toxicGeysers)
+            {
+                if (geyser.LastAware - geyser.FirstAware > 30000)
+                {
+                    eligible = false;
+                    break;
+                }
+            }
+            if (eligible)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityNoGeysersNoProblems], 1));
+            }
+        }
     }
 }
