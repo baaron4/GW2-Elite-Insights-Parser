@@ -15,11 +15,10 @@ internal class SpiritRace : SpiritVale
 {
     public SpiritRace(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
+        MechanicList.Add(new MechanicGroup([        
             new PlayerDstHitMechanic(SpiritFog, "Spirit Fog", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
             new PlayerDstBuffApplyMechanic(Crippled, "I Can Outrun A...Ghost", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(true),
-        });
+        ]));
         Extension = "sprtrace";
         Icon = EncounterIconSpiritRace;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
