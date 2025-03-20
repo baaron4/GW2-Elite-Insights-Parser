@@ -18,11 +18,12 @@ internal class River : HallOfChains
     private static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
     public River(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
+        MechanicList.Add(new MechanicGroup([
+        
             new PlayerDstHitMechanic(BombShellRiverOfSouls, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-            new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
-        }
+            new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0)
+                .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+        ])
         );
         GenericFallBackMethod = FallBackMethod.ChestGadget;
         ChestID = ChestID.ChestOfSouls;
