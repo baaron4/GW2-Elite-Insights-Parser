@@ -43,7 +43,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 .UsingChecker((bae, log) => bae.To.IsDowned(log, bae.Time)),
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
             new PlayerDstBuffApplyMechanic(PlagueRot, "Plague Rot", new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Elibigility: Guaranteed Plague Free", "Achiv Unplagued", 0)
-                .UsingChecker((bae, log) => log.FightData.IsCM).UsingAchievementEligibility(true),
+                .UsingEnable(log => log.FightData.IsCM).UsingAchievementEligibility(true),
             new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2, EffectGUIDs.GreerEruptionofRotGreen3], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
 
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
@@ -345,25 +345,11 @@ internal class GreerTheBlightbringer : MountBalrior
                 }
 
                 // Rot the World - Breakbar
-                var rotTheWorldCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == RotTheWorld || x.SkillId == RotTheWorldCM).ToList();
                 var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                List<BuffEvent> barrierRemovals =
-                [
-                    .. log.CombatData.GetBuffData(DamageImmunity1),
-                    .. log.CombatData.GetBuffData(DamageImmunity2),
-                    .. log.CombatData.GetBuffData(DamageImmunity3),
-                ];
-                foreach (CastEvent rotTheWorld in rotTheWorldCasts)
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
                 {
-                    long start = breakbarUpdates.FirstOrDefault(x => x.Start > rotTheWorld.Time)!.Start;
-                    long end = barrierRemovals != null ? barrierRemovals.FirstOrDefault(x => x.Time > rotTheWorld.Time)!.Time : rotTheWorld.EndTime;
-                    (long start, long end) lifespanRotTheWorld = (start, end);
-
-                    var bar = new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespanRotTheWorld, Colors.BreakbarBlue, 0.8, Colors.Black, 0.6,
-                        breakbarUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
-                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                        .UsingRotationConnector(new AngleConnector(180));
-                    replay.Decorations.Add(bar);
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
 
                 // Invulnerable Barrier

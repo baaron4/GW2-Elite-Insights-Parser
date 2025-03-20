@@ -85,7 +85,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return
+        return 
         [
             TrashID.SulfuricGeyser,
             TrashID.TitanspawnGeyser,
@@ -353,6 +353,14 @@ internal class UraTheSteamshrieker : MountBalrior
                             counter++;
                         }
                     }
+
+                    // Hardened Crust - Overhead
+                    replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+
+                    // Breakbar
+                    var toxicPercentUpdates = target.GetBreakbarPercentUpdates(log);
+                    var toxicStates = target.GetBreakbarStatus(log);
+                    replay.Decorations.AddBreakbar(target, toxicPercentUpdates, toxicStates);
                 }
                 else
                 {
@@ -360,10 +368,19 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 break;
             case (int)TrashID.SulfuricGeyser:
+                // Hardened Crust - Overhead
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
             case (int)TrashID.TitanspawnGeyser:
+                // Hardened Crust - Overhead
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
+                // Breakbar
+                var titanspawnPercentUpdates = target.GetBreakbarPercentUpdates(log);
+                var titanspawnStates = target.GetBreakbarStatus(log);
+                replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TrashID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star

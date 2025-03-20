@@ -120,7 +120,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 return false;
-            }).UsingAchievementEligibility(true),
+            }).UsingEnable(log => log.FightData.IsCM).UsingAchievementEligibility(true),
 
             new EnemyDstBuffApplyMechanic(ChargeDecima, "Charge", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
 
@@ -506,20 +506,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Flux Nova - Breakbar
-                var fluxNovaCasts = casts.Where(x => x.SkillId == FluxNova || x.SkillId == FluxNovaCM_70 || x.SkillId == FluxNovaCM_40);
-                var fractureArmorCasts = casts.Where(x => x.SkillId == FractureArmor || x.SkillId== FractureArmorCM);
                 var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                foreach (CastEvent fluxNova in fluxNovaCasts)
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
                 {
-                    var fractureArmor = fractureArmorCasts.FirstOrDefault(x => x.Time > fluxNova.Time);
-                    var endCast = fractureArmor != null ? fractureArmor.Time : fluxNova.EndTime;
-                    (long start, long end) lifespanFlux = (fluxNova.Time, endCast);
-
-                    var bar = new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespanFlux, Colors.BreakbarBlue, 0.8, Colors.Black, 0.6,
-                        breakbarUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
-                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                        .UsingRotationConnector(new AngleConnector(180));
-                    replay.Decorations.Add(bar);
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
                 break;
             case (int)TrashID.GreenOrb1Player:
