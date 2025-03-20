@@ -11,15 +11,14 @@ internal class ColdWar : IcebroodSagaStrike
 {
     public ColdWar(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
+        MechanicList.Add(new MechanicGroup([ 
             new PlayerDstHitMechanic(IcyEchoes, "Icy Echoes", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech","Tight stacking damage", "Icy Echoes",0),
             new PlayerDstHitMechanic(Detonate, "Detonate", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.","Hit by Detonation", "Detonate",50),
             new PlayerDstHitMechanic(LethalCoalescence, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.","Soaked damage", "Lethal Coalescence",50),
             new PlayerDstHitMechanic(FlameWall, "Flame Wall", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall","Stood in Flame Wall", "Flame Wall",50),
             new PlayerDstHitMechanic(CallAssassins, "Call Assassins", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.","Hit by Assassins", "Call Assassins",50),
             new PlayerDstHitMechanic(Charge, "Charge!", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!","Hit by Charge", "Charge!",50),
-        }
+        ])
         );
         Extension = "coldwar";
         Icon = EncounterIconColdWar;
