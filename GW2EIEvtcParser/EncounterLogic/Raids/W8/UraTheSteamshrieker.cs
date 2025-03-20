@@ -27,7 +27,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerDstHitMechanic(CreateTitanspawnGeyser, "Create Titanspawn Geyser", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
                 .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
 
-            new PlayerDstHitMechanic([ToxicGeyser1, ToxicGeyser2], "Toxic Geyser", new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
+            new PlayerDstHitMechanic([ToxicGeyser1, ToxicGeyser2, ToxicGeyserCM], "Toxic Geyser", new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
 
             new PlayerDstEffectMechanic(EffectGUIDs.UraSulfuricGeyserTarget, "Sulfuric Geyser", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightOrange), "Dispel.G", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
@@ -59,7 +59,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerSrcBuffRemoveFromMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Dispel.P", "Dispelled Player (Removed Pressure Blast)", "Dispelled Player", 0)
                 .UsingChecker((brae, log) => brae.To.IsPlayer),
 
-            new EnemySrcSkillMechanic(Return, "Return", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 0),
+            new EnemySrcSkillMechanic(Return, "Return", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
 
             new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
 

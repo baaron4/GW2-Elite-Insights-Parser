@@ -139,6 +139,8 @@ internal static class EncounterDamageModifiers
             {
                 return !VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
             }),
+        new BuffOnFoeDamageModifier(Mod_UnstrippableProtection, ProtectionUnstrippable, "Protection (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_UnstrippableResolution, ResolutionGreer, "Resolution (Unstrippable)", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
         // Enrages
         new BuffOnFoeDamageModifier(Mod_Enraged_inc25, Enraged_100_strike_25_reduc, "Enraged (-25%)", "-25%, stacks additively with Vulnerability", DamageSource.All, -25, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Mod_Enraged_inc50, Enraged_200_strike_50_reduc, "Enraged (-50%)", "-50%, stacks additively with Vulnerability", DamageSource.All, -50, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
