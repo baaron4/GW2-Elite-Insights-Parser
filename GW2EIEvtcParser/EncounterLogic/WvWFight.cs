@@ -27,8 +27,7 @@ internal class WvWFight : FightLogic
         _defaultName = _detailed ? "Detailed WvW" : "World vs World";
         EncounterCategoryInformation.Category = FightCategory.WvW;
         EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
-        MechanicList.AddRange(
-        [
+        MechanicList.Add(new MechanicGroup([
             new PlayerDamageMechanic("Killing Blows to enemy Players", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
                 if (a.Type != AgentItem.AgentType.Player)
                 {
@@ -39,7 +38,7 @@ internal class WvWFight : FightLogic
             new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
                 return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
-        ]);
+        ]));
     }
 
     protected override ReadOnlySpan<int> GetUniqueNPCIDs()
