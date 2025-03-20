@@ -18,16 +18,16 @@ internal class Adina : TheKeyOfAhdashim
 {
     public Adina(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>()
-        {
+        MechanicList.Add(new MechanicGroup([
             new PlayerDstBuffApplyMechanic(RadiantBlindness, "Radiant Blindness", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
             new PlayerDstBuffApplyMechanic(ErodingCurse, "Eroding Curse", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
             new PlayerDstHitMechanic(BoulderBarrage, "Boulder Barrage", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-            new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0).UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+            new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0)
+                .UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
             new PlayerDstHitMechanic(StalagmitesDetonation, "Stalagmites", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
             new PlayerDstHitMechanic(DiamondPalisadeEye, "Diamond Palisade", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
             new PlayerDstSkillMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
-        });
+        ]));
         Extension = "adina";
         Icon = EncounterIconAdina;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
