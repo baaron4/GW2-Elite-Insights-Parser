@@ -695,7 +695,13 @@ public static class EffectGUIDs
     public static readonly GUID DecimaAftershockAoE = new("FBABC6679768DC439AD844BFB94D9C74"); // 1500 duration - Src Decima
     public static readonly GUID DecimaAftershockAoECM = new("B438122328E462488F5B1BD417653C42"); // 1500 duration - Src Godsquall Decima
     public static readonly GUID DecimaSparkingReverberation = new("9CF7F3E43A32774E82F650A2EE9BF756"); // 30000 duration - Has end event - Src Transcendent Boulder
-    public static readonly GUID DecimaChargedGround = new("FD07306664C7984C86A4D177CAD60FEC"); // 5500 duration - Has end event - Src Transcendent Boulder
+    public static readonly GUID DecimaChargedGroundBorder = new("B4CCDBD5D84B5841BB50FE2698E6F5DA"); // 5500 / 1500 duration - Has end event - Src Transcendent Boulder
+    public static readonly GUID DecimaChargedGroundFirstStage = new("FD07306664C7984C86A4D177CAD60FEC"); // 5500 / 1500 duration - Has end event - Src Transcendent Boulder
+    public static readonly GUID DecimaChargedGroundSecondStage = new("9CF7F3E43A32774E82F650A2EE9BF756"); // 1500 duration - CONFLICT with Sparking Reverberation
+    public static readonly GUID DecimaChargedGroundThirdStage = new("52E01771136E9A4883B55915083ED6A5"); // 1500 duration
+    public static readonly GUID DecimaChargedGroundFourthStage = new("EA821B503C238B419F4B5EFAF86FABD8"); // 1500 duration
+    public static readonly GUID DecimaChargedGroundFifthStage = new("75A457A4D6DBE942A9B12B8D63084410"); // 1500 duration
+    public static readonly GUID DecimaChargedGroundMax = new("51CB6C241DA8384F9FB2DA81B44E7E38"); // 600000 duration - Has end event - Src Transcendent Boulder
     // Ura
     public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
     public static readonly GUID UraToxicGeyserSpawnCM = new("4A69CA27E8B3684CA0E492B3E5C7512F"); // 800000 duration - Src Toxic Geyser - Has end event

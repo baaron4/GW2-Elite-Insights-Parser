@@ -685,13 +685,24 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Charged Ground - AoEs from Sparkwave
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGround, out var chargedGround))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGroundBorder, out var chargedGround))
                 {
                     foreach (var effect in chargedGround)
                     {
-                        (long start, long end) lifespanChargedGround = effect.ComputeLifespan(log, 5500);
+                        (long start, long end) lifespanChargedGround = (effect.Time, effect.Time + effect.Duration);
                         var circle = new CircleDecoration(400, lifespanChargedGround, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
+                    }
+                }
+
+                // Charged Ground - AoEs from Sparkwave - Max Charge
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGroundMax, out var chargedGroundMax))
+                {
+                    foreach (var effect in chargedGroundMax)
+                    {
+                        (long start, long end) lifespanChargedGround = effect.ComputeLifespan(log, 600000);
+                        var circle = new CircleDecoration(400, lifespanChargedGround, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
                     }
                 }
                 break;
