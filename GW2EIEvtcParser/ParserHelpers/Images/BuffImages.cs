@@ -337,6 +337,7 @@ public static class BuffImages
     public const string HardenedCrust = "https://wiki.guildwars2.com/images/4/4e/Branded_Crystal_Shield.png";
     public const string FireEffect = "https://wiki.guildwars2.com/images/e/eb/Fire_%28effect%29.png";
     public const string SinisterThread = "https://wiki.guildwars2.com/images/d/d7/Sinister_Thread.png";
+    public const string SonicOverload = "https://wiki.guildwars2.com/images/2/29/Sonic_Overload.png";
     // Fractal
     public const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
     public const string ReflectiveShielding = "https://wiki.guildwars2.com/images/c/c6/Reflective_Shielding.png";

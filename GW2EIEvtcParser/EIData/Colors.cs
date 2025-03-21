@@ -50,6 +50,7 @@ internal static class Colors
     public static Color RedSkin = new(198, 101, 94);
     public static Color Orange = new(255, 100, 0);
     public static Color LightOrange = new(250, 120, 0);
+    public static Color BreakbarRecoveringOrange = new(168, 104, 61);
     public static Color Sand = new(177, 157, 111);
     public static Color Yellow = new(255, 220, 0);
     public static Color LightBrown = new(196, 164, 132);
@@ -67,7 +68,7 @@ internal static class Colors
     public static Color Teal = new(0, 255, 255);
     public static Color DarkTeal = new(0, 160, 150);
     public static Color LightBlue = new(0, 140, 255);
-    public static Color BreakbarBlue = new(75, 173, 168);
+    public static Color BreakbarActiveBlue = new(75, 173, 168);
     public static Color DarkPurpleBlue = new(25, 25, 112);
     public static Color Purple = new(150, 0, 255);
     public static Color DarkPurple = new(50, 0, 150);
@@ -85,6 +86,7 @@ internal static class Colors
     public static Color DarkWhite = new(180, 180, 180);
     public static Color Grey = new(60, 60, 60);
     public static Color LightGrey = new(120, 120, 120);
+    public static Color BreakbarImmuneGrey = new(44, 45, 54);
     public static Color Black = new(0, 0, 0);
 
     public static Color Guardian = new(0x3399cc);

@@ -2,6 +2,7 @@
 using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Decoration;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -470,6 +471,50 @@ internal class CombatReplayDecorationContainer
             AddWithBorder((FormDecoration)bar, colors[2].color, colors[2].opacity);
             Add(background);
         }
+    }
+
+    /// <summary>
+    /// Adds a dynamic breakbar decoration with each various state.<br></br>
+    /// The breakbar will be displayed as long as the actor is present and it's active, recovering or immune.
+    /// </summary>
+    /// <param name="actor"></param>
+    /// <param name="percentUpdates"></param>
+    /// <param name="stateUpdates"></param>
+    internal void AddBreakbar(SingleActor actor, IReadOnlyList<Segment> percentUpdates,
+        (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) stateUpdates)
+    {
+        foreach (var segment in stateUpdates.breakbarActives)
+        {
+            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarActiveBlue);
+        }
+        foreach (var segment in stateUpdates.breakbarRecoverings)
+        {
+            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarRecoveringOrange);
+        }
+        foreach (var segment in stateUpdates.breakbarImmunes)
+        {
+            AddBreakbar(segment.TimeSpan, actor, percentUpdates, Colors.BreakbarImmuneGrey);
+        }
+    }
+
+    private void AddBreakbar((long start, long end) lifespan, SingleActor actor, IReadOnlyList<Segment> percentUpdates, Color color)
+    {
+        Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, color, 0.8, Colors.Black, 0.6,
+            percentUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(actor))
+            .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+            .UsingRotationConnector(new AngleConnector(180)));
+    }
+
+    /// <summary>
+    /// Adds a dynamic breakbar decoration.<br></br>
+    /// To be used during active state only.
+    /// </summary>
+    /// <param name="lifespan"></param>
+    /// <param name="actor"></param>
+    /// <param name="percentUpdates"></param>
+    internal void AddActiveBreakbar((long start, long end) lifespan, SingleActor actor, IReadOnlyList<Segment> percentUpdates)
+    {
+        AddBreakbar(lifespan, actor, percentUpdates, Colors.BreakbarActiveBlue);
     }
 }
 

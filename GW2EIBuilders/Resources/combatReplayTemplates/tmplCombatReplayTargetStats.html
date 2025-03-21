@@ -9,7 +9,7 @@
             <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
                 <li class="nav-item" v-for="(phase, id) in breakbarPhases"
                     @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
-                    :data-original-title="phase.durationS + ' seconds'">
+                    :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
                     <a class="nav-link">{{id + 1}} </a>
                 </li>
             </ul>

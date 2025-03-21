@@ -414,6 +414,7 @@ internal static class ParserIcons
     private const string TrashCannon = "https://i.imgur.com/aNe6JUJ.png";
     private const string TrashProtoGreerling = "https://i.imgur.com/B1v91mQ.png";
     private const string TrashEmpoweringBeast = "https://i.imgur.com/HRmRRq1.png";
+    private const string TrashLucidBoulder = "https://i.imgur.com/hcceqNq.png";
     #endregion
 
     #region Minion
@@ -1195,7 +1196,7 @@ internal static class ParserIcons
         { TrashID.EmpoweringBeast, TrashEmpoweringBeast },
         { TrashID.EnlightenedConduit, TrashEnlightenedConduit },
         { TrashID.EnlightenedConduitCM, TrashEnlightenedConduit },
-        { TrashID.TranscendentBoulder, TrashGenericRedEnemySkull },
+        { TrashID.TranscendentBoulder, TrashLucidBoulder },
         { TrashID.EliteVentshot, TrashVentshot },
         { TrashID.EliteFumaroller, TrashFumaroller },
         { TrashID.ChampionFumaroller, TrashFumaroller },

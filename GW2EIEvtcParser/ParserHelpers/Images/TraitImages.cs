@@ -38,7 +38,7 @@ internal static class TraitImages
     #region Engineer
     public const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
     public const string LightDensityAmplifier = "https://render.guildwars2.com/file/3994F02CE07262B156C90E9143F2720ADF2DB0FD/1769927.png";
-    public const string GlassCannon = "https://render.guildwars2.com/file/63B2BD4FCDA047EA740E5DEA0EBF593308320713/1012344.pn";
+    public const string GlassCannon = "https://render.guildwars2.com/file/63B2BD4FCDA047EA740E5DEA0EBF593308320713/1012344.png";
     public const string ExplosivePowder = "https://render.guildwars2.com/file/6DA800E25FE446E734FAD0A6E81EB671F596AA79/1012353.png";
     public const string BigBoomer = "https://render.guildwars2.com/file/0122FE72473C12BA0661EABA18F5B83022066EDB/2261506.png";
     public const string ThermalVision = "https://render.guildwars2.com/file/F806ACB6130CED2DACC9DD804E4303327073385A/1012358.png";
@@ -104,7 +104,7 @@ internal static class TraitImages
     public const string ImprovedAlacrity = "https://render.guildwars2.com/file/C9BC67D77E3D959723393BF0EC9B212B53D8362D/1012478.png";
     public const string ConfoundingSuggestions = "https://render.guildwars2.com/file/E9CB4990C405C00D34DB07C5C5291FD5E90EF90C/1012486.png";
     public const string TemporalEnchanter = "https://render.guildwars2.com/file/1503DDC5B62526D71901E3A7F891A6F4445D80C8/1012527.png";
-    public const string Fragility = "https://render.guildwars2.com/file/DBA1050B30E4FBB4CEAFDF01217E7E07D4EF6459/1012497.pn";
+    public const string Fragility = "https://render.guildwars2.com/file/DBA1050B30E4FBB4CEAFDF01217E7E07D4EF6459/1012497.png";
     public const string CompoundingPower = "https://render.guildwars2.com/file/E9BA251055B444E693144A9AF5FD1CF8266BEFA6/1012520.png";
     public const string IllusionaryMembrane = "https://render.guildwars2.com/file/0DF6A27A24B01D069DCD7609ADD305C7C557A82A/1012472.png";
     public const string MirageMantle = "https://render.guildwars2.com/file/275DBDFD630099D49A76287DDD237709150C1D73/1769955.png";

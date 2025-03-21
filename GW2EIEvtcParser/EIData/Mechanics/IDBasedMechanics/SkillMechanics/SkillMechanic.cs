@@ -42,12 +42,8 @@ internal abstract class SkillMechanic : IDBasedMechanic<HealthDamageEvent>
         {
             foreach (HealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
             {
-                SingleActor? amp = null;
-                if (Keep(ahde, log))
-                {
-                    amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
-                }
-                if (amp != null)
+                SingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
+                if (amp != null && Keep(ahde, log))
                 {
                     InsertMechanic(log, mechanicLogs, ahde.Time, amp);
                 }

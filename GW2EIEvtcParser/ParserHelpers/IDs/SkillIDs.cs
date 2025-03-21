@@ -4658,6 +4658,7 @@ public static class SkillIDs
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
     public const long ScatteringSporeblast2 = 75262;
+    public const long POV_WhirlpoolBuff = 75269;
     public const long SparkingAuraTier3 = 75270;
     public const long DeployTrebuchet_InfiniteTrebuchet = 75271;
     public const long DeployBallista_InfiniteBallista = 75278;
@@ -4712,7 +4713,9 @@ public static class SkillIDs
     public const long PealOfHarmonyCM = 75535;
     public const long ThrummingPresenceDamageCM = 75536;
     public const long CageOfDecay4 = 75554;
+    public const long DiscordantThunderCM = 75561;
     public const long FluxlanceSalvoCM2 = 75569;
+    public const long Subsided = 75570;
     public const long DecimaCMUngaBungaCast = 75585;
     public const long ThrummingPresenceBuffCM = 75588;
     public const long AuraOfCorruptionBuff_Ereg = 75592;
@@ -4758,8 +4761,10 @@ public static class SkillIDs
     public const long ChargedGround = 75899;
     public const long EnfeeblingMiasma4 = 75919;
     public const long AftershockDecimaCM = 75920;
+    public const long ToxicGeyserCM = 75923;
     public const long FluxlanceFusilladeCM = 75954;
     public const long DecimaBeamLoadingCM2 = 75956;
+    public const long FocusedFluxlanceBuffCM = 75957;
     public const long DecimaBeamLoadingCM1 = 75960;
     public const long EarthrendCM2 = 75961;
     public const long EnlightenedConduitGadgetChargeTier1BuffCM = 75963;
