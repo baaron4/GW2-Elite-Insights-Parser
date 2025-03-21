@@ -17,7 +17,7 @@ internal class EXTHealingStatsPlayerChartDto
         Healing = new PlayerDamageChartDto<int>()
         {
             Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All),
-            Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
+            Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All),
             Targets = new (log.Friendlies.Count)
         };
         //
