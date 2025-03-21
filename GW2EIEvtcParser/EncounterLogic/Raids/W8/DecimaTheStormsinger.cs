@@ -73,12 +73,6 @@ internal class DecimaTheStormsinger : MountBalrior
 
             new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM], "This Bug Can Dance", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Elibigility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
             {
-                // Only available in CM
-                if (!isCM)
-                {
-                    return true;
-                }
-
                 // If you are dead, lose the achievement
                 if (adhe.To.IsDead(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
