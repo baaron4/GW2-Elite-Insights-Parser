@@ -489,6 +489,17 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 EnvironmentDecorations.Add(doughnut);
             }
         }
+
+        // Enrage
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutEnrage, out var enrage))
+        {
+            foreach (EffectEvent effect in enrage)
+            {
+                long duration = 8000;
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                EnvironmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
+            }
+        }
     }
 
     private SingleActor? GetEchoOfScarletBriar(FightData fightData)
