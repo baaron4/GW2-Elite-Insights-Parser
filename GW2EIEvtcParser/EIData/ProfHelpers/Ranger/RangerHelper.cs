@@ -91,6 +91,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileWarclaw,
+        (int)MinionID.JuvenileJanthiriBee,
     ];
 
     private static bool IsJuvenilePetID(int id)

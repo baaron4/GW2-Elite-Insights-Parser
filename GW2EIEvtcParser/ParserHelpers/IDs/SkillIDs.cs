@@ -4716,6 +4716,7 @@ public static class SkillIDs
     public const long DiscordantThunderCM = 75561;
     public const long FluxlanceSalvoCM2 = 75569;
     public const long Subsided = 75570;
+    public const long RelicOfVampirismHealing = 75574;
     public const long DecimaCMUngaBungaCast = 75585;
     public const long ThrummingPresenceBuffCM = 75588;
     public const long AuraOfCorruptionBuff_Ereg = 75592;

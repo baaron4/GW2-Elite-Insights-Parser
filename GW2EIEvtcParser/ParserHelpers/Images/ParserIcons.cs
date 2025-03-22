@@ -269,7 +269,6 @@ internal static class ParserIcons
     private const string TrashMazeMinotaur = "https://i.imgur.com/EMR1lQG.png";
     private const string TrashVoidSaltsprayDragon = "https://i.imgur.com/KuC1xF1.png";
     private const string TrashGenericRedEnemySkull = "https://i.imgur.com/k79t7ZA.png"; // GENERIC ICON
-    private const string TrashHandOfErosionEruption = "https://i.imgur.com/reGQHhr.png";
     private const string TrashVoltaicWisp = "https://i.imgur.com/C1mvNGZ.png";
     private const string TrashParalyzingWisp = "https://i.imgur.com/YBl8Pqo.png";
     private const string TrashPeerlessQadimPylon = "https://i.imgur.com/Db5Pi3b.png";
@@ -415,6 +414,8 @@ internal static class ParserIcons
     private const string TrashProtoGreerling = "https://i.imgur.com/B1v91mQ.png";
     private const string TrashEmpoweringBeast = "https://i.imgur.com/HRmRRq1.png";
     private const string TrashLucidBoulder = "https://i.imgur.com/hcceqNq.png";
+    private const string TrashHandOfErosion = "https://i.imgur.com/THCasXt.png";
+    private const string TrashHandOfEruption = "https://i.imgur.com/pQ0bOT8.png";
     #endregion
 
     #region Minion
@@ -519,6 +520,7 @@ internal static class ParserIcons
     private const string MinionJuvenileSkyChakStriker = "https://i.imgur.com/bfmZsdK.png";
     private const string MinionJuvenileSpinegazer = "https://i.imgur.com/mYAH1g7.png";
     private const string MinionJuvenileWarclaw = "https://i.imgur.com/dYuiG3W.png";
+    private const string MinionJuvenileJanthiriBee = "https://i.imgur.com/WymxKGX.png";
     private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
     private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
     private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -1012,8 +1014,8 @@ internal static class ParserIcons
         { TrashID.SpiritOfDestruction, TrashSpiritOfDestructionOrPain },
         { TrashID.SpiritOfPain, TrashSpiritOfDestructionOrPain },
         { TrashID.DragonEnergyOrb, TrashGenericRedEnemySkull },
-        { TrashID.HandOfErosion, TrashHandOfErosionEruption },
-        { TrashID.HandOfEruption, TrashHandOfErosionEruption },
+        { TrashID.HandOfErosion, TrashHandOfErosion },
+        { TrashID.HandOfEruption, TrashHandOfEruption },
         { TrashID.VoltaicWisp, TrashVoltaicWisp },
         { TrashID.ParalyzingWisp, TrashParalyzingWisp },
         { TrashID.PeerlessQadimPylon, TrashPeerlessQadimPylon },
@@ -1375,6 +1377,7 @@ internal static class ParserIcons
         { MinionID.JuvenileSkyChakStriker, MinionJuvenileSkyChakStriker },
         { MinionID.JuvenileSpinegazer, MinionJuvenileSpinegazer },
         { MinionID.JuvenileWarclaw, MinionJuvenileWarclaw },
+        { MinionID.JuvenileJanthiriBee, MinionJuvenileJanthiriBee },
         { MinionID.BloodFiend, MinionBloodFiend },
         { MinionID.BoneFiend, MinionBoneFiend },
         { MinionID.FleshGolem, MinionFleshGolem },
