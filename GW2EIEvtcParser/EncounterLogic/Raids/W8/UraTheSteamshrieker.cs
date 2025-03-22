@@ -353,8 +353,26 @@ internal class UraTheSteamshrieker : MountBalrior
                         uint initialRadius = 480;
                         uint radiusIncrease = 12; // Aprox
                         uint counter = 0;
+
+                        // Find the first effect appearing after the breakbar has started to recover.
+                        var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                        List<long> resetTimes = [];
+                        foreach (var segment in breakbarRecoverings)
+                        {
+                            var effect = effects.FirstOrDefault(x => x.Time > segment.Start);
+                            if (effect != null)
+                            {
+                                resetTimes.Add(effect.Time);
+                            }
+                        }
+
                         foreach (var effect in effects)
                         {
+                            // If the breakbar has been broken, reset the effect radius.
+                            if (resetTimes.Contains(effect.Time))
+                            {
+                                counter = 0;
+                            }
                             (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1200);
                             uint radius = initialRadius + (radiusIncrease * counter);
                             replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
