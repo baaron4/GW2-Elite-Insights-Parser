@@ -232,10 +232,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 start = Math.Min(start, giant.FirstAware);
                 end = Math.Max(end, giant.LastAware);
             }
-            var subPhase = new PhaseData(start, end, "Giants")
-            {
-                CanBeSubPhase = false
-            };
+            var subPhase = new PhaseData(start, end, "Giants");
             subPhase.AddTargets(giants);
             subPhase.OverrideEndTime(log);
             phases.Add(subPhase);
@@ -243,10 +240,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         var subPhaseNonBlockings = Targets.Where(x => x.IsSpecies(TrashID.VoidGoliath) || x.IsSpecies(TrashID.VoidObliterator) || x.IsSpecies(TrashID.VoidGiant));
         foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
         {
-            var subPhase = new PhaseData(start, end, name)
-            {
-                CanBeSubPhase = canBeSubPhase
-            };
+            var subPhase = new PhaseData(start, end, name);
             subPhase.AddTarget(target);
             subPhase.OverrideEndTime(log);
             subPhase.AddTargets(subPhaseNonBlockings, PhaseData.TargetPriority.NonBlocking);

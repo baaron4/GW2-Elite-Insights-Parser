@@ -348,8 +348,7 @@ public abstract class FightLogic
                 long end = Math.Min(breakbarActive.End, log.FightData.FightEnd);
                 var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                 {
-                    BreakbarPhase = true,
-                    CanBeSubPhase = false
+                    BreakbarPhase = true
                 };
                 phase.AddTarget(target);
                 breakbarPhases.Add(phase);

@@ -187,10 +187,7 @@ internal class Arkk : ShatteredObservatory
         var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk));
         foreach (PhaseData phase in phases)
         {
-            if (phase.CanBeSubPhase)
-            {
-                phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
-            }
+            phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
         }
 
         return phases;

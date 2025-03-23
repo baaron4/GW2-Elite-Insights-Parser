@@ -179,10 +179,7 @@ internal class SoullessHorror : HallOfChains
         var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead));
         foreach (PhaseData phase in phases)
         {
-            if (phase.CanBeSubPhase)
-            {
-                phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
-            }
+            phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
         }
 
         return phases;

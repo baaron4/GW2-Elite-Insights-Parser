@@ -15,7 +15,8 @@ public class PhaseData
     public bool DrawEnd { get; internal set; } = true;
     public bool DrawArea { get; internal set; } = true;
     public bool DrawLabel { get; internal set; } = true;
-    public bool CanBeSubPhase { get; internal set; } = true;
+    public IReadOnlyCollection<PhaseData> CanBeSubPhaseOf => _CanBeSubPhaseOf;
+    internal HashSet<PhaseData> _CanBeSubPhaseOf { get; } = [];
 
     public bool BreakbarPhase { get; internal set; } = false;
 

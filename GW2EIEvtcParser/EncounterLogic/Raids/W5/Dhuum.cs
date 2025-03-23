@@ -142,18 +142,12 @@ internal class Dhuum : HallOfChains
             // ritual started
             if (firstDamageable != null)
             {
-                phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum")
-                {
-                    CanBeSubPhase = false
-                });
+                phases.Add(new PhaseData(end, firstDamageable.Time, "Shielded Dhuum"));
                 phases.Add(new PhaseData(firstDamageable.Time, fightDuration, "Ritual"));
             }
             else
             {
-                phases.Add(new PhaseData(end, fightDuration, "Shielded Dhuum")
-                {
-                    CanBeSubPhase = false
-                });
+                phases.Add(new PhaseData(end, fightDuration, "Shielded Dhuum"));
             }
         }
     }
@@ -179,10 +173,7 @@ internal class Dhuum : HallOfChains
             long soulsplitEnd = Math.Min(cataCycle.EndTime, mainEnd);
             ++i;
             phases.Add(new PhaseData(start, end, "Pre-Soulsplit " + i));
-            phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i)
-            {
-                CanBeSubPhase = false
-            });
+            phases.Add(new PhaseData(end, soulsplitEnd, "Soulsplit " + i));
             start = cataCycle.EndTime;
         }
         phases.Add(new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe"));
@@ -215,7 +206,7 @@ internal class Dhuum : HallOfChains
             {
                 long end = invulDhuum.Time;
                 phases.Add(new PhaseData(0, end, "Pre Event"));
-                phases.Add(new PhaseData(end, fightDuration, "Main Fight") { CanBeSubPhase = false });
+                phases.Add(new PhaseData(end, fightDuration, "Main Fight"));
                 ComputeFightPhases(phases, castLogs, fightDuration, end);
             }
         }
@@ -226,7 +217,6 @@ internal class Dhuum : HallOfChains
         PhaseData? dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
         if (mainFight != null)
         {
-            mainFight.CanBeSubPhase = dhuumFight == null;
             // from pre event end to 10% or fight end if 10% not achieved
             phases.AddRange(GetInBetweenSoulSplits(log, dhuum, mainFight.Start, dhuumFight != null ? dhuumFight.End : mainFight.End, hasRitual));
         }
@@ -243,10 +233,7 @@ internal class Dhuum : HallOfChains
         var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer));
         foreach (PhaseData phase in phases)
         {
-            if (phase.CanBeSubPhase)
-            {
-                phase.AddTargets(enforcers, PhaseData.TargetPriority.NonBlocking);
-            }
+            phase.AddTargets(enforcers, PhaseData.TargetPriority.NonBlocking);
         }
         return phases;
     }

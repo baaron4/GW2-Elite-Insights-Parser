@@ -116,11 +116,7 @@ internal class Escort : StrongholdOfTheFaithful
         var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
         if (mcLeodWargs.Any())
         {
-            var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd)
-            {
-                Name = "McLeod Wargs",
-                CanBeSubPhase = false,
-            };
+            var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "McLeod Wargs");
             phase.AddTargets(mcLeodWargs);
             phase.OverrideTimes(log);
             phases.Add(phase);
