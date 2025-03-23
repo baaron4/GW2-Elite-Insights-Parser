@@ -93,6 +93,7 @@ internal class MAMA : Nightmare
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase._CanBeSubPhaseOf.Add(phases[0]);
             if (i % 2 == 0)
             {
                 AddTargetsToPhaseAndFit(phase, knightIds, log);

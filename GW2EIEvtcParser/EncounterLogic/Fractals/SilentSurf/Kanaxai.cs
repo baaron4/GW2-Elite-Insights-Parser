@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -174,6 +175,7 @@ internal class Kanaxai : SilentSurf
         for (int i = 0; i < encounterPhases.Count; i++)
         {
             PhaseData curPhase = encounterPhases[i];
+            curPhase._CanBeSubPhaseOf.Add(phases[0]);
             if (worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
             {
                 var baseName = "World Cleaver ";

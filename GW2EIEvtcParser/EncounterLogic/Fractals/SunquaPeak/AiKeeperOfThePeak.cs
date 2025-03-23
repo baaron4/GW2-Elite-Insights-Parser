@@ -294,11 +294,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
             BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
             long eleStart = Math.Max(elementalAi.FirstAware, log.FightData.FightStart);
             long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+            var elePhase = phases[0];
             if (_hasDarkMode)
             {
-                var elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
+                elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
                 elePhase.AddTarget(elementalAi);
                 phases.Add(elePhase);
+                elePhase._CanBeSubPhaseOf.Add(phases[0]);
             }
             if (requirePhases)
             {
@@ -309,6 +311,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 {
                     PhaseData phase = elementalPhases[i];
                     phase.Name = eleNames[i];
+                    phase._CanBeSubPhaseOf.Add(elePhase);
                     phase.AddTarget(elementalAi);
                     if (i > 0)
                     {
@@ -336,11 +339,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
             BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
             long darkStart = Math.Max(darkAi.FirstAware, log.FightData.FightStart);
             long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+            var darkPhase = phases[0];
             if (_hasElementalMode)
             {
-                var darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
+                darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
                 darkPhase.AddTarget(darkAi);
                 phases.Add(darkPhase);
+                darkPhase._CanBeSubPhaseOf.Add(phases[0]);
             }
             if (requirePhases)
             {
@@ -351,6 +356,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 {
                     var fearPhase = new PhaseData(darkStart, fearToSorrow.Time, "Fear");
                     fearPhase.AddTarget(darkAi);
+                    fearPhase._CanBeSubPhaseOf.Add(darkPhase);
                     phases.Add(fearPhase);
                     long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
                     CastEvent? sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
@@ -358,15 +364,18 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, sorrowToGuilt.Time, "Sorrow");
                         sorrowPhase.AddTarget(darkAi);
+                        sorrowPhase._CanBeSubPhaseOf.Add(darkPhase);
                         phases.Add(sorrowPhase);
                         var guiltPhase = new PhaseData(sorrowToGuilt.Time, darkEnd, "Guilt");
                         guiltPhase.AddTarget(darkAi);
+                        guiltPhase._CanBeSubPhaseOf.Add(darkPhase);
                         phases.Add(guiltPhase);
                     }
                     else
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, darkEnd, "Sorrow");
                         sorrowPhase.AddTarget(darkAi);
+                        sorrowPhase._CanBeSubPhaseOf.Add(darkPhase);
                         phases.Add(sorrowPhase);
                     }
                 }

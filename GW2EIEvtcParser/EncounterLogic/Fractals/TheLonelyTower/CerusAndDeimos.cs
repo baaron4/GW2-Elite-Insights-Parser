@@ -115,6 +115,10 @@ internal class CerusAndDeimos : LonelyTower
         }
         phases.Add(GetBossPhase(log, cerus, "Cerus"));
         phases.Add(GetBossPhase(log, deimos, "Deimos"));
+        for (var i = 1; i < phases.Count; i++)
+        {
+            phases[i]._CanBeSubPhaseOf.Add(phases[0]);
+        }
         return phases;
     }
 
