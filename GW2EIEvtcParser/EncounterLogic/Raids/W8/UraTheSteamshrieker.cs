@@ -231,7 +231,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
         var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
         // 100-70
-        var propelPhase = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "Propel");
+        var propelPhase = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
         propelPhase.AddTarget(ura);
         phases.Add(propelPhase);
         // 70-40
@@ -246,14 +246,10 @@ internal class UraTheSteamshrieker : MountBalrior
                 var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
                 after40.AddTarget(ura);
                 phases.Add(after40);
-                var noPropelPhase = new PhaseData(after70.Start, after40.End, "No Propel");
+                var noPropelPhase = new PhaseData(after70.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
                 noPropelPhase.AddTarget(ura);
                 phases.Add(noPropelPhase);
             } 
-            else
-            {
-                after70.Name = "No Propel";
-            }
         }
         // Healed CM
         if (hp1 != null)
