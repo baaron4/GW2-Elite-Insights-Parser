@@ -138,7 +138,12 @@ internal class Golem : FightLogic
                     phases.Add(phase);
                 }
             }
-            phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
+            var subPhases = GetPhasesByHealthPercent(log, mainTarget, thresholds);
+            foreach (var subPhase in subPhases)
+            {
+                subPhase._CanBeSubPhaseOf.UnionWith(phases);
+            }
+            phases.AddRange(subPhases);
         }
         AgentItem? pov = log.LogData.PoV;
         if (pov != null)
