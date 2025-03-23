@@ -16,8 +16,7 @@ internal class SuperKodanBrothers : Bjora
 {
     public SuperKodanBrothers(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
+        MechanicList.Add(new MechanicGroup([      
             new PlayerDstHitMechanic(Groundshaker, "Groundshaker", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Grey), "Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit", 150),
             new PlayerDstHitMechanic(Groundpiercer, "Groundpiercer", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.White), "Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown", 150),
             new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
@@ -25,7 +24,7 @@ internal class SuperKodanBrothers : Bjora
             new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Enrage", "Enrage", "Enrage", 1 << 16),
             new EnemyCastStartMechanic(DeadlySynergy, "Deadly Synergy", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Deadly Synergy", "Cast  Deadly Synergy", "Deadly Synergy", 10000),
             new EnemyCastStartMechanic(KodanTeleport, "Teleport", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), "Teleport", "Cast Teleport", "Teleport", 150),
-        }
+        ])
         );
         Extension = "supkodbros";
         Icon = EncounterIconKodanBrothers;

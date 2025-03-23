@@ -16,9 +16,9 @@ internal class Eparch : LonelyTower
 {
     public Eparch(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
-        });
+        MechanicList.AddRange(
+        [
+        ]);
         Extension = "eparch";
         Icon = EncounterIconEparch;
         EncounterCategoryInformation.InSubCategoryOrder = 1;

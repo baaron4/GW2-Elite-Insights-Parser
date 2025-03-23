@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -8,7 +9,7 @@ internal abstract class CastMechanic : IDBasedMechanic<CastEvent>
 
     protected abstract long GetTime(CastEvent evt);
 
-    protected abstract SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs);
+    protected abstract bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor);
 
     public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -24,13 +25,9 @@ internal abstract class CastMechanic : IDBasedMechanic<CastEvent>
         {
             foreach (CastEvent c in log.CombatData.GetAnimatedCastData(mechanicID))
             {
-                if (Keep(c, log))
+                if (TryGetActor(log, c.Caster, regroupedMobs, out var amp) && Keep(c, log))
                 {
-                    SingleActor? amp = GetActor(log, c.Caster, regroupedMobs);
-                    if (amp != null)
-                    {
-                        InsertMechanic(log, mechanicLogs, GetTime(c), amp);
-                    }
+                    InsertMechanic(log, mechanicLogs, GetTime(c), amp);
                 }
             }
         }

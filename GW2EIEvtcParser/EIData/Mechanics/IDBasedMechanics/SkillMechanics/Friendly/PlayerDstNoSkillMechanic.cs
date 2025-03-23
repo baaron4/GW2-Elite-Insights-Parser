@@ -27,7 +27,7 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
             long lastTime = int.MinValue;
             foreach (HealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
             {
-                if (!Keep(ahde, log))
+                if (!TryGetActor(log, GetCreditedAgentItem(ahde), regroupedMobs, out var amp) || !Keep(ahde, log))
                 {
                     continue;
                 }
@@ -36,17 +36,13 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 {
                     time = lastTime;
                 }
-                SingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
-                if (amp != null)
+                if (regroupedSkillDst.TryGetValue(time, out var actorSet))
                 {
-                    if (regroupedSkillDst.TryGetValue(time, out var actorSet))
-                    {
-                        actorSet.Add(amp);
-                    }
-                    else
-                    {
-                        regroupedSkillDst[time] = [amp];
-                    }
+                    actorSet.Add(amp);
+                }
+                else
+                {
+                    regroupedSkillDst[time] = [amp];
                 }
 
                 lastTime = ahde.Time;

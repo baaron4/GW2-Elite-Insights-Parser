@@ -14,30 +14,39 @@ internal class Cairn : BastionOfThePenitent
 {
     public Cairn(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
-        // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
-        new PlayerDstHitMechanic(CairnDisplacement, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
-        new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-        new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-        new PlayerDstHitMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals", "KB Crystal",1000),
-        new PlayerSrcSkillMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal",1000).WithMinions(true).UsingChecker((evt, log) => evt.ToFriendly),
-        new PlayerDstBuffApplyMechanic(SharedAgony, "Shared Agony", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
-        new PlayerDstBuffApplyMechanic(SharedAgony25, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
-        new PlayerDstBuffApplyMechanic(SharedAgony50, "Shared Agony", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
-        new PlayerDstBuffApplyMechanic(SharedAgony75, "Shared Agony", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
-        // new Mechanic(SharedAgony2, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "Agony Damage",0), from old raidheroes logs? Small damage packets. Is also named "Shared Agony" in the evtc. Doesn't seem to occur anymore.
-        // new Mechanic(SharedAgony3, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "SA.dmg","Shared Agony Damage dealt", "Shared Agony dmg",0), //could flip. HP% attack, thus only shows on down/absorb hits.
-        new PlayerDstHitMechanic(EnergySurge, "Energy Surge", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap","Jump between green fields", "Leap",100),
-        new PlayerDstHitMechanic(OrbitalSweep, "Orbital Sweep", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
-        new PlayerDstHitMechanic(GravityWave, "Gravity Wave", new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
-        // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
-        // Greens after Energy Surge/Orbital Sweep: 38302
-        //100% - 75%: 37611
-        // 75% - 50%: 38074
-        // 50% - 25%: 37673
-        // 25% -  0%: 37642
-        });
+        MechanicList.Add(new MechanicGroup([
+        
+            new PlayerDstHitMechanic(CairnDisplacement, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
+            new MechanicGroup([
+                new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0)
+                    .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0)
+                    .UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            ]),
+            new MechanicGroup([
+                new PlayerDstHitMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals", "KB Crystal",1000),
+                new PlayerSrcSkillMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal",1000)
+                    .WithMinions(true)
+                    .UsingChecker((evt, log) => evt.ToFriendly),
+            ]),
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(SharedAgony, "Shared Agony", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
+                new PlayerDstBuffApplyMechanic(SharedAgony25, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
+                new PlayerDstBuffApplyMechanic(SharedAgony50, "Shared Agony", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
+                new PlayerDstBuffApplyMechanic(SharedAgony75, "Shared Agony", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75","Shared Agony Damage (75% Player's HP)", "SA dmg 75%",0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
+            ]),
+            // new Mechanic(SharedAgony2, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "Agony Damage",0), from old raidheroes logs? Small damage packets. Is also named "Shared Agony" in the evtc. Doesn't seem to occur anymore.
+            // new Mechanic(SharedAgony3, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "SA.dmg","Shared Agony Damage dealt", "Shared Agony dmg",0), //could flip. HP% attack, thus only shows on down/absorb hits.
+            new PlayerDstHitMechanic(EnergySurge, "Energy Surge", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap","Jump between green fields", "Leap",100),
+            new PlayerDstHitMechanic(OrbitalSweep, "Orbital Sweep", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
+            new PlayerDstHitMechanic(GravityWave, "Gravity Wave", new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
+            // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
+            // Greens after Energy Surge/Orbital Sweep: 38302
+            //100% - 75%: 37611
+            // 75% - 50%: 38074
+            // 50% - 25%: 37673
+            // 25% -  0%: 37642
+        ]));
         Extension = "cairn";
         Icon = EncounterIconCairn;
         EncounterCategoryInformation.InSubCategoryOrder = 0;

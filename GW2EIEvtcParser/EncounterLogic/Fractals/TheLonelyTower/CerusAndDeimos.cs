@@ -16,9 +16,9 @@ internal class CerusAndDeimos : LonelyTower
 {
     public CerusAndDeimos(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
-        });
+        MechanicList.AddRange(
+        [
+        ]);
         Extension = "cerdei";
         Icon = EncounterIconCerusAndDeimos;
         EncounterCategoryInformation.InSubCategoryOrder = 0;

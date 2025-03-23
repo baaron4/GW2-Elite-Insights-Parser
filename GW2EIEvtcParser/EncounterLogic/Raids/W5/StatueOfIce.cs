@@ -13,15 +13,19 @@ internal class StatueOfIce : HallOfChains
 {
     public StatueOfIce(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(
+        MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstHitMechanic(KingsWrathConeAoE, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
-            new PlayerDstHitMechanic(KingsWrathConeShards, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Cone Shards", "Hit by King's Wrath (Frontal Cone Shards)", "King's Wrath Cone Shards Hit", 0),
+            new MechanicGroup([
+                new PlayerDstHitMechanic(KingsWrathConeAoE, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
+                new PlayerDstHitMechanic(KingsWrathConeShards, "King's Wrath", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Cone Shards", "Hit by King's Wrath (Frontal Cone Shards)", "King's Wrath Cone Shards Hit", 0),
+            ]),
             new PlayerDstHitMechanic(NumbingBreach, "Numbing Breach", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Cracks", "Stood on Numbing Breach (Ice Cracks in the Ground)", "Cracks", 0),
-            new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Frozen Wind (Stood in Green)", "Green Stack", 0),
-            new PlayerDstBuffApplyMechanic(Glaciate, "Glaciate", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Glaciate", "Glaciated (Frozen by 4th Stack of Frozen Wind)", "Glaciate", 0),
-            new EnemySrcEffectMechanic(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, "Ice Breaker", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "Ice Breaker", "Hailstorm Explosion (Missed Green)", "Ice Breaker (Green Missed)", 0),
-        ]
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(FrozenWind, "Frozen Wind", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Frozen Wind (Stood in Green)", "Green Stack", 0),
+                new PlayerDstBuffApplyMechanic(Glaciate, "Glaciate", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Glaciate", "Glaciated (Frozen by 4th Stack of Frozen Wind)", "Glaciate", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, "Ice Breaker", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "Ice Breaker", "Hailstorm Explosion (Missed Green)", "Ice Breaker (Green Missed)", 0),
+            ]),
+        ])
         );
         Extension = "brokenking";
         Icon = EncounterIconStatueOfIce;
