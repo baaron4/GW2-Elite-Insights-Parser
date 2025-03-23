@@ -101,6 +101,7 @@ internal class Sabetha : SpiritVale
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase._CanBeSubPhaseOf.Add(phases[0]);
             if (i % 2 == 0)
             {
                 int phaseID = i / 2;

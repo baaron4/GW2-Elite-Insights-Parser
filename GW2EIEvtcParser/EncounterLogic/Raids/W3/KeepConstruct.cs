@@ -104,28 +104,31 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         }
         // Main phases 35025
         var kcPhaseInvuls = GetFilteredList(log.CombatData, XerasBoon, mainTarget, true, true);
+        var mainPhases = new List<PhaseData>();
         foreach (BuffEvent c in kcPhaseInvuls)
         {
             if (c is BuffApplyEvent)
             {
                 end = c.Time;
-                phases.Add(new PhaseData(start, end));
+                mainPhases.Add(new PhaseData(start, end));
             }
             else
             {
                 start = c.Time;
             }
         }
-        if (fightEnd - start > PhaseTimeLimit && start >= phases.Last().End)
+        if (fightEnd - start > PhaseTimeLimit && start >= mainPhases.Last().End)
         {
-            phases.Add(new PhaseData(start, fightEnd));
+            mainPhases.Add(new PhaseData(start, fightEnd));
             start = fightEnd;
         }
-        for (int i = 1; i < phases.Count; i++)
+        for (int i = 0; i < mainPhases.Count; i++)
         {
-            phases[i].Name = "Phase " + i;
-            phases[i].AddTarget(mainTarget);
+            mainPhases[i].Name = "Phase " + (i + 1);
+            mainPhases[i]._CanBeSubPhaseOf.Add(phases[0]);
+            mainPhases[i].AddTarget(mainTarget);
         }
+        phases.AddRange(mainPhases);
         // add burn phases
         int offset = phases.Count;
         IReadOnlyList<BuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
@@ -155,6 +158,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         {
             var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
             phase.AddTarget(mainTarget);
+            phase._CanBeSubPhaseOf.UnionWith(mainPhases);
             phases.Add(phase);
         }
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
@@ -174,6 +178,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     if (end - start > 1000)
                     {
                         var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
+                        phase._CanBeSubPhaseOf.UnionWith(mainPhases);
                         phase.AddTarget(mainTarget);
                         preBurnPhase.Add(phase);
                     }
@@ -200,6 +205,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
                     {
                         var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
+                        leftOverPhase._CanBeSubPhaseOf.UnionWith(mainPhases);
                         leftOverPhase.AddTarget(mainTarget);
                         leftOverPhases.Add(leftOverPhase);
                     }

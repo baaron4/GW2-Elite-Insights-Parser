@@ -109,10 +109,16 @@ internal class Escort : StrongholdOfTheFaithful
                 Name = "Escort",
             };
             preEventPhase.AddTargets(preEventWargs);
+            preEventPhase._CanBeSubPhaseOf.Add(phases[0]);
             preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget));
             phases.Add(preEventPhase);
         }
-        phases.AddRange(GetMcLeodPhases(mcLeod, log));
+        var mcLeodPhases = GetMcLeodPhases(mcLeod, log);
+        foreach (var mcLeodPhase in mcLeodPhases)
+        {
+            mcLeodPhase._CanBeSubPhaseOf.Add(phases[0]);
+        }
+        phases.AddRange(mcLeodPhases);
         var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
         if (mcLeodWargs.Any())
         {

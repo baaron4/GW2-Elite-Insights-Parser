@@ -197,21 +197,15 @@ internal class BanditTrio : SalvationPass
                 end = phaseEnd.Time;
             }
             var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
+            phase._CanBeSubPhaseOf.Add(phases[0]);
             phase.AddTarget(target);
-            switch (target.ID)
+            phase.Name = target.ID switch
             {
-                case (int)TargetID.Narella:
-                    phase.Name = "Narella";
-                    break;
-                case (int)TargetID.Berg:
-                    phase.Name = "Berg";
-                    break;
-                case (int)TargetID.Zane:
-                    phase.Name = "Zane";
-                    break;
-                default:
-                    throw new MissingKeyActorsException("Unknown target in Bandit Trio");
-            }
+                (int)TargetID.Narella => "Narella",
+                (int)TargetID.Berg => "Berg",
+                (int)TargetID.Zane => "Zane",
+                _ => throw new MissingKeyActorsException("Unknown target in Bandit Trio"),
+            };
             phases.Add(phase);
         }
     }
