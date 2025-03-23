@@ -24,6 +24,7 @@ internal class DecimaTheStormsinger : MountBalrior
         MechanicList.AddRange(new List<Mechanic>()
         {
             new PlayerDstHitMechanic([ChorusOfThunderDamage, ChorusOfThunderCM], "Chorus of Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", 0),
+            new PlayerDstHitMechanic([DiscordantThunderCM], "Discordant Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", 0),
             new PlayerDstEffectMechanic(EffectGUIDs.DecimaChorusOfThunderAoE, "Chorus of Thunder", new MechanicPlotlySetting(Symbols.Circle, Colors.LightGrey), "ChorThun.T", "Targeted by Chorus of Thunder (Spreads)", "Chorus of Thunder Target", 0),
 
             new PlayerDstHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], "Seismic Crash", new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0),
@@ -69,6 +70,51 @@ internal class DecimaTheStormsinger : MountBalrior
             new PlayerDstHitMechanic(Earthfall, "Earthfall", new MechanicPlotlySetting(Symbols.YUp, Colors.LightPink), "Earthfall.H", "Hit by Earthfall (Transcendent Boudlers Jump)", "Earthfall Hit", 0),
             new PlayerDstHitMechanic(Sparkwave, "Sparkwave", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightOrange), "Sparkwave.H", "Hit by Sparkwave (Transcendent Boulders Cone)", "Sparkwave Hit", 0),
             new PlayerDstHitMechanic(ChargedGround, "Charged Ground", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "CharGrnd.H", "Hit by Charged Ground (Transcendent Boulders AoEs)", "Charged Ground Hit", 0),
+
+            new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM], "This Bug Can Dance", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Elibigility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
+            {
+                // If you are dead, lose the achievement
+                if (adhe.To.IsDead(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    return true;
+                }
+
+                // If you get hit by Fulgent Fence, lose the achievement
+                if (adhe.SkillId == FulgentFenceCM && adhe.HasHit)
+                {
+                    return true;
+                }
+
+                var damageTaken = log.CombatData.GetDamageTakenData(adhe.To);
+                bool hasExposed = log.CombatData.GetBuffData(ExposedPlayer).Any(x => x is BuffApplyEvent && x.To == adhe.To && Math.Abs(x.Time - adhe.Time) < ServerDelayConstant);
+
+                // If you get hit by your own Fluxlance only during the current sequence, keep the achievement
+                // If you get hit by 2 Fluxlance in the current sequence, lose the achievement
+                long[] fluxlanceIds = [FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5];
+                var fluxlanceTimes = damageTaken.Where(x => (fluxlanceIds.Contains(x.SkillId)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
+                foreach (long fluxlanceTime in fluxlanceTimes)
+                {
+                    // Fluxlance sequence lasts about 5 seconds, giving it 7 as margin
+                    if (Math.Abs(fluxlanceTime - adhe.Time) < 7000 && fluxlanceIds.Contains(adhe.SkillId) && hasExposed)
+                    {
+                        return true;
+                    }
+                }
+
+                // If you get hit by your own thunder, keep the achievement
+                // If you get hit by a thunder on another player or on a conduit, lose the achievement
+                long[] thunderIds = [ChorusOfThunderCM, DiscordantThunderCM];
+                var thunderTimes = damageTaken.Where(x => (thunderIds.Contains(x.SkillId)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
+                foreach (long thunderTime in thunderTimes)
+                {
+                    if (Math.Abs(thunderTime - adhe.Time) < ServerDelayConstant && thunderIds.Contains(adhe.SkillId) && hasExposed)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }).UsingEnable(log => log.FightData.IsCM).UsingAchievementEligibility(true),
 
             new EnemyDstBuffApplyMechanic(ChargeDecima, "Charge", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
 
@@ -454,20 +500,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Flux Nova - Breakbar
-                var fluxNovaCasts = casts.Where(x => x.SkillId == FluxNova || x.SkillId == FluxNovaCM_70 || x.SkillId == FluxNovaCM_40);
-                var fractureArmorCasts = casts.Where(x => x.SkillId == FractureArmor || x.SkillId== FractureArmorCM);
                 var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
-                foreach (CastEvent fluxNova in fluxNovaCasts)
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
                 {
-                    var fractureArmor = fractureArmorCasts.FirstOrDefault(x => x.Time > fluxNova.Time);
-                    var endCast = fractureArmor != null ? fractureArmor.Time : fluxNova.EndTime;
-                    (long start, long end) lifespanFlux = (fluxNova.Time, endCast);
-
-                    var bar = new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespanFlux, Colors.BreakbarBlue, 0.8, Colors.Black, 0.6,
-                        breakbarUpdates.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
-                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                        .UsingRotationConnector(new AngleConnector(180));
-                    replay.Decorations.Add(bar);
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
                 break;
             case (int)TrashID.GreenOrb1Player:
@@ -648,13 +685,24 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Charged Ground - AoEs from Sparkwave
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGround, out var chargedGround))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGroundBorder, out var chargedGround))
                 {
                     foreach (var effect in chargedGround)
                     {
-                        (long start, long end) lifespanChargedGround = effect.ComputeLifespan(log, 5500);
+                        (long start, long end) lifespanChargedGround = (effect.Time, effect.Time + effect.Duration);
                         var circle = new CircleDecoration(400, lifespanChargedGround, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
+                    }
+                }
+
+                // Charged Ground - AoEs from Sparkwave - Max Charge
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaChargedGroundMax, out var chargedGroundMax))
+                {
+                    foreach (var effect in chargedGroundMax)
+                    {
+                        (long start, long end) lifespanChargedGround = effect.ComputeLifespan(log, 600000);
+                        var circle = new CircleDecoration(400, lifespanChargedGround, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
                     }
                 }
                 break;
@@ -763,5 +811,18 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         return isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
+    }
+
+    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    {
+        base.SetInstanceBuffs(log);
+
+        if (log.FightData.Success && isCM)
+        {
+            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.Value > 0))
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityCalmBeforeTheStorm], 1));
+            }
+        }
     }
 }

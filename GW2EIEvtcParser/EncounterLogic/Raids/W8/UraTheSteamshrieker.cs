@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -26,7 +27,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerDstHitMechanic(CreateTitanspawnGeyser, "Create Titanspawn Geyser", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
                 .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
 
-            new PlayerDstHitMechanic([ToxicGeyser1, ToxicGeyser2], "Toxic Geyser", new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
+            new PlayerDstHitMechanic([ToxicGeyser1, ToxicGeyser2, ToxicGeyserCM], "Toxic Geyser", new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
 
             new PlayerDstEffectMechanic(EffectGUIDs.UraSulfuricGeyserTarget, "Sulfuric Geyser", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightOrange), "Dispel.G", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
@@ -43,20 +44,27 @@ internal class UraTheSteamshrieker : MountBalrior
 
             new PlayerDstHitMechanic(BreakingGround, "Breaking Ground", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "BreGround.H", "Hit by Breaking Ground (8 pointed star)", "Breaking Ground Hit", 0),
 
-            new PlayerDstBuffApplyMechanic(Deterrence, "Deterrence", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Pick-up Shard", "Picked up the Bloodstone Shard", "Bloodstone Shard Pick-up", 0),
-
-            new PlayerDstBuffApplyMechanic(BloodstoneSaturation, "Bloodstone Saturation", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Dispel", "Used Dispel (SAK)", "Used Dispel", 0),
-
             new PlayerDstBuffApplyMechanic(PressureBlastTargetBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightBlue), "Pres.Blast.T", "Targeted by Pressure Blast (Bubbles)", "Pressure Blast Target", 0),
             new PlayerDstBuffApplyMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Pres.Blast.Up", "Lifted in a bubble by Pressure Blast", "Pressure Blast Bubble", 0),
+
+            new PlayerDstBuffApplyMechanic(Deterrence, "Deterrence", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Pick-up Shard", "Picked up the Bloodstone Shard", "Bloodstone Shard Pick-up", 0),
+            new PlayerDstBuffApplyMechanic(BloodstoneSaturation, "Bloodstone Saturation", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Dispel", "Used Dispel (SAK)", "Used Dispel", 0),
+
+            new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleCross, Colors.White), "Dispel.Toxc", "Dispelled Toxic Geyser (Removed Hardened Crust)", "Dispelled Toxic Geyser", 0)
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.ToxicGeyser)),
+            new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.SulfuricGeyser)),
+            new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.TitanspawnGeyser)),
             new PlayerSrcBuffRemoveFromMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Dispel.P", "Dispelled Player (Removed Pressure Blast)", "Dispelled Player", 0)
                 .UsingChecker((brae, log) => brae.To.IsPlayer),
 
-            new EnemySrcSkillMechanic(Return, "Return", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 0),
+            new EnemySrcSkillMechanic(Return, "Return", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
 
             new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
 
             new EnemyDstBuffApplyMechanic(RisingPressure, "Rising Pressure", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "Rising Pressure", "Applied Rising Pressure", "Rising Pressure", 0),
+            new EnemyDstBuffApplyMechanic(TitanicResistance, "Titanic Resistance", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "Titanic Resistance", "Applied Titanic Resistance", "Titanic Resistance", 0),
         });
         Extension = "ura";
         Icon = EncounterIconUra;
@@ -84,7 +92,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return
+        return 
         [
             TrashID.SulfuricGeyser,
             TrashID.TitanspawnGeyser,
@@ -204,6 +212,57 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found"); ;
+        phases[0].AddTarget(ura);
+        if (!requirePhases)
+        {
+            return phases;
+        }
+
+        bool isCm = log.FightData.IsCM;
+        long start = log.FightData.FightStart;
+        long end = log.FightData.FightEnd;
+        var hpUpdates = ura.GetHealthUpdates(log);
+
+        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
+        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
+        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
+
+        // 100-70
+        var before70 = hp70.Value > 0 ? new PhaseData(start, hp70.Start, "100-70%") : new PhaseData(log.FightData.FightStart, end, "100-70%");
+        before70.AddTarget(ura);
+        phases.Add(before70);
+
+        // 70-40
+        if (hp70.Value > 0)
+        {
+            var after70 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70-40%");
+            after70.AddTarget(ura);
+            phases.Add(after70);
+        }
+
+        // 40 - 1 CM / 40 - 0 NM
+        if (hp40.Value > 0)
+        {
+            var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40-1%") : new PhaseData(hp40.Start, end, "40-0%");
+            after40.AddTarget(ura);
+            phases.Add(after40);
+        }
+
+        // Healed CM
+        if (hp1 != null)
+        {
+            var after1 = new PhaseData(hp1.Time, end, "Healed");
+            after1.AddTarget(ura);
+            phases.Add(after1);
+        }
+
+        return phases;
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         switch (target.ID)
@@ -286,13 +345,70 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 break;
             case (int)TrashID.ToxicGeyser:
-                replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                if (log.FightData.IsCM)
+                {
+                    // Damage field ring
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraToxicGeyserGrowing, out var effects))
+                    {
+                        uint initialRadius = 480;
+                        uint radiusIncrease = 12; // Aprox
+                        uint counter = 0;
+
+                        // Find the first effect appearing after the breakbar has started to recover.
+                        var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                        List<long> resetTimes = [];
+                        foreach (var segment in breakbarRecoverings)
+                        {
+                            var effect = effects.FirstOrDefault(x => x.Time > segment.Start);
+                            if (effect != null)
+                            {
+                                resetTimes.Add(effect.Time);
+                            }
+                        }
+
+                        foreach (var effect in effects)
+                        {
+                            // If the breakbar has been broken, reset the effect radius.
+                            if (resetTimes.Contains(effect.Time))
+                            {
+                                counter = 0;
+                            }
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                            uint radius = initialRadius + (radiusIncrease * counter);
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                            counter++;
+                        }
+                    }
+
+                    // Hardened Crust - Overhead
+                    replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+
+                    // Breakbar
+                    var toxicPercentUpdates = target.GetBreakbarPercentUpdates(log);
+                    var toxicStates = target.GetBreakbarStatus(log);
+                    replay.Decorations.AddBreakbar(target, toxicPercentUpdates, toxicStates);
+                }
+                else
+                {
+                    // Damage field ring
+                    replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                }
                 break;
             case (int)TrashID.SulfuricGeyser:
+                // Hardened Crust - Overhead
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+
+                // Damage field ring
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
             case (int)TrashID.TitanspawnGeyser:
+                // Hardened Crust - Overhead
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
+                // Breakbar
+                var titanspawnPercentUpdates = target.GetBreakbarPercentUpdates(log);
+                var titanspawnStates = target.GetBreakbarStatus(log);
+                replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TrashID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star
@@ -390,5 +506,28 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         target.OverrideName("Ura, the Streamshrieker");
         return FightData.EncounterMode.Normal;
+    }
+
+    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    {
+        base.SetInstanceBuffs(log);
+
+        if (log.FightData.Success && log.FightData.IsCM)
+        {
+            var toxicGeysers = log.AgentData.GetNPCsByID(TrashID.ToxicGeyser);
+            bool eligible = true;
+            foreach (var geyser in toxicGeysers)
+            {
+                if (geyser.LastAware - geyser.FirstAware > 30000)
+                {
+                    eligible = false;
+                    break;
+                }
+            }
+            if (eligible)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityNoGeysersNoProblems], 1));
+            }
+        }
     }
 }

@@ -330,5 +330,7 @@ public static class DamageModifierIDs
     public const int Mod_AllForOne = 317;
     public const int Mod_RelicOfFire = 318;
     public const int Mod_RelicOfTheEagle = 319;
+    public const int Mod_UnstrippableProtection = 320;
+    public const int Mod_UnstrippableResolution = 321;
 }
 
