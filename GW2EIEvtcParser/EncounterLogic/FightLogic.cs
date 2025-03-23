@@ -171,6 +171,11 @@ public abstract class FightLogic
         return new[] { GenericTriggerID };
     }
 
+    protected virtual HashSet<int> ForbidBreakbarPhasesFor()
+    {
+        return [];
+    }
+
     protected virtual Dictionary<int, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
@@ -332,8 +337,13 @@ public abstract class FightLogic
 
         //TODO(Rennorb) @perf: find average complexity
         var breakbarPhases = new List<PhaseData>(Targets.Count);
+        var noBreakbarSpecies = ForbidBreakbarPhasesFor();
         foreach (SingleActor target in Targets)
         {
+            if (noBreakbarSpecies.Contains(target.ID))
+            {
+                continue;
+            }
             int i = 0;
             var (_, breakbarActives, _, _) = target.GetBreakbarStatus(log);
             var (_, _, _, actives) = target.GetStatus(log);

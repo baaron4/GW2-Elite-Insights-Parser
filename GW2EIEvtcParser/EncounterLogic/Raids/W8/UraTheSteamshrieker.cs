@@ -90,6 +90,15 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
+    protected override HashSet<int> ForbidBreakbarPhasesFor()
+    {
+        return
+        [
+            (int)TrashID.ChampionFumaroller,
+            (int)TrashID.EliteFumaroller,
+        ];
+    }
+
     protected override List<TrashID> GetTrashMobsIDs()
     {
         return 
