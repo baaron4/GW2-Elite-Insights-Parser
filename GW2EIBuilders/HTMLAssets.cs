@@ -117,6 +117,7 @@ public class HTMLAssets
             Properties.Resources.tmplOffensiveTable,
             Properties.Resources.tmplBuffTab,
             Properties.Resources.tmplStatTables,
+            Properties.Resources.tmplMechanicsStats,
             Properties.Resources.tmplMechanicsTable,
             Properties.Resources.tmplPhase,
             Properties.Resources.tmplPlayers,

@@ -1,0 +1,25 @@
+<template>
+    <div>          
+        <keep-alive>
+            <mechanics-table-component v-for="(phase, id) in phases" :key="'mechanics' + id" v-if="id === phaseindex"
+                :phaseindex="id" :playerindex="playerindex">
+            </mechanics-table-component>      
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("mechanics-stats-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+            };
+        },
+        computed: {       
+            phases: function() {
+                return logData.phases;
+            }
+        }
+    });
+</script>

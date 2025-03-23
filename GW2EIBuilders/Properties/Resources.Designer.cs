@@ -340,17 +340,14 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to /*jshint esversion: 6 */
         ///&quot;use strict&quot;;
         ///function compileTemplates() {
-        ///    const plotlyConfig = {
-        ///        modeBarButtonsToRemove: [&apos;select2d&apos;, &apos;lasso2d&apos;],
-        ///        showEditInChartStudio: true,
-        ///        plotlyServerURL: &quot;https://chart-studio.plotly.com&quot;
-        ///    };
         ///    Vue.component(&quot;custom-numberform-component&quot;, {
         ///        props: [&quot;minValue&quot;, &quot;maxValue&quot;, &quot;id&quot;, &quot;placeholderValue&quot;],
         ///        template: `
         ///        &lt;div&gt;
         ///            &lt;input class=&quot;form-control&quot; type=&quot;number&quot; :id=&quot;id&quot;
-        ///                @onkeypress= [rest of string was truncated]&quot;;.
+        ///                @onkeypress=&quot;return isNumber(event)&quot; onpaste=&quot;return false;&quot; step=&quot;2&quot; 
+        ///                    :value=&quot;placeholderValue&quot; data-bind=&quot;value:replyNumber, fireChange: true&quot;
+        ///                    :min=&quot;minValue&quot; : [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string main_js {
             get {
@@ -702,8 +699,7 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot; style=&quot;max-width: 700px;&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in reactivePhases&quot;
         ///                    v-show=&quot;!getPhaseData(id).breakbarPhase&quot;
-        ///                    :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot;  [rest of string was truncated]&quot;;.
+        ///                    :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds &lt;br /&gt; Start: &apos; + getPhaseData(id).start + &apos; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -1392,20 +1388,11 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;div :id=&quot;id&quot; class=&quot;d-flex flex-row justify-content-center&quot;&gt;&lt;/div&gt;
-        ///    &lt;/div&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    const plotlyConfig = {
-        ///        modeBarButtonsToRemove: [&apos;select2d&apos;, &apos;lasso2d&apos;],
-        ///        showEditInChartStudio: true,
-        ///        plotlyServerURL: &quot;https://chart-studio.plotly.com&quot;
-        ///    };
-        ///    Vue.component(&quot;graph-component&quot;, {
-        ///        props: [&apos;id&apos;, &apos;layout&apos;, &apos;data&apos;],
-        ///        template: `${template}`,
-        ///        activated: function () {
-        ///            var div = document.qu [rest of string was truncated]&quot;;.
+        ///        &lt;div v-if=&quot;!removerangecontrol&quot; style=&quot;position:absolute; margin-top: -60px;margin-left: 100px; z-index: 1;&quot;&gt;
+        ///            &lt;div class=&quot;d-flex flex-row align-items-center&quot;&gt;
+        ///                &lt;custom-numberform-component class=&quot;mr-1&quot; style=&quot;width: 100px;&quot; :minValue=&quot;-1e6&quot; :maxValue=&quot;1e6&quot; :id=&quot;id+&apos;xMin&apos;&quot;
+        ///                    :placeholderValue=&quot;0&quot;&gt;&lt;/custom-numberform-component&gt;
+        ///                &lt;custom-num [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGraph {
             get {
@@ -1650,6 +1637,30 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;          
+        ///        &lt;keep-alive&gt;
+        ///            &lt;mechanics-table-component v-for=&quot;(phase, id) in phases&quot; :key=&quot;&apos;mechanics&apos; + id&quot; v-if=&quot;id === phaseindex&quot;
+        ///                :phaseindex=&quot;id&quot; :playerindex=&quot;playerindex&quot;&gt;
+        ///            &lt;/mechanics-table-component&gt;      
+        ///        &lt;/keep-alive&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;mechanics-stats-component&quot;, {
+        ///        props: [&quot;phaseindex&quot;, &quot;playerindex&quot;],
+        ///        template: `${template}`,
+        ///        data: function () {
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplMechanicsStats {
+            get {
+                return ResourceManager.GetString("tmplMechanicsStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;div v-if=&quot;playerColPageCount &gt; 0&quot;&gt;
         ///            &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;playerColPageCount&quot; :width=&quot;&apos;600px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;&apos;translate(500px)&apos;&quot; :pagestructure=&quot;playerColStructure&quot;&gt;&lt;/table-scroll-component&gt;
@@ -1784,11 +1795,9 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;ul v-if=&quot;showNormalPhases&quot; class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot;&gt;
         ///            &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot; v-show=&quot;!getPhaseData(id).breakbarPhase&quot;
-        ///                :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
+        ///                :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds &lt;br /&gt; Start: &apos; + getPhaseData(id).start + &apos;&lt;br /&gt; End: &apos; + getPhaseData(id).end&quot;&gt;
         ///                &lt;a class=&quot;nav-link&quot; @click=&quot;select(phase)&quot; :class=&quot;{active: phase.active}&quot;&gt;{{getPhaseData(id).name}}&lt;/a&gt;
-        ///            &lt;/li&gt;
-        ///        &lt;/ul&gt;
-        ///        &lt;div v-if=&quot;hasBreakbarPhases&quot; class=&quot;d-f [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPhase {
             get {
@@ -2120,7 +2129,7 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot; style=&quot;width: 500px;&quot;&gt;
-        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center flex-wrap&quot; style=&quot;max-width: 500px;&quot;&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center align-items-center flex-wrap&quot; style=&quot;max-width: 400px;&quot;&gt;
         ///            &lt;div v-for=&quot;target in mainTargets&quot;&gt;
         ///                &lt;img class=&quot;icon-lg mr-2 ml-2 target-cell&quot; 
         ///                    :src=&quot;getTargetData(target.id).icon&quot; 
