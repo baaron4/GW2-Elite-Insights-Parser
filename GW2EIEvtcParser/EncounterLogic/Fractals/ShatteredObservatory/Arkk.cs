@@ -135,7 +135,7 @@ internal class Arkk : ShatteredObservatory
         var phaseData = new PhaseData(Math.Max(target.FirstAware, log.FightData.FightStart), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
         AddTargetsToPhaseAndFit(phaseData, [targetID], log);
         phases.Add(phaseData);
-        phaseData._CanBeSubPhaseOf.Add(phases[0]);
+        phaseData.AddParentPhase(phases[0]);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -152,7 +152,7 @@ internal class Arkk : ShatteredObservatory
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = "Phase " + i;
-            phases[i]._CanBeSubPhaseOf.Add(phases[0]);
+            phases[i].AddParentPhase(phases[0]);
             phases[i].AddTarget(arkk);
         }
 
@@ -179,7 +179,7 @@ internal class Arkk : ShatteredObservatory
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
-            phase._CanBeSubPhaseOf.Add(phases[0]);
+            phase.AddParentPhase(phases[0]);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk);
             BuffEvent? invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);

@@ -141,7 +141,7 @@ internal class Golem : FightLogic
             var subPhases = GetPhasesByHealthPercent(log, mainTarget, thresholds);
             foreach (var subPhase in subPhases)
             {
-                subPhase._CanBeSubPhaseOf.UnionWith(phases);
+                subPhase.AddParentPhases(phases);
             }
             phases.AddRange(subPhases);
         }

@@ -109,11 +109,11 @@ internal class Xera : StrongholdOfTheFaithful
         phases[0].AddTarget(mainTarget);
         if (requirePhases)
         {
-            PhaseData phase100to0 = null;
+            PhaseData? phase100to0 = null;
             if (_xeraFirstPhaseStart > 0)
             {
                 var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
-                phasePreEvent._CanBeSubPhaseOf.Add(phases[0]);
+                phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TrashID.BloodstoneShardButton) || x.IsSpecies(TrashID.BloodstoneShardRift)));
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
                 phases.Add(phasePreEvent);
@@ -126,10 +126,10 @@ internal class Xera : StrongholdOfTheFaithful
             if (invulXera != null)
             {
                 var phase1 = new PhaseData(_xeraFirstPhaseStart, invulXera.Time, "Phase 1");
-                phase1._CanBeSubPhaseOf.Add(phases[0]);
+                phase1.AddParentPhase(phases[0]);
                 if (phase100to0 != null)
                 {
-                    phase1._CanBeSubPhaseOf.Add(phase100to0);
+                    phase1.AddParentPhase(phase100to0);
                 }
                 phase1.AddTarget(mainTarget);
                 phases.Add(phase1);
@@ -142,10 +142,10 @@ internal class Xera : StrongholdOfTheFaithful
                 if (_xeraSecondPhaseStartTime > 0)
                 {
                     var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
-                    phase2._CanBeSubPhaseOf.Add(phases[0]);
+                    phase2.AddParentPhase(phases[0]);
                     if (phase100to0 != null)
                     {
-                        phase2._CanBeSubPhaseOf.Add(phase100to0);
+                        phase2.AddParentPhase(phase100to0);
                     }
                     phase2.AddTarget(mainTarget);
                     phase2.AddTargets(Targets.Where(t => t.IsSpecies(TrashID.BloodstoneShardMainFight)));

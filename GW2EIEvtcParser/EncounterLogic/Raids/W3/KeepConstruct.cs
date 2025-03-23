@@ -125,7 +125,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         for (int i = 0; i < mainPhases.Count; i++)
         {
             mainPhases[i].Name = "Phase " + (i + 1);
-            mainPhases[i]._CanBeSubPhaseOf.Add(phases[0]);
+            mainPhases[i].AddParentPhase(phases[0]);
             mainPhases[i].AddTarget(mainTarget);
         }
         phases.AddRange(mainPhases);
@@ -158,7 +158,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         {
             var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
             phase.AddTarget(mainTarget);
-            phase._CanBeSubPhaseOf.UnionWith(mainPhases);
+            phase.AddParentPhases(mainPhases);
             phases.Add(phase);
         }
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
@@ -178,7 +178,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     if (end - start > 1000)
                     {
                         var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
-                        phase._CanBeSubPhaseOf.UnionWith(mainPhases);
+                        phase.AddParentPhases(mainPhases);
                         phase.AddTarget(mainTarget);
                         preBurnPhase.Add(phase);
                     }
@@ -205,7 +205,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
                     {
                         var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
-                        leftOverPhase._CanBeSubPhaseOf.UnionWith(mainPhases);
+                        leftOverPhase.AddParentPhases(mainPhases);
                         leftOverPhase.AddTarget(mainTarget);
                         leftOverPhases.Add(leftOverPhase);
                     }

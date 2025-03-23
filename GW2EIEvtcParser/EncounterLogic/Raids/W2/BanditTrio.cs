@@ -197,7 +197,7 @@ internal class BanditTrio : SalvationPass
                 end = phaseEnd.Time;
             }
             var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
-            phase._CanBeSubPhaseOf.Add(phases[0]);
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(target);
             phase.Name = target.ID switch
             {

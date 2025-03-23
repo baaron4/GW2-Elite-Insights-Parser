@@ -85,7 +85,7 @@ internal class SooWon : OpenWorldLogic
         InitPhases(phases, mainTarget, tailTarget, phaseOffset);
         for (int i = 1; i < phases.Count; i++)
         {
-            phases[i]._CanBeSubPhaseOf.Add(phases[0]);
+            phases[i].AddParentPhase(phases[0]);
         }
         return phases;
     }

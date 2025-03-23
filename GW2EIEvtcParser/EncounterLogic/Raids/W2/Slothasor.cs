@@ -102,13 +102,13 @@ internal class Slothasor : SalvationPass
         foreach (CastEvent c in sleepy)
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Phase " + i++);
-            phase._CanBeSubPhaseOf.Add(phases[0]);
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             start = c.EndTime;
             phases.Add(phase);
         }
         var lastPhase = new PhaseData(start, fightEnd, "Phase " + i++);
-        lastPhase._CanBeSubPhaseOf.Add(phases[0]);
+        lastPhase.AddParentPhase(phases[0]);
         lastPhase.AddTarget(mainTarget);
         phases.Add(lastPhase);
         return phases;

@@ -300,7 +300,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
                 elePhase.AddTarget(elementalAi);
                 phases.Add(elePhase);
-                elePhase._CanBeSubPhaseOf.Add(phases[0]);
+                elePhase.AddParentPhase(phases[0]);
             }
             if (requirePhases)
             {
@@ -311,7 +311,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 {
                     PhaseData phase = elementalPhases[i];
                     phase.Name = eleNames[i];
-                    phase._CanBeSubPhaseOf.Add(elePhase);
+                    phase.AddParentPhase(elePhase);
                     phase.AddTarget(elementalAi);
                     if (i > 0)
                     {
@@ -345,7 +345,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
                 darkPhase.AddTarget(darkAi);
                 phases.Add(darkPhase);
-                darkPhase._CanBeSubPhaseOf.Add(phases[0]);
+                darkPhase.AddParentPhase(phases[0]);
             }
             if (requirePhases)
             {
@@ -356,7 +356,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 {
                     var fearPhase = new PhaseData(darkStart, fearToSorrow.Time, "Fear");
                     fearPhase.AddTarget(darkAi);
-                    fearPhase._CanBeSubPhaseOf.Add(darkPhase);
+                    fearPhase.AddParentPhase(darkPhase);
                     phases.Add(fearPhase);
                     long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
                     CastEvent? sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
@@ -364,18 +364,18 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, sorrowToGuilt.Time, "Sorrow");
                         sorrowPhase.AddTarget(darkAi);
-                        sorrowPhase._CanBeSubPhaseOf.Add(darkPhase);
+                        sorrowPhase.AddParentPhase(darkPhase);
                         phases.Add(sorrowPhase);
                         var guiltPhase = new PhaseData(sorrowToGuilt.Time, darkEnd, "Guilt");
                         guiltPhase.AddTarget(darkAi);
-                        guiltPhase._CanBeSubPhaseOf.Add(darkPhase);
+                        guiltPhase.AddParentPhase(darkPhase);
                         phases.Add(guiltPhase);
                     }
                     else
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, darkEnd, "Sorrow");
                         sorrowPhase.AddTarget(darkAi);
-                        sorrowPhase._CanBeSubPhaseOf.Add(darkPhase);
+                        sorrowPhase.AddParentPhase(darkPhase);
                         phases.Add(sorrowPhase);
                     }
                 }

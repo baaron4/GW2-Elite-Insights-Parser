@@ -175,7 +175,7 @@ internal class Kanaxai : SilentSurf
         for (int i = 0; i < encounterPhases.Count; i++)
         {
             PhaseData curPhase = encounterPhases[i];
-            curPhase._CanBeSubPhaseOf.Add(phases[0]);
+            curPhase.AddParentPhase(phases[0]);
             if (worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
             {
                 var baseName = "World Cleaver ";

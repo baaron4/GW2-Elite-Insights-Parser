@@ -55,7 +55,7 @@ internal static class JsonPhaseBuilder
             {
                 PhaseData curPhase = phases[j];
                 if (curPhase.Start < jsPhase.Start || curPhase.End > jsPhase.End ||
-                     (curPhase.Start == jsPhase.Start && curPhase.End == jsPhase.End) || !curPhase.CanBeSubPhaseOf.Contains(phase))
+                     (curPhase.Start == jsPhase.Start && curPhase.End == jsPhase.End) || !curPhase.CanBeASubPhaseOf(phase))
                 {
                     continue;
                 }
