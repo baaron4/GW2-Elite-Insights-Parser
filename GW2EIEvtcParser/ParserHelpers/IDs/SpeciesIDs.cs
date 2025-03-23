@@ -871,6 +871,7 @@ public static class SpeciesIDs
         JuvenileSkyChakStriker = 26147,
         JuvenileSpinegazer = 26220,
         JuvenileWarclaw = 26628,
+        JuvenileJanthiriBee = 26851,
         // Guardian Weapon Summons
         BowOfTruth = 6383,
         HammerOfWisdom = 5791,

@@ -526,6 +526,7 @@ public class SkillItem
         { RelicOfTheBeehive, ItemImages.RelicOfTheBeehive },
         { RelicOfMountBalrior, ItemImages.RelicOfMountBalrior },
         { RelicOfTheHolosmith, ItemImages.RelicOfTheHolosmith },
+        { RelicOfVampirismHealing, ItemImages.RelicOfVampirism },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, SkillImages.FireAttunement },
