@@ -230,34 +230,44 @@ internal class UraTheSteamshrieker : MountBalrior
         var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
         var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
         var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
-
         // 100-70
-        var before70 = hp70.Value > 0 ? new PhaseData(start, hp70.Start, "100-70%") : new PhaseData(log.FightData.FightStart, end, "100-70%");
-        before70.AddTarget(ura);
-        phases.Add(before70);
-
+        var propelPhase = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "Propel");
+        propelPhase.AddTarget(ura);
+        phases.Add(propelPhase);
         // 70-40
         if (hp70.Value > 0)
         {
-            var after70 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70-40%");
+            var after70 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
             after70.AddTarget(ura);
             phases.Add(after70);
+            // 40 - 1 CM / 40 - 0 NM
+            if (hp40.Value > 0)
+            {
+                var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
+                after40.AddTarget(ura);
+                phases.Add(after40);
+                var noPropelPhase = new PhaseData(after70.Start, after40.End, "No Propel");
+                noPropelPhase.AddTarget(ura);
+                phases.Add(noPropelPhase);
+            } 
+            else
+            {
+                after70.Name = "No Propel";
+            }
         }
-
-        // 40 - 1 CM / 40 - 0 NM
-        if (hp40.Value > 0)
-        {
-            var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40-1%") : new PhaseData(hp40.Start, end, "40-0%");
-            after40.AddTarget(ura);
-            phases.Add(after40);
-        }
-
         // Healed CM
         if (hp1 != null)
         {
-            var after1 = new PhaseData(hp1.Time, end, "Healed");
-            after1.AddTarget(ura);
-            phases.Add(after1);
+            var before1 = new PhaseData(start, hp1.Time, "100% - 1%");
+            before1.AddTarget(ura);
+            phases.Add(before1);
+            var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == ura.AgentItem && x.Time >= hp1.Time);
+            if (determinedLost != null)
+            {
+                var after1 = new PhaseData(determinedLost.Time, end, "Healed");
+                after1.AddTarget(ura);
+                phases.Add(after1);
+            }
         }
 
         return phases;
