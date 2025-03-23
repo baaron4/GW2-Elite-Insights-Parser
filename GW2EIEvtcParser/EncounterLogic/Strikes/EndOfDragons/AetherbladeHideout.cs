@@ -65,7 +65,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetBlue, "Beam Target", new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Blue), "BombBlue.A", "Received Blue Bomb Target", "Blue Bomb Target", 0),
                 ]),
             ]
-        );
+        ));
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide";
         EncounterCategoryInformation.InSubCategoryOrder = 0;
