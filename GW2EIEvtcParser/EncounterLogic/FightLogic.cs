@@ -100,7 +100,7 @@ public abstract class FightLogic
     internal MechanicData GetMechanicData()
     {
         var allMechs = new List<Mechanic>();
-        foreach (MechanicGroup mechGroup in MechanicList)
+        foreach (MechanicContainer mechGroup in MechanicList)
         {
             allMechs.AddRange(mechGroup.GetMechanics());
         }
