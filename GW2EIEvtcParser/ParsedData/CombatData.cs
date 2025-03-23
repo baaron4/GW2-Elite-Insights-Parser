@@ -21,11 +21,14 @@ public class CombatData
     private readonly MetaEventsContainer _metaDataEvents = new();
     private readonly HashSet<long> _skillIds;
     private readonly Dictionary<long, List<BuffEvent>> _buffData;
+    private Dictionary<long, List<AbstractBuffApplyEvent>> _buffApplyData;
     private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
     private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
+    private Dictionary<long,  Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataBySrc;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataByDst;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
+    private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffApplyEvent>>> _buffApplyDataByIDByDst;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
@@ -576,7 +579,20 @@ public class CombatData
     private void BuildBuffDependentContainers()
     {
         _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+        _buffRemoveAllDataBySrc = _buffData.ToDictionary(
+            x => x.Key, 
+            x => x.Value.OfType<BuffRemoveAllEvent>()
+                .GroupBy(y => y.CreditedBy)
+                .ToDictionary(y => y.Key, y => y.ToList())
+        );
         _buffDataByIDByDst = _buffData.ToDictionary(x => x.Key, x => x.Value.GroupBy(y => y.To).ToDictionary(y => y.Key, y => y.ToList()));
+        _buffApplyData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<AbstractBuffApplyEvent>().ToList());
+        _buffApplyDataByIDByDst = _buffData.ToDictionary(
+            x => x.Key, 
+            x => x.Value.OfType<AbstractBuffApplyEvent>()
+                .GroupBy(y => y.To)
+                .ToDictionary(y => y.Key, y => y.ToList())
+        );
         //TODO(Rennorb) @perf @mem: find average complexity
         _buffDataByInstanceID = new(_buffData.Count / 10);
         foreach (var buffEvents in _buffData.Values)
@@ -859,6 +875,10 @@ public class CombatData
     {
         return _buffData.GetValueOrEmpty(buffID);
     }
+    public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyData(long buffID)
+    {
+        return _buffApplyData.GetValueOrEmpty(buffID);
+    }
     /// <summary>
     /// Won't return Buff Extension events
     /// </summary>
@@ -884,6 +904,21 @@ public class CombatData
         return [ ];
     }
 
+    /// <summary>
+    /// Returns list of buff apply events applied on agent for given id
+    /// </summary>
+    public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyDataByIDByDst(long buffID, AgentItem dst)
+    {
+        if (_buffApplyDataByIDByDst.TryGetValue(buffID, out var agentDict))
+        {
+            if (agentDict.TryGetValue(dst, out var res))
+            {
+                return res;
+            }
+        }
+        return [];
+    }
+
     public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
     {
         if (instanceID == 0)
@@ -903,6 +938,15 @@ public class CombatData
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID)
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
+    }
+
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID, AgentItem src)
+    {
+        if (_buffRemoveAllDataBySrc.TryGetValue(buffID, out var bySrc))
+        {
+            return bySrc.GetValueOrEmpty(src);
+        }
+        return [];
     }
 
     /// <summary>

@@ -25,9 +25,9 @@ public class SupportPerAllyStatistics
             long friendlyTime = 0;
             int unknownCount = 0;
             long unknownTime = 0;
-            foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllData(buffID))
+            foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllData(buffID, actor.AgentItem))
             {
-                if (brae.Time >= start && brae.Time <= end && brae.CreditedBy == actor.AgentItem)
+                if (brae.Time >= start && brae.Time <= end)
                 {
                     if (to != null && brae.To != to.AgentItem)
                     {
