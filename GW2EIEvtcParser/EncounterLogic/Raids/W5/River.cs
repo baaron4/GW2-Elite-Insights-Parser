@@ -43,16 +43,16 @@ internal class River : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Enervator,
-            TrashID.HollowedBomber,
-            TrashID.RiverOfSouls,
-            TrashID.SpiritHorde1,
-            TrashID.SpiritHorde2,
-            TrashID.SpiritHorde3
+            TargetID.Enervator,
+            TargetID.HollowedBomber,
+            TargetID.RiverOfSouls,
+            TargetID.SpiritHorde1,
+            TargetID.SpiritHorde2,
+            TargetID.SpiritHorde3
         ];
     }
 
@@ -78,7 +78,7 @@ internal class River : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(TrashID.Enervator);
+            IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(TargetID.Enervator);
             if (!enervators.Any())
             {
                 throw new MissingKeyActorsException("Enervators not found");
@@ -173,7 +173,7 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)TrashID.HollowedBomber:
+            case (int)TargetID.HollowedBomber:
                 ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstBomberMovement.XYZ != default)
                 {
@@ -191,7 +191,7 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)TrashID.RiverOfSouls:
+            case (int)TargetID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstRiverMovement.XYZ != default)
                 {
@@ -206,11 +206,11 @@ internal class River : HallOfChains
                 }
                 break;
 
-            case (int)TrashID.Enervator:
+            case (int)TargetID.Enervator:
             // TODO Line actor between desmina and enervator. Missing skillID
-            case (int)TrashID.SpiritHorde1:
-            case (int)TrashID.SpiritHorde2:
-            case (int)TrashID.SpiritHorde3:
+            case (int)TargetID.SpiritHorde1:
+            case (int)TargetID.SpiritHorde2:
+            case (int)TargetID.SpiritHorde3:
                 break;
             default:
                 break;

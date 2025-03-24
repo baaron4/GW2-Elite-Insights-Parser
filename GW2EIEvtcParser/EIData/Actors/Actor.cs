@@ -86,11 +86,6 @@ public abstract class Actor
         return AgentItem.IsSpecies(id);
     }
 
-    public bool IsSpecies(TrashID id)
-    {
-        return AgentItem.IsSpecies(id);
-    }
-
     public bool IsSpecies(TargetID id)
     {
         return AgentItem.IsSpecies(id);
@@ -107,11 +102,6 @@ public abstract class Actor
     }
 
     public bool IsAnySpecies(IEnumerable<int> ids)
-    {
-        return AgentItem.IsAnySpecies(ids);
-    }
-
-    public bool IsAnySpecies(IEnumerable<TrashID> ids)
     {
         return AgentItem.IsAnySpecies(ids);
     }

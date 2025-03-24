@@ -60,7 +60,7 @@ internal class Eparch : LonelyTower
         var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000);
         foreach (var riftAgent in riftAgents)
         {
-            riftAgent.OverrideID(TrashID.KryptisRift, agentData);
+            riftAgent.OverrideID(TargetID.KryptisRift, agentData);
             riftAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         //
@@ -71,16 +71,16 @@ internal class Eparch : LonelyTower
         {
             switch (target.ID)
             {
-                case (int)TrashID.KryptisRift:
+                case (int)TargetID.KryptisRift:
                     target.OverrideName(target.Character + " " + miniBossCount[0]++);
                     break;
-                case (int)TrashID.IncarnationOfCruelty:
+                case (int)TargetID.IncarnationOfCruelty:
                     target.OverrideName(target.Character + " " + miniBossCount[1]++);
                     break;
-                case (int)TrashID.IncarnationOfJudgement:
+                case (int)TargetID.IncarnationOfJudgement:
                     target.OverrideName(target.Character + " " + miniBossCount[2]++);
                     break;
-                case (int)TrashID.AvatarOfSpite:
+                case (int)TargetID.AvatarOfSpite:
                     target.OverrideName(target.Character + " " + miniBossCount[3]++);
                     break;
             }
@@ -106,7 +106,7 @@ internal class Eparch : LonelyTower
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.IncarnationOfCruelty) || x.IsSpecies(TrashID.IncarnationOfJudgement)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.IncarnationOfCruelty) || x.IsSpecies(TargetID.IncarnationOfJudgement)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases || !log.FightData.IsCM)
         {
             return phases;
@@ -120,9 +120,9 @@ internal class Eparch : LonelyTower
                 phase.Name = "Split " + i / 2;
                 var ids = new List<int>
                 {
-                    (int)TrashID.IncarnationOfCruelty,
-                    (int)TrashID.IncarnationOfJudgement,
-                    (int)TrashID.KryptisRift,
+                    (int)TargetID.IncarnationOfCruelty,
+                    (int)TargetID.IncarnationOfJudgement,
+                    (int)TargetID.KryptisRift,
                 };
                 AddTargetsToPhase(phase, ids);
             }
@@ -140,10 +140,10 @@ internal class Eparch : LonelyTower
         return
         [
             (int)TargetID.EparchLonelyTower,
-            (int)TrashID.IncarnationOfCruelty,
-            (int)TrashID.IncarnationOfJudgement,
-            (int)TrashID.AvatarOfSpite,
-            (int)TrashID.KryptisRift,
+            (int)TargetID.IncarnationOfCruelty,
+            (int)TargetID.IncarnationOfJudgement,
+            (int)TargetID.AvatarOfSpite,
+            (int)TargetID.KryptisRift,
         ];
     }
 
@@ -152,19 +152,19 @@ internal class Eparch : LonelyTower
         return new Dictionary<int, int>()
         {
             {(int)TargetID.EparchLonelyTower, 0},
-            {(int)TrashID.KryptisRift, 1},
-            {(int)TrashID.IncarnationOfCruelty, 2},
-            {(int)TrashID.IncarnationOfJudgement, 2},
-            {(int)TrashID.AvatarOfSpite, 3},
+            {(int)TargetID.KryptisRift, 1},
+            {(int)TargetID.IncarnationOfCruelty, 2},
+            {(int)TargetID.IncarnationOfJudgement, 2},
+            {(int)TargetID.AvatarOfSpite, 3},
         };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.TheTormentedLonelyTower,
-            TrashID.TheCravenLonelyTower,
+            TargetID.TheTormentedLonelyTower,
+            TargetID.TheCravenLonelyTower,
         ];
     }
 
@@ -190,7 +190,7 @@ internal class Eparch : LonelyTower
         base.ComputeNPCCombatReplayActors(target, log, replay);
         switch (target.ID)
         {
-            case (int)TrashID.KryptisRift:
+            case (int)TargetID.KryptisRift:
                 {
                     var events = GetFilteredList(log.CombatData, [ KryptisRiftIncarnationTether ], target, true, true);
                     replay.Decorations.AddTether(events, Colors.Red, 0.5);

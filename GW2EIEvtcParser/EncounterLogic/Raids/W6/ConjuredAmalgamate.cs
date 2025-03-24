@@ -116,12 +116,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.ConjuredGreatsword,
-            TrashID.ConjuredShield
+            TargetID.ConjuredGreatsword,
+            TargetID.ConjuredShield
         ];
     }
 
@@ -129,7 +129,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         return
         [
-            (int)TrashID.ConjuredPlayerSword
+            (int)TargetID.ConjuredPlayerSword
         ];
     }
 
@@ -159,7 +159,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             rightArm.OverrideID(TargetID.CARightArm, agentData);
         }
         FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TrashID.ConjuredPlayerSword, true);
+        AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (CombatItem c in combatData)
         {
@@ -204,9 +204,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
             case (int)TargetID.CALeftArm:
             case (int)TargetID.CARightArm:
                 break;
-            case (int)TrashID.ConjuredGreatsword:
+            case (int)TargetID.ConjuredGreatsword:
                 break;
-            case (int)TrashID.ConjuredShield:
+            case (int)TargetID.ConjuredShield:
                 var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint ShieldShieldRadius = 100;
                 foreach (Segment seg in shieldShield)
@@ -231,7 +231,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            AgentItem? zommoros = agentData.GetNPCsByID(TrashID.ChillZommoros).LastOrDefault();
+            AgentItem? zommoros = agentData.GetNPCsByID(TargetID.ChillZommoros).LastOrDefault();
             if (zommoros == null)
             {
                 return;

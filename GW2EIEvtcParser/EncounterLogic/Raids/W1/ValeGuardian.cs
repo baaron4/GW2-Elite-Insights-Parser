@@ -75,9 +75,9 @@ internal class ValeGuardian : SpiritVale
         return
         [
             (int)TargetID.ValeGuardian,
-            (int)TrashID.RedGuardian,
-            (int)TrashID.BlueGuardian,
-            (int)TrashID.GreenGuardian
+            (int)TargetID.RedGuardian,
+            (int)TargetID.BlueGuardian,
+            (int)TargetID.GreenGuardian
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -85,9 +85,9 @@ internal class ValeGuardian : SpiritVale
         return new Dictionary<int, int>()
         {
             {(int)TargetID.ValeGuardian, 0 },
-            {(int)TrashID.RedGuardian, 1 },
-            {(int)TrashID.BlueGuardian, 1 },
-            {(int)TrashID.GreenGuardian, 1 },
+            {(int)TargetID.RedGuardian, 1 },
+            {(int)TargetID.BlueGuardian, 1 },
+            {(int)TargetID.GreenGuardian, 1 },
         };
     }
 
@@ -98,9 +98,9 @@ internal class ValeGuardian : SpiritVale
         phases[0].AddTarget(mainTarget);
         var splitGuardianIds = new List<int>
         {
-            (int) TrashID.BlueGuardian,
-            (int) TrashID.GreenGuardian,
-            (int) TrashID.RedGuardian
+            (int) TargetID.BlueGuardian,
+            (int) TargetID.GreenGuardian,
+            (int) TargetID.RedGuardian
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -134,26 +134,26 @@ internal class ValeGuardian : SpiritVale
         int curGreen = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.RedGuardian))
+            if (target.IsSpecies(TargetID.RedGuardian))
             {
                 target.OverrideName(target.Character + " " + curRed++);
             }
-            if (target.IsSpecies(TrashID.BlueGuardian))
+            if (target.IsSpecies(TargetID.BlueGuardian))
             {
                 target.OverrideName(target.Character + " " + curBlue++);
             }
-            if (target.IsSpecies(TrashID.GreenGuardian))
+            if (target.IsSpecies(TargetID.GreenGuardian))
             {
                 target.OverrideName(target.Character + " " + curGreen++);
             }
         }
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-           TrashID.Seekers
+           TargetID.Seekers
         ];
     }
 
@@ -244,16 +244,16 @@ internal class ValeGuardian : SpiritVale
                     CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
                 #endif
                 break;
-            case (int)TrashID.BlueGuardian:
+            case (int)TargetID.BlueGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)TrashID.GreenGuardian:
+            case (int)TargetID.GreenGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Green, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)TrashID.RedGuardian:
+            case (int)TargetID.RedGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)TrashID.Seekers:
+            case (int)TargetID.Seekers:
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
             default:

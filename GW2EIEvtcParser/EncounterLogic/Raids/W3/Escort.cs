@@ -22,7 +22,7 @@ internal class Escort : StrongholdOfTheFaithful
     public Escort(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([          
-            new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TrashID.Mine)),
+            new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TargetID.Mine)),
             new PlayerDstSkillMechanic(GlennaBombHit, "Bomb Explosion", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
             new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
             new MechanicGroup([
@@ -75,8 +75,8 @@ internal class Escort : StrongholdOfTheFaithful
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
-                SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
-                SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
+                SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.RadiantMcLeod) && x.LastAware > phase.Start);
+                SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CrimsonMcLeod) && x.LastAware > phase.Start);
                 phase.AddTarget(whiteMcLeod);
                 phase.AddTarget(redMcLeod);
                 phase.OverrideTimes(log);
@@ -100,7 +100,7 @@ internal class Escort : StrongholdOfTheFaithful
         {
             return phases;
         }
-        var wargs = Targets.Where(x => x.IsSpecies(TrashID.WargBloodhound));
+        var wargs = Targets.Where(x => x.IsSpecies(TargetID.WargBloodhound));
         if (_hasPreEvent)
         {
             var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
@@ -140,11 +140,11 @@ internal class Escort : StrongholdOfTheFaithful
         var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
         foreach (AgentItem mine in mineAgents)
         {
-            mine.OverrideID(TrashID.Mine, agentData);
+            mine.OverrideID(TargetID.Mine, agentData);
             mine.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         var duplicateGlennaPosition = new Vector3(-4326.979f, 13687.298f, -5561.857f);
-        foreach (var glenna in agentData.GetNPCsByID(TrashID.Glenna))
+        foreach (var glenna in agentData.GetNPCsByID(TargetID.Glenna))
         {
             var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(glenna)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
             if (positions.Any(x => (duplicateGlennaPosition.XY() - x.XYZ.XY()).LengthSquared() < 10))
@@ -153,7 +153,7 @@ internal class Escort : StrongholdOfTheFaithful
             }
         }
         // to keep the pre event as we need targets
-        if (_hasPreEvent && !agentData.GetNPCsByID(TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
+        if (_hasPreEvent && !agentData.GetNPCsByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
@@ -163,15 +163,15 @@ internal class Escort : StrongholdOfTheFaithful
         int curWarg = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.WargBloodhound))
+            if (target.IsSpecies(TargetID.WargBloodhound))
             {
                 target.OverrideName(target.Character + " " + curWarg++);
             }
-            if (target.IsSpecies(TrashID.CrimsonMcLeod))
+            if (target.IsSpecies(TargetID.CrimsonMcLeod))
             {
                 target.OverrideName("Crimson " + target.Character + " " + curCrimson++);
             }
-            if (target.IsSpecies(TrashID.RadiantMcLeod))
+            if (target.IsSpecies(TargetID.RadiantMcLeod))
             {
                 target.OverrideName("Radiant " + target.Character + " " + curRadiant++);
             }
@@ -210,7 +210,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         if (_hasPreEvent)
         {
-            if (!agentData.TryGetFirstAgentItem(TrashID.Glenna, out var glenna))
+            if (!agentData.TryGetFirstAgentItem(TargetID.Glenna, out var glenna))
             {
                 throw new MissingKeyActorsException("Glenna not found");
             }
@@ -239,7 +239,7 @@ internal class Escort : StrongholdOfTheFaithful
         return
         [
             (int)TargetID.McLeodTheSilent,
-            (int)TrashID.Glenna
+            (int)TargetID.Glenna
         ];
     }
     protected override ReadOnlySpan<int> GetTargetsIDs()
@@ -247,30 +247,30 @@ internal class Escort : StrongholdOfTheFaithful
         return
         [
             (int)TargetID.McLeodTheSilent,
-            (int)TrashID.RadiantMcLeod,
-            (int)TrashID.CrimsonMcLeod,
-            (int)TrashID.WargBloodhound,
+            (int)TargetID.RadiantMcLeod,
+            (int)TargetID.CrimsonMcLeod,
+            (int)TargetID.WargBloodhound,
             (int)TargetID.DummyTarget,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return [
-            TrashID.MushroomCharger,
-            TrashID.MushroomKing,
-            TrashID.MushroomSpikeThrower,
-            TrashID.WhiteMantleBattleMage1Escort,
-            TrashID.WhiteMantleBattleMage2Escort,
-            TrashID.WhiteMantleBattleCultist1,
-            TrashID.WhiteMantleBattleCultist2,
-            TrashID.WhiteMantleBattleKnight1,
-            TrashID.WhiteMantleBattleKnight2,
-            TrashID.WhiteMantleBattleCleric1,
-            TrashID.WhiteMantleBattleCleric2,
-            TrashID.WhiteMantleBattleSeeker1,
-            TrashID.WhiteMantleBattleSeeker2,
-            TrashID.Mine,
+            TargetID.MushroomCharger,
+            TargetID.MushroomKing,
+            TargetID.MushroomSpikeThrower,
+            TargetID.WhiteMantleBattleMage1Escort,
+            TargetID.WhiteMantleBattleMage2Escort,
+            TargetID.WhiteMantleBattleCultist1,
+            TargetID.WhiteMantleBattleCultist2,
+            TargetID.WhiteMantleBattleKnight1,
+            TargetID.WhiteMantleBattleKnight2,
+            TargetID.WhiteMantleBattleCleric1,
+            TargetID.WhiteMantleBattleCleric2,
+            TargetID.WhiteMantleBattleSeeker1,
+            TargetID.WhiteMantleBattleSeeker2,
+            TargetID.Mine,
         ];
     }
 
@@ -278,7 +278,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         return
         [
-            (int)TrashID.Glenna
+            (int)TargetID.Glenna
         ];
     }
 

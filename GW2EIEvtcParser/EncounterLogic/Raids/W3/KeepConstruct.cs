@@ -50,7 +50,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 ),
             ]),
-            new SpawnMechanic((int) TrashID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
+            new SpawnMechanic((int) TargetID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
             new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new PlayerDstHitMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerDstBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
@@ -65,7 +65,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     .UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
             ]),
             new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
-                .UsingChecker((de, log) => de.To.IsSpecies(TrashID.KeepConstructCore) && de is DirectHealthDamageEvent)
+                .UsingChecker((de, log) => de.To.IsSpecies(TargetID.KeepConstructCore) && de is DirectHealthDamageEvent)
         ]));
         Extension = "kc";
         Icon = EncounterIconKeepConstruct;
@@ -215,14 +215,14 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return
         [
             (int)TargetID.KeepConstruct,
-            (int)TrashID.Jessica,
-            (int)TrashID.Olson,
-            (int)TrashID.Engul,
-            (int)TrashID.Faerla,
-            (int)TrashID.Caulle,
-            (int)TrashID.Henley,
-            (int)TrashID.Galletta,
-            (int)TrashID.Ianim,
+            (int)TargetID.Jessica,
+            (int)TargetID.Olson,
+            (int)TargetID.Engul,
+            (int)TargetID.Faerla,
+            (int)TargetID.Caulle,
+            (int)TargetID.Henley,
+            (int)TargetID.Galletta,
+            (int)TargetID.Ianim,
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -230,28 +230,28 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return new Dictionary<int, int>()
         {
             {(int)TargetID.KeepConstruct, 0 },
-            {(int)TrashID.Jessica, 1 },
-            {(int)TrashID.Olson, 1 },
-            {(int)TrashID.Engul, 1 },
-            {(int)TrashID.Faerla, 1 },
-            {(int)TrashID.Caulle, 1 },
-            {(int)TrashID.Henley, 1 },
-            {(int)TrashID.Galletta, 1 },
-            {(int)TrashID.Ianim, 1 },
+            {(int)TargetID.Jessica, 1 },
+            {(int)TargetID.Olson, 1 },
+            {(int)TargetID.Engul, 1 },
+            {(int)TargetID.Faerla, 1 },
+            {(int)TargetID.Caulle, 1 },
+            {(int)TargetID.Henley, 1 },
+            {(int)TargetID.Galletta, 1 },
+            {(int)TargetID.Ianim, 1 },
         };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.KeepConstructCore,
-            TrashID.GreenPhantasm,
-            TrashID.InsidiousProjection,
-            TrashID.UnstableLeyRift,
-            TrashID.RadiantPhantasm,
-            TrashID.CrimsonPhantasm,
-            TrashID.RetrieverProjection
+            TargetID.KeepConstructCore,
+            TargetID.GreenPhantasm,
+            TargetID.InsidiousProjection,
+            TargetID.UnstableLeyRift,
+            TargetID.RadiantPhantasm,
+            TargetID.CrimsonPhantasm,
+            TargetID.RetrieverProjection
         ];
     }
 
@@ -261,14 +261,14 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var countDict = new Dictionary<int, int>();
         var bigPhantasmIDs = new HashSet<int>
         {
-            (int)TrashID.Jessica,
-            (int)TrashID.Olson,
-            (int)TrashID.Engul,
-            (int)TrashID.Faerla,
-            (int)TrashID.Caulle,
-            (int)TrashID.Henley,
-            (int)TrashID.Galletta,
-            (int)TrashID.Ianim,
+            (int)TargetID.Jessica,
+            (int)TargetID.Olson,
+            (int)TargetID.Engul,
+            (int)TargetID.Faerla,
+            (int)TargetID.Caulle,
+            (int)TargetID.Henley,
+            (int)TargetID.Galletta,
+            (int)TargetID.Ianim,
         };
         foreach (SingleActor target in Targets)
         {
@@ -389,16 +389,16 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 }
                 break;
-            case (int)TrashID.KeepConstructCore:
+            case (int)TargetID.KeepConstructCore:
                 break;
-            case (int)TrashID.Jessica:
-            case (int)TrashID.Olson:
-            case (int)TrashID.Engul:
-            case (int)TrashID.Faerla:
-            case (int)TrashID.Caulle:
-            case (int)TrashID.Henley:
-            case (int)TrashID.Galletta:
-            case (int)TrashID.Ianim:
+            case (int)TargetID.Jessica:
+            case (int)TargetID.Olson:
+            case (int)TargetID.Engul:
+            case (int)TargetID.Faerla:
+            case (int)TargetID.Caulle:
+            case (int)TargetID.Henley:
+            case (int)TargetID.Galletta:
+            case (int)TargetID.Ianim:
                 replay.Decorations.Add(new CircleDecoration(600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                 if (replay.PolledPositions.Count > 0)
@@ -406,15 +406,15 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     replay.Decorations.AddWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
-            case (int)TrashID.GreenPhantasm:
+            case (int)TargetID.GreenPhantasm:
                 int lifetime = 8000;
                 replay.Decorations.AddWithGrowing(new CircleDecoration(210, (start, start + lifetime), Colors.Green, 0.2, new AgentConnector(target)), start + lifetime);
                 break;
-            case (int)TrashID.RetrieverProjection:
-            case (int)TrashID.InsidiousProjection:
-            case (int)TrashID.UnstableLeyRift:
-            case (int)TrashID.RadiantPhantasm:
-            case (int)TrashID.CrimsonPhantasm:
+            case (int)TargetID.RetrieverProjection:
+            case (int)TargetID.InsidiousProjection:
+            case (int)TargetID.UnstableLeyRift:
+            case (int)TargetID.RadiantPhantasm:
+            case (int)TargetID.CrimsonPhantasm:
                 break;
             default:
                 break;

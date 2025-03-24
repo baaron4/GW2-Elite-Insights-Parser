@@ -44,7 +44,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                 foreach (EffectEvent effectEvent in effects)
                 {
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
-                    if (agentItem.IsSpecies(TrashID.Environment) && Keep(effectEvent, log))
+                    if (agentItem.IsSpecies(TargetID.Environment) && Keep(effectEvent, log))
                     {
                         SingleActor? actor = log.FindActor(agentItem, true);
                         if (actor != null)

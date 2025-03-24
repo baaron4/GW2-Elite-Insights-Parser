@@ -81,18 +81,18 @@ internal class Arkk : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.Add(TrashID.FanaticDagger2);
-        trashIDs.Add(TrashID.FanaticDagger1);
-        trashIDs.Add(TrashID.FanaticBow);
-        trashIDs.Add(TrashID.SolarBloom);
-        trashIDs.Add(TrashID.BLIGHT);
-        trashIDs.Add(TrashID.PLINK);
-        trashIDs.Add(TrashID.DOC);
-        trashIDs.Add(TrashID.CHOP);
-        trashIDs.Add(TrashID.ProjectionArkk);
+        trashIDs.Add(TargetID.FanaticDagger2);
+        trashIDs.Add(TargetID.FanaticDagger1);
+        trashIDs.Add(TargetID.FanaticBow);
+        trashIDs.Add(TargetID.SolarBloom);
+        trashIDs.Add(TargetID.BLIGHT);
+        trashIDs.Add(TargetID.PLINK);
+        trashIDs.Add(TargetID.DOC);
+        trashIDs.Add(TargetID.CHOP);
+        trashIDs.Add(TargetID.ProjectionArkk);
         return trashIDs;
     }
 
@@ -106,9 +106,9 @@ internal class Arkk : ShatteredObservatory
         return
         [
             (int)TargetID.Arkk,
-            (int)TrashID.Archdiviner,
-            (int)TrashID.EliteBrazenGladiator,
-            (int)TrashID.TemporalAnomalyArkk,
+            (int)TargetID.Archdiviner,
+            (int)TargetID.EliteBrazenGladiator,
+            (int)TargetID.TemporalAnomalyArkk,
         ];
     }
 
@@ -117,7 +117,7 @@ internal class Arkk : ShatteredObservatory
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Add number to the spawned anomalies
-        var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk)).ToList();
+        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk)).ToList();
         for (int i = 0; i < anomalies.Count; i++)
         {
             anomalies[i].OverrideName(anomalies[i].Character + " " + (i + 1));
@@ -141,7 +141,7 @@ internal class Arkk : ShatteredObservatory
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         phases[0].AddTarget(arkk);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.Archdiviner) || x.IsSpecies(TrashID.EliteBrazenGladiator)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Archdiviner) || x.IsSpecies(TargetID.EliteBrazenGladiator)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -153,11 +153,11 @@ internal class Arkk : ShatteredObservatory
             phases[i].AddTarget(arkk);
         }
 
-        GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
-        GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+        GetMiniBossPhase((int)TargetID.Archdiviner, log, "Archdiviner", phases);
+        GetMiniBossPhase((int)TargetID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
 
         var bloomPhases = new List<PhaseData>(10);
-        foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TrashID.SolarBloom)).OrderBy(x => x.FirstAware))
+        foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom)).OrderBy(x => x.FirstAware))
         {
             long start = bloom.FirstAware;
             long end = bloom.LastAware;
@@ -184,7 +184,7 @@ internal class Arkk : ShatteredObservatory
         phases.AddRange(bloomPhases);
 
         // Add anomalies as secondary target to the phases
-        var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk));
+        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
         foreach (PhaseData phase in phases)
         {
             if (phase.CanBeSubPhase)
@@ -357,7 +357,7 @@ internal class Arkk : ShatteredObservatory
                     }
                 }
                 break;
-                // case (int)TrashID.TemporalAnomalyArkk:
+                // case (int)TargetID.TemporalAnomalyArkk:
                 //     if (!log.CombatData.HasEffectData)
                 //     {
                 //         foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))

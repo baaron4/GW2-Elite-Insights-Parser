@@ -52,7 +52,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 new PlayerDstHitMechanic([EnviousGazeNM, EnviousGazeCM], "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (Wall/Beam)", "Envious Gaze Hit", 0),
                 new PlayerDstHitMechanic([EnviousGazeEmpoweredNM, EnviousGazeEmpoweredRearNM, EnviousGazeEmpoweredCM, EnviousGazeEmpoweredRearCM], "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Emp.EnvGaz.H", "Hit by Empowered Envious Gaze (Double Wall/Beam)", "Empowered Envious Gaze Hit", 0),
                 new PlayerDstBuffRemoveMechanic(Boons, "Envious Gaze", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "EnvGaze.Strip", "Boons removed by Envious Gaze (Any)", "Envious Gaze Boon Removal", 100)
-                    .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Cerus, (int)TrashID.EmbodimentOfEnvy, (int)TrashID.PermanentEmbodimentOfEnvy])),
+                    .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Cerus, (int)TargetID.EmbodimentOfEnvy, (int)TargetID.PermanentEmbodimentOfEnvy])),
                 new EnemyCastStartMechanic([EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM], "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
             ]),
             new MechanicGroup([
@@ -121,29 +121,29 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed), "Despair.K", "Embodiment of Despair Killed", "Despair Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfDespair) && !bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfDespair) && !bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "Envy.K", "Embodiment of Envy Killed", "Envy Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfEnvy) && !bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfEnvy) && !bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Gluttony.K", "Embodiment of Gluttony Killed", "Gluttony Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfGluttony) && ! bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfGluttony) && ! bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightGrey), "Malice.K", "Embodiment of Malice Killed", "Malice Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && !bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfMalice) && !bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightPurple), "Rage.K", "Embodiment of Rage Killed", "Rage Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && !bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfRage) && !bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.White), "Regret.K", "Embodiment of Regret Killed", "Regret Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && !bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfRegret) && !bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Emp.Despair.K", "Empowered Embodiment of Despair Killed", "Empowered Despair Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfDespair) && bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfDespair) && bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Blue), "Emp.Envy.K", "Empowered Embodiment of Envy Killed", "Empowered Envy Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfEnvy) && bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfEnvy) && bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Orange), "Emp.Gluttony.K", "Empowered Embodiment of Gluttony Killed", "Empowered Gluttony Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfGluttony) && bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfGluttony) && bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Grey), "Emp.Malice.K", "Empowered Embodiment of Malice Killed", "Empowered Malice Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0)
-                    .UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
 
             ]),  
         ])
@@ -166,20 +166,20 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         return
         [
             (int)TargetID.Cerus,
-            (int)TrashID.EmbodimentOfDespair,
-            (int)TrashID.EmbodimentOfEnvy,
-            (int)TrashID.EmbodimentOfGluttony,
-            (int)TrashID.EmbodimentOfMalice,
-            (int)TrashID.EmbodimentOfRage,
-            (int)TrashID.EmbodimentOfRegret,
-            (int)TrashID.PermanentEmbodimentOfDespair,
-            (int)TrashID.PermanentEmbodimentOfEnvy,
-            (int)TrashID.PermanentEmbodimentOfGluttony,
-            (int)TrashID.PermanentEmbodimentOfMalice,
-            (int)TrashID.PermanentEmbodimentOfRage,
-            (int)TrashID.PermanentEmbodimentOfRegret,
-            (int)TrashID.MaliciousShadow,
-            (int)TrashID.MaliciousShadowCM,
+            (int)TargetID.EmbodimentOfDespair,
+            (int)TargetID.EmbodimentOfEnvy,
+            (int)TargetID.EmbodimentOfGluttony,
+            (int)TargetID.EmbodimentOfMalice,
+            (int)TargetID.EmbodimentOfRage,
+            (int)TargetID.EmbodimentOfRegret,
+            (int)TargetID.PermanentEmbodimentOfDespair,
+            (int)TargetID.PermanentEmbodimentOfEnvy,
+            (int)TargetID.PermanentEmbodimentOfGluttony,
+            (int)TargetID.PermanentEmbodimentOfMalice,
+            (int)TargetID.PermanentEmbodimentOfRage,
+            (int)TargetID.PermanentEmbodimentOfRegret,
+            (int)TargetID.MaliciousShadow,
+            (int)TargetID.MaliciousShadowCM,
         ];
     }
 
@@ -188,20 +188,20 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         return new Dictionary<int, int>()
         {
             { (int)TargetID.Cerus, 0 },
-            { (int)TrashID.EmbodimentOfDespair, 1 },
-            { (int)TrashID.EmbodimentOfEnvy, 1 },
-            { (int)TrashID.EmbodimentOfGluttony, 1 },
-            { (int)TrashID.EmbodimentOfMalice, 1 },
-            { (int)TrashID.EmbodimentOfRage, 1 },
-            { (int)TrashID.EmbodimentOfRegret, 1 },
-            { (int)TrashID.MaliciousShadow, 2 },
-            { (int)TrashID.MaliciousShadowCM, 2 },
-            { (int)TrashID.PermanentEmbodimentOfDespair, 3 },
-            { (int)TrashID.PermanentEmbodimentOfEnvy, 3 },
-            { (int)TrashID.PermanentEmbodimentOfGluttony, 3 },
-            { (int)TrashID.PermanentEmbodimentOfMalice, 3 },
-            { (int)TrashID.PermanentEmbodimentOfRage, 3 },
-            { (int)TrashID.PermanentEmbodimentOfRegret, 3 },
+            { (int)TargetID.EmbodimentOfDespair, 1 },
+            { (int)TargetID.EmbodimentOfEnvy, 1 },
+            { (int)TargetID.EmbodimentOfGluttony, 1 },
+            { (int)TargetID.EmbodimentOfMalice, 1 },
+            { (int)TargetID.EmbodimentOfRage, 1 },
+            { (int)TargetID.EmbodimentOfRegret, 1 },
+            { (int)TargetID.MaliciousShadow, 2 },
+            { (int)TargetID.MaliciousShadowCM, 2 },
+            { (int)TargetID.PermanentEmbodimentOfDespair, 3 },
+            { (int)TargetID.PermanentEmbodimentOfEnvy, 3 },
+            { (int)TargetID.PermanentEmbodimentOfGluttony, 3 },
+            { (int)TargetID.PermanentEmbodimentOfMalice, 3 },
+            { (int)TargetID.PermanentEmbodimentOfRage, 3 },
+            { (int)TargetID.PermanentEmbodimentOfRegret, 3 },
         };
     }
 
@@ -212,12 +212,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         phases[0].AddTarget(cerus);
         var embodimentIds = new List<int>
         {
-            (int)TrashID.EmbodimentOfDespair,
-            (int)TrashID.EmbodimentOfEnvy,
-            (int)TrashID.EmbodimentOfGluttony,
-            (int)TrashID.EmbodimentOfMalice,
-            (int)TrashID.EmbodimentOfRage,
-            (int)TrashID.EmbodimentOfRegret,
+            (int)TargetID.EmbodimentOfDespair,
+            (int)TargetID.EmbodimentOfEnvy,
+            (int)TargetID.EmbodimentOfGluttony,
+            (int)TargetID.EmbodimentOfMalice,
+            (int)TargetID.EmbodimentOfRage,
+            (int)TargetID.EmbodimentOfRegret,
         };
         var embodiments = Targets.Where(target => embodimentIds.Contains(target.ID));
         var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
@@ -271,16 +271,16 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var embodimentIDs = new List<TrashID>()
+        var embodimentIDs = new List<TargetID>()
         {
-            TrashID.EmbodimentOfDespair,
-            TrashID.EmbodimentOfEnvy,
-            TrashID.EmbodimentOfGluttony,
-            TrashID.EmbodimentOfMalice,
-            TrashID.EmbodimentOfRage,
-            TrashID.EmbodimentOfRegret,
+            TargetID.EmbodimentOfDespair,
+            TargetID.EmbodimentOfEnvy,
+            TargetID.EmbodimentOfGluttony,
+            TargetID.EmbodimentOfMalice,
+            TargetID.EmbodimentOfRage,
+            TargetID.EmbodimentOfRegret,
         };
-        foreach (TrashID embodimentID in embodimentIDs)
+        foreach (TargetID embodimentID in embodimentIDs)
         {
             foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
             {
@@ -288,23 +288,23 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 {
                     switch (embodiment.ID)
                     {
-                        case (int)TrashID.EmbodimentOfDespair:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfDespair, agentData);
+                        case (int)TargetID.EmbodimentOfDespair:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfDespair, agentData);
                             break;
-                        case (int)TrashID.EmbodimentOfEnvy:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfEnvy, agentData);
+                        case (int)TargetID.EmbodimentOfEnvy:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfEnvy, agentData);
                             break;
-                        case (int)TrashID.EmbodimentOfGluttony:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfGluttony, agentData);
+                        case (int)TargetID.EmbodimentOfGluttony:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfGluttony, agentData);
                             break;
-                        case (int)TrashID.EmbodimentOfMalice:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfMalice, agentData);
+                        case (int)TargetID.EmbodimentOfMalice:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfMalice, agentData);
                             break;
-                        case (int)TrashID.EmbodimentOfRage:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRage, agentData);
+                        case (int)TargetID.EmbodimentOfRage:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfRage, agentData);
                             break;
-                        case (int)TrashID.EmbodimentOfRegret:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRegret, agentData);
+                        case (int)TargetID.EmbodimentOfRegret:
+                            embodiment.OverrideID(TargetID.PermanentEmbodimentOfRegret, agentData);
                             break;
                         default:
                             break;
@@ -319,7 +319,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         {
             switch (target.ID)
             {
-                case (int)TrashID.EmbodimentOfDespair:
+                case (int)TargetID.EmbodimentOfDespair:
                     CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[0]++ + ")");
                     if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
@@ -327,7 +327,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.EmbodimentOfEnvy:
+                case (int)TargetID.EmbodimentOfEnvy:
                     CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[1]++ + ")");
                     if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
@@ -335,7 +335,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.EmbodimentOfGluttony:
+                case (int)TargetID.EmbodimentOfGluttony:
                     CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[2]++ + ")");
                     if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
@@ -343,7 +343,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.EmbodimentOfMalice:
+                case (int)TargetID.EmbodimentOfMalice:
                     CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[3]++ + ")");
                     if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
@@ -351,7 +351,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.EmbodimentOfRage:
+                case (int)TargetID.EmbodimentOfRage:
                     CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[4]++ + ")");
                     if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
@@ -359,7 +359,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.EmbodimentOfRegret:
+                case (int)TargetID.EmbodimentOfRegret:
                     CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[5]++ + ")");
                     if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
@@ -367,16 +367,16 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         target.OverrideName("Empowered " + target.Character);
                     }
                     break;
-                case (int)TrashID.MaliciousShadow:
-                case (int)TrashID.MaliciousShadowCM:
+                case (int)TargetID.MaliciousShadow:
+                case (int)TargetID.MaliciousShadowCM:
                     target.OverrideName(target.Character + " " + (curShadow++));
                     break;
-                case (int)TrashID.PermanentEmbodimentOfDespair:
-                case (int)TrashID.PermanentEmbodimentOfEnvy:
-                case (int)TrashID.PermanentEmbodimentOfGluttony:
-                case (int)TrashID.PermanentEmbodimentOfMalice:
-                case (int)TrashID.PermanentEmbodimentOfRage:
-                case (int)TrashID.PermanentEmbodimentOfRegret:
+                case (int)TargetID.PermanentEmbodimentOfDespair:
+                case (int)TargetID.PermanentEmbodimentOfEnvy:
+                case (int)TargetID.PermanentEmbodimentOfGluttony:
+                case (int)TargetID.PermanentEmbodimentOfMalice:
+                case (int)TargetID.PermanentEmbodimentOfRage:
+                case (int)TargetID.PermanentEmbodimentOfRegret:
                     target.OverrideName(target.Character + " (Permanent)");
                     break;
                 default:
@@ -428,46 +428,46 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 break;
-            case (int)TrashID.EmbodimentOfDespair:
+            case (int)TargetID.EmbodimentOfDespair:
                 AddDeterminedOverhead(target, log, replay);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfDespair:
+            case (int)TargetID.PermanentEmbodimentOfDespair:
                 AddHiddenWhileNotCasting(target, log, replay, 6350);
                 break;
-            case (int)TrashID.EmbodimentOfEnvy:
+            case (int)TargetID.EmbodimentOfEnvy:
                 AddDeterminedOverhead(target, log, replay);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfEnvy:
+            case (int)TargetID.PermanentEmbodimentOfEnvy:
                 AddHiddenWhileNotCasting(target, log, replay, 13750);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.EmbodimentOfGluttony:
+            case (int)TargetID.EmbodimentOfGluttony:
                 AddDeterminedOverhead(target, log, replay);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfGluttony:
+            case (int)TargetID.PermanentEmbodimentOfGluttony:
                 AddHiddenWhileNotCasting(target, log, replay, 13720);
                 break;
-            case (int)TrashID.EmbodimentOfMalice:
+            case (int)TargetID.EmbodimentOfMalice:
                 AddDeterminedOverhead(target, log, replay);
                 AddMaliciousIntentDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfMalice:
+            case (int)TargetID.PermanentEmbodimentOfMalice:
                 AddHiddenWhileNotCasting(target, log, replay, 3670);
                 AddMaliciousIntentDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.EmbodimentOfRage:
+            case (int)TargetID.EmbodimentOfRage:
                 AddDeterminedOverhead(target, log, replay);
                 AddCryOfRageDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfRage:
+            case (int)TargetID.PermanentEmbodimentOfRage:
                 AddHiddenWhileNotCasting(target, log, replay, 7660);
                 AddCryOfRageDecoration(target, log, replay, casts);
                 break;
-            case (int)TrashID.EmbodimentOfRegret:
+            case (int)TargetID.EmbodimentOfRegret:
                 AddDeterminedOverhead(target, log, replay);
                 break;
-            case (int)TrashID.PermanentEmbodimentOfRegret:
+            case (int)TargetID.PermanentEmbodimentOfRegret:
                 AddHiddenWhileNotCasting(target, log, replay, 8350);
                 break;
             default:

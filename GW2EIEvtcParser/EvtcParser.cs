@@ -969,7 +969,7 @@ public class EvtcParser
         _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
-        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, TrashID.Environment, true);
+        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {

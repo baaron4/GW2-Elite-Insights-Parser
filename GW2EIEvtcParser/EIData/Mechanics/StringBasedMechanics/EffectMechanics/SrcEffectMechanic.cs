@@ -11,7 +11,7 @@ internal abstract class SrcEffectMechanic : EffectMechanic
     {
         if (effectEvt.Src.IsUnamedSpecies())
         {
-            return agentData.GetNPCsByID(TrashID.Environment).FirstOrDefault()!;
+            return agentData.GetNPCsByID(TargetID.Environment).FirstOrDefault()!;
         }
         return effectEvt.Src;
     }

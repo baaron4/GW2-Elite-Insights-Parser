@@ -11,7 +11,7 @@ internal abstract class DstEffectMechanic : EffectMechanic
     {
         if (!effectEvt.IsAroundDst || effectEvt.Dst.IsUnamedSpecies())
         {
-            return agentData.GetNPCsByID(TrashID.Environment).FirstOrDefault()!;
+            return agentData.GetNPCsByID(TargetID.Environment).FirstOrDefault()!;
         }
         return effectEvt.Dst;
     }

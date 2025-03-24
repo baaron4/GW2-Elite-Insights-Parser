@@ -60,7 +60,7 @@ internal class Gorseval : SpiritVale
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
         phases[0].AddTarget(mainTarget);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.ChargedSoul)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -79,7 +79,7 @@ internal class Gorseval : SpiritVale
                 phase.Name = "Split " + (i) / 2;
                 var ids = new List<int>
                 {
-                   (int) TrashID.ChargedSoul
+                   (int) TargetID.ChargedSoul
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -102,7 +102,7 @@ internal class Gorseval : SpiritVale
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.ChargedSoul))
+            if (target.IsSpecies(TargetID.ChargedSoul))
             {
                 // 2nd split souls spawn further out, check in larger radius
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, SoulLocations, 300);
@@ -120,16 +120,16 @@ internal class Gorseval : SpiritVale
         return
         [
             (int)TargetID.Gorseval,
-            (int)TrashID.ChargedSoul
+            (int)TargetID.ChargedSoul
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.EnragedSpirit,
-            TrashID.AngeredSpirit
+            TargetID.EnragedSpirit,
+            TargetID.AngeredSpirit
         ];
     }
 
@@ -299,7 +299,7 @@ internal class Gorseval : SpiritVale
                     replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightBlue, 0.5, new AgentConnector(target)));
                 }
                 break;
-            case (int)TrashID.ChargedSoul:
+            case (int)TargetID.ChargedSoul:
                 var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                 replay.Decorations.Add(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;

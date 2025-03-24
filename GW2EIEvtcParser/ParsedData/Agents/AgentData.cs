@@ -63,11 +63,6 @@ public class AgentData
         return agent;
     }
 
-    internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, TrashID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
-    {
-        return AddCustomNPCAgent(start, end, name, spec, (int)ID, isFake, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
-    }
-
     internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, TargetID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
     {
         return AddCustomNPCAgent(start, end, name, spec, (int)ID, isFake, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
@@ -116,15 +111,6 @@ public class AgentData
         return GetNPCsByID(id).Where(x => x.Agent == agent).ToList();
     }
 
-    public IReadOnlyList<AgentItem> GetNPCsByID(TrashID id)
-    {
-        return GetNPCsByID((int)id);
-    }
-    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(TrashID id, ulong agent)
-    {
-        return GetNPCsByIDAndAgent((int)id, agent);
-    }
-
     public IReadOnlyList<AgentItem> GetNPCsByID(TargetID id)
     {
         return GetNPCsByID((int)id);
@@ -155,11 +141,6 @@ public class AgentData
             return list;
         }
         return new List<AgentItem>();
-    }
-
-    public IReadOnlyList<AgentItem> GetGadgetsByID(TrashID id)
-    {
-        return GetGadgetsByID((int)id);
     }
 
     public IReadOnlyList<AgentItem> GetGadgetsByID(TargetID id)
@@ -321,17 +302,6 @@ public class AgentData
     public bool TryGetFirstAgentItem(TargetID targetID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)targetID, out agentItem);
-    }
-
-    /// <summary>
-    /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="TrashID"/>.
-    /// </summary>
-    /// <param name="trashID">The ID of the trash to search for.</param>
-    /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
-    /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="TrashID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(TrashID trashID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
-    {
-        return TryGetFirstAgentItem((int)trashID, out agentItem);
     }
 
     /// <summary>

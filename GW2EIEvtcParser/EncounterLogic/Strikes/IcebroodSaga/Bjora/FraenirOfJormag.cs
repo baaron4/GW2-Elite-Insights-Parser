@@ -143,24 +143,24 @@ internal class FraenirOfJormag : Bjora
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.IcebroodElemental,
-            TrashID.BoundIcebroodElemental,
+            TargetID.IcebroodElemental,
+            TargetID.BoundIcebroodElemental,
         ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
-        IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(TrashID.IcebroodElemental);
+        IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(TargetID.IcebroodElemental);
         foreach (AgentItem boundElemental in boundElementals)
         {
             IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             boundElemental.OverrideType(AgentItem.AgentType.NPC, agentData);
-            boundElemental.OverrideID(TrashID.BoundIcebroodElemental, agentData);
+            boundElemental.OverrideID(TargetID.BoundIcebroodElemental, agentData);
 
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
             if (boundElementalKilled.Any())

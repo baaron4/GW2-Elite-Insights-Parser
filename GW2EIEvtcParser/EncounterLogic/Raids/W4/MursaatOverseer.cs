@@ -52,11 +52,11 @@ internal class MursaatOverseer : BastionOfThePenitent
                         (11774, 4480, 14078, 5376)*/);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Jade
+            TargetID.Jade
         ];
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -91,7 +91,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         switch (target.ID)
         {
-            case (int)TrashID.Jade:
+            case (int)TargetID.Jade:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint shieldRadius = 100;

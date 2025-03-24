@@ -93,11 +93,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             (int)TargetID.MaiTrinStrike,
             (int)TargetID.EchoOfScarletBriarNM,
             (int)TargetID.EchoOfScarletBriarCM,
-            (int)TrashID.ScarletPhantomBreakbar,
-            (int)TrashID.ScarletPhantomHP,
-            (int)TrashID.ScarletPhantomHPCM,
-            (int)TrashID.ScarletPhantomBeamNM,
-            (int)TrashID.FerrousBomb,
+            (int)TargetID.ScarletPhantomBreakbar,
+            (int)TargetID.ScarletPhantomHP,
+            (int)TargetID.ScarletPhantomHPCM,
+            (int)TargetID.ScarletPhantomBeamNM,
+            (int)TargetID.FerrousBomb,
         ];
     }
 
@@ -111,14 +111,14 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.ScarletPhantom,
-            TrashID.ScarletPhantomDeathBeamCM,
-            TrashID.ScarletPhantomDeathBeamCM2,
-            TrashID.MaiTrinStrikeDuringEcho,
+            TargetID.ScarletPhantom,
+            TargetID.ScarletPhantomDeathBeamCM,
+            TargetID.ScarletPhantomDeathBeamCM2,
+            TargetID.MaiTrinStrikeDuringEcho,
         ];
     }
 
@@ -187,7 +187,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 }
                 break;
-            case (int)TrashID.MaiTrinStrikeDuringEcho:
+            case (int)TargetID.MaiTrinStrikeDuringEcho:
                 // Nightmare Fusillade - Cone Attack
                 var nightmareFusilladeSide = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == NightmareFusilladeSide);
                 foreach (CastEvent cast in nightmareFusilladeSide)
@@ -214,7 +214,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 var initialPoint = new Vector3(3138.17456f, 1639.60657f, -1852.15894f); // The first cirle always spawns on the bomb on north east.
 
                 // Filted bombs to select only 1 bomb per puzzle, with the max last aware
-                var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TrashID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
+                var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
                 var filteredBombs = groupedBombs.Select(x => x.MaxBy(y => y.LastAware));
 
                 // Filter the detonations, we use them only for the end time
@@ -296,7 +296,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)TrashID.ScarletPhantomBeamNM:
+            case (int)TargetID.ScarletPhantomBeamNM:
                 // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
                 var flankingShot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == FlankingShot);
                 foreach (CastEvent cast in flankingShot)
@@ -322,7 +322,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 }
                 break;
-            case (int)TrashID.FerrousBomb:
+            case (int)TargetID.FerrousBomb:
                 // Mag Beam - Challenge Mode Puzzle - Rectangular Beams during the bomb puzzle.
                 AddMagBeamDecorations(target, log, replay, MaiTrinCMBeamsBombTargetGreen, 30, 120);
                 AddMagBeamDecorations(target, log, replay, MaiTrinCMBeamsBombTargetRed, 0, 90);
@@ -454,7 +454,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             foreach (EffectEvent effect in puzzleNM)
             {
                 // The effect position is outside of the arena, take the position of the Echo as central point.
-                SingleActor? phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
+                SingleActor? phantom = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
                 if (echo != null && phantom != null)
                 {
                     if (echo.TryGetCurrentPosition(log, effect.Time, out var echoPosition) 
@@ -585,7 +585,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     else
                     {
                         subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
-                        AddTargetsToPhase(subPhase, [(int)TrashID.ScarletPhantomHP, (int)TrashID.ScarletPhantomHPCM]);
+                        AddTargetsToPhase(subPhase, [(int)TargetID.ScarletPhantomHP, (int)TargetID.ScarletPhantomHPCM]);
                     }
                 }
                 phases.AddRange(maiPhases);
@@ -609,7 +609,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 else
                 {
                     subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
-                    AddTargetsToPhase(subPhase, [(int)TrashID.ScarletPhantomHP, (int)TrashID.ScarletPhantomHPCM]);
+                    AddTargetsToPhase(subPhase, [(int)TargetID.ScarletPhantomHP, (int)TargetID.ScarletPhantomHPCM]);
                 }
             }
             phases.AddRange(echoPhases);
@@ -624,7 +624,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         foreach (AgentItem bomb in bombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(TrashID.FerrousBomb, agentData);
+            bomb.OverrideID(TargetID.FerrousBomb, agentData);
         }
         // We remove extra Mai trins if present
         IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(TargetID.MaiTrinStrike);
@@ -658,17 +658,17 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         {
             switch (target.ID)
             {
-                case (int)TrashID.ScarletPhantomBreakbar:
+                case (int)TargetID.ScarletPhantomBreakbar:
                     target.OverrideName("Elite " + target.Character + " CC " + curCC++);
                     break;
-                case (int)TrashID.ScarletPhantomHP:
-                case (int)TrashID.ScarletPhantomHPCM:
+                case (int)TargetID.ScarletPhantomHP:
+                case (int)TargetID.ScarletPhantomHPCM:
                     target.OverrideName("Elite " + target.Character + " HP " + curHP++);
                     break;
-                case (int)TrashID.FerrousBomb:
+                case (int)TargetID.FerrousBomb:
                     target.OverrideName("Ferrous Bomb " + curBomb++);
                     break;
-                case (int)TrashID.ScarletPhantomBeamNM:
+                case (int)TargetID.ScarletPhantomBeamNM:
                     target.OverrideName("Scarlet Phantom " + curBeam++);
                     break;
                 default:
@@ -745,7 +745,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             replay.Decorations.Add(pie.GetBorderDecoration());
 
             // If the indicator lifespan matches the growing or the side Mai Trin is casting, add the shockwave.
-            if ((target.IsSpecies(TargetID.MaiTrinStrike) && lifespan.end == growing) || target.IsSpecies(TrashID.MaiTrinStrikeDuringEcho))
+            if ((target.IsSpecies(TargetID.MaiTrinStrike) && lifespan.end == growing) || target.IsSpecies(TargetID.MaiTrinStrikeDuringEcho))
             {
                 (long start, long end) lifespanWave = (lifespan.end, lifespan.end + waveDuration);
                 var background = (PieDecoration)new PieDecoration(radius, angle, lifespanWave, Colors.Orange, 0.1, connector).UsingRotationConnector(rotation);
@@ -772,13 +772,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         {
             case var value when value == EffectGUIDs.AetherbladeHideoutFocusedDestructionGreen:
                 color = Colors.DarkGreen;
-                species.Add((int)TrashID.ScarletPhantomHP);
-                species.Add((int)TrashID.ScarletPhantomHPCM);
+                species.Add((int)TargetID.ScarletPhantomHP);
+                species.Add((int)TargetID.ScarletPhantomHPCM);
                 break;
             case var value2 when value2 == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosNM:
             case var value3 when value3 == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosCM:
                 color = Colors.LightOrange;
-                species.Add((int)TrashID.ScarletPhantomBreakbar);
+                species.Add((int)TargetID.ScarletPhantomBreakbar);
                 break;
             default:
                 break;
@@ -973,7 +973,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             }
         }
 
-        foreach (AgentItem agent in log.AgentData.GetNPCsByID(TrashID.FerrousBomb))
+        foreach (AgentItem agent in log.AgentData.GetNPCsByID(TargetID.FerrousBomb))
         {
             IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(agent).GetBuffGraphs(log);
             bombInvulnSegments = GetBuffSegments(bgms, FailSafeActivated, bombInvulnSegments).OrderBy(x => x.Start).ToList();

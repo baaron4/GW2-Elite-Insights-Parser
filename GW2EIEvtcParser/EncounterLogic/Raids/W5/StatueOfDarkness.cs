@@ -50,12 +50,12 @@ internal class StatueOfDarkness : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.LightThieves,
-            TrashID.MazeMinotaur,
+            TargetID.LightThieves,
+            TargetID.MazeMinotaur,
         ];
     }
 
@@ -103,7 +103,7 @@ internal class StatueOfDarkness : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(TrashID.LightThieves);
+            IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(TargetID.LightThieves);
             if (lightThieves.Any())
             {
                 startToUse = lightThieves.Min(x => x.FirstAware);

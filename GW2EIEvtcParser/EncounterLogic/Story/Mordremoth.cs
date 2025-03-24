@@ -18,11 +18,11 @@ internal class Mordremoth : StoryInstance
         EncounterID |= 0x000201;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.SmotheringShadow,
+            TargetID.SmotheringShadow,
         ];
     }
 
@@ -58,17 +58,17 @@ internal class Mordremoth : StoryInstance
         return
         [
             (int)TargetID.Mordremoth,
-            (int)TrashID.BlightedRytlock,
-            //TrashID.BlightedCanach,
-            (int)TrashID.BlightedBraham,
-            (int)TrashID.BlightedMarjory,
-            (int)TrashID.BlightedCaithe,
-            (int)TrashID.BlightedForgal,
-            (int)TrashID.BlightedSieran,
-            //TrashID.BlightedTybalt,
-            //TrashID.BlightedPaleTree,
-            //TrashID.BlightedTrahearne,
-            //TrashID.BlightedEir,
+            (int)TargetID.BlightedRytlock,
+            //TargetID.BlightedCanach,
+            (int)TargetID.BlightedBraham,
+            (int)TargetID.BlightedMarjory,
+            (int)TargetID.BlightedCaithe,
+            (int)TargetID.BlightedForgal,
+            (int)TargetID.BlightedSieran,
+            //TargetID.BlightedTybalt,
+            //TargetID.BlightedPaleTree,
+            //TargetID.BlightedTrahearne,
+            //TargetID.BlightedEir,
         ];
     }
 
@@ -92,9 +92,9 @@ internal class Mordremoth : StoryInstance
     {
         return
         [
-            (int)TrashID.Canach,
-            (int)TrashID.Braham,
-            (int)TrashID.Caithe,
+            (int)TargetID.Canach,
+            (int)TargetID.Braham,
+            (int)TargetID.Caithe,
         ];
     }
 
@@ -103,20 +103,20 @@ internal class Mordremoth : StoryInstance
         return
         [
             (int)TargetID.Mordremoth,
-            (int)TrashID.Canach,
-            (int)TrashID.Braham,
-            (int)TrashID.Caithe,
-            (int)TrashID.BlightedRytlock,
-            //TrashID.BlightedCanach,
-            (int)TrashID.BlightedBraham,
-            (int)TrashID.BlightedMarjory,
-            (int)TrashID.BlightedCaithe,
-            (int)TrashID.BlightedForgal,
-            (int)TrashID.BlightedSieran,
-            //TrashID.BlightedTybalt,
-            //TrashID.BlightedPaleTree,
-            //TrashID.BlightedTrahearne,
-            //TrashID.BlightedEir,           
+            (int)TargetID.Canach,
+            (int)TargetID.Braham,
+            (int)TargetID.Caithe,
+            (int)TargetID.BlightedRytlock,
+            //TargetID.BlightedCanach,
+            (int)TargetID.BlightedBraham,
+            (int)TargetID.BlightedMarjory,
+            (int)TargetID.BlightedCaithe,
+            (int)TargetID.BlightedForgal,
+            (int)TargetID.BlightedSieran,
+            //TargetID.BlightedTybalt,
+            //TargetID.BlightedPaleTree,
+            //TargetID.BlightedTrahearne,
+            //TargetID.BlightedEir,           
         ];
     }
 }

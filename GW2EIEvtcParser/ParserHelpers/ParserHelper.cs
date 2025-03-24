@@ -619,11 +619,6 @@ public static class ParserHelper
         {
             return ParserIcons.TargetNPCIcons.TryGetValue(target, out var targetIcon) ? targetIcon : ParserIcons.GenericEnemyIcon;
         }
-        TrashID trash = GetTrashID(id);
-        if (trash != TrashID.Unknown)
-        {
-            return ParserIcons.TrashNPCIcons.TryGetValue(trash, out var trashIcon) ? trashIcon : ParserIcons.GenericEnemyIcon;
-        }
         MinionID minion = GetMinionID(id);
         if (minion != MinionID.Unknown)
         {

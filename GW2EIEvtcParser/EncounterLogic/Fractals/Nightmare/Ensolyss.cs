@@ -68,16 +68,16 @@ internal class Ensolyss : Nightmare
         return
         [
             (int)TargetID.Ensolyss,
-            //(int)TrashID.NightmareAltar,
+            //(int)TargetID.NightmareAltar,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.Add(TrashID.NightmareHallucination1);
-        trashIDs.Add(TrashID.NightmareHallucination2);
-        //trashIDs.Add(TrashID.NightmareAltar);
+        trashIDs.Add(TargetID.NightmareHallucination1);
+        trashIDs.Add(TargetID.NightmareHallucination2);
+        //trashIDs.Add(TargetID.NightmareAltar);
         return trashIDs;
     }
 
@@ -421,7 +421,7 @@ internal class Ensolyss : Nightmare
                     }
                 }
                 break;
-            case (int)TrashID.NightmareHallucination1:
+            case (int)TargetID.NightmareHallucination1:
                 // Lunge (Dash)
                 var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination);
                 foreach (CastEvent c in lungeHallu)
@@ -444,7 +444,7 @@ internal class Ensolyss : Nightmare
                     replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.1, new AgentConnector(target)), lifespan.end);
                 }
                 break;
-            case (int)TrashID.NightmareHallucination2:
+            case (int)TargetID.NightmareHallucination2:
                 break;
             default:
                 break;

@@ -59,7 +59,7 @@ internal class Dhuum : HallOfChains
                     .UsingChecker((de,log) => de.HealthDamage > 0),
             ]),
             new PlayerDstBuffApplyMechanic(Superspeed, "Superspeed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Grey), "SupSpeed.Orb", "Gained Superspeed from Desmina (Walked over orb)", "Took Superspeed orb", 0)
-                .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TrashID.DhuumDesmina)),
+                .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.DhuumDesmina)),
             new PlayerDstHitMechanic(ConeSlash, "Slash", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone","Boon ripping Cone Attack", "Cone",0),
             new PlayerDstHitMechanic(CullDamage, "Cull", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Teal), "Crack","Cull (Fearing Fissures)", "Cracks",0),
             new PlayerDstHitMechanic(PutridBomb, "Putrid Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark","Necro Marks during Scythe attack", "Necro Marks",0),
@@ -240,7 +240,7 @@ internal class Dhuum : HallOfChains
             phases[i].AddTarget(dhuum);
         }
         // Add enforcers as secondary target to the phases
-        var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer));
+        var enforcers = Targets.Where(x => x.IsSpecies(TargetID.Enforcer));
         foreach (PhaseData phase in phases)
         {
             if (phase.CanBeSubPhase)
@@ -256,19 +256,19 @@ internal class Dhuum : HallOfChains
         return
         [
             (int)TargetID.Dhuum,
-            (int)TrashID.Echo,
-            (int)TrashID.Enforcer,
-            (int)TrashID.UnderworldReaper,
+            (int)TargetID.Echo,
+            (int)TargetID.Enforcer,
+            (int)TargetID.UnderworldReaper,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Messenger,
-            TrashID.Deathling,
-            TrashID.DhuumDesmina
+            TargetID.Messenger,
+            TargetID.Deathling,
+            TargetID.DhuumDesmina
         ];
     }
 
@@ -278,7 +278,7 @@ internal class Dhuum : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem messenger = agentData.GetNPCsByID(TrashID.Messenger).MinBy(x => x.FirstAware);
+            AgentItem messenger = agentData.GetNPCsByID(TargetID.Messenger).MinBy(x => x.FirstAware);
             if (messenger != null)
             {
                 startToUse = messenger.FirstAware;
@@ -309,7 +309,7 @@ internal class Dhuum : HallOfChains
             if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
             {
                 soul.OverrideType(AgentItem.AgentType.NPC, agentData);
-                soul.OverrideID(TrashID.YourSoul, agentData);
+                soul.OverrideID(TargetID.YourSoul, agentData);
                 if (soul.GetFinalMaster() != firstApplier)
                 {
                     soul.SetMaster(firstApplier);
@@ -321,7 +321,7 @@ internal class Dhuum : HallOfChains
 
         // Adding counting number to the Enforcers
         int i = 1;
-        foreach (var enforcer in Targets.Where(x => x.IsSpecies(TrashID.Enforcer)))
+        foreach (var enforcer in Targets.Where(x => x.IsSpecies(TargetID.Enforcer)))
         {
             enforcer.OverrideName(enforcer.Character + " " + i);
             i++;
@@ -525,12 +525,12 @@ internal class Dhuum : HallOfChains
                     }
                 }
                 break;
-            case (int)TrashID.DhuumDesmina:
+            case (int)TargetID.DhuumDesmina:
                 break;
-            case (int)TrashID.Echo:
+            case (int)TargetID.Echo:
                 replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
-            case (int)TrashID.Enforcer:
+            case (int)TargetID.Enforcer:
                 {
                     var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe);
@@ -549,15 +549,15 @@ internal class Dhuum : HallOfChains
                     }
                 }
                 break;
-            case (int)TrashID.Messenger:
+            case (int)TargetID.Messenger:
                 replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
                 var fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                 replay.Decorations.AddTether(fixations, Colors.Red, 0.4);
                 break;
-            case (int)TrashID.Deathling:
+            case (int)TargetID.Deathling:
                 break;
-            case (int)TrashID.UnderworldReaper:
+            case (int)TargetID.UnderworldReaper:
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
@@ -683,7 +683,7 @@ internal class Dhuum : HallOfChains
 
         // Soul split
         var hastenedDemise = p.GetBuffStatus(log, HastenedDemise, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1);
-        var souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
+        var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
         foreach (AgentItem soul in souls)
         {
             Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - ServerDelayConstant);

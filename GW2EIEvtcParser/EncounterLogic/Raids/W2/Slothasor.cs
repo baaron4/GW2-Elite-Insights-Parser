@@ -64,15 +64,15 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Slubling1,
-            TrashID.Slubling2,
-            TrashID.Slubling3,
-            TrashID.Slubling4,
-            TrashID.PoisonMushroom
+            TargetID.Slubling1,
+            TargetID.Slubling2,
+            TargetID.Slubling3,
+            TargetID.Slubling4,
+            TargetID.PoisonMushroom
         ];
     }
 
@@ -144,7 +144,7 @@ internal class Slothasor : SalvationPass
                     {
                         lastDeadTime = deadEvent.Time;
                     }
-                    AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TrashID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
+                    AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TargetID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
                     copyEventsFrom.Add(aliveMushroom);
                 }
@@ -199,7 +199,7 @@ internal class Slothasor : SalvationPass
                     replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 break;
-            case (int)TrashID.PoisonMushroom:
+            case (int)TargetID.PoisonMushroom:
                 break;
             default:
                 break;

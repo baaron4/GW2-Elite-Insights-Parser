@@ -101,13 +101,13 @@ internal class Adina : TheKeyOfAhdashim
             var attackOns = targetables.Where(x => x.Targetable);
             var attackOffs = targetables.Where(x => !x.Targetable);
             CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == StateChange.Position);
-            TrashID id = TrashID.HandOfErosion;
+            var id = TargetID.HandOfErosion;
             if (posEvt != null)
             {
                 var pos = MovementEvent.GetPoint3D(posEvt);
                 if (handOfEruptionPositions.Any(x => (x - pos.XY()).Length() < InchDistanceThreshold))
                 {
-                    id = TrashID.HandOfEruption;
+                    id = TargetID.HandOfEruption;
                 }
             }
 
@@ -129,7 +129,7 @@ internal class Adina : TheKeyOfAhdashim
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
         foreach (SingleActor target in Targets)
         {
-            if (target.IsAnySpecies(new [] { TrashID.HandOfErosion, TrashID.HandOfEruption }))
+            if (target.IsAnySpecies(new [] { TargetID.HandOfErosion, TargetID.HandOfEruption }))
             {
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))
@@ -146,8 +146,8 @@ internal class Adina : TheKeyOfAhdashim
         return
         [
             (int)TargetID.Adina,
-            (int)TrashID.HandOfErosion,
-            (int)TrashID.HandOfEruption
+            (int)TargetID.HandOfErosion,
+            (int)TargetID.HandOfEruption
         ];
     }
 
@@ -156,8 +156,8 @@ internal class Adina : TheKeyOfAhdashim
         return new Dictionary<int, int>()
         {
             { (int)TargetID.Adina, 0 },
-            { (int)TrashID.HandOfErosion, 1 },
-            { (int)TrashID.HandOfEruption, 1 },
+            { (int)TargetID.HandOfErosion, 1 },
+            { (int)TargetID.HandOfEruption, 1 },
         };
     }
 
@@ -248,7 +248,7 @@ internal class Adina : TheKeyOfAhdashim
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         phases[0].AddTarget(adina);
-        var handIds = new TrashID[] { TrashID.HandOfErosion, TrashID.HandOfEruption };
+        var handIds = new TargetID[] { TargetID.HandOfErosion, TargetID.HandOfEruption };
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
         BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
@@ -272,7 +272,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
                     splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, [(int)TrashID.HandOfErosion, (int)TrashID.HandOfEruption], log);
+                    AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
                 }
             }
@@ -281,7 +281,7 @@ internal class Adina : TheKeyOfAhdashim
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
                 splitPhaseEnds.Add(end);
-                AddTargetsToPhaseAndFit(splitPhase, [(int)TrashID.HandOfErosion, (int)TrashID.HandOfEruption], log);
+                AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
         }

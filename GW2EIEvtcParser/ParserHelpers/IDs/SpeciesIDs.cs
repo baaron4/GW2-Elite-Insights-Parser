@@ -9,143 +9,17 @@ public static class SpeciesIDs
     public enum TargetID : int
     {
         // Raids
-        // - Wing 1
-        ValeGuardian = 15438,
-        Gorseval = 15429,
-        EtherealBarrier = SpeciesIDs.EtherealBarrier,
-        EtherealBarrierGadget = 47188, // Gadget
-        Sabetha = 15375,
-        // - Wing 2
-        Slothasor = 16123,
-        Berg = 16088,
-        Zane = 16137,
-        Narella = 16125,
-        Matthias = 16115,
-        // - Wing 3
-        McLeodTheSilent = 16253,
-        KeepConstruct = 16235,
-        Xera = 16246,
-        Xera2 = 16286,
-        // - Wing 4
-        Cairn = 17194,
-        MursaatOverseer = 17172,
-        Samarog = 17188,
-        Deimos = 17154,
-        // - Wing 5
-        SoullessHorror = 19767,
-        Desmina = 19828,
-        BrokenKing = 19691,
-        EaterOfSouls = 19536,
-        EyeOfJudgement = 19651,
-        EyeOfFate = 19844,
-        Dhuum = 19450,
-        // - Wing 6
-        ConjuredAmalgamate = 43974, // Gadget
-        CARightArm = 10142, // Gadget
-        CALeftArm = 37464, // Gadget
-        ConjuredAmalgamate_CHINA = 44885, // Gadget
-        CARightArm_CHINA = 11053, // Gadget
-        CALeftArm_CHINA = 38375, // Gadget
-        Nikare = 21105,
-        Kenut = 21089,
-        Qadim = 20934,
-        // - Wing 7
-        Adina = 22006,
-        Sabir = 21964,
-        PeerlessQadim = 22000,
-        // - Wing 8
-        Greer = 26725,
-        Decima = 26774,
-        Ura = 26712,
-        DecimaCM = 26867,
-        // Strike Missions
-        // - Festival
-        Freezie = 21333,
-        // - Icebrood Saga
-        IcebroodConstruct = 22154,
-        VoiceOfTheFallen = 22343,
-        ClawOfTheFallen = 22481,
-        VoiceAndClaw = 22315,
-        FraenirOfJormag = 22492,
-        IcebroodConstructFraenir = 22436,
-        Boneskinner = 22521,
-        WhisperOfJormag = 22711,
-        VariniaStormsounder = 22836,
-        // - End of Dragons
-        MaiTrinStrike = 24033,
-        EchoOfScarletBriarNM = 24768,
-        EchoOfScarletBriarCM = 25247,
-        Ankka = 23957,
-        MinisterLi = 24485,
-        MinisterLiCM = 24266,
-        GadgetTheDragonVoid1 = 43488, // Gadget
-        GadgetTheDragonVoid2 = 1378, // Gadget
-        VoidAmalgamate1 = 24375,
-        TheDragonVoidZhaitan = SpeciesIDs.TheDragonVoidZhaitan,
-        TheDragonVoidJormag = SpeciesIDs.TheDragonVoidJormag,
-        TheDragonVoidKralkatorrik = SpeciesIDs.TheDragonVoidKralkatorrik,
-        TheDragonVoidSooWon = SpeciesIDs.TheDragonVoidSooWon,
-        TheDragonVoidPrimordus = SpeciesIDs.TheDragonVoidPrimordus,
-        TheDragonVoidMordremoth = SpeciesIDs.TheDragonVoidMordremoth,
-        PrototypeVermilion = 25413,
-        PrototypeArsenite = 25415,
-        PrototypeIndigo = 25419,
-        PrototypeVermilionCM = 25414,
-        PrototypeArseniteCM = 25416,
-        PrototypeIndigoCM = 25423,
-        // Secrets of the Obscure
-        Dagda = 25705,
-        Cerus = 25989,
-        // Fractals
-        MAMA = 17021,
-        Siax = 17028,
-        Ensolyss = 16948,
-        Skorvald = 17632,
-        Artsariiv = 17949,
-        Arkk = 17759,
-        MaiTrinFract = 19697,
-        ShadowMinotaur = 20682,
-        BroodQueen = 20742,
-        TheVoice = 20497,
-        AiKeeperOfThePeak = 23254,
-        AiKeeperOfThePeak2 = SpeciesIDs.AiKeeperOfThePeak2,
-        KanaxaiScytheOfHouseAurkusNM = 25572,
-        KanaxaiScytheOfHouseAurkusCM = 25577,
-        CerusLonelyTower = 26257,
-        DeimosLonelyTower = 26226,
-        EparchLonelyTower = 26231,
-        // Golems
-        MassiveGolem10M = 16169,
-        MassiveGolem4M = 16202,
-        MassiveGolem1M = 16178,
-        VitalGolem = 16198,
-        AvgGolem = 16177,
-        StdGolem = 16199,
-        LGolem = 19676,
-        MedGolem = 19645,
-        ConditionGolem = 16174,
-        PowerGolem = 16176,
-        // Open World
-        SooWonOW = 35552, // Gadget
-        // Story
-        Mordremoth = 15884,
-        // General
-        WorldVersusWorld = 1,
-        Instance = 2,
-        DummyTarget = SpeciesIDs.DummyTarget,
-        Unknown = int.MaxValue,
-    };
-
-    public enum TrashID : int
-    {
-        // Raids
         Glenna = 15014,
+        // - Wing 1
         // - Vale Guardian
+        ValeGuardian = 15438,
         Seekers = 15426,
         RedGuardian = 15433,
         BlueGuardian = 15431,
         GreenGuardian = 15420,
         // - Spirit Race
+        EtherealBarrier = SpeciesIDs.EtherealBarrier,
+        EtherealBarrierGadget = 47188, // Gadget
         WallOfGhosts = 15415,
         AngeredSpiritSR = 15389,
         AngeredSpiritSR2 = 15409,
@@ -153,10 +27,12 @@ public static class SpeciesIDs
         DerangedSpiritSR2 = 15425,
         EnragedSpiritSR = 15414,
         // - Gorseval
+        Gorseval = 15429,
         ChargedSoul = 15434,
         EnragedSpirit = 16024,
         AngeredSpirit = 16005,
         // - Sabetha
+        Sabetha = 15375,
         Kernan = 15372,
         Knuckles = 15404,
         Karde = 15430,
@@ -165,13 +41,18 @@ public static class SpeciesIDs
         BanditArsonist = 15421,
         Cannon = SpeciesIDs.Cannon,
         HeavyBomb = SpeciesIDs.HeavyBomb,
+        // - Wing 2
         // - Slothasor
+        Slothasor = 16123,
         Slubling1 = 16064,
         Slubling2 = 16071,
         Slubling3 = 16077,
         Slubling4 = 16104,
         PoisonMushroom = SpeciesIDs.PoisonMushroom,
         // - Bandit Trio
+        Berg = 16088,
+        Zane = 16137,
+        Narella = 16125,
         Cage = SpeciesIDs.Cage,
         Bombs = SpeciesIDs.Bombs,
         BanditSaboteur = 16117,
@@ -196,13 +77,16 @@ public static class SpeciesIDs
         Prisoner1 = 16056,
         Prisoner2 = 16103,
         // - Matthias
+        Matthias = 16115,
         Spirit = 16105,
         Spirit2 = 16114,
         IcePatch = 16139,
         Storm = 16108,
         Tornado = 16068,
         MatthiasSacrificeCrystal = MatthiasSacrifice,
+        // - Wing 3
         // - Escort
+        McLeodTheSilent = 16253,
         MushroomSpikeThrower = 16219,
         MushroomKing = 16255,
         MushroomCharger = 16224,
@@ -221,6 +105,7 @@ public static class SpeciesIDs
         CrimsonMcLeod = 16241,
         Mine = SpeciesIDs.Mine,
         // - Keep Construct
+        KeepConstruct = 16235,
         Olson = 16244,
         Engul = 16274,
         Faerla = 16264,
@@ -237,9 +122,11 @@ public static class SpeciesIDs
         CrimsonPhantasm = 16257,
         RetrieverProjection = 16249,
         // - Twisted Castle
-        HauntingStatue = 16247,
         //CastleFountain = 32951,
+        HauntingStatue = 16247,
         // - Xera
+        Xera = 16246,
+        Xera2 = 16286,
         BloodstoneShardMainFight = SpeciesIDs.BloodstoneShardMainFight,
         BloodstoneShardRift = SpeciesIDs.BloodstoneShardRift,
         BloodstoneShardButton = SpeciesIDs.BloodstoneShardButton,
@@ -254,13 +141,19 @@ public static class SpeciesIDs
         WhiteMantleBattleMage2 = 16226,
         ExquisiteConjunction = 16232,
         FakeXera = 16289,
+        // - Wing 4
+        // - Cairn
+        Cairn = 17194,
         // - Mursaat Overseer
+        MursaatOverseer = 17172,
         Jade = 17181,
         // - Samarog
+        Samarog = 17188,
         Guldhem = 17208,
         Rigom = 17124,
         SpearAggressionRevulsion = SpeciesIDs.SpearAggressionRevulsion,
         // - Deimos
+        Deimos = 17154,
         Saul = 17126,
         ShackledPrisoner = SpeciesIDs.ShackledPrisoner,
         DemonicBond = SpeciesIDs.DemonicBond,
@@ -274,28 +167,37 @@ public static class SpeciesIDs
         Greed = 17213,
         Pride = 17233,
         Hands = 17221,
+        // - Wing 5
         // - Soulless Horror
+        SoullessHorror = 19767,
         TormentedDead = 19422,
         SurgingSoul = 19474,
         Scythe = 19396,
         FleshWurm = 19464,
         // - River of Souls
+        Desmina = 19828,
         Enervator = 19863,
         HollowedBomber = 19399,
         RiverOfSouls = 19829,
         SpiritHorde1 = 19461,
         SpiritHorde2 = 19400,
         SpiritHorde3 = 19692,
-        // - Statues of Darkness
-        LightThieves = 19658,
-        MazeMinotaur = 19402,
+        // - Statues of Ice
+        BrokenKing = 19691,
         // - Statue of Death
+        EaterOfSouls = 19536,
         OrbSpider = 19801,
         GreenSpirit1 = 19587,
         GreenSpirit2 = 19571,
         AscalonianPeasant1 = 19810,
         AscalonianPeasant2 = 19758,
+        // - Statues of Darkness
+        EyeOfJudgement = 19651,
+        EyeOfFate = 19844,
+        LightThieves = 19658,
+        MazeMinotaur = 19402,
         // - Dhuum (Skeletons are the same as Spirit Hordes)
+        Dhuum = 19450,
         Messenger = 19807,
         Echo = 19628,
         Enforcer = 19681,
@@ -303,11 +205,22 @@ public static class SpeciesIDs
         UnderworldReaper = 19831,
         DhuumDesmina = 19481,
         YourSoul = SpeciesIDs.YourSoul,
+        // - Wing 6
         // - Conjured Amalgamate
+        ConjuredAmalgamate = 43974, // Gadget
+        CARightArm = 10142, // Gadget
+        CALeftArm = 37464, // Gadget
+        ConjuredAmalgamate_CHINA = 44885, // Gadget
+        CARightArm_CHINA = 11053, // Gadget
+        CALeftArm_CHINA = 38375, // Gadget
         ConjuredGreatsword = 21255,
         ConjuredShield = 21170,
         ConjuredPlayerSword = CASword,
+        // - Twin Largos
+        Nikare = 21105,
+        Kenut = 21089,
         // - Qadim
+        Qadim = 20934,
         LavaElemental1 = 21236,
         LavaElemental2 = 21078,
         IcebornHydra = 21163,
@@ -374,10 +287,13 @@ public static class SpeciesIDs
         TamedWarg = 18184,
         TarElemental = 21019,
         WindRider = 21164,
+        // - Wing 7
         // - Adina
+        Adina = 22006,
         HandOfErosion = SpeciesIDs.HandOfErosion,
         HandOfEruption = SpeciesIDs.HandOfEruption,
         // - Sabir
+        Sabir = 21964,
         ParalyzingWisp = 21955,
         VoltaicWisp = 21975,
         SmallJumpyTornado = 21961,
@@ -385,6 +301,7 @@ public static class SpeciesIDs
         BigKillerTornado = 21987,
         SabirPlatform = 21998,
         // - Peerless Qadim
+        PeerlessQadim = 22000,
         PeerlessQadimPylon = 21996,
         PeerlessQadimAuraPylon = 21962,
         EntropicDistortion = 21973,
@@ -392,17 +309,20 @@ public static class SpeciesIDs
         Brandstorm = 21978,
         GiantQadimThePeerless = 21953,
         DummyPeerlessQadim = 22005,
-        // Wing 8
+        // - Wing 8
         VeteranVentshot = 26799,
         EliteVentshot = 26766,
         ChampionVentshot = 26795,
         // - Greer
+        Greer = 26725,
         Reeg = 26742,
         Gree = 26771,
         Ereg = 26859,
         EmpoweringBeast = 26776,
         ProtoGreerling = 26862,
         // - Decima
+        Decima = 26774,
+        DecimaCM = 26867,
         EnlightenedConduit = 26709,
         EnlightenedConduitGadget = SpeciesIDs.EnlightenedConduitGadget,
         BigEnlightenedConduitGadget = SpeciesIDs.BigEnlightenedConduitGadget,
@@ -419,6 +339,7 @@ public static class SpeciesIDs
         EnlightenedConduitCM = 26826,
         TranscendentBoulder = 26856,
         // - Ura
+        Ura = 26712,
         EliteFumaroller = 26797,
         ChampionFumaroller = 26744,
         ToxicGeyser = SpeciesIDs.ToxicGeyser,
@@ -426,16 +347,28 @@ public static class SpeciesIDs
         TitanspawnGeyser = 26741,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         // Strike Missions
+        // - Festival
         // - Freezie
+        Freezie = 21333,
         FreeziesFrozenHeart = 21328,
         IceStormer = 21325,
         IceSpiker = 21337,
         IcyProtector = 21326,
         SnowPile = SpeciesIDs.SnowPile,
+        // - Icebrood Saga
+        // - Icebrood
+        IcebroodConstruct = 22154,
+        // - Voice and Claw
+        VoiceOfTheFallen = 22343,
+        ClawOfTheFallen = 22481,
+        VoiceAndClaw = 22315,
         // - Fraenir
+        FraenirOfJormag = 22492,
         IcebroodElemental = 22576,
         BoundIcebroodElemental = SpeciesIDs.BoundIcebroodElemental,
+        IcebroodConstructFraenir = 22436,
         // - Boneskinner
+        Boneskinner = 22521,
         PrioryExplorer = 22561,
         PrioryScholar = 22448,
         VigilRecruit = 22389,
@@ -443,6 +376,7 @@ public static class SpeciesIDs
         AberrantWisp = 22538,
         Torch = SpeciesIDs.Torch,
         // - Whisper of Jormag
+        WhisperOfJormag = 22711,
         WhisperEcho = 22628,
         DoppelgangerElementalist = 22627,
         DoppelgangerElementalist2 = 22691,
@@ -463,6 +397,7 @@ public static class SpeciesIDs
         DoppelgangerWarrior = 22640,
         DoppelgangerWarrior2 = 22717,
         // - Cold War
+        VariniaStormsounder = 22836,
         PropagandaBallon = 23093,
         DominionBladestorm = 23102,
         DominionStalker = 22882,
@@ -475,7 +410,11 @@ public static class SpeciesIDs
         BloodLegionBlademaster = 22993,
         CharrTank = 22953,
         SonsOfSvanirHighShaman = 22283,
+        // - End of Dragons
         // - Aetherblade Hideout
+        MaiTrinStrike = 24033,
+        EchoOfScarletBriarNM = 24768,
+        EchoOfScarletBriarCM = 25247,
         MaiTrinStrikeDuringEcho = 23826,
         ScarletPhantom = 24404,
         ScarletPhantomBreakbar = 23656,
@@ -486,7 +425,8 @@ public static class SpeciesIDs
         ScarletPhantomDeathBeamCM2 = 25287,
         FerrousBomb = SpeciesIDs.FerrousBomb,
         // - Xunlai Jade Junkyard
-        Ankka = 24634,
+        Ankka = 23957,
+        Ankka2 = 24634,
         KraitsHallucination = 24258,
         LichHallucination = 24158,
         QuaggansHallucinationNM = 24969,
@@ -499,6 +439,8 @@ public static class SpeciesIDs
         ZhaitansReach = 23839,
         SanctuaryPrism = SpeciesIDs.SanctuaryPrism,
         // - Kaineng Overlook
+        MinisterLi = 24485,
+        MinisterLiCM = 24266,
         TheSniper = 23612,
         TheSniperCM = 25259,
         TheMechRider = 24660,
@@ -512,6 +454,15 @@ public static class SpeciesIDs
         SpiritOfPain = 23793,
         SpiritOfDestruction = 23961,
         // - Harvest Temple - Void Amalgamate
+        GadgetTheDragonVoid1 = 43488, // Gadget
+        GadgetTheDragonVoid2 = 1378, // Gadget
+        VoidAmalgamate1 = 24375,
+        TheDragonVoidZhaitan = SpeciesIDs.TheDragonVoidZhaitan,
+        TheDragonVoidJormag = SpeciesIDs.TheDragonVoidJormag,
+        TheDragonVoidKralkatorrik = SpeciesIDs.TheDragonVoidKralkatorrik,
+        TheDragonVoidSooWon = SpeciesIDs.TheDragonVoidSooWon,
+        TheDragonVoidPrimordus = SpeciesIDs.TheDragonVoidPrimordus,
+        TheDragonVoidMordremoth = SpeciesIDs.TheDragonVoidMordremoth,
         PushableVoidAmalgamate = SpeciesIDs.PushableVoidAmalgamate,
         VoidAmalgamate = 24375,
         KillableVoidAmalgamate = 23956,
@@ -538,8 +489,16 @@ public static class SpeciesIDs
         JormagMovingFrostBeamNorth = 24541,
         JormagMovingFrostBeam = SpeciesIDs.JormagMovingFrostBeam,
         // - Old Lion's Court
+        PrototypeVermilion = 25413,
+        PrototypeArsenite = 25415,
+        PrototypeIndigo = 25419,
+        PrototypeVermilionCM = 25414,
+        PrototypeArseniteCM = 25416,
+        PrototypeIndigoCM = 25423,
         Tribocharge = 25424,
+        // Secrets of the Obscure
         // - Cosmic Observatory
+        Dagda = 25705,
         TheTormented = 26016,
         VeteranTheTormented = 25829,
         EliteTheTormented = 26000,
@@ -548,6 +507,7 @@ public static class SpeciesIDs
         SoulFeast = 26069,
         Zojja = 26011,
         // - Temple of Febe
+        Cerus = 25989,
         EmbodimentOfGluttony = 25677,
         EmbodimentOfRage = 25686,
         EmbodimentOfDespair = 26034,
@@ -570,21 +530,29 @@ public static class SpeciesIDs
         ChampionRabbit = 11329,
         AwakenedAbomination = 21634,
         TheMossman = 11277,
+        MaiTrinFract = 19697,
+        ShadowMinotaur = 20682,
+        BroodQueen = 20742,
+        TheVoice = 20497,
         // - MAMA
-        Arkk = 16902,
+        MAMA = 17021,
+        Arkk2 = 16902,
         GreenKnight = 16906,
         RedKnight = 16974,
         BlueKnight = 16899,
         TwistedHorror = 17009,
         // - Siax
+        Siax = 17028,
         VolatileHallucinationSiax = 17002,
         EchoOfTheUnclean = 17068,
         NightmareHallucinationSiax = 16911,
         // - Ensolyss
+        Ensolyss = 16948,
         NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
         NightmareHallucination2 = 17033, // (small adds, last phase)
         NightmareAltar = 35791,
         // - Skorvald
+        Skorvald = 17632,
         UnknownAnomaly = SpeciesIDs.UnknownAnomaly,
         FluxAnomaly1 = 17578,
         FluxAnomaly2 = 17929,
@@ -596,6 +564,7 @@ public static class SpeciesIDs
         FluxAnomalyCM4 = 17673,
         SolarBloom = 17732,
         // - Artsariiv
+        Artsariiv = 17949,
         TemporalAnomalyArtsariiv = 17870,
         Spark = 17630,
         SmallArtsariiv = 17811, // tiny adds
@@ -603,6 +572,7 @@ public static class SpeciesIDs
         BigArtsariiv = 17937, // big adds
         CloneArtsariiv = SubArtsariiv, // clone adds
         // - Arkk
+        Arkk = 17759,
         TemporalAnomalyArkk = 17720,
         Archdiviner = 17893,
         FanaticDagger1 = 11281,
@@ -615,6 +585,8 @@ public static class SpeciesIDs
         CHOP = 16552,
         ProjectionArkk = 17613,
         // - Ai
+        AiKeeperOfThePeak = 23254,
+        AiKeeperOfThePeak2 = SpeciesIDs.AiKeeperOfThePeak2,
         EnragedWaterSprite = 23270,
         TransitionSorrowDemon1 = 23265,
         TransitionSorrowDemon2 = 23242,
@@ -626,6 +598,8 @@ public static class SpeciesIDs
         FearDemon = 23264,
         GuiltDemon = 23252,
         // - Kanaxai
+        KanaxaiScytheOfHouseAurkusNM = 25572,
+        KanaxaiScytheOfHouseAurkusCM = 25577,
         AspectOfTorment = 25556,
         AspectOfLethargy = 25561,
         AspectOfExposure = 25562,
@@ -635,13 +609,29 @@ public static class SpeciesIDs
         CaptainThess1 = 25554,
         CaptainThess2 = 25557,
         // - Eparch
+        CerusLonelyTower = 26257,
+        DeimosLonelyTower = 26226,
+        EparchLonelyTower = 26231,
         IncarnationOfCruelty = 26270,
         IncarnationOfJudgement = 26260,
         AvatarOfSpite = 26268,
         TheTormentedLonelyTower = 26193,
         TheCravenLonelyTower = 26193,
         KryptisRift = SpeciesIDs.KryptisRift,
-        // Open world Soo-Won
+        // Golems
+        MassiveGolem10M = 16169,
+        MassiveGolem4M = 16202,
+        MassiveGolem1M = 16178,
+        VitalGolem = 16198,
+        AvgGolem = 16177,
+        StdGolem = 16199,
+        LGolem = 19676,
+        MedGolem = 19645,
+        ConditionGolem = 16174,
+        PowerGolem = 16176,
+        // Open World
+        // Soo Won OW
+        SooWonOW = 35552, // Gadget
         SooWonTail = 51756,
         VoidGiant2 = 24310,
         VoidTimeCaster2 = 24586,
@@ -684,6 +674,7 @@ public static class SpeciesIDs
         VoidWorm = 23701,
         // Story
         // - Mordremoth
+        Mordremoth = 15884,
         SmotheringShadow = 15640,
         Canach = 15501,
         Braham = 15778,
@@ -700,6 +691,9 @@ public static class SpeciesIDs
         //BlightedTrahearne = 15597,
         //BlightedEir = 15597,
         // General
+        WorldVersusWorld = 1,
+        Instance = 2,
+        DummyTarget = SpeciesIDs.DummyTarget,
         Environment = SpeciesIDs.Environment,
         Unknown = int.MaxValue,
     };
@@ -975,11 +969,6 @@ public static class SpeciesIDs
     public static TargetID GetTargetID(int id)
     {
         return Enum.IsDefined(typeof(TargetID), id) ? (TargetID)id : TargetID.Unknown;
-    }
-
-    public static TrashID GetTrashID(int id)
-    {
-        return Enum.IsDefined(typeof(TrashID), id) ? (TrashID)id : TrashID.Unknown;
     }
 
     public static MinionID GetMinionID(int id)

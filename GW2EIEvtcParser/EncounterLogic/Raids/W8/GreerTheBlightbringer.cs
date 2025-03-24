@@ -29,9 +29,9 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0)
                 .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0)
-                .UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Reeg)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+                .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Reeg)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
             new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0)
-                .UsingChecker((hde, log) => hde.To.IsSpecies(TrashID.Gree)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
+                .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Gree)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
 
             new PlayerDstHitMechanic([RotTheWorld, RotTheWorldCM], "Rot the World", new MechanicPlotlySetting(Symbols.Star, Colors.Teal), "RotWorld.H", "Hit by Rot the World (Breakbar AoEs)", "Rot the World Hit", 0),
             new PlayerDstHitMechanic([RakeTheRot, RakeTheRot2, RakeTheRot3], "Rake the Rot", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "Rake.H", "Hit by Rake the Rot", "Rake the Rot Hit", 0),
@@ -72,7 +72,7 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstHitMechanic([StompTheGrowth, StompTheGrowth2, StompTheGrowth3], "Stomp the Growth", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "Stomp.H", "Hit by Stomp the Growth", "Stomp the Growth Hit", 0),
 
             new PlayerDstBuffRemoveMechanic(Boons, "Boon Corrupt", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted", 100)
-                .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TrashID.Gree, (int)TrashID.Reeg, (int)TrashID.Ereg])),
+                .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg, (int)TargetID.Ereg])),
 
             new EnemyDstBuffApplyMechanic(EmpoweredGreer, "Empowered", new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", 0),
         });
@@ -93,10 +93,10 @@ internal class GreerTheBlightbringer : MountBalrior
         return
         [
             (int)TargetID.Greer,
-            (int)TrashID.Gree,
-            (int)TrashID.Reeg,
-            (int)TrashID.Ereg,
-            (int)TrashID.ProtoGreerling,
+            (int)TargetID.Gree,
+            (int)TargetID.Reeg,
+            (int)TargetID.Ereg,
+            (int)TargetID.ProtoGreerling,
         ];
     }
 
@@ -105,9 +105,9 @@ internal class GreerTheBlightbringer : MountBalrior
         return
         [
             (int)TargetID.Greer,
-            (int)TrashID.Gree,
-            (int)TrashID.Reeg,
-            (int)TrashID.Ereg,
+            (int)TargetID.Gree,
+            (int)TargetID.Reeg,
+            (int)TargetID.Ereg,
         ];
     }
 
@@ -116,18 +116,18 @@ internal class GreerTheBlightbringer : MountBalrior
         return new Dictionary<int, int>()
         {
             { (int)TargetID.Greer, 0 },
-            { (int)TrashID.Gree, 1 },
-            { (int)TrashID.Reeg, 1 },
-            { (int)TrashID.Ereg, 1 },
-            { (int)TrashID.ProtoGreerling, 2 },
+            { (int)TargetID.Gree, 1 },
+            { (int)TargetID.Reeg, 1 },
+            { (int)TargetID.Ereg, 1 },
+            { (int)TargetID.ProtoGreerling, 2 },
         };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.EmpoweringBeast,
+            TargetID.EmpoweringBeast,
         ];
     }
 
@@ -137,7 +137,7 @@ internal class GreerTheBlightbringer : MountBalrior
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, [(int)TargetID.Greer, (int)TrashID.Gree, (int)TrashID.Reeg], logStartNPCUpdate.DstAgent);
+            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, [(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg], logStartNPCUpdate.DstAgent);
         }
         return startToUse;
     }
@@ -150,7 +150,7 @@ internal class GreerTheBlightbringer : MountBalrior
         int cur = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.ProtoGreerling))
+            if (target.IsSpecies(TargetID.ProtoGreerling))
             {
                 target.OverrideName("Champion " + target.Character + " " + cur++);
             }
@@ -160,7 +160,7 @@ internal class GreerTheBlightbringer : MountBalrior
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
-        SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
+        SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
         if (ereg != null)
         {
             greer.OverrideName("Godspoil Greer");
@@ -211,16 +211,16 @@ internal class GreerTheBlightbringer : MountBalrior
         SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         var subTitanIDs = new List<int>
         {
-            (int) TrashID.Reeg,
-            (int) TrashID.Gree,
+            (int) TargetID.Reeg,
+            (int) TargetID.Gree,
         };
         var subTitans = Targets.Where(x => x.IsAnySpecies(subTitanIDs));
         // Ereg is present in CM
-        var ereg = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.Ereg));
+        var ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
         AddMainTitansToPhase(phases[0], greer, subTitans, ereg);
 
         // The Proto-Greelings can respawn during 10%
-        var protoGreelings = Targets.Where(x => x.IsSpecies(TrashID.ProtoGreerling));
+        var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
         var damageImmunity3StatusCount = greer.GetBuffStatus(log, DamageImmunity3, log.FightData.FightStart, log.FightData.FightEnd).Count(x => x.Value > 0);
         var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(damageImmunity3StatusCount * 3);
         phases[0].AddTargets(filteredProtoGreelings, PhaseData.TargetPriority.Blocking);
@@ -297,7 +297,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     if (i % 2 == 1)
                     {
                         phase.Name = "Proto Greer " + (++protoPhases);
-                        AddTargetsToPhase(phase, [(int)TrashID.ProtoGreerling]);
+                        AddTargetsToPhase(phase, [(int)TargetID.ProtoGreerling]);
                         phases.Add(phase);
                     } 
                     else
@@ -362,31 +362,31 @@ internal class GreerTheBlightbringer : MountBalrior
                     }
                 }
                 break;
-            case (int)TrashID.Reeg:
+            case (int)TargetID.Reeg:
                 AddScatteringSporeblast(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
-            case (int)TrashID.Gree:
+            case (int)TargetID.Gree:
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
-            case (int)TrashID.Ereg:
+            case (int)TargetID.Ereg:
                 AddScatteringSporeblast(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
                 break;
-            case (int)TrashID.ProtoGreerling:
+            case (int)TargetID.ProtoGreerling:
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddScatteringSporeblast(target, log, replay);
                 break;
-            case (int)TrashID.EmpoweringBeast:
+            case (int)TargetID.EmpoweringBeast:
                 // Blighting Stab - Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerBlightingStabIndicator, out var blightingStabIndicator))
                 {
@@ -742,7 +742,7 @@ internal class GreerTheBlightbringer : MountBalrior
         if (log.FightData.Success && log.FightData.IsCM)
         {
             // The buff elegibility remains on players even if Ereg is dead
-            AgentItem? ereg = log.AgentData.GetNPCsByID((int)TrashID.Ereg).FirstOrDefault();
+            AgentItem? ereg = log.AgentData.GetNPCsByID((int)TargetID.Ereg).FirstOrDefault();
             if (ereg != null && !log.CombatData.GetDeadEvents(ereg).Any())
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilitySpareTheEreg], 1));

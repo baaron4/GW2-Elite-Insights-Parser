@@ -47,7 +47,7 @@ internal class SoullessHorror : HallOfChains
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic(SoulRift, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
-                new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(TrashID.TormentedDead)),
+                new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(TargetID.TormentedDead)),
             ]),
         ]));
         Extension = "sh";
@@ -81,17 +81,17 @@ internal class SoullessHorror : HallOfChains
         return
         [
             (int)TargetID.SoullessHorror,
-            (int)TrashID.TormentedDead,
+            (int)TargetID.TormentedDead,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Scythe,
-            TrashID.SurgingSoul,
-            TrashID.FleshWurm
+            TargetID.Scythe,
+            TargetID.SurgingSoul,
+            TargetID.FleshWurm
         ];
     }
 
@@ -133,7 +133,7 @@ internal class SoullessHorror : HallOfChains
         }
 
         // Add number to the spawned Tormented Deads
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead)).ToList();
+        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead)).ToList();
         for (int i = 0; i < tormentedDeads.Count; i++)
         {
             tormentedDeads[i].OverrideName(tormentedDeads[i].Character + " " + (i + 1));
@@ -176,7 +176,7 @@ internal class SoullessHorror : HallOfChains
         }
 
         // Add Tormented Deads as secondary target to the phases
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead));
+        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
         foreach (PhaseData phase in phases)
         {
             if (phase.CanBeSubPhase)
@@ -311,11 +311,11 @@ internal class SoullessHorror : HallOfChains
                 }
                 break;
 
-            case (int)TrashID.Scythe:
+            case (int)TargetID.Scythe:
                 replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
 
-            case (int)TrashID.TormentedDead:
+            case (int)TargetID.TormentedDead:
                 if (replay.Positions.Count == 0)
                 {
                     break;
@@ -323,7 +323,7 @@ internal class SoullessHorror : HallOfChains
                 replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
                 break;
 
-            case (int)TrashID.SurgingSoul:
+            case (int)TargetID.SurgingSoul:
                 if (replay.Positions.Count < 2)
                 {
                     break;
@@ -342,7 +342,7 @@ internal class SoullessHorror : HallOfChains
                 }
                 break;
 
-            case (int)TrashID.FleshWurm:
+            case (int)TargetID.FleshWurm:
                 break;
 
             default:

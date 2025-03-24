@@ -190,7 +190,7 @@ public abstract class FightLogic
     //TODO(Rennorb) @cleanup: use readonlyspan? 
     //NOTE(Rennorb): I purposefully did not change this to a span or array for now, because there are quite a few overrides that take the shape of
     /*
-    protected virtual List<TrashID> GetTrashMobsIDs()
+    protected virtual List<TargetID> GetTrashMobsIDs()
     {
         var trash = new List<>() {A, B};
         trash.AddRange(base.GetTrashMobsIDs);
@@ -200,7 +200,7 @@ public abstract class FightLogic
     // changing the return type to a span is still possible, but initialization requires them to be rewritten with manual array indices and sizes.
     // This is likely to cause issues in the future, because someone _will_ miss updating the indices correctly is something gets added.
     // On the other hand i don't know how often the lists even change, i would imagine this to not happen very frequently - so it still might be a thing we could do.
-    protected virtual List<TrashID> GetTrashMobsIDs()
+    protected virtual List<TargetID> GetTrashMobsIDs()
     {
         return [ ];
     }
@@ -267,7 +267,7 @@ public abstract class FightLogic
                 throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
         }
-        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
+        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTargetID(x.ID))).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2
         var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID) && !x.GetFinalMaster().IsPlayer).ToList();

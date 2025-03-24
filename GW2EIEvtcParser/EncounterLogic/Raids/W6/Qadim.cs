@@ -86,11 +86,11 @@ internal class Qadim : MythwrightGambit
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic(BodyOfFlame, "Body of Flame", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Pink,10), "P.AoE","Body of Flame (Pyre Ground AoE (CM))", "Pyre Hitbox AoE",0),
-                new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>("Retal Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-                new EnemyStatusMechanic<DeadEvent>("Resolution Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>("Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Pyre.K","Pyre Killed", "Pyre Killed",0, (log, a) => a.IsSpecies(TargetID.PyreGuardian) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>("Stab Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pyre.S.K","Stab Pyre Killed", "Stab Pyre Killed",0, (log, a) => a.IsSpecies(TargetID.PyreGuardianStab) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TargetID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>("Retal Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0, (log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
+                new EnemyStatusMechanic<DeadEvent>("Resolution Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0, (log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             ]),
         ]));
         Extension = "qadim";
@@ -115,11 +115,11 @@ internal class Qadim : MythwrightGambit
         return
         [
             (int)TargetID.Qadim,
-            (int)TrashID.AncientInvokedHydra,
-            (int)TrashID.ApocalypseBringer,
-            (int)TrashID.WyvernMatriarch,
-            (int)TrashID.WyvernPatriarch,
-            (int)TrashID.QadimLamp,
+            (int)TargetID.AncientInvokedHydra,
+            (int)TargetID.ApocalypseBringer,
+            (int)TargetID.WyvernMatriarch,
+            (int)TargetID.WyvernPatriarch,
+            (int)TargetID.QadimLamp,
         ];
     }
 
@@ -128,10 +128,10 @@ internal class Qadim : MythwrightGambit
         return
         [
             (int)TargetID.Qadim,
-            (int)TrashID.AncientInvokedHydra,
-            (int)TrashID.ApocalypseBringer,
-            (int)TrashID.WyvernMatriarch,
-            (int)TrashID.WyvernPatriarch
+            (int)TargetID.AncientInvokedHydra,
+            (int)TargetID.ApocalypseBringer,
+            (int)TargetID.WyvernMatriarch,
+            (int)TargetID.WyvernPatriarch
         ];
     }
 
@@ -149,12 +149,12 @@ internal class Qadim : MythwrightGambit
                 foreach (AgentItem platform in platformAgents)
                 {
                     platform.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    platform.OverrideID(TrashID.QadimPlatform, agentData);
+                    platform.OverrideID(TargetID.QadimPlatform, agentData);
                     platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                 }
             }
         }
-        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
+        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
         // Lamps
         if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
         {
@@ -162,7 +162,7 @@ internal class Qadim : MythwrightGambit
             foreach (AgentItem lamp in lampAgents)
             {
                 lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-                lamp.OverrideID(TrashID.QadimLamp, agentData);
+                lamp.OverrideID(TargetID.QadimLamp, agentData);
             }
         }
         // Pyres
@@ -177,34 +177,34 @@ internal class Qadim : MythwrightGambit
                 var position = MovementEvent.GetPoint3D(positionEvt).XY();
                 if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(TrashID.PyreGuardianProtect, agentData);
+                    pyre.OverrideID(TargetID.PyreGuardianProtect, agentData);
                 }
                 else if (stabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(TrashID.PyreGuardianStab, agentData);
+                    pyre.OverrideID(TargetID.PyreGuardianStab, agentData);
                 }
                 else if (resolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal, agentData);
+                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TargetID.PyreGuardianResolution : TargetID.PyreGuardianRetal, agentData);
                 }
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (NPC target in TrashMobs)
         {
-            if (target.IsSpecies(TrashID.PyreGuardianProtect))
+            if (target.IsSpecies(TargetID.PyreGuardianProtect))
             {
                 target.OverrideName("Protect " + target.Character);
             }
-            if (target.IsSpecies(TrashID.PyreGuardianRetal))
+            if (target.IsSpecies(TargetID.PyreGuardianRetal))
             {
                 target.OverrideName("Retal " + target.Character);
             }
-            if (target.IsSpecies(TrashID.PyreGuardianResolution))
+            if (target.IsSpecies(TargetID.PyreGuardianResolution))
             {
                 target.OverrideName("Resolution " + target.Character);
             }
-            if (target.IsSpecies(TrashID.PyreGuardianStab))
+            if (target.IsSpecies(TargetID.PyreGuardianStab))
             {
                 target.OverrideName("Stab " + target.Character);
             }
@@ -253,7 +253,7 @@ internal class Qadim : MythwrightGambit
             }
         }
         if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
-            (Targets.Any(x => x.IsSpecies(TrashID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TrashID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
+            (Targets.Any(x => x.IsSpecies(TargetID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TargetID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
         {
             return FightData.EncounterStartStatus.Late;
         }
@@ -294,12 +294,12 @@ internal class Qadim : MythwrightGambit
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
         phases[0].AddTarget(qadim);
-        var secondaryTargetIds = new HashSet<TrashID>
+        var secondaryTargetIds = new HashSet<TargetID>
                     {
-                       TrashID.WyvernMatriarch,
-                       TrashID.WyvernPatriarch,
-                       TrashID.AncientInvokedHydra,
-                       TrashID.ApocalypseBringer,
+                       TargetID.WyvernMatriarch,
+                       TargetID.WyvernPatriarch,
+                       TargetID.AncientInvokedHydra,
+                       TargetID.ApocalypseBringer,
                     };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -314,13 +314,13 @@ internal class Qadim : MythwrightGambit
             {
                 phase.Name = "Qadim P" + (i) / 2;
                 var pyresFirstAware = new List<long>();
-                var pyres = new List<TrashID>
+                var pyres = new List<TargetID>
                     {
-                        TrashID.PyreGuardian,
-                        TrashID.PyreGuardianProtect,
-                        TrashID.PyreGuardianStab,
-                        TrashID.PyreGuardianRetal,
-                        TrashID.PyreGuardianResolution,
+                        TargetID.PyreGuardian,
+                        TargetID.PyreGuardianProtect,
+                        TargetID.PyreGuardianStab,
+                        TargetID.PyreGuardianRetal,
+                        TargetID.PyreGuardianResolution,
                     };
                 foreach (int pyreId in pyres)
                 {
@@ -336,25 +336,25 @@ internal class Qadim : MythwrightGambit
             {
                 var ids = new List<int>
                     {
-                       (int) TrashID.WyvernMatriarch,
-                       (int) TrashID.WyvernPatriarch,
-                       (int) TrashID.AncientInvokedHydra,
-                       (int) TrashID.ApocalypseBringer,
-                       (int) TrashID.QadimLamp
+                       (int) TargetID.WyvernMatriarch,
+                       (int) TargetID.WyvernPatriarch,
+                       (int) TargetID.AncientInvokedHydra,
+                       (int) TargetID.ApocalypseBringer,
+                       (int) TargetID.QadimLamp
                     };
                 AddTargetsToPhaseAndFit(phase, ids, log);
                 if (phase.Targets.Count > 0)
                 {
                     var phaseTarIDs = new HashSet<int>(phase.Targets.Keys.Select(x => x.ID));
-                    if (phaseTarIDs.Contains((int)TrashID.AncientInvokedHydra))
+                    if (phaseTarIDs.Contains((int)TargetID.AncientInvokedHydra))
                     {
                         phase.Name = "Hydra";
                     }
-                    else if (phaseTarIDs.Contains((int)TrashID.ApocalypseBringer))
+                    else if (phaseTarIDs.Contains((int)TargetID.ApocalypseBringer))
                     {
                         phase.Name = "Apocalypse";
                     }
-                    else if (phaseTarIDs.Contains((int)TrashID.WyvernPatriarch) || phaseTarIDs.Contains((int)TrashID.WyvernMatriarch))
+                    else if (phaseTarIDs.Contains((int)TargetID.WyvernPatriarch) || phaseTarIDs.Contains((int)TargetID.WyvernMatriarch))
                     {
                         phase.Name = "Wyvern";
                     }
@@ -369,70 +369,70 @@ internal class Qadim : MythwrightGambit
         return phases;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.QadimPlatform,
-            TrashID.LavaElemental1,
-            TrashID.LavaElemental2,
-            TrashID.IcebornHydra,
-            TrashID.GreaterMagmaElemental1,
-            TrashID.GreaterMagmaElemental2,
-            TrashID.FireElemental,
-            TrashID.FireImp,
-            TrashID.PyreGuardian,
-            TrashID.PyreGuardianProtect,
-            TrashID.PyreGuardianRetal,
-            TrashID.PyreGuardianResolution,
-            TrashID.PyreGuardianStab,
-            TrashID.ReaperOfFlesh,
-            TrashID.DestroyerTroll,
-            TrashID.IceElemental,
-            TrashID.AngryZommoros,
-            TrashID.AssaultCube,
-            TrashID.AwakenedSoldier,
-            TrashID.Basilisk,
-            TrashID.BlackMoa,
-            TrashID.BrandedCharr,
-            TrashID.BrandedDevourer,
-            TrashID.ChakDrone,
-            TrashID.CrazedKarkaHatchling,
-            TrashID.FireImpLamp,
-            TrashID.GhostlyPirateFighter,
-            TrashID.GiantBrawler,
-            TrashID.GiantHunter,
-            TrashID.GoldOoze,
-            TrashID.GrawlBascher,
-            TrashID.GrawlTrapper,
-            TrashID.GuildInitiateModusSceleris,
-            TrashID.IcebroodAtrocity,
-            TrashID.IcebroodKodan,
-            TrashID.IcebroodQuaggan,
-            TrashID.Jotun,
-            TrashID.JungleWurm,
-            TrashID.Karka,
-            TrashID.MinotaurBull,
-            TrashID.ModnirrBerserker,
-            TrashID.MoltenDisaggregator,
-            TrashID.MoltenProtector,
-            TrashID.MoltenReverberant,
-            TrashID.MordremVinetooth,
-            TrashID.Murellow,
-            TrashID.NightmareCourtier,
-            TrashID.OgreHunter,
-            TrashID.PirareSkrittSentry,
-            TrashID.PolarBear,
-            TrashID.Rabbit,
-            TrashID.ReefSkelk,
-            TrashID.RisenKraitDamoss,
-            TrashID.RottingAncientOakheart,
-            TrashID.RottingDestroyer,
-            TrashID.ShadowSkelk,
-            TrashID.SpiritOfExcess,
-            TrashID.TamedWarg,
-            TrashID.TarElemental,
-            TrashID.WindRider,
+            TargetID.QadimPlatform,
+            TargetID.LavaElemental1,
+            TargetID.LavaElemental2,
+            TargetID.IcebornHydra,
+            TargetID.GreaterMagmaElemental1,
+            TargetID.GreaterMagmaElemental2,
+            TargetID.FireElemental,
+            TargetID.FireImp,
+            TargetID.PyreGuardian,
+            TargetID.PyreGuardianProtect,
+            TargetID.PyreGuardianRetal,
+            TargetID.PyreGuardianResolution,
+            TargetID.PyreGuardianStab,
+            TargetID.ReaperOfFlesh,
+            TargetID.DestroyerTroll,
+            TargetID.IceElemental,
+            TargetID.AngryZommoros,
+            TargetID.AssaultCube,
+            TargetID.AwakenedSoldier,
+            TargetID.Basilisk,
+            TargetID.BlackMoa,
+            TargetID.BrandedCharr,
+            TargetID.BrandedDevourer,
+            TargetID.ChakDrone,
+            TargetID.CrazedKarkaHatchling,
+            TargetID.FireImpLamp,
+            TargetID.GhostlyPirateFighter,
+            TargetID.GiantBrawler,
+            TargetID.GiantHunter,
+            TargetID.GoldOoze,
+            TargetID.GrawlBascher,
+            TargetID.GrawlTrapper,
+            TargetID.GuildInitiateModusSceleris,
+            TargetID.IcebroodAtrocity,
+            TargetID.IcebroodKodan,
+            TargetID.IcebroodQuaggan,
+            TargetID.Jotun,
+            TargetID.JungleWurm,
+            TargetID.Karka,
+            TargetID.MinotaurBull,
+            TargetID.ModnirrBerserker,
+            TargetID.MoltenDisaggregator,
+            TargetID.MoltenProtector,
+            TargetID.MoltenReverberant,
+            TargetID.MordremVinetooth,
+            TargetID.Murellow,
+            TargetID.NightmareCourtier,
+            TargetID.OgreHunter,
+            TargetID.PirareSkrittSentry,
+            TargetID.PolarBear,
+            TargetID.Rabbit,
+            TargetID.ReefSkelk,
+            TargetID.RisenKraitDamoss,
+            TargetID.RottingAncientOakheart,
+            TargetID.RottingDestroyer,
+            TargetID.ShadowSkelk,
+            TargetID.SpiritOfExcess,
+            TargetID.TamedWarg,
+            TargetID.TarElemental,
+            TargetID.WindRider,
         ];
     }
 
@@ -551,7 +551,7 @@ internal class Qadim : MythwrightGambit
                     }
                 }
                 break;
-            case (int)TrashID.AncientInvokedHydra:
+            case (int)TargetID.AncientInvokedHydra:
                 //CC
                 var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor);
                 foreach (CastEvent c in fieryMeteor)
@@ -573,7 +573,7 @@ internal class Qadim : MythwrightGambit
                     }
                 }
                 break;
-            case (int)TrashID.WyvernMatriarch:
+            case (int)TargetID.WyvernMatriarch:
                 //Wing Buffet
                 var wingBuffet = cls.Where(x => x.SkillId == WingBuffet);
                 foreach (CastEvent c in wingBuffet)
@@ -632,7 +632,7 @@ internal class Qadim : MythwrightGambit
                     }
                 }
                 break;
-            case (int)TrashID.WyvernPatriarch:
+            case (int)TargetID.WyvernPatriarch:
                 //CC
                 var patCC = cls.Where(x => x.SkillId == PatriarchCC);
                 foreach (CastEvent c in patCC)
@@ -680,7 +680,7 @@ internal class Qadim : MythwrightGambit
                     }
                 }
                 break;
-            case (int)TrashID.ApocalypseBringer:
+            case (int)TargetID.ApocalypseBringer:
                 var jumpShockwave = cls.Where(x => x.SkillId == ShatteredEarth);
                 foreach (CastEvent c in jumpShockwave)
                 {
@@ -739,7 +739,7 @@ internal class Qadim : MythwrightGambit
                     }
                 }
                 break;
-            case (int)TrashID.QadimPlatform:
+            case (int)TargetID.QadimPlatform:
                 if (_manualPlatforms)
                 {
                     return;
@@ -1405,7 +1405,7 @@ internal class Qadim : MythwrightGambit
         // The death zone from falling off the platform is roughly at -2950
         // The main fight platform is at roughly at -4700
 
-        var lamps = log.AgentData.GetNPCsByID(TrashID.QadimLamp).ToList();
+        var lamps = log.AgentData.GetNPCsByID(TargetID.QadimLamp).ToList();
         int lampLabyrinthZ = -250; // Height Threshold
 
         foreach (Player p in log.PlayerList)
@@ -1448,10 +1448,10 @@ internal class Qadim : MythwrightGambit
     private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
     {
         SingleActor? qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
-        SingleActor? hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
-        SingleActor? bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
-        SingleActor? matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
-        SingleActor? patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
+        SingleActor? hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.AncientInvokedHydra)).FirstOrDefault();
+        SingleActor? bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.ApocalypseBringer)).FirstOrDefault();
+        SingleActor? matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.WyvernMatriarch)).FirstOrDefault();
+        SingleActor? patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.WyvernPatriarch)).FirstOrDefault();
 
         if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
         {

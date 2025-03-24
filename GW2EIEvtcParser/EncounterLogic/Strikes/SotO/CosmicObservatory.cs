@@ -59,7 +59,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             new MechanicGroup([
                 new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
                 new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0)
-                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TrashID.SoulFeast)),
+                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
                 new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
                     .UsingEnable(x => x.FightData.IsCM),
@@ -185,7 +185,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
         var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
         var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem);
-        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast);
+        var agentsToTether = log.AgentData.GetNPCsByID(TargetID.SoulFeast);
 
         foreach (BuffApplyEvent buffApply in buffAppliesPlayer)
         {
@@ -344,14 +344,14 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             return phases;
         }
         // Cast check
-        var tormentedIDs = new List<TrashID>()
+        var tormentedIDs = new List<TargetID>()
         {
-            TrashID.VeteranTheTormented,
-            TrashID.EliteTheTormented,
-            TrashID.ChampionTheTormented,
+            TargetID.VeteranTheTormented,
+            TargetID.EliteTheTormented,
+            TargetID.ChampionTheTormented,
         };
         var tormentedAgents = new List<AgentItem>();
-        foreach (TrashID tormentedID in tormentedIDs)
+        foreach (TargetID tormentedID in tormentedIDs)
         {
             tormentedAgents.AddRange(log.AgentData.GetNPCsByID(tormentedID));
         }
@@ -413,9 +413,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 };
                 var ids = new List<int>
                 {
-                    (int)TrashID.VeteranTheTormented,
-                    (int)TrashID.EliteTheTormented,
-                    (int)TrashID.ChampionTheTormented,
+                    (int)TargetID.VeteranTheTormented,
+                    (int)TargetID.EliteTheTormented,
+                    (int)TargetID.ChampionTheTormented,
                 };
                 AddTargetsToPhase(phase, ids);
             }
@@ -445,16 +445,16 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         {
             switch (target.ID)
             {
-                case (int)TrashID.TheTormented:
+                case (int)TargetID.TheTormented:
                     target.OverrideName(target.Character + " " + curTormenteds[0]++);
                     break;
-                case (int)TrashID.VeteranTheTormented:
+                case (int)TargetID.VeteranTheTormented:
                     target.OverrideName("Veteran " + target.Character + " " + curTormenteds[1]++);
                     break;
-                case (int)TrashID.EliteTheTormented:
+                case (int)TargetID.EliteTheTormented:
                     target.OverrideName("Elite " + target.Character + " " + curTormenteds[2]++);
                     break;
-                case (int)TrashID.ChampionTheTormented:
+                case (int)TargetID.ChampionTheTormented:
                     target.OverrideName("Champion " + target.Character + " " + curTormenteds[3]++);
                     break;
                 default:
@@ -475,19 +475,19 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return
         [
             (int)TargetID.Dagda,
-            (int)TrashID.ChampionTheTormented,
-            (int)TrashID.EliteTheTormented,
-            (int)TrashID.VeteranTheTormented,
+            (int)TargetID.ChampionTheTormented,
+            (int)TargetID.EliteTheTormented,
+            (int)TargetID.VeteranTheTormented,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.SoulFeast,
-            TrashID.TheTormented,
-            TrashID.TormentedPhantom,
+            TargetID.SoulFeast,
+            TargetID.TheTormented,
+            TargetID.TormentedPhantom,
         ];
     }
 

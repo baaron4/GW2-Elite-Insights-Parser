@@ -58,7 +58,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID(TrashID.HauntingStatue);
+            IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID(TargetID.HauntingStatue);
             long start = long.MaxValue;
             foreach (AgentItem statue in statues)
             {
@@ -85,11 +85,11 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-           TrashID.HauntingStatue,
+           TargetID.HauntingStatue,
            //ParseEnum.TrashIDS.CastleFountain
         ];
     }
@@ -102,7 +102,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
     {
         switch (npc.ID)
         {
-            case (int)TrashID.HauntingStatue:
+            case (int)TargetID.HauntingStatue:
                 var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
                 if (replay.Rotations.Count != 0)
                 {
@@ -140,7 +140,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override int GetTriggerID()
     {
-        return (int)TrashID.HauntingStatue;
+        return (int)TargetID.HauntingStatue;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
