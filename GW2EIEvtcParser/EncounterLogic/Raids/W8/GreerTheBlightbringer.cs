@@ -88,38 +88,38 @@ internal class GreerTheBlightbringer : MountBalrior
                         (11300, -10621, 18374, -3794));
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Greer,
-            (int)TargetID.Gree,
-            (int)TargetID.Reeg,
-            (int)TargetID.Ereg,
-            (int)TargetID.ProtoGreerling,
+            TargetID.Greer,
+            TargetID.Gree,
+            TargetID.Reeg,
+            TargetID.Ereg,
+            TargetID.ProtoGreerling,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Greer,
-            (int)TargetID.Gree,
-            (int)TargetID.Reeg,
-            (int)TargetID.Ereg,
+            TargetID.Greer,
+            TargetID.Gree,
+            TargetID.Reeg,
+            TargetID.Ereg,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            { (int)TargetID.Greer, 0 },
-            { (int)TargetID.Gree, 1 },
-            { (int)TargetID.Reeg, 1 },
-            { (int)TargetID.Ereg, 1 },
-            { (int)TargetID.ProtoGreerling, 2 },
+            { TargetID.Greer, 0 },
+            { TargetID.Gree, 1 },
+            { TargetID.Reeg, 1 },
+            { TargetID.Ereg, 1 },
+            { TargetID.ProtoGreerling, 2 },
         };
     }
 
@@ -297,7 +297,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     if (i % 2 == 1)
                     {
                         phase.Name = "Proto Greer " + (++protoPhases);
-                        AddTargetsToPhase(phase, [(int)TargetID.ProtoGreerling]);
+                        AddTargetsToPhase(phase, [TargetID.ProtoGreerling]);
                         phases.Add(phase);
                     } 
                     else

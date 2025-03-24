@@ -41,7 +41,7 @@ internal class WvWFight : FightLogic
         ]));
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }

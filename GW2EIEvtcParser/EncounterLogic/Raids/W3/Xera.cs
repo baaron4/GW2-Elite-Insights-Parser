@@ -282,15 +282,15 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return [
-            (int)TargetID.Xera,
-            (int)TargetID.DummyTarget,
-            (int)TargetID.BloodstoneShardMainFight,
-            (int)TargetID.BloodstoneShardRift,
-            (int)TargetID.BloodstoneShardButton,
-            (int)TargetID.ChargedBloodstone,
+            TargetID.Xera,
+            TargetID.DummyTarget,
+            TargetID.BloodstoneShardMainFight,
+            TargetID.BloodstoneShardRift,
+            TargetID.BloodstoneShardButton,
+            TargetID.ChargedBloodstone,
         ];
     }
 
@@ -319,7 +319,7 @@ internal class Xera : StrongholdOfTheFaithful
                 var summon = cls.Where(x => x.SkillId == SummonFragments);
                 foreach (CastEvent c in summon)
                 {
-                    replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (c.Time, c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 if (_xeraFirstPhaseEndTime != 0)
                 {
@@ -339,7 +339,7 @@ internal class Xera : StrongholdOfTheFaithful
                 }
                 break;
             case (int)TargetID.BloodstoneFragment:
-                replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(760, (replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                 break;
             default:
                 break;

@@ -106,13 +106,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.ConjuredAmalgamate,
-            (int)TargetID.CARightArm,
-            (int)TargetID.CALeftArm
+            TargetID.ConjuredAmalgamate,
+            TargetID.CARightArm,
+            TargetID.CALeftArm
         ];
     }
 
@@ -125,11 +125,11 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.ConjuredPlayerSword
+            TargetID.ConjuredPlayerSword
         ];
     }
 
@@ -179,13 +179,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return res;
     }*/
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.ConjuredAmalgamate,
-            (int)TargetID.CALeftArm,
-            (int)TargetID.CARightArm
+            TargetID.ConjuredAmalgamate,
+            TargetID.CALeftArm,
+            TargetID.CARightArm
         ];
     }
 

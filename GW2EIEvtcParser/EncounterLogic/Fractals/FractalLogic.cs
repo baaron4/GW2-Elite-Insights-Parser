@@ -68,9 +68,9 @@ internal abstract class FractalLogic : FightLogic
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
-        return new[] { GenericTriggerID };
+        return new[] { GetTargetID(GenericTriggerID) };
     }
 
     protected override List<TargetID> GetTrashMobsIDs()

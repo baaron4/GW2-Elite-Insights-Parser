@@ -91,31 +91,31 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (3456, 11012, 4736, 14212)*/);
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
-            (int)TargetID.TheEnforcer,
-            (int)TargetID.TheMindblade,
-            (int)TargetID.TheMechRider,
-            (int)TargetID.TheRitualist,
-            (int)TargetID.TheSniper,
-            (int)TargetID.TheEnforcerCM,
-            (int)TargetID.TheMindbladeCM,
-            (int)TargetID.TheMechRiderCM,
-            (int)TargetID.TheRitualistCM,
-            (int)TargetID.TheSniperCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
+            TargetID.TheEnforcer,
+            TargetID.TheMindblade,
+            TargetID.TheMechRider,
+            TargetID.TheRitualist,
+            TargetID.TheSniper,
+            TargetID.TheEnforcerCM,
+            TargetID.TheMindbladeCM,
+            TargetID.TheMechRiderCM,
+            TargetID.TheRitualistCM,
+            TargetID.TheSniperCM,
         ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
         ];
     }
 
@@ -133,22 +133,22 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
-            (int)TargetID.TheEnforcer,
-            (int)TargetID.TheMindblade,
-            (int)TargetID.TheMechRider,
-            (int)TargetID.TheRitualist,
-            (int)TargetID.TheSniper,
-            (int)TargetID.TheEnforcerCM,
-            (int)TargetID.TheMindbladeCM,
-            (int)TargetID.TheMechRiderCM,
-            (int)TargetID.TheRitualistCM,
-            (int)TargetID.TheSniperCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
+            TargetID.TheEnforcer,
+            TargetID.TheMindblade,
+            TargetID.TheMechRider,
+            TargetID.TheRitualist,
+            TargetID.TheSniper,
+            TargetID.TheEnforcerCM,
+            TargetID.TheMindbladeCM,
+            TargetID.TheMechRiderCM,
+            TargetID.TheRitualistCM,
+            TargetID.TheSniperCM,
         ];
     }
 
@@ -191,7 +191,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     private SingleActor? GetMinisterLi(FightData fightData)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.MinisterLiCM : (int)TargetID.MinisterLi));
+        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -200,11 +200,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheEnforcerCM : (int)TargetID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMindbladeCM : (int)TargetID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMechRiderCM : (int)TargetID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheSniperCM : (int)TargetID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheRitualistCM : (int)TargetID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
         //
         phases[0].AddTarget(enforcer, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(mindblade, PhaseData.TargetPriority.Blocking);

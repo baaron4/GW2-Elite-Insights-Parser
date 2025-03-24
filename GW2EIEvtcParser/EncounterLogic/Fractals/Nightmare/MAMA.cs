@@ -78,11 +78,11 @@ internal class MAMA : Nightmare
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
         phases[0].AddTarget(mama);
-        var knightIds = new List<int>
+        var knightIds = new List<TargetID>
         {
-            (int) TargetID.GreenKnight,
-            (int) TargetID.RedKnight,
-            (int) TargetID.BlueKnight,
+            TargetID.GreenKnight,
+            TargetID.RedKnight,
+            TargetID.BlueKnight,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -111,24 +111,24 @@ internal class MAMA : Nightmare
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.MAMA,
-            (int)TargetID.GreenKnight,
-            (int)TargetID.RedKnight,
-            (int)TargetID.BlueKnight
+            TargetID.MAMA,
+            TargetID.GreenKnight,
+            TargetID.RedKnight,
+            TargetID.BlueKnight
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.MAMA, 0 },
-            {(int)TargetID.GreenKnight, 1 },
-            {(int)TargetID.RedKnight, 1 },
-            {(int)TargetID.BlueKnight, 1 },
+            {TargetID.MAMA, 0 },
+            {TargetID.GreenKnight, 1 },
+            {TargetID.RedKnight, 1 },
+            {TargetID.BlueKnight, 1 },
         };
     }
 

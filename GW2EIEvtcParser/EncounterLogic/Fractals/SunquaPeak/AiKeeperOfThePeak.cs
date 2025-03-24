@@ -149,13 +149,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return res;
     }*/
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.AiKeeperOfThePeak,
-            (int)TargetID.AiKeeperOfThePeak2,
-            (int)TargetID.CCSorrowDemon,
+            TargetID.AiKeeperOfThePeak,
+            TargetID.AiKeeperOfThePeak2,
+            TargetID.CCSorrowDemon,
         ];
     }
 
@@ -178,12 +178,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return trashIDs;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.AiKeeperOfThePeak,
-            (int)TargetID.AiKeeperOfThePeak2,
+            TargetID.AiKeeperOfThePeak,
+            TargetID.AiKeeperOfThePeak2,
         ];
     }
 

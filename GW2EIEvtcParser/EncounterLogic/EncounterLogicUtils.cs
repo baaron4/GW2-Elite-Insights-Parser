@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupSameInstidNPCsByID(ReadOnlySpan<int> ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RegroupSameInstidNPCsByID(ReadOnlySpan<TargetID> ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var toRemove = new List<AgentItem>(10);
         var toAdd = new List<AgentItem>(3);

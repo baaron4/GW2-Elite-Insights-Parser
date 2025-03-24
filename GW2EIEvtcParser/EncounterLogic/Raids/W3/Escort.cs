@@ -234,23 +234,23 @@ internal class Escort : StrongholdOfTheFaithful
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.McLeodTheSilent,
-            (int)TargetID.Glenna
+            TargetID.McLeodTheSilent,
+            TargetID.Glenna
         ];
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.McLeodTheSilent,
-            (int)TargetID.RadiantMcLeod,
-            (int)TargetID.CrimsonMcLeod,
-            (int)TargetID.WargBloodhound,
-            (int)TargetID.DummyTarget,
+            TargetID.McLeodTheSilent,
+            TargetID.RadiantMcLeod,
+            TargetID.CrimsonMcLeod,
+            TargetID.WargBloodhound,
+            TargetID.DummyTarget,
         ];
     }
 
@@ -274,11 +274,11 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Glenna
+            TargetID.Glenna
         ];
     }
 

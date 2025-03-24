@@ -60,30 +60,30 @@ internal class StatueOfDarkness : HallOfChains
     }
 
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.EyeOfFate,
-            (int)TargetID.EyeOfJudgement
+            TargetID.EyeOfFate,
+            TargetID.EyeOfJudgement
         ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.EyeOfFate,
-            (int)TargetID.EyeOfJudgement
+            TargetID.EyeOfFate,
+            TargetID.EyeOfJudgement
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.EyeOfFate,
-            (int)TargetID.EyeOfJudgement
+            TargetID.EyeOfFate,
+            TargetID.EyeOfJudgement
         ];
     }
 

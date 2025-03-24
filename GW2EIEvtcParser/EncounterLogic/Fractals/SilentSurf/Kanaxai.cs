@@ -87,37 +87,37 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
+            TargetID.KanaxaiScytheOfHouseAurkusCM,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
-            (int)TargetID.AspectOfTorment,
-            (int)TargetID.AspectOfLethargy,
-            (int)TargetID.AspectOfExposure,
-            (int)TargetID.AspectOfDeath,
-            (int)TargetID.AspectOfFear,
+            TargetID.KanaxaiScytheOfHouseAurkusCM,
+            TargetID.AspectOfTorment,
+            TargetID.AspectOfLethargy,
+            TargetID.AspectOfExposure,
+            TargetID.AspectOfDeath,
+            TargetID.AspectOfFear,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
-            {(int)TargetID.AspectOfTorment, 1 },
-            {(int)TargetID.AspectOfLethargy, 1 },
-            {(int)TargetID.AspectOfExposure, 1 },
-            {(int)TargetID.AspectOfDeath, 1 },
-            {(int)TargetID.AspectOfFear, 1 },
+            {TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+            {TargetID.AspectOfTorment, 1 },
+            {TargetID.AspectOfLethargy, 1 },
+            {TargetID.AspectOfExposure, 1 },
+            {TargetID.AspectOfDeath, 1 },
+            {TargetID.AspectOfFear, 1 },
         };
     }
 

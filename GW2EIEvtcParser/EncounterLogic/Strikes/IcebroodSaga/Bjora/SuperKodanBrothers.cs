@@ -212,31 +212,31 @@ internal class SuperKodanBrothers : Bjora
         return "Super Kodan Brothers";
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceOfTheFallen,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceOfTheFallen,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.VoiceOfTheFallen,
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceAndClaw,
+            TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceAndClaw,
         ];
     }
 }

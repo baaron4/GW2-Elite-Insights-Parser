@@ -210,34 +210,34 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.KeepConstruct,
-            (int)TargetID.Jessica,
-            (int)TargetID.Olson,
-            (int)TargetID.Engul,
-            (int)TargetID.Faerla,
-            (int)TargetID.Caulle,
-            (int)TargetID.Henley,
-            (int)TargetID.Galletta,
-            (int)TargetID.Ianim,
+            TargetID.KeepConstruct,
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim,
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.KeepConstruct, 0 },
-            {(int)TargetID.Jessica, 1 },
-            {(int)TargetID.Olson, 1 },
-            {(int)TargetID.Engul, 1 },
-            {(int)TargetID.Faerla, 1 },
-            {(int)TargetID.Caulle, 1 },
-            {(int)TargetID.Henley, 1 },
-            {(int)TargetID.Galletta, 1 },
-            {(int)TargetID.Ianim, 1 },
+            {TargetID.KeepConstruct, 0 },
+            {TargetID.Jessica, 1 },
+            {TargetID.Olson, 1 },
+            {TargetID.Engul, 1 },
+            {TargetID.Faerla, 1 },
+            {TargetID.Caulle, 1 },
+            {TargetID.Henley, 1 },
+            {TargetID.Galletta, 1 },
+            {TargetID.Ianim, 1 },
         };
     }
 
@@ -259,20 +259,20 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var countDict = new Dictionary<int, int>();
-        var bigPhantasmIDs = new HashSet<int>
+        var bigPhantasmIDs = new HashSet<TargetID>
         {
-            (int)TargetID.Jessica,
-            (int)TargetID.Olson,
-            (int)TargetID.Engul,
-            (int)TargetID.Faerla,
-            (int)TargetID.Caulle,
-            (int)TargetID.Henley,
-            (int)TargetID.Galletta,
-            (int)TargetID.Ianim,
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim,
         };
         foreach (SingleActor target in Targets)
         {
-            if (bigPhantasmIDs.Contains(target.ID))
+            if (target.IsAnySpecies(bigPhantasmIDs))
             {
                 if (countDict.TryGetValue(target.ID, out int count))
                 {

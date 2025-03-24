@@ -166,20 +166,20 @@ public abstract class FightLogic
     }
 
     /// <remarks>Do _NOT_ modify Instance._targetIDs while iterating the result of this function. Appending is allowed.</remarks>
-    protected virtual ReadOnlySpan<int> GetTargetsIDs()
-    {
-        return new[] { GenericTriggerID };
-    }
-
-    protected virtual HashSet<int> ForbidBreakbarPhasesFor()
+    protected virtual ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return [];
     }
 
-    protected virtual Dictionary<int, int> GetTargetsSortIDs()
+    protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        return [];
+    }
+
+    protected virtual Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
-        var res = new Dictionary<int, int>(targetsIds.Length);
+        var res = new Dictionary<TargetID, int>(targetsIds.Length);
         for (int i = 0; i < targetsIds.Length; i++)
         {
             res.Add(targetsIds[i], i);
@@ -205,7 +205,7 @@ public abstract class FightLogic
         return [ ];
     }
 
-    protected virtual ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected virtual ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return [ ];
     }
@@ -220,7 +220,7 @@ public abstract class FightLogic
         return target.Character;
     }
 
-    protected abstract ReadOnlySpan<int> GetUniqueNPCIDs();
+    protected abstract ReadOnlySpan<TargetID> GetUniqueNPCIDs();
 
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
@@ -253,7 +253,7 @@ public abstract class FightLogic
         //TODO(Rennorb) @perf
         _targets = _targets.OrderBy(x =>
         {
-            if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
+            if (targetSortIDs.TryGetValue(GetTargetID(x.ID), out int sortKey))
             {
                 return sortKey;
             }
@@ -262,12 +262,12 @@ public abstract class FightLogic
         // Build trash mobs
         foreach (var trash in trashIDs)
         {
-            if(targetIDs.IndexOf((int)trash) != -1)
+            if(targetIDs.IndexOf(trash) != -1)
             {
                 throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
         }
-        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTargetID(x.ID))).Select(a => new NPC(a)));
+        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(trashIDs)).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2
         var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID) && !x.GetFinalMaster().IsPlayer).ToList();
@@ -340,7 +340,7 @@ public abstract class FightLogic
         var noBreakbarSpecies = ForbidBreakbarPhasesFor();
         foreach (SingleActor target in Targets)
         {
-            if (noBreakbarSpecies.Contains(target.ID))
+            if (target.IsAnySpecies(noBreakbarSpecies))
             {
                 continue;
             }
@@ -385,18 +385,18 @@ public abstract class FightLogic
         return [ ];
     }
 
-    protected void AddTargetsToPhase(PhaseData phase, List<int> ids, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected void AddTargetsToPhase(PhaseData phase, List<TargetID> ids, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         foreach (SingleActor target in Targets)
         {
-            if (ids.Contains(target.ID))
+            if (target.IsAnySpecies(ids))
             {
                 phase.AddTarget(target, priority);
             }
         }
     }
 
-    protected void AddTargetsToPhaseAndFit(PhaseData phase, List<int> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected void AddTargetsToPhaseAndFit(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         AddTargetsToPhase(phase, ids, priority);
         phase.OverrideTimes(log);
@@ -470,9 +470,9 @@ public abstract class FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected virtual List<int> GetSuccessCheckIDs()
+    protected virtual List<TargetID> GetSuccessCheckIDs()
     {
-        return [ GenericTriggerID ];
+        return [ GetTargetID(GenericTriggerID) ];
     }
 
     internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -482,7 +482,7 @@ public abstract class FightLogic
 
     protected IEnumerable<SingleActor> GetSuccessCheckTargets()
     {
-        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID));
+        return Targets.Where(x => x.IsAnySpecies(GetSuccessCheckIDs()));
     }
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

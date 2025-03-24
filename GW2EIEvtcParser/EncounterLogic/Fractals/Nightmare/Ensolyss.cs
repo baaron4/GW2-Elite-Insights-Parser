@@ -63,11 +63,11 @@ internal class Ensolyss : Nightmare
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Ensolyss,
+            TargetID.Ensolyss,
             //(int)TargetID.NightmareAltar,
         ];
     }

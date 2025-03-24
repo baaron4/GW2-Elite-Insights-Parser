@@ -101,14 +101,14 @@ internal class Arkk : ShatteredObservatory
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Arkk,
-            (int)TargetID.Archdiviner,
-            (int)TargetID.EliteBrazenGladiator,
-            (int)TargetID.TemporalAnomalyArkk,
+            TargetID.Arkk,
+            TargetID.Archdiviner,
+            TargetID.EliteBrazenGladiator,
+            TargetID.TemporalAnomalyArkk,
         ];
     }
 
@@ -124,7 +124,7 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
+    private void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
     {
         SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
@@ -153,8 +153,8 @@ internal class Arkk : ShatteredObservatory
             phases[i].AddTarget(arkk);
         }
 
-        GetMiniBossPhase((int)TargetID.Archdiviner, log, "Archdiviner", phases);
-        GetMiniBossPhase((int)TargetID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+        GetMiniBossPhase(TargetID.Archdiviner, log, "Archdiviner", phases);
+        GetMiniBossPhase(TargetID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
 
         var bloomPhases = new List<PhaseData>(10);
         foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom)).OrderBy(x => x.FirstAware))

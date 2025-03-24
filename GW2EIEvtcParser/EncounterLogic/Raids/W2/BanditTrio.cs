@@ -55,24 +55,24 @@ internal class BanditTrio : SalvationPass
         EncounterID |= 0x000002;
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
-        return [ (int)TargetID.Narella ];
+        return [ TargetID.Narella ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Berg,
-            (int)TargetID.Zane,
-            (int)TargetID.Narella
+            TargetID.Berg,
+            TargetID.Zane,
+            TargetID.Narella
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
-        return [ (int)TargetID.Cage ];
+        return [ TargetID.Cage ];
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -216,13 +216,13 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Berg,
-            (int)TargetID.Zane,
-            (int)TargetID.Narella
+            TargetID.Berg,
+            TargetID.Zane,
+            TargetID.Narella
         ];
     }
 

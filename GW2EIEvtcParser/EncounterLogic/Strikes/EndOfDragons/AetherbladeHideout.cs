@@ -86,28 +86,28 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return "Aetherblade Hideout";
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.MaiTrinStrike,
-            (int)TargetID.EchoOfScarletBriarNM,
-            (int)TargetID.EchoOfScarletBriarCM,
-            (int)TargetID.ScarletPhantomBreakbar,
-            (int)TargetID.ScarletPhantomHP,
-            (int)TargetID.ScarletPhantomHPCM,
-            (int)TargetID.ScarletPhantomBeamNM,
-            (int)TargetID.FerrousBomb,
+            TargetID.MaiTrinStrike,
+            TargetID.EchoOfScarletBriarNM,
+            TargetID.EchoOfScarletBriarCM,
+            TargetID.ScarletPhantomBreakbar,
+            TargetID.ScarletPhantomHP,
+            TargetID.ScarletPhantomHPCM,
+            TargetID.ScarletPhantomBeamNM,
+            TargetID.FerrousBomb,
         ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.MaiTrinStrike,
-            (int)TargetID.EchoOfScarletBriarNM,
-            (int)TargetID.EchoOfScarletBriarCM,
+            TargetID.MaiTrinStrike,
+            TargetID.EchoOfScarletBriarNM,
+            TargetID.EchoOfScarletBriarCM,
         ];
     }
 
@@ -122,13 +122,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.MaiTrinStrike,
-            (int)TargetID.EchoOfScarletBriarNM,
-            (int)TargetID.EchoOfScarletBriarCM,
+            TargetID.MaiTrinStrike,
+            TargetID.EchoOfScarletBriarNM,
+            TargetID.EchoOfScarletBriarCM,
         ];
     }
 
@@ -585,7 +585,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     else
                     {
                         subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
-                        AddTargetsToPhase(subPhase, [(int)TargetID.ScarletPhantomHP, (int)TargetID.ScarletPhantomHPCM]);
+                        AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM]);
                     }
                 }
                 phases.AddRange(maiPhases);
@@ -609,7 +609,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 else
                 {
                     subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
-                    AddTargetsToPhase(subPhase, [(int)TargetID.ScarletPhantomHP, (int)TargetID.ScarletPhantomHPCM]);
+                    AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM]);
                 }
             }
             phases.AddRange(echoPhases);

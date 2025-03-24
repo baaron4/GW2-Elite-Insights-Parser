@@ -54,12 +54,12 @@ internal class TwinLargos : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Nikare,
-            (int)TargetID.Kenut
+            TargetID.Nikare,
+            TargetID.Kenut
         ];
     }
 
@@ -72,12 +72,12 @@ internal class TwinLargos : MythwrightGambit
         ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.Nikare,
-            (int)TargetID.Kenut
+            TargetID.Nikare,
+            TargetID.Kenut
         ];
     }
 
@@ -129,12 +129,12 @@ internal class TwinLargos : MythwrightGambit
         return targetPhases;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Kenut,
-            (int)TargetID.Nikare
+            TargetID.Kenut,
+            TargetID.Nikare
         ];
     }
 

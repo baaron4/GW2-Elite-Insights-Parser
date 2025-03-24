@@ -56,19 +56,19 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Desmina
+            TargetID.Desmina
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Desmina
+            TargetID.Desmina
         ];
     }
 

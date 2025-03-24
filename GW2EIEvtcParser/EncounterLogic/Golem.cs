@@ -212,8 +212,8 @@ internal class Golem : FightLogic
         fightData.SetSuccess(success, fightEndLogTime);
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
-        return new[] { GenericTriggerID };
+        return new[] { GetTargetID(GenericTriggerID) };
     }
 }

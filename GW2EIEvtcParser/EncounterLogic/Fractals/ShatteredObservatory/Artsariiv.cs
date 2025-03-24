@@ -43,17 +43,17 @@ internal class Artsariiv : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Artsariiv,
-            (int)TargetID.CloneArtsariiv
+            TargetID.Artsariiv,
+            TargetID.CloneArtsariiv
         ];
     }
 
@@ -88,9 +88,9 @@ internal class Artsariiv : ShatteredObservatory
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                   (int)TargetID.CloneArtsariiv,
+                   TargetID.CloneArtsariiv,
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }

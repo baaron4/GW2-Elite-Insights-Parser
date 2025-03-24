@@ -243,12 +243,12 @@ internal class Matthias : SalvationPass
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Matthias,
-            (int)TargetID.MatthiasSacrificeCrystal
+            TargetID.Matthias,
+            TargetID.MatthiasSacrificeCrystal
         ];
     }
 

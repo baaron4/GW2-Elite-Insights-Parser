@@ -141,23 +141,23 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Adina,
-            (int)TargetID.HandOfErosion,
-            (int)TargetID.HandOfEruption
+            TargetID.Adina,
+            TargetID.HandOfErosion,
+            TargetID.HandOfEruption
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            { (int)TargetID.Adina, 0 },
-            { (int)TargetID.HandOfErosion, 1 },
-            { (int)TargetID.HandOfEruption, 1 },
+            { TargetID.Adina, 0 },
+            { TargetID.HandOfErosion, 1 },
+            { TargetID.HandOfEruption, 1 },
         };
     }
 
@@ -272,7 +272,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
                     splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
+                    AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
                 }
             }
@@ -281,7 +281,7 @@ internal class Adina : TheKeyOfAhdashim
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
                 splitPhaseEnds.Add(end);
-                AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
+                AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
         }

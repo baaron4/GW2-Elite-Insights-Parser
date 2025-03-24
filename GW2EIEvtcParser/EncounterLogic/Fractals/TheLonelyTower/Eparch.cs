@@ -118,11 +118,11 @@ internal class Eparch : LonelyTower
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + i / 2;
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                    (int)TargetID.IncarnationOfCruelty,
-                    (int)TargetID.IncarnationOfJudgement,
-                    (int)TargetID.KryptisRift,
+                    TargetID.IncarnationOfCruelty,
+                    TargetID.IncarnationOfJudgement,
+                    TargetID.KryptisRift,
                 };
                 AddTargetsToPhase(phase, ids);
             }
@@ -135,27 +135,27 @@ internal class Eparch : LonelyTower
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.EparchLonelyTower,
-            (int)TargetID.IncarnationOfCruelty,
-            (int)TargetID.IncarnationOfJudgement,
-            (int)TargetID.AvatarOfSpite,
-            (int)TargetID.KryptisRift,
+            TargetID.EparchLonelyTower,
+            TargetID.IncarnationOfCruelty,
+            TargetID.IncarnationOfJudgement,
+            TargetID.AvatarOfSpite,
+            TargetID.KryptisRift,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.EparchLonelyTower, 0},
-            {(int)TargetID.KryptisRift, 1},
-            {(int)TargetID.IncarnationOfCruelty, 2},
-            {(int)TargetID.IncarnationOfJudgement, 2},
-            {(int)TargetID.AvatarOfSpite, 3},
+            {TargetID.EparchLonelyTower, 0},
+            {TargetID.KryptisRift, 1},
+            {TargetID.IncarnationOfCruelty, 2},
+            {TargetID.IncarnationOfJudgement, 2},
+            {TargetID.AvatarOfSpite, 3},
         };
     }
 

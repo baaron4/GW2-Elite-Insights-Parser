@@ -14,7 +14,7 @@ internal class Instance : FightLogic
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
     private readonly List<FightLogic> _subLogics = [];
-    private readonly List<int> _targetIDs = [];
+    private readonly List<TargetID> _targetIDs = [];
     public Instance(int id) : base(id)
     {
         Extension = "instance";
@@ -27,17 +27,17 @@ internal class Instance : FightLogic
 
     private void FillSubLogics(AgentData agentData)
     {
-        var allTargetIDs = Enum.GetValues(typeof(TargetID)).Cast<int>();
-        var blackList = new HashSet<int>()
+        var allTargetIDs = Enum.GetValues(typeof(TargetID));
+        var blackList = new HashSet<TargetID>()
         {
-            (int)TargetID.Artsariiv,
-            (int)TargetID.Deimos,
-            (int)TargetID.ConjuredAmalgamate,
-            (int)TargetID.CALeftArm_CHINA,
-            (int)TargetID.CARightArm_CHINA,
-            (int)TargetID.ConjuredAmalgamate_CHINA,
+            TargetID.Artsariiv,
+            TargetID.Deimos,
+            TargetID.ConjuredAmalgamate,
+            TargetID.CALeftArm_CHINA,
+            TargetID.CARightArm_CHINA,
+            TargetID.ConjuredAmalgamate_CHINA,
         };
-        foreach (int targetID in allTargetIDs)
+        foreach (TargetID targetID in allTargetIDs)
         {
             //TODO(Rennorb) @perf: invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
             if (agentData.GetNPCsByID(targetID).Any())
@@ -264,23 +264,19 @@ internal class Instance : FightLogic
             logic.ComputeNPCCombatReplayActors(target, log, replay);
         }
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
-        if (_targetIDs.Count != 0)
-        {
-            return  _targetIDs.AsSpan();
-        }
-        return new[] { GenericTriggerID };
+        return [];
     }
     protected override List<TargetID> GetTrashMobsIDs()
     {
         return [];
     }
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return [];
     }

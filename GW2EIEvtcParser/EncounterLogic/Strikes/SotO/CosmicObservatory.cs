@@ -411,11 +411,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 {
                     Name = "Tormenteds " + (i + 1) / 2
                 };
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                    (int)TargetID.VeteranTheTormented,
-                    (int)TargetID.EliteTheTormented,
-                    (int)TargetID.ChampionTheTormented,
+                    TargetID.VeteranTheTormented,
+                    TargetID.EliteTheTormented,
+                    TargetID.ChampionTheTormented,
                 };
                 AddTargetsToPhase(phase, ids);
             }
@@ -470,14 +470,14 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Dagda,
-            (int)TargetID.ChampionTheTormented,
-            (int)TargetID.EliteTheTormented,
-            (int)TargetID.VeteranTheTormented,
+            TargetID.Dagda,
+            TargetID.ChampionTheTormented,
+            TargetID.EliteTheTormented,
+            TargetID.VeteranTheTormented,
         ];
     }
 

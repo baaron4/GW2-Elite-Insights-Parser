@@ -134,12 +134,12 @@ internal class FraenirOfJormag : Bjora
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.FraenirOfJormag,
-            (int)TargetID.IcebroodConstructFraenir,
+            TargetID.FraenirOfJormag,
+            TargetID.IcebroodConstructFraenir,
         ];
     }
 

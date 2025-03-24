@@ -251,14 +251,14 @@ internal class Dhuum : HallOfChains
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Dhuum,
-            (int)TargetID.Echo,
-            (int)TargetID.Enforcer,
-            (int)TargetID.UnderworldReaper,
+            TargetID.Dhuum,
+            TargetID.Echo,
+            TargetID.Enforcer,
+            TargetID.UnderworldReaper,
         ];
     }
 

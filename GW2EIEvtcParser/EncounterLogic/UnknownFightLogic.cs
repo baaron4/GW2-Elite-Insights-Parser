@@ -18,11 +18,6 @@ internal class UnknownFightLogic : FightLogic
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
-    {
-        return [];
-    }
-
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
         // We don't know how an unknown fight could operate.
@@ -58,5 +53,25 @@ internal class UnknownFightLogic : FightLogic
         }
         //
         FinalizeComputeFightTargets();
+    }
+
+    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetUniqueNPCIDs()
+    {
+        throw new InvalidOperationException("UniqueNPCIDs not valid for Unknown");
+    }
+
+    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetTargetsIDs()
+    {
+        throw new InvalidOperationException("GetTargetIDs not valid for Unknown");
+    }
+
+    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetFriendlyNPCIDs()
+    {
+        throw new InvalidOperationException("GetFriendlyNPCIDs not valid for Unknown");
+    }
+
+    protected override List<SpeciesIDs.TargetID> GetTrashMobsIDs()
+    {
+        throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
     }
 }

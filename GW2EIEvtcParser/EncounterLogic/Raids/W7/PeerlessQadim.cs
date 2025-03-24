@@ -60,13 +60,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         EncounterID |= 0x000003;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.PeerlessQadim,
-            (int)TargetID.EntropicDistortion,
-            (int)TargetID.PeerlessQadimPylon,
+            TargetID.PeerlessQadim,
+            TargetID.EntropicDistortion,
+            TargetID.PeerlessQadimPylon,
         ];
     }
 

@@ -65,16 +65,16 @@ internal class Skorvald : ShatteredObservatory
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         phases[0].AddTarget(skorvald);
-        var anomalyIds = new List<int>
+        var anomalyIds = new List<TargetID>
         {
-            (int)TargetID.FluxAnomaly1,
-            (int)TargetID.FluxAnomaly2,
-            (int)TargetID.FluxAnomaly3,
-            (int)TargetID.FluxAnomaly4,
-            (int)TargetID.FluxAnomalyCM1,
-            (int)TargetID.FluxAnomalyCM2,
-            (int)TargetID.FluxAnomalyCM3,
-            (int)TargetID.FluxAnomalyCM4,
+            TargetID.FluxAnomaly1,
+            TargetID.FluxAnomaly2,
+            TargetID.FluxAnomaly3,
+            TargetID.FluxAnomaly4,
+            TargetID.FluxAnomalyCM1,
+            TargetID.FluxAnomalyCM2,
+            TargetID.FluxAnomalyCM3,
+            TargetID.FluxAnomalyCM4,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -107,16 +107,16 @@ internal class Skorvald : ShatteredObservatory
             manualFractalScaleSet = true;
         }
         var fluxAnomalies = new List<AgentItem>();
-        var fluxIds = new List<int>
+        var fluxIds = new List<TargetID>
                 {
-                    (int)TargetID.FluxAnomaly1,
-                    (int)TargetID.FluxAnomaly2,
-                    (int)TargetID.FluxAnomaly3,
-                    (int)TargetID.FluxAnomaly4,
-                    (int)TargetID.FluxAnomalyCM1,
-                    (int)TargetID.FluxAnomalyCM2,
-                    (int)TargetID.FluxAnomalyCM3,
-                    (int)TargetID.FluxAnomalyCM4,
+                    TargetID.FluxAnomaly1,
+                    TargetID.FluxAnomaly2,
+                    TargetID.FluxAnomaly3,
+                    TargetID.FluxAnomaly4,
+                    TargetID.FluxAnomalyCM1,
+                    TargetID.FluxAnomalyCM2,
+                    TargetID.FluxAnomalyCM3,
+                    TargetID.FluxAnomalyCM4,
                 };
         for (int i = 0; i < fluxIds.Count; i++)
         {
@@ -217,19 +217,19 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Skorvald,
-            (int)TargetID.FluxAnomaly1,
-            (int)TargetID.FluxAnomaly2,
-            (int)TargetID.FluxAnomaly3,
-            (int)TargetID.FluxAnomaly4,
-            (int)TargetID.FluxAnomalyCM1,
-            (int)TargetID.FluxAnomalyCM2,
-            (int)TargetID.FluxAnomalyCM3,
-            (int)TargetID.FluxAnomalyCM4,
+            TargetID.Skorvald,
+            TargetID.FluxAnomaly1,
+            TargetID.FluxAnomaly2,
+            TargetID.FluxAnomaly3,
+            TargetID.FluxAnomaly4,
+            TargetID.FluxAnomalyCM1,
+            TargetID.FluxAnomalyCM2,
+            TargetID.FluxAnomalyCM3,
+            TargetID.FluxAnomalyCM4,
         ];
     }
 

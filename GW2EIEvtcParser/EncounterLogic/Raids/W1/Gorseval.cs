@@ -77,9 +77,9 @@ internal class Gorseval : SpiritVale
             else
             {
                 phase.Name = "Split " + (i) / 2;
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                   (int) TargetID.ChargedSoul
+                   TargetID.ChargedSoul
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -115,12 +115,12 @@ internal class Gorseval : SpiritVale
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Gorseval,
-            (int)TargetID.ChargedSoul
+            TargetID.Gorseval,
+            TargetID.ChargedSoul
         ];
     }
 

@@ -110,28 +110,28 @@ internal class Qadim : MythwrightGambit
     }
 
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Qadim,
-            (int)TargetID.AncientInvokedHydra,
-            (int)TargetID.ApocalypseBringer,
-            (int)TargetID.WyvernMatriarch,
-            (int)TargetID.WyvernPatriarch,
-            (int)TargetID.QadimLamp,
+           TargetID.Qadim,
+           TargetID.AncientInvokedHydra,
+           TargetID.ApocalypseBringer,
+           TargetID.WyvernMatriarch,
+           TargetID.WyvernPatriarch,
+           TargetID.QadimLamp,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Qadim,
-            (int)TargetID.AncientInvokedHydra,
-            (int)TargetID.ApocalypseBringer,
-            (int)TargetID.WyvernMatriarch,
-            (int)TargetID.WyvernPatriarch
+           TargetID.Qadim,
+           TargetID.AncientInvokedHydra,
+           TargetID.ApocalypseBringer,
+           TargetID.WyvernMatriarch,
+           TargetID.WyvernPatriarch
         ];
     }
 
@@ -262,7 +262,7 @@ internal class Qadim : MythwrightGambit
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return [ new DamageCastFinder(BurningCrucible, BurningCrucible) ];
+        return [new DamageCastFinder(BurningCrucible, BurningCrucible)];
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -334,13 +334,13 @@ internal class Qadim : MythwrightGambit
             }
             else
             {
-                var ids = new List<int>
+                var ids = new List<TargetID>
                     {
-                       (int) TargetID.WyvernMatriarch,
-                       (int) TargetID.WyvernPatriarch,
-                       (int) TargetID.AncientInvokedHydra,
-                       (int) TargetID.ApocalypseBringer,
-                       (int) TargetID.QadimLamp
+                       TargetID.WyvernMatriarch,
+                       TargetID.WyvernPatriarch,
+                       TargetID.AncientInvokedHydra,
+                       TargetID.ApocalypseBringer,
+                       TargetID.QadimLamp
                     };
                 AddTargetsToPhaseAndFit(phase, ids, log);
                 if (phase.Targets.Count > 0)
@@ -539,7 +539,7 @@ internal class Qadim : MythwrightGambit
                     uint radius = 2000;
                     uint impactRadius = 40;
                     int spellCenterDistance = 300;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) 
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
                         && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
                     {
                         var position = new Vector3(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
@@ -768,9 +768,10 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "01":
                     case "1":
-                        foreach(var velocity in replay.Velocities)
+                        foreach (var velocity in replay.Velocities)
                         {
-                            if((velocity.XYZ  - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold) {
+                            if ((velocity.XYZ - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold)
+                            {
                                 opacities.Add(new ParametricPoint1D(hiddenOpacity, velocity.Time));
                                 break;
                             }
@@ -815,7 +816,7 @@ internal class Qadim : MythwrightGambit
                         if (log.FightData.IsCM)
                         {
                             doNormalPlat5 = false;
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new( -8.0078125f, 0, 0), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-8.0078125f, 0, 0), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(6.7871094f, 18.188477f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
@@ -961,7 +962,7 @@ internal class Qadim : MythwrightGambit
                 {
                     opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
                 }
-                
+
                 foundIndexPlusOne = velocityIndex + 1;
                 return true;
             }
@@ -1074,9 +1075,9 @@ internal class Qadim : MythwrightGambit
         if (phases.Count > 6)
         {
             //TODO(Rennorb) @perf: Why was there an unused reference to last phase here?
-            foreach(var pos in qadim.GetCombatReplayNonPolledPositions(log))
+            foreach (var pos in qadim.GetCombatReplayNonPolledPositions(log))
             {
-                if((pos.XYZ.XY() - qadimFinalXY).LengthSquared() < 25)
+                if ((pos.XYZ.XY() - qadimFinalXY).LengthSquared() < 25)
                 {
                     finalPhaseTime = (int)pos.Time;
                 }
@@ -1476,7 +1477,7 @@ internal class Qadim : MythwrightGambit
         {
             return true;
         }
-        
+
         // Get positions of Qadim during the times of the adds being present
         var qadimPositions = qadim.GetCombatReplayPolledPositions(log).Where(x => x.Time >= addPositions.First().Time && x.Time <= addPositions.Last().Time).ToList();
         if (qadimPositions.Count == 0)

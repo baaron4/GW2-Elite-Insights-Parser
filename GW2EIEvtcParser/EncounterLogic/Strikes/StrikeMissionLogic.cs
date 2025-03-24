@@ -3,6 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -31,8 +32,8 @@ internal abstract class StrikeMissionLogic : FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
-        return new[] { GenericTriggerID };
+        return new[] { GetTargetID(GenericTriggerID) };
     }
 }

@@ -88,16 +88,16 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.PrototypeVermilion,
-            (int)TargetID.PrototypeIndigo,
-            (int)TargetID.PrototypeArsenite,
-            (int)TargetID.PrototypeVermilionCM,
-            (int)TargetID.PrototypeIndigoCM,
-            (int)TargetID.PrototypeArseniteCM,
+            TargetID.PrototypeVermilion,
+            TargetID.PrototypeIndigo,
+            TargetID.PrototypeArsenite,
+            TargetID.PrototypeVermilionCM,
+            TargetID.PrototypeIndigoCM,
+            TargetID.PrototypeArseniteCM,
         ];
     }
 
@@ -106,7 +106,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return [ TargetID.Tribocharge ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return [ ];
     }
@@ -141,26 +141,26 @@ internal class OldLionsCourt : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            List<int> idsToCheck;
+            List<TargetID> idsToCheck;
             if (fightData.IsCM)
             {
                 idsToCheck =
                 [
-                    (int)TargetID.PrototypeVermilionCM,
-                    (int)TargetID.PrototypeIndigoCM,
-                    (int)TargetID.PrototypeArseniteCM,
+                    TargetID.PrototypeVermilionCM,
+                    TargetID.PrototypeIndigoCM,
+                    TargetID.PrototypeArseniteCM,
                 ];
             }
             else
             {
                 idsToCheck =
                 [
-                    (int)TargetID.PrototypeVermilion,
-                    (int)TargetID.PrototypeIndigo,
-                    (int)TargetID.PrototypeArsenite,
+                    TargetID.PrototypeVermilion,
+                    TargetID.PrototypeIndigo,
+                    TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, fightData, playerAgents, true);
         }
     }
 
@@ -169,16 +169,16 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return "Old Lion's Court";
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.PrototypeVermilion,
-            (int)TargetID.PrototypeIndigo,
-            (int)TargetID.PrototypeArsenite,
-            (int)TargetID.PrototypeVermilionCM,
-            (int)TargetID.PrototypeIndigoCM,
-            (int)TargetID.PrototypeArseniteCM,
+            TargetID.PrototypeVermilion,
+            TargetID.PrototypeIndigo,
+            TargetID.PrototypeArsenite,
+            TargetID.PrototypeVermilionCM,
+            TargetID.PrototypeIndigoCM,
+            TargetID.PrototypeArseniteCM,
         ];
     }
 

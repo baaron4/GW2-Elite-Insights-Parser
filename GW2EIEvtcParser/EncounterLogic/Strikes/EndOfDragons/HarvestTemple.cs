@@ -265,7 +265,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         return phases;
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return [];
     }
@@ -291,47 +291,47 @@ internal class HarvestTemple : EndOfDragonsStrike
         return startToUse;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.TheDragonVoidJormag,
-            (int)TargetID.TheDragonVoidKralkatorrik,
-            (int)TargetID.TheDragonVoidMordremoth,
-            (int)TargetID.TheDragonVoidPrimordus,
-            (int)TargetID.TheDragonVoidSooWon,
-            (int)TargetID.TheDragonVoidZhaitan,
-            (int)TargetID.VoidSaltsprayDragon,
-            (int)TargetID.VoidObliterator,
-            (int)TargetID.VoidGoliath,
-            (int)TargetID.VoidTimeCaster,
-            (int)TargetID.PushableVoidAmalgamate,
-            (int)TargetID.KillableVoidAmalgamate,
-            (int)TargetID.VoidGiant
+            TargetID.TheDragonVoidJormag,
+            TargetID.TheDragonVoidKralkatorrik,
+            TargetID.TheDragonVoidMordremoth,
+            TargetID.TheDragonVoidPrimordus,
+            TargetID.TheDragonVoidSooWon,
+            TargetID.TheDragonVoidZhaitan,
+            TargetID.VoidSaltsprayDragon,
+            TargetID.VoidObliterator,
+            TargetID.VoidGoliath,
+            TargetID.VoidTimeCaster,
+            TargetID.PushableVoidAmalgamate,
+            TargetID.KillableVoidAmalgamate,
+            TargetID.VoidGiant
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.TheDragonVoidJormag, 0 },
-            {(int)TargetID.TheDragonVoidKralkatorrik, 0 },
-            {(int)TargetID.TheDragonVoidMordremoth, 0 },
-            {(int)TargetID.TheDragonVoidPrimordus, 0 },
-            {(int)TargetID.TheDragonVoidZhaitan, 0 },
-            {(int)TargetID.TheDragonVoidSooWon, 0 },
-            {(int)TargetID.PushableVoidAmalgamate, 1 },
-            {(int)TargetID.KillableVoidAmalgamate, 1 },
-            {(int)TargetID.VoidSaltsprayDragon, 1 },
-            {(int)TargetID.VoidObliterator, 1 },
-            {(int)TargetID.VoidGoliath, 1 },
-            {(int)TargetID.VoidTimeCaster, 1 },
-            {(int)TargetID.VoidGiant, 1},
+            {TargetID.TheDragonVoidJormag, 0 },
+            {TargetID.TheDragonVoidKralkatorrik, 0 },
+            {TargetID.TheDragonVoidMordremoth, 0 },
+            {TargetID.TheDragonVoidPrimordus, 0 },
+            {TargetID.TheDragonVoidZhaitan, 0 },
+            {TargetID.TheDragonVoidSooWon, 0 },
+            {TargetID.PushableVoidAmalgamate, 1 },
+            {TargetID.KillableVoidAmalgamate, 1 },
+            {TargetID.VoidSaltsprayDragon, 1 },
+            {TargetID.VoidObliterator, 1 },
+            {TargetID.VoidGoliath, 1 },
+            {TargetID.VoidTimeCaster, 1 },
+            {TargetID.VoidGiant, 1},
         };
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [ ];
     }

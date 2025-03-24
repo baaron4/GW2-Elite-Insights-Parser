@@ -161,47 +161,47 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         (-2088, -6124, 2086, -1950));
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Cerus,
-            (int)TargetID.EmbodimentOfDespair,
-            (int)TargetID.EmbodimentOfEnvy,
-            (int)TargetID.EmbodimentOfGluttony,
-            (int)TargetID.EmbodimentOfMalice,
-            (int)TargetID.EmbodimentOfRage,
-            (int)TargetID.EmbodimentOfRegret,
-            (int)TargetID.PermanentEmbodimentOfDespair,
-            (int)TargetID.PermanentEmbodimentOfEnvy,
-            (int)TargetID.PermanentEmbodimentOfGluttony,
-            (int)TargetID.PermanentEmbodimentOfMalice,
-            (int)TargetID.PermanentEmbodimentOfRage,
-            (int)TargetID.PermanentEmbodimentOfRegret,
-            (int)TargetID.MaliciousShadow,
-            (int)TargetID.MaliciousShadowCM,
+            TargetID.Cerus,
+            TargetID.EmbodimentOfDespair,
+            TargetID.EmbodimentOfEnvy,
+            TargetID.EmbodimentOfGluttony,
+            TargetID.EmbodimentOfMalice,
+            TargetID.EmbodimentOfRage,
+            TargetID.EmbodimentOfRegret,
+            TargetID.PermanentEmbodimentOfDespair,
+            TargetID.PermanentEmbodimentOfEnvy,
+            TargetID.PermanentEmbodimentOfGluttony,
+            TargetID.PermanentEmbodimentOfMalice,
+            TargetID.PermanentEmbodimentOfRage,
+            TargetID.PermanentEmbodimentOfRegret,
+            TargetID.MaliciousShadow,
+            TargetID.MaliciousShadowCM,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            { (int)TargetID.Cerus, 0 },
-            { (int)TargetID.EmbodimentOfDespair, 1 },
-            { (int)TargetID.EmbodimentOfEnvy, 1 },
-            { (int)TargetID.EmbodimentOfGluttony, 1 },
-            { (int)TargetID.EmbodimentOfMalice, 1 },
-            { (int)TargetID.EmbodimentOfRage, 1 },
-            { (int)TargetID.EmbodimentOfRegret, 1 },
-            { (int)TargetID.MaliciousShadow, 2 },
-            { (int)TargetID.MaliciousShadowCM, 2 },
-            { (int)TargetID.PermanentEmbodimentOfDespair, 3 },
-            { (int)TargetID.PermanentEmbodimentOfEnvy, 3 },
-            { (int)TargetID.PermanentEmbodimentOfGluttony, 3 },
-            { (int)TargetID.PermanentEmbodimentOfMalice, 3 },
-            { (int)TargetID.PermanentEmbodimentOfRage, 3 },
-            { (int)TargetID.PermanentEmbodimentOfRegret, 3 },
+            { TargetID.Cerus, 0 },
+            { TargetID.EmbodimentOfDespair, 1 },
+            { TargetID.EmbodimentOfEnvy, 1 },
+            { TargetID.EmbodimentOfGluttony, 1 },
+            { TargetID.EmbodimentOfMalice, 1 },
+            { TargetID.EmbodimentOfRage, 1 },
+            { TargetID.EmbodimentOfRegret, 1 },
+            { TargetID.MaliciousShadow, 2 },
+            { TargetID.MaliciousShadowCM, 2 },
+            { TargetID.PermanentEmbodimentOfDespair, 3 },
+            { TargetID.PermanentEmbodimentOfEnvy, 3 },
+            { TargetID.PermanentEmbodimentOfGluttony, 3 },
+            { TargetID.PermanentEmbodimentOfMalice, 3 },
+            { TargetID.PermanentEmbodimentOfRage, 3 },
+            { TargetID.PermanentEmbodimentOfRegret, 3 },
         };
     }
 
@@ -210,16 +210,16 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
         phases[0].AddTarget(cerus);
-        var embodimentIds = new List<int>
+        var embodimentIds = new List<TargetID>
         {
-            (int)TargetID.EmbodimentOfDespair,
-            (int)TargetID.EmbodimentOfEnvy,
-            (int)TargetID.EmbodimentOfGluttony,
-            (int)TargetID.EmbodimentOfMalice,
-            (int)TargetID.EmbodimentOfRage,
-            (int)TargetID.EmbodimentOfRegret,
+            TargetID.EmbodimentOfDespair,
+            TargetID.EmbodimentOfEnvy,
+            TargetID.EmbodimentOfGluttony,
+            TargetID.EmbodimentOfMalice,
+            TargetID.EmbodimentOfRage,
+            TargetID.EmbodimentOfRegret,
         };
-        var embodiments = Targets.Where(target => embodimentIds.Contains(target.ID));
+        var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIds));
         var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
         phases[0].AddTargets(embodimentsKilled, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)

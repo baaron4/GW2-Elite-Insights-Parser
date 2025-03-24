@@ -133,13 +133,13 @@ internal class DecimaTheStormsinger : MountBalrior
                         (-13068, 10300, -7141, 16227));
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Decima,
-            (int)TargetID.DecimaCM,
-            (int)TargetID.TranscendentBoulder,
+            TargetID.Decima,
+            TargetID.DecimaCM,
+            TargetID.TranscendentBoulder,
         ];
     }
 

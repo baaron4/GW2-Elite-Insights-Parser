@@ -80,22 +80,22 @@ internal class UraTheSteamshrieker : MountBalrior
     }
 
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Ura,
-            (int)TargetID.ChampionFumaroller,
-            (int)TargetID.EliteFumaroller,
+            TargetID.Ura,
+            TargetID.ChampionFumaroller,
+            TargetID.EliteFumaroller,
         ];
     }
 
-    protected override HashSet<int> ForbidBreakbarPhasesFor()
+    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return
         [
-            (int)TargetID.ChampionFumaroller,
-            (int)TargetID.EliteFumaroller,
+            TargetID.ChampionFumaroller,
+            TargetID.EliteFumaroller,
         ];
     }
 

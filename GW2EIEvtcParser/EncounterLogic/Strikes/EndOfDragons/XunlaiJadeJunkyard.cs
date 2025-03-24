@@ -169,31 +169,31 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Ankka,
+            TargetID.Ankka,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Ankka,
-            (int)TargetID.ReanimatedAntipathy,
-            (int)TargetID.ReanimatedSpite,
+            TargetID.Ankka,
+            TargetID.ReanimatedAntipathy,
+            TargetID.ReanimatedSpite,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.Ankka, 0 },
-            {(int)TargetID.ReanimatedAntipathy, 1 },
-            {(int)TargetID.ReanimatedSpite, 1 },
+            {TargetID.Ankka, 0 },
+            {TargetID.ReanimatedAntipathy, 1 },
+            {TargetID.ReanimatedSpite, 1 },
         };
     }
 

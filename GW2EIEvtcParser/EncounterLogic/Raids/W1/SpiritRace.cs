@@ -34,12 +34,12 @@ internal class SpiritRace : SpiritVale
                         (-15360, -36864, 15360, 39936),
                         (3456, 11012, 4736, 14212)*/);
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.DummyTarget,
-            (int)TargetID.EtherealBarrier,
+            TargetID.DummyTarget,
+            TargetID.EtherealBarrier,
         ];
     }
 
@@ -61,7 +61,7 @@ internal class SpiritRace : SpiritVale
         return (int)TargetID.WallOfGhosts;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }

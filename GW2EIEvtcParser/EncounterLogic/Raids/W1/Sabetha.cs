@@ -85,11 +85,11 @@ internal class Sabetha : SpiritVale
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
         phases[0].AddTarget(sabetha);
-        var miniBossIds = new List<int>
+        var miniBossIds = new List<TargetID>
         {
-            (int) TargetID.Karde, // reverse order for mini boss phase detection
-            (int) TargetID.Knuckles,
-            (int) TargetID.Kernan,
+             TargetID.Karde, // reverse order for mini boss phase detection
+             TargetID.Knuckles,
+             TargetID.Kernan,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -131,27 +131,27 @@ internal class Sabetha : SpiritVale
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Sabetha,
-            (int)TargetID.Kernan,
-            (int)TargetID.Knuckles,
-            (int)TargetID.Karde,
-            (int)TargetID.Cannon,
+            TargetID.Sabetha,
+            TargetID.Kernan,
+            TargetID.Knuckles,
+            TargetID.Karde,
+            TargetID.Cannon,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.Sabetha, 0 },
-            {(int)TargetID.Kernan, 1 },
-            {(int)TargetID.Knuckles, 1 },
-            {(int)TargetID.Karde, 1 },
-            {(int)TargetID.Cannon, 2 },
+            {TargetID.Sabetha, 0 },
+            {TargetID.Kernan, 1 },
+            {TargetID.Knuckles, 1 },
+            {TargetID.Karde, 1 },
+            {TargetID.Cannon, 2 },
         };
     }
 
@@ -323,14 +323,14 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Sabetha,
-            (int)TargetID.Kernan,
-            (int)TargetID.Karde,
-            (int)TargetID.Knuckles,
+            TargetID.Sabetha,
+            TargetID.Kernan,
+            TargetID.Karde,
+            TargetID.Knuckles,
         ];
     }
 

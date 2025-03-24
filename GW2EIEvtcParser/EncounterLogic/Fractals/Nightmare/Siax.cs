@@ -56,12 +56,12 @@ internal class Siax : Nightmare
         trashIDs.Add(TargetID.NightmareHallucinationSiax);
         return trashIDs;
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Siax,
-            (int)TargetID.EchoOfTheUnclean,
+            TargetID.Siax,
+            TargetID.EchoOfTheUnclean,
         ];
     }
 
@@ -86,9 +86,9 @@ internal class Siax : Nightmare
             PhaseData phase = phases[i];
             if (i % 2 == 0)
             {
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                   (int) TargetID.EchoOfTheUnclean,
+                   TargetID.EchoOfTheUnclean,
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
                 phase.Name = "Caustic Explosion " + (i / 2);

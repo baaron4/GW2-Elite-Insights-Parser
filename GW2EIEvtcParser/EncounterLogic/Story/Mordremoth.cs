@@ -53,18 +53,18 @@ internal class Mordremoth : StoryInstance
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Mordremoth,
-            (int)TargetID.BlightedRytlock,
+            TargetID.Mordremoth,
+            TargetID.BlightedRytlock,
             //TargetID.BlightedCanach,
-            (int)TargetID.BlightedBraham,
-            (int)TargetID.BlightedMarjory,
-            (int)TargetID.BlightedCaithe,
-            (int)TargetID.BlightedForgal,
-            (int)TargetID.BlightedSieran,
+            TargetID.BlightedBraham,
+            TargetID.BlightedMarjory,
+            TargetID.BlightedCaithe,
+            TargetID.BlightedForgal,
+            TargetID.BlightedSieran,
             //TargetID.BlightedTybalt,
             //TargetID.BlightedPaleTree,
             //TargetID.BlightedTrahearne,
@@ -88,31 +88,31 @@ internal class Mordremoth : StoryInstance
         return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Canach,
-            (int)TargetID.Braham,
-            (int)TargetID.Caithe,
+            TargetID.Canach,
+            TargetID.Braham,
+            TargetID.Caithe,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Mordremoth,
-            (int)TargetID.Canach,
-            (int)TargetID.Braham,
-            (int)TargetID.Caithe,
-            (int)TargetID.BlightedRytlock,
+            TargetID.Mordremoth,
+            TargetID.Canach,
+            TargetID.Braham,
+            TargetID.Caithe,
+            TargetID.BlightedRytlock,
             //TargetID.BlightedCanach,
-            (int)TargetID.BlightedBraham,
-            (int)TargetID.BlightedMarjory,
-            (int)TargetID.BlightedCaithe,
-            (int)TargetID.BlightedForgal,
-            (int)TargetID.BlightedSieran,
+            TargetID.BlightedBraham,
+            TargetID.BlightedMarjory,
+            TargetID.BlightedCaithe,
+            TargetID.BlightedForgal,
+            TargetID.BlightedSieran,
             //TargetID.BlightedTybalt,
             //TargetID.BlightedPaleTree,
             //TargetID.BlightedTrahearne,

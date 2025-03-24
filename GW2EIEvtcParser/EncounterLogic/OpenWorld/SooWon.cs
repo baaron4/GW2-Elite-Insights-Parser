@@ -245,31 +245,31 @@ internal class SooWon : OpenWorldLogic
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.SooWonOW,
-            (int)TargetID.SooWonTail,
-            (int)TargetID.VoidGiant2,
-            (int)TargetID.VoidTimeCaster2,
-            (int)TargetID.VoidBrandstalker,
-            (int)TargetID.VoidColdsteel2,
-            (int)TargetID.VoidObliterator2,
+            TargetID.SooWonOW,
+            TargetID.SooWonTail,
+            TargetID.VoidGiant2,
+            TargetID.VoidTimeCaster2,
+            TargetID.VoidBrandstalker,
+            TargetID.VoidColdsteel2,
+            TargetID.VoidObliterator2,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.SooWonOW,
-            (int)TargetID.SooWonTail,
-            (int)TargetID.VoidGiant2,
-            (int)TargetID.VoidTimeCaster2,
-            (int)TargetID.VoidBrandstalker,
-            (int)TargetID.VoidColdsteel2,
-            (int)TargetID.VoidObliterator2,
+            TargetID.SooWonOW,
+            TargetID.SooWonTail,
+            TargetID.VoidGiant2,
+            TargetID.VoidTimeCaster2,
+            TargetID.VoidBrandstalker,
+            TargetID.VoidColdsteel2,
+            TargetID.VoidObliterator2,
         ];
     }
 

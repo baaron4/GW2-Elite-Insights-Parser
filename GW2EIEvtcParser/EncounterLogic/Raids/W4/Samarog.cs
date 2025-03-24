@@ -125,10 +125,10 @@ internal class Samarog : BastionOfThePenitent
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + i / 2;
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                   (int) TargetID.Rigom,
-                   (int) TargetID.Guldhem
+                    TargetID.Rigom,
+                    TargetID.Guldhem
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -152,7 +152,7 @@ internal class Samarog : BastionOfThePenitent
                 foreach (AgentItem spear in spearAgents)
                 {
                     spear.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    spear.OverrideID((int)TargetID.SpearAggressionRevulsion, agentData);
+                    spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
                 }
             }
         }
@@ -172,22 +172,22 @@ internal class Samarog : BastionOfThePenitent
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Samarog,
-            (int)TargetID.Rigom,
-            (int)TargetID.Guldhem,
+            TargetID.Samarog,
+            TargetID.Rigom,
+            TargetID.Guldhem,
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.Samarog, 0 },
-            {(int)TargetID.Rigom, 1 },
-            {(int)TargetID.Guldhem, 1 },
+            {TargetID.Samarog, 0 },
+            {TargetID.Rigom, 1 },
+            {TargetID.Guldhem, 1 },
         };
     }
 

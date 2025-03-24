@@ -98,24 +98,24 @@ internal class Deimos : BastionOfThePenitent
             new DamageCastFinder(DemonicAura, DemonicAura),
         ];
     }
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Deimos,
-            (int)TargetID.Saul,
-            (int)TargetID.Thief,
-            (int)TargetID.Drunkard,
-            (int)TargetID.Gambler,
+            TargetID.Deimos,
+            TargetID.Saul,
+            TargetID.Thief,
+            TargetID.Drunkard,
+            TargetID.Gambler,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Saul,
-            (int)TargetID.ShackledPrisoner
+            TargetID.Saul,
+            TargetID.ShackledPrisoner
         ];
     }
 
@@ -507,16 +507,16 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Deimos,
-            (int)TargetID.DummyTarget,
-            (int)TargetID.Thief,
-            (int)TargetID.Drunkard,
-            (int)TargetID.Gambler,
-            (int)TargetID.DemonicBond
+            TargetID.Deimos,
+            TargetID.DummyTarget,
+            TargetID.Thief,
+            TargetID.Drunkard,
+            TargetID.Gambler,
+            TargetID.DemonicBond
         ];
     }
 

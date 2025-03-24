@@ -70,24 +70,24 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.ValeGuardian,
-            (int)TargetID.RedGuardian,
-            (int)TargetID.BlueGuardian,
-            (int)TargetID.GreenGuardian
+            TargetID.ValeGuardian,
+            TargetID.RedGuardian,
+            TargetID.BlueGuardian,
+            TargetID.GreenGuardian
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.ValeGuardian, 0 },
-            {(int)TargetID.RedGuardian, 1 },
-            {(int)TargetID.BlueGuardian, 1 },
-            {(int)TargetID.GreenGuardian, 1 },
+            {TargetID.ValeGuardian, 0 },
+            {TargetID.RedGuardian, 1 },
+            {TargetID.BlueGuardian, 1 },
+            {TargetID.GreenGuardian, 1 },
         };
     }
 
@@ -96,11 +96,11 @@ internal class ValeGuardian : SpiritVale
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget);
-        var splitGuardianIds = new List<int>
+        var splitGuardianIds = new List<TargetID>
         {
-            (int) TargetID.BlueGuardian,
-            (int) TargetID.GreenGuardian,
-            (int) TargetID.RedGuardian
+            TargetID.BlueGuardian,
+            TargetID.GreenGuardian,
+            TargetID.RedGuardian
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
