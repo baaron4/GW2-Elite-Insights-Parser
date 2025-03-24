@@ -182,8 +182,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         return
         [
             (int)TargetID.Ankka,
-            (int)TrashID.ReanimatedAntipathy,
-            (int)TrashID.ReanimatedSpite,
+            (int)TargetID.ReanimatedAntipathy,
+            (int)TargetID.ReanimatedSpite,
         ];
     }
 
@@ -192,25 +192,25 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         return new Dictionary<int, int>()
         {
             {(int)TargetID.Ankka, 0 },
-            {(int)TrashID.ReanimatedAntipathy, 1 },
-            {(int)TrashID.ReanimatedSpite, 1 },
+            {(int)TargetID.ReanimatedAntipathy, 1 },
+            {(int)TargetID.ReanimatedSpite, 1 },
         };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Ankka,
-            TrashID.ReanimatedMalice1,
-            TrashID.ReanimatedMalice2,
-            TrashID.ReanimatedHatred,
-            TrashID.ZhaitansReach,
-            TrashID.KraitsHallucination,
-            TrashID.LichHallucination,
-            TrashID.QuaggansHallucinationNM,
-            TrashID.QuaggansHallucinationCM,
-            TrashID.SanctuaryPrism,
+            TargetID.Ankka2,
+            TargetID.ReanimatedMalice1,
+            TargetID.ReanimatedMalice2,
+            TargetID.ReanimatedHatred,
+            TargetID.ZhaitansReach,
+            TargetID.KraitsHallucination,
+            TargetID.LichHallucination,
+            TargetID.QuaggansHallucinationNM,
+            TargetID.QuaggansHallucinationCM,
+            TargetID.SanctuaryPrism,
         ];
     }
 
@@ -232,7 +232,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         {
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC, agentData);
-            sanctuary.OverrideID(TrashID.SanctuaryPrism, agentData);
+            sanctuary.OverrideID(TargetID.SanctuaryPrism, agentData);
             sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -367,7 +367,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)TrashID.KraitsHallucination:
+            case (int)TargetID.KraitsHallucination:
                 // Wall of Fear
                 long firstMovementTime = target.FirstAware + 2550;
                 uint kraitsRadius = 420;
@@ -376,7 +376,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 replay.Decorations.Add(new CircleDecoration(kraitsRadius, (firstMovementTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                 break;
 
-            case (int)TrashID.LichHallucination:
+            case (int)TargetID.LichHallucination:
                 // Terrifying Apparition
                 long awareTime = target.FirstAware + 1000;
                 uint lichRadius = 280;
@@ -385,7 +385,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                 break;
 
-            case (int)TrashID.QuaggansHallucinationNM:
+            case (int)TargetID.QuaggansHallucinationNM:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM);
@@ -399,7 +399,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)TrashID.QuaggansHallucinationCM:
+            case (int)TargetID.QuaggansHallucinationCM:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM);
@@ -413,7 +413,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)TrashID.ZhaitansReach:
+            case (int)TargetID.ZhaitansReach:
                 {
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     // Thrash - Circle that pulls in
@@ -439,10 +439,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 break;
 
-            case (int)TrashID.ReanimatedSpite:
+            case (int)TargetID.ReanimatedSpite:
                 break;
 
-            case (int)TrashID.SanctuaryPrism:
+            case (int)TargetID.SanctuaryPrism:
                 if (!log.FightData.IsCM)
                 {
                     replay.Trim(log.FightData.LogStart, log.FightData.LogStart);
@@ -487,7 +487,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
-        replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TrashID.ReanimatedHatred, Colors.Magenta, 0.5);
+        replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TargetID.ReanimatedHatred, Colors.Magenta, 0.5);
     }
 
     private static void AddDeathsHandDecoration(CombatReplay replay, Vector3 position, int start, int delay, uint radius, int duration)

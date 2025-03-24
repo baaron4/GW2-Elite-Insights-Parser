@@ -155,25 +155,25 @@ internal class AiKeeperOfThePeak : SunquaPeak
         [
             (int)TargetID.AiKeeperOfThePeak,
             (int)TargetID.AiKeeperOfThePeak2,
-            (int)TrashID.CCSorrowDemon,
+            (int)TargetID.CCSorrowDemon,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
         trashIDs.ReserveAdditional(9);
         
-        trashIDs.Add(TrashID.FearDemon);
-        trashIDs.Add(TrashID.GuiltDemon);
-        trashIDs.Add(TrashID.AiDoubtDemon);
-        trashIDs.Add(TrashID.PlayerDoubtDemon);
-        trashIDs.Add(TrashID.EnragedWaterSprite);
+        trashIDs.Add(TargetID.FearDemon);
+        trashIDs.Add(TargetID.GuiltDemon);
+        trashIDs.Add(TargetID.AiDoubtDemon);
+        trashIDs.Add(TargetID.PlayerDoubtDemon);
+        trashIDs.Add(TargetID.EnragedWaterSprite);
         // Transition sorrow demons
-        trashIDs.Add(TrashID.TransitionSorrowDemon1);
-        trashIDs.Add(TrashID.TransitionSorrowDemon2);
-        trashIDs.Add(TrashID.TransitionSorrowDemon3);
-        trashIDs.Add(TrashID.TransitionSorrowDemon4);
+        trashIDs.Add(TargetID.TransitionSorrowDemon1);
+        trashIDs.Add(TargetID.TransitionSorrowDemon2);
+        trashIDs.Add(TargetID.TransitionSorrowDemon3);
+        trashIDs.Add(TargetID.TransitionSorrowDemon4);
         
         return trashIDs;
     }
@@ -230,7 +230,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             int sorrowCount = 0;
             foreach (SingleActor target in Targets)
             {
-                if (target.IsSpecies(TrashID.CCSorrowDemon))
+                if (target.IsSpecies(TargetID.CCSorrowDemon))
                 {
                     target.OverrideName(target.Character + " " + (++sorrowCount));
                 }
@@ -483,7 +483,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
         switch (target.ID)
         {
-            case (int)TrashID.CCSorrowDemon:
+            case (int)TargetID.CCSorrowDemon:
                 {
                     const long sorrowFullCastDuration = 11840;
                     const long sorrowHitDelay = 400;
@@ -520,7 +520,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     }
                     break;
                 }
-            case (int)TrashID.GuiltDemon:
+            case (int)TargetID.GuiltDemon:
                 {
                     // tether between guilt and player/boss, buff applied TO guilt
                     var fixationBuffs = GetFilteredList(log.CombatData, [ FixatedGuilt ], target, true, true);

@@ -749,6 +749,7 @@ public static class EffectGUIDs
     public static readonly GUID AetherbladeHideoutLeyBreachIndicator2 = new("27E4543F5DD04844B5D98BC3EAFF9348"); // Duration 2000
     public static readonly GUID AetherbladeHideoutLeyBreachRedPuddle = new("4B62321544A6314ABEEECA3FF2D96116"); // Duration 30000 - Has End Event
     public static readonly GUID AetherbladeHideoutHeartpiercer = new("06EA9504DA08A0468E9CAFAA97CD9A36"); // Duration 2000
+    public static readonly GUID AetherbladeHideoutEnrage = new("D05A30041F4C6249BA566571B3E213DE"); // Duration 8000
     // Ankka
     public static readonly GUID DeathsEmbrace = new("4AC57C4159E0804D8DBEB6F0F39F5EF3");
     public static readonly GUID DeathsHandOnPlayerCM = new("9A64DC8F21EEC046BA1D4412863F2940");

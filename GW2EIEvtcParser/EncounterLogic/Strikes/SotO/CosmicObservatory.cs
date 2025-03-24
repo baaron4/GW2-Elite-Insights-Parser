@@ -16,33 +16,56 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 {
     public CosmicObservatory(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
-            new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Spinning Nebula", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
+        MechanicList.Add( new MechanicGroup([
+        
+            new MechanicGroup([
+                new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Danced with the Stars", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
+                    .UsingEnable(x => x.FightData.IsCM)
+                    .UsingAchievementEligibility(true),
+                new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Spinning Nebula", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
+                new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Spinning Nebula", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
+            ]),
             new PlayerDstHitMechanic(DemonicBlast, "Demonic Blast", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Dmn.Blst.H", "Demonic Blast Hit (Cones AoEs)", "Demonic Blast Hit", 0),
-            new PlayerDstHitMechanic(SoulFeast, "Soul Feast", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Sl.Fst.H", "Soul Feat (Pulsing Orb AoEs)", "Soul Feast Hit", 0),
-            new PlayerDstHitMechanic(PlanetCrashProjectileSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", 0),
+            new MechanicGroup([
+                new PlayerDstHitMechanic(SoulFeast, "Soul Feast", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Sl.Fst.H", "Soul Feat (Pulsing Orb AoEs)", "Soul Feast Hit", 0),
+                new PlayerDstBuffApplyMechanic(Revealed, "Revealed", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targeted by Soul Feast", 0)
+                    .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
+            ]),
+            new MechanicGroup([
+                new PlayerDstHitMechanic(PlanetCrashProjectileSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", 0),
+                new EnemyCastStartMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
+                new EnemyDstBuffApplyMechanic(Exposed31589, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", 0)
+                    .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Dagda)),
+                new EnemySrcSkillMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", 1000)
+                    .UsingChecker((ahde, log) => ahde.HealthDamage >= 0 && ahde.To.IsPlayer),
+            ]),
             new PlayerDstHitMechanic(ChargingConstellationDamage, "Charging Constellation", new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", 0),
-            new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Danced with the Stars", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0).UsingEnable(x => x.FightData.IsCM).UsingAchievementEligibility(true),
-            new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targeted by Shooting Stars", 0),
-            new PlayerDstBuffApplyMechanic(ResidualAnxiety, "Residual Anxiety", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", 0),
-            new PlayerDstBuffApplyMechanic(CosmicObservatoryLostControlBuff, "Lost Control", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Lst.Ctrl", "Lost Control (10 stacks of Residual Anxiety)", "Lost Control", 0),
-            new PlayerDstBuffApplyMechanic(Revealed, "Revealed", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targeted by Soul Feast", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targeted by Shooting Stars", 0),
+                new EnemyCastStartMechanic(ShootingStars, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
+            ]),
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(ResidualAnxiety, "Residual Anxiety", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", 0),
+                new PlayerDstBuffApplyMechanic(CosmicObservatoryLostControlBuff, "Lost Control", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Lst.Ctrl", "Lost Control (10 stacks of Residual Anxiety)", "Lost Control", 0),
+            ]),
             new PlayerDstBuffApplyMechanic(DagdaSharedDestruction_MeteorCrash, "Shared Destruction", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Shar.Des.T", "Targeted by Shared Destruction (Greens - Meteor Crash)", "Shared Destruction Target (Green - Meteor Crash)", 0),
             new PlayerDstBuffApplyMechanic([ TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 ], "Target Order", new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
             new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 0),
-            new PlayerSrcBuffRemoveSingleFromMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightBlue), "DemAur.R", "Removed Stacks of Demonic Aura", "Demonic Aura Stacks Removed"),
-            new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
-            new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TrashID.SoulFeast)),
-            new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda)).UsingEnable(x => x.FightData.IsCM),
+            new MechanicGroup([
+                new PlayerSrcBuffRemoveSingleFromMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.Bowtie, Colors.LightBlue), "DemAur.R", "Removed Stacks of Demonic Aura", "Demonic Aura Stacks Removed"),
+                new EnemyDstBuffRemoveSingleMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "DemAur.L", "Lost stacks of Demonic Aura", "Demonic Aura Stacks Lost")
+                    .UsingChecker((abre, log) => abre.CreditedBy.IsPlayer),
+            ]),
+            new MechanicGroup([
+                new PlayerSrcSkillMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
+                new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0)
+                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
+                new PlayerSrcHitMechanic(PurifyingLight, "Purifying Light", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
+                    .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
+                    .UsingEnable(x => x.FightData.IsCM),
+            ]),
             new PlayerDstEffectMechanic(EffectGUIDs.CosmicObservatoryDemonicFever, "Demonic Fever", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "DemFev.T", "Targeted by Demonic Fever (Orange Spread AoEs)", "Demonic Fever Target", 0),
-            new EnemyDstBuffRemoveSingleMechanic(DagdaDemonicAura, "Demonic Aura", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "DemAur.L", "Lost stacks of Demonic Aura", "Demonic Aura Stacks Lost").UsingChecker((abre, log) => abre.CreditedBy.IsPlayer),
-            new EnemyCastStartMechanic(ShootingStars, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
-            new EnemyCastStartMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
-            new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], "Spinning Nebula", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Dagda)),
-            new EnemySrcSkillMechanic(PlanetCrashSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", 1000).UsingChecker((ahde, log) => ahde.HealthDamage >= 0 && ahde.To.IsPlayer),
-        }
+        ])
         );
         Icon = EncounterIconCosmicObservatory;
         Extension = "cosobs";
@@ -162,7 +185,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
         var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
         var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem);
-        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast);
+        var agentsToTether = log.AgentData.GetNPCsByID(TargetID.SoulFeast);
 
         foreach (BuffApplyEvent buffApply in buffAppliesPlayer)
         {
@@ -321,14 +344,14 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             return phases;
         }
         // Cast check
-        var tormentedIDs = new List<TrashID>()
+        var tormentedIDs = new List<TargetID>()
         {
-            TrashID.VeteranTheTormented,
-            TrashID.EliteTheTormented,
-            TrashID.ChampionTheTormented,
+            TargetID.VeteranTheTormented,
+            TargetID.EliteTheTormented,
+            TargetID.ChampionTheTormented,
         };
         var tormentedAgents = new List<AgentItem>();
-        foreach (TrashID tormentedID in tormentedIDs)
+        foreach (TargetID tormentedID in tormentedIDs)
         {
             tormentedAgents.AddRange(log.AgentData.GetNPCsByID(tormentedID));
         }
@@ -390,9 +413,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 };
                 var ids = new List<int>
                 {
-                    (int)TrashID.VeteranTheTormented,
-                    (int)TrashID.EliteTheTormented,
-                    (int)TrashID.ChampionTheTormented,
+                    (int)TargetID.VeteranTheTormented,
+                    (int)TargetID.EliteTheTormented,
+                    (int)TargetID.ChampionTheTormented,
                 };
                 AddTargetsToPhase(phase, ids);
             }
@@ -422,16 +445,16 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         {
             switch (target.ID)
             {
-                case (int)TrashID.TheTormented:
+                case (int)TargetID.TheTormented:
                     target.OverrideName(target.Character + " " + curTormenteds[0]++);
                     break;
-                case (int)TrashID.VeteranTheTormented:
+                case (int)TargetID.VeteranTheTormented:
                     target.OverrideName("Veteran " + target.Character + " " + curTormenteds[1]++);
                     break;
-                case (int)TrashID.EliteTheTormented:
+                case (int)TargetID.EliteTheTormented:
                     target.OverrideName("Elite " + target.Character + " " + curTormenteds[2]++);
                     break;
-                case (int)TrashID.ChampionTheTormented:
+                case (int)TargetID.ChampionTheTormented:
                     target.OverrideName("Champion " + target.Character + " " + curTormenteds[3]++);
                     break;
                 default:
@@ -452,19 +475,19 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return
         [
             (int)TargetID.Dagda,
-            (int)TrashID.ChampionTheTormented,
-            (int)TrashID.EliteTheTormented,
-            (int)TrashID.VeteranTheTormented,
+            (int)TargetID.ChampionTheTormented,
+            (int)TargetID.EliteTheTormented,
+            (int)TargetID.VeteranTheTormented,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.SoulFeast,
-            TrashID.TheTormented,
-            TrashID.TormentedPhantom,
+            TargetID.SoulFeast,
+            TargetID.TheTormented,
+            TargetID.TormentedPhantom,
         ];
     }
 

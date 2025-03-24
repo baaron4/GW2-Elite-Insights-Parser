@@ -45,16 +45,16 @@ internal class StatueOfDeath : HallOfChains
             new DamageCastFinder(HungeringAura , HungeringAura ), // Hungering Aura
         ];
     }
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.OrbSpider,
-            TrashID.SpiritHorde1,
-            TrashID.SpiritHorde2,
-            TrashID.SpiritHorde3,
-            TrashID.GreenSpirit1,
-            TrashID.GreenSpirit2
+            TargetID.OrbSpider,
+            TargetID.SpiritHorde1,
+            TargetID.SpiritHorde2,
+            TargetID.SpiritHorde3,
+            TargetID.GreenSpirit1,
+            TargetID.GreenSpirit2
         ];
     }
 
@@ -68,8 +68,8 @@ internal class StatueOfDeath : HallOfChains
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var peasants = new List<AgentItem>(agentData.GetNPCsByID(TrashID.AscalonianPeasant1));
-            peasants.AddRange(agentData.GetNPCsByID(TrashID.AscalonianPeasant2));
+            var peasants = new List<AgentItem>(agentData.GetNPCsByID(TargetID.AscalonianPeasant1));
+            peasants.AddRange(agentData.GetNPCsByID(TargetID.AscalonianPeasant2));
             if (peasants.Count != 0)
             {
                 startToUse = peasants.Max(x => x.LastAware);
@@ -119,8 +119,8 @@ internal class StatueOfDeath : HallOfChains
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(end));
                 }
             } break;
-            case (int)TrashID.GreenSpirit1:
-            case (int)TrashID.GreenSpirit2: {
+            case (int)TargetID.GreenSpirit1:
+            case (int)TargetID.GreenSpirit2: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var green = cls.Where(x => x.SkillId == GreensEaterofSouls);
                 foreach (CastEvent c in green)
@@ -131,10 +131,10 @@ internal class StatueOfDeath : HallOfChains
                     replay.Decorations.AddWithGrowing(circle, gend);
                 }
             } break;
-            case (int)TrashID.SpiritHorde1:
-            case (int)TrashID.SpiritHorde2:
-            case (int)TrashID.SpiritHorde3:
-            case (int)TrashID.OrbSpider:
+            case (int)TargetID.SpiritHorde1:
+            case (int)TargetID.SpiritHorde2:
+            case (int)TargetID.SpiritHorde3:
+            case (int)TargetID.OrbSpider:
                 break;
             default:
                 break;

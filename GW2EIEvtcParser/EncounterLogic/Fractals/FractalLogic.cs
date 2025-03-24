@@ -26,7 +26,7 @@ internal abstract class FractalLogic : FightLogic
                         new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0), // No longer tracking damage
                     ]
                 ),
-                new SpawnMechanic((int)TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
+                new SpawnMechanic((int)TargetID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
                 new MechanicGroup(
                     [
                         new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Debilitated", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", 0),
@@ -73,17 +73,17 @@ internal abstract class FractalLogic : FightLogic
         return new[] { GenericTriggerID };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.FractalAvenger,
-            TrashID.FractalVindicator,
-            TrashID.TheMossman,
-            TrashID.InspectorEllenKiel,
-            TrashID.ChampionRabbit,
-            TrashID.JadeMawTentacle,
-            TrashID.AwakenedAbomination,
+            TargetID.FractalAvenger,
+            TargetID.FractalVindicator,
+            TargetID.TheMossman,
+            TargetID.InspectorEllenKiel,
+            TargetID.ChampionRabbit,
+            TargetID.JadeMawTentacle,
+            TargetID.AwakenedAbomination,
         ];
     }
 

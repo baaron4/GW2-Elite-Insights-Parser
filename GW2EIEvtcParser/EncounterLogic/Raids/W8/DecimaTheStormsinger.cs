@@ -139,28 +139,28 @@ internal class DecimaTheStormsinger : MountBalrior
         [
             (int)TargetID.Decima,
             (int)TargetID.DecimaCM,
-            (int)TrashID.TranscendentBoulder,
+            (int)TargetID.TranscendentBoulder,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.GreenOrb1Player,
-            TrashID.GreenOrb1PlayerCM,
-            TrashID.GreenOrb2Players,
-            TrashID.GreenOrb2PlayersCM,
-            TrashID.GreenOrb3Players,
-            TrashID.GreenOrb3PlayersCM,
-            TrashID.EnlightenedConduitCM,
-            TrashID.EnlightenedConduit,
-            TrashID.EnlightenedConduitGadget,
-            TrashID.BigEnlightenedConduitGadget,
-            TrashID.DecimaBeamStart,
-            TrashID.DecimaBeamStartCM,
-            TrashID.DecimaBeamEnd,
-            TrashID.DecimaBeamEndCM,
+            TargetID.GreenOrb1Player,
+            TargetID.GreenOrb1PlayerCM,
+            TargetID.GreenOrb2Players,
+            TargetID.GreenOrb2PlayersCM,
+            TargetID.GreenOrb3Players,
+            TargetID.GreenOrb3PlayersCM,
+            TargetID.EnlightenedConduitCM,
+            TargetID.EnlightenedConduit,
+            TargetID.EnlightenedConduitGadget,
+            TargetID.BigEnlightenedConduitGadget,
+            TargetID.DecimaBeamStart,
+            TargetID.DecimaBeamStartCM,
+            TargetID.DecimaBeamEnd,
+            TargetID.DecimaBeamEndCM,
         ];
     }
 
@@ -187,18 +187,18 @@ internal class DecimaTheStormsinger : MountBalrior
             {
                 var effectByConduitOnGadget = effects
                     .Where(x => x.DstMatchesAgent(conduitGadget)
-                                && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TrashID.EnlightenedConduitCM)
+                                && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM)
                     ).FirstOrDefault();
                 if (effectByConduitOnGadget != null)
                 {
-                    conduitGadget.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
+                    conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
                     conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
                     conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
                 }
             } 
             else
             {
-                conduitGadget.OverrideID(TrashID.EnlightenedConduitGadget, agentData);
+                conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
                 conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
@@ -210,14 +210,14 @@ internal class DecimaTheStormsinger : MountBalrior
 
         foreach (var conduitGadget in conduitsGadgets)
         {
-            conduitGadget.OverrideID(TrashID.BigEnlightenedConduitGadget, agentData);
+            conduitGadget.OverrideID(TargetID.BigEnlightenedConduitGadget, agentData);
             conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int cur = 1;
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.TranscendentBoulder))
+            if (target.IsSpecies(TargetID.TranscendentBoulder))
             {
                 target.OverrideName(target.Character + " " + cur++);
             }
@@ -303,7 +303,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     phases.Add(finalPhase);
                 }
             }
-            var boulders = Targets.Where(x => x.IsSpecies(TrashID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
+            var boulders = Targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
             phases[0].AddTargets(boulders, PhaseData.TargetPriority.Blocking);
             var firstBoulders = boulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
@@ -507,8 +507,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
                 break;
-            case (int)TrashID.GreenOrb1Player:
-            case (int)TrashID.GreenOrb1PlayerCM:
+            case (int)TargetID.GreenOrb1Player:
+            case (int)TargetID.GreenOrb1PlayerCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -523,8 +523,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)TrashID.GreenOrb2Players:
-            case (int)TrashID.GreenOrb2PlayersCM:
+            case (int)TargetID.GreenOrb2Players:
+            case (int)TargetID.GreenOrb2PlayersCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(185, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -539,8 +539,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)TrashID.GreenOrb3Players:
-            case (int)TrashID.GreenOrb3PlayersCM:
+            case (int)TargetID.GreenOrb3Players:
+            case (int)TargetID.GreenOrb3PlayersCM:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(285, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
@@ -555,8 +555,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     .UsingRotationConnector(new AngleConnector(180))
                 );
                 break;
-            case (int)TrashID.EnlightenedConduit:
-            case (int)TrashID.EnlightenedConduitCM:
+            case (int)TargetID.EnlightenedConduit:
+            case (int)TargetID.EnlightenedConduitCM:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
                 if (!isCM)
                 {
@@ -579,7 +579,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var walls = GetFilteredList(log.CombatData, isCM ? DecimaConduitWallBuffCM: DecimaConduitWallBuff, target, true, true);
                 replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
-            case (int)TrashID.EnlightenedConduitGadget:
+            case (int)TargetID.EnlightenedConduitGadget:
                 if (isCM && target.AgentItem.Master == null)
                 {
                     break;
@@ -617,8 +617,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder3Overhead);
                 }
                 break;
-            case (int)TrashID.DecimaBeamStart:
-            case (int)TrashID.DecimaBeamStartCM:
+            case (int)TargetID.DecimaBeamStart:
+            case (int)TargetID.DecimaBeamStartCM:
                 const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
@@ -645,7 +645,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
                 }
                 break;
-            case (int)TrashID.TranscendentBoulder:
+            case (int)TargetID.TranscendentBoulder:
                 var boulderCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Sparking Reverberation - Breakbar

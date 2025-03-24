@@ -26,7 +26,7 @@ internal class Artsariiv : ShatteredObservatory
             new PlayerDstHitMechanic([RedMarble1, RedMarble2], "Red Marble", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble","Red KD Marble after Jump", "Red Marble",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0)
                 .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new SpawnMechanic((int)TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
+            new SpawnMechanic((int)TargetID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
         ]));
         Extension = "arts";
         Icon = EncounterIconArtsariiv;
@@ -53,20 +53,20 @@ internal class Artsariiv : ShatteredObservatory
         return
         [
             (int)TargetID.Artsariiv,
-            (int)TrashID.CloneArtsariiv
+            (int)TargetID.CloneArtsariiv
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
         trashIDs.ReserveAdditional(5);
 
-        trashIDs.Add(TrashID.TemporalAnomalyArtsariiv);
-        trashIDs.Add(TrashID.Spark);
-        trashIDs.Add(TrashID.SmallArtsariiv);
-        trashIDs.Add(TrashID.MediumArtsariiv);
-        trashIDs.Add(TrashID.BigArtsariiv);
+        trashIDs.Add(TargetID.TemporalAnomalyArtsariiv);
+        trashIDs.Add(TargetID.Spark);
+        trashIDs.Add(TargetID.SmallArtsariiv);
+        trashIDs.Add(TargetID.MediumArtsariiv);
+        trashIDs.Add(TargetID.BigArtsariiv);
         
         return trashIDs;
     }
@@ -91,7 +91,7 @@ internal class Artsariiv : ShatteredObservatory
                 phase.Name = "Split " + (i) / 2;
                 var ids = new List<int>
                 {
-                   (int)TrashID.CloneArtsariiv,
+                   (int)TargetID.CloneArtsariiv,
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -128,22 +128,22 @@ internal class Artsariiv : ShatteredObservatory
             {
                 foreach (AgentItem subartsariiv in artsariivs)
                 {
-                    subartsariiv.OverrideID(TrashID.CloneArtsariiv, agentData);
+                    subartsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
                 }
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (NPC trashMob in _trashMobs)
         {
-            if (trashMob.IsSpecies(TrashID.SmallArtsariiv))
+            if (trashMob.IsSpecies(TargetID.SmallArtsariiv))
             {
                 trashMob.OverrideName("Small " + trashMob.Character);
             }
-            if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
+            if (trashMob.IsSpecies(TargetID.MediumArtsariiv))
             {
                 trashMob.OverrideName("Medium " + trashMob.Character);
             }
-            if (trashMob.IsSpecies(TrashID.BigArtsariiv))
+            if (trashMob.IsSpecies(TargetID.BigArtsariiv))
             {
                 trashMob.OverrideName("Big " + trashMob.Character);
             }
@@ -156,7 +156,7 @@ internal class Artsariiv : ShatteredObservatory
 
         foreach (var target in Targets)
         {
-            if (target.IsSpecies(TrashID.CloneArtsariiv))
+            if (target.IsSpecies(TargetID.CloneArtsariiv))
             {
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))

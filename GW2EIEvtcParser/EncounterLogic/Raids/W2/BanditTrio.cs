@@ -23,7 +23,7 @@ internal class BanditTrio : SalvationPass
         MechanicList.Add(new MechanicGroup([
             new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
             new PlayerDstBuffApplyMechanic(SlowBurn, "Slow Burn", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
-            new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.Cage)),
+            new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Cage)),
             new MechanicGroup([
                 new MechanicGroup([
                     new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Pink), "Targeted.B", "Applied Targeted Buff (Berg)", "Targeted Application (Berg)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Berg)),
@@ -72,7 +72,7 @@ internal class BanditTrio : SalvationPass
 
     protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
-        return [ (int)TrashID.Cage ];
+        return [ (int)TargetID.Cage ];
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -112,21 +112,21 @@ internal class BanditTrio : SalvationPass
             // Thrash mob start check
             var boxStart = new Vector2(-2200, -11300);
             var boxEnd = new Vector2(1000, -7200);
-            var trashMobsToCheck = new HashSet<TrashID>()
+            var trashMobsToCheck = new HashSet<TargetID>()
             {
-                TrashID.BanditAssassin,
-                TrashID.BanditAssassin2,
-                TrashID.BanditSapperTrio,
-                TrashID.BanditDeathsayer,
-                TrashID.BanditDeathsayer2,
-                TrashID.BanditBrawler,
-                TrashID.BanditBrawler2,
-                TrashID.BanditBattlemage,
-                TrashID.BanditBattlemage2,
-                TrashID.BanditCleric,
-                TrashID.BanditCleric2,
-                TrashID.BanditBombardier,
-                TrashID.BanditSniper,
+                TargetID.BanditAssassin,
+                TargetID.BanditAssassin2,
+                TargetID.BanditSapperTrio,
+                TargetID.BanditDeathsayer,
+                TargetID.BanditDeathsayer2,
+                TargetID.BanditBrawler,
+                TargetID.BanditBrawler2,
+                TargetID.BanditBattlemage,
+                TargetID.BanditBattlemage2,
+                TargetID.BanditCleric,
+                TargetID.BanditCleric2,
+                TargetID.BanditBombardier,
+                TargetID.BanditSniper,
             };
             var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
                 .Select(x => new PositionEvent(x, agentData));
@@ -150,14 +150,14 @@ internal class BanditTrio : SalvationPass
         if (cage != null)
         {
             cage.OverrideType(AgentItem.AgentType.NPC, agentData);
-            cage.OverrideID(TrashID.Cage, agentData);
+            cage.OverrideID(TargetID.Cage, agentData);
         }
         // Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(TrashID.Bombs, agentData);
+            bomb.OverrideID(TargetID.Bombs, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
@@ -238,32 +238,32 @@ internal class BanditTrio : SalvationPass
         return phases;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.BanditSaboteur,
-            TrashID.Warg,
-            TrashID.VeteranTorturedWarg,
-            TrashID.BanditAssassin,
-            TrashID.BanditAssassin2,
-            TrashID.BanditSapperTrio,
-            TrashID.BanditDeathsayer,
-            TrashID.BanditDeathsayer2,
-            TrashID.BanditBrawler,
-            TrashID.BanditBrawler2,
-            TrashID.BanditBattlemage,
-            TrashID.BanditBattlemage2,
-            TrashID.BanditCleric,
-            TrashID.BanditCleric2,
-            TrashID.BanditBombardier,
-            TrashID.BanditSniper,
-            TrashID.NarellaTornado,
-            TrashID.OilSlick,
-            TrashID.Prisoner1,
-            TrashID.Prisoner2,
-            TrashID.InsectSwarm,
-            TrashID.Bombs,
+            TargetID.BanditSaboteur,
+            TargetID.Warg,
+            TargetID.VeteranTorturedWarg,
+            TargetID.BanditAssassin,
+            TargetID.BanditAssassin2,
+            TargetID.BanditSapperTrio,
+            TargetID.BanditDeathsayer,
+            TargetID.BanditDeathsayer2,
+            TargetID.BanditBrawler,
+            TargetID.BanditBrawler2,
+            TargetID.BanditBattlemage,
+            TargetID.BanditBattlemage2,
+            TargetID.BanditCleric,
+            TargetID.BanditCleric2,
+            TargetID.BanditBombardier,
+            TargetID.BanditSniper,
+            TargetID.NarellaTornado,
+            TargetID.OilSlick,
+            TargetID.Prisoner1,
+            TargetID.Prisoner2,
+            TargetID.InsectSwarm,
+            TargetID.Bombs,
         ];
     }
 

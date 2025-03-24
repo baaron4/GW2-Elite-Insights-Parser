@@ -272,7 +272,7 @@ internal class Instance : FightLogic
         }
         return new[] { GenericTriggerID };
     }
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return [];
     }

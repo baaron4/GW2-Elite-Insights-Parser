@@ -44,9 +44,9 @@ public class BuffVolumeStatistics
                 {
                     activePlayerCount++;
                 }
-                foreach (BuffEvent abe in log.CombatData.GetBuffDataByIDByDst(buff.ID, p.AgentItem))
+                foreach (BuffEvent abae in log.CombatData.GetBuffApplyDataByIDByDst(buff.ID, p.AgentItem))
                 {
-                    if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
+                    if (abae.Time >= start && abae.Time <= end)
                     {
                         abae.TryFindSrc(log);
                         if (abae.CreditedBy == srcAgentItem)
@@ -136,12 +136,12 @@ public class BuffVolumeStatistics
             double totalActiveIncomingByUnknownExtension = 0;
             double totalActiveOutgoing = 0;
             double totalActiveOutgoingByExtension = 0;
-            foreach (BuffEvent abe in log.CombatData.GetBuffData(buff.ID))
+            foreach (BuffEvent abae in log.CombatData.GetBuffApplyData(buff.ID))
             {
-                if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
+                if (abae.Time >= start && abae.Time <= end)
                 {
                     abae.TryFindSrc(log);
-                    if (abe.To == dstActor.AgentItem)
+                    if (abae.To == dstActor.AgentItem)
                     {
                         if (abae is BuffApplyEvent bae)
                         {
@@ -150,7 +150,7 @@ public class BuffVolumeStatistics
                             {
                                 continue;
                             }*/
-                            if (abe.CreditedBy == dstActor.AgentItem)
+                            if (abae.CreditedBy == dstActor.AgentItem)
                             {
                                 totalOutgoing += bae.AppliedDuration;
                             }
@@ -158,12 +158,12 @@ public class BuffVolumeStatistics
                         }
                         if (abae is BuffExtensionEvent bee)
                         {
-                            if (abe.CreditedBy == dstActor.AgentItem)
+                            if (abae.CreditedBy == dstActor.AgentItem)
                             {
                                 totalOutgoingByExtension += bee.ExtendedDuration;
                             }
                             totalIncomingByExtension += bee.ExtendedDuration;
-                            if (abe.CreditedBy.IsUnknown)
+                            if (abae.CreditedBy.IsUnknown)
                             {
                                 totalIncomingByUnknownExtension += bee.ExtendedDuration;
                             }

@@ -67,14 +67,14 @@ internal class Skorvald : ShatteredObservatory
         phases[0].AddTarget(skorvald);
         var anomalyIds = new List<int>
         {
-            (int)TrashID.FluxAnomaly1,
-            (int)TrashID.FluxAnomaly2,
-            (int)TrashID.FluxAnomaly3,
-            (int)TrashID.FluxAnomaly4,
-            (int)TrashID.FluxAnomalyCM1,
-            (int)TrashID.FluxAnomalyCM2,
-            (int)TrashID.FluxAnomalyCM3,
-            (int)TrashID.FluxAnomalyCM4,
+            (int)TargetID.FluxAnomaly1,
+            (int)TargetID.FluxAnomaly2,
+            (int)TargetID.FluxAnomaly3,
+            (int)TargetID.FluxAnomaly4,
+            (int)TargetID.FluxAnomalyCM1,
+            (int)TargetID.FluxAnomalyCM2,
+            (int)TargetID.FluxAnomalyCM3,
+            (int)TargetID.FluxAnomalyCM4,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -110,14 +110,14 @@ internal class Skorvald : ShatteredObservatory
         var fluxAnomalies = new List<AgentItem>();
         var fluxIds = new List<int>
                 {
-                    (int)TrashID.FluxAnomaly1,
-                    (int)TrashID.FluxAnomaly2,
-                    (int)TrashID.FluxAnomaly3,
-                    (int)TrashID.FluxAnomaly4,
-                    (int)TrashID.FluxAnomalyCM1,
-                    (int)TrashID.FluxAnomalyCM2,
-                    (int)TrashID.FluxAnomalyCM3,
-                    (int)TrashID.FluxAnomalyCM4,
+                    (int)TargetID.FluxAnomaly1,
+                    (int)TargetID.FluxAnomaly2,
+                    (int)TargetID.FluxAnomaly3,
+                    (int)TargetID.FluxAnomaly4,
+                    (int)TargetID.FluxAnomalyCM1,
+                    (int)TargetID.FluxAnomalyCM2,
+                    (int)TargetID.FluxAnomalyCM3,
+                    (int)TargetID.FluxAnomalyCM4,
                 };
         for (int i = 0; i < fluxIds.Count; i++)
         {
@@ -127,7 +127,7 @@ internal class Skorvald : ShatteredObservatory
         {
             if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApply() && x.DstMatchesAgent(fluxAnomaly)))
             {
-                fluxAnomaly.OverrideID(TrashID.UnknownAnomaly, agentData);
+                fluxAnomaly.OverrideID(TargetID.UnknownAnomaly, agentData);
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -145,20 +145,20 @@ internal class Skorvald : ShatteredObservatory
         {
             switch (target.ID)
             {
-                case (int)TrashID.FluxAnomaly1:
-                case (int)TrashID.FluxAnomalyCM1:
+                case (int)TargetID.FluxAnomaly1:
+                case (int)TargetID.FluxAnomalyCM1:
                     target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
                     break;
-                case (int)TrashID.FluxAnomaly2:
-                case (int)TrashID.FluxAnomalyCM2:
+                case (int)TargetID.FluxAnomaly2:
+                case (int)TargetID.FluxAnomalyCM2:
                     target.OverrideName(target.Character + " " + (2 + 4 * nameCount[1]++));
                     break;
-                case (int)TrashID.FluxAnomaly3:
-                case (int)TrashID.FluxAnomalyCM3:
+                case (int)TargetID.FluxAnomaly3:
+                case (int)TargetID.FluxAnomalyCM3:
                     target.OverrideName(target.Character + " " + (3 + 4 * nameCount[2]++));
                     break;
-                case (int)TrashID.FluxAnomaly4:
-                case (int)TrashID.FluxAnomalyCM4:
+                case (int)TargetID.FluxAnomaly4:
+                case (int)TargetID.FluxAnomalyCM4:
                     target.OverrideName(target.Character + " " + (4 + 4 * nameCount[3]++));
                     break;
             }
@@ -203,10 +203,10 @@ internal class Skorvald : ShatteredObservatory
                 //SupernovaCM,
             };
             if (combatData.GetSkills().Intersect(cmSkills).Any() ||
-                agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
-                agentData.GetNPCsByID(TrashID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
+                agentData.GetNPCsByID(TargetID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetNPCsByID(TargetID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetNPCsByID(TargetID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
+                agentData.GetNPCsByID(TargetID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
             {
                 return FightData.EncounterMode.CM;
             }
@@ -223,14 +223,14 @@ internal class Skorvald : ShatteredObservatory
         return
         [
             (int)TargetID.Skorvald,
-            (int)TrashID.FluxAnomaly1,
-            (int)TrashID.FluxAnomaly2,
-            (int)TrashID.FluxAnomaly3,
-            (int)TrashID.FluxAnomaly4,
-            (int)TrashID.FluxAnomalyCM1,
-            (int)TrashID.FluxAnomalyCM2,
-            (int)TrashID.FluxAnomalyCM3,
-            (int)TrashID.FluxAnomalyCM4,
+            (int)TargetID.FluxAnomaly1,
+            (int)TargetID.FluxAnomaly2,
+            (int)TargetID.FluxAnomaly3,
+            (int)TargetID.FluxAnomaly4,
+            (int)TargetID.FluxAnomalyCM1,
+            (int)TargetID.FluxAnomalyCM2,
+            (int)TargetID.FluxAnomalyCM3,
+            (int)TargetID.FluxAnomalyCM4,
         ];
     }
 
@@ -254,10 +254,10 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.Add(TrashID.SolarBloom);
+        trashIDs.Add(TargetID.SolarBloom);
         return trashIDs;
     }
 
@@ -406,10 +406,10 @@ internal class Skorvald : ShatteredObservatory
                     }
                 }
                 break;
-            case (int)TrashID.FluxAnomalyCM1:
-            case (int)TrashID.FluxAnomalyCM2:
-            case (int)TrashID.FluxAnomalyCM3:
-            case (int)TrashID.FluxAnomalyCM4:
+            case (int)TargetID.FluxAnomalyCM1:
+            case (int)TargetID.FluxAnomalyCM2:
+            case (int)TargetID.FluxAnomalyCM3:
+            case (int)TargetID.FluxAnomalyCM4:
                 // Solar Stomp
                 var solarStomp = casts.Where(x => x.SkillId == SolarStomp);
                 foreach (CastEvent c in solarStomp)
@@ -496,7 +496,7 @@ internal class Skorvald : ShatteredObservatory
                     }
                 }
                 break;
-            case (int)TrashID.SolarBloom:
+            case (int)TargetID.SolarBloom:
                 break;
             default:
                 break;

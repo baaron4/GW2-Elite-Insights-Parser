@@ -66,7 +66,7 @@ internal class Sabetha : SpiritVale
         foreach (AgentItem cannon in cannons)
         {
             cannon.OverrideType(AgentItem.AgentType.NPC, agentData);
-            cannon.OverrideID(TrashID.Cannon, agentData);
+            cannon.OverrideID(TargetID.Cannon, agentData);
         }
 
         // Heavy Bombs
@@ -74,7 +74,7 @@ internal class Sabetha : SpiritVale
         foreach (AgentItem bomb in heavyBombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
-            bomb.OverrideID(TrashID.HeavyBomb, agentData);
+            bomb.OverrideID(TargetID.HeavyBomb, agentData);
         }
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -87,9 +87,9 @@ internal class Sabetha : SpiritVale
         phases[0].AddTarget(sabetha);
         var miniBossIds = new List<int>
         {
-            (int) TrashID.Karde, // reverse order for mini boss phase detection
-            (int) TrashID.Knuckles,
-            (int) TrashID.Kernan,
+            (int) TargetID.Karde, // reverse order for mini boss phase detection
+            (int) TargetID.Knuckles,
+            (int) TargetID.Kernan,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -137,10 +137,10 @@ internal class Sabetha : SpiritVale
         return
         [
             (int)TargetID.Sabetha,
-            (int)TrashID.Kernan,
-            (int)TrashID.Knuckles,
-            (int)TrashID.Karde,
-            (int)TrashID.Cannon,
+            (int)TargetID.Kernan,
+            (int)TargetID.Knuckles,
+            (int)TargetID.Karde,
+            (int)TargetID.Cannon,
         ];
     }
 
@@ -149,10 +149,10 @@ internal class Sabetha : SpiritVale
         return new Dictionary<int, int>()
         {
             {(int)TargetID.Sabetha, 0 },
-            {(int)TrashID.Kernan, 1 },
-            {(int)TrashID.Knuckles, 1 },
-            {(int)TrashID.Karde, 1 },
-            {(int)TrashID.Cannon, 2 },
+            {(int)TargetID.Kernan, 1 },
+            {(int)TargetID.Knuckles, 1 },
+            {(int)TargetID.Karde, 1 },
+            {(int)TargetID.Cannon, 2 },
         };
     }
 
@@ -178,7 +178,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)TrashID.Kernan:
+            case (int)TargetID.Kernan:
                 var bulletHail = cls.Where(x => x.SkillId == BulletHail);
                 foreach (CastEvent c in bulletHail)
                 {
@@ -201,7 +201,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)TrashID.Knuckles:
+            case (int)TargetID.Knuckles:
                 var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
                 foreach (CastEvent c in breakbar)
                 {
@@ -209,7 +209,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
 
-            case (int)TrashID.Karde:
+            case (int)TargetID.Karde:
                 var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
                 foreach (CastEvent c in flameBlast)
                 {
@@ -222,7 +222,7 @@ internal class Sabetha : SpiritVale
                     }
                 }
                 break;
-            case (int)TrashID.Cannon:
+            case (int)TargetID.Cannon:
                 if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(target.AgentItem, MarkerGUIDs.SabethaCannonRedCrossSwordsMarker, out var swords))
                 {
                     long hideStart = target.FirstAware;
@@ -241,14 +241,14 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.BanditSapper,
-            TrashID.BanditThug,
-            TrashID.BanditArsonist,
-            TrashID.HeavyBomb,
+            TargetID.BanditSapper,
+            TargetID.BanditThug,
+            TargetID.BanditArsonist,
+            TargetID.HeavyBomb,
         ];
     }
 
@@ -329,16 +329,16 @@ internal class Sabetha : SpiritVale
         return
         [
             (int)TargetID.Sabetha,
-            (int)TrashID.Kernan,
-            (int)TrashID.Karde,
-            (int)TrashID.Knuckles,
+            (int)TargetID.Kernan,
+            (int)TargetID.Karde,
+            (int)TargetID.Knuckles,
         ];
     }
 
     private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
     {
-        { (int)TrashID.Kernan, "Kernan" },
-        { (int)TrashID.Karde, "Karde" },
-        { (int)TrashID.Knuckles, "Knuckles" }
+        { (int)TargetID.Kernan, "Kernan" },
+        { (int)TargetID.Karde, "Karde" },
+        { (int)TargetID.Knuckles, "Knuckles" }
     };
 }

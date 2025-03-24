@@ -52,22 +52,22 @@ internal class ColdWar : IcebroodSagaStrike
     }
 
     // TODO - complete IDs
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.PropagandaBallon,
-            TrashID.DominionBladestorm,
-            TrashID.DominionStalker,
-            TrashID.DominionSpy1,
-            TrashID.DominionSpy2,
-            TrashID.DominionAxeFiend,
-            TrashID.DominionEffigy,
-            TrashID.FrostLegionCrusher,
-            TrashID.FrostLegionMusketeer,
-            TrashID.BloodLegionBlademaster,
-            TrashID.CharrTank,
-            TrashID.SonsOfSvanirHighShaman,
+            TargetID.PropagandaBallon,
+            TargetID.DominionBladestorm,
+            TargetID.DominionStalker,
+            TargetID.DominionSpy1,
+            TargetID.DominionSpy2,
+            TargetID.DominionAxeFiend,
+            TargetID.DominionEffigy,
+            TargetID.FrostLegionCrusher,
+            TargetID.FrostLegionMusketeer,
+            TargetID.BloodLegionBlademaster,
+            TargetID.CharrTank,
+            TargetID.SonsOfSvanirHighShaman,
         ];
     }
 }

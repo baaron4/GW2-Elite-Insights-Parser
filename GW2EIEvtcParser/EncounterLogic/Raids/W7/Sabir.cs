@@ -56,15 +56,15 @@ internal class Sabir : TheKeyOfAhdashim
         EncounterID |= 0x000002;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.ParalyzingWisp,
-            TrashID.VoltaicWisp,
-            TrashID.SmallKillerTornado,
-            TrashID.SmallJumpyTornado,
-            TrashID.BigKillerTornado
+            TargetID.ParalyzingWisp,
+            TargetID.VoltaicWisp,
+            TargetID.SmallKillerTornado,
+            TargetID.SmallJumpyTornado,
+            TargetID.BigKillerTornado
         ];
     }
 
@@ -196,15 +196,15 @@ internal class Sabir : TheKeyOfAhdashim
                     replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
                 }
                 break;
-            case (int)TrashID.BigKillerTornado:
+            case (int)TargetID.BigKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
-            case (int)TrashID.SmallKillerTornado:
+            case (int)TargetID.SmallKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
-            case (int)TrashID.SmallJumpyTornado:
-            case (int)TrashID.ParalyzingWisp:
-            case (int)TrashID.VoltaicWisp:
+            case (int)TargetID.SmallJumpyTornado:
+            case (int)TargetID.ParalyzingWisp:
+            case (int)TargetID.VoltaicWisp:
                 break;
             default:
                 break;

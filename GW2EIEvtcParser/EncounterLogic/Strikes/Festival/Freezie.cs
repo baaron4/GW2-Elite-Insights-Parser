@@ -64,7 +64,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         foreach (AgentItem pile in snowPiles)
         {
             pile.OverrideType(AgentItem.AgentType.NPC, agentData);
-            pile.OverrideID(TrashID.SnowPile, agentData);
+            pile.OverrideID(TargetID.SnowPile, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
@@ -73,7 +73,7 @@ internal class Freezie : FestivalStrikeMissionLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Freezie));
-        SingleActor? heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.FreeziesFrozenHeart));
+        SingleActor? heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.FreeziesFrozenHeart));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Freezie not found");
@@ -118,7 +118,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         {
             return FightData.EncounterStartStatus.Late;
         }
-        AgentItem? heart = agentData.GetNPCsByID(TrashID.FreeziesFrozenHeart).FirstOrDefault();
+        AgentItem? heart = agentData.GetNPCsByID(TargetID.FreeziesFrozenHeart).FirstOrDefault();
         if (heart != null)
         {
             HealthUpdateEvent? heartHpUpdate = combatData.GetHealthUpdateEvents(heart).FirstOrDefault(x => x.Time >= freezie.FirstAware);
@@ -135,7 +135,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         return
         [
             (int)TargetID.Freezie,
-            (int)TrashID.FreeziesFrozenHeart
+            (int)TargetID.FreeziesFrozenHeart
         ];
     }
 
@@ -144,18 +144,18 @@ internal class Freezie : FestivalStrikeMissionLogic
         return
         [
             (int)TargetID.Freezie,
-            (int)TrashID.FreeziesFrozenHeart
+            (int)TargetID.FreeziesFrozenHeart
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.IceStormer,
-            TrashID.IceSpiker,
-            TrashID.IcyProtector,
-            TrashID.SnowPile,
+            TargetID.IceStormer,
+            TargetID.IceSpiker,
+            TargetID.IcyProtector,
+            TargetID.SnowPile,
         ];
     }
 

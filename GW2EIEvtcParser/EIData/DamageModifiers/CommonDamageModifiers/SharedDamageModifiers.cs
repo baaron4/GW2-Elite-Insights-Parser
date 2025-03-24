@@ -23,7 +23,7 @@ internal static class SharedDamageModifiers
             return false;
         }
         // Malicious Shadows in CM have a unique Resistance buff
-        if (evt.To.IsSpecies(TrashID.MaliciousShadowCM) && evt.To.HasBuff(log, ResistanceUnremovable, evt.Time))
+        if (evt.To.IsSpecies(TargetID.MaliciousShadowCM) && evt.To.HasBuff(log, ResistanceUnremovable, evt.Time))
         {
             return false;
         }

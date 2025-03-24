@@ -20,7 +20,7 @@ internal class Siax : Nightmare
         [
             new PlayerDstHitMechanic(VileSpit, "Vile Spit", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit","Vile Spit (green goo)", "Poison Spit",0),
             new PlayerDstHitMechanic(TailLashSiax, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new SpawnMechanic((int)TrashID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
+            new SpawnMechanic((int)TargetID.NightmareHallucinationSiax, "Nightmare Hallucination", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu","Nightmare Hallucination Spawn", "Hallucination",0),
             new PlayerDstHitMechanic([CascadeOfTorment1, CascadeOfTorment2], "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
             new MechanicGroup(
                 [
@@ -49,11 +49,11 @@ internal class Siax : Nightmare
                         (11804, 4414, 12444, 5054)*/);
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.Add(TrashID.VolatileHallucinationSiax);
-        trashIDs.Add(TrashID.NightmareHallucinationSiax);
+        trashIDs.Add(TargetID.VolatileHallucinationSiax);
+        trashIDs.Add(TargetID.NightmareHallucinationSiax);
         return trashIDs;
     }
     protected override ReadOnlySpan<int> GetTargetsIDs()
@@ -61,7 +61,7 @@ internal class Siax : Nightmare
         return
         [
             (int)TargetID.Siax,
-            (int)TrashID.EchoOfTheUnclean,
+            (int)TargetID.EchoOfTheUnclean,
         ];
     }
 
@@ -75,7 +75,7 @@ internal class Siax : Nightmare
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
         phases[0].AddTarget(siax);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TrashID.EchoOfTheUnclean)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EchoOfTheUnclean)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -89,7 +89,7 @@ internal class Siax : Nightmare
             {
                 var ids = new List<int>
                 {
-                   (int) TrashID.EchoOfTheUnclean,
+                   (int) TargetID.EchoOfTheUnclean,
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
                 phase.Name = "Caustic Explosion " + (i / 2);
@@ -124,7 +124,7 @@ internal class Siax : Nightmare
             {
                 target.OverrideName("Siax the Corrupted");
             }
-            else if (target.IsSpecies(TrashID.EchoOfTheUnclean))
+            else if (target.IsSpecies(TargetID.EchoOfTheUnclean))
             {
                 AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
             }
@@ -173,7 +173,7 @@ internal class Siax : Nightmare
                 }
 
                 break;
-            case (int)TrashID.EchoOfTheUnclean:
+            case (int)TargetID.EchoOfTheUnclean:
                 var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho);
                 foreach (CastEvent c in causticExplosionEcho)
                 {
@@ -183,7 +183,7 @@ internal class Siax : Nightmare
                     replay.Decorations.Add(new CircleDecoration(3000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)));
                 }
                 break;
-            case (int)TrashID.VolatileHallucinationSiax:
+            case (int)TargetID.VolatileHallucinationSiax:
                 // Volatile Hallucinations Explosions
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.VolatileExpulsionIndicator, out var expulsionEffects))
                 {
@@ -195,7 +195,7 @@ internal class Siax : Nightmare
                     }
                 }
                 break;
-            case (int)TrashID.NightmareHallucinationSiax:
+            case (int)TargetID.NightmareHallucinationSiax:
                 break;
             default: break;
         }

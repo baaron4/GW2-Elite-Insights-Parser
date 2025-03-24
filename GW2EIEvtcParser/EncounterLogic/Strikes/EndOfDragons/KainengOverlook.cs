@@ -33,13 +33,13 @@ internal class KainengOverlook : EndOfDragonsStrike
                     new PlayerDstHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                     new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, "Rain of Blades", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targeted by Rain of Blades", "Rain of Blades Target", 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150)
-                        .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TrashID> { TrashID.TheMindblade, TrashID.TheMindbladeCM })),
+                        .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheMindblade, TargetID.TheMindbladeCM })),
                 ]),
                 // Enforcer
                 new MechanicGroup([
                     new PlayerDstHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150)
-                        .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TrashID> { TrashID.TheEnforcer, TrashID.TheEnforcerCM })),
+                        .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheEnforcer, TargetID.TheEnforcerCM })),
                     new PlayerDstHitMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
                 ]),
                 // Ritualist
@@ -97,16 +97,16 @@ internal class KainengOverlook : EndOfDragonsStrike
         [
             (int)TargetID.MinisterLi,
             (int)TargetID.MinisterLiCM,
-            (int)TrashID.TheEnforcer,
-            (int)TrashID.TheMindblade,
-            (int)TrashID.TheMechRider,
-            (int)TrashID.TheRitualist,
-            (int)TrashID.TheSniper,
-            (int)TrashID.TheEnforcerCM,
-            (int)TrashID.TheMindbladeCM,
-            (int)TrashID.TheMechRiderCM,
-            (int)TrashID.TheRitualistCM,
-            (int)TrashID.TheSniperCM,
+            (int)TargetID.TheEnforcer,
+            (int)TargetID.TheMindblade,
+            (int)TargetID.TheMechRider,
+            (int)TargetID.TheRitualist,
+            (int)TargetID.TheSniper,
+            (int)TargetID.TheEnforcerCM,
+            (int)TargetID.TheMindbladeCM,
+            (int)TargetID.TheMechRiderCM,
+            (int)TargetID.TheRitualistCM,
+            (int)TargetID.TheSniperCM,
         ];
     }
 
@@ -124,12 +124,12 @@ internal class KainengOverlook : EndOfDragonsStrike
         return "Kaineng Overlook";
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.SpiritOfDestruction,
-            TrashID.SpiritOfPain,
+            TargetID.SpiritOfDestruction,
+            TargetID.SpiritOfPain,
         ];
     }
 
@@ -139,16 +139,16 @@ internal class KainengOverlook : EndOfDragonsStrike
         [
             (int)TargetID.MinisterLi,
             (int)TargetID.MinisterLiCM,
-            (int)TrashID.TheEnforcer,
-            (int)TrashID.TheMindblade,
-            (int)TrashID.TheMechRider,
-            (int)TrashID.TheRitualist,
-            (int)TrashID.TheSniper,
-            (int)TrashID.TheEnforcerCM,
-            (int)TrashID.TheMindbladeCM,
-            (int)TrashID.TheMechRiderCM,
-            (int)TrashID.TheRitualistCM,
-            (int)TrashID.TheSniperCM,
+            (int)TargetID.TheEnforcer,
+            (int)TargetID.TheMindblade,
+            (int)TargetID.TheMechRider,
+            (int)TargetID.TheRitualist,
+            (int)TargetID.TheSniper,
+            (int)TargetID.TheEnforcerCM,
+            (int)TargetID.TheMindbladeCM,
+            (int)TargetID.TheMechRiderCM,
+            (int)TargetID.TheRitualistCM,
+            (int)TargetID.TheSniperCM,
         ];
     }
 
@@ -200,11 +200,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TrashID.TheEnforcerCM : (int)TrashID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TrashID.TheMindbladeCM : (int)TrashID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TrashID.TheMechRiderCM : (int)TrashID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TrashID.TheSniperCM : (int)TrashID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TrashID.TheRitualistCM : (int)TrashID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheEnforcerCM : (int)TargetID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMindbladeCM : (int)TargetID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMechRiderCM : (int)TargetID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheSniperCM : (int)TargetID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheRitualistCM : (int)TargetID.TheRitualist));
         //
         phases[0].AddTarget(enforcer, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(mindblade, PhaseData.TargetPriority.Blocking);
@@ -386,8 +386,8 @@ internal class KainengOverlook : EndOfDragonsStrike
                 }
             } break;
 
-            case (int)TrashID.TheMechRider:
-            case (int)TrashID.TheMechRiderCM: {
+            case (int)TargetID.TheMechRider:
+            case (int)TargetID.TheMechRiderCM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Small Cone
                 var fallOfTheAxeSmall = casts.Where(x => x.SkillId == FallOfTheAxeSmallConeNM || x.SkillId == FallOfTheAxeSmallConeCM);
@@ -435,22 +435,22 @@ internal class KainengOverlook : EndOfDragonsStrike
                     replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                 }
             }  break;
-            case (int)TrashID.TheEnforcer:
-            case (int)TrashID.TheEnforcerCM:
+            case (int)TargetID.TheEnforcer:
+            case (int)TargetID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
                 var enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
                 break;
-            case (int)TrashID.TheMindblade:
-            case (int)TrashID.TheMindbladeCM:
+            case (int)TargetID.TheMindblade:
+            case (int)TargetID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
                 var mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
                 break;
-            case (int)TrashID.TheRitualist:
-            case (int)TrashID.TheRitualistCM:
+            case (int)TargetID.TheRitualist:
+            case (int)TargetID.TheRitualistCM:
                 break;
-            case (int)TrashID.SpiritOfPain:
+            case (int)TargetID.SpiritOfPain:
                 // Volatile Expulsion - Orange AoE around the spirit
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out var volatileExpulsion))
                 {
@@ -463,7 +463,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     }
                 }
                 break;
-            case (int)TrashID.SpiritOfDestruction:
+            case (int)TargetID.SpiritOfDestruction:
                 // Volatile Burst - Orange AoE around the spirit with safe zone in the center
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileBurstAoE, out var volatileBurst))
                 {

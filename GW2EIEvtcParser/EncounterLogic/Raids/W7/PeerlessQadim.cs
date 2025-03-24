@@ -65,21 +65,21 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         return
         [
             (int)TargetID.PeerlessQadim,
-            (int)TrashID.EntropicDistortion,
-            (int)TrashID.PeerlessQadimPylon,
+            (int)TargetID.EntropicDistortion,
+            (int)TargetID.PeerlessQadimPylon,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            //TrashID.PeerlessQadimAuraPylon,
-            TrashID.BigKillerTornado,
-            TrashID.EnergyOrb,
-            //TrashID.Brandstorm,
-            TrashID.GiantQadimThePeerless,
-            //TrashID.DummyPeerlessQadim,
+            //TargetID.PeerlessQadimAuraPylon,
+            TargetID.BigKillerTornado,
+            TargetID.EnergyOrb,
+            //TargetID.Brandstorm,
+            TargetID.GiantQadimThePeerless,
+            //TargetID.DummyPeerlessQadim,
         ];
     }
 
@@ -106,7 +106,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Update pylon names with their cardinal locations.
-        foreach (NPC target in Targets.Where(x => x.IsSpecies(TrashID.PeerlessQadimPylon)).Cast<NPC>())
+        foreach (NPC target in Targets.Where(x => x.IsSpecies(TargetID.PeerlessQadimPylon)).Cast<NPC>())
         {
             AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
         }
@@ -314,14 +314,14 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     {
                         replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
 
-                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(TrashID.PeerlessQadimAuraPylon)))
+                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(TargetID.PeerlessQadimAuraPylon)))
                         {
                             replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
                         }
                     }
                 }
                 break;
-            case (int)TrashID.EntropicDistortion:
+            case (int)TargetID.EntropicDistortion:
                 // Sapping Surge, bad red tether
                 AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
 
@@ -336,22 +336,22 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
-            case (int)TrashID.BigKillerTornado:
+            case (int)TargetID.BigKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(450, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
-            case (int)TrashID.PeerlessQadimPylon:
+            case (int)TargetID.PeerlessQadimPylon:
                 // Red tether from Qadim to the Pylon during breakbar
                 var breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
                 replay.Decorations.AddTether(breakbarBuffs, Colors.Red, 0.4);
                 break;
-            case (int)TrashID.PeerlessQadimAuraPylon:
+            case (int)TargetID.PeerlessQadimAuraPylon:
                 break;
-            case (int)TrashID.EnergyOrb:
+            case (int)TargetID.EnergyOrb:
                 replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Green, 0.3, new AgentConnector(target)));
                 break;
-            case (int)TrashID.GiantQadimThePeerless:
+            case (int)TargetID.GiantQadimThePeerless:
                 // Trim the first giant Qadim, it exists since log start.
-                var firstGiantQadim = log.AgentData.GetNPCsByID(TrashID.GiantQadimThePeerless).FirstByAware();
+                var firstGiantQadim = log.AgentData.GetNPCsByID(TargetID.GiantQadimThePeerless).FirstByAware();
                 var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstByNonZeroTime();
                 if (firstGiantQadim != null && firstLiftUp != null && target.AgentItem == firstGiantQadim)
                 {

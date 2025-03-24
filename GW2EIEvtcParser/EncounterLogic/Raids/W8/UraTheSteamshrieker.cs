@@ -31,7 +31,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
             new PlayerDstEffectMechanic(EffectGUIDs.UraSulfuricGeyserTarget, "Sulfuric Geyser", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightOrange), "Dispel.G", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
-                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.SulfuricGeyser)),
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
 
             new PlayerDstHitMechanic(SteamPrison, "Steam Prison", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange), "Ste.Prison.H", "Hit by Steam Prison", "Steam Prison Hit", 0),
             new PlayerDstEffectMechanic(EffectGUIDs.UraSteamPrisonIndicator, "Steam Prison", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "Ste.Prison.T", "Targeted by Steam Prison (Ring)", "Steam Prison Target", 0),
@@ -51,11 +51,11 @@ internal class UraTheSteamshrieker : MountBalrior
             new PlayerDstBuffApplyMechanic(BloodstoneSaturation, "Bloodstone Saturation", new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Dispel", "Used Dispel (SAK)", "Used Dispel", 0),
 
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleCross, Colors.White), "Dispel.Toxc", "Dispelled Toxic Geyser (Removed Hardened Crust)", "Dispelled Toxic Geyser", 0)
-                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.ToxicGeyser)),
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser)),
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
-                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.SulfuricGeyser)),
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
             new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, "Hardened Crust", new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)
-                .UsingChecker((brae, log) => brae.To.IsSpecies(TrashID.TitanspawnGeyser)),
+                .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.TitanspawnGeyser)),
             new PlayerSrcBuffRemoveFromMechanic(PressureBlastBubbleBuff, "Pressure Blast", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "Dispel.P", "Dispelled Player (Removed Pressure Blast)", "Dispelled Player", 0)
                 .UsingChecker((brae, log) => brae.To.IsPlayer),
 
@@ -85,19 +85,28 @@ internal class UraTheSteamshrieker : MountBalrior
         return
         [
             (int)TargetID.Ura,
-            (int)TrashID.ChampionFumaroller,
-            (int)TrashID.EliteFumaroller,
+            (int)TargetID.ChampionFumaroller,
+            (int)TargetID.EliteFumaroller,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override HashSet<int> ForbidBreakbarPhasesFor()
+    {
+        return
+        [
+            (int)TargetID.ChampionFumaroller,
+            (int)TargetID.EliteFumaroller,
+        ];
+    }
+
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return 
         [
-            TrashID.SulfuricGeyser,
-            TrashID.TitanspawnGeyser,
-            TrashID.ToxicGeyser,
-            TrashID.UraGadget_BloodstoneShard,
+            TargetID.SulfuricGeyser,
+            TargetID.TitanspawnGeyser,
+            TargetID.ToxicGeyser,
+            TargetID.UraGadget_BloodstoneShard,
         ];
     }
 
@@ -127,7 +136,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Distinct();
             foreach (var toxicAgent in toxicAgents)
             {
-                toxicAgent.OverrideID(TrashID.ToxicGeyser, agentData);
+                toxicAgent.OverrideID(TargetID.ToxicGeyser, agentData);
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
@@ -147,7 +156,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Distinct();
             foreach (var titanAgent in titanAgents)
             {
-                titanAgent.OverrideID(TrashID.TitanspawnGeyser, agentData);
+                titanAgent.OverrideID(TargetID.TitanspawnGeyser, agentData);
                 titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
@@ -159,7 +168,7 @@ internal class UraTheSteamshrieker : MountBalrior
             .Distinct();
         foreach (var sulfuricAgent in sulfuricAgents)
         {
-            sulfuricAgent.OverrideID(TrashID.SulfuricGeyser, agentData);
+            sulfuricAgent.OverrideID(TargetID.SulfuricGeyser, agentData);
             sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Those can only be toxic ones
@@ -170,7 +179,7 @@ internal class UraTheSteamshrieker : MountBalrior
             .Distinct();
         foreach (var remainingGeyser in remainingGeysers)
         {
-            remainingGeyser.OverrideID(TrashID.ToxicGeyser, agentData);
+            remainingGeyser.OverrideID(TargetID.ToxicGeyser, agentData);
             remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         // Bloodstone shards
@@ -189,7 +198,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Distinct();
             foreach (var toxicAgent in bloodstoneShardAgents)
             {
-                toxicAgent.OverrideID(TrashID.UraGadget_BloodstoneShard, agentData);
+                toxicAgent.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
@@ -200,10 +209,10 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             switch (target.ID)
             {
-                case (int)TrashID.EliteFumaroller:
+                case (int)TargetID.EliteFumaroller:
                     target.OverrideName("Elite " + target.Character + " " + curFumarollers[0]++);
                     break;
-                case (int)TrashID.ChampionFumaroller:
+                case (int)TargetID.ChampionFumaroller:
                     target.OverrideName("Champion " + target.Character + " " + curFumarollers[1]++);
                     break;
                 default:
@@ -350,7 +359,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     }
                 }
                 break;
-            case (int)TrashID.ToxicGeyser:
+            case (int)TargetID.ToxicGeyser:
                 if (log.FightData.IsCM)
                 {
                     // Damage field ring
@@ -400,14 +409,14 @@ internal class UraTheSteamshrieker : MountBalrior
                     replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 }
                 break;
-            case (int)TrashID.SulfuricGeyser:
+            case (int)TargetID.SulfuricGeyser:
                 // Hardened Crust - Overhead
                 replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                 // Damage field ring
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)TrashID.TitanspawnGeyser:
+            case (int)TargetID.TitanspawnGeyser:
                 // Hardened Crust - Overhead
                 replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
@@ -416,7 +425,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 var titanspawnStates = target.GetBreakbarStatus(log);
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
-            case (int)TrashID.ChampionFumaroller:
+            case (int)TargetID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraFumarollerBreakingGround, out var breakingGrounds))
                 {
@@ -428,7 +437,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     }
                 }
                 break;
-            case (int)TrashID.EliteFumaroller:
+            case (int)TargetID.EliteFumaroller:
 
                 break;
             default:
@@ -520,7 +529,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
         if (log.FightData.Success && log.FightData.IsCM)
         {
-            var toxicGeysers = log.AgentData.GetNPCsByID(TrashID.ToxicGeyser);
+            var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
             bool eligible = true;
             foreach (var geyser in toxicGeysers)
             {

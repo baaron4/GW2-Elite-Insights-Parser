@@ -80,9 +80,9 @@ internal class MAMA : Nightmare
         phases[0].AddTarget(mama);
         var knightIds = new List<int>
         {
-            (int) TrashID.GreenKnight,
-            (int) TrashID.RedKnight,
-            (int) TrashID.BlueKnight,
+            (int) TargetID.GreenKnight,
+            (int) TargetID.RedKnight,
+            (int) TargetID.BlueKnight,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -117,9 +117,9 @@ internal class MAMA : Nightmare
         return
         [
             (int)TargetID.MAMA,
-            (int)TrashID.GreenKnight,
-            (int)TrashID.RedKnight,
-            (int)TrashID.BlueKnight
+            (int)TargetID.GreenKnight,
+            (int)TargetID.RedKnight,
+            (int)TargetID.BlueKnight
         ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -127,24 +127,24 @@ internal class MAMA : Nightmare
         return new Dictionary<int, int>()
         {
             {(int)TargetID.MAMA, 0 },
-            {(int)TrashID.GreenKnight, 1 },
-            {(int)TrashID.RedKnight, 1 },
-            {(int)TrashID.BlueKnight, 1 },
+            {(int)TargetID.GreenKnight, 1 },
+            {(int)TargetID.RedKnight, 1 },
+            {(int)TargetID.BlueKnight, 1 },
         };
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.Add(TrashID.TwistedHorror);
+        trashIDs.Add(TargetID.TwistedHorror);
         return trashIDs;
     }
 
     private static readonly Dictionary<int, string> PhaseNames = new()
     {
-        { (int)TrashID.GreenKnight, "Green Knight" },
-        { (int)TrashID.RedKnight, "Red Knight" },
-        { (int)TrashID.BlueKnight, "Blue Knight" }
+        { (int)TargetID.GreenKnight, "Green Knight" },
+        { (int)TargetID.RedKnight, "Red Knight" },
+        { (int)TargetID.BlueKnight, "Blue Knight" }
     };
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -201,9 +201,9 @@ internal class MAMA : Nightmare
                     }
                 }
                 break;
-            case (int)TrashID.BlueKnight:
-            case (int)TrashID.RedKnight:
-            case (int)TrashID.GreenKnight:
+            case (int)TargetID.BlueKnight:
+            case (int)TargetID.RedKnight:
+            case (int)TargetID.GreenKnight:
                 // Explosive Launch - Knight Jump in air
                 var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch);
                 foreach (CastEvent c in explosiveLaunch)

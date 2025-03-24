@@ -147,11 +147,6 @@ public class AgentItem
         ID = id;
     }
 
-    internal void OverrideID(TrashID id, AgentData agentData)
-    {
-        OverrideID((int)id, agentData);
-    }
-
     internal void OverrideID(TargetID id, AgentData agentData)
     {
         OverrideID((int)id, agentData);
@@ -541,10 +536,6 @@ public class AgentItem
         return !IsPlayer && ID == id;
     }
 
-    public bool IsSpecies(TrashID id)
-    {
-        return IsSpecies((int)id);
-    }
 
     public bool IsSpecies(TargetID id)
     {
@@ -562,11 +553,6 @@ public class AgentItem
     }
 
     public bool IsAnySpecies(IEnumerable<int> ids)
-    {
-        return ids.Any(IsSpecies);
-    }
-
-    public bool IsAnySpecies(IEnumerable<TrashID> ids)
     {
         return ids.Any(IsSpecies);
     }

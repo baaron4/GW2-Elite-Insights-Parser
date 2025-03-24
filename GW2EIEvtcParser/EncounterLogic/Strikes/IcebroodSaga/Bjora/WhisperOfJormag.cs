@@ -117,29 +117,29 @@ internal class WhisperOfJormag : Bjora
         return phases;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.WhisperEcho,
-            TrashID.DoppelgangerElementalist,
-            TrashID.DoppelgangerElementalist2,
-            TrashID.DoppelgangerEngineer,
-            TrashID.DoppelgangerEngineer2,
-            TrashID.DoppelgangerGuardian,
-            TrashID.DoppelgangerGuardian2,
-            TrashID.DoppelgangerMesmer,
-            TrashID.DoppelgangerMesmer2,
-            TrashID.DoppelgangerNecromancer,
-            TrashID.DoppelgangerNecromancer2,
-            TrashID.DoppelgangerRanger,
-            TrashID.DoppelgangerRanger2,
-            TrashID.DoppelgangerRevenant,
-            TrashID.DoppelgangerRevenant2,
-            TrashID.DoppelgangerThief,
-            TrashID.DoppelgangerThief2,
-            TrashID.DoppelgangerWarrior,
-            TrashID.DoppelgangerWarrior2,
+            TargetID.WhisperEcho,
+            TargetID.DoppelgangerElementalist,
+            TargetID.DoppelgangerElementalist2,
+            TargetID.DoppelgangerEngineer,
+            TargetID.DoppelgangerEngineer2,
+            TargetID.DoppelgangerGuardian,
+            TargetID.DoppelgangerGuardian2,
+            TargetID.DoppelgangerMesmer,
+            TargetID.DoppelgangerMesmer2,
+            TargetID.DoppelgangerNecromancer,
+            TargetID.DoppelgangerNecromancer2,
+            TargetID.DoppelgangerRanger,
+            TargetID.DoppelgangerRanger2,
+            TargetID.DoppelgangerRevenant,
+            TargetID.DoppelgangerRevenant2,
+            TargetID.DoppelgangerThief,
+            TargetID.DoppelgangerThief2,
+            TargetID.DoppelgangerWarrior,
+            TargetID.DoppelgangerWarrior2,
         ];
     }
 }

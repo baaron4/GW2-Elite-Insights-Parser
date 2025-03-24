@@ -101,9 +101,9 @@ internal class OldLionsCourt : EndOfDragonsStrike
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
-        return [ TrashID.Tribocharge ];
+        return [ TargetID.Tribocharge ];
     }
 
     protected override List<int> GetSuccessCheckIDs()
@@ -627,7 +627,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 // Hide when inactive
                 replay.AddHideByBuff(target, log, Determined762);
                 break;
-            case (int)TrashID.Tribocharge:
+            case (int)TargetID.Tribocharge:
                 // Tribocharge AoE on Player
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtTribocharge, out var tribocharge))
                 {

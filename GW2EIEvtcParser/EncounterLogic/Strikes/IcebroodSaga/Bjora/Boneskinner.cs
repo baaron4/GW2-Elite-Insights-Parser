@@ -61,16 +61,16 @@ internal class Boneskinner : Bjora
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.VigilTactician,
-            TrashID.VigilRecruit,
-            TrashID.PrioryExplorer,
-            TrashID.PrioryScholar,
-            TrashID.AberrantWisp,
-            TrashID.Torch,
+            TargetID.VigilTactician,
+            TargetID.VigilRecruit,
+            TargetID.PrioryExplorer,
+            TargetID.PrioryScholar,
+            TargetID.AberrantWisp,
+            TargetID.Torch,
         ];
     }
 
@@ -80,7 +80,7 @@ internal class Boneskinner : Bjora
         foreach (AgentItem torch in torches)
         {
             torch.OverrideType(AgentItem.AgentType.NPC, agentData);
-            torch.OverrideID(TrashID.Torch, agentData);
+            torch.OverrideID(TargetID.Torch, agentData);
             torch.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -172,7 +172,7 @@ internal class Boneskinner : Bjora
                 AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
                 AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
                 break;
-            case (int)TrashID.AberrantWisp:
+            case (int)TargetID.AberrantWisp:
                 break;
             default:
                 break;

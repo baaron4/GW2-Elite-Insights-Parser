@@ -101,11 +101,11 @@ internal class Kanaxai : SilentSurf
         return
         [
             (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
-            (int)TrashID.AspectOfTorment,
-            (int)TrashID.AspectOfLethargy,
-            (int)TrashID.AspectOfExposure,
-            (int)TrashID.AspectOfDeath,
-            (int)TrashID.AspectOfFear,
+            (int)TargetID.AspectOfTorment,
+            (int)TargetID.AspectOfLethargy,
+            (int)TargetID.AspectOfExposure,
+            (int)TargetID.AspectOfDeath,
+            (int)TargetID.AspectOfFear,
         ];
     }
 
@@ -114,11 +114,11 @@ internal class Kanaxai : SilentSurf
         return new Dictionary<int, int>()
         {
             {(int)TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
-            {(int)TrashID.AspectOfTorment, 1 },
-            {(int)TrashID.AspectOfLethargy, 1 },
-            {(int)TrashID.AspectOfExposure, 1 },
-            {(int)TrashID.AspectOfDeath, 1 },
-            {(int)TrashID.AspectOfFear, 1 },
+            {(int)TargetID.AspectOfTorment, 1 },
+            {(int)TargetID.AspectOfLethargy, 1 },
+            {(int)TargetID.AspectOfExposure, 1 },
+            {(int)TargetID.AspectOfDeath, 1 },
+            {(int)TargetID.AspectOfFear, 1 },
         };
     }
 
@@ -135,11 +135,11 @@ internal class Kanaxai : SilentSurf
         {
             switch (actor.ID)
             {
-                case (int)TrashID.AspectOfTorment:
-                case (int)TrashID.AspectOfLethargy:
-                case (int)TrashID.AspectOfExposure:
-                case (int)TrashID.AspectOfDeath:
-                case (int)TrashID.AspectOfFear:
+                case (int)TargetID.AspectOfTorment:
+                case (int)TargetID.AspectOfLethargy:
+                case (int)TargetID.AspectOfExposure:
+                case (int)TargetID.AspectOfDeath:
+                case (int)TargetID.AspectOfFear:
                     if (aspectCounts.TryGetValue(actor.ID, out int count))
                     {
                         actor.OverrideName(actor.Character + " " + count);
@@ -221,11 +221,11 @@ internal class Kanaxai : SilentSurf
                 {
                     switch (aspect.ID)
                     {
-                        case (int)TrashID.AspectOfTorment:
-                        case (int)TrashID.AspectOfLethargy:
-                        case (int)TrashID.AspectOfExposure:
-                        case (int)TrashID.AspectOfDeath:
-                        case (int)TrashID.AspectOfFear:
+                        case (int)TargetID.AspectOfTorment:
+                        case (int)TargetID.AspectOfLethargy:
+                        case (int)TargetID.AspectOfExposure:
+                        case (int)TargetID.AspectOfDeath:
+                        case (int)TargetID.AspectOfFear:
                             if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
                             {
                                 curPhase.AddTarget(aspect);
@@ -371,11 +371,11 @@ internal class Kanaxai : SilentSurf
                     }
                 }
                 break;
-            case (int)TrashID.AspectOfTorment:
-            case (int)TrashID.AspectOfLethargy:
-            case (int)TrashID.AspectOfExposure:
-            case (int)TrashID.AspectOfDeath:
-            case (int)TrashID.AspectOfFear:
+            case (int)TargetID.AspectOfTorment:
+            case (int)TargetID.AspectOfLethargy:
+            case (int)TargetID.AspectOfExposure:
+            case (int)TargetID.AspectOfDeath:
+            case (int)TargetID.AspectOfFear:
                 // Tether casts performed by Aspects
                 IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
                 foreach (AnimatedCastEvent cast in tetherCasts)

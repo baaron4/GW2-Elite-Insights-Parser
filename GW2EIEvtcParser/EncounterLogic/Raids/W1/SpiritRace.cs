@@ -43,22 +43,22 @@ internal class SpiritRace : SpiritVale
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.WallOfGhosts,
-            TrashID.AngeredSpiritSR,
-            TrashID.AngeredSpiritSR2,
-            TrashID.EnragedSpiritSR,
-            TrashID.DerangedSpiritSR,
-            TrashID.DerangedSpiritSR2,
+            TargetID.WallOfGhosts,
+            TargetID.AngeredSpiritSR,
+            TargetID.AngeredSpiritSR2,
+            TargetID.EnragedSpiritSR,
+            TargetID.DerangedSpiritSR,
+            TargetID.DerangedSpiritSR2,
         ];
     }
 
     internal override int GetTriggerID()
     {
-        return (int)TrashID.WallOfGhosts;
+        return (int)TargetID.WallOfGhosts;
     }
 
     protected override ReadOnlySpan<int> GetUniqueNPCIDs()
@@ -89,7 +89,7 @@ internal class SpiritRace : SpiritVale
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
 
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts == null)
         {
             return FightData.EncounterStartStatus.Late;
@@ -106,7 +106,7 @@ internal class SpiritRace : SpiritVale
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
             foreach(var @event in combatData.Where(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
@@ -192,7 +192,7 @@ internal class SpiritRace : SpiritVale
                     replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
                 }
                 break;
-            case (int)TrashID.WallOfGhosts:
+            case (int)TargetID.WallOfGhosts:
                 (long, long) lifespan = (target.FirstAware, target.LastAware);
                 uint innerRadius = 400;
                 uint outerRadius = 500;

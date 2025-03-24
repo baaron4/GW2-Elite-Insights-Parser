@@ -120,7 +120,7 @@ public class FightData
                         return new KeepConstruct(id);
                     case TargetID.Xera:
                         // some TC logs are registered as Xera
-                        if (agentData.GetNPCsByID(TrashID.HauntingStatue).Count > 0)
+                        if (agentData.GetNPCsByID(TargetID.HauntingStatue).Count > 0)
                         {
                             return new TwistedCastle((int)TargetID.DummyTarget);
                         }
@@ -244,24 +244,22 @@ public class FightData
                     case TargetID.LGolem:
                     case TargetID.MedGolem:
                         return new Golem(id);
-                    default:
-                        switch(GetTrashID(id))
+                    //
+                    case TargetID.WallOfGhosts:
+                        return new SpiritRace(id);
+                    case TargetID.HauntingStatue:
+                        return new TwistedCastle((int)TargetID.DummyTarget);
+                    case TargetID.VoidAmalgamate:
+                        return new HarvestTemple(id);
+                    case TargetID.AncientInvokedHydra:
+                        return new Qadim((int)TargetID.Qadim);
+                    case TargetID.VoidMelter:
+                        if (agentData.GetNPCsByID(TargetID.VoidAmalgamate).Any())
                         {
-                            case TrashID.WallOfGhosts:
-                                return new SpiritRace(id);
-                            case TrashID.HauntingStatue:
-                                return new TwistedCastle((int)TargetID.DummyTarget);
-                            case TrashID.VoidAmalgamate:
-                                return new HarvestTemple(id);
-                            case TrashID.AncientInvokedHydra:
-                                return new Qadim((int)TargetID.Qadim);
-                            case TrashID.VoidMelter:
-                                if (agentData.GetNPCsByID(TrashID.VoidAmalgamate).Any())
-                                {
-                                    return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
-                                }
-                                break;
+                            return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }
+                        break;
+                    default:
                         break;
                 }
                 break;
@@ -281,7 +279,7 @@ public class FightData
                     case TargetID.GadgetTheDragonVoid1:
                     case TargetID.GadgetTheDragonVoid2:
                         // This will most likely require a chinese client version
-                        if (agentData.GetNPCsByID(TrashID.VoidAmalgamate).Any())
+                        if (agentData.GetNPCsByID(TargetID.VoidAmalgamate).Any())
                         {
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }

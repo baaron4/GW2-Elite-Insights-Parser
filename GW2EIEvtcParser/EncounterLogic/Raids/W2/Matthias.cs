@@ -191,7 +191,7 @@ internal class Matthias : SalvationPass
                 {
                     continue;
                 }
-                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, TrashID.MatthiasSacrificeCrystal, false);
+                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, TargetID.MatthiasSacrificeCrystal, false);
                 foreach (CombatItem cbt in combatData)
                 {
                     if (!sacrificeCrystal.InAwareTimes(cbt.Time))
@@ -236,7 +236,7 @@ internal class Matthias : SalvationPass
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TrashID.MatthiasSacrificeCrystal))
+            if (target.IsSpecies(TargetID.MatthiasSacrificeCrystal))
             {
                 target.SetManualHealth(100000);
             }
@@ -248,19 +248,19 @@ internal class Matthias : SalvationPass
         return
         [
             (int)TargetID.Matthias,
-            (int)TrashID.MatthiasSacrificeCrystal
+            (int)TargetID.MatthiasSacrificeCrystal
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.Storm,
-            TrashID.Spirit,
-            TrashID.Spirit2,
-            TrashID.IcePatch,
-            TrashID.Tornado
+            TargetID.Storm,
+            TargetID.Spirit,
+            TargetID.Spirit2,
+            TargetID.IcePatch,
+            TargetID.Tornado
         ];
     }
 
@@ -306,17 +306,17 @@ internal class Matthias : SalvationPass
                     }
                 }
                 break;
-            case (int)TrashID.Storm:
+            case (int)TargetID.Storm:
                 replay.Decorations.Add(new CircleDecoration(260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                 break;
-            case (int)TrashID.Spirit:
-            case (int)TrashID.Spirit2:
+            case (int)TargetID.Spirit:
+            case (int)TargetID.Spirit2:
                 replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
-            case (int)TrashID.IcePatch:
+            case (int)TargetID.IcePatch:
                 replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
                 break;
-            case (int)TrashID.Tornado:
+            case (int)TargetID.Tornado:
                 replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
             default:

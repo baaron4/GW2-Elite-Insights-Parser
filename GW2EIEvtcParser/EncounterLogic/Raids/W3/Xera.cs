@@ -114,7 +114,7 @@ internal class Xera : StrongholdOfTheFaithful
             {
                 var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
-                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TrashID.BloodstoneShardButton) || x.IsSpecies(TrashID.BloodstoneShardRift)));
+                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)));
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
                 phases.Add(phasePreEvent);
                 phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
@@ -136,7 +136,7 @@ internal class Xera : StrongholdOfTheFaithful
 
                 long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
                 var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TrashID.ChargedBloodstone)));
+                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)));
                 phases.Add(glidingPhase);
 
                 if (_xeraSecondPhaseStartTime > 0)
@@ -148,7 +148,7 @@ internal class Xera : StrongholdOfTheFaithful
                         phase2.AddParentPhase(phase100to0);
                     }
                     phase2.AddTarget(mainTarget);
-                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TrashID.BloodstoneShardMainFight)));
+                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)));
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(phase2);
                 }
@@ -175,7 +175,7 @@ internal class Xera : StrongholdOfTheFaithful
         CombatItem? enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == StateChange.EnterCombat);
         if (enterCombat != null)
         {
-            if (agentData.TryGetFirstAgentItem(TrashID.FakeXera, out var fakeXera))
+            if (agentData.TryGetFirstAgentItem(TargetID.FakeXera, out var fakeXera))
             {
                 _hasPreEvent = true;
                 long encounterStart = fakeXera.LastAware;
@@ -216,21 +216,21 @@ internal class Xera : StrongholdOfTheFaithful
         foreach (AgentItem gadget in bloodstoneFragments)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(TrashID.BloodstoneFragment, agentData);
+            gadget.OverrideID(TargetID.BloodstoneFragment, agentData);
         }
         //
         var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(TrashID.BloodstoneShardMainFight, agentData);
+            gadget.OverrideID(TargetID.BloodstoneShardMainFight, agentData);
         }
         //
         var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(TrashID.BloodstoneShardButton, agentData);
+            gadget.OverrideID(TargetID.BloodstoneShardButton, agentData);
             mayRequireDummy = false;
         }
         //
@@ -238,7 +238,7 @@ internal class Xera : StrongholdOfTheFaithful
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(TrashID.BloodstoneShardRift, agentData);
+            gadget.OverrideID(TargetID.BloodstoneShardRift, agentData);
             mayRequireDummy = false;
         }
         //
@@ -250,7 +250,7 @@ internal class Xera : StrongholdOfTheFaithful
                 continue;
             }
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-            gadget.OverrideID(TrashID.ChargedBloodstone, agentData);
+            gadget.OverrideID(TargetID.ChargedBloodstone, agentData);
         }
         if (_hasPreEvent && mayRequireDummy)
         {
@@ -299,26 +299,26 @@ internal class Xera : StrongholdOfTheFaithful
         return [
             (int)TargetID.Xera,
             (int)TargetID.DummyTarget,
-            (int)TrashID.BloodstoneShardMainFight,
-            (int)TrashID.BloodstoneShardRift,
-            (int)TrashID.BloodstoneShardButton,
-            (int)TrashID.ChargedBloodstone,
+            (int)TargetID.BloodstoneShardMainFight,
+            (int)TargetID.BloodstoneShardRift,
+            (int)TargetID.BloodstoneShardButton,
+            (int)TargetID.ChargedBloodstone,
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<TargetID> GetTrashMobsIDs()
     {
         return
         [
-            TrashID.WhiteMantleSeeker1,
-            TrashID.WhiteMantleSeeker2,
-            TrashID.WhiteMantleKnight1,
-            TrashID.WhiteMantleKnight2,
-            TrashID.WhiteMantleBattleMage1,
-            TrashID.WhiteMantleBattleMage2,
-            TrashID.BloodstoneFragment,
-            TrashID.ExquisiteConjunction,
-            TrashID.XerasPhantasm,
+            TargetID.WhiteMantleSeeker1,
+            TargetID.WhiteMantleSeeker2,
+            TargetID.WhiteMantleKnight1,
+            TargetID.WhiteMantleKnight2,
+            TargetID.WhiteMantleBattleMage1,
+            TargetID.WhiteMantleBattleMage2,
+            TargetID.BloodstoneFragment,
+            TargetID.ExquisiteConjunction,
+            TargetID.XerasPhantasm,
         ];
     }
 
@@ -338,7 +338,7 @@ internal class Xera : StrongholdOfTheFaithful
                     replay.Hidden.Add(new(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
                 }
                 break;
-            case (int)TrashID.ChargedBloodstone:
+            case (int)TargetID.ChargedBloodstone:
                 if (_xeraFirstPhaseEndTime != 0)
                 {
                     long end = replay.TimeOffsets.end;
@@ -350,7 +350,7 @@ internal class Xera : StrongholdOfTheFaithful
                     replay.Trim(_xeraFirstPhaseEndTime + 12000, end);
                 }
                 break;
-            case (int)TrashID.BloodstoneFragment:
+            case (int)TargetID.BloodstoneFragment:
                 replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                 break;
             default:
