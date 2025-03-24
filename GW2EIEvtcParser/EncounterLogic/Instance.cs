@@ -98,11 +98,14 @@ internal class Instance : FightLogic
             _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
         }
         _targets.RemoveAll(x => x.IsSpecies(TargetID.DummyTarget));
-        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
+        Targetless = _targets.Count == 0;
+        if (Targetless)
+        {
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
+        }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
 
-        Targetless = _targets.Count == 1;
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
     }
 
@@ -266,7 +269,7 @@ internal class Instance : FightLogic
     }
     protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
-        return [];
+        return [TargetID.Instance];
     }
     protected override List<TargetID> GetTrashMobsIDs()
     {
