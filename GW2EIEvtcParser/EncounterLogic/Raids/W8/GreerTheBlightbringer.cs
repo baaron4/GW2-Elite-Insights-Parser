@@ -277,6 +277,12 @@ internal class GreerTheBlightbringer : MountBalrior
                 }
             } 
         }
+        // Enrage handling, greer gets damage immunity again, remove that
+        var lastPhase = phases.Last();
+        if (log.CombatData.GetAnimatedCastData(75665).Any(x => lastPhase.Start >= x.Time))
+        {
+            phases.Remove(lastPhase);
+        }
         // Below 20% CM phases handling
         if (log.FightData.IsCM && damageImmunity3StatusCount > 0)
         {
@@ -306,6 +312,7 @@ internal class GreerTheBlightbringer : MountBalrior
                         AddMainTitansToPhase(phase, greer, subTitans, ereg);
                         phases.Add(phase);
                     }
+                    phase.OverrideEnd(Math.Min(phase.End, finalHPPhase.End));
                 }
             }
         }
