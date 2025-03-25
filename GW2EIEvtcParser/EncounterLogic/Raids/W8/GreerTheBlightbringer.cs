@@ -279,7 +279,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
         // Enrage handling, greer gets damage immunity again, remove that
         var lastPhase = phases.Last();
-        if (log.CombatData.GetAnimatedCastData(75665).Any(x => lastPhase.Start >= x.Time))
+        if (log.CombatData.GetAnimatedCastData(TheWorldEndsInDecay).Any(x => lastPhase.Start >= x.Time))
         {
             phases.Remove(lastPhase);
         }
