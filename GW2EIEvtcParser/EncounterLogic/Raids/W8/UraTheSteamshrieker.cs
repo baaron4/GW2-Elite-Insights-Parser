@@ -231,7 +231,7 @@ internal class UraTheSteamshrieker : MountBalrior
             return phases;
         }
 
-        bool isCm = log.FightData.IsCM;
+        bool isCm = log.FightData.IsCM || log.FightData.IsLegendaryCM;
         long start = log.FightData.FightStart;
         long end = log.FightData.FightEnd;
         var hpUpdates = ura.GetHealthUpdates(log);
@@ -360,7 +360,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 break;
             case (int)TargetID.ToxicGeyser:
-                if (log.FightData.IsCM)
+                if (log.FightData.IsCM || log.FightData.IsLegendaryCM)
                 {
                     // Damage field ring
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraToxicGeyserGrowing, out var effects))
@@ -514,10 +514,11 @@ internal class UraTheSteamshrieker : MountBalrior
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
-        if (target.GetHealth(combatData) > 70e6)
+        var uraHP = target.GetHealth(combatData);
+        if (uraHP > 70e6)
         {
             target.OverrideName("Godscream Ura");
-            return FightData.EncounterMode.CMNoName;
+            return uraHP > 100e6 ? FightData.EncounterMode.LegendaryCM : FightData.EncounterMode.CMNoName;
         }
         target.OverrideName("Ura, the Streamshrieker");
         return FightData.EncounterMode.Normal;
@@ -527,7 +528,7 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM)
+        if (log.FightData.Success && (log.FightData.IsCM || log.FightData.IsLegendaryCM))
         {
             var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
             bool eligible = true;
