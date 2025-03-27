@@ -174,20 +174,20 @@ internal class CerusAndDeimos : LonelyTower
         DoFixationTether(log, p, replay, deimos, DeimossFocus, Colors.Red);
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.CerusLonelyTower,
-            (int)TargetID.DeimosLonelyTower,
+            TargetID.CerusLonelyTower,
+            TargetID.DeimosLonelyTower,
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.CerusLonelyTower, 0 },
-            {(int)TargetID.DeimosLonelyTower, 0 },
+            {TargetID.CerusLonelyTower, 0 },
+            {TargetID.DeimosLonelyTower, 0 },
         };
     }
 }

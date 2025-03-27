@@ -959,7 +959,7 @@ public class EvtcParser
         }
         if (invalidCombatItems.Count != 0)
         {
-#if DEBUG
+#if DEBUG2
             throw new InvalidDataException("Must remove " + invalidCombatItems.Count + " invalid combat items");
 #else
             operation.UpdateProgressWithCancellationCheck("Removing " + invalidCombatItems.Count + " invalid combat items");

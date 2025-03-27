@@ -17,13 +17,13 @@ internal class SuperKodanBrothers : Bjora
     public SuperKodanBrothers(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([      
-            new PlayerDstHitMechanic(Groundshaker, "Groundshaker", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Grey), "Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit", 150),
-            new PlayerDstHitMechanic(Groundpiercer, "Groundpiercer", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.White), "Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown", 150),
-            new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
-            new PlayerDstBuffApplyMechanic(Immobile, "Trapped", new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Trapped", "Trapped", "Trapped", 2500),
-            new EnemyDstBuffApplyMechanic(EnragedVC, "Enrage", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Enrage", "Enrage", "Enrage", 1 << 16),
-            new EnemyCastStartMechanic(DeadlySynergy, "Deadly Synergy", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Deadly Synergy", "Cast  Deadly Synergy", "Deadly Synergy", 10000),
-            new EnemyCastStartMechanic(KodanTeleport, "Teleport", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), "Teleport", "Cast Teleport", "Teleport", 150),
+            new PlayerDstHitMechanic(Groundshaker, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Grey), "Groundshaker.H", "Hit by Groundshaker", "Groundshaker Hit", 150),
+            new PlayerDstHitMechanic(Groundpiercer, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.White), "Groundpiercer.H", "Hit by Groundpiercer", "Groundpiercer Knockdown", 150),
+            new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
+            new PlayerDstBuffApplyMechanic(Immobile, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Trapped", "Trapped", "Trapped", 2500),
+            new EnemyDstBuffApplyMechanic(EnragedVC, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Enrage", "Enrage", "Enrage", 1 << 16),
+            new EnemyCastStartMechanic(DeadlySynergy, new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Deadly Synergy", "Cast  Deadly Synergy", "Deadly Synergy", 10000),
+            new EnemyCastStartMechanic(KodanTeleport, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightBlue), "Teleport", "Cast Teleport", "Teleport", 150),
         ])
         );
         Extension = "supkodbros";
@@ -212,31 +212,31 @@ internal class SuperKodanBrothers : Bjora
         return "Super Kodan Brothers";
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceOfTheFallen,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceOfTheFallen,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.VoiceOfTheFallen,
-            (int)TargetID.ClawOfTheFallen,
-            (int)TargetID.VoiceAndClaw,
+            TargetID.VoiceOfTheFallen,
+            TargetID.ClawOfTheFallen,
+            TargetID.VoiceAndClaw,
         ];
     }
 }

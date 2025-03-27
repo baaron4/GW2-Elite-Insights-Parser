@@ -30,8 +30,8 @@ internal class Deimos : BastionOfThePenitent
     {
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
-                new PlayerDstFirstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
+                new PlayerDstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
+                new PlayerDstFirstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
                     .UsingChecker((ce, log) => {
                         SingleActor? actor = log.FindActor(ce.To);
                         if (actor == null)
@@ -45,36 +45,36 @@ internal class Deimos : BastionOfThePenitent
                 ),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
-                new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail","Failed Saul TP CC", "Failed CC (TP)",0)
+                new EnemyCastStartMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "TP CC", "Off Balance (Saul TP Breakbar)","Saul TP Start", 0),
+                new EnemyCastEndMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "TP CC Fail", "Failed Saul TP CC","Failed CC (TP)", 0)
                     .UsingChecker((ce,log) => ce.ActualDuration >= 2200),
-                new EnemyCastEndMechanic(OffBalance, "Off Balance", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed","Saul TP CCed", "CCed (TP)",0)
+                new EnemyCastEndMechanic(OffBalance, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "TP CCed", "Saul TP CCed","CCed (TP)", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration < 2200),
             ]),
             new MechanicGroup([
-                new EnemyCastStartMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
-                new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0)
+                new EnemyCastStartMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC", "Boon Thief (Saul Breakbar)","Boon Thief Start", 0),
+                new EnemyCastEndMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail", "Failed Boon Thief CC","Failed CC (Thief)", 0)
                     .UsingChecker((ce,log) => ce.ActualDuration >= 4400),
-                new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0)
+                new EnemyCastEndMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed", "Boon Thief CCed","CCed (Thief)", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration < 4400),
             ]),
-            new PlayerDstHitMechanic([Annihilate2, Annihilate1], "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new PlayerDstHitMechanic([Annihilate2, Annihilate1], new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza", "Annihilate (Cascading Pizza attack)","Boss Smash", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DemonicShockWaveRight, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
-                new PlayerDstHitMechanic(DemonicShockWaveLeft, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
-                new PlayerDstHitMechanic(DemonicShockWaveCenter, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),
+                new PlayerDstHitMechanic(DemonicShockWaveRight, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash", "Knockback (right hand) in 10% Phase","10% Right Smash", 0),
+                new PlayerDstHitMechanic(DemonicShockWaveLeft, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash", "Knockback (left hand) in 10% Phase","10% Left Smash", 0),
+                new PlayerDstHitMechanic(DemonicShockWaveCenter, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash", "Knockback (both hands) in 10% Phase","10% Double Smash", 0),
             ]),
-            new PlayerDstBuffApplyMechanic(TearInstability, "Tear Instability", new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear","Collected a Demonic Tear", "Tear",0),
+            new PlayerDstBuffApplyMechanic(TearInstability, new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear", "Collected a Demonic Tear","Tear", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(MindCrush, "Mind Crush", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush","Hit by Mind Crush without Bubble Protection", "Mind Crush",0)
+                new PlayerDstHitMechanic(MindCrush, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush", "Hit by Mind Crush without Bubble Protection","Mind Crush", 0)
                     .UsingChecker( (de,log) => de.HealthDamage > 0),
-                new PlayerDstBuffApplyMechanic(WeakMinded, "Weak Minded", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
+                new PlayerDstBuffApplyMechanic(WeakMinded, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind", "Weak Minded (Debuff after Mind Crush)","Weak Minded", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(DeimosSelectedByGreen, "Chosen by Eye of Janthir", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Chosen by the Eye of Janthir", "Chosen (Green)",0),
-                new PlayerDstBuffApplyMechanic(GreenTeleport, "Teleported", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP","Teleport to/from Demonic Realm", "Teleport",0),
+                new PlayerDstBuffApplyMechanic(DeimosSelectedByGreen, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Chosen by the Eye of Janthir","Chosen (Green)", 0),
+                new PlayerDstBuffApplyMechanic(GreenTeleport, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP", "Teleport to/from Demonic Realm","Teleport", 0),
             ]),
-            new EnemyDstBuffApplyMechanic(UnnaturalSignet, "Unnatural Signet", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
+            new EnemyDstBuffApplyMechanic(UnnaturalSignet, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff", "Double Damage Debuff on Deimos","+100% Dmg Buff", 0)
         ]));
         Extension = "dei";
         GenericFallBackMethod = FallBackMethod.None;
@@ -98,24 +98,24 @@ internal class Deimos : BastionOfThePenitent
             new DamageCastFinder(DemonicAura, DemonicAura),
         ];
     }
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Deimos,
-            (int)TargetID.Saul,
-            (int)TargetID.Thief,
-            (int)TargetID.Drunkard,
-            (int)TargetID.Gambler,
+            TargetID.Deimos,
+            TargetID.Saul,
+            TargetID.Thief,
+            TargetID.Drunkard,
+            TargetID.Gambler,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Saul,
-            (int)TargetID.ShackledPrisoner
+            TargetID.Saul,
+            TargetID.ShackledPrisoner
         ];
     }
 
@@ -507,16 +507,16 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Deimos,
-            (int)TargetID.DummyTarget,
-            (int)TargetID.Thief,
-            (int)TargetID.Drunkard,
-            (int)TargetID.Gambler,
-            (int)TargetID.DemonicBond
+            TargetID.Deimos,
+            TargetID.DummyTarget,
+            TargetID.Thief,
+            TargetID.Drunkard,
+            TargetID.Gambler,
+            TargetID.DemonicBond
         ];
     }
 

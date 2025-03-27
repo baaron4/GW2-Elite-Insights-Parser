@@ -19,56 +19,56 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([  
-            new PlayerDstHitMechanic(GraspingHorror, "GraspingHorror", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
+            new PlayerDstHitMechanic(GraspingHorror, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
-                    new EnemyCastStartMechanic(DeathsEmbraceSkill, "Death's Embrace", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "AnkkaPull.C", "Casted Death's Embrace", "Death's Embrace Cast", 150),
+                new PlayerDstHitMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
+                    new EnemyCastStartMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "AnkkaPull.C", "Casted Death's Embrace", "Death's Embrace Cast", 150),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathsHandInBetween, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
-                new PlayerDstHitMechanic(DeathsHandDropped, "Death's Hand", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
-                new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, "Death's Hand Spread", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
+                new PlayerDstHitMechanic(DeathsHandInBetween, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
+                new PlayerDstHitMechanic(DeathsHandDropped, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
+                new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(ImminentDeathSkill, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 0),
-                    new PlayerDstBuffApplyMechanic(ImminentDeathBuff, "Imminent Death", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
+                    new PlayerDstHitMechanic(ImminentDeathSkill, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 0),
+                    new PlayerDstBuffApplyMechanic(ImminentDeathBuff, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
                 ]),
             ]),
             // Extra adds
             new MechanicGroup([
                 // Kraits
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(WallOfFear, "Wall of Fear", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
+                    new PlayerDstHitMechanic(WallOfFear, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
                 ]),
                 // Quaggans
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([WaveOfTormentNM, WaveOfTormentCM], "Wave of Torment", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
+                    new PlayerDstHitMechanic([WaveOfTormentNM, WaveOfTormentCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
                 ]),
                 // Lich
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(TerrifyingApparition, "Terrifying Apparition", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
-                    new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, "Lich Fixation", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
+                    new PlayerDstHitMechanic(TerrifyingApparition, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
+                    new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 ]),
-                new PlayerDstHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], "Clarity", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
+                new PlayerDstHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
                     .UsingAchievementEligibility(true),
                 // Reaches
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], "Thrash", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
-                    new PlayerDstHitMechanic([ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ], "Ground Slam", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
+                    new PlayerDstHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
+                    new PlayerDstHitMechanic([ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
                 ]),
                 // Hallucinations
                 new MechanicGroup([
-                    new PlayerDstBuffApplyMechanic(Hallucinations, "Hallucinations", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Hallu", "Received Hallucinations Debuff", "Hallucinations Debuff", 150),
+                    new PlayerDstBuffApplyMechanic(Hallucinations, new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Hallu", "Received Hallucinations Debuff", "Hallucinations Debuff", 150),
                 ]),
                 // Hatred
                 new MechanicGroup([
-                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated", new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Fxt.Hatred", "Fixated by Reanimated Hatred", "Fixated Hatred", 150),
+                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "Fxt.Hatred", "Fixated by Reanimated Hatred", "Fixated Hatred", 150),
                 ]),
             ]),
-            new EnemyCastStartMechanic(InevitabilityOfDeath, "Inevitability of Death", new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "Inev.Death.C", "Casted Inevitability of Death (Enrage)", "Inevitability of Death (Enrage)", 150),
-            new EnemyDstBuffApplyMechanic(PowerOfTheVoid, "Power of the Void", new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150),
+            new EnemyCastStartMechanic(InevitabilityOfDeath, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightRed), "Inev.Death.C", "Casted Inevitability of Death (Enrage)", "Inevitability of Death (Enrage)", 150),
+            new EnemyDstBuffApplyMechanic(PowerOfTheVoid, new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Pwrd.Up", "Ankka has powered up", "Ankka powered up", 150),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(DevouringVoid, "Devouring Void", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
-                new PlayerDstBuffApplyMechanic(DevouringVoid, "Undevoured", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
+                new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
+                new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
                     .UsingAchievementEligibility(true).UsingEnable(x => x.FightData.IsCM),
             ]),
         ])
@@ -169,31 +169,31 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Ankka,
+            TargetID.Ankka,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Ankka,
-            (int)TargetID.ReanimatedAntipathy,
-            (int)TargetID.ReanimatedSpite,
+            TargetID.Ankka,
+            TargetID.ReanimatedAntipathy,
+            TargetID.ReanimatedSpite,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.Ankka, 0 },
-            {(int)TargetID.ReanimatedAntipathy, 1 },
-            {(int)TargetID.ReanimatedSpite, 1 },
+            {TargetID.Ankka, 0 },
+            {TargetID.ReanimatedAntipathy, 1 },
+            {TargetID.ReanimatedSpite, 1 },
         };
     }
 

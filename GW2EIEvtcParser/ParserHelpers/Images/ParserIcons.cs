@@ -1192,7 +1192,7 @@ internal static class ParserIcons
         { TargetID.EnlightenedConduit, TrashEnlightenedConduit },
         { TargetID.EnlightenedConduitCM, TrashEnlightenedConduit },
         { TargetID.TranscendentBoulder, TrashLucidBoulder },
-        { TargetID.EliteVentshot, TrashVentshot },
+        { TargetID.LegendaryVentshot, TrashVentshot },
         { TargetID.EliteFumaroller, TrashFumaroller },
         { TargetID.ChampionFumaroller, TrashFumaroller },
         { TargetID.ToxicGeyser, TrashToxicGeyser },

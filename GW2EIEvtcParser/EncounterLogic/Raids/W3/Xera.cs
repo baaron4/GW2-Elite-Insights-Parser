@@ -25,28 +25,28 @@ internal class Xera : StrongholdOfTheFaithful
     {
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstHitMechanic(TemporalShredOrb, "Temporal Shred", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
-                new PlayerDstHitMechanic(TemporalShredAoE, "Temporal Shred", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+                new PlayerDstHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", 0),
+                new PlayerDstHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", 0),
             ]),
-            new PlayerDstBuffApplyMechanic(BloodstoneProtection, "Bloodstone Protection", new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
+            new PlayerDstBuffApplyMechanic(BloodstoneProtection, new MechanicPlotlySetting(Symbols.HourglassOpen,Colors.DarkPurple), "In Bubble", "Bloodstone Protection (Stood in Bubble)","Inside Bubble", 0),
             new MechanicGroup([
-                new EnemyCastStartMechanic(SummonFragments, "Summon Fragment Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-                new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Summon Fragment (Failed CC)", "CC Fail",0)
+                new EnemyCastStartMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Summon Fragment (Xera Breakbar)","Breakbar", 0),
+                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Summon Fragment (Failed CC)","CC Fail", 0)
                     .UsingChecker( (ce,log) => ce.ActualDuration > 11940),
-                new EnemyCastEndMechanic(SummonFragments, "Summon Fragment End", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Summon Fragment (Breakbar broken)", "CCed",0)
+                new EnemyCastEndMechanic(SummonFragments, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Summon Fragment (Breakbar broken)","CCed", 0)
                     .UsingChecker( (ce, log) => ce.ActualDuration <= 11940),
             ]),
-            new PlayerDstBuffApplyMechanic(Derangement, "Derangement", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks","Derangement (Stacking Debuff)", "Derangement",0),
+            new PlayerDstBuffApplyMechanic(Derangement, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Stacks", "Derangement (Stacking Debuff)","Derangement", 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
-                new PlayerDstBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
-                new PlayerDstBuffApplyMechanic(TwistingChaos, "Twisting Chaos", new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
+                new PlayerDstBuffApplyMechanic(BendingChaos, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1", "Bending Chaos (Stood on 1st Button)","Button 1", 0),
+                new PlayerDstBuffApplyMechanic(ShiftingChaos, new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2", "Bending Chaos (Stood on 2nd Button)","Button 2", 0),
+                new PlayerDstBuffApplyMechanic(TwistingChaos, new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3", "Bending Chaos (Stood on 3rd Button)","Button 3", 0),
             ]),
-            new PlayerDstBuffApplyMechanic(InterventionSkillOwnerBuff, "Intervention SAK", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
-            new PlayerDstBuffApplyMechanic(GravityWellXera, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
+            new PlayerDstBuffApplyMechanic(InterventionSkillOwnerBuff, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield", "Intervention (got Special Action Key)","Shield", 0),
+            new PlayerDstBuffApplyMechanic(GravityWellXera, new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half", "Half-platform Gravity Well","Gravity Well", 4000),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(HerosDeparture, "Hero's Depature", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Hero's Departure (Teleport to Platform)","TP",0),
-                new PlayerDstBuffApplyMechanic(HerosReturn, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
+                new PlayerDstBuffApplyMechanic(HerosDeparture, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out", "Hero's Departure (Teleport to Platform)","TP",0),
+                new PlayerDstBuffApplyMechanic(HerosReturn, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back", "Hero's Return (Teleport back)","TP back", 0),
             ]),
             /*new Mechanic(Intervention, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
             //new Mechanic(Disruption, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 
@@ -294,15 +294,15 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return [
-            (int)TargetID.Xera,
-            (int)TargetID.DummyTarget,
-            (int)TargetID.BloodstoneShardMainFight,
-            (int)TargetID.BloodstoneShardRift,
-            (int)TargetID.BloodstoneShardButton,
-            (int)TargetID.ChargedBloodstone,
+            TargetID.Xera,
+            TargetID.DummyTarget,
+            TargetID.BloodstoneShardMainFight,
+            TargetID.BloodstoneShardRift,
+            TargetID.BloodstoneShardButton,
+            TargetID.ChargedBloodstone,
         ];
     }
 
@@ -331,7 +331,7 @@ internal class Xera : StrongholdOfTheFaithful
                 var summon = cls.Where(x => x.SkillId == SummonFragments);
                 foreach (CastEvent c in summon)
                 {
-                    replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (c.Time, c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 if (_xeraFirstPhaseEndTime != 0)
                 {
@@ -351,7 +351,7 @@ internal class Xera : StrongholdOfTheFaithful
                 }
                 break;
             case (int)TargetID.BloodstoneFragment:
-                replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(760, (replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                 break;
             default:
                 break;

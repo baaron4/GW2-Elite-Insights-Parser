@@ -12,7 +12,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
     public delegate long TimeClamper(long time, ParsedEvtcLog log);
     private TimeClamper _timeClamper;
 
-    protected CheckedMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
     {
         Checkers = [];
     }

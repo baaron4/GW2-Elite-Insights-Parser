@@ -17,20 +17,20 @@ internal class Gorseval : SpiritVale
     public Gorseval(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([    
-            new PlayerDstHitMechanic(SpectralImpact, "Spectral Impact", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam","Spectral Impact (KB Slam)", "Slam",4000)
+            new PlayerDstHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", 4000)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstBuffApplyMechanic(GhastlyPrison, "Ghastly Prison", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg","Ghastly Prison (Egged)", "Egged",500),
-            new PlayerDstBuffApplyMechanic(SpectralDarkness, "Spectral Darkness", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
-            new EnemyDstBuffApplyMechanic(SpiritedFusion, "Spirited Fusion", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
-            new PlayerDstHitMechanic(SpiritKick, "Kick", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick","Kicked by small add", "Spirit Kick",0)
+            new PlayerDstBuffApplyMechanic(GhastlyPrison, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", 500),
+            new PlayerDstBuffApplyMechanic(SpectralDarkness, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff", "Spectral Darkness (Stood in Orb AoE)","Orb Debuff", 100),
+            new EnemyDstBuffApplyMechanic(SpiritedFusion, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff", "Spirited Fusion (Consumed a Spirit)","Ate Spirit", 0),
+            new PlayerDstHitMechanic(SpiritKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by small add","Spirit Kick", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(Vulnerability, "Ghastly Rampage Black Goo Hit", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black","Hit by Black Goo","Black Goo",3000)
+                new PlayerDstBuffApplyMechanic(Vulnerability, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black", "Hit by Black Goo","Black Goo",3000)
                     .UsingChecker( (ba,log) => ba.AppliedDuration == 10000),
-                new EnemyCastStartMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-                new EnemyCastEndMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC End","Ghastly Rampage (Full duration)", "CC ran out",0)
+                new EnemyCastStartMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Ghastly Rampage (Breakbar)","Breakbar", 0),
+                new EnemyCastEndMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC End", "Ghastly Rampage (Full duration)","CC ran out", 0)
                     .UsingChecker( (ce,log) => ce.ActualDuration > 21985),
-                new EnemyCastEndMechanic(GhastlyRampage, "Ghastly Rampage", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0)
+                new EnemyCastEndMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Ghastly Rampage (Breakbar broken)","CCed", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 21985),
             ]),
         ]));
@@ -78,9 +78,9 @@ internal class Gorseval : SpiritVale
             else
             {
                 phase.Name = "Split " + (i) / 2;
-                var ids = new List<int>
+                var ids = new List<TargetID>
                 {
-                   (int) TargetID.ChargedSoul
+                   TargetID.ChargedSoul
                 };
                 AddTargetsToPhaseAndFit(phase, ids, log);
             }
@@ -116,12 +116,12 @@ internal class Gorseval : SpiritVale
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Gorseval,
-            (int)TargetID.ChargedSoul
+            TargetID.Gorseval,
+            TargetID.ChargedSoul
         ];
     }
 

@@ -16,20 +16,20 @@ internal class MAMA : Nightmare
     {
         MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstHitMechanic([Blastwave1, Blastwave2], "Blastwave", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB","Blastwave (Spinning Knockback)", "KB Spin",0),
-            new PlayerDstHitMechanic(TantrumMAMA, "Tantrum", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum","Tantrum (Double hit or Slams)", "Dual Spin/Slams",700),
-            new PlayerDstHitMechanic(Leap, "Leap", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump","Leap (<33% only)", "Leap",0),
-            new PlayerDstHitMechanic(ShootGreenBalls, "Shoot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot","Toxic Shoot (Green Bullets)", "Toxic Shoot",0),
-            new PlayerDstHitMechanic(ExplosiveImpact, "Explosive Impact", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump","Explosive Impact (Knight Jump)", "Knight Jump",0),
-            new PlayerDstHitMechanic(SweepingStrikes, "Sweeping Strikes", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Sweep","Swings (Many rapid front spins)", "Sweeping Strikes",200),
-            new PlayerDstHitMechanic(NightmareMiasmaMAMA, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Poison Puddle)", "Poison Goo",700),
-            new PlayerDstHitMechanic([GrenadeBarrage, GrenadeBarrage2], "Grenade Barrage", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage","Grenade Barrage (Red Bullets with AoEs)", "Ball Barrage",0),
-            new PlayerDstHitMechanic([ShootRedBalls, ShootRedBalls2], "Red Ball Shot", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball","Shoot (Direct Red Bullets)", "Bullet",0),
-            new PlayerDstHitMechanic(Extraction, "Extraction", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull","Extraction (Knight Pull Circle)", "Knight Pull",0),
-            new PlayerDstHitMechanic([HomingGrenades, HomingGrenades2], "Homing Grenades", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades","Homing Grenades", "Homing Grenades",0),
-            new PlayerDstHitMechanic([CascadeOfTorment1, CascadeOfTorment2], "Cascade of Torment", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings","Cascade of Torment (Alternating Rings)", "Rings", 0),
-            new PlayerDstHitMechanic(KnightsGaze, "Knight's Daze", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze","Knight's Daze", "Daze", 0),
-            new PlayerDstSkillMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", 0),
+            new PlayerDstHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB", "Blastwave (Spinning Knockback)","KB Spin", 0),
+            new PlayerDstHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)","Dual Spin/Slams", 700),
+            new PlayerDstHitMechanic(Leap, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "Jump", "Leap (<33% only)","Leap", 0),
+            new PlayerDstHitMechanic(ShootGreenBalls, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Brown), "Shoot", "Toxic Shoot (Green Bullets)","Toxic Shoot", 0),
+            new PlayerDstHitMechanic(ExplosiveImpact, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Knight Jump", "Explosive Impact (Knight Jump)","Knight Jump", 0),
+            new PlayerDstHitMechanic(SweepingStrikes, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Sweep", "Swings (Many rapid front spins)","Sweeping Strikes", 200),
+            new PlayerDstHitMechanic(NightmareMiasmaMAMA, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo", "Nightmare Miasma (Poison Puddle)","Poison Goo", 700),
+            new PlayerDstHitMechanic([GrenadeBarrage, GrenadeBarrage2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Barrage", "Grenade Barrage (Red Bullets with AoEs)","Ball Barrage", 0),
+            new PlayerDstHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball", "Shoot (Direct Red Bullets)","Bullet", 0),
+            new PlayerDstHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull", "Extraction (Knight Pull Circle)","Knight Pull", 0),
+            new PlayerDstHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades", "Homing Grenades","Homing Grenades", 0),
+            new PlayerDstHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", 0),
+            new PlayerDstHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", 0),
+            new PlayerDstSkillMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", 0),
         ]));
         Extension = "mama";
         Icon = EncounterIconMAMA;
@@ -78,11 +78,11 @@ internal class MAMA : Nightmare
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
         phases[0].AddTarget(mama);
-        var knightIds = new List<int>
+        var knightIds = new List<TargetID>
         {
-            (int) TargetID.GreenKnight,
-            (int) TargetID.RedKnight,
-            (int) TargetID.BlueKnight,
+            TargetID.GreenKnight,
+            TargetID.RedKnight,
+            TargetID.BlueKnight,
         };
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -112,24 +112,24 @@ internal class MAMA : Nightmare
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.MAMA,
-            (int)TargetID.GreenKnight,
-            (int)TargetID.RedKnight,
-            (int)TargetID.BlueKnight
+            TargetID.MAMA,
+            TargetID.GreenKnight,
+            TargetID.RedKnight,
+            TargetID.BlueKnight
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.MAMA, 0 },
-            {(int)TargetID.GreenKnight, 1 },
-            {(int)TargetID.RedKnight, 1 },
-            {(int)TargetID.BlueKnight, 1 },
+            {TargetID.MAMA, 0 },
+            {TargetID.GreenKnight, 1 },
+            {TargetID.RedKnight, 1 },
+            {TargetID.BlueKnight, 1 },
         };
     }
 

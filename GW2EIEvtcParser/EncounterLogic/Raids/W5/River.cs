@@ -20,8 +20,8 @@ internal class River : HallOfChains
     {
         MechanicList.Add(new MechanicGroup([
         
-            new PlayerDstHitMechanic(BombShellRiverOfSouls, "Bombshell", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange),"Bomb Hit", "Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-            new PlayerDstHitMechanic(TimedBomb, "Timed Bomb", new MechanicPlotlySetting(Symbols.Square,Colors.Orange),"Stun Bomb", "Stunned by Mini Bomb", "Stun Bomb", 0)
+            new PlayerDstHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
+            new PlayerDstHitMechanic(TimedBomb, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb","Stunned by Mini Bomb", "Stun Bomb", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
         ])
         );
@@ -56,19 +56,19 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.Desmina
+            TargetID.Desmina
         ];
     }
 
-    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
-            (int)TargetID.Desmina
+            TargetID.Desmina
         ];
     }
 

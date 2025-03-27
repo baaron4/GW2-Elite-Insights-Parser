@@ -19,14 +19,14 @@ internal class Adina : TheKeyOfAhdashim
     public Adina(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstBuffApplyMechanic(RadiantBlindness, "Radiant Blindness", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
-            new PlayerDstBuffApplyMechanic(ErodingCurse, "Eroding Curse", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
-            new PlayerDstHitMechanic(BoulderBarrage, "Boulder Barrage", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
-            new PlayerDstHitMechanic(PerilousPulse, "Perilous Pulse", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0)
+            new PlayerDstBuffApplyMechanic(RadiantBlindness, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
+            new PlayerDstBuffApplyMechanic(ErodingCurse, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
+            new PlayerDstHitMechanic(BoulderBarrage, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
+            new PlayerDstHitMechanic(PerilousPulse, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0)
                 .UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
-            new PlayerDstHitMechanic(StalagmitesDetonation, "Stalagmites", new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
-            new PlayerDstHitMechanic(DiamondPalisadeEye, "Diamond Palisade", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
-            new PlayerDstSkillMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], "Quantum Quake", new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
+            new PlayerDstHitMechanic(StalagmitesDetonation, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
+            new PlayerDstHitMechanic(DiamondPalisadeEye, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
+            new PlayerDstSkillMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
         ]));
         Extension = "adina";
         Icon = EncounterIconAdina;
@@ -141,23 +141,23 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Adina,
-            (int)TargetID.HandOfErosion,
-            (int)TargetID.HandOfEruption
+            TargetID.Adina,
+            TargetID.HandOfErosion,
+            TargetID.HandOfEruption
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            { (int)TargetID.Adina, 0 },
-            { (int)TargetID.HandOfErosion, 1 },
-            { (int)TargetID.HandOfEruption, 1 },
+            { TargetID.Adina, 0 },
+            { TargetID.HandOfErosion, 1 },
+            { TargetID.HandOfEruption, 1 },
         };
     }
 
@@ -272,7 +272,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
                     splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
+                    AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
                 }
             }
@@ -281,7 +281,7 @@ internal class Adina : TheKeyOfAhdashim
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
                 splitPhaseEnds.Add(end);
-                AddTargetsToPhaseAndFit(splitPhase, [(int)TargetID.HandOfErosion, (int)TargetID.HandOfEruption], log);
+                AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
         }

@@ -24,54 +24,54 @@ internal class AiKeeperOfThePeak : SunquaPeak
         MechanicList.Add(new MechanicGroup(
         [
             // General
-            new PlayerDstHitMechanic(ElementalWhirl, "Elemental Whirl", new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.","Elemental Whirl", "Elemental Whirl",0),
+            new PlayerDstHitMechanic(ElementalWhirl, new MechanicPlotlySetting(Symbols.Square,Colors.LightRed), "Ele.Whrl.", "Elemental Whirl","Elemental Whirl", 0),
             // Air
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic([ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3], "Elemental Manipulation (Air)", new MechanicPlotlySetting(Symbols.Square,Colors.Magenta), "Ar.Mnp.","Elemental Manipulation (Air)", "Elemental Manipulation (Air)",0),
-                    new PlayerDstHitMechanic([FulgorSphere1, FulgorSphere2], "Fulgor Sphere", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.","Fulgor Sphere", "Fulgor Sphere",0),
-                    new PlayerDstHitMechanic(VolatileWind, "Volatile Wind", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.","Volatile Wind", "Volatile Wind",0),
+                    new PlayerDstHitMechanic([ElementalManipulationAir1, ElementalManipulationAir2, ElementalManipulationAir3], new MechanicPlotlySetting(Symbols.Square,Colors.Magenta), "Ar.Mnp.", "Elemental Manipulation (Air)","Elemental Manipulation (Air)", 0),
+                    new PlayerDstHitMechanic([FulgorSphere1, FulgorSphere2], new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Flg.Sph.", "Fulgor Sphere","Fulgor Sphere", 0),
+                    new PlayerDstHitMechanic(VolatileWind, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Vlt.Wnd.", "Volatile Wind","Volatile Wind", 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstHitMechanic(WindBurst, "Wind Burst", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.","Wind Burst", "Wind Burst",0),
-                            new PlayerDstHitMechanic(WindBurst, "Wind Burst Launch", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst","Launched up by Wind Burst", "Wind Burst Launch",0)
+                            new PlayerDstHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Magenta), "Wnd.Brst.", "Wind Burst","Wind Burst", 0),
+                            new PlayerDstHitMechanic(WindBurst, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Magenta), "L.Wnd.Burst", "Launched up by Wind Burst","Wind Burst Launch", 0)
                             .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                         ]
                     ),
-                    new PlayerDstHitMechanic(CallOfStorms , "Call of Storms", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs","Call of Storms", "Call of Storms",0),
-                    new EnemyDstBuffApplyMechanic(WhirlwindShield, "Whirlwind Shield",new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Magenta), "W.Shield" ,"Whirlwind Shield","Whirlwind Shield",0),
+                    new PlayerDstHitMechanic(CallOfStorms , new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Magenta), "Call.Strs", "Call of Storms","Call of Storms", 0),
+                    new EnemyDstBuffApplyMechanic(WhirlwindShield, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Magenta),"W.Shield" , "Whirlwind Shield","Whirlwind Shield",0),
                 ]
             ),
             // Fire
             new MechanicGroup(
                 [
 
-                    new PlayerDstHitMechanic([ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3], "Elemental Manipulation (Fire)", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Fr.Mnp.","Elemental Manipulation (Fire)", "Elemental Manipulation (Fire)",0),
-                    new PlayerDstHitMechanic([RoilingFlames1, RoilingFlames2], "Roiling Flames", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Rlng.Flms.","Roiling Flames", "Roiling Flames",0),
-                    new PlayerDstHitMechanic(VolatileFire, "Volatile Fire", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Vlt.Fr.","Volatile Fire", "Volatile Fire",0),
+                    new PlayerDstHitMechanic([ElementalManipulationFire1, ElementalManipulationFire2, ElementalManipulationFire3], new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Fr.Mnp.", "Elemental Manipulation (Fire)","Elemental Manipulation (Fire)", 0),
+                    new PlayerDstHitMechanic([RoilingFlames1, RoilingFlames2], new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Rlng.Flms.", "Roiling Flames","Roiling Flames", 0),
+                    new PlayerDstHitMechanic(VolatileFire, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Vlt.Fr.", "Volatile Fire","Volatile Fire", 0),
                     new MechanicGroup(
                         [
-                            new EnemyCastStartMechanic(CallMeteorSummon, "Call Meteor", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", 0),
-                            new PlayerDstSkillMechanic(CallMeteorHit, "Call Meteor", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Mtr.H","Hit by Meteor", "Meteor Hit",1000)
+                            new EnemyCastStartMechanic(CallMeteorSummon, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "Smn.Meteor", "Summoned Meteor", "Summon Meteor", 0),
+                            new PlayerDstSkillMechanic(CallMeteorHit, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Mtr.H", "Hit by Meteor","Meteor Hit", 1000)
                             .UsingChecker((evt, log) => evt.HasDowned || evt.HasKilled),
                         ]
                     ),
-                    new PlayerDstHitMechanic(FlameBurst, "Flame Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Flm.Brst.","Flame Burst", "Flame Burst",0),
-                    new PlayerDstHitMechanic(FirestormAi, "Firestorm", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Fr.Strm","Firestorm", "Firestorm",0),
+                    new PlayerDstHitMechanic(FlameBurst, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Flm.Brst.", "Flame Burst","Flame Burst", 0),
+                    new PlayerDstHitMechanic(FirestormAi, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Fr.Strm", "Firestorm","Firestorm", 0),
                 ]
             ),
             // Water
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic([ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3], "Elemental Manipulation (Water)", new MechanicPlotlySetting(Symbols.Square,Colors.LightBlue), "Wtr.Mnp.","Elemental Manipulation (Water)", "Elemental Manipulation (Water)",0),
-                    new PlayerDstHitMechanic([TorrentialBolt1, TorrentialBolt2], "Torrential Bolt", new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Tr.Blt.","Torrential Bolt", "Torrential Bolt",0),
-                    new PlayerDstHitMechanic(VolatileWater, "Volatile Water", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Vlt.Wtr.","Volatile Water", "Volatile Water",0),
-                    new PlayerDstHitMechanic(AquaticBurst, "Aquatic Burst", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.","Aquatic Burst", "Aquatic Burst",0),
-                    new EnemyDstBuffApplyMechanic(TidalBarrier, "Tidal Barrier", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
+                    new PlayerDstHitMechanic([ElementalManipulationWater1, ElementalManipulationWater2, ElementalManipulationWater3], new MechanicPlotlySetting(Symbols.Square,Colors.LightBlue), "Wtr.Mnp.", "Elemental Manipulation (Water)","Elemental Manipulation (Water)", 0),
+                    new PlayerDstHitMechanic([TorrentialBolt1, TorrentialBolt2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Tr.Blt.", "Torrential Bolt","Torrential Bolt", 0),
+                    new PlayerDstHitMechanic(VolatileWater, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightBlue), "Vlt.Wtr.", "Volatile Water","Volatile Water", 0),
+                    new PlayerDstHitMechanic(AquaticBurst, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.LightBlue), "Aq.Brst.", "Aquatic Burst","Aquatic Burst", 0),
+                    new EnemyDstBuffApplyMechanic(TidalBarrier, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.LightBlue), "Tdl.Bar.", "Tidal Barrier", "Tidal Barrier", 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstBuffApplyMechanic(TidalBargain, "Tidal Bargain", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.","Downed by Tidal Bargain", "Tidal Bargain",0),
-                            new PlayerDstBuffRemoveMechanic(TidalBargain, "Tidal Bargain Downed", new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0)
+                            new PlayerDstBuffApplyMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightBlue), "Tdl.Brgn.", "Downed by Tidal Bargain","Tidal Bargain", 0),
+                            new PlayerDstBuffRemoveMechanic(TidalBargain, new MechanicPlotlySetting(Symbols.Star,Colors.LightBlue), "Tdl.Brgn.Dwn.","Downed by Tidal Bargain", "Tidal Bargain Downed",0)
                                 .UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffDataByIDByDst(Downed, evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae)),
                         ]
                     ),
@@ -80,32 +80,32 @@ internal class AiKeeperOfThePeak : SunquaPeak
             // Dark
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic([EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9], "Empathic Manipulation", new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Emp.Mnp.","Empathic Manipulation", "Empathic Manipulation",0),
-                    new PlayerDstHitMechanic([FocusedWrath, FocusedWrath2], "Focused Wrath", new MechanicPlotlySetting(Symbols.Circle,Colors.LightPurple), "Fcsd.Wrth.","Focused Wrath", "Focused Wrath",0),
-                    new PlayerDstHitMechanic(NegativeBurst, "Negative Burst", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.","Negative Burst", "Negative Burst",500),
-                    new PlayerDstHitMechanic(Terrorstorm, "Terrorstorm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm","Terrorstorm", "Terrorstorm",0),
+                    new PlayerDstHitMechanic([EmpathicManipulationGuilt, EmpathicManipulation2, EmpathicManipulationSorrow, EmpathicManipulationFear, EmpathicManipulation5, EmpathicManipulation6, EmpathicManipulation7, EmpathicManipulation8, EmpathicManipulation9], new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Emp.Mnp.", "Empathic Manipulation","Empathic Manipulation", 0),
+                    new PlayerDstHitMechanic([FocusedWrath, FocusedWrath2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightPurple), "Fcsd.Wrth.", "Focused Wrath","Focused Wrath", 0),
+                    new PlayerDstHitMechanic(NegativeBurst, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.LightPurple), "N.Brst.", "Negative Burst","Negative Burst", 500),
+                    new PlayerDstHitMechanic(Terrorstorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightPurple), "TrrStrm", "Terrorstorm","Terrorstorm", 0),
                     new MechanicGroup(
                         [
-                            new PlayerDstBuffApplyMechanic(CrushingGuilt, "Crushing Guilt", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.","Crushing Guilt", "Crushing Guilt",0),
-                            new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0)
+                            new PlayerDstBuffApplyMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightPurple), "Crsh.Glt.", "Crushing Guilt","Crushing Guilt", 0),
+                            new PlayerDstBuffRemoveMechanic(CrushingGuilt, new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0)
                                 .UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffDataByIDByDst(Downed, evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae)),
                         ]
                     ),
-                    new PlayerDstBuffApplyMechanic([FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], "Fixated (Fear)", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Fear.Fix.A", "Fixated by Fear", "Fixated Application", 0),
+                    new PlayerDstBuffApplyMechanic([FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Fear.Fix.A", "Fixated by Fear", "Fixated Application", 0),
                     new MechanicGroup(
                         [
-                            new EnemyCastStartMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationFear, new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
-                            new EnemyCastStartMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationSorrow, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
-                            new EnemyCastStartMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt)", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
-                            new EnemyCastEndMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0)
+                            new EnemyCastStartMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
+                            new EnemyCastEndMechanic(EmpathicManipulationGuilt, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0)
                                 .UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.IsInterrupted),
                         ]
                     ),
-                    new EnemyDstBuffApplyMechanic(CacophonousMind, "Cacophonous Mind", new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.","Cacophonous Mind", "Cacophonous Mind",0),
+                    new EnemyDstBuffApplyMechanic(CacophonousMind, new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.", "Cacophonous Mind","Cacophonous Mind", 0),
                 ]
             ),
         ]));
@@ -149,13 +149,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return res;
     }*/
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.AiKeeperOfThePeak,
-            (int)TargetID.AiKeeperOfThePeak2,
-            (int)TargetID.CCSorrowDemon,
+            TargetID.AiKeeperOfThePeak,
+            TargetID.AiKeeperOfThePeak2,
+            TargetID.CCSorrowDemon,
         ];
     }
 
@@ -178,12 +178,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return trashIDs;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.AiKeeperOfThePeak,
-            (int)TargetID.AiKeeperOfThePeak2,
+            TargetID.AiKeeperOfThePeak,
+            TargetID.AiKeeperOfThePeak2,
         ];
     }
 

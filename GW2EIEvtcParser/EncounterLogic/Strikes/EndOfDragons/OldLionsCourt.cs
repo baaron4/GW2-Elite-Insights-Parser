@@ -17,63 +17,63 @@ internal class OldLionsCourt : EndOfDragonsStrike
     public OldLionsCourt(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM], "Boiling Aether (Vermilion & Indigo)", new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "Red.VermIndi.H", "Hit by Boiling Aether (Vermilion & Indigo)", "Boiling Aether Hit (Vermilion & Indigo)", 0),
+            new PlayerDstHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "Red.VermIndi.H", "Hit by Boiling Aether (Vermilion & Indigo)", "Boiling Aether Hit (Vermilion & Indigo)", 0),
             // Vermilion
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM])),
                 new MechanicGroup([
                     new MechanicGroup([
-                        new PlayerDstHitMechanic([DualHorizon, DualHorizonCM], "Dual Horizon", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightRed), "DualHrz.H", "Hit by Dual Horizon", "Dual Horizon Hit", 0),
-                        new EnemyCastStartMechanic([DualHorizon, DualHorizonCM], "Dual Horizon", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Red), "DualHrz.C", "Casted Dual Horizon", "Dual Horizon Cast", 0),
+                        new PlayerDstHitMechanic([DualHorizon, DualHorizonCM], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightRed), "DualHrz.H", "Hit by Dual Horizon", "Dual Horizon Hit", 0),
+                        new EnemyCastStartMechanic([DualHorizon, DualHorizonCM], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Red), "DualHrz.C", "Casted Dual Horizon", "Dual Horizon Cast", 0),
                     ]),
-                    new PlayerDstBuffApplyMechanic([TidalTorment, TidalTormentCM], "Tidal Torment", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "TidTorm.A", "Tidal Torment Applied", "Tidal Torment Applied", 0),
-                    new PlayerDstBuffApplyMechanic([ErgoShear, ErgoShearCM], "Ergo Shear", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "ErgShr.A", "Ergo Shear Applied", "Ergo Shear Applied", 0),
-                    new EnemySrcEffectMechanic(EffectGUIDs.OldLionsCourtGravitationalWave, "Gravitational Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "GravWave.C", "Casted Gravitational Wave", "Gravitational Wave", 0),
+                    new PlayerDstBuffApplyMechanic([TidalTorment, TidalTormentCM], new MechanicPlotlySetting(Symbols.Star, Colors.Red), "TidTorm.A", "Tidal Torment Applied", "Tidal Torment Applied", 0),
+                    new PlayerDstBuffApplyMechanic([ErgoShear, ErgoShearCM], new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "ErgShr.A", "Ergo Shear Applied", "Ergo Shear Applied", 0),
+                    new EnemySrcEffectMechanic(EffectGUIDs.OldLionsCourtGravitationalWave, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "GravWave.C", "Casted Gravitational Wave", "Gravitational Wave", 0),
                 ]),
-                new PlayerDstBuffApplyMechanic(Spaghettification, "Spaghettification", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Spgt.H", "Hit by Spaghettification", "Spaghettification Hit", 0),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150)
+                new PlayerDstBuffApplyMechanic(Spaghettification, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Spgt.H", "Hit by Spaghettification", "Spaghettification Hit", 0),
+                new PlayerDstSkillMechanic(ExhaustPlume, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150)
                     .UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
             ]),
             // Arsenite
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM])),
-                new PlayerDstHitMechanic([BoilingAetherGreenNM, BoilingAetherGreenCM], "Boiling Aether (Arsenite)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Red.Arse.H", "Hit by Boiling Aether (Arsenite)", "Boiling Aether Hit (Arsenite)", 0),
+                new PlayerDstHitMechanic([BoilingAetherGreenNM, BoilingAetherGreenCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Red.Arse.H", "Hit by Boiling Aether (Arsenite)", "Boiling Aether Hit (Arsenite)", 0),
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([NoxiousVaporBlade, NoxiousVaporBladeCM], "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
-                    new PlayerDstHitMechanic([NoxiousReturn, NoxiousReturnCM], "Noxious Return", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
-                    new PlayerDstBuffApplyMechanic(NoxiousVaporBladeTargetBuff, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Blade.A", "Targeted for Noxious Vapor Blade", "Noxious Vapor Blade Target", 0),
+                    new PlayerDstHitMechanic([NoxiousVaporBlade, NoxiousVaporBladeCM], new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
+                    new PlayerDstHitMechanic([NoxiousReturn, NoxiousReturnCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
+                    new PlayerDstBuffApplyMechanic(NoxiousVaporBladeTargetBuff, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Blade.A", "Targeted for Noxious Vapor Blade", "Noxious Vapor Blade Target", 0),
                 ]),
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([PerniciousVortex, PerniciousVortexCM], "Pernicious Vortex", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "PernVort.H", "Hit by Pernicious Vortex (Pull)", "Pernicious Vortex Hit", 0),
-                    new EnemyCastStartMechanic([PerniciousVortexSkillNM, PerniciousVortexSkillCM], "Pernicious Vortex", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "PrnVrx.C", "Casted Pernicious Vortex", "Pernicious Vortex Cast", 0),
+                    new PlayerDstHitMechanic([PerniciousVortex, PerniciousVortexCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "PernVort.H", "Hit by Pernicious Vortex (Pull)", "Pernicious Vortex Hit", 0),
+                    new EnemyCastStartMechanic([PerniciousVortexSkillNM, PerniciousVortexSkillCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "PrnVrx.C", "Casted Pernicious Vortex", "Pernicious Vortex Cast", 0),
                 ]),
-                new PlayerDstBuffApplyMechanic(Dysapoptosis, "Dysapoptosis", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), "Dysp.H", "Hit by Dysapoptosis", "Dysapoptosis Hit", 0),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150)
+                new PlayerDstBuffApplyMechanic(Dysapoptosis, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), "Dysp.H", "Hit by Dysapoptosis", "Dysapoptosis Hit", 0),
+                new PlayerDstSkillMechanic(ExhaustPlume, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150)
                     .UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
             ]),
             // Indigo
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0)
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM])),
-                new PlayerDstHitMechanic([TriBolt, TriBoltCM], "Tri Bolt", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "TriBolt.H", "Hit by Tri Bolt (Spread AoEs)", "Tri Bolt Hit", 150),
-                new PlayerDstHitMechanic([Tribocharge, TribochargeCM], "Tribocharge", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),
+                new PlayerDstHitMechanic([TriBolt, TriBoltCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "TriBolt.H", "Hit by Tri Bolt (Spread AoEs)", "Tri Bolt Hit", 150),
+                new PlayerDstHitMechanic([Tribocharge, TribochargeCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([CracklingWind, CracklingWindCM], "Crackling Wind", new MechanicPlotlySetting(Symbols.Hexagon, Colors.CobaltBlue), "CrackWind.H", "Hit by Crackling Wind (Push)", "Crackling Wind Hit", 0),
-                    new EnemyCastStartMechanic([CracklingWindSkillNM, CracklingWindSkillCM], "Crackling Wind", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "CrckWind.C", "Casted Crackling Wind", "Cracking Wind Cast", 0),
+                    new PlayerDstHitMechanic([CracklingWind, CracklingWindCM], new MechanicPlotlySetting(Symbols.Hexagon, Colors.CobaltBlue), "CrackWind.H", "Hit by Crackling Wind (Push)", "Crackling Wind Hit", 0),
+                    new EnemyCastStartMechanic([CracklingWindSkillNM, CracklingWindSkillCM], new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "CrckWind.C", "Casted Crackling Wind", "Cracking Wind Cast", 0),
                 ]),
-                new PlayerDstBuffApplyMechanic(ThunderingUltimatum, "Thundering Ultimatum", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "ThunUlti.H", "Hit by Thundering Ultimatum", "Thunderin gUltimatum Hit", 0),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150)
+                new PlayerDstBuffApplyMechanic(ThunderingUltimatum, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "ThunUlti.H", "Hit by Thundering Ultimatum", "Thunderin gUltimatum Hit", 0),
+                new PlayerDstSkillMechanic(ExhaustPlume, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150)
                     .UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
             ]),
-            new PlayerDstHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM], "Boiling Aether", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150)
+            new PlayerDstHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150)
                 .UsingAchievementEligibility(true),
-            new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, "Empowered", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
-            new EnemyDstBuffApplyMechanic(PowerTransfer, "Power Transfer", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
-            new EnemyDstBuffApplyMechanic(LeyWovenShielding, "Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
-            new EnemyDstBuffApplyMechanic(MalfunctioningLeyWovenShielding, "Malfunctioning Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkTeal), "MalfWovShld.A", "Knight gained Malfunctioning Ley-Woven Shielding", "Malfunctioning Ley-Woven Shielding Applied", 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed (Knight)", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Purple), "Expo.A", "Exposed Applied to Knight", "Exposed Applied to Knight", 0),
+            new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
+            new EnemyDstBuffApplyMechanic(PowerTransfer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
+            new EnemyDstBuffApplyMechanic(LeyWovenShielding, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
+            new EnemyDstBuffApplyMechanic(MalfunctioningLeyWovenShielding, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkTeal), "MalfWovShld.A", "Knight gained Malfunctioning Ley-Woven Shielding", "Malfunctioning Ley-Woven Shielding Applied", 0),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Purple), "Expo.A", "Exposed Applied to Knight", "Exposed Applied to Knight", 0),
         ])
         );
         Icon = EncounterIconOldLionsCourt;
@@ -88,16 +88,16 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.PrototypeVermilion,
-            (int)TargetID.PrototypeIndigo,
-            (int)TargetID.PrototypeArsenite,
-            (int)TargetID.PrototypeVermilionCM,
-            (int)TargetID.PrototypeIndigoCM,
-            (int)TargetID.PrototypeArseniteCM,
+            TargetID.PrototypeVermilion,
+            TargetID.PrototypeIndigo,
+            TargetID.PrototypeArsenite,
+            TargetID.PrototypeVermilionCM,
+            TargetID.PrototypeIndigoCM,
+            TargetID.PrototypeArseniteCM,
         ];
     }
 
@@ -106,7 +106,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return [ TargetID.Tribocharge ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return [ ];
     }
@@ -141,26 +141,26 @@ internal class OldLionsCourt : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            List<int> idsToCheck;
+            List<TargetID> idsToCheck;
             if (fightData.IsCM)
             {
                 idsToCheck =
                 [
-                    (int)TargetID.PrototypeVermilionCM,
-                    (int)TargetID.PrototypeIndigoCM,
-                    (int)TargetID.PrototypeArseniteCM,
+                    TargetID.PrototypeVermilionCM,
+                    TargetID.PrototypeIndigoCM,
+                    TargetID.PrototypeArseniteCM,
                 ];
             }
             else
             {
                 idsToCheck =
                 [
-                    (int)TargetID.PrototypeVermilion,
-                    (int)TargetID.PrototypeIndigo,
-                    (int)TargetID.PrototypeArsenite,
+                    TargetID.PrototypeVermilion,
+                    TargetID.PrototypeIndigo,
+                    TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, fightData, playerAgents, true);
         }
     }
 
@@ -169,16 +169,16 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return "Old Lion's Court";
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.PrototypeVermilion,
-            (int)TargetID.PrototypeIndigo,
-            (int)TargetID.PrototypeArsenite,
-            (int)TargetID.PrototypeVermilionCM,
-            (int)TargetID.PrototypeIndigoCM,
-            (int)TargetID.PrototypeArseniteCM,
+            TargetID.PrototypeVermilion,
+            TargetID.PrototypeIndigo,
+            TargetID.PrototypeArsenite,
+            TargetID.PrototypeVermilionCM,
+            TargetID.PrototypeIndigoCM,
+            TargetID.PrototypeArseniteCM,
         ];
     }
 

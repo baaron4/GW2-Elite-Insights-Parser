@@ -20,27 +20,27 @@ internal class KainengOverlook : EndOfDragonsStrike
         [  
             //Li
             new MechanicGroup([
-                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM ], "Dragon Slash - Wave", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], "Dragon Slash - Burst", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], "Dragon Slash - Rush", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], "A Test of Your Reflexes", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
+                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
+                new PlayerDstHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
+                new PlayerDstHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
+                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
                     .UsingAchievementEligibility(true)
                     .UsingEnable((log) => log.FightData.IsCM),
             ]),
             new MechanicGroup([             
                 // Mindblade
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], "Storm of Swords", new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
-                    new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, "Rain of Blades", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targeted by Rain of Blades", "Rain of Blades Target", 150),
-                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Mindblade)", new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150)
+                    new PlayerDstHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                    new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targeted by Rain of Blades", "Rain of Blades Target", 150),
+                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheMindblade, TargetID.TheMindbladeCM })),
                 ]),
                 // Enforcer
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], "Rushing Justice", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
-                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, "Fixated (Enforcer)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150)
+                    new PlayerDstHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                    new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheEnforcer, TargetID.TheEnforcerCM })),
-                    new PlayerDstHitMechanic(BoomingCommandOverlap, "Booming Command", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
+                    new PlayerDstHitMechanic(BoomingCommandOverlap, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
                 ]),
                 // Ritualist
                 new MechanicGroup([
@@ -50,29 +50,29 @@ internal class KainengOverlook : EndOfDragonsStrike
             new MechanicGroup([          
                 // Mech Rider
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], "Explosive Uppercut", new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
-                    new PlayerDstHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], "Fall of the Axe", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", 150),
-                    new PlayerDstHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], "Fall of the Axe", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", 150),
-                    new PlayerDstHitMechanic([ ElectricRainNM, ElectricRainCM ], "Electric Rain", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", 150),
-                    new PlayerDstHitMechanic(JadeBusterCannonMechRider, "Jade Buster Cannon", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
+                    new PlayerDstHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
+                    new PlayerDstHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", 150),
+                    new PlayerDstHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", 150),
+                    new PlayerDstHitMechanic([ ElectricRainNM, ElectricRainCM ], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", 150),
+                    new PlayerDstHitMechanic(JadeBusterCannonMechRider, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
                 ]),
                 // Sniper
                 new MechanicGroup([
-                    new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, "Ricochet", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Sniper.T", "Targeted by Sniper Ricochet", "Ricochet Target", 150),
+                    new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSniperRicochetBeamCM, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "Sniper.T", "Targeted by Sniper Ricochet", "Ricochet Target", 150),
                 ]),
-                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, "Enhanced Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
-                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, "Destructive Aura", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
-                new EnemyDstBuffApplyMechanic(LethalInspiration, "Lethal Inspiration", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
-                new PlayerDstNoSkillMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], "The Path of Most Resistance", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
+                new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
+                new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
+                new PlayerDstNoSkillMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
                     .UsingAchievementEligibility(true)
                     .UsingEnable(x => x.FightData.IsCM),
             ]),
-            new PlayerDstSkillMechanic([ TargetedExpulsion, TargetedExpulsionCM ], "Targeted Expulsion", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
-            new PlayerDstBuffApplyMechanic([ TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 ], "Target Order", new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
+            new PlayerDstSkillMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
+            new PlayerDstBuffApplyMechanic([ TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 ], new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
             new MechanicGroup([
-                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreen, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Selected for Green", "Green", 150),
-                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, "Shared Destruction",  new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.Succ", "Successful Green", "Successful Green", 150),
-                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenFailure, "Shared Destruction",  new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.DarkGreen), "Green.Fail", "Failed Green", "Failed Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green),  "Green", "Selected for Green", "Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, new MechanicPlotlySetting(Symbols.Circle, Colors.Green),  "Green.Succ", "Successful Green", "Successful Green", 150),
+                new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreenFailure, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.DarkGreen),  "Green.Fail", "Failed Green", "Failed Green", 150),
             ]),
         ])
         );
@@ -91,31 +91,31 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (3456, 11012, 4736, 14212)*/);
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
-            (int)TargetID.TheEnforcer,
-            (int)TargetID.TheMindblade,
-            (int)TargetID.TheMechRider,
-            (int)TargetID.TheRitualist,
-            (int)TargetID.TheSniper,
-            (int)TargetID.TheEnforcerCM,
-            (int)TargetID.TheMindbladeCM,
-            (int)TargetID.TheMechRiderCM,
-            (int)TargetID.TheRitualistCM,
-            (int)TargetID.TheSniperCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
+            TargetID.TheEnforcer,
+            TargetID.TheMindblade,
+            TargetID.TheMechRider,
+            TargetID.TheRitualist,
+            TargetID.TheSniper,
+            TargetID.TheEnforcerCM,
+            TargetID.TheMindbladeCM,
+            TargetID.TheMechRiderCM,
+            TargetID.TheRitualistCM,
+            TargetID.TheSniperCM,
         ];
     }
 
-    protected override List<int> GetSuccessCheckIDs()
+    protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
         ];
     }
 
@@ -133,22 +133,22 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.MinisterLi,
-            (int)TargetID.MinisterLiCM,
-            (int)TargetID.TheEnforcer,
-            (int)TargetID.TheMindblade,
-            (int)TargetID.TheMechRider,
-            (int)TargetID.TheRitualist,
-            (int)TargetID.TheSniper,
-            (int)TargetID.TheEnforcerCM,
-            (int)TargetID.TheMindbladeCM,
-            (int)TargetID.TheMechRiderCM,
-            (int)TargetID.TheRitualistCM,
-            (int)TargetID.TheSniperCM,
+            TargetID.MinisterLi,
+            TargetID.MinisterLiCM,
+            TargetID.TheEnforcer,
+            TargetID.TheMindblade,
+            TargetID.TheMechRider,
+            TargetID.TheRitualist,
+            TargetID.TheSniper,
+            TargetID.TheEnforcerCM,
+            TargetID.TheMindbladeCM,
+            TargetID.TheMechRiderCM,
+            TargetID.TheRitualistCM,
+            TargetID.TheSniperCM,
         ];
     }
 
@@ -191,7 +191,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     private SingleActor? GetMinisterLi(FightData fightData)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.MinisterLiCM : (int)TargetID.MinisterLi));
+        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -200,11 +200,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheEnforcerCM : (int)TargetID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMindbladeCM : (int)TargetID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheMechRiderCM : (int)TargetID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheSniperCM : (int)TargetID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)TargetID.TheRitualistCM : (int)TargetID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
         //
         phases[0].AddTarget(enforcer, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(mindblade, PhaseData.TargetPriority.Blocking);

@@ -21,15 +21,15 @@ internal class Kanaxai : SilentSurf
         [
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic(RendingStormSkill, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
-                    new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
+                    new PlayerDstHitMechanic(RendingStormSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
+                    new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
                 ]
             ),
-            new PlayerDstHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
+            new PlayerDstHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
             new MechanicGroup(
                 [
-                    new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
-                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, "Dread Visage", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Eye.D", "Died to Dread Visage (Eye)", "Dread Visage Death", 150)
+                    new PlayerDstBuffApplyMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
+                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Eye.D", "Died to Dread Visage (Eye)", "Dread Visage Death", 150)
                         .UsingChecker((remove, log) =>
                         {
                             // 5s extreme vulnerability from dread visage
@@ -49,7 +49,7 @@ internal class Kanaxai : SilentSurf
                                 });
                         }
                     ),
-                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, "Frightening Speed", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", 150)
+                    new PlayerDstBuffRemoveMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Numbers.D", "Died to Frightening Speed (Numbers)", "Frightening Speed Death", 150)
                         .UsingChecker((remove, log) =>
                         {
                             // 60s extreme vulnerability from frightening speed
@@ -71,10 +71,10 @@ internal class Kanaxai : SilentSurf
                     ),
                 ]
             ),
-            new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
-            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
-            new PlayerDstBuffApplyMechanic(Phantasmagoria, "Phantasmagoria", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
-            new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed", new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
+            new PlayerDstBuffApplyMechanic(ExposedPlayer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
+            new PlayerDstBuffApplyMechanic(Phantasmagoria, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
         ]));
         Extension = "kanaxai";
         Icon = EncounterIconKanaxai;
@@ -88,37 +88,37 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return
         [
-            (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
+            TargetID.KanaxaiScytheOfHouseAurkusCM,
         ];
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
-            (int)TargetID.AspectOfTorment,
-            (int)TargetID.AspectOfLethargy,
-            (int)TargetID.AspectOfExposure,
-            (int)TargetID.AspectOfDeath,
-            (int)TargetID.AspectOfFear,
+            TargetID.KanaxaiScytheOfHouseAurkusCM,
+            TargetID.AspectOfTorment,
+            TargetID.AspectOfLethargy,
+            TargetID.AspectOfExposure,
+            TargetID.AspectOfDeath,
+            TargetID.AspectOfFear,
         ];
     }
 
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
-            {(int)TargetID.AspectOfTorment, 1 },
-            {(int)TargetID.AspectOfLethargy, 1 },
-            {(int)TargetID.AspectOfExposure, 1 },
-            {(int)TargetID.AspectOfDeath, 1 },
-            {(int)TargetID.AspectOfFear, 1 },
+            {TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+            {TargetID.AspectOfTorment, 1 },
+            {TargetID.AspectOfLethargy, 1 },
+            {TargetID.AspectOfExposure, 1 },
+            {TargetID.AspectOfDeath, 1 },
+            {TargetID.AspectOfFear, 1 },
         };
     }
 

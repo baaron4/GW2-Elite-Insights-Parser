@@ -17,11 +17,11 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     public KeepConstruct(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([    
-            new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
-            new PlayerDstHitMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
-            new EnemyDstBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
+            new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", 0),
+            new PlayerDstHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", 0),
+            new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", 0),
             new MechanicGroup([
-                new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0)
+                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%", "Magic Blast (Orbs eaten by KC) at 33%","Magic Blast 33%", 0)
                     .UsingChecker( (de, log) => {
                         var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
                         if (phases.Count < 2)
@@ -32,7 +32,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                         return de.Time >= phases[1].End;
                     }
                 ),
-                new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0)
+                new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%", "Magic Blast (Orbs eaten by KC) at 66%","Magic Blast 66%", 0)
                     .UsingChecker((de, log) => {
                         var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
                         if (phases.Count < 1)
@@ -50,21 +50,21 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 ),
             ]),
-            new SpawnMechanic((int) TargetID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
-            new PlayerDstHitMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
-            new PlayerDstBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
+            new SpawnMechanic((int) TargetID.InsidiousProjection, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge", "Insidious Projection spawn (2 Statue merge)","Merged Statues", 0),
+            new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza", "Phantasmal Blades (rotating Attack)","Phantasmal Blades", 0),
+            new PlayerDstHitMechanic(TowerDrop, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump", "Tower Drop (KC Jump)","Tower Drop", 0),
+            new PlayerDstBuffApplyMechanic(XerasFury, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb", "Xera's Fury (Large Bombs) application","Bombs", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(WhiteOrb, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0)
+                new PlayerDstHitMechanic(WhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb", "Good White Orb","Good White Orb", 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(RedOrb, "Good Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb","Good Red Orb", "Good Red Orb",0)
+                new PlayerDstHitMechanic(RedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb", "Good Red Orb","Good Red Orb", 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(WhiteOrb, "Bad White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb","Bad White Orb", "Bad White Orb",0)
+                new PlayerDstHitMechanic(WhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb", "Bad White Orb","Bad White Orb", 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(RedOrb, "Bad Red Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb","Bad Red Orb", "Bad Red Orb",0)
+                new PlayerDstHitMechanic(RedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb", "Bad Red Orb","Bad Red Orb", 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
             ]),
-            new PlayerSrcAllHitsMechanic("Core Hit", new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
+            new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.KeepConstructCore) && de is DirectHealthDamageEvent)
         ]));
         Extension = "kc";
@@ -216,34 +216,34 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.KeepConstruct,
-            (int)TargetID.Jessica,
-            (int)TargetID.Olson,
-            (int)TargetID.Engul,
-            (int)TargetID.Faerla,
-            (int)TargetID.Caulle,
-            (int)TargetID.Henley,
-            (int)TargetID.Galletta,
-            (int)TargetID.Ianim,
+            TargetID.KeepConstruct,
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim,
         ];
     }
-    protected override Dictionary<int, int> GetTargetsSortIDs()
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        return new Dictionary<int, int>()
+        return new Dictionary<TargetID, int>()
         {
-            {(int)TargetID.KeepConstruct, 0 },
-            {(int)TargetID.Jessica, 1 },
-            {(int)TargetID.Olson, 1 },
-            {(int)TargetID.Engul, 1 },
-            {(int)TargetID.Faerla, 1 },
-            {(int)TargetID.Caulle, 1 },
-            {(int)TargetID.Henley, 1 },
-            {(int)TargetID.Galletta, 1 },
-            {(int)TargetID.Ianim, 1 },
+            {TargetID.KeepConstruct, 0 },
+            {TargetID.Jessica, 1 },
+            {TargetID.Olson, 1 },
+            {TargetID.Engul, 1 },
+            {TargetID.Faerla, 1 },
+            {TargetID.Caulle, 1 },
+            {TargetID.Henley, 1 },
+            {TargetID.Galletta, 1 },
+            {TargetID.Ianim, 1 },
         };
     }
 
@@ -265,20 +265,20 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var countDict = new Dictionary<int, int>();
-        var bigPhantasmIDs = new HashSet<int>
+        var bigPhantasmIDs = new HashSet<TargetID>
         {
-            (int)TargetID.Jessica,
-            (int)TargetID.Olson,
-            (int)TargetID.Engul,
-            (int)TargetID.Faerla,
-            (int)TargetID.Caulle,
-            (int)TargetID.Henley,
-            (int)TargetID.Galletta,
-            (int)TargetID.Ianim,
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim,
         };
         foreach (SingleActor target in Targets)
         {
-            if (bigPhantasmIDs.Contains(target.ID))
+            if (target.IsAnySpecies(bigPhantasmIDs))
             {
                 if (countDict.TryGetValue(target.ID, out int count))
                 {

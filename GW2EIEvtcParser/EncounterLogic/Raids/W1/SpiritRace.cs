@@ -16,8 +16,8 @@ internal class SpiritRace : SpiritVale
     public SpiritRace(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([        
-            new PlayerDstHitMechanic(SpiritFog, "Spirit Fog", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
-            new PlayerDstBuffApplyMechanic(Crippled, "I Can Outrun A...Ghost", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(true),
+            new PlayerDstHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
+            new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(true),
         ]));
         Extension = "sprtrace";
         Icon = EncounterIconSpiritRace;
@@ -34,12 +34,12 @@ internal class SpiritRace : SpiritVale
                         (-15360, -36864, 15360, 39936),
                         (3456, 11012, 4736, 14212)*/);
     }
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.DummyTarget,
-            (int)TargetID.EtherealBarrier,
+            TargetID.DummyTarget,
+            TargetID.EtherealBarrier,
         ];
     }
 
@@ -61,7 +61,7 @@ internal class SpiritRace : SpiritVale
         return (int)TargetID.WallOfGhosts;
     }
 
-    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }

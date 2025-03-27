@@ -19,29 +19,29 @@ internal class Ensolyss : Nightmare
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic([ LungeEnsolyss, LungeNightmareHallucination ], "Lunge", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge","Lunge (KB charge over arena)", "Charge",150),
+                    new PlayerDstHitMechanic([ LungeEnsolyss, LungeNightmareHallucination ], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge", "Lunge (KB charge over arena)","Charge", 150),
                 ]
             ),
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic(UpswingEnsolyss, "Upswing", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Smash 1","High damage Jump hit", "First Smash",0),
-                    new PlayerDstHitMechanic(UpswingHallucination, "Upswing", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
+                    new PlayerDstHitMechanic(UpswingEnsolyss, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Smash 1", "High damage Jump hit","First Smash", 0),
+                    new PlayerDstHitMechanic(UpswingHallucination, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
                 ]
             ),
-            new PlayerDstHitMechanic([ NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 ], "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Goo)", "Miasma",0),
+            new PlayerDstHitMechanic([ NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo", "Nightmare Miasma (Goo)","Miasma", 0),
             new MechanicGroup(
                 [
-                    new EnemyCastStartMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","After Phase CC", "Breakbar", 0),
-                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","After Phase CC Failed", "CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
-                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","After Phase CC Success", "CCed", 0).UsingChecker( (ce, log) => ce.ActualDuration < 15260),
-                    new PlayerDstHitMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB","Knockback hourglass during CC", "CC KB", 0),
+                    new EnemyCastStartMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "After Phase CC","Breakbar", 0),
+                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "After Phase CC Failed","CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
+                    new EnemyCastEndMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "After Phase CC Success","CCed", 0).UsingChecker( (ce, log) => ce.ActualDuration < 15260),
+                    new PlayerDstHitMechanic(CausticExplosionEnsolyss, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB", "Knockback hourglass during CC","CC KB", 0),
                 ]
             ),
-            new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble","Nightmare Devastation (bubble attack)", "Bubble",0),
-            new PlayerDstHitMechanic(TailLashEnsolyss, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new PlayerDstHitMechanic(RampageEnsolyss, "Rampage", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage","Rampage (asterisk shaped Arrow attack)", "Rampage",150),
-            new PlayerDstHitMechanic(CausticGrasp, "Caustic Grasp", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull","Caustic Grasp (Arena Wide Pull)", "Pull",0),
-            new PlayerDstHitMechanic(TormentingBlast, "Tormenting Blast", new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
+            new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (bubble attack)","Bubble", 0),
+            new PlayerDstHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
+            new PlayerDstHitMechanic(RampageEnsolyss, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage", "Rampage (asterisk shaped Arrow attack)","Rampage", 150),
+            new PlayerDstHitMechanic(CausticGrasp, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull", "Caustic Grasp (Arena Wide Pull)","Pull", 0),
+            new PlayerDstHitMechanic(TormentingBlast, new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter", "Tormenting Blast (Two Quarter Circle attacks)","Quarter circle", 0),
         ]));
         Extension = "ensol";
         Icon = EncounterIconEnsolyss;
@@ -63,11 +63,11 @@ internal class Ensolyss : Nightmare
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override ReadOnlySpan<int> GetTargetsIDs()
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
     {
         return
         [
-            (int)TargetID.Ensolyss,
+            TargetID.Ensolyss,
             //(int)TargetID.NightmareAltar,
         ];
     }
