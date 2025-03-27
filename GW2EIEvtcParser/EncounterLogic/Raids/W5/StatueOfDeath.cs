@@ -15,13 +15,13 @@ internal class StatueOfDeath : HallOfChains
     public StatueOfDeath(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-            new PlayerDstHitMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
+            new PlayerDstHitMechanic(HungeringMiasma, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit", "Hungering Miasma (Vomit Goo)","Vomit Dmg", 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, "Reclaimed Energy", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected","Applied when taking a light orb", "Light Orb",0),
-                new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0)
+                new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected", "Applied when taking a light orb","Light Orb", 0),
+                new PlayerCastStartMechanic(ReclaimedEnergySkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown", "Has thrown a light orb","Light Orb Thrown", 0)
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
-            new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
+            new PlayerDstBuffApplyMechanic(FracturedSpirit, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD", "Applied when taking green","Green port", 0),
         ])
         );
         Extension = "souleater";

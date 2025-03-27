@@ -13,34 +13,34 @@ internal class WhisperOfJormag : Bjora
     {
         MechanicList.Add(new MechanicGroup([ 
             new MechanicGroup([
-                new PlayerDstHitMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Red), "H.Chains", "Hit by Chains of Frost", "Chains of Frost", 0),
-                new PlayerDstBuffApplyMechanic(ChainsOfFrostApplication, "Chains of Frost", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightRed), "F.Chains", "Selected for Chains of Frost", "Chains of Frost", 500),
-                new EnemyCastStartMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "F.Chains.C", "Cast Chains of Frost", "Cast Chains of Frost", 0),
+                new PlayerDstHitMechanic(ChainsOfFrostHit, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Red), "H.Chains", "Hit by Chains of Frost", "Chains of Frost", 0),
+                new PlayerDstBuffApplyMechanic(ChainsOfFrostApplication, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightRed), "F.Chains", "Selected for Chains of Frost", "Chains of Frost", 500),
+                new EnemyCastStartMechanic(ChainsOfFrostHit, new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "F.Chains.C", "Cast Chains of Frost", "Cast Chains of Frost", 0),
             ]),
-            new PlayerDstHitMechanic(SlitheringRime, "Slithering Rime", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "SlitRime.H", "Hit by Slithering Rime (Orbs)", "Slithering Rime", 0),
+            new PlayerDstHitMechanic(SlitheringRime, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "SlitRime.H", "Hit by Slithering Rime (Orbs)", "Slithering Rime", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(LethalCoalescenceSoaked, "Lethal Coalescence Soaked", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "S.Lethal.Coal.", "Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence", 50),
-                new EnemyCastStartMechanic(LethalCoalescenceSoaked, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Lethal Coalescence", "Cast Lethal Coalescence", "Cast Lethal Coalescence", 50),
-                new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "LethalCoa.A", "Selected for Lethal Coalescence (Green)", "Lethal Coalescence", 500),
+                new PlayerDstHitMechanic(LethalCoalescenceSoaked, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "S.Lethal.Coal.", "Soaked Lethal Coalescence Damage", "Soaked Lethal Coalescence", 50),
+                new EnemyCastStartMechanic(LethalCoalescenceSoaked, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Lethal Coalescence", "Cast Lethal Coalescence", "Cast Lethal Coalescence", 50),
+                new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "LethalCoa.A", "Selected for Lethal Coalescence (Green)", "Lethal Coalescence", 500),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(SpreadingIceOwn, "Spreading Ice (Own)", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "S.Ice", "Hit by own Spreading Ice", "Spreading Ice (Own)", 50),
-                new EnemyCastStartMechanic(SpreadingIceOwn, "Spreading Ice", new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkRed), "S.Ice.C", "Cast Spreading Ice", "Cast Spreading Ice", 0),
-                new PlayerDstHitMechanic(SpreadingIceOthers, "Spreading Ice (Others)", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "S.Ice.O", "Hit by other's Spreading Ice", "Spreading Ice (Others)", 50),
+                new PlayerDstHitMechanic(SpreadingIceOwn, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "S.Ice", "Hit by own Spreading Ice", "Spreading Ice (Own)", 50),
+                new EnemyCastStartMechanic(SpreadingIceOwn, new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkRed), "S.Ice.C", "Cast Spreading Ice", "Cast Spreading Ice", 0),
+                new PlayerDstHitMechanic(SpreadingIceOthers, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "S.Ice.O", "Hit by other's Spreading Ice", "Spreading Ice (Others)", 50),
             ]),
-            new PlayerDstHitMechanic(IcySlice, "Icy Slice", new MechanicPlotlySetting(Symbols.Hexagram, Colors.Orange), "I.Slice", "Hit by Icy Slice", "Icy Slice", 50),
-            new PlayerDstHitMechanic(IceTempest, "Ice Tempest", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Tornado", "Hit by Ice Tempest (Tornadoes)", "Ice Tempest", 50),
+            new PlayerDstHitMechanic(IcySlice, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Orange), "I.Slice", "Hit by Icy Slice", "Icy Slice", 50),
+            new PlayerDstHitMechanic(IceTempest, new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Tornado", "Hit by Ice Tempest (Tornadoes)", "Ice Tempest", 50),
             new MechanicGroup([
-                new PlayerDstHitMechanic(FrigidVortexDamage, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.Pink), "FrigVor.H", "Hit by Frigid Vortex", "Frigid Vortex Hit", 50),
-                new EnemyCastStartMechanic(FrigidVortexSkill, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.Magenta), "Frigid Vortex", "Cast Frigid Vortex", "Cast Frigid Vortex", 50),
+                new PlayerDstHitMechanic(FrigidVortexDamage, new MechanicPlotlySetting(Symbols.Star, Colors.Pink), "FrigVor.H", "Hit by Frigid Vortex", "Frigid Vortex Hit", 50),
+                new EnemyCastStartMechanic(FrigidVortexSkill, new MechanicPlotlySetting(Symbols.Star, Colors.Magenta), "Frigid Vortex", "Cast Frigid Vortex", "Cast Frigid Vortex", 50),
             ]),
-            new PlayerDstHitMechanic([IceShatterWhisper4, IceShatterWhisper2, IceShatterWhisper1, IceShatterWhisper3], "Ice Shatter", new MechanicPlotlySetting(Symbols.Circle, Colors.Teal), "IceShatt.H", "Hit by Ice Shatter (Large AoEs)", "Ice Shatter", 150),
-            new PlayerDstBuffApplyMechanic(FrigidVortexBuff, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "FrigVor.A", "Frigid Vortex Applied", "Frigid Vortex Buff", 0),
+            new PlayerDstHitMechanic([IceShatterWhisper4, IceShatterWhisper2, IceShatterWhisper1, IceShatterWhisper3], new MechanicPlotlySetting(Symbols.Circle, Colors.Teal), "IceShatt.H", "Hit by Ice Shatter (Large AoEs)", "Ice Shatter", 150),
+            new PlayerDstBuffApplyMechanic(FrigidVortexBuff, new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "FrigVor.A", "Frigid Vortex Applied", "Frigid Vortex Buff", 0),
             new MechanicGroup([
-                new PlayerDstBuffRemoveMechanic(WhisperTeleportBack, "Teleport Back", new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "TP In", "Teleported back to the arena", "Teleport Back", 500),
-                new PlayerDstBuffRemoveMechanic(WhisperTeleportOut, "Teleport Out", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightBlue), "TP Out", "Teleported outside of the arena", "Teleport Out", 500),
+                new PlayerDstBuffRemoveMechanic(WhisperTeleportBack, new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "TP In", "Teleported back to the arena", "Teleport Back", 500),
+                new PlayerDstBuffRemoveMechanic(WhisperTeleportOut, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightBlue), "TP Out", "Teleported outside of the arena", "Teleport Out", 500),
             ]),
-            new EnemyCastStartMechanic([ViciousSlam1, ViciousSlam2], "Vicious Slam",  new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)", 150),
+            new EnemyCastStartMechanic([ViciousSlam1, ViciousSlam2], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White),  "Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)", 150),
         ])
         );
         Extension = "woj";

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class PlayerSrcAllHitsMechanic : PlayerSrcHitMechanic
 {
 
-    public PlayerSrcAllHitsMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerSrcAllHitsMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
     protected override bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor)
