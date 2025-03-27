@@ -158,6 +158,7 @@ internal class SoullessHorror : HallOfChains
         {
             return phases;
         }
+        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
         var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath);
         long start = 0;
         int i = 1;
@@ -165,6 +166,8 @@ internal class SoullessHorror : HallOfChains
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i++);
             phase.AddTarget(mainTarget);
+            phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
+            phase.AddParentPhase(phases[0]);
             start = c.EndTime;
             phases.Add(phase);
         }
@@ -172,14 +175,9 @@ internal class SoullessHorror : HallOfChains
         {
             var lastPhase = new PhaseData(start, fightEnd, "Final");
             lastPhase.AddTarget(mainTarget);
+            lastPhase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
+            lastPhase.AddParentPhase(phases[0]);
             phases.Add(lastPhase);
-        }
-
-        // Add Tormented Deads as secondary target to the phases
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        foreach (PhaseData phase in phases)
-        {
-            phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
         }
 
         return phases;

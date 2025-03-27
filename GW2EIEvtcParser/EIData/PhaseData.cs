@@ -192,12 +192,24 @@ public class PhaseData
         }
     }
 
+    internal PhaseData WithParentPhase(PhaseData phase)
+    {
+        AddParentPhase(phase);
+        return this;
+    }
+
     internal void AddParentPhase(PhaseData phase)
     {
         if (phase != null)
         {
             CanBeSubPhaseOf.Add(phase);
         }
+    }
+
+    internal PhaseData WithParentPhases(IEnumerable<PhaseData> phases)
+    {
+        AddParentPhases(phases);
+        return this;
     }
 
     internal void AddParentPhases(IEnumerable<PhaseData> phases)

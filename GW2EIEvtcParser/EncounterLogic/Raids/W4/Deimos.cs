@@ -434,7 +434,7 @@ internal class Deimos : BastionOfThePenitent
                 phases.Add(phase100to0);
             }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
-            AddAddPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
+            AddAddPhases(phases, log, mainTarget, [phase100to10]);
             AddBurstPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
         }
 
