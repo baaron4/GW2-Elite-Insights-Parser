@@ -21,7 +21,9 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         MechanicList.AddRange(new List<Mechanic>()
         {
-            new PlayerDstHitMechanic(EruptionVent, new MechanicPlotlySetting(Symbols.TriangleSW, Colors.DarkPink), "ErupVent.H", "Hit by Eruption Vent (Geyser Spawn)", "Eruption Vent Hit", 0),
+            new PlayerDstHitMechanic(EruptionVent, new MechanicPlotlySetting(Symbols.TriangleSW, Colors.DarkPink), "ErupVent.H", "Hit by Eruption Vent (Geyser Shockwave)", "Eruption Vent Hit", 0),
+            new PlayerDstHitMechanic(EruptionVent, new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
+                .UsingEnable(log => log.FightData.IsCM || log.FightData.IsLegendaryCM).UsingAchievementEligibility(true),
 
             new PlayerDstHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Orange), "UraJump.H", "Hit by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser Hit", 0),
             new PlayerDstHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
@@ -38,7 +40,7 @@ internal class UraTheSteamshrieker : MountBalrior
 
             new PlayerDstHitMechanic(ScaldingAura, new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightPink), "ScalAura.H", "Hit by Scalding Aura (Ura's Hitbox)", "Scalding Aura Hit", 0),
 
-            new PlayerDstHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Shockwave)", "Sulfuric Eruption Hit", 0),
+            new PlayerDstHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),
             new PlayerDstBuffApplyMechanic(SulfuricAcid, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Purple), "SulfAcid.A", "Received Sulfuric Acid", "Sulfuric Acid Application", 0),
             new PlayerDstHitMechanic(SulfuricFroth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "SulfFroth.H", "Hit by Sulfuric Froth (Acid Projectile from Ura)", "Sulfuric Froth Hit", 0),
 
@@ -85,6 +87,7 @@ internal class UraTheSteamshrieker : MountBalrior
         return
         [
             TargetID.Ura,
+            TargetID.LegendaryVentshot,
             TargetID.ChampionFumaroller,
             TargetID.EliteFumaroller,
         ];
@@ -94,6 +97,7 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         return
         [
+            TargetID.LegendaryVentshot,
             TargetID.ChampionFumaroller,
             TargetID.EliteFumaroller,
         ];
@@ -204,16 +208,19 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
-        int[] curFumarollers = [1, 1];
+        int[] cur = [1, 1, 1];
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)TargetID.EliteFumaroller:
-                    target.OverrideName("Elite " + target.Character + " " + curFumarollers[0]++);
+                    target.OverrideName("Elite " + target.Character + " " + cur[0]++);
                     break;
                 case (int)TargetID.ChampionFumaroller:
-                    target.OverrideName("Champion " + target.Character + " " + curFumarollers[1]++);
+                    target.OverrideName("Champion " + target.Character + " " + cur[1]++);
+                    break;
+                case (int)TargetID.LegendaryVentshot:
+                    target.OverrideName("Legendary " + target.Character + " " + cur[2]++);
                     break;
                 default:
                     break;
@@ -425,6 +432,9 @@ internal class UraTheSteamshrieker : MountBalrior
                 var titanspawnStates = target.GetBreakbarStatus(log);
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
+            case (int)TargetID.LegendaryVentshot:
+                
+                break;
             case (int)TargetID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraFumarollerBreakingGround, out var breakingGrounds))
@@ -534,10 +544,20 @@ internal class UraTheSteamshrieker : MountBalrior
             bool eligible = true;
             foreach (var geyser in toxicGeysers)
             {
-                if (geyser.LastAware - geyser.FirstAware > 30000)
+                // Each eruption has to be active for less than 30 seconds
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(geyser, EffectGUIDs.UraToxicGeyserSpawnCM, out var eruptions))
                 {
-                    eligible = false;
-                    break;
+                    long effectDuration = 800000;
+                    foreach (var effect in eruptions.Where(x => x.Duration == effectDuration))
+                    {
+                        (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
+                        // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
+                        if (Math.Min(end, log.FightData.FightEnd) - start > 30000)
+                        {
+                            eligible = false;
+                            break;
+                        }
+                    }
                 }
             }
             if (eligible)
