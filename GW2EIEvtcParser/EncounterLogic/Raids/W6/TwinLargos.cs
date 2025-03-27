@@ -87,7 +87,7 @@ internal class TwinLargos : MythwrightGambit
         return [];
     }
 
-    private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName)
+    private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName, PhaseData fullFightPhase)
     {
         long start = 0;
         long end = 0;
@@ -124,6 +124,7 @@ internal class TwinLargos : MythwrightGambit
         {
             PhaseData phase = targetPhases[i];
             phase.Name = baseName + " P" + (i + 1);
+            phase.AddParentPhase(fullFightPhase);
             phase.AddTarget(target);
         }
         return targetPhases;
@@ -235,12 +236,12 @@ internal class TwinLargos : MythwrightGambit
         {
             return phases;
         }
-        List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare");
+        List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare", phases[0]);
         FallBackPhases(nikare, nikPhases, log, true);
         phases.AddRange(nikPhases);
         if (kenut != null)
         {
-            List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut");
+            List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut", phases[0]);
             FallBackPhases(kenut, kenPhases, log, false);
             phases.AddRange(kenPhases);
         }
