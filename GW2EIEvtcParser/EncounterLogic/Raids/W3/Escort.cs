@@ -22,16 +22,16 @@ internal class Escort : StrongholdOfTheFaithful
     public Escort(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([          
-            new PlayerDstSkillMechanic(DetonateMineEscort, "Detonate", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TargetID.Mine)),
-            new PlayerDstSkillMechanic(GlennaBombHit, "Bomb Explosion", new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
-            new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
+            new PlayerDstSkillMechanic(DetonateMineEscort, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TargetID.Mine)),
+            new PlayerDstSkillMechanic(GlennaBombHit, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
+            new PlayerDstHitMechanic(FireMortarEscortHit, new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, "Radiant Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
-                new PlayerDstBuffApplyMechanic(CrimsonAttunementPhantasm, "Crimson Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Crim.A", "Crimson Attunement Application", "Crimson Attunement Application", 150),
+                new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
+                new PlayerDstBuffApplyMechanic(CrimsonAttunementPhantasm, new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Crim.A", "Crimson Attunement Application", "Crimson Attunement Application", 150),
             ]),
-            new PlayerSrcEffectMechanic(EffectGUIDs.EscortOverHere, "Over Here!", new MechanicPlotlySetting(Symbols.Star, Colors.White), "OverHere.C", "Used Over Here! (Special Action Key)", "Over Here! Cast", 0),
-            new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.LightBlue), "Inv.A", "Invulnerability Applied", "Invulnerability Applied", 150),
-            new EnemyCastStartMechanic(TeleportDisplacementField, "Teleport Displacement Field", new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
+            new PlayerSrcEffectMechanic(EffectGUIDs.EscortOverHere, new MechanicPlotlySetting(Symbols.Star, Colors.White), "OverHere.C", "Used Over Here! (Special Action Key)", "Over Here! Cast", 0),
+            new EnemyDstBuffApplyMechanic(Invulnerability757, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.LightBlue), "Inv.A", "Invulnerability Applied", "Invulnerability Applied", 150),
+            new EnemyCastStartMechanic(TeleportDisplacementField, new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
         ])
         );
         ChestID = ChestID.SiegeChest;

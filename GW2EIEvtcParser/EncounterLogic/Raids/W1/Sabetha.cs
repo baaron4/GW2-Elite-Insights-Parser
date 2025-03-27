@@ -18,29 +18,29 @@ internal class Sabetha : SpiritVale
         MechanicList.Add(new MechanicGroup([
        
             // NOTE: Time Bomb damage is registered only for the user that has the bomb, damage to others is not logged.
-            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
-            new PlayerDstBuffApplyMechanic(SapperBombBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb","Got a Sapper Bomb", "Sapper Bomb",0),
-            new PlayerDstSkillMechanic(Firestorm, "Firestorm", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Flamewall","Firestorm (killed by Flamewall)", "Flamewall",0)
+            new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (launched up to cannons)","Shell-Shocked", 0),
+            new PlayerDstBuffApplyMechanic(SapperBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Sap Bomb", "Got a Sapper Bomb","Sapper Bomb", 0),
+            new PlayerDstSkillMechanic(Firestorm, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Flamewall", "Firestorm (killed by Flamewall)","Flamewall", 0)
                 .UsingChecker((de, log) => de.HasKilled),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(TimeBomb, "Time Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb","Got a Timed Bomb (Expanding circle)", "Timed Bomb",0),
-                new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], "Time Bomb", new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkMagenta), "TimeB Down", "Downed by Time Bomb", "Time Bomb Down", 0)
+                new PlayerDstBuffApplyMechanic(TimeBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Timed Bomb", "Got a Timed Bomb (Expanding circle)","Timed Bomb", 0),
+                new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], new MechanicPlotlySetting(Symbols.Hexagram, Colors.DarkMagenta), "TimeB Down", "Downed by Time Bomb", "Time Bomb Down", 0)
                     .UsingChecker((hde, log) => hde.HasDowned),
-                new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], "Time Bomb", new MechanicPlotlySetting(Symbols.HexagramOpen, Colors.DarkMagenta), "TimeB Kill", "Killed by Time Bomb", "Time Bomb Kill", 0)
+                new PlayerDstSkillMechanic([TimeBombDamage, TimeBombDamage2], new MechanicPlotlySetting(Symbols.HexagramOpen, Colors.DarkMagenta), "TimeB Kill", "Killed by Time Bomb", "Time Bomb Kill", 0)
                     .UsingChecker((hde, log) => hde.HasKilled),
             ]),
-            new PlayerDstHitMechanic(FlakShot, "Flak Shot", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.LightOrange), "Flak","Flak Shot (Fire Patches)", "Flak Shot",0),
-            new PlayerDstHitMechanic(CannonBarrage, "Cannon Barrage", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Cannon","Cannon Barrage (stood in AoE)", "Cannon Shot",0),
-            new PlayerDstHitMechanic(FlameBlast, "Flame Blast", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Yellow), "Karde Flame","Flame Blast (Karde's Flamethrower)", "Flamethrower (Karde)",0),
-            new PlayerDstHitMechanic(BanditKick, "Kick", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick","Kicked by Bandit", "Bandit Kick",0)
+            new PlayerDstHitMechanic(FlakShot, new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.LightOrange), "Flak", "Flak Shot (Fire Patches)","Flak Shot", 0),
+            new PlayerDstHitMechanic(CannonBarrage, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Cannon", "Cannon Barrage (stood in AoE)","Cannon Shot", 0),
+            new PlayerDstHitMechanic(FlameBlast, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Yellow), "Karde Flame", "Flame Blast (Karde's Flamethrower)","Flamethrower (Karde)", 0),
+            new PlayerDstHitMechanic(BanditKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by Bandit","Bandit Kick", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerCastStartMechanic(KickHeavyBomb, "Kick Heavy Bomb", new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", 0)
+            new PlayerCastStartMechanic(KickHeavyBomb, new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", 0)
                 .UsingChecker((ce, log) => !ce.IsInterrupted && !ce.IsUnknown),
             new MechanicGroup([
-                new EnemyCastStartMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Platform Quake (Breakbar)","Breakbar",0),
-                new EnemyCastEndMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Platform Quake (Breakbar broken) ", "CCed",0)
+                new EnemyCastStartMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Platform Quake (Breakbar)","Breakbar",0),
+                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Platform Quake (Breakbar broken) ","CCed", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 4400),
-                new EnemyCastEndMechanic(PlatformQuake, "Platform Quake", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Platform Quake (Breakbar failed) ", "CC Fail",0)
+                new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Platform Quake (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker( (ce,log) =>  ce.ActualDuration > 4400),
             ]),
         ]));

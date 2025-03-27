@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.EIData;
 
 internal abstract class PlayerBuffRemoveSingleMechanic : PlayerBuffRemoveMechanic<AbstractBuffRemoveEvent>
 {
-    public PlayerBuffRemoveSingleMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, 0)
+    public PlayerBuffRemoveSingleMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicID, plotlySetting, shortName, description, fullName, 0)
     {
     }
 
-    public PlayerBuffRemoveSingleMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, 0)
+    public PlayerBuffRemoveSingleMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, plotlySetting, shortName, description, fullName, 0)
     {
     }
 

@@ -20,29 +20,29 @@ internal class Skorvald : ShatteredObservatory
     {
         MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
-            new PlayerDstHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
-            new PlayerDstHitMechanic([CranialCascadeAnomaly,CranialCascade2], "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
-            new PlayerDstHitMechanic([RadiantFurySkorvald, RadiantFury2], "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
-            new PlayerDstHitMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
+            new PlayerDstHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge", "Combustion Rush","Charge", 0),
+            new PlayerDstHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick", "Punishing Kick (Single purple Line, Add)","Kick (Add)", 0),
+            new PlayerDstHitMechanic([CranialCascadeAnomaly,CranialCascade2], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB", "Cranial Cascade (3 purple Line Knockback, Add)","Small Cone KB (Add)", 0),
+            new PlayerDstHitMechanic([RadiantFurySkorvald, RadiantFury2], new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle", "Radiant Fury (expanding burn circles)","Expanding Circles", 0),
+            new PlayerDstHitMechanic(FocusedAnger, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB", "Focused Anger (Large Cone Overhead Crosshair Knockback)","Large Cone Knockback", 0),
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
-                    new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
+                    new PlayerDstHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices)","Horizon Strike", 0), // 
+                    new PlayerDstHitMechanic(CrimsonDawn, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End", "Crimson Dawn (almost Full platform attack after Horizon Strike)","Horizon Strike (last)", 0),
                 ]
             ),
-            new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0)
+            new PlayerDstHitMechanic(SolarCyclone, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone", "Solar Cyclone (Circling Knockback)","KB Cyclone", 0),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)", 0)
                 .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new MechanicGroup(
                 [
-                    new PlayerDstBuffApplyMechanic(SkorvaldsIre, "Skorvald Fixate", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire",  "Skorvald's Fixate", 0),
-                    new PlayerDstBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
+                    new PlayerDstBuffApplyMechanic(SkorvaldsIre, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire", "Skorvald's Fixate",  0),
+                    new PlayerDstBuffApplyMechanic(FixatedBloom1, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate", 0),
                 ]
             ),
-            new PlayerDstHitMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
-            new PlayerDstHitMechanic(SpiralStrike, "Spiral Strike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
-            new PlayerDstHitMechanic(WaveOfMutilation, "Wave of Mutilation", new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump","Hit by KB Jump (player targeted)", "Knockback jump",0),
+            new PlayerDstHitMechanic(BloomExplode, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl", "Hit by Solar Bloom Explosion","Bloom Explosion", 0), //shockwave, not damage? (damage is 50% max HP, not tracked)
+            new PlayerDstHitMechanic(SpiralStrike, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral", "Hit after Warp (Jump to Player with overhead bomb)","Spiral Strike", 0),
+            new PlayerDstHitMechanic(WaveOfMutilation, new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump", "Hit by KB Jump (player targeted)","Knockback jump", 0),
         ]));
         Extension = "skorv";
         Icon = EncounterIconSkorvald;

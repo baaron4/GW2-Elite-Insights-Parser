@@ -44,7 +44,6 @@ public abstract class Mechanic : MechanicContainer
     public readonly int InternalCooldown;
     public readonly MechanicPlotlySetting PlotlySetting;
     public readonly string Description;
-    private readonly string _inGameName;
     public readonly string ShortName;
     public readonly string FullName;
     public bool IsEnemyMechanic { get; protected set; }
@@ -68,9 +67,8 @@ public abstract class Mechanic : MechanicContainer
     /// <param name="description">description of the mechanic</param>
     /// <param name="fullName">full name of the mechanic</param>
     /// <param name="internalCoolDown">grace period, in ms, during which getting hit by the mechanic does not count</param>
-    protected Mechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
+    protected Mechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown)
     {
-        _inGameName = inGameName;
         PlotlySetting = plotlySetting;
         ShortName = shortName;
         FullName = fullName;

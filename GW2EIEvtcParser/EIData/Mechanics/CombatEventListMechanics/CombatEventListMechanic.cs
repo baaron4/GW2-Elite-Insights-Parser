@@ -14,7 +14,7 @@ internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T 
         return _getter(log, a);
     }
 
-    public CombatEventListMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public CombatEventListMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
     {
         _getter = getter;
         if (_getter == null)

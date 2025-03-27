@@ -16,11 +16,11 @@ internal abstract class DstEffectMechanic : EffectMechanic
         return effectEvt.Dst;
     }
 
-    public DstEffectMechanic(GUID effectGUID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effectGUID ], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public DstEffectMechanic(GUID effectGUID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effectGUID ], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
-    public DstEffectMechanic(ReadOnlySpan<GUID> effects, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effects, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public DstEffectMechanic(ReadOnlySpan<GUID> effects, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effects, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 }
