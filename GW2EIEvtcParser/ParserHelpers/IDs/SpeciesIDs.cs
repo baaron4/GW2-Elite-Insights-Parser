@@ -346,6 +346,7 @@ public static class SpeciesIDs
         SulfuricGeyser = SpeciesIDs.SulfuricGeyser,
         TitanspawnGeyser = 26741,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
+        LegendaryVentshot = 26824,
         // Strike Missions
         // - Festival
         // - Freezie
