@@ -58,6 +58,14 @@ public static class SkillIDs
     public const long BlitzMinesDrop = -39;
     public const long RelicOfTheClawBuffLoss = -40;
     public const long BerserkEndSkill = -41;
+    public const long RuneLichSpawn = -42;
+    public const long RuneOgreSpawn = -43;
+    public const long RuneGolemancerSpawn = -44;
+    public const long RunePrivateerSpawn = -45;
+    public const long RelicLichSpawn = -46;
+    public const long RelicOgreSpawn = -47;
+    public const long RelicGolemancerSpawn = -48;
+    public const long RelicPrivateerSpawn = -49;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
