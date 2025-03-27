@@ -320,4 +320,9 @@ internal class WvWFight : FightLogic
         _targets.AddRange(auxTargets.OrderBy(x => x.Character));
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
+
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    {
+        return new[] { GetTargetID(GenericTriggerID) };
+    }
 }

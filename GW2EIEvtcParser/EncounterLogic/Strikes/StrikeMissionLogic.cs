@@ -31,6 +31,10 @@ internal abstract class StrikeMissionLogic : FightLogic
         }
         return FightData.EncounterStartStatus.Normal;
     }
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    {
+        return new[] { GetTargetID(GenericTriggerID) };
+    }
 
     protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {

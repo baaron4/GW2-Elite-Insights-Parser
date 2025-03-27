@@ -166,10 +166,7 @@ public abstract class FightLogic
     }
 
     /// <remarks>Do _NOT_ modify Instance._targetIDs while iterating the result of this function. Appending is allowed.</remarks>
-    protected virtual ReadOnlySpan<TargetID> GetTargetsIDs()
-    {
-        return [];
-    }
+    protected abstract ReadOnlySpan<TargetID> GetTargetsIDs();
 
     protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
     {

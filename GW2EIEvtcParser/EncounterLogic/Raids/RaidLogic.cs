@@ -50,6 +50,11 @@ internal abstract class RaidLogic : FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    {
+        return new[] { GetTargetID(GenericTriggerID) };
+    }
+
     protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
         return new [] { GetTargetID(GenericTriggerID) };

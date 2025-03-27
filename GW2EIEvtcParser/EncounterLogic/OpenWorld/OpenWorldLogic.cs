@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EncounterLogic;
+﻿using static GW2EIEvtcParser.SpeciesIDs;
+
+namespace GW2EIEvtcParser.EncounterLogic;
 
 internal abstract class OpenWorldLogic : FightLogic
 {
@@ -9,5 +11,9 @@ internal abstract class OpenWorldLogic : FightLogic
         EncounterCategoryInformation.Category = EncounterCategory.FightCategory.OpenWorld;
         EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
         EncounterID |= EncounterIDs.EncounterMasks.OpenWorldMask;
+    }
+    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    {
+        return new[] { GetTargetID(GenericTriggerID) };
     }
 }
