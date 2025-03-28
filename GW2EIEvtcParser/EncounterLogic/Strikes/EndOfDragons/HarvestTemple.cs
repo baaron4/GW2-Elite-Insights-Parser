@@ -316,18 +316,18 @@ internal class HarvestTemple : EndOfDragonsStrike
         return new Dictionary<TargetID, int>()
         {
             {TargetID.TheDragonVoidJormag, 0 },
-            {TargetID.TheDragonVoidKralkatorrik, 0 },
-            {TargetID.TheDragonVoidMordremoth, 0 },
-            {TargetID.TheDragonVoidPrimordus, 0 },
-            {TargetID.TheDragonVoidZhaitan, 0 },
-            {TargetID.TheDragonVoidSooWon, 0 },
-            {TargetID.PushableVoidAmalgamate, 1 },
-            {TargetID.KillableVoidAmalgamate, 1 },
-            {TargetID.VoidSaltsprayDragon, 1 },
-            {TargetID.VoidObliterator, 1 },
-            {TargetID.VoidGoliath, 1 },
-            {TargetID.VoidTimeCaster, 1 },
-            {TargetID.VoidGiant, 1},
+            {TargetID.TheDragonVoidPrimordus, 1 },
+            {TargetID.TheDragonVoidKralkatorrik, 2},
+            {TargetID.TheDragonVoidMordremoth, 3 },
+            {TargetID.TheDragonVoidZhaitan, 4 },
+            {TargetID.TheDragonVoidSooWon, 5 },
+            {TargetID.PushableVoidAmalgamate, 6 },
+            {TargetID.KillableVoidAmalgamate, 6 },
+            {TargetID.VoidSaltsprayDragon, 6 },
+            {TargetID.VoidObliterator, 6 },
+            {TargetID.VoidGoliath, 6 },
+            {TargetID.VoidTimeCaster, 6 },
+            {TargetID.VoidGiant, 6},
         };
     }
 
