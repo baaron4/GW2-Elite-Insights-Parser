@@ -109,6 +109,7 @@ internal class SuperKodanBrothers : Bjora
         for (int i = 0; i < unmergedPhases.Count; i++)
         {
             unmergedPhases[i].Name = "Phase " + (i + 1);
+            unmergedPhases[i].AddParentPhase(phases[0]);
             unmergedPhases[i].AddTarget(claw);
             unmergedPhases[i].AddTarget(voice);
         }
@@ -158,6 +159,7 @@ internal class SuperKodanBrothers : Bjora
                         long postMergedStart = nextUnmergedPhase.Start + 1;
                         long postMergedEnd = oldEnd;
                         var phase = new PhaseData(postMergedStart, postMergedEnd, "Position " + (++tpCount));
+                        phase.AddParentPhases(unmergedPhases);
                         phase.AddTarget(claw);
                         phase.AddTarget(voice);
                         phases.Add(phase);
@@ -168,6 +170,7 @@ internal class SuperKodanBrothers : Bjora
             if (preTPPhaseEnd - preTPPhaseStart > 2000)
             {
                 var phase = new PhaseData(preTPPhaseStart, preTPPhaseEnd, "Position " + (++tpCount));
+                phase.AddParentPhases(unmergedPhases);
                 phase.AddTarget(claw);
                 phase.AddTarget(voice);
                 phases.Add(phase);
@@ -180,6 +183,7 @@ internal class SuperKodanBrothers : Bjora
         if (enrage != null)
         {
             var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
+            phase.AddParentPhases(unmergedPhases);
             phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice);
             phases.Add(phase);
         }
@@ -199,6 +203,7 @@ internal class SuperKodanBrothers : Bjora
             if (finalPositionEnd - finalStart > 2000)
             {
                 var phase = new PhaseData(finalStart, finalPositionEnd, "Position " + (++tpCount));
+                phase.AddParentPhases(unmergedPhases);
                 phase.AddTarget(claw);
                 phase.AddTarget(voice);
                 phases.Add(phase);

@@ -113,6 +113,7 @@ internal class WhisperOfJormag : Bjora
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].AddTarget(woj);
+            phases[i].AddParentPhase(phases[0]);
         }
         return phases;
     }
