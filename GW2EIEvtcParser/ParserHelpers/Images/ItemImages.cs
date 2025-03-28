@@ -82,6 +82,10 @@ internal static class ItemImages
     public const string SuperiorRuneOfTheMadKing = "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png";
     public const string SuperiorRuneOfTheCitadel = "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png";
     public const string SuperiorRuneOfGrenth = "https://wiki.guildwars2.com/images/6/6e/Superior_Rune_of_Grenth.png";
+    public const string SuperiorRuneOfTheLich = "https://render.guildwars2.com/file/10324E350DEFA2276F0FD22299D4BAFD00736D18/220712.png";
+    public const string SuperiorRuneOfTheOgre = "https://render.guildwars2.com/file/136590B36FFC2053D135743B063405C9A54A9E6A/220716.png";
+    public const string SuperiorRuneOfTheGolemancer = "https://render.guildwars2.com/file/EB4F765E36EC9CF57526789A3EAB6702110D0949/220705.png";
+    public const string SuperiorRuneOfThePrivateer = "https://render.guildwars2.com/file/1C2095ADECD26F212D0F6C47BCCF5B7848B347CF/220718.png";
     #endregion Rune
     #region Relic
     public const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
@@ -135,6 +139,10 @@ internal static class ItemImages
     public const string RelicOfTheEagle = "https://render.guildwars2.com/file/DFF4EB43AD0803F60D105658052321A0BE1AF02C/3592832.png";
     public const string RelicOfTheHolosmith = "https://render.guildwars2.com/file/0976F60805023D2F14DA6CC72F55F3D64407C7AF/3592836.png";
     public const string RelicOfVampirism = "https://render.guildwars2.com/file/349D3B9098A1EB445E00C45E70B892E8CFE3762C/3592842.png";
+    public const string RelicOfTheLich = "https://render.guildwars2.com/file/045D16259918EFA90A76B4D1B1400AA8D9CC0D4B/3592837.png";
+    public const string RelicOfTheOgre = "https://render.guildwars2.com/file/633231B05DC3D1D44003DAA891400C4624180D17/3592838.png";
+    public const string RelicOfTheGolemancer = "https://render.guildwars2.com/file/13412697BB6AD89F2E6ED97A750873C0BB35AA9A/3592835.png";
+    public const string RelicOfThePrivateer = "https://render.guildwars2.com/file/9CE01CF33B943BCC3FABD8491073DE0AD63F340C/3592839.png";
     #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";

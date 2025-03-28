@@ -85,7 +85,20 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         // Runes
         new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new MinionSpawnCastFinder(RuneLichSpawn, (int)MinionID.JaggedHorror)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+        new MinionSpawnCastFinder(RuneOgreSpawn, (int)MinionID.RockDog)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+        new MinionSpawnCastFinder(RuneGolemancerSpawn, (int)MinionID.MarkIGolem)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
+        new MinionSpawnCastFinder(RunePrivateerSpawn, (int)MinionID.TropicalBird)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         // Combos
         new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
         new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
@@ -177,6 +190,18 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTBarrierCastFinder(RelicOfTheFoundingBarrier, RelicOfTheFoundingBarrier)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new MinionSpawnCastFinder(RelicLichSpawn, (int)MinionID.JaggedHorror)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.November2024MountBalriorRelease),
+        new MinionSpawnCastFinder(RelicOgreSpawn, (int)MinionID.RockDog)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.November2024MountBalriorRelease),
+        new MinionSpawnCastFinder(RelicGolemancerSpawn, (int)MinionID.MarkIGolem)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.November2024MountBalriorRelease),
+        new MinionSpawnCastFinder(RelicPrivateerSpawn, (int)MinionID.TropicalBird)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
+            .WithBuilds(GW2Builds.November2024MountBalriorRelease),
         // Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),

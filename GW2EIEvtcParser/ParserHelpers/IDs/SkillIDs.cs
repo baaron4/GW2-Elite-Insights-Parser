@@ -58,6 +58,14 @@ public static class SkillIDs
     public const long BlitzMinesDrop = -39;
     public const long RelicOfTheClawBuffLoss = -40;
     public const long BerserkEndSkill = -41;
+    public const long RuneLichSpawn = -42;
+    public const long RuneOgreSpawn = -43;
+    public const long RuneGolemancerSpawn = -44;
+    public const long RunePrivateerSpawn = -45;
+    public const long RelicLichSpawn = -46;
+    public const long RelicOgreSpawn = -47;
+    public const long RelicGolemancerSpawn = -48;
+    public const long RelicPrivateerSpawn = -49;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;
@@ -1419,6 +1427,7 @@ public static class SkillIDs
     public const long BattleScars = 26646;
     public const long ResistTheDarkness = 26693;
     public const long UnrelentingAssaultSkill = 26699;
+    public const long PurifyingEssenceHeal2 = 26738;
     public const long Slow = 26766;
     public const long AssassinsPresence = 26854;
     public const long FrigidBlitzExtra = 26923;
@@ -3471,6 +3480,7 @@ public static class SkillIDs
     public const long GunsAndGlory = 62743;
     public const long Gunsaber = 62745;
     public const long LegendaryAllianceStanceSkill = 62749;
+    public const long RedemptorsSermonHeal = 62755;
     public const long FlameWheelSkill = 62758;
     public const long RockyLoopBuff = 62768;
     public const long GunsaberMode = 62769;

@@ -71,6 +71,10 @@ public class SkillItem
         { HuntersCall_RuneOfMadKing, "Hunter's Call (Rune of the Mad King)" },
         { ArtilleryBarrage_RuneofCitadel, "Artillery Barrage (Rune of the Citadel)" },
         { HandOfGrenth_RuneOfGrenth, "Hand of Grenth (Rune of Grenth)" },
+        { RuneLichSpawn, "Superior Rune of the Lich (Spawn Minion)" },
+        { RuneOgreSpawn, "Superior Rune of the Ogre (Spawn Minion)" },
+        { RuneGolemancerSpawn, "Superior Rune of the Golemancer (Spawn Minion)" },
+        { RunePrivateerSpawn, "Superior Rune of the Privateer (Spawn Minion)" },
         #endregion Runes
         { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
         { PortalExitWhiteMantleWatchwork, "Portal Exit" },
@@ -105,6 +109,10 @@ public class SkillItem
         { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
         { RelicOfTheClawBuffLoss, "Relic of the Claw (Buff Loss)" },
         { RelicOfTheStormsingerChain, "Relic of the Stormsinger (Chain)" },
+        { RelicLichSpawn, "Relic of the Lich (Spawn Minion)" },
+        { RelicOgreSpawn, "Relic of the Ogre (Spawn Minion)" },
+        { RelicGolemancerSpawn, "Relic of the Golemancer (Spawn Minion)" },
+        { RelicPrivateerSpawn, "Relic of the Privateer (Spawn Minion)" },
         #endregion Relics
         #region Elementalist
         { DualFireAttunement, "Dual Fire Attunement" },
@@ -466,6 +474,10 @@ public class SkillItem
         { SmashBottle, SkillImages.SmashBottle },
         { ThrowBottle, SkillImages.ThrowBottle },
         { ThrowNetUnderwaterNet, SkillImages.NetShot },
+        { RuneLichSpawn, ItemImages.SuperiorRuneOfTheLich },
+        { RuneOgreSpawn, ItemImages.SuperiorRuneOfTheOgre },
+        { RuneGolemancerSpawn, ItemImages.SuperiorRuneOfTheGolemancer },
+        { RunePrivateerSpawn, ItemImages.SuperiorRuneOfThePrivateer },
 #endregion ItemIcons
         #region MountIcons
         { BondOfLifeSkill, SkillImages.BondOfLife },
@@ -527,6 +539,10 @@ public class SkillItem
         { RelicOfMountBalrior, ItemImages.RelicOfMountBalrior },
         { RelicOfTheHolosmith, ItemImages.RelicOfTheHolosmith },
         { RelicOfVampirismHealing, ItemImages.RelicOfVampirism },
+        { RelicLichSpawn, ItemImages.RelicOfTheLich },
+        { RelicOgreSpawn, ItemImages.RelicOfTheOgre },
+        { RelicGolemancerSpawn, ItemImages.RelicOfTheGolemancer },
+        { RelicPrivateerSpawn, ItemImages.RelicOfThePrivateer },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, SkillImages.FireAttunement },
@@ -874,6 +890,7 @@ public class SkillItem
             { HealersGift, TraitImages.HealersGift },
             { EnergyExpulsionHeal, SkillImages.EnergyExpulsion },
             { PurifyingEssenceHeal, SkillImages.PurifyingEssence },
+            { PurifyingEssenceHeal2, SkillImages.PurifyingEssence },
             { HealingOrbRevenant, SkillImages.RejuvenatingAssault },
             { WordsOfCensure, TraitImages.WordsOfCensure },
             { GenerousAbundanceCentaur, TraitImages.GenerousAbundance },
@@ -887,6 +904,7 @@ public class SkillItem
             { AbyssalRazeUnleash, SkillImages.AbyssalRaze },
             { AbyssalStrike_SecondHit, SkillImages.AbyssalStrike },
             { BlitzMinesDrop, SkillImages.BlitzMines },
+            { RedemptorsSermonHeal, TraitImages.RedemptorsSermon },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
