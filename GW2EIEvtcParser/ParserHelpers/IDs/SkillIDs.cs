@@ -1419,6 +1419,7 @@ public static class SkillIDs
     public const long BattleScars = 26646;
     public const long ResistTheDarkness = 26693;
     public const long UnrelentingAssaultSkill = 26699;
+    public const long PurifyingEssenceHeal2 = 26738;
     public const long Slow = 26766;
     public const long AssassinsPresence = 26854;
     public const long FrigidBlitzExtra = 26923;
@@ -3471,6 +3472,7 @@ public static class SkillIDs
     public const long GunsAndGlory = 62743;
     public const long Gunsaber = 62745;
     public const long LegendaryAllianceStanceSkill = 62749;
+    public const long RedemptorsSermonHeal = 62755;
     public const long FlameWheelSkill = 62758;
     public const long RockyLoopBuff = 62768;
     public const long GunsaberMode = 62769;

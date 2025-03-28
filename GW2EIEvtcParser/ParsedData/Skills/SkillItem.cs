@@ -874,6 +874,7 @@ public class SkillItem
             { HealersGift, TraitImages.HealersGift },
             { EnergyExpulsionHeal, SkillImages.EnergyExpulsion },
             { PurifyingEssenceHeal, SkillImages.PurifyingEssence },
+            { PurifyingEssenceHeal2, SkillImages.PurifyingEssence },
             { HealingOrbRevenant, SkillImages.RejuvenatingAssault },
             { WordsOfCensure, TraitImages.WordsOfCensure },
             { GenerousAbundanceCentaur, TraitImages.GenerousAbundance },
@@ -887,6 +888,7 @@ public class SkillItem
             { AbyssalRazeUnleash, SkillImages.AbyssalRaze },
             { AbyssalStrike_SecondHit, SkillImages.AbyssalStrike },
             { BlitzMinesDrop, SkillImages.BlitzMines },
+            { RedemptorsSermonHeal, TraitImages.RedemptorsSermon },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
