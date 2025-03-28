@@ -431,6 +431,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     Name = "Phase " + (i + 2) / 2
                 };
             }
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             phases.Add(phase);
         }
