@@ -238,50 +238,62 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             return phases;
         }
-
+        var parentPhase = phases[0];
         bool isCm = log.FightData.IsCM || log.FightData.IsLegendaryCM;
         long start = log.FightData.FightStart;
         long end = log.FightData.FightEnd;
-        var hpUpdates = ura.GetHealthUpdates(log);
 
-        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
-        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
         var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
-        // 100-70
-        var propelPhase = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
-        propelPhase.AddTarget(ura);
-        phases.Add(propelPhase);
-        // 70-40
-        if (hp70.Value > 0)
-        {
-            var after70 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
-            after70.AddTarget(ura);
-            phases.Add(after70);
-            // 40 - 1 CM / 40 - 0 NM
-            if (hp40.Value > 0)
-            {
-                var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
-                after40.AddTarget(ura);
-                phases.Add(after40);
-                var noPropelPhase = new PhaseData(after70.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
-                noPropelPhase.AddTarget(ura);
-                phases.Add(noPropelPhase);
-            } 
-        }
         // Healed CM
         if (hp1 != null)
         {
             var before1 = new PhaseData(start, hp1.Time, "100% - 1%");
+            before1.AddParentPhase(parentPhase);
             before1.AddTarget(ura);
             phases.Add(before1);
             var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == ura.AgentItem && x.Time >= hp1.Time);
             if (determinedLost != null)
             {
                 var after1 = new PhaseData(determinedLost.Time, end, "Healed");
+                after1.AddParentPhase(parentPhase);
                 after1.AddTarget(ura);
                 phases.Add(after1);
             }
+            parentPhase = before1;
         }
+        // HP based phases
+        var hpUpdates = ura.GetHealthUpdates(log);
+        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
+        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
+        // 100-70
+        var before70 = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
+        before70.AddParentPhase(parentPhase);
+        before70.AddTarget(ura);
+        phases.Add(before70);
+        // 70-40
+        if (hp70.Value > 0)
+        {
+            var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
+            after70before40.AddTarget(ura);
+            phases.Add(after70before40);
+            // 40 - 1 CM / 40 - 0 NM
+            if (hp40.Value > 0)
+            {
+                var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
+                after40.AddTarget(ura);
+                phases.Add(after40);
+                var after70 = new PhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
+                after70.AddParentPhase(parentPhase);
+                after40.AddParentPhase(after70);
+                after70before40.AddParentPhase(after70);
+                after70.AddTarget(ura);
+                phases.Add(after70);
+            } 
+            else
+            {
+                after70before40.AddParentPhase(parentPhase);
+            }
+        } 
 
         return phases;
     }
