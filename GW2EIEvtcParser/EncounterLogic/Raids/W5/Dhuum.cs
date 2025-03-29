@@ -146,6 +146,7 @@ internal class Dhuum : HallOfChains
             if (firstDamageable != null)
             {
                 var shieldPhase = new PhaseData(end, firstDamageable.Time, "Shielded Dhuum");
+                shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum);
                 phases.Add(shieldPhase);
                 var ritualPhase = new PhaseData(firstDamageable.Time, fightDuration, "Ritual");
@@ -156,6 +157,7 @@ internal class Dhuum : HallOfChains
             else
             {
                 var shieldPhase = new PhaseData(end, fightDuration, "Shielded Dhuum");
+                shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum);
                 phases.Add(shieldPhase);
             }
