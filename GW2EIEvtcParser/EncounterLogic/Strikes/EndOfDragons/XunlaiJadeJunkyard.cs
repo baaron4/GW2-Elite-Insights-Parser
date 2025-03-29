@@ -103,27 +103,6 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             return phases;
         }
 
-        // DPS Phases
-        List<PhaseData> dpsPhase = GetPhasesByInvul(log, Determined895, ankka, false, true);
-        for (int i = 0; i < dpsPhase.Count; i++)
-        {
-            dpsPhase[i].Name = $"DPS Phase {i + 1}";
-            dpsPhase[i].AddTarget(ankka);
-        }
-        phases.AddRange(dpsPhase);
-
-        // Necrotic Rituals
-        List<PhaseData> rituals = GetPhasesByInvul(log, NecroticRitual, ankka, true, true);
-        for (int i = 0; i < rituals.Count; i++)
-        {
-            if (i % 2 != 0)
-            {
-                rituals[i].Name = $"Necrotic Ritual {(i + 1) / 2}";
-                rituals[i].AddTarget(ankka);
-            }
-        }
-        phases.AddRange(rituals);
-
         // Health and Transition Phases
         List<PhaseData> subPhases = GetPhasesByInvul(log, AnkkaPlateformChanging, ankka, true, true);
         for (int i = 0; i < subPhases.Count; i++)
@@ -148,9 +127,38 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 default:
                     break;
             }
+            subPhases[i].AddParentPhase(phases[0]);
             subPhases[i].AddTarget(ankka);
         }
         phases.AddRange(subPhases);
+        // DPS Phases
+        List<PhaseData> dpsPhase = GetPhasesByInvul(log, Determined895, ankka, false, true);
+        for (int i = 0; i < dpsPhase.Count; i++)
+        {
+            dpsPhase[i].Name = $"DPS Phase {i + 1}";
+            dpsPhase[i].AddTarget(ankka);
+            dpsPhase[i].AddParentPhases(subPhases);
+            // We are not using the same buff between the two types of phases, the timings may slightly differ, this makes sure to put a dps phase within a fight phase
+            var currentSubPhase = subPhases.FirstOrDefault(x => x.IntersectsWindow(dpsPhase[i].Start, dpsPhase[i].End));
+            if (currentSubPhase != null)
+            {
+                dpsPhase[i].OverrideStart(Math.Max(dpsPhase[i].Start, currentSubPhase.Start));
+                dpsPhase[i].OverrideEnd(Math.Min(dpsPhase[i].End, currentSubPhase.End));
+            }
+        }
+        phases.AddRange(dpsPhase);
+        // Necrotic Rituals
+        List<PhaseData> rituals = GetPhasesByInvul(log, NecroticRitual, ankka, true, true);
+        for (int i = 0; i < rituals.Count; i++)
+        {
+            if (i % 2 != 0)
+            {
+                rituals[i].Name = $"Necrotic Ritual {(i + 1) / 2}";
+                rituals[i].AddTarget(ankka);
+                rituals[i].AddParentPhases(subPhases);
+            }
+        }
+        phases.AddRange(rituals);
         //
         return phases;
     }
