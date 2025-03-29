@@ -72,6 +72,7 @@ internal class Escort : StrongholdOfTheFaithful
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(mainPhase);
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
@@ -101,10 +102,11 @@ internal class Escort : StrongholdOfTheFaithful
             return phases;
         }
         var wargs = Targets.Where(x => x.IsSpecies(TargetID.WargBloodhound));
+        PhaseData? preEventPhase = null;
         if (_hasPreEvent)
         {
             var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
-            var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
+            preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
             {
                 Name = "Escort",
             };
@@ -124,6 +126,7 @@ internal class Escort : StrongholdOfTheFaithful
         {
             var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "McLeod Wargs");
             phase.AddTargets(mcLeodWargs);
+            phase.AddParentPhase(preEventPhase);
             phase.OverrideTimes(log);
             phases.Add(phase);
         }

@@ -192,13 +192,13 @@ public class PhaseData
         }
     }
 
-    internal PhaseData WithParentPhase(PhaseData phase)
+    internal PhaseData WithParentPhase(PhaseData? phase)
     {
         AddParentPhase(phase);
         return this;
     }
 
-    internal void AddParentPhase(PhaseData phase)
+    internal void AddParentPhase(PhaseData? phase)
     {
         if (phase != null)
         {
@@ -206,13 +206,13 @@ public class PhaseData
         }
     }
 
-    internal PhaseData WithParentPhases(IEnumerable<PhaseData> phases)
+    internal PhaseData WithParentPhases(IEnumerable<PhaseData?> phases)
     {
         AddParentPhases(phases);
         return this;
     }
 
-    internal void AddParentPhases(IEnumerable<PhaseData> phases)
+    internal void AddParentPhases(IEnumerable<PhaseData?> phases)
     {
         foreach (var phase in phases)
         {
