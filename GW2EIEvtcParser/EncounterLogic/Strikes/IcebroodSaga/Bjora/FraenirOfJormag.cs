@@ -81,13 +81,14 @@ internal class FraenirOfJormag : Bjora
         if (invulApplyFraenir != null)
         {
             // split happened
-            phases.Add(new PhaseData(0, invulApplyFraenir.Time, "Fraenir 100-75%"));
+            phases.Add(new PhaseData(0, invulApplyFraenir.Time, "Fraenir 100-75%").WithParentPhase(phases[0]));
             if (icebrood != null)
             {
                 // icebrood enters combat
                 EnterCombatEvent? enterCombatIce = log.CombatData.GetEnterCombatEvents(icebrood.AgentItem).LastOrDefault();
                 if (enterCombatIce != null)
                 {
+                    var icebroodPhases = new List<PhaseData>(2);
                     // icebrood phasing
                     BuffEvent? invulApplyIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
                     BuffEvent? invulRemoveIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
@@ -97,6 +98,7 @@ internal class FraenirOfJormag : Bjora
                     {
                         long icebrood2Start = invulRemoveIce.Time;
                         phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
+                        icebroodPhases.Add(phases[^1]);
                         BuffEvent? invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                         if (invulRemoveFraenir != null)
                         {
@@ -110,11 +112,16 @@ internal class FraenirOfJormag : Bjora
                             {
                                 icebroodEnd = invulRemoveFraenir.Time - 1;
                             }
-                            phases.Add(new PhaseData(invulRemoveFraenir.Time, log.FightData.FightEnd, "Fraenir 25-0%"));
+                            phases.Add(new PhaseData(invulRemoveFraenir.Time, log.FightData.FightEnd, "Fraenir 25-0%").WithParentPhase(phases[0]));
                         }
                         phases.Add(new PhaseData(icebrood2Start, icebroodEnd, "Damaged Construct & Fraenir"));
+                        icebroodPhases.Add(phases[^1]);
                     }
-                    phases.Add(new PhaseData(icebroodStart, icebroodEnd, "Icebrood Construct"));
+                    phases.Add(new PhaseData(icebroodStart, icebroodEnd, "Icebrood Construct").WithParentPhase(phases[0]));
+                    foreach (var icebroodPhase in icebroodPhases)
+                    {
+                        icebroodPhase.AddParentPhase(phases[^1]);
+                    }
                 }
             }
         }

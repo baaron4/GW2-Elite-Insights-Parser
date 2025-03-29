@@ -265,10 +265,12 @@ internal class DecimaTheStormsinger : MountBalrior
         }
         // Invul check
         phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true));
+        List<PhaseData> mainPhases = new List<PhaseData>(3);
         var currentMainPhase = 1;
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (currentMainPhase++);
@@ -290,6 +292,7 @@ internal class DecimaTheStormsinger : MountBalrior
             }
             else if (i % 2 == 1)
             {
+                mainPhases.Add(phase);
                 phase.Name = "Phase " + (currentMainPhase);
                 phase.AddTarget(decima);
             }
@@ -301,12 +304,14 @@ internal class DecimaTheStormsinger : MountBalrior
             if (finalSeismicJumpEvent != null)
             {
                 var preFinalPhase = new PhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
+                preFinalPhase.AddParentPhases(mainPhases);
                 preFinalPhase.AddTarget(Decima);
                 phases.Add(preFinalPhase);
                 var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllData(SeismicRepositionInvul).FirstOrDefault(x => x.To == decima.AgentItem);
                 if (finalPhaseStartEvent != null)
                 {
                     var finalPhase = new PhaseData(finalPhaseStartEvent.Time, log.FightData.FightEnd, "10% - 0%");
+                    finalPhase.AddParentPhases(mainPhases);
                     finalPhase.AddTarget(Decima);
                     phases.Add(finalPhase);
                 }
@@ -316,11 +321,11 @@ internal class DecimaTheStormsinger : MountBalrior
             var firstBoulders = boulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {
-                phases.Add(GetBoulderPhase(log, firstBoulders, "Boulders 1", decima));
+                phases.Add(GetBoulderPhase(log, firstBoulders, "Boulders 1", decima).WithParentPhases(mainPhases));
                 var secondBoulders = boulders.Take(new Range(2, 4));
                 if (secondBoulders.Any())
                 {
-                    phases.Add(GetBoulderPhase(log, secondBoulders, "Boulders 2", decima));
+                    phases.Add(GetBoulderPhase(log, secondBoulders, "Boulders 2", decima).WithParentPhases(mainPhases));
                 }
             }
         }

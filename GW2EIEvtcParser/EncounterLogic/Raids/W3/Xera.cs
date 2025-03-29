@@ -109,13 +109,15 @@ internal class Xera : StrongholdOfTheFaithful
         phases[0].AddTarget(mainTarget);
         if (requirePhases)
         {
+            PhaseData? phase100to0 = null;
             if (_xeraFirstPhaseStart > 0)
             {
                 var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
+                phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)));
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
                 phases.Add(phasePreEvent);
-                var phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddTarget(mainTarget);
                 phases.Add(phase100to0);
             }
@@ -124,6 +126,11 @@ internal class Xera : StrongholdOfTheFaithful
             if (invulXera != null)
             {
                 var phase1 = new PhaseData(_xeraFirstPhaseStart, invulXera.Time, "Phase 1");
+                phase1.AddParentPhase(phases[0]);
+                if (phase100to0 != null)
+                {
+                    phase1.AddParentPhase(phase100to0);
+                }
                 phase1.AddTarget(mainTarget);
                 phases.Add(phase1);
 
@@ -135,6 +142,11 @@ internal class Xera : StrongholdOfTheFaithful
                 if (_xeraSecondPhaseStartTime > 0)
                 {
                     var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
+                    phase2.AddParentPhase(phases[0]);
+                    if (phase100to0 != null)
+                    {
+                        phase2.AddParentPhase(phase100to0);
+                    }
                     phase2.AddTarget(mainTarget);
                     phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)));
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);

@@ -230,17 +230,21 @@ internal class GreerTheBlightbringer : MountBalrior
         }
         // In shield bubble phases
         phases.AddRange(GetPhasesByCast(log, InvulnerableBarrier, greer, true, true));
+        var mainPhases = new List<PhaseData>(3);
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
+                phase.AddParentPhase(phases[0]);
                 phase.AddTargets(subTitans);
                 phase.AddTarget(ereg, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
+                mainPhases.Add(phase);
+                phase.AddParentPhase(phases[0]);
                 phase.Name = "Phase " + (i + 1) / 2;
                 AddMainTitansToPhase(phase, greer, subTitans, ereg);
             }
@@ -249,6 +253,7 @@ internal class GreerTheBlightbringer : MountBalrior
         var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true);
         foreach (var damageImmunityPhase in damageImmunityPhases)
         {
+            damageImmunityPhase.AddParentPhases(mainPhases);
             var currentMainPhase = phases.LastOrDefault(x => x.Start <= damageImmunityPhase.Start && x.Name.Contains("Phase"));
             var hpAtStart = greer.GetCurrentHealthPercent(log, damageImmunityPhase.Start);
             if (currentMainPhase != null)
@@ -290,6 +295,7 @@ internal class GreerTheBlightbringer : MountBalrior
             if (finalPhases.Count > 0)
             {
                 var p20Percent10PercentPhase = finalPhases[0];
+                p20Percent10PercentPhase.AddParentPhase(finalHPPhase);
                 p20Percent10PercentPhase.OverrideStart(finalHPPhase.Start);
                 p20Percent10PercentPhase.Name = "20% - 10%";
                 AddMainTitansToPhase(p20Percent10PercentPhase, greer, subTitans, ereg);
@@ -299,6 +305,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 for (var i = 1; i < finalPhases.Count; i++)
                 {
                     var phase = finalPhases[i];
+                    phase.AddParentPhase(finalHPPhase);
                     if (i % 2 == 1)
                     {
                         phase.Name = "Proto Greer " + (++protoPhases);

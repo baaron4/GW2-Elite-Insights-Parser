@@ -309,6 +309,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             string name;
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             if (i % 2 == 1)
             {
                 name = "Arm Phase " + (++armPhase);

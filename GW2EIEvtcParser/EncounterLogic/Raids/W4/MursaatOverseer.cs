@@ -78,6 +78,10 @@ internal class MursaatOverseer : BastionOfThePenitent
             return phases;
         }
         phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, new List<double> { 75, 50, 25, 0 }));
+        for (var i = 1; i < phases.Count; i++)
+        {
+            phases[i].AddParentPhase(phases[0]);
+        }
         return phases;
     }
 

@@ -112,6 +112,14 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
+    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        return [
+            TargetID.EntropicDistortion,
+            TargetID.PeerlessQadimPylon
+        ];
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -167,6 +175,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         for (int i = 0; i < phaseStarts.Count; i++)
         {
             var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             phases.Add(phase);
         }
@@ -185,6 +194,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         for (int i = 0; i < phaseEnds.Count - 1; i++)
         {
             var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.FightData.FightEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             phases.Add(phase);
         }
@@ -322,27 +332,43 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 }
                 break;
             case (int)TargetID.EntropicDistortion:
-                // Sapping Surge, bad red tether
-                AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
-
-                // Stun icon
-                IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                replay.Decorations.AddOverheadIcons(stuns, target, BuffImages.Stun);
-
-                // Spawn animation
-                if (replay.PolledPositions.Count > 0)
                 {
-                    uint radiusAnomaly = target.HitboxWidth / 2;
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                    // Sapping Surge, bad red tether
+                    AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
+
+                    // Stun icon
+                    IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                    replay.Decorations.AddOverheadIcons(stuns, target, BuffImages.Stun);
+
+                    // Spawn animation
+                    if (replay.PolledPositions.Count > 0)
+                    {
+                        uint radiusAnomaly = target.HitboxWidth / 2;
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                    }
+                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                    var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                    foreach (var segment in breakbarActives)
+                    {
+                        replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                    }
                 }
                 break;
             case (int)TargetID.BigKillerTornado:
                 replay.Decorations.Add(new CircleDecoration(450, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
             case (int)TargetID.PeerlessQadimPylon:
-                // Red tether from Qadim to the Pylon during breakbar
-                var breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
-                replay.Decorations.AddTether(breakbarBuffs, Colors.Red, 0.4);
+                {
+                    // Red tether from Qadim to the Pylon during breakbar
+                    var breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
+                    replay.Decorations.AddTether(breakbarBuffs, Colors.Red, 0.4);
+                    var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                    var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                    foreach (var segment in breakbarActives)
+                    {
+                        replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                    }
+                }
                 break;
             case (int)TargetID.PeerlessQadimAuraPylon:
                 break;

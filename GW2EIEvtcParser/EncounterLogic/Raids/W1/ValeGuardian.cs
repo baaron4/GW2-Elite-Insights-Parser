@@ -112,6 +112,7 @@ internal class ValeGuardian : SpiritVale
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;

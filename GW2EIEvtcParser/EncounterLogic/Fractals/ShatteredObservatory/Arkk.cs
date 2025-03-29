@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -134,6 +135,7 @@ internal class Arkk : ShatteredObservatory
         var phaseData = new PhaseData(Math.Max(target.FirstAware, log.FightData.FightStart), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
         AddTargetsToPhaseAndFit(phaseData, [targetID], log);
         phases.Add(phaseData);
+        phaseData.AddParentPhase(phases[0]);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -150,6 +152,7 @@ internal class Arkk : ShatteredObservatory
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = "Phase " + i;
+            phases[i].AddParentPhase(phases[0]);
             phases[i].AddTarget(arkk);
         }
 
@@ -176,6 +179,7 @@ internal class Arkk : ShatteredObservatory
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
+            phase.AddParentPhase(phases[0]);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk);
             BuffEvent? invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
@@ -185,12 +189,9 @@ internal class Arkk : ShatteredObservatory
 
         // Add anomalies as secondary target to the phases
         var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
-        foreach (PhaseData phase in phases)
+        for (int i = 1; i < phases.Count; i++)
         {
-            if (phase.CanBeSubPhase)
-            {
-                phase.AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
-            }
+            phases[i].AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
         }
 
         return phases;

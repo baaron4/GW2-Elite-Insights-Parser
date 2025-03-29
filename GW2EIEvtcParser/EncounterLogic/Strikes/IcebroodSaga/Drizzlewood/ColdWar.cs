@@ -47,6 +47,7 @@ internal class ColdWar : IcebroodSagaStrike
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].AddTarget(varinia);
+            phases[i].AddParentPhase(phases[0]);
         }
         return phases;
     }

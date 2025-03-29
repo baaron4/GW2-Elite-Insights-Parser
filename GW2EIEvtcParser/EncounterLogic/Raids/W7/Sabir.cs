@@ -121,6 +121,7 @@ internal class Sabir : TheKeyOfAhdashim
         foreach (var wallopingWind in wallopingWinds)
         {
             var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             phases.Add(phase);
             CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
@@ -135,6 +136,7 @@ internal class Sabir : TheKeyOfAhdashim
         if (i > 0)
         {
             var phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1));
+            phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget);
             phases.Add(phase);
         }

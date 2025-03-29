@@ -271,6 +271,7 @@ internal class Adina : TheKeyOfAhdashim
                 if (i == invuls.Count - 1)
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
+                    splitPhase.AddParentPhase(phases[0]);
                     splitPhaseEnds.Add(log.FightData.FightEnd);
                     AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
@@ -280,6 +281,7 @@ internal class Adina : TheKeyOfAhdashim
             {
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
+                splitPhase.AddParentPhase(phases[0]);
                 splitPhaseEnds.Add(end);
                 AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
@@ -331,6 +333,7 @@ internal class Adina : TheKeyOfAhdashim
         foreach (PhaseData phase in mainPhases)
         {
             phase.AddTarget(adina);
+            phase.AddParentPhase(phases[0]);
             phase.AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)), PhaseData.TargetPriority.NonBlocking);
         }
         phases.AddRange(mainPhases);

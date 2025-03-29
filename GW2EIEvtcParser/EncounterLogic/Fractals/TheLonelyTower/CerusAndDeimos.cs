@@ -97,10 +97,7 @@ internal class CerusAndDeimos : LonelyTower
     {
         BuffApplyEvent? determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
-        var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName)
-        {
-            CanBeSubPhase = false
-        };
+        var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName);
         bossPhase.AddTarget(target);
         return bossPhase;
     }
@@ -118,6 +115,10 @@ internal class CerusAndDeimos : LonelyTower
         }
         phases.Add(GetBossPhase(log, cerus, "Cerus"));
         phases.Add(GetBossPhase(log, deimos, "Deimos"));
+        for (var i = 1; i < phases.Count; i++)
+        {
+            phases[i].AddParentPhase(phases[0]);
+        }
         return phases;
     }
 

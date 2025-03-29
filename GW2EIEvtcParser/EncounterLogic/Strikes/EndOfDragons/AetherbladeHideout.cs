@@ -570,13 +570,15 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 {
                     maiTrinStart = buffRemove.Time;
                 }
-                var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
-                mainPhase.AddTarget(maiTrin);
-                phases.Add(mainPhase);
+                var maiTrinPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
+                maiTrinPhase.AddParentPhase(phases[0]);
+                maiTrinPhase.AddTarget(maiTrin);
+                phases.Add(maiTrinPhase);
                 List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
+                    subPhase.AddParentPhase(maiTrinPhase);
                     if ((i % 2) == 0)
                     {
                         subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
@@ -585,7 +587,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     else
                     {
                         subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
-                        AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM]);
+                        AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar]);
                     }
                 }
                 phases.AddRange(maiPhases);
@@ -594,22 +596,63 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         if (echoOfScarlet != null)
         {
             long echoStart = echoOfScarlet.FirstAware + 10000;
-            var phase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
-            phase.AddTarget(echoOfScarlet);
-            phases.Add(phase);
-            List<PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
+            var echoPhase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
+            echoPhase.AddParentPhase(phases[0]);
+            echoPhase.AddTarget(echoOfScarlet);
+            phases.Add(echoPhase);
+            var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2]));
+            var bombs = Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb));
+            List <PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
             for (int i = 0; i < echoPhases.Count; i++)
             {
                 PhaseData subPhase = echoPhases[i];
+                subPhase.AddParentPhase(echoPhase);
                 if ((i % 2) == 0)
                 {
-                    subPhase.Name = "Echo Phase " + ((i / 2) + 1);
+                    var phaseID = ((i / 2) + 1);
+                    subPhase.Name = "Echo Phase " + phaseID;
                     subPhase.AddTarget(echoOfScarlet);
+                    if (beamNPCs.Any(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware))) 
+                    {
+                        var prePuzzleStart = subPhase.Start;
+                        var prePuzzleEnd = beamNPCs.Where(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware)).Min(x => x.FirstAware);
+                        var prePuzzlePhase = new PhaseData(prePuzzleStart, prePuzzleEnd, "Pre-Puzzle Phase " + (phaseID - 1));
+                        prePuzzlePhase.AddParentPhase(subPhase);
+                        prePuzzlePhase.AddTarget(echoOfScarlet);
+                        phases.Add(prePuzzlePhase);
+                        long puzzleStart = prePuzzleEnd;
+                        long puzzleEnd;
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutPuzzleCirclesDetonation, out var circlesDetonations))
+                        {
+                            if (circlesDetonations.Any(x => subPhase.InInterval(x.Time)))
+                            {
+                                puzzleEnd = circlesDetonations.First(x => subPhase.InInterval(x.Time)).Time;
+                                var postPuzzleStart = puzzleEnd;
+                                var postPuzzleEnd = subPhase.End;
+                                var postPuzzlePhase = new PhaseData(postPuzzleStart, postPuzzleEnd, "Post-Puzzle Phase " + (phaseID - 1));
+                                postPuzzlePhase.AddParentPhase(subPhase);
+                                postPuzzlePhase.AddTarget(echoOfScarlet);
+                                phases.Add(postPuzzlePhase);
+                            } 
+                            else
+                            {
+                                puzzleEnd = subPhase.End;
+                            }
+                        } 
+                        else
+                        {
+                            puzzleEnd = subPhase.End;
+                        }
+                        var puzzlePhase = new PhaseData(puzzleStart, puzzleEnd, "Puzzle Phase " + (phaseID - 1));
+                        puzzlePhase.AddParentPhase(subPhase);
+                        puzzlePhase.AddTargets(bombs);
+                        phases.Add(puzzlePhase);
+                    }
                 }
                 else
                 {
                     subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
-                    AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM]);
+                    AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar]);
                 }
             }
             phases.AddRange(echoPhases);

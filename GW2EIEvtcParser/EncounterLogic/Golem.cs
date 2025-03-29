@@ -133,15 +133,17 @@ internal class Golem : FightLogic
                 HealthUpdateEvent? hpUpdate = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[j]);
                 if (hpUpdate != null)
                 {
-                    var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j])
-                    {
-                        CanBeSubPhase = false
-                    };
+                    var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j]);
                     phase.AddTarget(mainTarget);
                     phases.Add(phase);
                 }
             }
-            phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
+            var subPhases = GetPhasesByHealthPercent(log, mainTarget, thresholds);
+            foreach (var subPhase in subPhases)
+            {
+                subPhase.AddParentPhases(phases);
+            }
+            phases.AddRange(subPhases);
         }
         AgentItem? pov = log.LogData.PoV;
         if (pov != null)
@@ -151,10 +153,7 @@ internal class Golem : FightLogic
             ExitCombatEvent? firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
             if (firstExitCombat != null && (log.FightData.FightEnd - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
             {
-                var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
-                {
-                    CanBeSubPhase = false
-                };
+                var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase));
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }
@@ -162,10 +161,7 @@ internal class Golem : FightLogic
             {
                 ExitCombatEvent? exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                 long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
-                var phase = new PhaseData(Math.Max(ece.Time, log.FightData.FightStart), Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase))
-                {
-                    CanBeSubPhase = false
-                };
+                var phase = new PhaseData(Math.Max(ece.Time, log.FightData.FightStart), Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase));
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
             }

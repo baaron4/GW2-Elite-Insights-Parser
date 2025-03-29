@@ -87,6 +87,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             if (i % 2 == 1)
             {
                 phase.Name = "Phase " + (i + 1) / 2;
