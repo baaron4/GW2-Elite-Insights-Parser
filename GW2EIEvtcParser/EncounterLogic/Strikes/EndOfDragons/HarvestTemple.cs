@@ -153,9 +153,9 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        var subPhasesData = new List<(long start, long end, string name, NPC target, bool canBeSubPhase)>();
-        var giants = new List<NPC>();
-        foreach (NPC target in Targets)
+        var subPhasesData = new List<(long start, long end, string name, SingleActor target, string? subPhaseOf)>();
+        var giants = new List<SingleActor>();
+        foreach (SingleActor target in Targets)
         {
             long phaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
             long phaseStart = Math.Max(target.FirstAware, log.FightData.FightStart);
@@ -168,30 +168,36 @@ internal class HarvestTemple : EndOfDragonsStrike
                     giants.Add(target);
                     break;
                 case (int)TargetID.VoidSaltsprayDragon:
+                    subPhasesData.Add((phaseStart, phaseEnd, "Void Saltspray Dragon", target, null));
+                    break;
                 case (int)TargetID.VoidTimeCaster:
+                    subPhasesData.Add((phaseStart, phaseEnd, "Void Time Caster", target, null));
+                    break;
                 case (int)TargetID.VoidObliterator:
+                    subPhasesData.Add((phaseStart, phaseEnd, "Void Obliterator", target, null));
+                    break;
                 case (int)TargetID.VoidGoliath:
-                    subPhasesData.Add((phaseStart, phaseEnd, target.Character, target, false));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Void Goliath", target, null));
                     break;
                 case (int)TargetID.TheDragonVoidJormag:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Jormag", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Jormag", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidKralkatorrik:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Kralkatorrik", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Kralkatorrik", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidMordremoth:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Mordremoth", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Mordremoth", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidPrimordus:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Primordus", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Primordus", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
@@ -208,13 +214,13 @@ internal class HarvestTemple : EndOfDragonsStrike
                             {
                                 end = targetOff.Time;
                             }
-                            subPhasesData.Add((start, end, "Soo-Won " + (++id), target, true));
+                            subPhasesData.Add((start, end, "Soo-Won " + (++id), target, "Soo-Won"));
                         }
                     }
                     break;
                 case (int)TargetID.TheDragonVoidZhaitan:
                     phases[0].AddTarget(target);
-                    subPhasesData.Add((phaseStart, phaseEnd, "Zhaitan", target, true));
+                    subPhasesData.Add((phaseStart, phaseEnd, "Zhaitan", target, "Full Fight"));
                     break;
             }
         }
@@ -232,35 +238,63 @@ internal class HarvestTemple : EndOfDragonsStrike
                 start = Math.Min(start, giant.FirstAware);
                 end = Math.Max(end, giant.LastAware);
             }
-            var subPhase = new PhaseData(start, end, "Giants")
-            {
-                CanBeSubPhase = false
-            };
+            var subPhase = new PhaseData(start, end, "Giants");
             subPhase.AddTargets(giants);
             subPhase.OverrideEndTime(log);
             phases.Add(subPhase);
         }
         var subPhaseNonBlockings = Targets.Where(x => x.IsSpecies(TargetID.VoidGoliath) || x.IsSpecies(TargetID.VoidObliterator) || x.IsSpecies(TargetID.VoidGiant));
-        foreach ((long start, long end, string name, NPC target, bool canBeSubPhase) in subPhasesData)
+        foreach ((long start, long end, string name, SingleActor target, string? subPhaseOf) in subPhasesData)
         {
-            var subPhase = new PhaseData(start, end, name)
-            {
-                CanBeSubPhase = canBeSubPhase
-            };
+            var subPhase = new PhaseData(start, end, name);
             subPhase.AddTarget(target);
             subPhase.OverrideEndTime(log);
             subPhase.AddTargets(subPhaseNonBlockings, PhaseData.TargetPriority.NonBlocking);
+            if (subPhaseOf != null)
+            {
+                subPhase.AddParentPhase(phases.FirstOrDefault(x => x.Name == subPhaseOf));
+            }
             phases.Add(subPhase);
         }
         int purificationID = 0;
         var purificationNonBlockings = Targets.Where(x => x.IsSpecies(TargetID.VoidTimeCaster) || x.IsSpecies(TargetID.VoidSaltsprayDragon));
-        foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)))
+        foreach (SingleActor voidAmal in Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)))
         {
             var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), voidAmal.LastAware, "Purification " + (++purificationID));
             purificationPhase.AddTarget(voidAmal);
             purificationPhase.OverrideEndTime(log);
             purificationPhase.AddTargets(purificationNonBlockings, PhaseData.TargetPriority.NonBlocking);
             phases.Add(purificationPhase);
+            if (voidAmal.IsSpecies(TargetID.PushableVoidAmalgamate))
+            {
+                purificationPhase.AddParentPhase(phases.FirstOrDefault(x => x.Name == "Full Fight"));
+                if (purificationPhase.Targets.Keys.Any(x => x.IsSpecies(TargetID.VoidTimeCaster)))
+                {
+                    var voidTimeCasterPhase = phases.FirstOrDefault(x => x.Name == "Void Time Caster");
+                    if (voidTimeCasterPhase != null)
+                    {
+                        voidTimeCasterPhase.OverrideStart(Math.Max(voidTimeCasterPhase.Start, purificationPhase.Start));
+                        voidTimeCasterPhase.OverrideEnd(Math.Min(voidTimeCasterPhase.End, purificationPhase.End));
+                        voidTimeCasterPhase.AddParentPhase(purificationPhase);
+                    }
+                } 
+                else if (purificationPhase.Targets.Keys.Any(x => x.IsSpecies(TargetID.VoidSaltsprayDragon)))
+                {
+                    var voidSaltsprayDragonPhase = phases.FirstOrDefault(x => x.Name == "Void Saltspray Dragon");
+                    if (voidSaltsprayDragonPhase != null)
+                    {
+                        voidSaltsprayDragonPhase.OverrideStart(Math.Max(voidSaltsprayDragonPhase.Start, purificationPhase.Start));
+                        voidSaltsprayDragonPhase.OverrideEnd(Math.Min(voidSaltsprayDragonPhase.End, purificationPhase.End));
+                        voidSaltsprayDragonPhase.AddParentPhase(purificationPhase);
+                    }
+                }
+            } 
+            else
+            {
+                var sooWonPhase = phases.FirstOrDefault(x => x.Name == "Soo-Won");
+                purificationPhase.AddParentPhase(sooWonPhase);
+                sooWonPhase?.AddTarget(voidAmal, PhaseData.TargetPriority.Blocking);
+            }
         }
         return phases;
     }

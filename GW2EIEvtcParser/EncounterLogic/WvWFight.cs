@@ -57,11 +57,7 @@ internal class WvWFight : FightLogic
         }
         if (_detailed)
         {
-            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End)
-            {
-                Name = "Detailed Full Fight",
-                CanBeSubPhase = false
-            };
+            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, "Detailed Full Fight");
             detailedPhase.AddTargets(Targets);
             if (detailedPhase.Targets.Any())
             {

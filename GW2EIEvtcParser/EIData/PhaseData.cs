@@ -15,7 +15,7 @@ public class PhaseData
     public bool DrawEnd { get; internal set; } = true;
     public bool DrawArea { get; internal set; } = true;
     public bool DrawLabel { get; internal set; } = true;
-    public bool CanBeSubPhase { get; internal set; } = true;
+    private readonly HashSet<PhaseData> CanBeSubPhaseOf = [];
 
     public bool BreakbarPhase { get; internal set; } = false;
 
@@ -190,5 +190,38 @@ public class PhaseData
             }
             OverrideEnd(Math.Min(Math.Min(End, end), log.FightData.FightEnd));
         }
+    }
+
+    internal PhaseData WithParentPhase(PhaseData? phase)
+    {
+        AddParentPhase(phase);
+        return this;
+    }
+
+    internal void AddParentPhase(PhaseData? phase)
+    {
+        if (phase != null)
+        {
+            CanBeSubPhaseOf.Add(phase);
+        }
+    }
+
+    internal PhaseData WithParentPhases(IEnumerable<PhaseData?> phases)
+    {
+        AddParentPhases(phases);
+        return this;
+    }
+
+    internal void AddParentPhases(IEnumerable<PhaseData?> phases)
+    {
+        foreach (var phase in phases)
+        {
+            AddParentPhase(phase);
+        }
+    }
+
+    public bool CanBeASubPhaseOf(PhaseData phase)
+    {
+        return CanBeSubPhaseOf.Contains(phase);
     }
 }

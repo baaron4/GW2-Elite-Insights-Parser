@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -12,6 +13,11 @@ internal abstract class StoryInstance : FightLogic
         EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
         EncounterID |= EncounterIDs.EncounterMasks.StoryInstanceMask;
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.Story;
+    }
+
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         return GetGenericFightOffset(fightData);

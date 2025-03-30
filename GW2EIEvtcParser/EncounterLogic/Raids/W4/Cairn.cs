@@ -87,12 +87,14 @@ internal class Cairn : BastionOfThePenitent
                 Name = "Calm"
             };
             normalPhase.AddTarget(cairn);
+            normalPhase.AddParentPhase(phases[0]);
 
             var enragePhase = new PhaseData(enrageApply.Time, log.FightData.FightEnd)
             {
                 Name = "Angry"
             };
             enragePhase.AddTarget(cairn);
+            enragePhase.AddParentPhase(phases[0]);
 
             phases.Add(normalPhase);
             phases.Add(enragePhase);

@@ -195,7 +195,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
     }
 
-    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName)
+    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, PhaseData fullFightPhase)
     {
         DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
         long end = log.FightData.FightEnd;
@@ -236,6 +236,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         for (int i = 0; i < subPhases.Count; i++)
         {
             subPhases[i].Name = phaseNames[i];
+            subPhases[i].AddParentPhase(fullFightPhase);
             subPhases[i].AddTarget(target);
         }
         return subPhases;
@@ -281,7 +282,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             phases[0].AddTarget(vermilion);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion"));
+                phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", phases[0]));
             }
         }
         SingleActor? indigo = Indigo();
@@ -290,7 +291,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             phases[0].AddTarget(indigo);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(indigo, log, "Indigo"));
+                phases.AddRange(GetSubPhases(indigo, log, "Indigo", phases[0]));
             }
         }
         SingleActor? arsenite = Arsenite();
@@ -299,7 +300,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             phases[0].AddTarget(arsenite);
             if (canComputePhases)
             {
-                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite"));
+                phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", phases[0]));
             }
         }
         return phases;

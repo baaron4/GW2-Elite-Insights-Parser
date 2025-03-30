@@ -232,6 +232,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
@@ -254,7 +255,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         CastEvent? enragedSmash = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
         if (enragedSmash != null)
         {
+            var finalPhase = phases[^1];
             var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
+            phase.AddParentPhase(finalPhase);
             phase.AddTarget(cerus);
             phases.Add(phase);
             // Sub Phase for 50%-10%
@@ -262,6 +265,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             if (phase3 != null)
             {
                 var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
+                phase50_10.AddParentPhase(finalPhase);
                 phase50_10.AddTarget(cerus);
                 phases.Add(phase50_10);
             }

@@ -83,7 +83,10 @@ internal class SooWon : OpenWorldLogic
 
         int phaseOffset = GetPhaseOffset(log, mainTarget);
         InitPhases(phases, mainTarget, tailTarget, phaseOffset);
-
+        for (int i = 1; i < phases.Count; i++)
+        {
+            phases[i].AddParentPhase(phases[0]);
+        }
         return phases;
     }
 

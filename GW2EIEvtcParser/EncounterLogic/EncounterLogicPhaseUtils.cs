@@ -143,9 +143,6 @@ internal static class EncounterLogicPhaseUtils
         return
         [
             new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
-            {
-                CanBeSubPhase = false
-            }
         ];
     }
 }

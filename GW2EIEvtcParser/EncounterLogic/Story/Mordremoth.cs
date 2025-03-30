@@ -47,6 +47,7 @@ internal class Mordremoth : StoryInstance
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
             phase.Name = "Phase " + i;
             phase.AddTarget(mainTarget);
         }

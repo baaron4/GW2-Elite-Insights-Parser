@@ -165,7 +165,7 @@ internal class Matthias : SalvationPass
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = namesMat[i - 1];
-            phases[i].DrawStart = i > 1;
+            phases[i].AddParentPhase(phases[0]);
             phases[i].AddTarget(mainTarget);
         }
         return phases;
