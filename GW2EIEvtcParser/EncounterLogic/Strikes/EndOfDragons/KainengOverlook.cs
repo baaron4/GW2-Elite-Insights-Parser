@@ -184,6 +184,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets);
+                addPhase.AddParentPhase(phases[0]);
                 phases.Add(addPhase);
             }
         }
@@ -220,6 +221,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         {
             subPhases[i].Name = "Phase " + (i + 1);
             subPhases[i].AddTarget(ministerLi);
+            subPhases[i].AddParentPhase(phases[0]);
         }
         // when wiped during a split phase, Li's LastAware is well before fight end
         subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ServerDelayConstant);
