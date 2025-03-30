@@ -117,7 +117,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 start = c.Time;
             }
         }
-        if (fightEnd - start > PhaseTimeLimit && start >= mainPhases.Last().End)
+        if (fightEnd - start > PhaseTimeLimit && (mainPhases.Count == 0 || start >= mainPhases.Last().End))
         {
             mainPhases.Add(new PhaseData(start, fightEnd));
             start = fightEnd;
