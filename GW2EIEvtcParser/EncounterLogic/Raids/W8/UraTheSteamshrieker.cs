@@ -271,10 +271,10 @@ internal class UraTheSteamshrieker : MountBalrior
         before70.AddTarget(ura);
         phases.Add(before70);
         // 70-40
-        if (hp70.Value > 0)
+        if (!hp70.IsEmpty())
         {
             // 40 - 1 CM / 40 - 0 NM
-            if (hp40.Value > 0)
+            if (!hp40.IsEmpty())
             {
                 var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
                 after70before40.AddTarget(ura);
