@@ -571,6 +571,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Count " + cbtItemCount);
         int discardedCbtEvents = 0;
         bool keepOnlyExtensionEvents = false;
+        bool stopAtLogEnd = _id != (int)TargetID.Instance;
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
@@ -611,7 +612,7 @@ public class EvtcParser
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == StateChange.SquadCombatEnd)
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd )
             {
                 keepOnlyExtensionEvents = true;
             }

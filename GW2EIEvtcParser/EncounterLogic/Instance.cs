@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -25,11 +26,13 @@ internal class Instance : FightLogic
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
-    private void FillSubLogics(AgentData agentData)
+    private void FillSubLogics(AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var allTargetIDs = Enum.GetValues(typeof(TargetID));
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
         var blackList = new HashSet<TargetID>()
         {
+            TargetID.Environment,
             TargetID.Artsariiv,
             TargetID.Deimos,
             TargetID.ConjuredAmalgamate,
@@ -42,7 +45,7 @@ internal class Instance : FightLogic
             //TODO(Rennorb) @perf: invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
             if (agentData.GetNPCsByID(targetID).Any())
             {
-                if (blackList.Contains(targetID))
+                if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 500000))
                 {
                     continue;
                 }
@@ -78,7 +81,7 @@ internal class Instance : FightLogic
         List<PhaseData> phases = GetInitialPhase(log);
         phases[0].AddTargets(Targets);
         int phaseCount = 0;
-        foreach (NPC target in Targets)
+        foreach (SingleActor target in Targets)
         {
             var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
             phase.AddTarget(target);
@@ -89,7 +92,7 @@ internal class Instance : FightLogic
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FillSubLogics(agentData);
+        FillSubLogics(agentData, combatData);
         foreach (FightLogic logic in _subLogics)
         {
             logic.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
