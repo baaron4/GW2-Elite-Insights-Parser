@@ -273,25 +273,31 @@ internal class UraTheSteamshrieker : MountBalrior
         // 70-40
         if (hp70.Value > 0)
         {
-            var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
-            after70before40.AddTarget(ura);
-            phases.Add(after70before40);
             // 40 - 1 CM / 40 - 0 NM
             if (hp40.Value > 0)
             {
+                var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
+                after70before40.AddTarget(ura);
+                phases.Add(after70before40);
+
                 var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
                 after40.AddTarget(ura);
                 phases.Add(after40);
+
                 var after70 = new PhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
                 after70.AddParentPhase(parentPhase);
-                after40.AddParentPhase(after70);
-                after70before40.AddParentPhase(after70);
                 after70.AddTarget(ura);
                 phases.Add(after70);
+
+                after70before40.AddParentPhase(after70);
+                after40.AddParentPhase(after70);
             } 
             else
             {
-                after70before40.AddParentPhase(parentPhase);
+                var after70 = new PhaseData(hp70.Start, end, "70% - 40%");
+                after70.AddTarget(ura);
+                phases.Add(after70);
+                after70.AddParentPhase(parentPhase);
             }
         } 
 
