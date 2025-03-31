@@ -5,7 +5,7 @@
         <LangVersion>12.0</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Version>0.61.0</Version>
+        <Version>0.62.0</Version>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
     </PropertyGroup>
 
