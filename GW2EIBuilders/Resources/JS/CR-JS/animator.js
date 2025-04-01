@@ -162,6 +162,10 @@ class RenderablesBranch {
             this.right.draw(drawFunction);
         }
     }
+
+    any()  {
+        return this.renderables.length > 0 || this.left || this.right;
+    }
 }
 
 class RenderablesRoot extends RenderablesBranch{

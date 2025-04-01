@@ -121,10 +121,10 @@
         template: `${template}`,
         data: function() {
             return {
-                showSkills: animator.skillMechanicActorData.length > 0,
-                showMechanics: animator.overheadActorData.length + animator.mechanicActorData.length > 0,
-                showSquadMarkers: animator.squadMarkerData.length + animator.overheadSquadMarkerData.length > 0,
-                showSecondaryNPCs: animator.trashMobData.size > 0,
+                showSkills: animator.skillMechanicActorData.any(),
+                showMechanics: animator.overheadActorData.any() || animator.mechanicActorData.any(),
+                showSquadMarkers: animator.squadMarkerData.any() || animator.overheadSquadMarkerData.any(),
+                showSecondaryNPCs: animator.trashMobData.any(),
             };
         },
         methods: {
