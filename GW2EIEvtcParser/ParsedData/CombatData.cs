@@ -811,6 +811,11 @@ public class CombatData
         return _metaDataEvents.LogStartEvent;
     }
 
+    public IReadOnlyList<LogStartEvent> GetLogStartEvents()
+    {
+        return _metaDataEvents.LogStartEvents;
+    }
+
     public IReadOnlyList<LogNPCUpdateEvent> GetLogNPCUpdateEvents()
     {
         return _metaDataEvents.LogNPCUpdateEvents;
@@ -819,6 +824,10 @@ public class CombatData
     public LogEndEvent? GetLogEndEvent()
     {
         return _metaDataEvents.LogEndEvent;
+    }
+    public IReadOnlyList<LogEndEvent> GetLogEndEvents()
+    {
+        return _metaDataEvents.LogEndEvents;
     }
 
     public IReadOnlyList<MapIDEvent> GetMapIDEvents()

@@ -30,6 +30,7 @@ public static class ArcDPSEnums
         public const int MovementSkillDetection = 20240709;
         public const int EICanDoManualBuffAttributes = 20240716;
         public const int ExtraDataInGUIDEvents = 20241030;
+        public const int LogStartLogEndPerCombatSequenceOnInstanceLogs = 20250315;
         //
         public const int EndOfLife = int.MaxValue;
     }

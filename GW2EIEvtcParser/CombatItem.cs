@@ -137,6 +137,8 @@ public class CombatItem
             || IsStateChange == StateChange.TickRate
             || IsStateChange == StateChange.SquadMarker
             || IsStateChange == StateChange.InstanceStart
+            || IsStateChange == StateChange.SquadCombatStart
+            || IsStateChange == StateChange.SquadCombatEnd
             ;
     }
 

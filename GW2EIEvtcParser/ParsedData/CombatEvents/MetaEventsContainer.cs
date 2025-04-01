@@ -7,6 +7,8 @@ internal class MetaEventsContainer
     public LanguageEvent? LanguageEvent { get; set; }
     public LogEndEvent? LogEndEvent { get; set; }
     public LogStartEvent? LogStartEvent { get; set; }
+    public List<LogEndEvent> LogEndEvents { get; } = [];
+    public List<LogStartEvent> LogStartEvents { get; } = [];
     public readonly List<LogNPCUpdateEvent> LogNPCUpdateEvents = [];
     public readonly List<MapIDEvent> MapIDEvents = [];
     public readonly List<ShardEvent> ShardEvents = [];

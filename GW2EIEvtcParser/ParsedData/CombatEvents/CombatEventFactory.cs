@@ -55,6 +55,12 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
+                var logStartEvent = new LogStartEvent(stateChangeEvent);
+                metaDataEvents.LogStartEvents.Add(logStartEvent);
+                if (metaDataEvents.LogStartEvent != null || (metaDataEvents.LogEndEvent != null && metaDataEvents.LogEndEvent.ServerUnixTimeStamp <= logStartEvent.ServerUnixTimeStamp))
+                {
+                    break;
+                }
                 metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
                 break;
             case StateChange.LogNPCUpdate:
@@ -65,7 +71,9 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
-                metaDataEvents.LogEndEvent = new LogEndEvent(stateChangeEvent);
+                var logEndEvent = new LogEndEvent(stateChangeEvent);
+                metaDataEvents.LogEndEvent = logEndEvent;
+                metaDataEvents.LogEndEvents.Add(logEndEvent);
                 break;
             case StateChange.MaxHealthUpdate:
                 var maxHealthEvt = new MaxHealthUpdateEvent(stateChangeEvent, agentData);
