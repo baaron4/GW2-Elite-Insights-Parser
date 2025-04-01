@@ -6,7 +6,12 @@ public class MapIDEvent : MetaDataEvent
 
     internal MapIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        MapID = (int)evtcItem.SrcAgent;
+        MapID = GetMapID(evtcItem);
+    }
+
+    internal static int GetMapID(CombatItem evtcItem)
+    {
+        return (int)evtcItem.SrcAgent;
     }
 
 }

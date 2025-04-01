@@ -125,7 +125,7 @@ internal class River : HallOfChains
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
@@ -152,7 +152,7 @@ internal class River : HallOfChains
                 return new Dhuum((int)TargetID.Dhuum);
             }
         }
-        return base.AdjustLogic(agentData, combatData);
+        return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

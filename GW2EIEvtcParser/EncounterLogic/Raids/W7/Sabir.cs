@@ -68,7 +68,7 @@ internal class Sabir : TheKeyOfAhdashim
         ];
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
@@ -79,7 +79,7 @@ internal class Sabir : TheKeyOfAhdashim
                 return new Adina((int)TargetID.Adina);
             }
         }
-        return base.AdjustLogic(agentData, combatData);
+        return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

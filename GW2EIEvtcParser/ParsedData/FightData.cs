@@ -64,7 +64,7 @@ public class FightData
         FightEnd = end - start;
 
         Logic = DetectFight(id, agentData, parserSettings, evtcVersion);
-        Logic = Logic.AdjustLogic(agentData, combatData);
+        Logic = Logic.AdjustLogic(agentData, combatData, parserSettings);
         TriggerID = Logic.GetTriggerID();
     }
 

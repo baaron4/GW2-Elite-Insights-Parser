@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -60,6 +61,32 @@ internal class Instance : FightLogic
                 }*/
             }
         }
+    }
+
+    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    {
+        CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
+        // Handle potentially wrongly associated logs
+        if (mapIDEvent != null)
+        {
+            switch (MapIDEvent.GetMapID(mapIDEvent))
+            {
+                // EB
+                case 38:
+                // Green Alpine
+                case 95:
+                // Blue Alpine
+                case 96:
+                // Red Desert
+                case 1099: 
+                // EoM
+                case 968:
+                // Bastion
+                case 1315:
+                    return new WvWFight(GenericTriggerID, parserSettings.DetailedWvWParse, true);
+            }
+        }
+        return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)

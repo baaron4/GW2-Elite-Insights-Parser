@@ -17,7 +17,8 @@ internal class WvWFight : FightLogic
     private readonly bool _detailed;
     private bool _foundSkillMode;
     private bool _isGuildHall;
-    public WvWFight(int triggerID, bool detailed) : base(triggerID)
+    private bool _isFromInstance;
+    public WvWFight(int triggerID, bool detailed, bool full = false) : base(triggerID)
     {
         ParseMode = ParseModeEnum.WvW;
         SkillMode = SkillModeEnum.WvW;
@@ -25,6 +26,12 @@ internal class WvWFight : FightLogic
         _detailed = detailed;
         Extension = _detailed ? "detailed_wvw" : "wvw";
         _defaultName = _detailed ? "Detailed WvW" : "World vs World";
+        if (full)
+        {
+            Extension += "_full";
+            _defaultName += " Full";
+        }
+        _isFromInstance = full;
         EncounterCategoryInformation.Category = FightCategory.WvW;
         EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
         MechanicList.Add(new MechanicGroup([

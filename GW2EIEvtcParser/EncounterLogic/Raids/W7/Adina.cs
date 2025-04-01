@@ -42,7 +42,7 @@ internal class Adina : TheKeyOfAhdashim
         ];
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
@@ -53,7 +53,7 @@ internal class Adina : TheKeyOfAhdashim
                 return new Sabir((int)TargetID.Sabir);
             }
         }
-        return base.AdjustLogic(agentData, combatData);
+        return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
     // note: these are the attack target not gadget locations

@@ -508,7 +508,7 @@ public abstract class FightLogic
         return startToUse;
     }
 
-    internal virtual FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
+    internal virtual FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         return this;
     }
