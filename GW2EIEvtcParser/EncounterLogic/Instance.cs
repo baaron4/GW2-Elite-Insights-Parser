@@ -101,11 +101,23 @@ internal class Instance : FightLogic
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
+        List<PhaseData> phases;
         if (_targetIDs.Count == 0)
         {
-            return base.GetPhases(log, requirePhases);
+            phases = base.GetPhases(log, requirePhases);
+            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
+            {
+                var fightPhases = GetPhasesByLogStartLogEnd(log);
+                fightPhases.ForEach(x =>
+                {
+                    x.AddTargets(phases[0].Targets.Keys);
+                    x.AddParentPhase(phases[0]);
+                });
+                phases.AddRange(fightPhases);
+            }
+            return phases;
         }
-        List<PhaseData> phases = GetInitialPhase(log);
+        phases = GetInitialPhase(log);
         phases[0].AddTargets(Targets);
         int phaseCount = 0;
         foreach (SingleActor target in Targets)

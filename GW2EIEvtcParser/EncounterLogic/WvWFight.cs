@@ -77,26 +77,13 @@ internal class WvWFight : FightLogic
         }
         if (_isFromInstance && log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
         {
-            int sequence = 1;
-            foreach (var startEvent in log.CombatData.GetLogStartEvents())
+            var fightPhases = GetPhasesByLogStartLogEnd(log);
+            fightPhases.ForEach(x =>
             {
-                var logEndEvent = log.CombatData.GetLogEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
-                if (logEndEvent != null)
-                {
-                    var fightPhase = new PhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++));
-                    fightPhase.AddTargets(phases[0].Targets.Keys);
-                    fightPhase.AddParentPhase(phases[0]);
-                    phases.Add(fightPhase);
-                } 
-                else
-                {
-                    var fightPhase = new PhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++));
-                    fightPhase.AddTargets(phases[0].Targets.Keys);
-                    fightPhase.AddParentPhase(phases[0]);
-                    phases.Add(fightPhase);
-                    break;
-                }
-            }
+                x.AddTargets(phases[0].Targets.Keys);
+                x.AddParentPhase(phases[0]);
+            });
+            phases.AddRange(fightPhases);
         }
         return phases;
     }
