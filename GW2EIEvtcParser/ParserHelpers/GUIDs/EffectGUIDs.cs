@@ -715,7 +715,10 @@ public static class EffectGUIDs
     public static readonly GUID UraReturn2 = new("0836E7E36B6E7D4496EC712DD4976440"); // Src Ura - Happens twice, one with 0 duration no effect end, other 6000 duration with effect end
     public static readonly GUID UraSulfuricGeyserShockwave = new("CC50996DB340B649B717DE52EF667040"); // 8000 duration - Src Ura - Has Effect End
     public static readonly GUID UraSulfuricGeyserTarget = new("EE7B17875C502A499B2DCA60C3A44602"); // 5000 duration - Src Ura - Dst Player
+    public static readonly GUID UraSulfuricGeyserTargetCM = new("69D4F4DFC0E74249AF1426C0B6E127E3");
     public static readonly GUID UraBloodstoneRadiationPulse = new("3DBBDE2C5042744DB6AF333EDA672281"); // 0 duration - No Src - No Dst - happens at the same time of a Bloodstone Radiation damage event
+    public static readonly GUID UraVentshotPressureRelease = new("CE91D2D4CD6C4141B3977FA70FFE05BB"); // 0 duration - Initial Indicator
+    public static readonly GUID UraVentshotPressureReleaseWaterJet = new("37BA83DEA82A6E4DB5AB1997CC7DF942"); // 3000 duration - Water Sprout
     #endregion
 
     #region Strikes
