@@ -1,0 +1,36 @@
+<template>
+    <div>
+        <div v-if="player.minions.length > 0">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: distmode === -1}" @click="distmode = -1">{{player.name}}</a>
+                </li>
+                <li v-for="(minion, mindex) in player.minions">
+                    <a class="nav-link" :class="{active: distmode === mindex}"
+                        @click="distmode = mindex">{{minion.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <healingdist-table-component :healingdist="healingtaken" :tableid="'healingtakendist-' + playerindex" 
+            :actorindex="-1" :minionindex="distmode" :istarget="false" :player="true"
+            :phaseindex="phaseindex">
+        </healingdist-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component('healingtakendist-player-component', {
+        props: ['playerindex','phaseindex'],
+        template: `${template}`,
+        data: function () {
+            return {
+                distmode: -1
+            };
+        },
+        computed: {
+            healingtaken: function () {
+                return healingStatsExtension.playerHealingDetails[this.playerindex].incomingHealingDistributions[this.phaseindex];
+            }
+        },
+    });
+</script>
