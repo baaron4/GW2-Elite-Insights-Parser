@@ -149,7 +149,6 @@ internal class MAMA : Nightmare
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         long castDuration;
         long growing;
         (long start, long end) lifespan;
@@ -157,11 +156,12 @@ internal class MAMA : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.MAMA:
-                foreach (CastEvent c in casts)
+                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (c.SkillId)
                     {
-                        case Blastwave1: // Blastwave - AoE Knockback
+                        // Blastwave - AoE Knockback
+                        case Blastwave1:
                             castDuration = 2750;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
@@ -173,7 +173,8 @@ internal class MAMA : Nightmare
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                             replay.Decorations.AddWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(growing), 0, Colors.Red, 0.2, false);
                             break;
-                        case Leap: // Leap with shockwaves
+                        // Leap with shockwaves
+                        case Leap:
                             castDuration = 2400;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
@@ -206,23 +207,26 @@ internal class MAMA : Nightmare
             case (int)TargetID.BlueKnight:
             case (int)TargetID.RedKnight:
             case (int)TargetID.GreenKnight:
-                foreach (CastEvent c in casts)
+                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (c.SkillId)
                     {
-                        case ExplosiveLaunch: // Explosive Launch - Knight Jump in air
+                        // Explosive Launch - Knight Jump in air
+                        case ExplosiveLaunch:
                             castDuration = 1714;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing, true);
                             break;
-                        case ExplosiveImpact: // Explosive Impact - Knight fall and knockback AoE
+                        // Explosive Impact - Knight fall and knockback AoE
+                        case ExplosiveImpact:
                             castDuration = 533;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing);
                             break;
-                        case Extraction: // Extraction - Pull AoE
+                        // Extraction - Pull AoE
+                        case Extraction:
                             castDuration = 3835;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));

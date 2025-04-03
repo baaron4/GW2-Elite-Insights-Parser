@@ -133,7 +133,6 @@ internal class Siax : Nightmare
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         long castDuration;
         long growing;
         (long start, long end) lifespan;
@@ -141,11 +140,12 @@ internal class Siax : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.Siax:
-                foreach (CastEvent c in casts)
+                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (c.SkillId)
                     {
-                        case CausticExplosionSiaxBreakbar: // Siax's Breakbar
+                        // Caustic Explosion - Breakbar
+                        case CausticExplosionSiaxBreakbar:
                             castDuration = 15000;
                             growing = c.Time + castDuration;
                             lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
@@ -153,7 +153,17 @@ internal class Siax : Nightmare
                             var doughnut = new DoughnutDecoration(0, 1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
                             replay.Decorations.AddWithGrowing(doughnut, growing, true);
                             break;
-                        case TailLashSiax: // Tail Swipe
+                        // Caustic Explosion - 66% and 33% phases
+                        case CausticExplosionSiaxPhase66:
+                        case CausticExplosionSiaxPhase33:
+                            castDuration = 20000;
+                            growing = c.Time + castDuration;
+                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
+                            replay.Decorations.AddWithGrowing(circle, growing);
+                            break;
+                        // Tail Swipe
+                        case TailLashSiax:
                             castDuration = 1550;
                             lifespan = (c.Time, c.Time + castDuration);
                             if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
@@ -162,24 +172,17 @@ internal class Siax : Nightmare
                                 replay.Decorations.Add(new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation));
                             }
                             break;
-                        case CausticExplosionSiaxPhase66: // 66% and 33% phases
-                        case CausticExplosionSiaxPhase33:
-                            castDuration = 20000;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
-                            var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
-                            replay.Decorations.AddWithGrowing(circle, growing);
-                            break;
                         default:
                             break;
                     }
                 }
                 break;
             case (int)TargetID.EchoOfTheUnclean:
-                foreach (CastEvent c in casts)
+                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (c.SkillId)
                     {
+                        // Caustic Explosion
                         case CausticExplosionSiaxEcho:
                             // Duration is the same as Siax's explosion but starts 2 seconds later
                             // Display the explosion for a brief time
