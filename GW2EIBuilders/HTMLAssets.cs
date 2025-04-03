@@ -100,15 +100,16 @@ public class HTMLAssets
             Properties.Resources.tmplPersonalBuffVolumeTable,
             //
             Properties.Resources.tmplDamageDistPlayer,
+            Properties.Resources.tmplDamageTakenDistPlayer,
             Properties.Resources.tmplDamageDistTable,
             Properties.Resources.tmplDamageDistTarget,
+            Properties.Resources.tmplDamageTakenDistTarget,
             Properties.Resources.tmplDamageModifierTable,
             Properties.Resources.tmplDamageModifierStatsContainer,
             Properties.Resources.tmplDamageModifierStats,
             Properties.Resources.tmplDamageModifierPersStats,
             //
             Properties.Resources.tmplDamageTable,
-            Properties.Resources.tmplDamageTaken,
             Properties.Resources.tmplDeathRecap,
             Properties.Resources.tmplDefenseTable,
             Properties.Resources.tmplEncounter,
@@ -195,13 +196,13 @@ public class HTMLAssets
             Properties.Resources.tmplHealingGraphStats,
             Properties.Resources.tmplHealingDistPlayer,
             Properties.Resources.tmplHealingDistTable,
+            Properties.Resources.tmplHealingTakenDistPlayer,
             Properties.Resources.tmplPlayerHealingStats,
             Properties.Resources.tmplPlayerHealingTab,
-            Properties.Resources.tmplHealingTaken,
             Properties.Resources.tmplPlayerHealingTabGraph,
             Properties.Resources.tmplBarrierDistPlayer,
             Properties.Resources.tmplBarrierDistTable,
-            Properties.Resources.tmplBarrierTaken,
+            Properties.Resources.tmplBarrierTakenDistPlayer
         };
         var res = new List<string>();
         foreach (string template in templates)

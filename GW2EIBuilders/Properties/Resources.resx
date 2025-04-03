@@ -253,8 +253,11 @@
   <data name="tmplDamageTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\Statistics\tmplDamageTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmplDamageTaken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\htmlTemplates\Statistics\tmplDamageTaken.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tmplDamageTakenDistTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\DistributionTables\tmplDamageTakenDistTarget.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplDamageTakenDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlTemplates\DistributionTables\tmplDamageTakenDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplDeathRecap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlTemplates\tmplDeathRecap.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -433,8 +436,8 @@
   <data name="tmplPlayerHealingTab" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\tmplPlayerHealingTab.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmplHealingTaken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplHealingTaken.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tmplHealingTakenDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplHealingTakenDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplPlayerHealingTabGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\Graphs\tmplPlayerHealingTabGraph.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -445,7 +448,7 @@
   <data name="tmplBarrierDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplBarrierDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="tmplBarrierTaken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplBarrierTaken.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tmplBarrierTakenDistPlayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\htmlHealingExtensionTemplates\DistributionTables\tmplBarrierTakenDistPlayer.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

@@ -49,7 +49,8 @@ internal class EXTBarrierStatsPlayerDetailsDto
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
             BarrierDistributions = new (phases.Count),
-            BarrierDistributionsTargets = new (phases.Count)
+            BarrierDistributionsTargets = new (phases.Count),
+            IncomingBarrierDistributions = new(phases.Count)
         };
         foreach (PhaseData phase in phases)
         {
@@ -60,6 +61,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
             }
             dto.BarrierDistributionsTargets.Add(dmgTargetsDto);
             dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, null, phase, usedSkills, usedBuffs));
+            dto.IncomingBarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionIncomingBarrierDistData(log, minion, null, phase, usedSkills, usedBuffs));
         }
         return dto;
     }

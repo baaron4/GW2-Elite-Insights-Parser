@@ -151,4 +151,15 @@ internal class EXTBarrierStatsBarrierDistributionDto
 
         return BuildBarrierDistDataMinionsInternal(log, outgoingBarrierStats, minions, target, phase, usedSkills, usedBuffs);
     }
+
+    public static EXTBarrierStatsBarrierDistributionDto BuildFriendlyMinionIncomingBarrierDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        var dto = new EXTBarrierStatsBarrierDistributionDto();
+        var barrierLogs = minions.EXTBarrier.GetIncomingBarrierEvents(target, log, phase.Start, phase.End);
+        dto.ContributedBarrier = barrierLogs.Sum(x => x.BarrierGiven);
+        dto.Distribution = barrierLogs.GroupBy(x => x.Skill)
+            .Select(group => GetBarrierToItem(group.Key, group, null, usedSkills, usedBuffs, log.Buffs, phase))
+            .ToList();
+        return dto;
+    }
 }

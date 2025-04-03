@@ -191,8 +191,8 @@ public abstract class Actor
 
     public abstract IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
 
-    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor target, ParsedEvtcLog log, long start, long end);
-    public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end);
+    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
 
     // Cast logs
     public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);

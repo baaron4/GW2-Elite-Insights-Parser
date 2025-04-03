@@ -436,24 +436,20 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;barrierdist-table-component :barrierdist=&quot;barriertaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
-        ///        :phaseindex=&quot;phaseindex&quot;&gt;
-        ///    &lt;/barrierdist-table-component&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    Vue.component(&apos;barriertaken-component&apos;, {
-        ///        props: [&apos;actorindex&apos;, &apos;tableid&apos;,
-        ///            &apos;phaseindex&apos;
-        ///        ],
-        ///        template: `${template}`,
-        ///        computed: {
-        ///            barriertaken: function () {
-        ///                return barrierSt [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplBarrierTaken {
+        internal static string tmplBarrierTakenDistPlayer {
             get {
-                return ResourceManager.GetString("tmplBarrierTaken", resourceCulture);
+                return ResourceManager.GetString("tmplBarrierTakenDistPlayer", resourceCulture);
             }
         }
         
@@ -1126,24 +1122,39 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;damagedist-table-component :dmgdist=&quot;dmgtaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;player&quot;
-        ///        :phaseindex=&quot;phaseindex&quot;&gt;
-        ///    &lt;/damagedist-table-component&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    Vue.component(&apos;dmgtaken-component&apos;, {
-        ///        props: [&apos;actorindex&apos;, &quot;player&quot;, &apos;tableid&apos;,
-        ///            &apos;phaseindex&apos;
-        ///        ],
-        ///        template: `${template}`,
-        ///        computed: {
-        ///            actor: function () {
-        ///                return this.player? logDa [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplDamageTaken {
+        internal static string tmplDamageTakenDistPlayer {
             get {
-                return ResourceManager.GetString("tmplDamageTaken", resourceCulture);
+                return ResourceManager.GetString("tmplDamageTakenDistPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;target.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{target.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in target.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDamageTakenDistTarget {
+            get {
+                return ResourceManager.GetString("tmplDamageTakenDistTarget", resourceCulture);
             }
         }
         
@@ -1522,24 +1533,20 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;healingdist-table-component :healingdist=&quot;healingtaken&quot; :tableid=&quot;tableid&quot; :actorindex=&quot;-1&quot; :minionindex=&quot;-1&quot; :istarget=&quot;false&quot; :player=&quot;true&quot;
-        ///        :phaseindex=&quot;phaseindex&quot;&gt;
-        ///    &lt;/healingdist-table-component&gt;
-        ///&lt;/template&gt;
-        ///
-        ///&lt;script&gt;
-        ///    Vue.component(&apos;healingtaken-component&apos;, {
-        ///        props: [&apos;actorindex&apos;, &apos;tableid&apos;,
-        ///            &apos;phaseindex&apos;
-        ///        ],
-        ///        template: `${template}`,
-        ///        computed: {
-        ///            healingtaken: function () {
-        ///                return healingSt [rest of string was truncated]&quot;;.
+        ///    &lt;div&gt;
+        ///        &lt;div v-if=&quot;player.minions.length &gt; 0&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///                &lt;li&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === -1}&quot; @click=&quot;distmode = -1&quot;&gt;{{player.name}}&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li v-for=&quot;(minion, mindex) in player.minions&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: distmode === mindex}&quot;
+        ///                        @click=&quot;distmode = mindex&quot;&gt;{{minion.name}}&lt;/a&gt;
+        ///                &lt;/li&gt; [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string tmplHealingTaken {
+        internal static string tmplHealingTakenDistPlayer {
             get {
-                return ResourceManager.GetString("tmplHealingTaken", resourceCulture);
+                return ResourceManager.GetString("tmplHealingTakenDistPlayer", resourceCulture);
             }
         }
         
@@ -1851,9 +1858,9 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;keep-alive&gt;
         ///            &lt;healingdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;healingdist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
         ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/healingdist-player-component&gt;
-        ///            &lt;healingtaken-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;healingtaken&apos; + playerindex&quot; :actorindex=&quot;playerindex&quot;
-        ///                :tableid=&quot;&apos;healingtaken-player-&apos;+playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/healingtaken-component&gt;
-        ///    [rest of string was truncated]&quot;;.
+        ///            &lt;healingtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;healingtaken&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
+        ///                :phaseindex=&quot;phaseindex&quot;&gt;&lt;/healingtakendist-player-component&gt;
+        ///            &lt;player-healin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerHealingTab {
             get {
@@ -1961,9 +1968,9 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;keep-alive&gt;
         ///            &lt;dmgdist-player-component v-if=&quot;tabmode === 0&quot; :key=&quot;&apos;dist&apos; + playerindex&quot; :playerindex=&quot;playerindex&quot;
         ///                :phaseindex=&quot;phaseindex&quot; :activetargets=&quot;activetargets&quot;&gt;&lt;/dmgdist-player-component&gt;
-        ///            &lt;dmgtaken-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;taken&apos; + playerindex&quot; :actorindex=&quot;playerindex&quot; :player=&quot;true&quot;
-        ///                :tableid=&quot;&apos;dmgtaken-player-&apos;+playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtaken-component&gt;
-        ///            &lt;player-gr [rest of string was truncated]&quot;;.
+        ///            &lt;dmgtakendist-player-component v-if=&quot;tabmode ===1&quot; :key=&quot;&apos;taken&apos; + playerindex&quot; 
+        ///                :playerindex=&quot;playerindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtakendist-player-component&gt;
+        ///            &lt;player-graph-tab-component v-for=&quot;(ph, id) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPlayerTab {
             get {
@@ -2168,9 +2175,9 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;keep-alive&gt;
         ///            &lt;dmgdist-target-component v-if=&quot;mode === 0&quot; :key=&quot;&apos;dist&apos; + targetindex&quot; :phaseindex=&quot;phaseindex&quot;
         ///                :targetindex=&quot;targetindex&quot;&gt;&lt;/dmgdist-target-component&gt;
-        ///            &lt;dmgtaken-component v-if=&quot;mode === 1&quot; :actorindex=&quot;targetindex&quot; :player=&quot;false&quot; :key=&quot;&apos;taken&apos; + targetindex&quot;
-        ///                :tableid=&quot;&apos;dmgtaken-target-&apos;+targetindex&quot; :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtaken-component&gt;
-        ///            &lt;target-graph-tab-component v-for=&quot;(ph, id) i [rest of string was truncated]&quot;;.
+        ///            &lt;dmgtakendist-target-component v-if=&quot;mode === 1&quot; :targetindex=&quot;targetindex&quot; :key=&quot;&apos;taken&apos; + targetindex&quot;
+        ///                :phaseindex=&quot;phaseindex&quot;&gt;&lt;/dmgtakendist-target-component&gt;
+        ///            &lt;target-graph-tab-component v-for=&quot;(ph, id) in phases&quot; v-if=&quot;mode === 2 &amp;&amp; id == [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargetTab {
             get {

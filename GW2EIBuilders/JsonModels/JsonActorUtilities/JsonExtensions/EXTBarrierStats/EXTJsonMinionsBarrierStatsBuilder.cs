@@ -29,18 +29,25 @@ internal static class EXTJsonMinionsBarrierStatsBuilder
 
         var totalBarrier = new List<int>(phases.Count);
         var totalBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
+        var totalIncomingBarrier = new List<int>(phases.Count);
+        var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
         foreach (PhaseData phase in phases)
         {
             var list = minions.EXTBarrier.GetOutgoingBarrierEvents(null, log, phase.Start, phase.End);
             totalBarrier.Add(list.Sum(x => x.BarrierGiven));
             totalBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(list.GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
+            var listInc = minions.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End);
+            totalIncomingBarrier.Add(listInc.Sum(x => x.BarrierGiven));
+            totalIncomingBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(listInc.GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
         }
 
         return new() {
-            TotalBarrier       = totalBarrier,
-            TotalAlliedBarrier = totalAlliedBarrier,
-            TotalBarrierDist   = totalBarrierDist,
-            AlliedBarrierDist  = alliedBarrierDist,
+            TotalBarrier                = totalBarrier,
+            TotalIncomingBarrier        = totalIncomingBarrier,
+            TotalAlliedBarrier          = totalAlliedBarrier,
+            TotalBarrierDist            = totalBarrierDist,
+            TotalIncomingBarrierDist    = totalIncomingBarrierDist,
+            AlliedBarrierDist           = alliedBarrierDist,
         };
     }
 
