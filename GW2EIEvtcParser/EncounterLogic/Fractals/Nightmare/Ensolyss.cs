@@ -163,6 +163,9 @@ internal class Ensolyss : Nightmare
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
 
         switch (target.ID)
         {
@@ -265,10 +268,6 @@ internal class Ensolyss : Nightmare
                         }
                     }
                 }
-
-                long castDuration = 0;
-                long growing = 0;
-                (long start, long end) lifespan = (0, 0);
 
                 foreach (CastEvent cast in casts)
                 {
