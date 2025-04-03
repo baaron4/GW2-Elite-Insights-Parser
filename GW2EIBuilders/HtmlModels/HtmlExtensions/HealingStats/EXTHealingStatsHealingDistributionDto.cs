@@ -146,6 +146,7 @@ internal class EXTHealingStatsHealingDistributionDto
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
         var healingLogs = minions.EXTHealing.GetOutgoingHealEvents(target, log, phase.Start, phase.End);
         dto.ContributedHealing = healingLogs.Sum(x => x.HealingDone);
+        dto.ContributedDownedHealing = healingLogs.Sum(x => x.AgainstDowned ? x.HealingDone : 0);
         dto.TotalHealing = outgoingHealingStats.Healing;
         dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
         dto.Distribution = BuildHealingDistBodyData(log, casting, healingLogs, usedSkills, usedBuffs, phase);
@@ -157,5 +158,21 @@ internal class EXTHealingStatsHealingDistributionDto
         EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End);
 
         return BuildHealingDistDataMinionsInternal(log, outgoingHealingStats, minions, target, phase, usedSkills, usedBuffs);
+    }
+
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionIncomingHealingDistData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        var healingLogs = minions.EXTHealing.GetIncomingHealEvents(target, log, phase.Start, phase.End);
+        var dto = new EXTHealingStatsHealingDistributionDto
+        {
+            ContributedHealing = healingLogs.Sum(x => x.HealingDone),
+            ContributedDownedHealing = healingLogs.Sum(x => x.AgainstDowned ? x.HealingDone : 0),
+            Distribution = [],
+        };
+        foreach (var group in healingLogs.GroupBy(x => x.Skill))
+        {
+            dto.Distribution.Add(GetHealingToItem(group.Key, group, null, usedSkills, usedBuffs, log.Buffs, phase));
+        }
+        return dto;
     }
 }
