@@ -26,6 +26,11 @@ public class JsonMinions
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     public IReadOnlyList<IReadOnlyList<int>>? TotalTargetDamage;
+    /// <summary>
+    /// Total Damage done to minions \n
+    /// Length == # of phases
+    /// </summary>
+    public IReadOnlyList<int>? TotalDamageTaken;
 
     /// <summary>
     /// Total Breakbar Damage done by minions \n
@@ -38,6 +43,11 @@ public class JsonMinions
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     public IReadOnlyList<IReadOnlyList<double>>? TotalTargetBreakbarDamage;
+    /// <summary>
+    /// Total Breakbar Damage done to minions \n
+    /// Length == # of phases
+    /// </summary>
+    public IReadOnlyList<double>? TotalBreakbarDamageTaken;
 
     /// <summary>
     /// Total Shield Damage done by minions \n
@@ -50,6 +60,11 @@ public class JsonMinions
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     public IReadOnlyList<IReadOnlyList<int>>? TotalTargetShieldDamage;
+    /// <summary>
+    /// Total Shield Damage done to minions \n
+    /// Length == # of phases
+    /// </summary>
+    public IReadOnlyList<int>? TotalShieldDamageTaken;
 
     /// <summary>
     /// Total Damage distribution array \n
@@ -64,6 +79,13 @@ public class JsonMinions
     /// </summary>
     /// <seealso cref="JsonDamageDist"/>
     public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>>? TargetDamageDist;
+
+    /// <summary>
+    /// Total Damage Taken distribution array \n
+    /// Length == # of phases
+    /// </summary>
+    /// <seealso cref="JsonDamageDist"/>
+    public IReadOnlyList<IReadOnlyList<JsonDamageDist>>? TotalDamageTakenDist;
 
     /// <summary>
     /// Rotation data
