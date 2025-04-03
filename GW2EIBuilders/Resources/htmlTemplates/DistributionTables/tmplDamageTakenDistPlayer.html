@@ -32,7 +32,10 @@
                 return logData.players[this.playerindex];
             },
             dmgtaken: function () {
-                return this.player.details.dmgDistributionsTaken[this.phaseindex];
+                if (this.distmode === -1) {
+                    return this.player.details.dmgDistributionsTaken[this.phaseindex];
+                }
+                return this.player.details.minions[this.distmode].dmgDistributionsTaken[this.phaseindex];
             }
         },
     });

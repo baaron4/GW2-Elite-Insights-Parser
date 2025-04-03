@@ -32,7 +32,10 @@
                 return logData.targets[this.targetindex];
             },
             dmgtaken: function () {
-                return this.target.details.dmgDistributionsTaken[this.phaseindex];
+                if (this.distmode === -1) {
+                    return this.target.details.dmgDistributionsTaken[this.phaseindex];
+                }
+                return this.target.details.minions[this.distmode].dmgDistributionsTaken[this.phaseindex];
             }
         },
     });

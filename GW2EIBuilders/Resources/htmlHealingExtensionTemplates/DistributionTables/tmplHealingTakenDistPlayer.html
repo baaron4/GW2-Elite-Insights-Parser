@@ -28,8 +28,11 @@
             };
         },
         computed: {
-            healingtaken: function () {
-                return healingStatsExtension.playerHealingDetails[this.playerindex].incomingHealingDistributions[this.phaseindex];
+            healingtaken: function () {      
+                if (this.distmode === -1) {
+                    return healingStatsExtension.playerHealingDetails[this.playerindex].incomingHealingDistributions[this.phaseindex];
+                }
+                return healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].incomingHealingDistributions[this.phaseindex];
             }
         },
     });

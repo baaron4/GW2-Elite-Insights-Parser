@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    Vue.component('barriertaken-component', {
+    Vue.component('barrierdist-player-component', {
         props: ['playerindex','phaseindex'],
         template: `${template}`,
         data: function () {
@@ -29,7 +29,10 @@
         },
         computed: {
             barriertaken: function () {
-                return barrierStatsExtension.playerBarrierDetails[this.playerindex].incomingBarrierDistributions[this.phaseindex];
+                if (this.distmode === -1) {
+                    return barrierStatsExtension.playerBarrierDetails[this.playerindex].incomingBarrierDistributions[this.phaseindex];
+                }
+                return barrierStatsExtension.playerBarrierDetails[this.playerindex].minions[this.distmode].incomingBarrierDistributions[this.phaseindex];
             }
         },
     });
