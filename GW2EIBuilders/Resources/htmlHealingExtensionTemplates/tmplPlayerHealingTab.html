@@ -18,8 +18,8 @@
                 :phaseindex="phaseindex"></food-component>
             <barrierdist-player-component v-if="tabmode === 6" :key="'barrierdist' + playerindex" :playerindex="playerindex"
                 :phaseindex="phaseindex" :activetargets="activetargets"></barrierdist-player-component>
-            <barriertaken-component v-if="tabmode ===7" :key="'barriertaken' + playerindex" :actorindex="playerindex"
-                :tableid="'barriertaken-player-'+playerindex" :phaseindex="phaseindex"></barriertaken-component>
+            <barrierdist-player-component v-if="tabmode ===7" :key="'barriertaken' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></barrierdist-player-component>
         </keep-alive>
     </div>
 </template>
