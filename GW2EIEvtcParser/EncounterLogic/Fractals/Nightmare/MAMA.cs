@@ -156,28 +156,28 @@ internal class MAMA : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.MAMA:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Blastwave - AoE Knockback
                         case Blastwave1:
                             castDuration = 2750;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(growing), 0, Colors.Red, 0.2, false);
                             break;
                         case Blastwave2:
                             castDuration = 2750;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(growing), 0, Colors.Red, 0.2, false);
                             break;
                         // Leap with shockwaves
                         case Leap:
                             castDuration = 2400;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
 
                             // Find position at the end of the leap time
                             if (target.TryGetCurrentPosition(log, growing + 1000, out var targetPosition))
@@ -207,29 +207,29 @@ internal class MAMA : Nightmare
             case (int)TargetID.BlueKnight:
             case (int)TargetID.RedKnight:
             case (int)TargetID.GreenKnight:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Explosive Launch - Knight Jump in air
                         case ExplosiveLaunch:
                             castDuration = 1714;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing, true);
                             break;
                         // Explosive Impact - Knight fall and knockback AoE
                         case ExplosiveImpact:
                             castDuration = 533;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing);
                             break;
                         // Extraction - Pull AoE
                         case Extraction:
                             castDuration = 3835;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing);
                             break;
                         default:

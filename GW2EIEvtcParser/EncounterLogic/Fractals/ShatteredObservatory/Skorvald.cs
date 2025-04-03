@@ -270,9 +270,9 @@ internal class Skorvald : ShatteredObservatory
         switch (target.ID)
         {
             case (int)TargetID.Skorvald:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Horizon Strike
                         case HorizonStrikeSkorvald2:
@@ -280,15 +280,15 @@ internal class Skorvald : ShatteredObservatory
                             castDuration = 3900;
                             int shiftingAngle = 45;
                             int sliceSpawnInterval = 750;
-                            lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            lifespan = (cast.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingHorizonStrike, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var facingHorizonStrike, castDuration))
                             {
                                 float degree = facingHorizonStrike.GetRoundedZRotationDeg();
 
                                 // Horizon Strike starting at Skorvald's facing point
-                                if (c.SkillId == HorizonStrikeSkorvald4)
+                                if (cast.SkillId == HorizonStrikeSkorvald4)
                                 {
                                     for (int i = 0; i < 4; i++)
                                     {
@@ -299,7 +299,7 @@ internal class Skorvald : ShatteredObservatory
                                     }
                                 }
                                 // Starting at Skorvald's 90° of facing point
-                                if (c.SkillId == HorizonStrikeSkorvald2)
+                                if (cast.SkillId == HorizonStrikeSkorvald2)
                                 {
                                     degree -= 90;
                                     for (int i = 0; i < 4; i++)
@@ -320,18 +320,18 @@ internal class Skorvald : ShatteredObservatory
                             castDuration = 3000;
                             uint radius = 1200;
                             int angleCrimsonDawn = 295;
-                            lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            lifespan = (cast.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingCrimsonDawn, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var facingCrimsonDawn, castDuration))
                             {
                                 float degree = facingCrimsonDawn.GetRoundedZRotationDeg();
 
-                                if (c.SkillId == CrimsonDawnSkorvaldCM2)
+                                if (cast.SkillId == CrimsonDawnSkorvaldCM2)
                                 {
                                     degree += 90;
                                 }
-                                if (c.SkillId == CrimsonDawnSkorvaldCM1)
+                                if (cast.SkillId == CrimsonDawnSkorvaldCM1)
                                 {
                                     degree += 270;
                                 }
@@ -344,11 +344,11 @@ internal class Skorvald : ShatteredObservatory
                         // Punishing Kick
                         case PunishingKickSkorvald:
                             castDuration = 1850;
-                            lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
-                            long expectedEndCast = c.Time + castDuration;
+                            lifespan = (cast.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
+                            long expectedEndCast = cast.Time + castDuration;
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var frontalPoint, castDuration))
                             {
                                 float rotation = frontalPoint.GetRoundedZRotationDeg();
                                 // Frontal
@@ -358,9 +358,9 @@ internal class Skorvald : ShatteredObservatory
                         // Radiant Fury
                         case RadiantFurySkorvald:
                             castDuration = 2700;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
                             (long start, long end) lifespanWave = (lifespan.end, lifespan.end + 900);
 
                             if (growing <= lifespan.end)
@@ -372,19 +372,19 @@ internal class Skorvald : ShatteredObservatory
                         // Supernova - Phase Oneshot
                         case SupernovaSkorvaldCM:
                             castDuration = 75000;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(1200, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
                             break;
                         // Cranial Cascade
                         case CranialCascadeSkorvald:
                             castDuration = 1750;
-                            growing = c.Time + castDuration;
+                            growing = cast.Time + castDuration;
 
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingCranialCascade, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var facingCranialCascade, castDuration))
                             {
                                 float rotation = facingCranialCascade.GetRoundedZRotationDeg();
 
@@ -405,14 +405,14 @@ internal class Skorvald : ShatteredObservatory
             case (int)TargetID.FluxAnomalyCM2:
             case (int)TargetID.FluxAnomalyCM3:
             case (int)TargetID.FluxAnomalyCM4:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Solar Stomp
                         case SolarStomp:
                             castDuration = 2250;
-                            lifespan = (c.Time, c.Time + castDuration);
+                            lifespan = (cast.Time, cast.Time + castDuration);
                             uint radius = 280;
                             (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + castDuration);
 
@@ -424,10 +424,10 @@ internal class Skorvald : ShatteredObservatory
                         // Punishing Kick
                         case PunishingKickAnomaly:
                             castDuration = 1850;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, growing);
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, growing);
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var frontalPoint, castDuration))
                             {
                                 float rotation = frontalPoint.GetRoundedZRotationDeg();
                                 // Frontal
@@ -437,11 +437,11 @@ internal class Skorvald : ShatteredObservatory
                         // Cranial Cascade
                         case CranialCascadeAnomaly:
                             castDuration = 1750;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, growing);
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, growing);
                             int angleCranialCascade = 35;
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingCranialCascade, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var facingCranialCascade, castDuration))
                             {
                                 float rotation = facingCranialCascade.GetRoundedZRotationDeg();
 
@@ -454,7 +454,7 @@ internal class Skorvald : ShatteredObservatory
                         // Mist Smash
                         case MistSmash:
                             castDuration = 1933;
-                            lifespan = (c.Time, c.Time + castDuration);
+                            lifespan = (cast.Time, cast.Time + castDuration);
                             (long start, long end) lifespanShockwave2 = (lifespan.end, lifespan.end + 2250);
                             replay.Decorations.AddWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                             
@@ -465,10 +465,10 @@ internal class Skorvald : ShatteredObservatory
                         case WaveOfMutilation:
                             castDuration = 1850;
                             int angleWaveOfMutilation = 18;
-                            long expectedEndCast = c.Time + castDuration;
-                            lifespan = (c.Time, expectedEndCast);
+                            long expectedEndCast = cast.Time + castDuration;
+                            lifespan = (cast.Time, expectedEndCast);
 
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingWaveOfMutilation, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 100, out var facingWaveOfMutilation, castDuration))
                             {
                                 float rotation = facingWaveOfMutilation.GetRoundedZRotationDeg();
 

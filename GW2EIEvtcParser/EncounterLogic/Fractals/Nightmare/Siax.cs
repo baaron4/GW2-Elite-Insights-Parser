@@ -140,16 +140,16 @@ internal class Siax : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.Siax:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Caustic Explosion - Breakbar
                         case CausticExplosionSiaxBreakbar:
                             castDuration = 15000;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
                             var doughnut = new DoughnutDecoration(0, 1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
                             replay.Decorations.AddWithGrowing(doughnut, growing, true);
                             break;
@@ -157,16 +157,16 @@ internal class Siax : Nightmare
                         case CausticExplosionSiaxPhase66:
                         case CausticExplosionSiaxPhase33:
                             castDuration = 20000;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, cast.Time, castDuration));
                             var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
                             replay.Decorations.AddWithGrowing(circle, growing);
                             break;
                         // Tail Swipe
                         case TailLashSiax:
                             castDuration = 1550;
-                            lifespan = (c.Time, c.Time + castDuration);
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
                             {
                                 var rotation = new AngleConnector(facing);
                                 replay.Decorations.Add(new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation));
@@ -178,15 +178,15 @@ internal class Siax : Nightmare
                 }
                 break;
             case (int)TargetID.EchoOfTheUnclean:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Caustic Explosion
                         case CausticExplosionSiaxEcho:
                             // Duration is the same as Siax's explosion but starts 2 seconds later
                             // Display the explosion for a brief time
-                            lifespan = (c.Time + 18000, c.Time + 20000);
+                            lifespan = (cast.Time + 18000, cast.Time + 20000);
                             replay.Decorations.Add(new CircleDecoration(3000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)));
                             break;
                         default:

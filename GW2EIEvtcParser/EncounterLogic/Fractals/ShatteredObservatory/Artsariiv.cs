@@ -202,45 +202,47 @@ internal class Artsariiv : ShatteredObservatory
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
 
-        IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
         switch (target.ID)
         {
             case (int)TargetID.Artsariiv:
-                foreach (AnimatedCastEvent cast in casts)
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
                         case Obliterate:
+                            castDuration = 3160;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(1300, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                            (float, float)[][] positions = [
+                                // positions taken from effects
+                                [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
+                                [(10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f)],
+                                [(10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f)],
+                                [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
+                            ];
+                            uint[] radius = [400, 290, 180, 70];
+                            long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
+                            for (int i = 0; i < 4; i++)
                             {
-                                int castStart = (int)cast.Time;
-                                int castEnd = castStart + 3160;
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
-                                (float, float)[][] positions = [
-                                   // positions taken from effects
-                                   [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
-                                   [(10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f)],
-                                   [(10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f)],
-                                   [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
-                                ];
-                                uint[] radius = [400, 290, 180, 70];
-                                long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
-                                for (int i = 0; i < 4; i++)
+                                long start = lifespan.end + 560 * i;
+                                long end = start + 2450;
+                                if (start >= nextInvul)
                                 {
-                                    int start = castEnd + 560 * i;
-                                    int end = start + 2450;
-                                    if (start >= nextInvul)
-                                    {
-                                        break;
-                                    }
-                                    foreach ((float x, float y) in positions[i])
-                                    {
-                                        var position = new PositionConnector(new(x, y, 0));
-                                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
-                                    }
+                                    break;
                                 }
-                                break;
+                                foreach ((float x, float y) in positions[i])
+                                {
+                                    var position = new PositionConnector(new(x, y, 0));
+                                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
+                                }
                             }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;

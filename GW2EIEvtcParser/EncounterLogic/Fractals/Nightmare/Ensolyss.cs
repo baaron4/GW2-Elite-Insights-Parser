@@ -268,16 +268,16 @@ internal class Ensolyss : Nightmare
                     }
                 }
 
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId) 
+                    switch (cast.SkillId) 
                     {
                         // Tail Lash - Cone Swipe
                         case TailLashEnsolyss:
                             castDuration = 1550;
-                            long expectedEndCast = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
+                            long expectedEndCast = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
                             {
                                 var rotation = new AngleConnector(facing);
                                 var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
@@ -291,10 +291,10 @@ internal class Ensolyss : Nightmare
                             int secondQuarterAoe = 900;
                             int firstQuarterHit = 1635;
                             int secondQuarterHit = 1900;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
 
                             // Facing point
-                            if (target.TryGetCurrentFacingDirection(log, c.Time, out var facingDirection, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facingDirection, castDuration))
                             {
                                 // Calculated points
                                 var frontalPoint = new Vector3(facingDirection.X, facingDirection.Y, 0);
@@ -307,16 +307,16 @@ internal class Ensolyss : Nightmare
                         // Caustic Grasp - AoE Pull
                         case CausticGrasp:
                             castDuration = 1500;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             replay.Decorations.AddWithGrowing(new CircleDecoration(1300, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), growing);
                             break;
                         // Upswing
                         case UpswingEnsolyss:
                             castDuration = 1333;
-                            growing = c.Time + castDuration;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                            (long start, long end) lifespanShockwave = (lifespan.end, c.Time + 3100);
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            (long start, long end) lifespanShockwave = (lifespan.end, cast.Time + 3100);
                             GeographicalConnector connector = new AgentConnector(target);
                             replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, connector), growing);
                             // Shockwave
@@ -325,9 +325,9 @@ internal class Ensolyss : Nightmare
                         // Caustic Explosion - 66% & 33% Breakbars
                         case CausticExplosionEnsolyss:
                             castDuration = 15000;
-                            growing = c.Time + castDuration;
+                            growing = cast.Time + castDuration;
                             int durationQuarter = 3000;
-                            lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
 
                             // Circle going in
                             replay.Decorations.AddWithGrowing(new DoughnutDecoration(0, 2000, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing, true);
@@ -339,7 +339,7 @@ internal class Ensolyss : Nightmare
                             }
 
                             // Initial facing point
-                            if (target.TryGetCurrentFacingDirection(log, c.Time, out var facingCausticExplosion, castDuration))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facingCausticExplosion, castDuration))
                             {
                                 // Calculated other quarters from initial point
                                 var frontalPoint = new Vector3(facingCausticExplosion.X, facingCausticExplosion.Y, 0);
@@ -347,7 +347,7 @@ internal class Ensolyss : Nightmare
                                 int initialDelay = 1500;
 
                                 // First quarters
-                                (long start, long end) lifespanFirst = (c.Time + initialDelay, Math.Min(c.Time + initialDelay + durationQuarter, lifespan.end));
+                                (long start, long end) lifespanFirst = (cast.Time + initialDelay, Math.Min(cast.Time + initialDelay + durationQuarter, lifespan.end));
                                 long growingFirst = lifespanFirst.start + durationQuarter;
                                 AddCausticExplosionDecoration(replay, target, frontalPoint, lifespan.end, lifespanFirst, growingFirst);
                                 // Second quarters
@@ -367,10 +367,10 @@ internal class Ensolyss : Nightmare
                         // Lunge - Dash
                         case LungeEnsolyss:
                             castDuration = 1000;
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facingLunge))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facingLunge))
                             {
                                 var rotation = new AngleConnector(facingLunge);
-                                lifespan = (c.Time, c.Time + castDuration);
+                                lifespan = (cast.Time, cast.Time + castDuration);
                                 replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Vector3(850, 0, 0), true)).UsingRotationConnector(rotation));
                             }
                             break;
@@ -380,9 +380,9 @@ internal class Ensolyss : Nightmare
                             castDuration = 4050;
                             int visualDuration = 4450;
                             int warningDuration = 1800;
-                            lifespan = (c.Time, c.Time + visualDuration);
-                            (long start, long end) lifespanWarning = (c.Time, c.Time + warningDuration);
-                            (long start, long end) lifespanShockwave2 = (c.Time, c.Time + castDuration);
+                            lifespan = (cast.Time, cast.Time + visualDuration);
+                            (long start, long end) lifespanWarning = (cast.Time, cast.Time + warningDuration);
+                            (long start, long end) lifespanShockwave2 = (cast.Time, cast.Time + castDuration);
                             // Red outline
                             var outline = (CircleDecoration)new CircleDecoration(380, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
                             replay.Decorations.Add(outline);
@@ -395,7 +395,7 @@ internal class Ensolyss : Nightmare
                             // 8 Arrows
                             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out var arrows))
                             {
-                                foreach (EffectEvent effect in arrows.Where(x => x.Time >= c.Time && x.Time < c.Time + visualDuration))
+                                foreach (EffectEvent effect in arrows.Where(x => x.Time >= cast.Time && x.Time < cast.Time + visualDuration))
                                 {
                                     if (effect is EffectEventCBTS51)
                                     {
@@ -413,24 +413,24 @@ internal class Ensolyss : Nightmare
                 }
                 break;
             case (int)TargetID.NightmareHallucination1:
-                foreach (CastEvent c in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (c.SkillId)
+                    switch (cast.SkillId)
                     {
                         // Lunge - Dash
                         case LungeNightmareHallucination:
                             castDuration = 1000;
-                            if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facingLunge))
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facingLunge))
                             {
                                 var rotation = new AngleConnector(facingLunge);
-                                lifespan = (c.Time, c.Time + castDuration);
+                                lifespan = (cast.Time, cast.Time + castDuration);
                                 replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new(850, 0, 0), true)).UsingRotationConnector(rotation));
                             }
                             break;
                         // Upswing
                         case UpswingHallucination:
                             castDuration = 1333;
-                            lifespan = (c.Time, c.Time + castDuration);
+                            lifespan = (cast.Time, cast.Time + castDuration);
                             replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.1, new AgentConnector(target)), lifespan.end);
                             break;
                         default:
