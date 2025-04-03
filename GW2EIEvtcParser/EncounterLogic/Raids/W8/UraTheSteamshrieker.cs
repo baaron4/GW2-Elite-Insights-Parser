@@ -492,7 +492,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     {
                         // Pressure Release has 5 jets, one underneath and 4 on the cardinal sides
                         // If the effect has a duration of 3000, it's the jet underneath the Ventshot, otherwise it includes indicator and jet together.
-                        if (effect.Duration > 3000)
+                        if (effect.Duration != 3000)
                         {
                             long durationIndicator = 1240;
                             long startIndicator = effect.Time - durationIndicator;
