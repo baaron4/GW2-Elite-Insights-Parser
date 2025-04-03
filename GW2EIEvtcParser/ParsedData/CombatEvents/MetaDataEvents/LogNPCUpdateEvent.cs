@@ -4,8 +4,6 @@ public class LogNPCUpdateEvent : LogDateEvent
 {
     public readonly int AgentID;
 
-    public readonly long Time;
-
     public readonly AgentItem TriggerAgent = ParserHelper._unknownAgent;
 
     public readonly bool TriggerIsGadget;
@@ -18,7 +16,6 @@ public class LogNPCUpdateEvent : LogDateEvent
             TriggerIsGadget = evtcItem.IsFlanking > 0;
             TriggerAgent = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
         }
-        Time = evtcItem.Time;
     }
 
 }
