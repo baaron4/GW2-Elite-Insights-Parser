@@ -314,6 +314,25 @@ internal class DamageDistributionDto
         return dto;
     }
 
+    private static DamageDistributionDto BuildDamageDistributionTakenDataMinionsInternal(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        var damageLogs = minions.GetDamageTakenEvents(target, log, phase.Start, phase.End);
+        var brkDamageLogs = minions.GetBreakbarDamageTakenEvents(target, log, phase.Start, phase.End);
+        var breakbarLogsBySkill = brkDamageLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
+        var dto = new DamageDistributionDto
+        {
+            ContributedDamage = damageLogs.Sum(x => x.HealthDamage),
+            ContributedShieldDamage = damageLogs.Sum(x => x.ShieldDamage),
+            ContributedBreakbarDamage = Math.Round(brkDamageLogs.Sum(x => x.BreakbarDamage), 1),
+            Distribution = []
+        };
+        foreach (var group in damageLogs.GroupBy(x => x.Skill))
+        {
+            dto.Distribution.Add(GetDamageEventtoItem(group.Key, group, null, breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+        }
+        return dto;
+    }
+
     public static DamageDistributionDto BuildFriendlyMinionDamageDistributionData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         DamageStatistics dps = actor.GetDamageStats(target, log, phase.Start, phase.End);
@@ -321,10 +340,20 @@ internal class DamageDistributionDto
         return BuildDamageDistributionDataMinionsInternal(log, dps, minions, target, phase, usedSkills, usedBuffs);
     }
 
+    public static DamageDistributionDto BuildFriendlyMinionDamageTakenDistributionData(ParsedEvtcLog log, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        return BuildDamageDistributionTakenDataMinionsInternal(log, minions, target, phase, usedSkills, usedBuffs);
+    }
+
 
     public static DamageDistributionDto BuildTargetMinionDamageDistributionData(ParsedEvtcLog log, SingleActor target, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         DamageStatistics dps = target.GetDamageStats(log, phase.Start, phase.End);
         return BuildDamageDistributionDataMinionsInternal(log, dps, minions, null, phase, usedSkills, usedBuffs);
+    }
+
+    public static DamageDistributionDto BuildTargetMinionDamageTakenDistributionData(ParsedEvtcLog log, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        return BuildDamageDistributionTakenDataMinionsInternal(log, minions,null, phase, usedSkills, usedBuffs);
     }
 }
