@@ -11,7 +11,7 @@ public class EffectGUIDEvent : IDToGUIDEvent
         if (evtcVersion.Build > ArcDPSBuilds.ExtraDataInGUIDEvents)
         {
             EffectType = evtcItem.SrcInstid;
-            DefaultDuration = Convert.ToSingle(evtcItem.BuffDmg);
+            DefaultDuration = BitConverter.Int32BitsToSingle(evtcItem.BuffDmg);
         }
     }
 

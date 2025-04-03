@@ -40,7 +40,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser)),
             ]),
             new MechanicGroup([
-                new PlayerDstEffectMechanic(EffectGUIDs.UraSulfuricGeyserTarget, new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
+                new PlayerDstEffectMechanic([EffectGUIDs.UraSulfuricGeyserTarget, EffectGUIDs.UraSulfuricGeyserTargetCM], new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
                 new PlayerDstHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
@@ -62,6 +62,12 @@ internal class UraTheSteamshrieker : MountBalrior
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Deterrence, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Pick-up Shard", "Picked up the Bloodstone Shard", "Bloodstone Shard Pick-up", 0),
                 new PlayerDstBuffApplyMechanic(BloodstoneSaturation, new MechanicPlotlySetting(Symbols.Diamond, Colors.DarkPurple), "Dispel", "Used Dispel (SAK)", "Used Dispel", 0),
+            ]),
+            new MechanicGroup([
+                new PlayerDstHitMechanic(PressureRelease, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "PresRel.H", "Hit by Pressure Release (Ventshot Jump AoE)", "Pressure Release Hit", 0),
+                new PlayerDstHitMechanic(ForcedEruption, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "ForcErup.H", "Hit by Forced Eruption (Ventshot Homing Orb)", "Forced Eruption Hit", 0),
+                new PlayerDstHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", 0)
+                    .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
             ]),
             new EnemySrcSkillMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
@@ -309,7 +315,7 @@ internal class UraTheSteamshrieker : MountBalrior
         switch (target.ID)
         {
             case (int)TargetID.Ura:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Create Titanspawn Geyser - Ura jumps in places and creates an AoE underneath
                 var ctg = casts.Where(x => x.SkillId == CreateTitanspawnGeyser);
@@ -452,7 +458,63 @@ internal class UraTheSteamshrieker : MountBalrior
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TargetID.LegendaryVentshot:
-                
+                var castsVentshot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+                // Stone Slam - Autoattack with cone
+                var stoneSlams = castsVentshot.Where(x => x.SkillId == StoneSlamConeKnockback);
+                foreach (CastEvent cast in stoneSlams)
+                {
+                    (long start, long end) lifespan = (cast.Time, cast.GetInterruptedByStunTime(log));
+                    long growing = cast.Time + 2000; // 2000 Cast Duration
+                    target.TryGetCurrentFacingDirection(log, cast.Time, out var rotation, 300);
+                    var cone = (PieDecoration)new PieDecoration(350, 90, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(rotation));
+                    replay.Decorations.AddWithGrowing(cone, growing);
+                }
+
+                // Pressure Release - Jump underneath Ventshot indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraVentshotPressureRelease, out var pressureReleases))
+                {
+                    foreach (EffectEvent effect in pressureReleases)
+                    {
+                        // Value found from Jet effect time - Indicator time
+                        long durationIndicator = 1240;
+                        (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.UraVentshotPressureReleaseWaterJet);
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Stun, lifespan.start, durationIndicator));
+                        var indicator = new CircleDecoration(225, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(indicator, lifespan.end);
+                    }
+                }
+
+                // Pressure Release - Water Jet
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraVentshotPressureReleaseWaterJet, out var pressureReleaseJets))
+                {
+                    foreach (EffectEvent effect in pressureReleaseJets)
+                    {
+                        // Pressure Release has 5 jets, one underneath and 4 on the cardinal sides
+                        // If the effect has a duration of 3000, it's the jet underneath the Ventshot, otherwise it includes indicator and jet together.
+                        if (effect.Duration != 3000)
+                        {
+                            long durationIndicator = 1240;
+                            long startIndicator = effect.Time - durationIndicator;
+                            long growing = startIndicator + durationIndicator;
+
+                            (long start, long end) lifespanIndicator = (startIndicator, ComputeEndCastTimeByBuffApplication(log, target, Stun, startIndicator, durationIndicator));
+                            (long start, long end) lifespanJet = effect.ComputeLifespan(log, 3000);
+                            
+                            var indicator = new CircleDecoration(225, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            var jet = new CircleDecoration(225, lifespanJet, Colors.LightBlue, 0.2, new PositionConnector(effect.Position));
+                            
+                            replay.Decorations.AddWithGrowing(indicator, growing);
+                            replay.Decorations.Add(jet);
+                        }
+                        else
+                        {
+                            (long start, long end) lifespanJet = effect.ComputeLifespan(log, 3000);
+                            var jet = new CircleDecoration(225, lifespanJet, Colors.LightBlue, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(jet);
+                        }
+                    }
+                }
                 break;
             case (int)TargetID.ChampionFumaroller:
                 // Breaking Ground - 8 pointed star
@@ -506,7 +568,7 @@ internal class UraTheSteamshrieker : MountBalrior
         }
 
         // Sulfuric Geyser - Target
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.UraSulfuricGeyserTarget, out var sulfuricGeyserTarget))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, [EffectGUIDs.UraSulfuricGeyserTarget, EffectGUIDs.UraSulfuricGeyserTargetCM], out var sulfuricGeyserTarget))
         {
             foreach (var effect in sulfuricGeyserTarget)
             {

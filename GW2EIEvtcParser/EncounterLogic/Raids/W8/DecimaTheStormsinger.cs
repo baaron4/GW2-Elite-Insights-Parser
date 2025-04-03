@@ -340,7 +340,7 @@ internal class DecimaTheStormsinger : MountBalrior
         {
             case (int)TargetID.Decima:
             case (int)TargetID.DecimaCM:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Thrumming Presence - Red Ring around Decima
                 long buffId = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
@@ -659,7 +659,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             case (int)TargetID.TranscendentBoulder:
-                var boulderCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var boulderCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Sparking Reverberation - Breakbar
                 var sparkingReverberation = boulderCasts.Where(x => x.SkillId == SparkingReverberation);
