@@ -4554,8 +4554,11 @@ public static class SkillIDs
     public const long FluxlanceFusillade = 74660;
     public const long Propel = 74669;
     public const long RainOfSpores2 = 74679;
+    public const long StoneSlamConeKnockback = 74683;
     public const long FulgentAuraTier1 = 74686;
+    public const long BlastForward = 74687;
     public const long POV_FocusedFluxlanceBuff = 74689;
+    public const long StoneSlamAutoattack = 74691;
     public const long FluxlanceSalvo1 = 74705;
     public const long ChorusOfThunderDamage = 74706;
     public const long RisingPressure = 74707;
@@ -4589,6 +4592,7 @@ public static class SkillIDs
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
     public const long EnfeeblingMiasma = 74851;
+    public const long BlastBack = 74863;
     public const long WaveOfCorruption = 74867;
     public const long SeismicCrashHitboxDamage = 74870;
     public const long ThrummingPresenceDamage = 74872;
@@ -4609,6 +4613,7 @@ public static class SkillIDs
     public const long Return = 74961;
     public const long DecimaConduitWallBuff = 74962;
     public const long Slam = 74965;
+    public const long PressureRelease = 74966;
     public const long EruptionOfRot = 74976;
     public const long ThrummingPresenceBuff = 74982;
     public const long RelicOfTheBeehive = 74988;
@@ -4662,12 +4667,14 @@ public static class SkillIDs
     public const long ToxicBuildup = 75222;
     public const long DeploySiegeSuit_InfiniteSiegeSuit = 75227;
     public const long RockSmash2 = 75229;
+    public const long ForcedEruption = 75232;
     public const long DeploySentryTurret = 75238;
     public const long UnstoppableDecima = 75246;
     public const long StompTheGrowth3 = 75248;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
     public const long ScatteringSporeblast2 = 75262;
+    public const long SearingSnipe = 75265;
     public const long POV_WhirlpoolBuff = 75269;
     public const long SparkingAuraTier3 = 75270;
     public const long DeployTrebuchet_InfiniteTrebuchet = 75271;
