@@ -315,7 +315,7 @@ internal class UraTheSteamshrieker : MountBalrior
         switch (target.ID)
         {
             case (int)TargetID.Ura:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Create Titanspawn Geyser - Ura jumps in places and creates an AoE underneath
                 var ctg = casts.Where(x => x.SkillId == CreateTitanspawnGeyser);
@@ -458,10 +458,10 @@ internal class UraTheSteamshrieker : MountBalrior
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TargetID.LegendaryVentshot:
-                var castsVentshot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var castsVentshot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Stone Slam - Autoattack with cone
-                var stoneSlams = castsVentshot.Where(x => x.SkillId == StoneSlamConeKnockback).ToList();
+                var stoneSlams = castsVentshot.Where(x => x.SkillId == StoneSlamConeKnockback);
                 foreach (CastEvent cast in stoneSlams)
                 {
                     (long start, long end) lifespan = (cast.Time, cast.GetInterruptedByStunTime(log));
