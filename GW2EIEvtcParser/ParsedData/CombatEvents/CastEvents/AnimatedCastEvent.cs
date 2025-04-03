@@ -141,8 +141,7 @@ public class AnimatedCastEvent : CastEvent
         var stunStatus = log.FindActor(Caster).GetBuffStatus(log, SkillIDs.Stun, Time, ExpectedEndTime).FirstOrNull((in Segment x) => x.Value > 0);
         if (stunStatus != null)
         {
-            //TODO(Rennorb) @correctness: Why the cast?
-            return (int)stunStatus.Value.Start;
+            return stunStatus.Value.Start;
         }
         return EndTime;
     }
