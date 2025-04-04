@@ -80,6 +80,7 @@ internal static class Colors
     public static Color DarkMagenta = new(128, 0, 128);
     public static Color Blue = new(0, 0, 255);
     public static Color CobaltBlue = new(0, 50, 180);
+    public static Color LightCobaltBlue = new(0, 80, 255);
     public static Color SkyBlue = new(69, 182, 254);
     public static Color Ice = new(200, 233, 233);
     public static Color White = new(255, 255, 255);

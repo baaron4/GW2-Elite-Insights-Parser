@@ -203,9 +203,9 @@ internal class Sabetha : SpiritVale
                             {
                                 var connector = new AgentConnector(target);
                                 var rotationConnector = new AngleConnector(facingBulletHail);
-                                replay.Decorations.Add(new PieDecoration(radius, 28, firstCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                                replay.Decorations.Add(new PieDecoration(radius, 54, secondCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                                replay.Decorations.Add(new PieDecoration(radius, 81, thirdCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 28, firstCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 54, secondCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 81, thirdCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
                             }
                             break;
                         default:

@@ -539,8 +539,8 @@ public abstract partial class SingleActor : Actor
     {
         var animationCastData = log.CombatData.GetAnimatedCastData(AgentItem);
         var instantCastData = log.CombatData.GetInstantCastData(AgentItem);
+        #pragma warning disable IDE0028 //NOTE(Rennorb): this is (likely) more efficient because of the list types
         CastEvents = new List<CastEvent>(animationCastData.Count + instantCastData.Count);
-        #pragma warning disable IDE0028 //NOTE(Rennorb): this is (liikely) mroe efficient because of the list tpes
         CastEvents.AddRange(animationCastData);
         CastEvents.AddRange(instantCastData);
         #pragma warning restore IDE0028 
