@@ -513,230 +513,267 @@ internal class Qadim : MythwrightGambit
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+
+        long castDuration;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Qadim:
-                //CC
-                var breakbar = cls.Where(x => x.SkillId == QadimCC);
-                foreach (CastEvent c in breakbar)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                //Riposte
-                var riposte = cls.Where(x => x.SkillId == QadimRiposte);
-                foreach (CastEvent c in riposte)
-                {
-                    uint radius = 2200;
-                    replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), Colors.Red, 0.5, new AgentConnector(target)));
-                }
-                //Big Hit
-                var maceShockwave = cls.Where(x => x.SkillId == BigHit && !x.IsInterrupted);
-                foreach (CastEvent c in maceShockwave)
-                {
-                    int start = (int)c.Time;
-                    int delay = 2230;
-                    int duration = 2680;
-                    uint radius = 2000;
-                    uint impactRadius = 40;
-                    int spellCenterDistance = 300;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
-                        && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
+                    switch (cast.SkillId)
                     {
-                        var position = new Vector3(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                        (long, long) lifespanShockwave = (start + delay, start + delay + duration);
-                        GeographicalConnector connector = new PositionConnector(position);
-                        replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
-                        replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
-                        replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
+                        // Breakbar CC
+                        case QadimCC:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Riposte
+                        case QadimRiposte:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new CircleDecoration(2200, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
+                            break;
+                        // Big Hit - Mace smash to the ground
+                        case BigHit:
+                            long start = cast.Time;
+                            int delay = 2230;
+                            castDuration = 2680;
+                            uint radius = 2000;
+                            uint impactRadius = 40;
+                            int spellCenterDistance = 300;
+                            if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
+                                && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
+                            {
+                                var position = new Vector3(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
+                                (long, long) lifespanShockwave = (start + delay, start + delay + castDuration);
+                                GeographicalConnector connector = new PositionConnector(position);
+                                replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
+                                replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
+                                replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case (int)TargetID.AncientInvokedHydra:
-                //CC
-                var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor);
-                foreach (CastEvent c in fieryMeteor)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                var eleBreath = cls.Where(x => x.SkillId == ElementalBreath);
-                foreach (CastEvent c in eleBreath)
-                {
-                    int start = (int)c.Time;
-                    uint radius = 1300;
-                    int delay = 2600;
-                    int duration = 1000;
-                    int openingAngle = 70;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                    switch (cast.SkillId)
                     {
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.LightOrange, 0.3, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                        // Fiery Meteor - Breakbar CC
+                        case FieryMeteor:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Elemental Breath - Triple fire breath
+                        case ElementalBreath:
+                            {
+                                long delay = 2600;
+                                castDuration = 1000;
+                                lifespan = (cast.Time + delay, cast.Time + delay + castDuration);
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start + 1000, out var facing))
+                                {
+                                    replay.Decorations.Add(new PieDecoration(1300, 70, lifespan, Colors.LightOrange, 0.3, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case (int)TargetID.WyvernMatriarch:
-                //Wing Buffet
-                var wingBuffet = cls.Where(x => x.SkillId == WingBuffet);
-                foreach (CastEvent c in wingBuffet)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int preCast = Math.Min(3500, c.ActualDuration);
-                    int duration = Math.Min(6500, c.ActualDuration);
-                    uint range = 2800;
-                    uint span = 2400;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(range / 2, 0, 0), true);
-                        var rotationConnextor = new AngleConnector(facing);
-                        replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(rotationConnextor));
-                        replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), Colors.LightBlue, 0.5, positionConnector).UsingRotationConnector(rotationConnextor));
-                    }
-                }
-                //Breath
-                var matBreath = cls.Where(x => x.SkillId == FireBreath);
-                foreach (CastEvent c in matBreath)
-                {
-                    int start = (int)c.Time;
-                    uint radius = 1000;
-                    int delay = 1600;
-                    int duration = 3000;
-                    int openingAngle = 70;
-                    int fieldDuration = 10000;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
-                    {
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
-                    }
-                }
-                //Tail Swipe
-                var matSwipe = cls.Where(x => x.SkillId == TailSwipe);
-                foreach (CastEvent c in matSwipe)
-                {
-                    int start = (int)c.Time;
-                    uint maxRadius = 700;
-                    uint radiusDecrement = 100;
-                    int delay = 1435;
-                    int openingAngle = 59;
-                    int angleIncrement = 60;
-                    int coneAmount = 4;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (uint i = 0; i < coneAmount; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                        // Wing Buffet
+                        case WingBuffet:
+                            {
+                                long start = cast.Time;
+                                int preCast = Math.Min(3500, cast.ActualDuration);
+                                int duration = Math.Min(6500, cast.ActualDuration);
+                                uint range = 2800;
+                                uint span = 2400;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(range / 2, 0, 0), true);
+                                    var rotationConnextor = new AngleConnector(facing);
+                                    replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(rotationConnextor));
+                                    replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), Colors.LightBlue, 0.5, positionConnector).UsingRotationConnector(rotationConnextor));
+                                }
+                            }
+                            break;
+                        // Fire Breath
+                        case FireBreath:
+                            {
+                                long start = cast.Time;
+                                uint radius = 1000;
+                                int delay = 1600;
+                                int duration = 3000;
+                                int openingAngle = 70;
+                                int fieldDuration = 10000;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
+                                {
+                                    var rotationConnector = new AngleConnector(facing);
+                                    replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
+                                    replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
+                                }
+                            }
+                            break;
+                        // Tail Swipe
+                        case TailSwipe:
+                            {
+                                long start = cast.Time;
+                                uint maxRadius = 700;
+                                uint radiusDecrement = 100;
+                                int delay = 1435;
+                                int openingAngle = 59;
+                                int angleIncrement = 60;
+                                int coneAmount = 4;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (uint i = 0; i < coneAmount; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                        replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
-                        }
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case (int)TargetID.WyvernPatriarch:
-                //CC
-                var patCC = cls.Where(x => x.SkillId == PatriarchCC);
-                foreach (CastEvent c in patCC)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                //Breath
-                var patBreath = cls.Where(x => x.SkillId == FireBreath);
-                foreach (CastEvent c in patBreath)
-                {
-                    int start = (int)c.Time;
-                    uint radius = 1000;
-                    int delay = 1600;
-                    int duration = 3000;
-                    int openingAngle = 60;
-                    int fieldDuration = 10000;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
+                    switch (cast.SkillId)
                     {
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
-                    }
-                }
-                //Tail Swipe
-                var patSwipe = cls.Where(x => x.SkillId == TailSwipe);
-                foreach (CastEvent c in patSwipe)
-                {
-                    int start = (int)c.Time;
-                    uint maxRadius = 700;
-                    uint radiusDecrement = 100;
-                    int delay = 1435;
-                    int openingAngle = 59;
-                    int angleIncrement = 60;
-                    int coneAmount = 4;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (uint i = 0; i < coneAmount; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
-                        }
+                        // Breakbar CC
+                        case PatriarchCC:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Fire Breath
+                        case FireBreath:
+                            {
+                                long start = cast.Time;
+                                uint radius = 1000;
+                                int delay = 1600;
+                                int duration = 3000;
+                                int openingAngle = 60;
+                                int fieldDuration = 10000;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
+                                {
+                                    var rotationConnector = new AngleConnector(facing);
+                                    replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
+                                    replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay + duration, start + delay + fieldDuration), Colors.Red, 0.3, new PositionConnector(pos)).UsingRotationConnector(rotationConnector));
+                                }
+                            }
+                            break;
+                        // Tail Swipe
+                        case TailSwipe:
+                            {
+                                long start = cast.Time;
+                                uint maxRadius = 700;
+                                uint radiusDecrement = 100;
+                                int delay = 1435;
+                                int openingAngle = 59;
+                                int angleIncrement = 60;
+                                int coneAmount = 4;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (uint i = 0; i < coneAmount; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                        replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case (int)TargetID.ApocalypseBringer:
-                var jumpShockwave = cls.Where(x => x.SkillId == ShatteredEarth);
-                foreach (CastEvent c in jumpShockwave)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int delay = 1800;
-                    int duration = 3000;
-                    uint maxRadius = 2000;
-                    (long, long) lifespan = (start + delay, start + delay + duration);
-                    GeographicalConnector connector = new AgentConnector(target);
-                    replay.Decorations.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
-                }
-                var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp);
-                foreach (CastEvent c in stompShockwave)
-                {
-                    int start = (int)c.Time;
-                    int delay = 1600;
-                    int duration = 3500;
-                    uint maxRadius = 2000;
-                    uint impactRadius = 500;
-                    int spellCenterDistance = 270; //hitbox radius
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
+                    switch (cast.SkillId)
                     {
-                        var position = new Vector3(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
-                        replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
-                        replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
-                        replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
-                    }
-                }
-                //CC
-                var summon = cls.Where(x => x.SkillId == SummonDestroyer);
-                foreach (CastEvent c in summon)
-                {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                //Pizza
-                var forceWave = cls.Where(x => x.SkillId == WaveOfForce);
-                foreach (CastEvent c in forceWave)
-                {
-                    int start = (int)c.Time;
-                    uint maxRadius = 1000;
-                    uint radiusDecrement = 200;
-                    int delay = 1560;
-                    int openingAngle = 44;
-                    int angleIncrement = 45;
-                    int coneAmount = 3;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (uint i = 0; i < coneAmount; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
-                        }
+                        // Shattered Earth - Jump with shockwave
+                        case ShatteredEarth:
+                            {
+                                long start = cast.Time;
+                                int delay = 1800;
+                                int duration = 3000;
+                                uint maxRadius = 2000;
+                                lifespan = (start + delay, start + delay + duration);
+                                GeographicalConnector connector = new AgentConnector(target);
+                                replay.Decorations.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
+                            }
+                            break;
+                        // Seismic Stomp - Stomp with shockwave
+                        case SeismicStomp:
+                            {
+                                long start = cast.Time;
+                                int delay = 1600;
+                                int duration = 3500;
+                                uint maxRadius = 2000;
+                                uint impactRadius = 500;
+                                int spellCenterDistance = 270; //hitbox radius
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
+                                {
+                                    var position = new Vector3(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
+                                    replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
+                                    replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                                }
+                            }
+                            break;
+                        // Wave of Force - Cones Swipe
+                        case WaveOfForce:
+                            {
+                                long start = cast.Time;
+                                uint maxRadius = 1000;
+                                uint radiusDecrement = 200;
+                                int delay = 1560;
+                                int openingAngle = 44;
+                                int angleIncrement = 45;
+                                int coneAmount = 3;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (uint i = 0; i < coneAmount; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
+                                        replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        // Summon Destroyer - Breakbar CC
+                        case SummonDestroyer:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
@@ -1447,13 +1484,13 @@ internal class Qadim : MythwrightGambit
     /// Check the NPC positions for the achievement eligiblity.<br></br>
     /// </summary>
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
-    private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
+    private bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
     {
-        SingleActor? qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
-        SingleActor? hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.AncientInvokedHydra)).FirstOrDefault();
-        SingleActor? bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.ApocalypseBringer)).FirstOrDefault();
-        SingleActor? matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.WyvernMatriarch)).FirstOrDefault();
-        SingleActor? patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.WyvernPatriarch)).FirstOrDefault();
+        SingleActor? qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+        SingleActor? hydra = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AncientInvokedHydra));
+        SingleActor? bringer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ApocalypseBringer));
+        SingleActor? matriarch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernMatriarch));
+        SingleActor? patriarch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernPatriarch));
 
         if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
         {

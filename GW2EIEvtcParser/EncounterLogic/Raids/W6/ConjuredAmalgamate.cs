@@ -364,12 +364,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
         var shieldCast = casts.Where(x => x.SkillId == ConjuredProtectionSAK);
         foreach (CastEvent c in shieldCast)
         {
-            int start = (int)c.Time;
             int duration = 10000;
             uint radius = 300;
-            if (p.TryGetCurrentInterpolatedPosition(log, start, out var position))
+            (long start, long end) lifespan = (c.Time, c.Time + duration);
+            if (p.TryGetCurrentInterpolatedPosition(log, lifespan.start, out var position))
             {
-                var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
+                var circle = new CircleDecoration(radius, lifespan, Colors.Magenta, 0.2, new PositionConnector(position));
                 replay.Decorations.AddWithBorder(circle);
             }
         }
