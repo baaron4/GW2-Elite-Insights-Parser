@@ -203,7 +203,6 @@ internal class Artsariiv : ShatteredObservatory
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
         long castDuration;
-        long growing;
         (long start, long end) lifespan;
 
         switch (target.ID)

@@ -479,8 +479,9 @@ internal class AiKeeperOfThePeak : SunquaPeak
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
 
+        long growing;
+        (long start, long end) lifespan;
 
-        IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
         switch (target.ID)
         {
             case (int)TargetID.CCSorrowDemon:
@@ -488,34 +489,37 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     const long sorrowFullCastDuration = 11840;
                     const long sorrowHitDelay = 400;
                     const uint sorrowIndicatorSize = 2000;
-                    var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate);
-                    foreach (AnimatedCastEvent cast in casts)
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+
+                    foreach (CastEvent cast in casts)
                     {
-                        if (cast.SkillId == OverwhelmingSorrowWindup)
+                        switch (cast.SkillId)
                         {
-                            long start = cast.Time;
-                            long fullEnd = start + sorrowFullCastDuration;
-                            AnimatedCastEvent? detonate = detonates.Where(x => x.Time > start && x.Time < fullEnd + ServerDelayConstant).FirstOrDefault();
-                            long end;
-                            if (detonate != null)
-                            {
-                                end = detonate.Time;
-                                long hit = detonate.Time + sorrowHitDelay;
-                                replay.Decorations.Add(new CircleDecoration(sorrowIndicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
-                            }
-                            else
-                            {
-                                // attempt to find end while handling missing cast durations
-                                end = cast.EndTime > ServerDelayConstant ? cast.EndTime : fullEnd;
-                                DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
-                                if (dead != null)
+                            case OverwhelmingSorrowWindup:
+                                growing = cast.Time + sorrowFullCastDuration;
+                                lifespan = (cast.Time, growing);
+                                CastEvent? detonate = casts.FirstOrDefault(x => x.SkillId == OverwhelmingSorrowDetonate && x.Time > lifespan.start && x.Time < lifespan.end + ServerDelayConstant);
+                                if (detonate != null)
                                 {
-                                    end = Math.Min(end, dead.Time);
+                                    lifespan.end = detonate.Time;
+                                    long hit = detonate.Time + sorrowHitDelay;
+                                    replay.Decorations.Add(new CircleDecoration(sorrowIndicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
                                 }
-                            }
-                            var decoration = new CircleDecoration(sorrowIndicatorSize, (start, end), Colors.Orange, 0.15, new AgentConnector(target));
-                            replay.Decorations.Add(decoration.Copy().UsingFilled(false));
-                            replay.Decorations.Add(decoration.UsingGrowingEnd(fullEnd));
+                                else
+                                {
+                                    // attempt to find end while handling missing cast durations
+                                    lifespan.end = cast.EndTime > ServerDelayConstant ? cast.EndTime : lifespan.end;
+                                    DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                                    if (dead != null)
+                                    {
+                                        lifespan.end = Math.Min(lifespan.end, dead.Time);
+                                    }
+                                }
+                                var circle = new CircleDecoration(sorrowIndicatorSize, lifespan, Colors.Orange, 0.15, new AgentConnector(target)).UsingFilled(false);
+                                replay.Decorations.AddWithFilledWithGrowing(circle, true, growing);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;

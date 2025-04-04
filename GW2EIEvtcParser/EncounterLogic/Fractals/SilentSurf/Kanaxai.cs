@@ -331,43 +331,50 @@ internal class Kanaxai : SilentSurf
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
 
         switch (target.ID)
         {
             case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
-                // World Cleaver
-                var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver);
-                foreach (CastEvent c in worldCleaver)
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castDuration = 26320;
-                    (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                    var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
-                    var firstHit = hits.FirstOrDefault(x => x.Time > c.Time);
-                    if (firstHit != null)
+                    switch (cast.SkillId)
                     {
-                        (long start, long end) lifespanHit = (c.Time, firstHit.Time);
-                        AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
-                    }
-                    else
-                    {
-                        AddWorldCleaverDecoration(target, replay, lifespan, lifespan.end);
-                    }
-                }
-                // Dread Visage
-                var dreadVisage = casts.Where(x => x.SkillId == DreadVisageKanaxaiSkill || x.SkillId == DreadVisageKanaxaiSkillIsland);
-                foreach (CastEvent c in dreadVisage)
-                {
-                    int castDuration = 5400;
-                    int expectedEndCastTime = (int)c.Time + castDuration;
-                    double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
-                    if (actualDuration > 0)
-                    {
-                        replay.Decorations.AddOverheadIcon(new Segment(c.Time, c.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
-                    }
-                    else
-                    {
-                        replay.Decorations.AddOverheadIcon(new Segment(c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                        // World Cleaver
+                        case WorldCleaver:
+                            castDuration = 26320;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > cast.Time);
+                            var firstHit = hits.FirstOrDefault(x => x.Time > cast.Time);
+                            if (firstHit != null)
+                            {
+                                (long start, long end) lifespanHit = (cast.Time, firstHit.Time);
+                                AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
+                            }
+                            else
+                            {
+                                AddWorldCleaverDecoration(target, replay, lifespan, lifespan.end);
+                            }
+                            break;
+                        // Dread Visage
+                        case DreadVisageKanaxaiSkill:
+                        case DreadVisageKanaxaiSkillIsland:
+                            castDuration = 5400;
+                            growing = (int)cast.Time + castDuration;
+                            double actualDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, castDuration);
+                            if (actualDuration > 0)
+                            {
+                                replay.Decorations.AddOverheadIcon(new Segment(cast.Time, cast.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            }
+                            else
+                            {
+                                replay.Decorations.AddOverheadIcon(new Segment(cast.Time, growing, 1), target, ParserIcons.EyeOverhead, 30);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
@@ -376,54 +383,57 @@ internal class Kanaxai : SilentSurf
             case (int)TargetID.AspectOfExposure:
             case (int)TargetID.AspectOfDeath:
             case (int)TargetID.AspectOfFear:
-                // Tether casts performed by Aspects
-                IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
-                foreach (AnimatedCastEvent cast in tetherCasts)
-                {
-                    int start = (int)cast.Time;
-                    int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                    replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
-                }
-                // Dread Visage
-                var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill);
                 // Check if the log contains Sugar Rush
                 bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
-                foreach (CastEvent c in dreadVisageAspects)
+                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castDuration = 5400;
-                    int expectedEndCastTime = (int)c.Time + castDuration;
-
-                    Segment? quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrNull();
-
-                    // If the aspect has Sugar Rush AND Quickness
-                    if (hasSugarRush && quickness != null)
+                    switch (cast.SkillId)
                     {
-                        double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, c.Time, castDuration);
-                        var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
-                    }
+                        // Tether casts performed by Aspects
+                        case AspectTetherSkill:
+                            lifespan = (cast.Time, cast.ExpectedEndTime); // actual end is often much later, just use expected end for short highlight
+                            replay.Decorations.Add(new CircleDecoration(180, 20, lifespan, Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
+                            break;
+                        // Dread Visage
+                        case DreadVisageAspectSkill:
+                            castDuration = 5400;
+                            growing = (int)cast.Time + castDuration;
 
-                    // If the aspect has Sugar rush AND NOT Quickness
-                    if (hasSugarRush && quickness == null)
-                    {
-                        var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
-                        var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
-                    }
+                            Segment? quickness = target.GetBuffStatus(log, Quickness, cast.Time, growing).Where(x => x.Value == 1).FirstOrNull();
 
-                    // If the aspect DOESN'T have Sugar rush but HAS Quickness
-                    if (!hasSugarRush && quickness != null)
-                    {
-                        double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
-                        var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
-                    }
+                            // If the aspect has Sugar Rush AND Quickness
+                            if (hasSugarRush && quickness != null)
+                            {
+                                double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, cast.Time, castDuration);
+                                var duration = new Segment(cast.Time, cast.Time + (int)Math.Ceiling(actualDuration), 1);
+                                replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                            }
 
-                    // If the aspect DOESN'T have Sugar Rush and Quickness
-                    if (!hasSugarRush && quickness == null)
-                    {
-                        replay.Decorations.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                            // If the aspect has Sugar rush AND NOT Quickness
+                            if (hasSugarRush && quickness == null)
+                            {
+                                var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
+                                var duration = new Segment(cast.Time, cast.Time + (int)Math.Ceiling(actualDuration), 1);
+                                replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                            }
+
+                            // If the aspect DOESN'T have Sugar rush but HAS Quickness
+                            if (!hasSugarRush && quickness != null)
+                            {
+                                double actualDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, castDuration);
+                                var duration = new Segment(cast.Time, cast.Time + (int)Math.Ceiling(actualDuration), 1);
+                                replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                            }
+
+                            // If the aspect DOESN'T have Sugar Rush and Quickness
+                            if (!hasSugarRush && quickness == null)
+                            {
+                                replay.Decorations.AddOverheadIcon(new Segment((int)cast.Time, growing, 1), target, ParserIcons.EyeOverhead, 30);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
