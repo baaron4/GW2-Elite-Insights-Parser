@@ -158,67 +158,94 @@ internal class Sabetha : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        long castDuration;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Sabetha:
-                var flameWall = cls.Where(x => x.SkillId == Firestorm);
-                foreach (CastEvent c in flameWall)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int preCastTime = 2800;
-                    int duration = 10000;
-                    uint width = 1300; uint height = 60;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(facing)));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
+                        // Firestorm - Flame Wall
+                        case Firestorm:
+                            uint width = 1300;
+                            uint height = 60;
+                            long preCastTime = 2800;
+                            castDuration = 10000;
+                            lifespan = (cast.Time, cast.Time + preCastTime);
+                            (long start, long end) lifespanWall = (lifespan.end, lifespan.end + castDuration);
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facingFirestorm))
+                            {
+                                var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespan, Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(facingFirestorm)));
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanWall, Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facingFirestorm, 360)));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
-
             case (int)TargetID.Kernan:
-                var bulletHail = cls.Where(x => x.SkillId == BulletHail);
-                foreach (CastEvent c in bulletHail)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int firstConeStart = start;
-                    int secondConeStart = start + 800;
-                    int thirdConeStart = start + 1600;
-                    int firstConeEnd = firstConeStart + 400;
-                    int secondConeEnd = secondConeStart + 400;
-                    int thirdConeEnd = thirdConeStart + 400;
-                    uint radius = 1500;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                        // Bullet Hail - 3 Cones
+                        case BulletHail:
+                            uint radius = 1500;
+                            (long start, long end) firstCone = (cast.Time, cast.Time + 400);
+                            (long start, long end) secondCone = (cast.Time + 800, cast.Time + 800 + 400);
+                            (long start, long end) thirdCone = (cast.Time + 1600, cast.Time + 1600 + 400);
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facingBulletHail))
+                            {
+                                var connector = new AgentConnector(target);
+                                var rotationConnector = new AngleConnector(facingBulletHail);
+                                replay.Decorations.Add(new PieDecoration(radius, 28, firstCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 54, secondCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 81, thirdCone, Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
 
             case (int)TargetID.Knuckles:
-                var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
-                foreach (CastEvent c in breakbar)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    switch (cast.SkillId)
+                    {
+                        // Platform Quake
+                        case PlatformQuake:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)));
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 break;
 
             case (int)TargetID.Karde:
-                var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
-                foreach (CastEvent c in flameBlast)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int end = start + 4000;
-                    uint radius = 600;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.Yellow, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                        // Flame Blast
+                        case FlameBlast:
+                            castDuration = 4000;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            if (target.TryGetCurrentFacingDirection(log, lifespan.start, out var facingFlameBlast))
+                            {
+                                replay.Decorations.Add(new PieDecoration(600, 60, lifespan, Colors.Yellow, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facingFlameBlast)));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
@@ -228,7 +255,7 @@ internal class Sabetha : SpiritVale
                     long hideStart = target.FirstAware;
                     foreach (var marker in swords)
                     {
-                        (long start, long end) lifespan = (marker.Time, marker.EndTime);
+                        lifespan = (marker.Time, marker.EndTime);
                         replay.Hidden.Add(new Segment(hideStart, lifespan.start));
                         hideStart = lifespan.end;
                         replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.RedCrossSwordsMarker);

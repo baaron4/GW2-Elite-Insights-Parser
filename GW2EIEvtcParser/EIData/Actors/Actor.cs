@@ -197,6 +197,9 @@ public abstract class Actor
     // Cast logs
     public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
     public abstract IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end);
+    public abstract IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end);
+    public abstract IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end);
+    public abstract IEnumerable<WeaponSwapEvent> GetWeaponSwapEvents(ParsedEvtcLog log, long start, long end);
     // privates
 
     protected static bool KeepIntersectingCastLog(CastEvent evt, long start, long end)

@@ -268,20 +268,20 @@ internal class Ensolyss : Nightmare
                     }
                 }
 
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId) 
                     {
                         // Tail Lash - Cone Swipe
                         case TailLashEnsolyss:
                             castDuration = 1550;
-                            long expectedEndCast = cast.Time + castDuration;
+                            growing = cast.Time + castDuration;
                             lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
                             if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
                             {
                                 var rotation = new AngleConnector(facing);
                                 var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
-                                replay.Decorations.AddWithGrowing(cone, expectedEndCast);
+                                replay.Decorations.AddWithGrowing(cone, growing);
                             }
                             break;
                         // Tormenting Blast - Quarter attacks
@@ -413,7 +413,7 @@ internal class Ensolyss : Nightmare
                 }
                 break;
             case (int)TargetID.NightmareHallucination1:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {

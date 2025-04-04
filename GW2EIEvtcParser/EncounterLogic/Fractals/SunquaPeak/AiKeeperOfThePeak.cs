@@ -489,12 +489,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     const long sorrowFullCastDuration = 11840;
                     const long sorrowHitDelay = 400;
                     const uint sorrowIndicatorSize = 2000;
-                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                     foreach (CastEvent cast in casts)
                     {
                         switch (cast.SkillId)
                         {
+                            // Overwhelming Sorrow - Explosion
                             case OverwhelmingSorrowWindup:
                                 growing = cast.Time + sorrowFullCastDuration;
                                 lifespan = (cast.Time, growing);

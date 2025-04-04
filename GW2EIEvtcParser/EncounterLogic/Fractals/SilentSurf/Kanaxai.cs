@@ -338,11 +338,11 @@ internal class Kanaxai : SilentSurf
         switch (target.ID)
         {
             case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
-                        // World Cleaver
+                        // World Cleaver - 66 & 33% Attack
                         case WorldCleaver:
                             castDuration = 26320;
                             lifespan = (cast.Time, cast.Time + castDuration);
@@ -358,7 +358,7 @@ internal class Kanaxai : SilentSurf
                                 AddWorldCleaverDecoration(target, replay, lifespan, lifespan.end);
                             }
                             break;
-                        // Dread Visage
+                        // Dread Visage - Eye
                         case DreadVisageKanaxaiSkill:
                         case DreadVisageKanaxaiSkillIsland:
                             castDuration = 5400;
@@ -386,7 +386,7 @@ internal class Kanaxai : SilentSurf
                 // Check if the log contains Sugar Rush
                 bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
@@ -395,7 +395,7 @@ internal class Kanaxai : SilentSurf
                             lifespan = (cast.Time, cast.ExpectedEndTime); // actual end is often much later, just use expected end for short highlight
                             replay.Decorations.Add(new CircleDecoration(180, 20, lifespan, Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                             break;
-                        // Dread Visage
+                        // Dread Visage - Eye
                         case DreadVisageAspectSkill:
                             castDuration = 5400;
                             growing = (int)cast.Time + castDuration;

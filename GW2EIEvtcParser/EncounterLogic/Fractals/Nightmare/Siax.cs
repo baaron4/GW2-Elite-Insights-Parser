@@ -140,7 +140,7 @@ internal class Siax : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.Siax:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
@@ -178,7 +178,7 @@ internal class Siax : Nightmare
                 }
                 break;
             case (int)TargetID.EchoOfTheUnclean:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {

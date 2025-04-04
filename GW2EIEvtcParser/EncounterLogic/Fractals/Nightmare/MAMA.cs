@@ -156,7 +156,7 @@ internal class MAMA : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.MAMA:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
@@ -207,7 +207,7 @@ internal class MAMA : Nightmare
             case (int)TargetID.BlueKnight:
             case (int)TargetID.RedKnight:
             case (int)TargetID.GreenKnight:
-                foreach (CastEvent cast in target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {
