@@ -185,8 +185,9 @@ internal class SoullessHorror : HallOfChains
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.SoullessHorror:
@@ -227,95 +228,89 @@ internal class SoullessHorror : HallOfChains
                     }
                 }
 
-                //
-                var howling = cls.Where(x => x.SkillId == HowlingDeath);
-                foreach (CastEvent c in howling)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                
-                var vortex = cls.Where(x => x.SkillId == InnerVortexSlash);
-                foreach (CastEvent c in vortex)
-                {
-                    start = (int)c.Time;
-                    end = start + 4000;
-                    if (target.TryGetCurrentInterpolatedPosition(log, start, out var position))
+                    switch (cast.SkillId)
                     {
-                        var circle = new CircleDecoration(380, (start, end), Colors.LightOrange, 0.5, new PositionConnector(position));
-                        replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
-                        replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), Colors.LightOrange, 0.5, new PositionConnector(position)));
+                        case HowlingDeath:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                            .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        case InnerVortexSlash:
+                            castDuration = 4000;
+                            long doughnutDuration = 1000;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            (long start, long end) lifespanDoughnut = (lifespan.end, lifespan.end + doughnutDuration);
+                            if (target.TryGetCurrentInterpolatedPosition(log, lifespan.start, out var position))
+                            {
+                                var innerCircle = new CircleDecoration(380, lifespan, Colors.LightOrange, 0.2, new PositionConnector(position));
+                                replay.Decorations.AddWithFilledWithGrowing(innerCircle, true, lifespan.end);
+                                var outerDoughnut = new DoughnutDecoration(380, 760, lifespanDoughnut, Colors.LightOrange, 0.2, new PositionConnector(position));
+                                replay.Decorations.AddWithFilledWithGrowing(outerDoughnut, true, lifespanDoughnut.end);
+                            }
+                            break;
+                        case DeathBloom:
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start + 500, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (int i = 0; i < 8; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
+                                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, lifespan, Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        case QuadSlashFirstSet:
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start + 500, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
+                                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, lifespan, Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        case QuadSlashSecondSet:
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start + 500, out var facing))
+                                {
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    var connector = new AgentConnector(target);
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
+                                        replay.Decorations.Add(new PieDecoration(3500, 360 / 12, lifespan, Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                }
-                
-                var deathBloom = cls.Where(x => x.SkillId == DeathBloom);
-                foreach (CastEvent c in deathBloom)
-                {
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (int i = 0; i < 8; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 8));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                        }
-                    }
-
-
-                }
-                
-                var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet);
-                var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet);
-                foreach (CastEvent c in quad1)
-                {
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (int i = 0; i < 4; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                        }
-                    }
-
-
-                }
-
-                foreach (CastEvent c in quad2)
-                {
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (int i = 0; i < 4; i++)
-                        {
-                            var rotationConnector = new AngleConnector(initialAngle + 45 + (i * 360 / 4));
-                            replay.Decorations.Add(new PieDecoration(3500, 360 / 12, (start, end), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector));
-                        }
-                    }
-                    
-
                 }
                 break;
-
             case (int)TargetID.Scythe:
-                replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(80, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
                 break;
 
             case (int)TargetID.TormentedDead:
+                // TODO(Linka) @decorations: Add the explosion AoE to Environment Decorations and lock this behind !log.CombatData.HasEffectData
                 if (replay.Positions.Count == 0)
                 {
                     break;
                 }
-                replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
+                replay.Decorations.Add(new CircleDecoration(400, (lifespan.end, lifespan.end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
                 break;
 
             case (int)TargetID.SurgingSoul:
@@ -327,12 +322,12 @@ internal class SoullessHorror : HallOfChains
                 var firstPos = replay.Positions[0].XYZ;
                 if (firstPos.X < -12000 || firstPos.X > -9250)
                 {
-                    replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
+                    replay.Decorations.Add(new RectangleDecoration(240, 660, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                     break;
                 }
                 else if (firstPos.Y < -525 || firstPos.Y > 2275)
                 {
-                    replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
+                    replay.Decorations.Add(new RectangleDecoration(645, 238, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                     break;
                 }
                 break;
