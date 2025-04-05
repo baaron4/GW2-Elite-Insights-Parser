@@ -87,6 +87,7 @@ internal static class Colors
     public static Color DarkWhite = new(180, 180, 180);
     public static Color Grey = new(60, 60, 60);
     public static Color LightGrey = new(120, 120, 120);
+    public static Color BlueishGrey = new(108, 122, 137);
     public static Color BreakbarImmuneGrey = new(44, 45, 54);
     public static Color Black = new(0, 0, 0);
 
