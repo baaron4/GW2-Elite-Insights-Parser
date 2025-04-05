@@ -519,12 +519,23 @@ public abstract partial class SingleActor : Actor
         return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
 
     }
+
+    public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
+    {
+        return log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+    }
+
+    public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
+    {
+        return log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+    }
+
     protected override void InitCastEvents(ParsedEvtcLog log)
     {
         var animationCastData = log.CombatData.GetAnimatedCastData(AgentItem);
         var instantCastData = log.CombatData.GetInstantCastData(AgentItem);
+        #pragma warning disable IDE0028 //NOTE(Rennorb): this is (likely) more efficient because of the list types
         CastEvents = new List<CastEvent>(animationCastData.Count + instantCastData.Count);
-        #pragma warning disable IDE0028 //NOTE(Rennorb): this is (liikely) mroe efficient because of the list tpes
         CastEvents.AddRange(animationCastData);
         CastEvents.AddRange(instantCastData);
         #pragma warning restore IDE0028 

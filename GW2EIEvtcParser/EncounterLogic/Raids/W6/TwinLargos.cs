@@ -289,68 +289,75 @@ internal class TwinLargos : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        (long start, long end) lifespan;
+
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         switch (target.ID)
         {
             case (int)TargetID.Nikare:
-                //CC
-                var barrageN = cls.Where(x => x.SkillId == AquaticBarrage);
-                foreach (CastEvent c in barrageN)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                //Platform wipe (CM only)
-                var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain);
-                foreach (CastEvent c in aquaticDomainN)
-                {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    uint radius = 800;
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
+                    switch (cast.SkillId)
+                    {
+                        // Aquatic Barrage - Breakbar CC
+                        case AquaticBarrage:
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                            .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Aquatic Domain - Platform wipe (CM only)
+                        case AquaticDomain:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new CircleDecoration(800, lifespan, Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(lifespan.end));
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 break;
             case (int)TargetID.Kenut:
-                //CC
-                var barrageK = cls.Where(x => x.SkillId == AquaticBarrage);
-                foreach (CastEvent c in barrageK)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                //Platform wipe (CM only)
-                var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain);
-                foreach (CastEvent c in aquaticDomainK)
-                {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    uint radius = 800;
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
-                }
-                var shockwave = cls.Where(x => x.SkillId == SeaSwell);
-                foreach (CastEvent c in shockwave)
-                {
-                    int start = (int)c.Time;
-                    int delay = 960;
-                    int duration = 3000;
-                    uint radius = 1200;
-                    (long, long) lifespan = (start + delay, start + delay + duration);
-                    GeographicalConnector connector = new AgentConnector(target);
-                    replay.Decorations.AddShockwave(connector, lifespan, Colors.SkyBlue, 0.5, radius);
-                }
-                var boonSteal = cls.Where(x => x.SkillId == VaporJet);
-                foreach (CastEvent c in boonSteal)
-                {
-                    int start = (int)c.Time;
-                    int delay = 1000;
-                    int duration = 500;
-                    uint width = 500;
-                    uint height = 250;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        var rotationConnextor = new AngleConnector(facing);
-                        replay.Decorations.AddWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
+                        // Aquatic Barrage - Breakbar CC
+                        case AquaticBarrage:
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                            .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Aquatic Domain - Platform wipe (CM only)
+                        case AquaticDomain:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new CircleDecoration(800, lifespan, Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(lifespan.end));
+                            break;
+                        // Sea Swell - Shockwave
+                        case SeaSwell:
+                            {
+                                int delay = 960;
+                                int duration = 3000;
+                                uint radius = 1200;
+                                lifespan = (cast.Time + delay, cast.Time + delay + duration);
+                                GeographicalConnector connector = new AgentConnector(target);
+                                replay.Decorations.AddShockwave(connector, lifespan, Colors.SkyBlue, 0.5, radius);
+                            }
+                            break;
+                        // Vapor Jet - Boon steal
+                        case VaporJet:
+                            {
+                                int delay = 1000;
+                                int duration = 500;
+                                uint width = 500;
+                                uint height = 250;
+                                lifespan = (cast.Time + delay, cast.Time + delay + duration);
+                                if (target.TryGetCurrentFacingDirection(log, cast.Time + 250, out var facing))
+                                {
+                                    var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+                                    var rotationConnextor = new AngleConnector(facing);
+                                    replay.Decorations.AddWithBorder((RectangleDecoration)new RectangleDecoration(width, height, lifespan, Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;

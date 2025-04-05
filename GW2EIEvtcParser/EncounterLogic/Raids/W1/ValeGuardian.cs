@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -187,57 +188,37 @@ internal class ValeGuardian : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
         switch (target.ID)
         {
             case (int)TargetID.ValeGuardian:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
-                foreach (CastEvent c in magicStorms)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (start, end), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(start, 0), (start + 30000, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                if (!log.CombatData.HasEffectData)
-                {
-                    int distributedMagicDuration = 6700;
-                    int impactDuration = 110;
-                    uint arenaRadius = 1600;
-                    var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen);
-                    foreach (CastEvent c in distributedMagicGreen)
+                    switch (cast.SkillId)
                     {
-                        int start = (int)c.Time;
-                        int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
-                        var rotationConnector = new AngleConnector(151);
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-5449.0f, -20219.0f, 0.0f))));
-                    }
-                    var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
-                    foreach (CastEvent c in distributedMagicBlue)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
-                        var rotationConnector = new AngleConnector(31);
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-4063.0f, -20195.0f, 0.0f))));
-                    }
-                    var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
-                    foreach (CastEvent c in distributedMagicRed)
-                    {
-                        int start = (int)c.Time;
-                        int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
-                        var rotationConnector = new AngleConnector(271);
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-4735.0f, -21407.0f, 0.0f))));
+                        // Magic Storm - Breakbar
+                        case MagicStorm:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(
+                                ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.LightBlue, 0.6, Colors.Black, 0.2, 
+                                [(lifespan.start, 0), (lifespan.start + 30000, 100)], new AgentConnector(target)
+                            ).UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Distributed Magic - Green circle in green area
+                        case DistributedMagicGreen:
+                            AddDistributedMagicDecoration(log, replay, cast.Time, new(-5449.0f, -20219.0f, 0.0f), 151);
+                            break;
+                        // Distributed Magic - Green circle in blue area
+                        case DistributedMagicBlue:
+                            AddDistributedMagicDecoration(log, replay, cast.Time, new(-4063.0f, -20195.0f, 0.0f), 31);
+                            break;
+                        // Distributed Magic - Green circle in red area
+                        case DistributedMagicRed:
+                            AddDistributedMagicDecoration(log, replay, cast.Time, new(-4735.0f, -21407.0f, 0.0f), 271);
+                            break;
+                        default:
+                            break;
                     }
                 }
                 #if DEBUG_EFFECTS
@@ -269,5 +250,25 @@ internal class ValeGuardian : SpiritVale
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
+    }
+
+    /// <summary>
+    /// Adds Distributed Magic green circle for older logs without Effect Data.
+    /// </summary>
+    private static void AddDistributedMagicDecoration(ParsedEvtcLog log, CombatReplay replay, long time, Vector3 circlePosition, float angle)
+    {
+        if (!log.CombatData.HasEffectData)
+        {
+            int duration = 6700;
+            int impactDuration = 110;
+            uint arenaRadius = 1600;
+            (long start, long end) lifespan = (time, time + duration);
+            var piePositionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
+            var circlePositionConnector = new PositionConnector(circlePosition);
+            var rotationConnector = new AngleConnector(angle);
+            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, lifespan, Colors.Green, 0.1, piePositionConnector).UsingGrowingEnd(lifespan.end).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (lifespan.end, lifespan.end + impactDuration), Colors.Green, 0.3, piePositionConnector).UsingRotationConnector(rotationConnector));
+            replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Green, 0.2, circlePositionConnector));
+        }
     }
 }

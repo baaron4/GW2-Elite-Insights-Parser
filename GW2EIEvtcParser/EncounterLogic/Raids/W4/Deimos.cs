@@ -542,52 +542,58 @@ internal class Deimos : BastionOfThePenitent
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.Deimos:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var mindCrush = cls.Where(x => x.SkillId == MindCrush);
-                foreach (CastEvent c in mindCrush)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    start = (int)c.Time;
-                    end = start + 5000;
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (start, end), Colors.Red, 0.6, Colors.Black, 0.2, [(start, 0), (end, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                    if (!log.FightData.IsCM)
+                    switch (cast.SkillId)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
-                    }
-                }
-
-                var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1));
-                foreach (CastEvent c in annihilate)
-                {
-                    start = (int)c.Time;
-                    int delay = 1000;
-                    end = start + 2400;
-                    int duration = 120;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
-                    {
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        var connector = new AgentConnector(target);
-                        for (int i = 0; i < 6; i++)
-                        {
-                            var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
-                            replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
-                            if (i % 5 != 0)
+                        // Mind Crush
+                        case MindCrush:
+                            castDuration = 5000;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            if (!log.FightData.IsCM)
                             {
-                                var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
-                                replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
                             }
-                        }
+                            break;
+                        // Annihilate - Slices
+                        case Annihilate1:
+                        case Annihilate2:
+                            long start = cast.Time;
+                            long end = start + 2400;
+                            int delay = 1000;
+                            int duration = 120;
+                            if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                            {
+                                float initialAngle = facing.GetRoundedZRotationDeg();
+                                var connector = new AgentConnector(target);
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    var rotationConnector1 = new AngleConnector(initialAngle + i * 360 / 10);
+                                    replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * duration), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector1));
+                                    replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector1));
+                                    if (i % 5 != 0)
+                                    {
+                                        var rotationConnector2 = new AngleConnector(initialAngle - i * 360 / 10);
+                                        replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.Yellow, 0.5, connector).UsingRotationConnector(rotationConnector2));
+                                        replay.Decorations.Add(new PieDecoration(900, 360 / 10, (start + delay + i * duration, end + i * 120), Colors.LightOrange, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector2));
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
-
                 }
 
+                // Unnatural Signet - Overhead
                 var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(signets, target, BuffImages.UnnaturalSignet);
                 break;
@@ -602,14 +608,16 @@ internal class Deimos : BastionOfThePenitent
             case (int)TargetID.Tear:
                 break;
             case (int)TargetID.Hands:
-                replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.2, new AgentConnector(target)));
                 break;
             case (int)TargetID.Oil:
                 if (!log.CombatData.HasEffectData)
                 {
                     int delayOil = 3000;
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(200, (start, start + delayOil), Colors.LightOrange, 0.5, new AgentConnector(target)), start + delayOil);
-                    replay.Decorations.AddWithBorder(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)), Colors.Red, 0.2);
+                    (long start, long end) lifespanWarning = (lifespan.start, lifespan.start + delayOil);
+                    (long start, long end) lifespanOil = (lifespanWarning.start, lifespan.end);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanWarning, Colors.LightOrange, 0.5, new AgentConnector(target)), lifespanWarning.end);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(200, lifespanOil, Colors.Black, 0.5, new AgentConnector(target)), Colors.Red, 0.2);
                 }
                 break;
             case (int)TargetID.ShackledPrisoner:

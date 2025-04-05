@@ -151,149 +151,158 @@ internal class Gorseval : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Gorseval:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var worldEaters = cls.Where(x => x.SkillId == GorsevalWorldEater);
-                foreach (CastEvent c in worldEaters)
-                {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
-                }
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-                if (phases.Count > 1)
-                {
-                    var rampage = cls.Where(x => x.SkillId == GhastlyRampage);
-                    const byte first = 1 << 0;
-                    const byte second = 1 << 1;
-                    const byte third = 1 << 2;
-                    const byte fourth = 1 << 3;
-                    const byte fifth = 1 << 4;
-                    const byte full = 1 << 5;
+                const byte first = 1 << 0;
+                const byte second = 1 << 1;
+                const byte third = 1 << 2;
+                const byte fourth = 1 << 3;
+                const byte fifth = 1 << 4;
+                const byte full = 1 << 5;
 
-                    var pos = replay.PolledPositions.First().XYZ;
-                    foreach (CastEvent c in rampage)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
                     {
-                        int start = (int)c.Time;
-                        int end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)));
-                        // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                        int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
-                        int phaseIndex;
-                        // get only phases where Gorseval is target (aka main phases)
-                        var gorsevalPhases = phases.Where(x => x.Targets.ContainsKey(target)).ToList();
-                        for (phaseIndex = 1; phaseIndex < gorsevalPhases.Count; phaseIndex++)
-                        {
-                            if (gorsevalPhases[phaseIndex].InInterval(start))
-                            {
-                                break;
-                            }
-                        }
-                        if (pos == default)
-                        {
+                        // World Eater - Oneshot
+                        case GorsevalWorldEater:
+                            castDuration = 10000;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, growing);
+                            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, growing);
                             break;
-                        }
-                        List<byte> patterns;
-                        switch (phaseIndex)
-                        {
-                            case 1:
-                                patterns =
-                                [
-                                    second | third | fifth,
-                                    second | third | fourth,
-                                    first | fourth | fifth,
-                                    first | second | fifth,
-                                    first | third | fifth,
-                                    full
-                                ];
-                                break;
-                            case 2:
-                                patterns =
-                                [
-                                    second | third | fourth,
-                                    first | fourth | fifth,
-                                    first | third | fourth,
-                                    first | second | fifth,
-                                    first | second | third,
-                                    full
-                                ];
-                                break;
-                            case 3:
-                                patterns =
-                                [
-                                    first | fourth | fifth,
-                                    first | second | fifth,
-                                    second | third | fifth,
-                                    third | fourth | fifth,
-                                    third | fourth | fifth,
-                                    full
-                                ];
-                                break;
-                            default:
-                                // no reason to stop parsing because of CR, worst case, no rampage
-                                patterns = [];
-                                ticks = 0;
-                                break;
-                                //throw new EIException("Gorseval cast rampage during a split phase");
-                        }
-                        start += 2200;
-                        for (int i = 0; i < ticks; i++)
-                        {
-                            byte pattern = patterns[i];
-                            var connector = new PositionConnector(pos);
-                            //
-                            var nonFullDecorations = new List<FormDecoration>();
-                            int tickStartNonFull = start + 4000 * i;
-                            int explosionNonFull = tickStartNonFull + 3000;
-                            int tickEndNonFull = tickStartNonFull + 3500;
-                            (int, int) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
-                            if ((pattern & first) > 0)
+                        // Spectral Impact - Slam on the ground
+                        case SpectralImpact:
+                            castDuration = 1185;
+                            lifespan = (cast.Time, Math.Min(cast.Time, cast.Time + castDuration));
+                            uint radius = 320;
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (lifespan.end, lifespan.end + 100), Colors.Red, 0.4, new AgentConnector(target)));
+                            break;
+                        // Ghastly Rampage - Doughnuts
+                        case GhastlyRampage:
+                            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                            if (phases.Count > 1)
                             {
-                                nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                var pos = replay.PolledPositions.First().XYZ;
+                                lifespan = (cast.Time, cast.EndTime);
+                                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)));
+                                // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
+                                int ticks = (int)Math.Min(Math.Ceiling(cast.ActualDuration / 4000.0), 6);
+                                int phaseIndex;
+                                // get only phases where Gorseval is target (aka main phases)
+                                var gorsevalPhases = phases.Where(x => x.Targets.ContainsKey(target)).ToList();
+                                for (phaseIndex = 1; phaseIndex < gorsevalPhases.Count; phaseIndex++)
+                                {
+                                    if (gorsevalPhases[phaseIndex].InInterval(lifespan.start))
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (pos == default)
+                                {
+                                    break;
+                                }
+                                List<byte> patterns;
+                                switch (phaseIndex)
+                                {
+                                    case 1:
+                                        patterns =
+                                        [
+                                            second | third | fifth,
+                                            second | third | fourth,
+                                            first | fourth | fifth,
+                                            first | second | fifth,
+                                            first | third | fifth,
+                                            full
+                                        ];
+                                        break;
+                                    case 2:
+                                        patterns =
+                                        [
+                                            second | third | fourth,
+                                            first | fourth | fifth,
+                                            first | third | fourth,
+                                            first | second | fifth,
+                                            first | second | third,
+                                            full
+                                        ];
+                                        break;
+                                    case 3:
+                                        patterns =
+                                        [
+                                            first | fourth | fifth,
+                                            first | second | fifth,
+                                            second | third | fifth,
+                                            third | fourth | fifth,
+                                            third | fourth | fifth,
+                                            full
+                                        ];
+                                        break;
+                                    default:
+                                        // no reason to stop parsing because of CR, worst case, no rampage
+                                        patterns = [];
+                                        ticks = 0;
+                                        break;
+                                        //throw new EIException("Gorseval cast rampage during a split phase");
+                                }
+                                lifespan.start += 2200;
+                                for (int i = 0; i < ticks; i++)
+                                {
+                                    byte pattern = patterns[i];
+                                    var connector = new PositionConnector(pos);
+                                    //
+                                    var nonFullDecorations = new List<FormDecoration>();
+                                    long tickStartNonFull = lifespan.start + 4000 * i;
+                                    long explosionNonFull = tickStartNonFull + 3000;
+                                    long tickEndNonFull = tickStartNonFull + 3500;
+                                    (long, long) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
+                                    if ((pattern & first) > 0)
+                                    {
+                                        nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                    }
+                                    if ((pattern & second) > 0)
+                                    {
+                                        nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                    }
+                                    if ((pattern & third) > 0)
+                                    {
+                                        nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                    }
+                                    if ((pattern & fourth) > 0)
+                                    {
+                                        nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                    }
+                                    if ((pattern & fifth) > 0)
+                                    {
+                                        nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                    }
+                                    foreach (FormDecoration decoration in nonFullDecorations)
+                                    {
+                                        replay.Decorations.AddWithGrowing(decoration, explosionNonFull);
+                                    }
+                                    // Full a different timings
+                                    if ((pattern & full) > 0)
+                                    {
+                                        (long, long) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
+                                        long fullExplosion = explosionNonFull - 1000;
+                                        replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, Colors.DarkPurpleBlue, 0.25, connector), fullExplosion);
+                                    }
+                                }
+                                
                             }
-                            if ((pattern & second) > 0)
-                            {
-                                nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                            }
-                            if ((pattern & third) > 0)
-                            {
-                                nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                            }
-                            if ((pattern & fourth) > 0)
-                            {
-                                nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                            }
-                            if ((pattern & fifth) > 0)
-                            {
-                                nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                            }
-                            foreach (FormDecoration decoration in nonFullDecorations)
-                            {
-                                replay.Decorations.AddWithGrowing(decoration, explosionNonFull);
-                            }
-                            // Full a different timings
-                            if ((pattern & full) > 0)
-                            {
-                                (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
-                                int fullExplosion = explosionNonFull - 1000;
-                                replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, Colors.DarkPurpleBlue, 0.25, connector), fullExplosion);
-                            }
-                        }
+                            break;
+                        default:
+                            break;
                     }
                 }
-                var slam = cls.Where(x => x.SkillId == SpectralImpact);
-                foreach (CastEvent c in slam)
-                {
-                    int start = (int)c.Time;
-                    int impactPoint = 1185;
-                    int impactTime = start + impactPoint;
-                    int end = Math.Min((int)c.EndTime, impactTime);
-                    uint radius = 320;
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), Colors.Red, 0.4, new AgentConnector(target)));
-                }
+
+                // Protective Shadow - Invulnerability
                 var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var seg in protection)
                 {
@@ -301,7 +310,7 @@ internal class Gorseval : SpiritVale
                 }
                 break;
             case (int)TargetID.ChargedSoul:
-                var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+                lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
                 replay.Decorations.Add(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
             default:

@@ -98,73 +98,77 @@ internal class Boneskinner : Bjora
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-
         switch (target.ID)
         {
             case (int)TargetID.Boneskinner:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                // Death Wind
-                var deathWind = casts.Where(x => x.SkillId == DeathWind);
-                foreach (CastEvent c in deathWind)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castTime = 3330;
-                    int hitTime = 1179;
-                    uint radius = 1500;
-                    int endHitTime = (int)c.Time + hitTime;
-                    int endCastTime = (int)c.Time + castTime;
-
-                    var lastDirection = replay.PolledRotations.LastOrNull((in ParametricPoint3D x) => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
-                    if (lastDirection != null)
+                    switch (cast.SkillId)
                     {
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(lastDirection.Value.XYZ);
-                        // Growing Decoration
-                        var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddWithGrowing(pie, endHitTime);
-                        // Lingering AoE to match in game display
-                        replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
+                        // Death Wind
+                        case DeathWind:
+                            {
+                                int castTime = 3330;
+                                int hitTime = 1179;
+                                uint radius = 1500;
+                                long endHitTime = cast.Time + hitTime;
+                                long endCastTime = cast.Time + castTime;
+
+                                var lastDirection = replay.PolledRotations.LastOrNull((in ParametricPoint3D x) => x.Time > cast.Time + 100 && x.Time < cast.Time + 100 + castTime);
+                                if (lastDirection != null)
+                                {
+                                    var connector = new AgentConnector(target);
+                                    var rotationConnector = new AngleConnector(lastDirection.Value.XYZ);
+                                    // Growing Decoration
+                                    var pie = (PieDecoration)new PieDecoration(radius, 30, (cast.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
+                                    replay.Decorations.AddWithGrowing(pie, endHitTime);
+                                    // Lingering AoE to match in game display
+                                    replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
+                                }
+                            }
+                            break;
+                        // Crushing Cruelty - Jump back to the center
+                        case CrushingCruelty:
+                            {
+                                int hitTime = 2833;
+                                long endTime = cast.Time + hitTime;
+
+                                // Position of the jump back
+                                var jumpPosition = new Vector3(613.054f, -85.3458f, -7075.265f);
+                                var circle = new CircleDecoration(1500, (cast.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
+                                replay.Decorations.AddWithGrowing(circle, endTime);
+                            }
+                            break;
+                        // Douse in Darkness - Jump in air
+                        case DouseInDarkness:
+                            {
+                                int jumpTime = 2500;
+                                uint radius = 1500;
+                                long endJump = cast.Time + jumpTime;
+                                int timings = 300;
+
+                                // Jump up
+                                var jumpUpCircle = new CircleDecoration(radius, (cast.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
+                                replay.Decorations.AddWithGrowing(jumpUpCircle, endJump);
+                                // Pull
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    long duration = cast.Time + jumpTime + timings * i;
+                                    long end = cast.Time + jumpTime + timings * (i + 1);
+                                    replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
+                                }
+                                // Landing
+                                long pullTime = cast.Time + jumpTime + 1700;
+                                long finalTime = pullTime + 1500;
+                                var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
+                                replay.Decorations.AddWithGrowing(landingCircle, finalTime);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
 
-                // Crushing Cruelty
-                var crushingCruelty = casts.Where(x => x.SkillId == CrushingCruelty);
-                foreach (CastEvent c in crushingCruelty)
-                {
-                    int hitTime = 2833;
-                    uint radius = 1500;
-                    long endTime = c.Time + hitTime;
-
-                    // Position of the jump back
-                    var jumpPosition = new Vector3(613.054f, -85.3458f, -7075.265f);
-                    var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
-                    replay.Decorations.AddWithGrowing(circle, endTime);
-                }
-
-                // Douse in Darkness
-                var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness);
-                foreach (CastEvent c in douseInDarkness)
-                {
-                    int jumpTime = 2500;
-                    uint radius = 1500;
-                    long endJump = c.Time + jumpTime;
-                    int timings = 300;
-
-                    // Jump up
-                    var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
-                    replay.Decorations.AddWithGrowing(jumpUpCircle, endJump);
-                    // Pull
-                    for (int i = 0; i < 4; i++)
-                    {
-                        long duration = c.Time + jumpTime + timings * i;
-                        long end = c.Time + jumpTime + timings * (i + 1);
-                        replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
-                    }
-                    // Landing
-                    long pullTime = c.Time + jumpTime + 1700;
-                    long finalTime = pullTime + 1500;
-                    var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
-                    replay.Decorations.AddWithGrowing(landingCircle, finalTime);
-                }
                 // Cascade
                 AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
                 AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
@@ -183,28 +187,25 @@ internal class Boneskinner : Bjora
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
+        (long start, long end) lifespan;
+
         // Grasp AoE Orange Indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out var indicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out var grasps))
         {
-            foreach (EffectEvent indicator in indicators)
+            foreach (EffectEvent effect in grasps)
             {
-                int duration = 1800;
-                int start = (int)indicator.Time;
-                int end = (int)indicator.Time + duration;
-                var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, new PositionConnector(indicator.Position));
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
-                EnvironmentDecorations.Add(circle);
+                lifespan = effect.ComputeLifespan(log, 1800);
+                var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
         // Grasp Claws Effect / Dark Red AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspClaws1, out var claws))
         {
-            foreach (EffectEvent claw in claws)
+            foreach (EffectEvent effect in claws)
             {
-                int duration = 30000;
-                int start = (int)claw.Time;
-                int end = (int)claw.Time + duration;
-                var circle = new CircleDecoration(100, (start, end), Colors.RedBrownish, 0.2, new PositionConnector(claw.Position));
+                lifespan = effect.ComputeLifespan(log, 30000);
+                var circle = new CircleDecoration(100, lifespan, Colors.RedBrownish, 0.2, new PositionConnector(effect.Position));
                 EnvironmentDecorations.Add(circle);
                 EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
@@ -217,15 +218,13 @@ internal class Boneskinner : Bjora
         {
             foreach (EffectEvent indicator in rectangularIndicators)
             {
-                int duration = 360;
-                int start = (int)indicator.Time;
-                int end = (int)indicator.Time + duration;
+                long duration = 300;
+                (long start, long end) lifespan = indicator.ComputeLifespan(log, duration);
 
-                if (actor.TryGetCurrentFacingDirection(log, start, out var rotation, duration))
+                if (actor.TryGetCurrentFacingDirection(log, lifespan.start, out var rotation, duration))
                 {
-                    var connector = new PositionConnector(indicator.Position);
-                    var rotationConnector = new AngleConnector(rotation);
-                    replay.Decorations.AddWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
+                    var rectangle = (RectangleDecoration)new RectangleDecoration(width, height, lifespan, Colors.Orange, 0.2, new PositionConnector(indicator.Position)).UsingRotationConnector(new AngleConnector(rotation));
+                    replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                 }
             }
         }

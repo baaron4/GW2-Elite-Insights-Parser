@@ -171,74 +171,54 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int crStart = (int)replay.TimeOffsets.start;
-        int crEnd = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Adina:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var doubleQuantumQuakes = casts.Where(x => x.SkillId == DoubleRotatingEarthRays);
-                foreach (CastEvent c in doubleQuantumQuakes)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    long start = c.Time;
-                    int preCastTime = 2990; // casttime 0
-                    int duration = c.ActualDuration;
-                    uint width = 1100; uint height = 60;
-                    foreach (int angle in new List<int> { 90, 270 })
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+                        // Quantum Quakes - Double Rotating Earth Rays (Normal Mode)
+                        case DoubleRotatingEarthRays:
+                            AddQuantumQuakesDecoration(replay, target, cast, [90, 270]);
+                            break;
+                        // Quantum Quakes - Triple Rotating Earth Rays (Challenge Mode)
+                        case TripleRotatingEarthRays:
+                            AddQuantumQuakesDecoration(replay, target, cast, [30, 150, 270]);
+                            break;
+                        // Terraform - Phase shockwave
+                        case Terraform:
+                            long delay = 2000; // casttime 0 from skill def
+                            castDuration = 5000;
+                            uint radius = 1100;
+                            lifespan = (cast.Time + delay, cast.Time + castDuration);
+                            GeographicalConnector connector = new AgentConnector(target);
+                            replay.Decorations.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
+                            break;
+                        // Boulder Barrage
+                        case BoulderBarrage:
+                            castDuration = 4600; // cycle 3 from skill def
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            replay.Decorations.Add(new CircleDecoration(1100, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target)).UsingGrowingEnd(lifespan.end));
+                            break;
+                        default:
+                            break;
                     }
                 }
-                //
-                var tripleQuantumQuakes = casts.Where(x => x.SkillId == TripleRotatingEarthRays);
-                foreach (CastEvent c in tripleQuantumQuakes)
-                {
-                    long start = c.Time;
-                    int preCastTime = 2990; // casttime 0
-                    int duration = c.ActualDuration;
-                    uint width = 1100; uint height = 60;
-                    foreach (int angle in new List<int> { 30, 150, 270 })
-                    {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
-                    }
 
-                }
-                //
-                var terraforms = casts.Where(x => x.SkillId == Terraform);
-                foreach (CastEvent c in terraforms)
-                {
-                    long start = c.Time;
-                    int delay = 2000; // casttime 0 from skill def
-                    int duration = 5000;
-                    uint radius = 1100;
-                    (long, long) lifespan = (start + delay, start + duration);
-                    GeographicalConnector connector = new AgentConnector(target);
-                    replay.Decorations.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
-                }
-                //
+                // Diamond Palisade
                 var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
                     replay.Decorations.AddOverheadIcon(seg, target, SkillImages.MonsterSkill);
                 }
-                //
-                var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage);
-                foreach (CastEvent c in boulderBarrages)
-                {
-                    long start = c.Time;
-                    int duration = 4600; // cycle 3 from skill def
-                    uint radius = 1100;
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, start + duration), Colors.LightOrange, 0.4, new AgentConnector(target)).UsingGrowingEnd(start + duration));
-                }
                 break;
             default:
                 break;
-
         }
     }
 
@@ -414,6 +394,22 @@ internal class Adina : TheKeyOfAhdashim
         if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
+        }
+    }
+
+    private static void AddQuantumQuakesDecoration(CombatReplay replay, NPC target, CastEvent cast, List<int> angles)
+    {
+        long preCastTime = 2990;
+        long duration = 13400;
+        uint width = 1100;
+        uint height = 60;
+        (long start, long end) lifespanWarning = (cast.Time, cast.Time + preCastTime);
+        (long start, long end) lifespanRotating = (cast.Time + preCastTime, cast.Time + duration);
+        foreach (int angle in angles)
+        {
+            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+            replay.Decorations.Add(new RectangleDecoration(width, height, lifespanWarning, Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
+            replay.Decorations.Add(new RectangleDecoration(width, height, lifespanRotating, Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
         }
     }
 }

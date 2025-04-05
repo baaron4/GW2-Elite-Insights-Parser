@@ -42,7 +42,7 @@ internal class StatueOfDeath : HallOfChains
     {
         return
         [
-            new DamageCastFinder(HungeringAura , HungeringAura ), // Hungering Aura
+            new DamageCastFinder(HungeringAura , HungeringAura ),
         ];
     }
     protected override List<TargetID> GetTrashMobsIDs()
@@ -84,53 +84,58 @@ internal class StatueOfDeath : HallOfChains
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
-            case (int)TargetID.EaterOfSouls: {
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var breakbar = cls.Where(x => x.SkillId == Imbibe);
-                foreach (CastEvent c in breakbar)
+            case (int)TargetID.EaterOfSouls:
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-                var vomit = cls.Where(x => x.SkillId == HungeringMiasma);
-                foreach (CastEvent c in vomit)
-                {
-                    start = (int)c.Time + 2100;
-                    int cascading = 1500;
-                    int duration = 15000 + cascading;
-                    end = start + duration;
-                    uint radius = 900;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing) && target.TryGetCurrentPosition(log, start, out var position))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.GreenishYellow, 0.5, new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
+                        switch (cast.SkillId)
+                        {
+                            case Imbibe:
+                                replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                                break;
+                            case HungeringMiasma:
+                                int cascading = 1500;
+                                int duration = 15000 + cascading;
+                                lifespan = (cast.Time + 2100, cast.Time + 2100 + duration);
+                                uint radius = 900;
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start, out var facing) && target.TryGetCurrentPosition(log, lifespan.start, out var position))
+                                {
+                                    replay.Decorations.Add(new PieDecoration(radius, 60, lifespan, Colors.GreenishYellow, 0.5, new PositionConnector(position)).UsingGrowingEnd(lifespan.start + cascading).UsingRotationConnector(new AngleConnector(facing)));
+                                }
+                                break;
+                            case PseudoDeathEaterOfSouls:
+                                lifespan = (cast.Time, cast.EndTime);
+                                replay.Decorations.Add(new CircleDecoration(180, lifespan, "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(lifespan.end));
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
-                var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls);
-                foreach (CastEvent c in pseudoDeath)
-                {
-                    start = (int)c.Time;
-                    //int duration = 900;
-                    end = (int)c.EndTime; //duration;
-                    //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(end));
-                }
-            } break;
+                break;
             case (int)TargetID.GreenSpirit1:
-            case (int)TargetID.GreenSpirit2: {
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var green = cls.Where(x => x.SkillId == GreensEaterofSouls);
-                foreach (CastEvent c in green)
+            case (int)TargetID.GreenSpirit2:
                 {
-                    int gstart = (int)c.Time + 667;
-                    int gend = gstart + 5000;
-                    var circle = new CircleDecoration(240, (gstart, gend), Colors.Green, 0.2, new AgentConnector(target));
-                    replay.Decorations.AddWithGrowing(circle, gend);
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    {
+                        switch (cast.SkillId)
+                        {
+                            case GreensEaterofSouls:
+                                long greenDuration = 5000;
+                                lifespan = (cast.Time + 667, cast.Time + 667 + greenDuration);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(240, lifespan, Colors.Green, 0.2, new AgentConnector(target)), lifespan.end);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
-            } break;
+                break;
             case (int)TargetID.SpiritHorde1:
             case (int)TargetID.SpiritHorde2:
             case (int)TargetID.SpiritHorde3:

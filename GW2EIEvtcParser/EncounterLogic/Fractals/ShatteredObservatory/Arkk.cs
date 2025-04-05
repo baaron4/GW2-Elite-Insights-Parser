@@ -287,11 +287,10 @@ internal class Arkk : ShatteredObservatory
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
 
-        IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
         switch (target.ID)
         {
             case (int)TargetID.Arkk:
-                foreach (CastEvent cast in casts)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
                     {

@@ -73,13 +73,12 @@ internal class StatueOfIce : HallOfChains
         {
             int duration = 45000;
             BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
-            int start = (int)c.Time;
-            int end = start + duration;
+            (long start, long end) lifespan = (c.Time, c.Time + duration);
             if (removedBuff != null)
             {
-                end = (int)removedBuff.Time;
+                lifespan.end = removedBuff.Time;
             }
-            replay.Decorations.Add(new CircleDecoration(100, (start, end), "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
+            replay.Decorations.Add(new CircleDecoration(100, lifespan, "rgba(100, 200, 255, 0.25)", new AgentConnector(p)));
         }
     }
 
@@ -88,23 +87,25 @@ internal class StatueOfIce : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.BrokenKing:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards);
-                foreach (CastEvent c in Cone)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    var start = c.Time;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var end = c.EndTime;
-                        uint range = 450;
-                        int angle = 100;
-
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(range, angle, (start + 1900, end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
+                        case KingsWrathConeShards:
+                            (long start, long end) lifespan = (cast.Time, cast.EndTime);
+                            if (target.TryGetCurrentFacingDirection(log, lifespan.start + 1000, out var facing))
+                            {
+                                uint range = 450;
+                                int angle = 100;
+                                var connector = new AgentConnector(target);
+                                var rotationConnector = new AngleConnector(facing);
+                                replay.Decorations.Add(new PieDecoration(range, angle, lifespan, Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(range, angle, (lifespan.start + 1900, lifespan.end), Colors.LightBlue, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            }
+                            break;
+                        default:
+                            break;
                     }
-
                 }
                 break;
             default:

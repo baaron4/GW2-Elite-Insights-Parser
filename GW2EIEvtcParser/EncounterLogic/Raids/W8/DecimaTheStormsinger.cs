@@ -335,12 +335,13 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.Decima:
             case (int)TargetID.DecimaCM:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
                 long buffId = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
@@ -352,9 +353,9 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // Add the Charge indicator on top right of the replay
                 var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in chargeSegments)
+                foreach (Segment segment in chargeSegments)
                 {
-                    replay.Decorations.Add(new TextDecoration((seg.Start, seg.End), "Decima Charge(s) " + seg.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
+                    replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
                 }
 
                 // Mainshock - Pizza Indicator
@@ -364,9 +365,9 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         long duration = 2300;
                         long growing = effect.Time + duration;
-                        (long start, long end) lifespan2 = effect.ComputeLifespan(log, duration);
+                        lifespan = effect.ComputeLifespan(log, duration);
                         var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                        var slice = (PieDecoration)new PieDecoration(1200, 32, lifespan2, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                        var slice = (PieDecoration)new PieDecoration(1200, 32, lifespan, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                         replay.Decorations.AddWithBorder(slice, Colors.LightOrange, 0.6);
                     }
                 }
@@ -384,10 +385,10 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         foreach (EffectEvent effect in foreshockLeft.Where(x => x.Time >= start && x.Time < end))
                         {
-                            (long start, long end) lifespanLeft = effect.ComputeLifespan(log, 1967);
-                            nextStartTime = lifespanLeft.end;
+                            lifespan = effect.ComputeLifespan(log, 1967);
+                            nextStartTime = lifespan.end;
                             var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                            var leftHalf = (PieDecoration)new PieDecoration(1185, 180, lifespanLeft, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            var leftHalf = (PieDecoration)new PieDecoration(1185, 180, lifespan, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                             replay.Decorations.AddWithBorder(leftHalf, Colors.LightOrange, 0.6);
                         }
                     }
@@ -397,11 +398,11 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         foreach (EffectEvent effect in foreshockRight.Where(x => x.Time >= start && x.Time < end))
                         {
-                            (long start, long end) lifespanRight = effect.ComputeLifespan(log, 3000);
-                            lifespanRight.start = nextStartTime - 700; // Trying to match in game timings
-                            nextStartTime = lifespanRight.end;
+                            lifespan = effect.ComputeLifespan(log, 3000);
+                            lifespan.start = nextStartTime - 700; // Trying to match in game timings
+                            nextStartTime = lifespan.end;
                             var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                            var rightHalf = (PieDecoration)new PieDecoration(1185, 180, lifespanRight, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            var rightHalf = (PieDecoration)new PieDecoration(1185, 180, lifespan, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                             replay.Decorations.AddWithBorder(rightHalf, Colors.LightOrange, 0.6);
                         }
                     }
@@ -411,9 +412,9 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         foreach (EffectEvent effect in foreshockFrontal.Where(x => x.Time >= start && x.Time < end))
                         {
-                            (long start, long end) lifespanFrontal = effect.ComputeLifespan(log, 5100);
-                            lifespanFrontal.start = nextStartTime;
-                            var frontalCircle = new CircleDecoration(600, lifespanFrontal, Colors.LightOrange, 0.4, new PositionConnector(effect.Position));
+                            lifespan = effect.ComputeLifespan(log, 5100);
+                            lifespan.start = nextStartTime;
+                            var frontalCircle = new CircleDecoration(600, lifespan, Colors.LightOrange, 0.4, new PositionConnector(effect.Position));
                             replay.Decorations.AddWithBorder(frontalCircle, Colors.LightOrange, 0.6);
                         }
                     }
@@ -429,19 +430,19 @@ internal class DecimaTheStormsinger : MountBalrior
                         uint outer = 3000;
                         int lineAngle = 45;
                         var offset = new Vector3(0, inner + (outer - inner) / 2, 0);
-                        (long start, long end) lifespanRing = group[0].ComputeLifespan(log, 2800);
+                        lifespan = group[0].ComputeLifespan(log, 2800);
 
                         if (target.TryGetCurrentFacingDirection(log, group[0].Time, out Vector3 facing, 100))
                         {
                             for (int i = 0; i < 360; i += lineAngle)
                             {
                                 var rotation = facing.GetRoundedZRotationDeg() + i;
-                                var line = new RectangleDecoration(10, outer - inner, lifespanRing, Colors.LightOrange, 0.6, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(rotation));
+                                var line = new RectangleDecoration(10, outer - inner, lifespan, Colors.LightOrange, 0.6, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(rotation));
                                 replay.Decorations.Add(line);
                             }
                         }
 
-                        var doughnut = new DoughnutDecoration(inner, outer, lifespanRing, Colors.LightOrange, 0.2, new AgentConnector(target));
+                        var doughnut = new DoughnutDecoration(inner, outer, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
                         replay.Decorations.AddWithBorder(doughnut, Colors.LightOrange, 0.6);
                     }
                 }
@@ -451,8 +452,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 {
                     foreach (var effect in seismicCrash)
                     {
-                        (long start, long end) lifespanCrash = effect.ComputeLifespan(log, 3000);
-                        replay.Decorations.AddContrenticRings(300, 140, lifespanCrash, effect.Position, Colors.LightOrange, 0.30f, 6, false);
+                        lifespan = effect.ComputeLifespan(log, 3000);
+                        replay.Decorations.AddContrenticRings(300, 140, lifespan, effect.Position, Colors.LightOrange, 0.30f, 6, false);
                     }
                 }
 
@@ -462,8 +463,8 @@ internal class DecimaTheStormsinger : MountBalrior
                     foreach (var effect in deathZone)
                     {
                         // Logged effect has 2 durations depending on attack - 3000 and 2500
-                        (long start, long end) lifespanDeathzone = effect.ComputeLifespan(log, effect.Duration);
-                        var zone = new CircleDecoration(300, lifespanDeathzone, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        var zone = new CircleDecoration(300, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.AddWithGrowing(zone, effect.Time + effect.Duration);
                     }
                 }
@@ -504,8 +505,8 @@ internal class DecimaTheStormsinger : MountBalrior
                                 {
                                     radius = 320;
                                 }
-                                (long start, long end) lifespanAftershock = effect.ComputeLifespan(log, 1500);
-                                var zone = (CircleDecoration)new CircleDecoration(radius, lifespanAftershock, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
+                                lifespan = effect.ComputeLifespan(log, 1500);
+                                var zone = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
                                 replay.Decorations.Add(zone);
                             }
                         }
@@ -659,41 +660,42 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             case (int)TargetID.TranscendentBoulder:
-                var boulderCasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-
-                // Sparking Reverberation - Breakbar
-                var sparkingReverberation = boulderCasts.Where(x => x.SkillId == SparkingReverberation);
-                foreach (var cast in sparkingReverberation)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaSparkingReverberation, out var effects))
+                    switch (cast.SkillId)
                     {
-                        foreach (var effect in effects.Where(x => x.Time > cast.Time && x.Time < cast.Time + 2000)) // 2000ms margin
-                        {
-                            uint radius = 800;
-                            long warningDuration = effect.Time - cast.Time;
-                            (long start, long end) lifespanWarning = (cast.Time, effect.Time);
-                            (long start, long end) lifespanDamage = effect.ComputeDynamicLifespan(log, 30000);
-                            lifespanWarning.end = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, warningDuration); // Cast can be interrupted
+                        // Sparking Reverberation - Breakbar
+                        case SparkingReverberation:
+                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaSparkingReverberation, out var effects))
+                            {
+                                foreach (var effect in effects.Where(x => x.Time > cast.Time && x.Time < cast.Time + 2000)) // 2000ms margin
+                                {
+                                    uint radius = 800;
+                                    long warningDuration = effect.Time - cast.Time;
+                                    (long start, long end) lifespanWarning = (cast.Time, effect.Time);
+                                    (long start, long end) lifespanDamage = effect.ComputeDynamicLifespan(log, 30000);
+                                    lifespanWarning.end = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, warningDuration); // Cast can be interrupted
 
-                            var warningIndicator = new CircleDecoration(radius, lifespanWarning, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.AddWithGrowing(warningIndicator, effect.Time);
+                                    var warningIndicator = new CircleDecoration(radius, lifespanWarning, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                                    replay.Decorations.AddWithGrowing(warningIndicator, effect.Time);
 
-                            var damageField = new CircleDecoration(radius, lifespanDamage, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(damageField);
-                        }
-                    }
-                }
-
-                // Sparkwave - Cone
-                var sparkwave = boulderCasts.Where(x => x.SkillId == Sparkwave);
-                foreach (var cast in sparkwave)
-                {
-                    long castDuration = 1800;
-                    (long start, long end) lifespanSparkwave = (cast.Time, Math.Min(cast.EndTime, cast.Time + castDuration));
-                    if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
-                    {
-                        var cone = (PieDecoration)new PieDecoration(6000, 120, lifespanSparkwave, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing));
-                        replay.Decorations.AddWithGrowing(cone, cast.Time + castDuration);
+                                    var damageField = new CircleDecoration(radius, lifespanDamage, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
+                                    replay.Decorations.Add(damageField);
+                                }
+                            }
+                            break;
+                        // Sparkwave - Cone
+                        case Sparkwave:
+                            long castDuration = 1800;
+                            (long start, long end) lifespanSparkwave = (cast.Time, Math.Min(cast.EndTime, cast.Time + castDuration));
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
+                            {
+                                var cone = (PieDecoration)new PieDecoration(6000, 120, lifespanSparkwave, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing));
+                                replay.Decorations.AddWithGrowing(cone, cast.Time + castDuration);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
 

@@ -115,59 +115,73 @@ internal class Cairn : BastionOfThePenitent
                 EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
             }
         }
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out var dashGreenEffects))
+        {
+            var spatialManipulations = log.CombatData.GetAnimatedCastData(SpatialManipulation6);
+            foreach (EffectEvent dashGreen in dashGreenEffects)
+            {
+                long dashGreenStart = dashGreen.Time;
+                long dashGreenEnd = log.FightData.FightEnd;
+                CastEvent? endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
+                if (endEvent != null)
+                {
+                    dashGreenEnd = endEvent.Time + 3300; // from skill def
+                }
+                EnvironmentDecorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+            }
+        }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long preCastTime;
+
         switch (target.ID)
         {
             case (int)TargetID.Cairn:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep);
-                foreach (CastEvent c in swordSweep)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int start = (int)c.Time;
-                    int preCastTime = 1400;
-                    int initialHitDuration = 850;
-                    int sweepDuration = 1100;
-                    uint width = 1400; uint height = 80;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
-                    }
-                }
-                var wave = cls.Where(x => x.SkillId == GravityWave);
-                foreach (CastEvent c in wave)
-                {
-                    int start = (int)c.Time;
-                    int preCastTime = 1200;
-                    int duration = 600;
-                    uint firstRadius = 400;
-                    uint secondRadius = 700;
-                    uint thirdRadius = 1000;
-                    uint fourthRadius = 1300;
-                    replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), Colors.Purple, 0.3, new AgentConnector(target)));
-                    replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
-                    replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
-                }
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out var dashGreenEffects))
-                {
-                    var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6);
-                    foreach (EffectEvent dashGreen in dashGreenEffects)
-                    {
-                        long dashGreenStart = dashGreen.Time;
-                        long dashGreenEnd = target.LastAware;
-                        CastEvent? endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
-                        if (endEvent != null)
-                        {
-                            dashGreenEnd = endEvent.Time + 3300; // from skill def
-                        }
-                        replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
-                        replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                        // Orbital Sweep - Arm rotation swipe
+                        case OrbitalSweep:
+                            preCastTime = 1400;
+                            long initialHitDuration = 850;
+                            long sweepDuration = 1100;
+                            (long start, long end) lifespanWarning = (cast.Time, cast.Time + preCastTime);
+                            (long start, long end) lifespanHit = (lifespanWarning.start, lifespanWarning.start + initialHitDuration);
+                            (long start, long end) lifespanSwipe = (lifespanHit.start, lifespanHit.start + sweepDuration);
+                            uint width = 1400;
+                            uint height = 80;
+                            if (target.TryGetCurrentFacingDirection(log, lifespanWarning.start, out var facing))
+                            {
+                                var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+                                var rotationConnector = new AngleConnector(facing);
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanWarning, Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanHit, Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanSwipe, Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
+                            }
+                            break;
+                        // Gravity Wave - Doughnuts
+                        case GravityWave:
+                            long start = cast.Time;
+                            preCastTime = 1200;
+                            long duration = 600;
+                            (long start, long end) lifespanFirst = (start + preCastTime, start + preCastTime + duration);
+                            (long start, long end) lifespanSecond = (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration);
+                            (long start, long end) lifespanThird = (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration);
+                            uint firstRadius = 400;
+                            uint secondRadius = 700;
+                            uint thirdRadius = 1000;
+                            uint fourthRadius = 1300;
+                            replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, lifespanFirst, Colors.Purple, 0.3, new AgentConnector(target)));
+                            replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, lifespanSecond, Colors.Purple, 0.3, new AgentConnector(target)));
+                            replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, lifespanThird, Colors.Purple, 0.3, new AgentConnector(target)));
+                            break;
+                        default:
+                            break;
                     }
                 }
                 #if DEBUG_EFFECTS

@@ -361,21 +361,83 @@ internal class Dhuum : HallOfChains
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.Dhuum:
                 {
-                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                    var deathmark = cls.Where(x => x.SkillId == DeathMark);
-                    CastEvent? majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+
+                    foreach (CastEvent cast in casts)
+                    {
+                        switch (cast.SkillId)
+                        {
+                            // Cataclysmic Cycle - Suction during Major Soul Split
+                            case CataclysmicCycle:
+                                lifespan = (cast.Time, cast.EndTime);
+                                replay.Decorations.Add(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)));
+                                replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Orange, 0.9, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                                break;
+                            // Cone Slash
+                            case ConeSlash:
+                                // Using new effects method for logs that contain them
+                                if (!log.CombatData.HasEffectData)
+                                {
+                                    lifespan = (cast.Time, cast.EndTime);
+                                    // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
+                                    if (target.TryGetCurrentFacingDirection(log, lifespan.start + 200, out var facing, 200))
+                                    {
+                                        replay.Decorations.Add(new PieDecoration(850, 60, lifespan, Colors.LightOrange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                                    }
+                                }
+                                else
+                                {
+                                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumConeSlash, out var coneSlashes))
+                                    {
+                                        foreach (EffectEvent effect in coneSlashes)
+                                        {
+                                            int castDuration = 3250;
+                                            int expectedEndCastTime = (int)effect.Time + castDuration;
+
+                                            // Find if Dhuum has stolen quickness
+                                            double actualDuration = ComputeCastTimeWithQuickness(log, target, effect.Time, castDuration);
+
+                                            // Dhuum can interrupt his own cast with other skills and the effect duration logged of 10000 isn't correct.
+                                            lifespan = effect.ComputeDynamicLifespan(log, castDuration);
+                                            (long, long) supposedLifespan = (effect.Time, effect.Time + castDuration);
+
+                                            // If Dhuum has stolen quickness, find the minimum cast duration
+                                            if (actualDuration > 0)
+                                            {
+                                                supposedLifespan.Item2 = effect.Time + Math.Min(castDuration, (long)Math.Ceiling(actualDuration));
+                                            }
+
+                                            var position = new PositionConnector(effect.Position);
+                                            var rotation = new AngleConnector(effect.Rotation.Z + 90);
+
+                                            var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                                            var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
+                                            replay.Decorations.Add(coneDec);
+                                            replay.Decorations.Add(coneGrowing);
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    var deathmark = casts.Where(x => x.SkillId == DeathMark);
+                    CastEvent? majorSplit = casts.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                     // Using new effects method for logs that contain them
                     if (!log.CombatData.HasEffectData)
                     {
-                        foreach (CastEvent c in deathmark)
+                        foreach (CastEvent cast in deathmark)
                         {
-                            start = (int)c.Time;
+                            long start = cast.Time;
                             long defaultCastDuration = 1550;
                             long castDuration = 0;
 
@@ -383,7 +445,7 @@ internal class Dhuum : HallOfChains
                             double computedDuration = ComputeCastTimeWithQuickness(log, target, start, defaultCastDuration);
                             if (computedDuration > 0)
                             {
-                                castDuration = Math.Min(defaultCastDuration, (int)Math.Ceiling(computedDuration));
+                                castDuration = Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration));
                             }
 
                             long zoneActive = start + castDuration; // When the Death Mark hits (Soul Split and spawns the AoE)
@@ -393,8 +455,8 @@ internal class Dhuum : HallOfChains
 
                             if (majorSplit != null)
                             {
-                                zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
-                                zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
+                                zoneEnd = Math.Min(zoneEnd, majorSplit.Time);
+                                zoneDeadly = Math.Min(zoneDeadly, majorSplit.Time);
                             }
                             int spellCenterDistance = 200; //hitbox radius
                             if (target.TryGetCurrentFacingDirection(log, start + castDuration, out var facing)
@@ -428,68 +490,14 @@ internal class Dhuum : HallOfChains
                             }
                         }
                     }
-
-                    // Cataclysmic Cycle - Suction during Major Soul Split
-                    var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle);
-                    foreach (CastEvent c in cataCycle)
+                    if (majorSplit != null)
                     {
-                        var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
-                        replay.Decorations.Add(circle);
-                        replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Orange, 0.9, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                    }
-
-                    // Cone Slash
-                    // Using new effects method for logs that contain them
-                    if (!log.CombatData.HasEffectData)
-                    {
-                        var slash = cls.Where(x => x.SkillId == ConeSlash);
-                        foreach (CastEvent c in slash)
-                        {
-                            start = (int)c.Time;
-                            end = (int)c.EndTime;
-                            // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
-                            if (target.TryGetCurrentFacingDirection(log, start + 200, out var facing, 200))
-                            {
-                                replay.Decorations.Add(new PieDecoration(850, 60, (start, end), Colors.LightOrange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumConeSlash, out var coneSlashes))
-                        {
-                            foreach (EffectEvent effect in coneSlashes)
-                            {
-                                int castDuration = 3250;
-                                int expectedEndCastTime = (int)effect.Time + castDuration;
-
-                                // Find if Dhuum has stolen quickness
-                                double actualDuration = ComputeCastTimeWithQuickness(log, target, effect.Time, castDuration);
-
-                                // Dhuum can interrupt his own cast with other skills and the effect duration logged of 10000 isn't correct.
-                                (long, long) lifespan = effect.ComputeDynamicLifespan(log, castDuration);
-                                (long, long) supposedLifespan = (effect.Time, effect.Time + castDuration);
-
-                                // If Dhuum has stolen quickness, find the minimum cast duration
-                                if (actualDuration > 0)
-                                {
-                                    supposedLifespan.Item2 = effect.Time + Math.Min(castDuration, (long)Math.Ceiling(actualDuration));
-                                }
-
-                                var position = new PositionConnector(effect.Position);
-                                var rotation = new AngleConnector(effect.Rotation.Z + 90);
-
-                                var coneDec = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
-                                var coneGrowing = (PieDecoration)new PieDecoration(850, 60, lifespan, Colors.Orange, 0.2, position).UsingGrowingEnd(supposedLifespan.Item2).UsingRotationConnector(rotation);
-                                replay.Decorations.Add(coneDec);
-                                replay.Decorations.Add(coneGrowing);
-                            }
-                        }
+                        lifespan = (majorSplit.Time, log.FightData.FightEnd);
+                        replay.Decorations.Add(new CircleDecoration(320, lifespan, "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
 
                     // Scythe Swing - AoEs
-                    var scytheSwing = cls.Where(x => x.SkillId == ScytheSwing).ToList();
+                    var scytheSwing = casts.Where(x => x.SkillId == ScytheSwing).ToList();
                     for (int i = 0; i < scytheSwing.Count; i++)
                     {
                         var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
@@ -502,7 +510,7 @@ internal class Dhuum : HallOfChains
                             foreach (EffectEvent indicator in scytheSwingIndicators.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // Computing lifespan through secondary effect and position.
-                                (long start, long end) lifespan = indicator.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumScytheSwingDamage);
+                                lifespan = indicator.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumScytheSwingDamage);
                                 var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(indicator.Position));
                                 replay.Decorations.Add(circle);
                                 radius += radiusIncrease;
@@ -517,47 +525,45 @@ internal class Dhuum : HallOfChains
                             foreach (EffectEvent damage in scytheSwingDamage.Where(x => x.Time >= scytheSwing[i].Time && x.Time < nextSwing))
                             {
                                 // The effect has 0 duration, setting it to 250
-                                (long start, long end) lifespan = (damage.Time, damage.Time + 250);
+                                lifespan = (damage.Time, damage.Time + 250);
                                 var circle = new CircleDecoration(radius, lifespan, "rgba(97, 104, 51, 0.5)", new PositionConnector(damage.Position));
                                 replay.Decorations.Add(circle);
                                 radius += radiusIncrease;
                             }
                         }
                     }
-                    if (majorSplit != null)
-                    {
-                        start = (int)majorSplit.Time;
-                        end = (int)log.FightData.FightEnd;
-                        replay.Decorations.Add(new CircleDecoration(320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
-                    }
                 }
                 break;
             case (int)TargetID.DhuumDesmina:
                 break;
             case (int)TargetID.Echo:
-                replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(120, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
                 break;
             case (int)TargetID.Enforcer:
                 {
-                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                    var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe);
-                    foreach (CastEvent c in rendingSwipes)
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        long castDuration = 667;
-                        (long, long) lifespan = (c.Time, c.Time + castDuration);
-                        if (target.TryGetCurrentFacingDirection(log, c.Time, out var facing, 200))
+                        switch (cast.SkillId)
                         {
-                            continue;
+                            case RendingSwipe:
+                                long castDuration = 667;
+                                lifespan = (cast.Time, cast.Time + castDuration);
+                                if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facing, 200))
+                                {
+                                    var agentConnector = new AgentConnector(target);
+                                    var rotationConnector = new AngleConnector(facing);
+                                    var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
+                                    replay.Decorations.AddWithFilledWithGrowing(cone, true, lifespan.end);
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        var agentConnector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddWithFilledWithGrowing(cone, true, lifespan.Item2);
                     }
                 }
                 break;
             case (int)TargetID.Messenger:
-                replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
                 var fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                 replay.Decorations.AddTether(fixations, Colors.Red, 0.4);
@@ -568,7 +574,7 @@ internal class Dhuum : HallOfChains
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
-                replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180)));
                 if (_hasPrevent)

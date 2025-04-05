@@ -274,49 +274,58 @@ internal class BanditTrio : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
-            case (int)TargetID.Berg: {
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var overheadSmash = casts.Where(x => x.SkillId == OverheadSmashBerg);
-                foreach (CastEvent c in overheadSmash)
+            case (int)TargetID.Berg:
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    uint radius = 550;
-                    int angle = 80;
-                    (long, long End) lifespan = (c.Time, c.Time + c.ActualDuration);
-                    if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 600, out var facing, lifespan.End))
+                    switch (cast.SkillId)
                     {
-                        var rotationConnector = new AngleConnector(facing);
-                        var agentConnector = new AgentConnector(target);
-                        var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddWithGrowing(cone, lifespan.End);
+                        // Overhead Smash - Cone knock
+                        case OverheadSmashBerg:
+                            castDuration = 2250;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, growing);
+                            if (target.TryGetCurrentFacingDirection(log, lifespan.start + 600, out var facing, lifespan.end))
+                            {
+                                var cone = (PieDecoration)new PieDecoration(550, 80, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing));
+                                replay.Decorations.AddWithGrowing(cone, growing);
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
-            } break;
-            case (int)TargetID.Zane: {
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var bulletHail = casts.Where(x => x.SkillId == HailOfBulletsZane);
-                foreach (CastEvent c in bulletHail)
+                break;
+            case (int)TargetID.Zane:
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    long start = c.Time;
-                    long firstConeStart = start;
-                    long secondConeStart = start + 800;
-                    long thirdConeStart = start + 1600;
-                    long firstConeEnd = firstConeStart + 400;
-                    long secondConeEnd = secondConeStart + 400;
-                    long thirdConeEnd = thirdConeStart + 400;
-                    uint radius = 1500;
-                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                        // Hail of Bullets - 3 Cones attack
+                        case HailOfBulletsZane:
+                            (long start, long end) firstCone = (cast.Time, cast.Time + 400);
+                            (long start, long end) secondCone = (cast.Time + 800, cast.Time + 800 + 400);
+                            (long start, long end) thirdCone = (cast.Time + 1600, cast.Time + 1600 + 400);
+                            uint radius = 1500;
+                            if (target.TryGetCurrentFacingDirection(log, firstCone.start, out var facing))
+                            {
+                                var connector = new AgentConnector(target);
+                                var rotationConnector = new AngleConnector(facing);
+                                replay.Decorations.Add(new PieDecoration(radius, 28, firstCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 54, secondCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(radius, 81, thirdCone, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
-            } break;
-
+            break;
             case (int)TargetID.Narella:
                 break;
             default:
@@ -331,7 +340,7 @@ internal class BanditTrio : SalvationPass
         var sapperBombs = player.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
-            var circle = new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player));
+            var circle = new CircleDecoration(180, seg, Colors.Lime, 0.5, new AgentConnector(player));
             replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
             replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
         }

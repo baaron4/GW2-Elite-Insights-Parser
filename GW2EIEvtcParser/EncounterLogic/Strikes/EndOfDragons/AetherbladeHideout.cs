@@ -144,10 +144,44 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.MaiTrinStrike:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd);
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        // Nightmare Fusillade - Cone Attack
+                        case NightmareFusilladeMain:
+                            castDuration = 1767;
+                            long waveDuration = 1066;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            AddNightmareFusilladeDecorations(log, target, replay, lifespan, castDuration, waveDuration, growing, 1200, 90);
+                            break;
+                        // Heartpiercer - Arrow attack with dash
+                        case Heartpiercer:
+                            castDuration = 2500;
+                            uint range = 500;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            var offset = new Vector3(range / 2, 0, 0);
+
+                            // Get facing direction
+                            if (target.TryGetCurrentFacingDirection(log, lifespan.start + 200, out var facingDirection, castDuration))
+                            {
+                                var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
+                                replay.Decorations.AddWithGrowing(indicator, growing);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
                 // Visually removing Mai Trin from the Combat Replay when we get the last HP update.
                 HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault();
@@ -156,47 +190,23 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     long maiTrinEnd = lastHPUpdate.Time;
                     replay.Trim(replay.TimeOffsets.start, maiTrinEnd);
                 }
-
-                // Nightmare Fusillade - Cone Attack
-                var nightmareFusilladeMain = casts.Where(x => x.SkillId == NightmareFusilladeMain);
-                foreach (CastEvent cast in nightmareFusilladeMain)
-                {
-                    int castDuration = 1767;
-                    int waveDuration = 1066;
-                    long growing = cast.Time + castDuration;
-                    (long start, long end) lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
-                    AddNightmareFusilladeDecorations(log, target, replay, lifespan, castDuration, waveDuration, growing, 1200, 90);
-                }
-
-                // Heartpiercer - Arrow attack with dash
-                var heartpiercer = casts.Where(x => x.SkillId == Heartpiercer);
-                foreach (CastEvent cast in heartpiercer)
-                {
-                    int castDuration = 2500;
-                    uint range = 500;
-                    long growing = cast.Time + castDuration;
-                    (long start, long end) lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
-                    var offset = new Vector3(range / 2, 0, 0);
-
-                    // Get facing direction
-                    if (target.TryGetCurrentFacingDirection(log, lifespan.start + 100, out var facingDirection, castDuration))
-                    {
-                        var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
-                        replay.Decorations.AddWithGrowing(indicator, growing);
-                    }
-
-                }
                 break;
             case (int)TargetID.MaiTrinStrikeDuringEcho:
-                // Nightmare Fusillade - Cone Attack
-                var nightmareFusilladeSide = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == NightmareFusilladeSide);
-                foreach (CastEvent cast in nightmareFusilladeSide)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castDuration = 3167;
-                    int waveDuration = 1066;
-                    long growing = cast.Time + castDuration;
-                    (long start, long end) lifespan = (cast.Time, growing);
-                    AddNightmareFusilladeDecorations(log, target, replay, lifespan, castDuration, waveDuration, growing, 1200, 90);
+                    switch (cast.SkillId)
+                    {
+                        // Nightmare Fusillade - Cone Attack
+                        case NightmareFusilladeSide:
+                            castDuration = 3167;
+                            long waveDuration = 1066;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, growing);
+                            AddNightmareFusilladeDecorations(log, target, replay, lifespan, castDuration, waveDuration, growing, 1200, 90);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 break;
             case (int)TargetID.EchoOfScarletBriarNM:
@@ -297,29 +307,34 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.ScarletPhantomBeamNM:
-                // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
-                var flankingShot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == FlankingShot);
-                foreach (CastEvent cast in flankingShot)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int duration = 500;
-                    uint range = 1600;
-                    (long start, long end) lifespanDamage = (cast.Time, cast.Time + duration);
-                    var offset = new Vector3(range / 2, 0, 0);
-
-                    // Get facing direction
-                    if (target.TryGetCurrentFacingDirection(log, lifespanDamage.start + 100, out var facingDirection, duration))
+                    switch (cast.SkillId)
                     {
-                        (long start, long end) lifespanIndicator = (lifespanDamage.start - 1520, lifespanDamage.start);
+                        // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
+                        case FlankingShot:
+                            castDuration = 500;
+                            uint range = 1600;
+                            (long start, long end) lifespanDamage = (cast.Time, cast.Time + castDuration);
+                            var offset = new Vector3(range / 2, 0, 0);
 
-                        var connector = new AgentConnector(target.AgentItem);
-                        var angle = new AngleConnector(facingDirection);
+                            // Get facing direction
+                            if (target.TryGetCurrentFacingDirection(log, lifespanDamage.start + 100, out var facingDirection, castDuration))
+                            {
+                                (long start, long end) lifespanIndicator = (lifespanDamage.start - 1520, lifespanDamage.start);
 
-                        var indicator = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanIndicator, Colors.LightOrange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
-                        var damage = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanDamage, Colors.LightBlue, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
-                        replay.Decorations.Add(indicator);
-                        replay.Decorations.Add(damage);
+                                var connector = new AgentConnector(target.AgentItem);
+                                var angle = new AngleConnector(facingDirection);
+
+                                var indicator = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanIndicator, Colors.LightOrange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
+                                var damage = (RectangleDecoration)new RectangleDecoration(range, 300, lifespanDamage, Colors.LightBlue, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(angle);
+                                replay.Decorations.Add(indicator);
+                                replay.Decorations.Add(damage);
+                            }
+                            break;
+                        default:
+                            break;
                     }
-
                 }
                 break;
             case (int)TargetID.FerrousBomb:
@@ -421,8 +436,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 // Effect lasts slightly too long, we use the damage effect as end time if it's fully casted.
                 // The effect doesn't have a Src, it will last the full 1300ms even if the Scarlet Phantom dies.
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1300);
-                (long start, long end) lifespan2 = effect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.AetherbladeHideoutFissureOfTormentDamage);
-                lifespan.end = Math.Min(lifespan.end, lifespan2.end);
+                (long start, long end) = effect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.AetherbladeHideoutFissureOfTormentDamage);
+                lifespan.end = Math.Min(lifespan.end, end);
 
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
@@ -775,7 +790,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     /// <summary>
     /// Nightmare Fusillade - The cone attack with shockwave.
     /// </summary>
-    private static void AddNightmareFusilladeDecorations(ParsedEvtcLog log, NPC target, CombatReplay replay, (long start, long end) lifespan, int castDuration, int waveDuration, long growing, uint radius, int angle)
+    private static void AddNightmareFusilladeDecorations(ParsedEvtcLog log, NPC target, CombatReplay replay, (long start, long end) lifespan, long castDuration, long waveDuration, long growing, uint radius, int angle)
     {
         // Get facing direction
         if (target.TryGetCurrentFacingDirection(log, lifespan.start + 100, out var facingDirection, castDuration))

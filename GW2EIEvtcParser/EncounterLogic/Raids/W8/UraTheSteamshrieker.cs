@@ -312,32 +312,37 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Ura:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-
-                // Create Titanspawn Geyser - Ura jumps in places and creates an AoE underneath
-                var ctg = casts.Where(x => x.SkillId == CreateTitanspawnGeyser);
-                foreach (var cast in ctg)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    long castDuration = 3100;
-                    long growing = cast.Time + castDuration;
-                    (long start, long end) lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(800, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), growing);
-                }
-
-                // Propel - Arrow Dash
-                var propel = casts.Where(x => x.SkillId == Propel);
-                foreach (var cast in propel)
-                {
-                    long castDuration = 3000;
-                    (long start, long end) lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
-                    if (target.TryGetCurrentFacingDirection(log, cast.Time, out var facing, 1000))
+                    switch (cast.SkillId)
                     {
-                        var offset = new Vector3(250, 0, 0);
-                        var rotation = new AngleConnector(facing);
-                        replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(rotation));
+                        // Propel - Arrow Dash
+                        case Propel:
+                            castDuration = 3000;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            if (target.TryGetCurrentFacingDirection(log, cast.Time + 1000, out var facing))
+                            {
+                                var offset = new Vector3(250, 0, 0);
+                                var rotation = new AngleConnector(facing);
+                                replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(rotation));
+                            }
+                            break;
+                        // Create Titanspawn Geyser - Ura jumps in places and creates an AoE underneath
+                        case CreateTitanspawnGeyser:
+                            castDuration = 3100;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(800, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), growing);
+                            break;
+                        default:
+                            break;
                     }
                 }
 
@@ -347,8 +352,8 @@ internal class UraTheSteamshrieker : MountBalrior
                     foreach (EffectEvent effect in slams)
                     {
                         long duration = 2000;
-                        long growing = effect.Time + duration;
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                        growing = effect.Time + duration;
+                        lifespan = effect.ComputeLifespan(log, duration);
                         lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Stun, effect.Time, duration));
                         if (target.TryGetCurrentFacingDirection(log, effect.Time, out var facingDirection, duration))
                         {
@@ -363,7 +368,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 {
                     foreach (var effect in steamPrisons)
                     {
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 10000);
+                        lifespan = effect.ComputeLifespan(log, 10000);
                         replay.Decorations.Add(new CircleDecoration(400, lifespan, Colors.LightGrey, 0.1, new PositionConnector(effect.Position)));
                         replay.Decorations.Add(new DoughnutDecoration(400, 500, lifespan, Colors.Grey, 0.2, new PositionConnector(effect.Position)));
                     }
@@ -375,7 +380,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     foreach (var effect in returns)
                     {
                         // Radius is indicative only, anyone in the arena gets pulled.
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 6000);
+                        lifespan = effect.ComputeLifespan(log, 6000);
                         replay.Decorations.AddWithGrowing(new CircleDecoration(900, lifespan, Colors.Sand, 0.2, new PositionConnector(effect.Position)), lifespan.end, true);
                     }
                 }
@@ -386,7 +391,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     foreach (var effect in shockwaves)
                     {
                         // Looks like in game it loses velocity as it gets further away from the starting point, can't display it as velocity is unknown.
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 8000);
+                        lifespan = effect.ComputeLifespan(log, 8000);
                         replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightGrey, 0.5, 5000);
                     }
                 }
@@ -420,7 +425,7 @@ internal class UraTheSteamshrieker : MountBalrior
                             {
                                 counter = 0;
                             }
-                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                            lifespan = effect.ComputeDynamicLifespan(log, 1200);
                             uint radius = initialRadius + (radiusIncrease * counter);
                             replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                             counter++;
@@ -458,17 +463,21 @@ internal class UraTheSteamshrieker : MountBalrior
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TargetID.LegendaryVentshot:
-                var castsVentshot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-
-                // Stone Slam - Autoattack with cone
-                var stoneSlams = castsVentshot.Where(x => x.SkillId == StoneSlamConeKnockback);
-                foreach (CastEvent cast in stoneSlams)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    (long start, long end) lifespan = (cast.Time, cast.GetInterruptedByStunTime(log));
-                    long growing = cast.Time + 2000; // 2000 Cast Duration
-                    target.TryGetCurrentFacingDirection(log, cast.Time, out var rotation, 300);
-                    var cone = (PieDecoration)new PieDecoration(350, 90, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(rotation));
-                    replay.Decorations.AddWithGrowing(cone, growing);
+                    switch (cast.SkillId)
+                    {
+                        // Stone Slam - Autoattack with cone
+                        case StoneSlamConeKnockback:
+                            lifespan = (cast.Time, cast.GetInterruptedByStunTime(log));
+                            growing = cast.Time + 2000; // 2000 Cast Duration
+                            target.TryGetCurrentFacingDirection(log, cast.Time, out var rotation, 300);
+                            var cone = (PieDecoration)new PieDecoration(350, 90, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(rotation));
+                            replay.Decorations.AddWithGrowing(cone, growing);
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 // Pressure Release - Jump underneath Ventshot indicator
@@ -478,7 +487,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     {
                         // Value found from Jet effect time - Indicator time
                         long durationIndicator = 1240;
-                        (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.UraVentshotPressureReleaseWaterJet);
+                        lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.UraVentshotPressureReleaseWaterJet);
                         lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Stun, lifespan.start, durationIndicator));
                         var indicator = new CircleDecoration(225, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.AddWithGrowing(indicator, lifespan.end);
@@ -496,7 +505,7 @@ internal class UraTheSteamshrieker : MountBalrior
                         {
                             long durationIndicator = 1240;
                             long startIndicator = effect.Time - durationIndicator;
-                            long growing = startIndicator + durationIndicator;
+                            growing = startIndicator + durationIndicator;
 
                             (long start, long end) lifespanIndicator = (startIndicator, ComputeEndCastTimeByBuffApplication(log, target, Stun, startIndicator, durationIndicator));
                             (long start, long end) lifespanJet = effect.ComputeLifespan(log, 3000);
@@ -522,7 +531,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 {
                     foreach (EffectEvent effect in breakingGrounds)
                     {
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 20000);
+                        lifespan = effect.ComputeLifespan(log, 20000);
                         var rotation = new AngleConnector(effect.Rotation.Z);
                         replay.Decorations.Add(new RectangleDecoration(10, 75, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
                     }
