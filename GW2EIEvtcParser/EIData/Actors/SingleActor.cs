@@ -520,19 +520,14 @@ public abstract partial class SingleActor : Actor
 
     }
 
-    public override IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
+    public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
     {
         return log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
+    public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
     {
         return log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
-    }
-
-    public override IEnumerable<WeaponSwapEvent> GetWeaponSwapEvents(ParsedEvtcLog log, long start, long end)
-    {
-        return log.CombatData.GetWeaponSwapData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
     }
 
     protected override void InitCastEvents(ParsedEvtcLog log)
