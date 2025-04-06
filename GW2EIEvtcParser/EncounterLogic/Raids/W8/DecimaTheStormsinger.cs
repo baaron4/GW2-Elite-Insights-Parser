@@ -27,6 +27,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstEffectMechanic(EffectGUIDs.DecimaChorusOfThunderAoE, new MechanicPlotlySetting(Symbols.Circle, Colors.LightGrey), "ChorThun.T", "Targeted by Chorus of Thunder (Spreads)", "Chorus of Thunder Target", 0),
             ]),
             new PlayerDstHitMechanic([DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", 0),
+            new PlayerDstHitMechanic(HarmoniousThunder, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "HarmThun.H", "Hit by Harmonious Thunder", "Harmonious Thunder Hit", 0),
             new MechanicGroup([
                 new PlayerDstHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0),
                 new PlayerDstHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0)
@@ -79,7 +80,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstHitMechanic(Sparkwave, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightOrange), "Sparkwave.H", "Hit by Sparkwave (Transcendent Boulders Cone)", "Sparkwave Hit", 0),
                 new PlayerDstHitMechanic(ChargedGround, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "CharGrnd.H", "Hit by Charged Ground (Transcendent Boulders AoEs)", "Charged Ground Hit", 0),
             ]),
-            new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Elibigility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
+            new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder], new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Elibigility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
             {
                 // If you are dead, lose the achievement
                 if (adhe.To.IsDead(log, log.FightData.FightStart, log.FightData.FightEnd))
@@ -111,7 +112,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // If you get hit by your own thunder, keep the achievement
                 // If you get hit by a thunder on another player or on a conduit, lose the achievement
-                long[] thunderIds = [ChorusOfThunderCM, DiscordantThunderCM];
+                long[] thunderIds = [ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder];
                 var thunderTimes = damageTaken.Where(x => (thunderIds.Contains(x.SkillId)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
                 foreach (long thunderTime in thunderTimes)
                 {
