@@ -88,6 +88,8 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         switch (target.ID)
         {
             case (int)TargetID.Dagda:
+                var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
+
                 foreach (CastEvent cast in casts)
                 {
                     switch (cast.SkillId)
@@ -131,7 +133,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                             // Before then, the mechanic would continue during the phase and shoot.
                             if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
                             {
-                                foreach (CastEvent demonicBlastCast in casts.Where(x => x.SkillId == DemonicBlast))
+                                foreach (CastEvent demonicBlastCast in demonicBlasts)
                                 {
                                     if (lifespan.start < demonicBlastCast.Time && lifespan.end > demonicBlastCast.Time)
                                     {
