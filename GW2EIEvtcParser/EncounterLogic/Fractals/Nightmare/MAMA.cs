@@ -149,89 +149,92 @@ internal class MAMA : Nightmare
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
 
         switch (target.ID)
         {
             case (int)TargetID.MAMA:
-                // Blastwave - AoE Knockback
-                var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2);
-                foreach (CastEvent c in blastwave)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castDuration = 2750;
-                    long expectedEndCast = c.Time + castDuration;
-                    (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-
-                    if (c.SkillId == Blastwave1)
+                    switch (cast.SkillId)
                     {
-                        replay.Decorations.AddWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
-                    }
-                    else if (c.SkillId == Blastwave2)
-                    {
-                        replay.Decorations.AddWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
-                    }
-                }
+                        // Blastwave - AoE Knockback
+                        case Blastwave1:
+                            castDuration = 2750;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(growing), 0, Colors.Red, 0.2, false);
+                            break;
+                        case Blastwave2:
+                            castDuration = 2750;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(growing), 0, Colors.Red, 0.2, false);
+                            break;
+                        // Leap with shockwaves
+                        case Leap:
+                            castDuration = 2400;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
 
-                // Leap with shockwaves
-                var leap = casts.Where(x => x.SkillId == Leap);
-                foreach (CastEvent c in leap)
-                {
-                    int castDuration = 2400;
-                    long expectedEndCast = c.Time + castDuration;
-                    (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-
-                    // Find position at the end of the leap time
-                    if (target.TryGetCurrentPosition(log, expectedEndCast + 1000, out var targetPosition))
-                    {
-                        replay.Decorations.AddWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
-
-                        // 3 rounds of decorations for the 3 waves
-                        if (lifespan.end == expectedEndCast)
-                        {
-                            uint shockwaveRadius = 1300;
-                            int duration = 2680;
-                            for (int i = 0; i < 3; i++)
+                            // Find position at the end of the leap time
+                            if (target.TryGetCurrentPosition(log, growing + 1000, out var targetPosition))
                             {
-                                long shockWaveStart = expectedEndCast + i * 120;
-                                (long, long) lifespanShockwave = (shockWaveStart, shockWaveStart + duration);
-                                GeographicalConnector connector = new PositionConnector(targetPosition);
-                                replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), growing);
+
+                                // 3 rounds of decorations for the 3 waves
+                                if (lifespan.end == growing)
+                                {
+                                    uint shockwaveRadius = 1300;
+                                    int duration = 2680;
+                                    for (int i = 0; i < 3; i++)
+                                    {
+                                        long shockWaveStart = growing + i * 120;
+                                        (long, long) lifespanShockwave = (shockWaveStart, shockWaveStart + duration);
+                                        GeographicalConnector connector = new PositionConnector(targetPosition);
+                                        replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
+                                    }
+                                }
                             }
-                        }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case (int)TargetID.BlueKnight:
             case (int)TargetID.RedKnight:
             case (int)TargetID.GreenKnight:
-                // Explosive Launch - Knight Jump in air
-                var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch);
-                foreach (CastEvent c in explosiveLaunch)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    int castDuration = 1714;
-                    long expectedEndCast = c.Time + castDuration;
-                    (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast, true);
-                }
-
-                // Explosive Impact - Knight fall and knockback AoE
-                var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact);
-                foreach (CastEvent c in explosiveImpact)
-                {
-                    int castDuration = 533;
-                    long expectedEndCast = c.Time + castDuration;
-                    (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
-                }
-
-                // Pull AoE
-                var extraction = casts.Where(x => x.SkillId == Extraction);
-                foreach (CastEvent c in extraction)
-                {
-                    int castDuration = 3835;
-                    long expectedEndCast = c.Time + castDuration;
-                    (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
+                    switch (cast.SkillId)
+                    {
+                        // Explosive Launch - Knight Jump in air
+                        case ExplosiveLaunch:
+                            castDuration = 1714;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing, true);
+                            break;
+                        // Explosive Impact - Knight fall and knockback AoE
+                        case ExplosiveImpact:
+                            castDuration = 533;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing);
+                            break;
+                        // Extraction - Pull AoE
+                        case Extraction:
+                            castDuration = 3835;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), growing);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 break;
             default:

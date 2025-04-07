@@ -212,122 +212,132 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.PeerlessQadim:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop);
-                foreach (CastEvent c in cataCycle)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    uint magmaRadius = 850;
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    if (target.TryGetCurrentPosition(log, end, out var pylonPosition))
+                    switch (cast.SkillId)
                     {
-                        replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
-                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
-                    }
-                }
-                var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2);
-                foreach (CastEvent c in forceOfHavoc)
-                {
-                    uint roadLength = 2400;
-                    uint roadWidth = 360;
-                    int hitboxOffset = 200;
-                    uint subdivisions = 100;
-                    int rollOutTime = 3250;
-                    start = (int)c.Time;
-                    int preCastTime = 1500;
-                    int duration = 22500;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
-                        && target.TryGetCurrentPosition(log, start + 1000, out var position))
-                    {
-                        replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new(roadLength / 2 + 200, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
-                        for (uint i = 0; i < subdivisions; i++)
-                        {
-                            var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
-                            replay.Decorations.Add(new RectangleDecoration(roadLength / subdivisions, roadWidth, (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new(translation, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
-                        }
-                    }
-                }
-                var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast);
-                foreach (CastEvent c in forceOfRetal)
-                {
-                    uint radius = 650;
-                    double radiusIncrement = 433.3;
-                    int preCastTime = 1800;
-                    int timeBetweenCascades = 200;
-                    int cascades = 5;
-                    start = (int)c.Time + 1400;
-                    if (target.TryGetCurrentPosition(log, start + 1000, out var position))
-                    {
-                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
-                        for (uint i = 0; i < cascades; i++)
-                        {
-                            replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
-                            replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
-                        }
-                    }
-                }
-                var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2);
-                foreach (CastEvent c in etherStrikes)
-                {
-                    uint coneRadius = 2600;
-                    int coneAngle = 60;
-                    start = (int)c.Time;
-                    end = start + 250;
-                    if (target.TryGetCurrentFacingDirection(log, start + 300, out var facing))
-                    {
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
-                    }
-                }
-                var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile);
-                foreach (CastEvent c in causticChaos)
-                {
-                    double acceleration = c.Acceleration;
-                    double ratio = 1.0;
-                    if (acceleration > 0)
-                    {
-                        ratio = acceleration * 0.5 + 1;
-                    }
-                    else
-                    {
-                        ratio = acceleration * 0.6 + 1;
-                    }
-                    uint chaosLength = 2600;
-                    uint chaosWidth = 100;
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    int aimTime = (int)(c.ExpectedDuration * ratio);
-                    if (replay.Rotations.Count != 0)
-                    {
-                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new(chaosLength / 2, 0, 0), true);
-                        var rotationConnector = new AgentFacingConnector(target);
-                        replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), Colors.Orange, 0.3, connector).UsingRotationConnector(rotationConnector));
-                        if (end > start + aimTime)
-                        {
-                            replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start + aimTime, end), Colors.LightGrey, 0.7, connector).UsingRotationConnector(rotationConnector));
-                        }
-                    }
-                }
-                var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion);
-                foreach (CastEvent c in expoReperc)
-                {
-                    uint radius = 650;
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    if (target.TryGetCurrentPosition(log, start + 1000, out var position))
-                    {
-                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
+                        // Big Magma Drop - Pylon Destroyed
+                        case BigMagmaDrop:
+                            castDuration = 3000;
+                            long magmaDuration = 600000;
+                            uint magmaRadius = 850;
+                            lifespan = (cast.Time, cast.Time + castDuration);
+                            (long start, long end) lifespanMagma = (lifespan.end, lifespan.end + magmaDuration);
+                            if (target.TryGetCurrentPosition(log, lifespan.end, out var pylonPosition))
+                            {
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, lifespan, Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), lifespan.end);
+                                replay.Decorations.Add(new CircleDecoration(magmaRadius, lifespanMagma, Colors.Red, 0.5, new PositionConnector(pylonPosition)));
+                            }
+                            break;
+                        // Force of Havoc
+                        case ForceOfHavoc2:
+                            {
+                                uint roadLength = 2400;
+                                uint roadWidth = 360;
+                                int hitboxOffset = 200;
+                                uint subdivisions = 100;
+                                int rollOutTime = 3250;
+                                long start = cast.Time;
+                                int preCastTime = 1500;
+                                int duration = 22500;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
+                                    && target.TryGetCurrentPosition(log, start + 1000, out var position))
+                                {
+                                    replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new(roadLength / 2 + 200, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                                    for (uint i = 0; i < subdivisions; i++)
+                                    {
+                                        var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
+                                        replay.Decorations.Add(new RectangleDecoration(roadLength / subdivisions, roadWidth, (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new(translation, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                                    }
+                                }
+                            }
+                            break;
+                        // Force of Retaliation
+                        case ForceOfRetaliationCast:
+                            {
+                                uint radius = 650;
+                                double radiusIncrement = 433.3;
+                                int preCastTime = 1800;
+                                int timeBetweenCascades = 200;
+                                int cascades = 5;
+                                long start = cast.Time + 1400;
+                                if (target.TryGetCurrentPosition(log, start + 1000, out var position))
+                                {
+                                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), Colors.Yellow, 0.2, new PositionConnector(position)), start + preCastTime);
+                                    for (uint i = 0; i < cascades; i++)
+                                    {
+                                        replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
+                                        replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * (i + 1), start + preCastTime + timeBetweenCascades * (i + 2)), "rgba(50, 20, 50, 0.25)", new PositionConnector(position)));
+                                    }
+                                }
+                            }
+                            break;
+                        // Ether Strikes
+                        case EtherStrikes2:
+                            {
+                                castDuration = 250;
+                                lifespan = (cast.Time, cast.Time + castDuration);
+                                if (target.TryGetCurrentFacingDirection(log, lifespan.start + 300, out var facing))
+                                {
+                                    replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(2600, 60, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
+                                }
+                            }
+                            break;
+                        // Caustic Chaos - Arrow Projectile
+                        case CausticChaosProjectile:
+                            {
+                                double acceleration = cast.Acceleration;
+                                double ratio = 1.0;
+                                if (acceleration > 0)
+                                {
+                                    ratio = acceleration * 0.5 + 1;
+                                }
+                                else
+                                {
+                                    ratio = acceleration * 0.6 + 1;
+                                }
+                                uint chaosLength = 2600;
+                                uint chaosWidth = 100;
+                                int aimTime = (int)(cast.ExpectedDuration * ratio);
+                                lifespan = (cast.Time, cast.EndTime);
+                                (long start, long end) lifespanProj = (lifespan.start + aimTime, lifespan.end);
+                                if (replay.Rotations.Count != 0)
+                                {
+                                    var connector = (AgentConnector)new AgentConnector(target).WithOffset(new(chaosLength / 2, 0, 0), true);
+                                    var rotationConnector = new AgentFacingConnector(target);
+                                    replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, lifespan, Colors.Orange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                    if (lifespan.end > lifespan.start + aimTime)
+                                    {
+                                        replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, lifespanProj, Colors.LightGrey, 0.7, connector).UsingRotationConnector(rotationConnector));
+                                    }
+                                }
+                            }
+                            break;
+                        // Exponential Repercussion
+                        case ExponentialRepercussion:
+                            {
+                                uint radius = 650;
+                                castDuration = 2600;
+                                lifespan = (cast.Time, cast.Time + castDuration);
+                                if (target.TryGetCurrentPosition(log, lifespan.start + 1000, out var position))
+                                {
+                                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, Colors.Yellow, 0.2, new PositionConnector(position)), lifespan.end);
 
-                        foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(TargetID.PeerlessQadimAuraPylon)))
-                        {
-                            replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
-                        }
+                                    foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(TargetID.PeerlessQadimAuraPylon)))
+                                    {
+                                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, Colors.Yellow, 0.2, new AgentConnector(pylon)), lifespan.end);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
@@ -344,7 +354,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     if (replay.PolledPositions.Count > 0)
                     {
                         uint radiusAnomaly = target.HitboxWidth / 2;
-                        replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                        lifespan = (lifespan.start - 5000, lifespan.start);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, lifespan, Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), lifespan.start);
                     }
                     var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
                     var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
@@ -355,7 +366,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 }
                 break;
             case (int)TargetID.BigKillerTornado:
-                replay.Decorations.Add(new CircleDecoration(450, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(450, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
             case (int)TargetID.PeerlessQadimPylon:
                 {
@@ -373,7 +384,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             case (int)TargetID.PeerlessQadimAuraPylon:
                 break;
             case (int)TargetID.EnergyOrb:
-                replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Green, 0.3, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)TargetID.GiantQadimThePeerless:
                 // Trim the first giant Qadim, it exists since log start.
@@ -389,9 +400,6 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
     }
-
-     const string MagmaColor1 = "rgba(255, 215,  0, ";
-     const string MagmaColor2 = "rgba(255, 130, 50, ";
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -426,17 +434,17 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             // If a player has gone into downstate while in air, the magma field will not spawn
             var hasPlayerDownedInAir = log.CombatData.GetDownEvents(p.AgentItem).Any(x => x.Time >= seg.Start && x.Time <= seg.End);
             long magmaDropEnd = seg.End;
-            replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, seg, Colors.Red, 0.15, new AgentConnector(p)), magmaDropEnd);
             if (!log.CombatData.HasEffectData)
             {
                 if (p.TryGetCurrentInterpolatedPosition(log, magmaDropEnd, out var position) && !hasPlayerDownedInAir)
                 {
-                    string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                    Color magmaColor = magmaCounter == 0 ? Colors.Yellow : Colors.LightOrange;
                     magmaCounter = (magmaCounter + 1) & 1;
 
                     long magmaWarningEnd = magmaDropEnd + magmaOffset;
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), magmaColor + "0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
-                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaWarningEnd, magmaWarningEnd + magmaDuration), magmaColor + "0.5)", new PositionConnector(position)));
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), magmaColor, 0.2, new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                    replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaWarningEnd, magmaWarningEnd + magmaDuration), magmaColor, 0.5, new PositionConnector(position)));
                 }
             }
         }
@@ -498,7 +506,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             foreach (EffectEvent effect in residualImpact)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 600000);
-                var circle = new CircleDecoration(75, lifespan, "rgba(230, 40, 0, 0.1)", new PositionConnector(effect.Position));
+                var circle = new CircleDecoration(75, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position));
                 EnvironmentDecorations.Add(circle);
                 EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.Red, 0.4));
             }
@@ -512,7 +520,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 // Each shark effect appears every 120 ms
                 // The logged duration is 0, we set it at 120 to give it the impression of a single effect moving around
                 (long, long) lifespan = effect.ComputeLifespan(log, 120);
-                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, "rgba(108, 122, 137, 0.4)", new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.BlueishGrey, 0.4, new PositionConnector(effect.Position)));
             }
         }
 
@@ -523,7 +531,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             {
                 // The actual effect duration is 0
                 (long, long) lifespan = effect.ComputeLifespan(log, 1500);
-                EnvironmentDecorations.Add(new CircleDecoration(150, lifespan, "rgba(108, 122, 137, 0.1)", new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(150, lifespan, Colors.BlueishGrey, 0.1, new PositionConnector(effect.Position)));
             }
         }
 
@@ -562,7 +570,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                 var connector = new PositionConnector(effect.Position);
                 EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, Colors.White, 0.5, connector).UsingFilled(false));
-                EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, "rgba(255, 215, 0, 0.4)", connector));
+                EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, Colors.Yellow, 0.4, connector));
             }
         }
 
@@ -598,13 +606,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             foreach (var effects in dict.Values)
             {
                 // Yellow for first, orange for second
-                string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                Color magmaColor = magmaCounter == 0 ? Colors.Yellow : Colors.LightOrange;
                 magmaCounter = (magmaCounter + 1) & 1;
                 foreach (EffectEvent effect in effects)
                 {
                     var connector = new PositionConnector(effect.Position);
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    var circle = new CircleDecoration(420, lifespan, magmaColor + "0.2)", connector);
+                    var circle = new CircleDecoration(420, lifespan, magmaColor, 0.2, connector);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
@@ -630,13 +638,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             foreach (KeyValuePair<long, List<EffectEvent>> pair in dict)
             {
                 // Yellow for first, orange for second
-                string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                Color magmaColor = magmaCounter == 0 ? Colors.Yellow : Colors.LightOrange;
                 magmaCounter = (magmaCounter + 1) & 1;
                 foreach (EffectEvent effect in pair.Value)
                 {
                     var connector = new PositionConnector(effect.Position);
                     (long, long) lifespan = effect.ComputeLifespan(log, 600000);
-                    var circle = new CircleDecoration(420, lifespan, magmaColor + "0.5)", connector);
+                    var circle = new CircleDecoration(420, lifespan, magmaColor, 0.5, connector);
                     EnvironmentDecorations.Add(circle);
                 }
             }

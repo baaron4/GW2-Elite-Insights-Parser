@@ -148,15 +148,13 @@ internal class Samarog : BastionOfThePenitent
         if (evtcVersion.Build >= ArcDPSBuilds.LingeringAgents)
         {
             var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
-            if (spearAgents.Any())
+            foreach (AgentItem spear in spearAgents)
             {
-                foreach (AgentItem spear in spearAgents)
-                {
-                    spear.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
-                }
+                spear.OverrideType(AgentItem.AgentType.NPC, agentData);
+                spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
             }
         }
+
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int curGuldhem = 1;
         int curRigom = 1;

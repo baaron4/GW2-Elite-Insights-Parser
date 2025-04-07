@@ -275,49 +275,62 @@ internal class Matthias : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.Matthias:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                AddMatthiasBubbles(BloodShield, target, log, replay);
-                AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
-                var rageShards = cls.Where(x => x.SkillId == ShardsOfRageHuman || x.SkillId == ShardsOfRageAbomination);
-                foreach (CastEvent c in rageShards)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
-                }
-                var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman);
-                foreach (CastEvent c in hadouken)
-                {
-                    start = (int)c.Time;
-                    int preCastTime = 1000;
-                    int duration = 750;
-                    uint width = 4000; uint height = 130;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                    switch (cast.SkillId)
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
-                        var rotationConnextor = new AngleConnector(facing);
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Red, 0.1, positionConnector).UsingRotationConnector(rotationConnextor));
-                        replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.7, positionConnector).UsingRotationConnector(rotationConnextor));
+                        // Shards of Rage - Jump with AoEs
+                        case ShardsOfRageHuman:
+                        case ShardsOfRageAbomination:
+                            // Generic indicator of casting
+                            // TODO(Linka) @decorations: Add Shards of Rage AoEs to Environment Decorations and lock this behind !log.CombatData.HasEffectData
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(300, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, lifespan.end);
+                            break;
+                        // Oppressive Gaze - Haduken Orb
+                        case OppressiveGazeHuman:
+                        case OppressiveGazeAbomination:
+                            int preCastTime = 1000;
+                            castDuration = 750;
+                            lifespan = (cast.Time, cast.Time + preCastTime);
+                            (long start, long end) lifespanHit = (lifespan.end, lifespan.end + castDuration);
+                            uint width = 4000;
+                            uint height = 130;
+                            if (target.TryGetCurrentFacingDirection(log, lifespan.start + 1000, out var facingOppressiveGaze))
+                            {
+                                var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
+                                var rotationConnextor = new AngleConnector(facingOppressiveGaze);
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespan, Colors.Red, 0.1, positionConnector).UsingRotationConnector(rotationConnextor));
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanHit, Colors.Red, 0.7, positionConnector).UsingRotationConnector(rotationConnextor));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
+
+                // Blood Shield - Invulnerability Bubble
+                AddMatthiasBubbles(BloodShield, target, log, replay);
+                AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
                 break;
             case (int)TargetID.Storm:
-                replay.Decorations.Add(new CircleDecoration(260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
+                replay.Decorations.Add(new CircleDecoration(260, lifespan, Colors.LightCobaltBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                 break;
             case (int)TargetID.Spirit:
             case (int)TargetID.Spirit2:
-                replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
                 break;
             case (int)TargetID.IcePatch:
-                replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Blue, 0.5, new AgentConnector(target)));
                 break;
             case (int)TargetID.Tornado:
-                replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
                 break;
             default:
                 break;

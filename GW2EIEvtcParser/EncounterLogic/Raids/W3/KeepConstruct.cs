@@ -296,103 +296,108 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-        int start = (int)replay.TimeOffsets.start;
-        int end = (int)replay.TimeOffsets.end;
+        long start = replay.TimeOffsets.start;
+        long end = replay.TimeOffsets.end;
         switch (target.ID)
         {
             case (int)TargetID.KeepConstruct:
+                // Phantasmal Blades
+                int bladeDelay = 150;
+                int duration = 1000;
+                float bladeOpeningAngle = 360 * 3 / 32;
+                uint bladeRadius = 1600;
+
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        case TowerDrop:
+                            {
+                                start = cast.Time;
+                                end = cast.EndTime;
+                                long skillCast = end - 1000;
+                                if (target.TryGetCurrentInterpolatedPosition(log, end, out var position))
+                                {
+                                    replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
+                                }
+                            }
+                            break;
+                        case PhantasmalBlades1:
+                            {
+                                int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((cast.ActualDuration - 1150) / 1000.0), 9));
+                                start = cast.Time + bladeDelay;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    var connector = new AgentConnector(target);
+                                    replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
+                                    float initialAngle = facing.GetRoundedZRotationDeg();
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
+                                    for (int i = 1; i < ticks; i++)
+                                    {
+                                        float angle = initialAngle + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
+                                    }
+                                }
+                            }
+                            break;
+                        case PhantasmalBlades2:
+                            {
+                                int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((cast.ActualDuration - 1150) / 1000.0), 9));
+                                start = cast.Time + bladeDelay;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    var connector = new AgentConnector(target);
+                                    replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
+                                    float initialAngle1 = facing.GetRoundedZRotationDeg();
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                                    float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                                    for (int i = 1; i < ticks; i++)
+                                    {
+                                        float angle1 = initialAngle1 + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                                        float angle2 = initialAngle2 + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                                    }
+                                }
+                            }
+                            break;
+                        case PhantasmalBlades3:
+                            {
+                                int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((cast.ActualDuration - 1150) / 1000.0), 9));
+                                start = cast.Time + bladeDelay;
+                                if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
+                                {
+                                    var connector = new AgentConnector(target);
+                                    replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
+                                    float initialAngle1 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                                    float initialAngle2 = initialAngle1 + 120;
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
+                                    float initialAngle3 = initialAngle1 - 120;
+                                    replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
+                                    for (int i = 1; i < ticks; i++)
+                                    {
+                                        float angle1 = initialAngle1 + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
+                                        float angle2 = initialAngle2 + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
+                                        float angle3 = initialAngle3 + i * 360 / 8;
+                                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
                 var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.End, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
-                }
-                
-                var towerDrop = cls.Where(x => x.SkillId == TowerDrop);
-                foreach (CastEvent c in towerDrop)
-                {
-                    start = (int)c.Time;
-                    end = (int)c.EndTime;
-                    int skillCast = end - 1000;
-                    if (target.TryGetCurrentInterpolatedPosition(log, end, out var position))
-                    {
-                        replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
-                    }
-                }
-               
-                var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1);
-                var blades2 = cls.Where(x => x.SkillId == PhantasmalBlades2);
-                var blades3 = cls.Where(x => x.SkillId == PhantasmalBlades3);
-                int bladeDelay = 150;
-                int duration = 1000;
-                float bladeOpeningAngle = 360 * 3 / 32;
-                uint bladeRadius = 1600;
-                foreach (CastEvent c in blades1)
-                {
-                    int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                    start = (int)c.Time + bladeDelay;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
-                        float initialAngle = facing.GetRoundedZRotationDeg();
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
-                        for (int i = 1; i < ticks; i++)
-                        {
-                            float angle = initialAngle + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
-                        }
-                    }
-                }
-
-                foreach (CastEvent c in blades2)
-                {
-                    int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                    start = (int)c.Time + bladeDelay;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
-                        float initialAngle1 = facing.GetRoundedZRotationDeg();
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
-                        float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
-                        for (int i = 1; i < ticks; i++)
-                        {
-                            float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
-                            float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
-                        }
-                    }
-                }
-
-                foreach (CastEvent c in blades3)
-                {
-                    int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                    start = (int)c.Time + bladeDelay;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        var connector = new AgentConnector(target);
-                        replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
-                        float initialAngle1 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
-                        float initialAngle2 = initialAngle1 + 120;
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
-                        float initialAngle3 = initialAngle1 - 120;
-                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle3))); // First blade lasts twice as long
-                        for (int i = 1; i < ticks; i++)
-                        {
-                            float angle1 = initialAngle1 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle1))); // First blade lasts longer
-                            float angle2 = initialAngle2 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
-                            float angle3 = initialAngle3 + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle3))); // First blade lasts longer
-                        }
-                    }
                 }
                 break;
             case (int)TargetID.KeepConstructCore:
@@ -430,7 +435,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        return combatData.GetSkills().Contains(34958) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetSkills().Contains(AchievementEligibilityDownDownDowned) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

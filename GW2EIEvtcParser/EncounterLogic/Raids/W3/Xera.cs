@@ -210,7 +210,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         _xeraFirstPhaseEndTime = firstXera.LastAware;
         //
-        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData));
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
         //
         var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneFragments)
@@ -327,11 +327,16 @@ internal class Xera : StrongholdOfTheFaithful
         switch (target.ID)
         {
             case (int)TargetID.Xera:
-                var cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
-                var summon = cls.Where(x => x.SkillId == SummonFragments);
-                foreach (CastEvent c in summon)
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    replay.Decorations.Add(new CircleDecoration(180, (c.Time, c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    switch (cast.SkillId)
+                    {
+                        case SummonFragments:
+                            replay.Decorations.Add(new CircleDecoration(180, (cast.Time, cast.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 if (_xeraFirstPhaseEndTime != 0)
                 {

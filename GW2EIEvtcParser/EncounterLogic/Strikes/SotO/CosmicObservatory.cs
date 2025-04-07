@@ -82,78 +82,78 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        (long start, long end) lifespan;
+        var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
         switch (target.ID)
         {
             case (int)TargetID.Dagda:
-                var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-
-                // Red AoE during 75-50-25 % phases
                 var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
-                foreach (CastEvent cast in demonicBlasts)
+
+                foreach (CastEvent cast in casts)
                 {
-                    // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
-                    // We check if she has gained the buff to be sure that the phase has started.
-                    var phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrNull();
-                    if (phaseBuff is null || Math.Abs(cast.Time - phaseBuff.Value.Start) > 4000)
+                    switch (cast.SkillId)
                     {
-                        continue;
-                    }
-                    // Hardcoded positional value, Dagda isn't in the center but the AoE is
-                    var connector = new PositionConnector(new(305.26892f, 920.6105f, -5961.992f));
-                    var circle = new CircleDecoration(800, (cast.Time, phaseBuff.Value.End), Colors.Red, 0.4, connector);
-                    replay.Decorations.Add(circle);
-                }
-
-                //
-                var planetCrashes = casts.Where(x => x.SkillId == PlanetCrashSkill);
-                foreach (CastEvent c in planetCrashes)
-                {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
-
-                // Spinning nebula
-                var spinningNebulas = casts.Where(x => x.SkillId == SpinningNebulaCentral || x.SkillId == SpinningNebulaWithTeleport);
-                foreach (CastEvent cast in spinningNebulas)
-                {
-                    (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
-                    var connector = new AgentConnector(target);
-                    var circle = new CircleDecoration(300, lifespan, "rgba(0, 191, 255, 0.2)", connector);
-                    replay.Decorations.AddWithGrowing(circle, lifespan.Item2);
-                }
-
-                // Shooting Stars - Green Arrow
-                var shootingStars = casts.Where(x => x.SkillId == ShootingStars);
-                foreach (CastEvent cast in shootingStars)
-                {
-                    uint length = 1500;
-                    uint width = 100;
-                    int castDuration = 6700;
-                    (long, long) lifespan = (cast.Time, cast.Time + castDuration);
-
-                    // The mechanic gets cancelled during the intermission phases since the CM release.
-                    // Before then, the mechanic would continue during the phase and shoot.
-                    if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
-                    {
-                        foreach (CastEvent demonicBlastCast in demonicBlasts)
-                        {
-                            if (lifespan.Item1 < demonicBlastCast.Time && lifespan.Item2 > demonicBlastCast.Time)
+                        // Demonic Blast - Red AoE during 75-50-25 % phases
+                        case DemonicBlast:
+                            var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                            // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
+                            // We check if she has gained the buff to be sure that the phase has started.
+                            var phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrNull();
+                            if (phaseBuff is null || Math.Abs(cast.Time - phaseBuff.Value.Start) > 4000)
                             {
-                                lifespan.Item2 = demonicBlastCast.Time;
-                                break;
+                                continue;
                             }
-                        }
-                    }
+                            // Hardcoded positional value, Dagda isn't in the center but the AoE is
+                            lifespan = (cast.Time, phaseBuff.Value.End);
+                            var connector = new PositionConnector(new(305.26892f, 920.6105f, -5961.992f));
+                            var circle = new CircleDecoration(800, lifespan, Colors.Red, 0.4, connector);
+                            replay.Decorations.Add(circle);
+                            break;
+                        // Planet Crash - Breakbar
+                        case PlanetCrashSkill:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.Time + 10000, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        // Spinning Nebula
+                        case SpinningNebulaCentral:
+                        case SpinningNebulaWithTeleport:
+                            lifespan = (cast.Time, cast.Time + cast.ActualDuration);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, "rgba(0, 191, 255, 0.2)", new AgentConnector(target)), lifespan.end);
+                            break;
+                        // Shooting Stars - Green Arrow
+                        case ShootingStars:
+                            uint length = 1500;
+                            uint width = 100;
+                            int castDuration = 6700;
+                            lifespan = (cast.Time, cast.Time + castDuration);
 
-                    // Find the targeted player
-                    Player? player = log.PlayerList.FirstOrDefault(x => x.HasBuff(log, ShootingStarsTargetBuff, cast.Time, ServerDelayConstant));
-                    if (player != null)
-                    {
-                        var rotation = new AgentFacingAgentConnector(target, player);
-                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new(length / 2, 0, 0), true);
-                        replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotation));
+                            // The mechanic gets cancelled during the intermission phases since the CM release.
+                            // Before then, the mechanic would continue during the phase and shoot.
+                            if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
+                            {
+                                foreach (CastEvent demonicBlastCast in demonicBlasts)
+                                {
+                                    if (lifespan.start < demonicBlastCast.Time && lifespan.end > demonicBlastCast.Time)
+                                    {
+                                        lifespan.end = demonicBlastCast.Time;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Find the targeted player
+                            Player? player = log.PlayerList.FirstOrDefault(x => x.HasBuff(log, ShootingStarsTargetBuff, cast.Time, ServerDelayConstant));
+                            if (player != null)
+                            {
+                                var rotation = new AgentFacingAgentConnector(target, player);
+                                var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(length / 2, 0, 0), true);
+                                replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, Colors.DarkGreen, 0.4, agentConnector).UsingRotationConnector(rotation));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
                 break;
@@ -183,7 +183,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
-        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
+        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
         var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem);
         var agentsToTether = log.AgentData.GetNPCsByID(TargetID.SoulFeast);
 

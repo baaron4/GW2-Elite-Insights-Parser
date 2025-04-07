@@ -160,49 +160,58 @@ internal class Sabir : TheKeyOfAhdashim
         uint boltBreakRadius = 180;
         foreach (Segment seg in boltBreaks)
         {
-            var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
+            var circle = new CircleDecoration(boltBreakRadius, seg, Colors.LightOrange, 0.2, new AgentConnector(p));
             replay.Decorations.AddWithGrowing(circle, seg.End);
         }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        int crStart = (int)replay.TimeOffsets.start;
-        int crEnd = (int)replay.TimeOffsets.end;
+        long castDuration;
+        (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+
         switch (target.ID)
         {
             case (int)TargetID.Sabir:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        // Fury of the Storm
+                        case FuryOfTheStorm:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new CircleDecoration(1200, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(lifespan.end));
+                            break;
+                        // Unbridled Tempest
+                        case UnbridledTempest:
+                            castDuration = 5000;
+                            long delay = 3000; // casttime 0 from skill def
+                            uint radius = 1200;
+                            lifespan = (cast.Time, cast.Time + delay);
+                            (long start, long end) lifespanShockwave = (lifespan.end, cast.Time + castDuration);
+                            GeographicalConnector connector = new AgentConnector(target);
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, connector));
+                            replay.Decorations.Add(new CircleDecoration(radius, (lifespan.end - 10, lifespan.end + 100), Colors.Orange, 0.5, connector));
+                            replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // Repulsion Field
                 var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.TargetedLocust);
+
+                // Ion Shield
                 var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.IonShield);
-                //
-                var furyOfTheStorm = casts.Where(x => x.SkillId == FuryOfTheStorm);
-                foreach (CastEvent c in furyOfTheStorm)
-                {
-                    replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
-                }
-                //
-                var unbridledTempest = casts.Where(x => x.SkillId == UnbridledTempest);
-                foreach (CastEvent c in unbridledTempest)
-                {
-                    int start = (int)c.Time;
-                    int delay = 3000; // casttime 0 from skill def
-                    int duration = 5000;
-                    uint radius = 1200;
-                    (long, long) lifespanShockwave = (start + delay, start + duration);
-                    GeographicalConnector connector = new AgentConnector(target);
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, connector));
-                    replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
-                    replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
-                }
                 break;
             case (int)TargetID.BigKillerTornado:
-                replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(480, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
             case (int)TargetID.SmallKillerTornado:
-                replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(120, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target)));
                 break;
             case (int)TargetID.SmallJumpyTornado:
             case (int)TargetID.ParalyzingWisp:

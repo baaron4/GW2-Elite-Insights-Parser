@@ -408,29 +408,39 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        (long start, long end) lifespan;
 
         switch (target.ID)
         {
             case (int)TargetID.Cerus:
+                foreach (CastEvent cast in casts)
+                {
+                    switch (cast.SkillId)
+                    {
+                        // Enraged Smash - 10% attacks
+                        case EnragedSmashNM:
+                        case EnragedSmashCM:
+                            // Cast time is 750, we only show a quick pulse of damage
+                            lifespan = (cast.Time + 750, cast.Time + 1000);
+                            var circle = new CircleDecoration(2500, lifespan, Colors.RedSkin, 0.1, new AgentConnector(target));
+                            replay.Decorations.Add(circle);
+                            break;
+                        // Petrify - Breakbar 80%, 50%, 10%
+                        case PetrifySkill:
+                            lifespan = (cast.Time, cast.EndTime);
+                            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.Time + 10000, 100)], new AgentConnector(target))
+                                .UsingRotationConnector(new AngleConnector(180)));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 replay.AddHideByBuff(target, log, InvulnerabilityCerus);
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddMaliciousIntentDecoration(target, log, replay, casts);
-                var enragedSmash = casts.Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM);
-                foreach (CastEvent cast in enragedSmash)
-                {
-                    // Cast time is 750, we only show a quick pulse of damage
-                    (long start, long end) lifespan = (cast.Time + 750, cast.Time + 1000);
-                    var circle = new CircleDecoration(2500, lifespan, Colors.RedSkin, 0.1, new AgentConnector(target));
-                    replay.Decorations.Add(circle);
-                }
-                var petrifies = casts.Where(x => x.SkillId == PetrifySkill);
-                foreach (CastEvent c in petrifies)
-                {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
-                        .UsingRotationConnector(new AngleConnector(180)));
-                }
                 break;
             case (int)TargetID.EmbodimentOfDespair:
                 AddDeterminedOverhead(target, log, replay);

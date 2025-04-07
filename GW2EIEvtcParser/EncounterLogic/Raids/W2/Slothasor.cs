@@ -158,48 +158,58 @@ internal class Slothasor : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Slothasor:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        // Halitosis - Fire breath
+                        case Halitosis:
+                            long preCastTime = 1000;
+                            castDuration = 2000;
+                            (long start, long end) lifespanPrecast = (cast.Time, cast.Time + preCastTime);
+                            lifespan = (lifespanPrecast.end, lifespanPrecast.end + castDuration);
+                            uint range = 600;
+                            if (target.TryGetCurrentFacingDirection(log, lifespanPrecast.start, out var facingHalitosis))
+                            {
+                                var connector = new AgentConnector(target);
+                                var rotationConnector = new AngleConnector(facingHalitosis);
+                                var openingAngle = 60;
+                                replay.Decorations.Add(new PieDecoration(range, openingAngle, lifespanPrecast, Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
+                                replay.Decorations.Add(new PieDecoration(range, openingAngle, lifespan, Colors.Orange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                            }
+                            break;
+                        // Tantrum - 3 sets ground AoEs
+                        case TantrumSkill:
+                            // Generic indicator of casting
+                            // TODO(Linka) @decorations: Add tantrum AoEs to Environment Decorations and lock this behind !log.CombatData.HasEffectData
+                            lifespan = (cast.Time, cast.EndTime);
+                            var tantrum = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target));
+                            replay.Decorations.AddWithFilledWithGrowing(tantrum.UsingFilled(false), true, lifespan.end);
+                            break;
+                        // Spore Release - Shake
+                        case SporeRelease:
+                            // Generic indicator of casting
+                            lifespan = (cast.Time, cast.EndTime);
+                            var sporeRelease = new CircleDecoration(700, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
+                            replay.Decorations.AddWithFilledWithGrowing(sporeRelease, true, lifespan.end);
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
+                // Narcolepsy - Invulnerability
                 var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var narcolepsy in narcolepsies)
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
-                }
-                var breath = cls.Where(x => x.SkillId == Halitosis);
-                foreach (CastEvent c in breath)
-                {
-                    int start = (int)c.Time;
-                    int preCastTime = 1000;
-                    int duration = 2000;
-                    uint range = 600;
-                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
-                    {
-                        var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(facing);
-                        var openingAngle = 60;
-                        replay.Decorations.Add(new PieDecoration(range, openingAngle, (start, start + preCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), Colors.Orange, 0.4, connector).UsingRotationConnector(rotationConnector));
-                    }
-                }
-                var tantrum = cls.Where(x => x.SkillId == TantrumSkill);
-                foreach (CastEvent c in tantrum)
-                {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    var circle = new CircleDecoration(300, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target));
-                    replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
-                }
-                var shakes = cls.Where(x => x.SkillId == SporeRelease);
-                foreach (CastEvent c in shakes)
-                {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    var circle = new CircleDecoration(700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
-                    replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 break;
             case (int)TargetID.PoisonMushroom:

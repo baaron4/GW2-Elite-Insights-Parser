@@ -158,39 +158,48 @@ internal class River : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        // TODO bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
+        // TODO(Linka) @decorations: Bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        long castDuration;
+        long growing;
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Desmina:
                 var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var asylum in asylums)
                 {
-                    replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(300, asylum, Colors.LightBlue, 0.2, new AgentConnector(target)));
                 }
                 break;
 
             case (int)TargetID.HollowedBomber:
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        case BombShellRiverOfSouls:
+                            castDuration = 3500;
+                            growing = cast.Time + castDuration;
+                            lifespan = (cast.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration));
+                            var circle = new CircleDecoration(480, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
+                            replay.Decorations.AddWithGrowing(circle, growing);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstBomberMovement.XYZ != default)
                 {
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                 }
-
-                var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls);
-                foreach (CastEvent bomb in bomberman)
-                {
-                    int startCast = (int)bomb.Time;
-                    int endCast = (int)bomb.EndTime;
-                    int expectedEnd = Math.Max(startCast + bomb.ExpectedDuration, endCast);
-                    var circle = new CircleDecoration(480, (startCast, endCast), "rgba(180,250,0,0.3)", new AgentConnector(target));
-                    replay.Decorations.AddWithGrowing(circle, expectedEnd);
-                }
                 break;
-
             case (int)TargetID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
                 if (firstRiverMovement.XYZ != default)
@@ -200,14 +209,13 @@ internal class River : HallOfChains
 
                 if (replay.Rotations.Count != 0)
                 {
-                    int start = (int)replay.TimeOffsets.start;
-                    int end = (int)replay.TimeOffsets.end;
-                    replay.Decorations.Add(new RectangleDecoration(160, 390, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                    lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
+                    replay.Decorations.Add(new RectangleDecoration(160, 390, lifespan, Colors.Orange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                 }
                 break;
 
             case (int)TargetID.Enervator:
-            // TODO Line actor between desmina and enervator. Missing skillID
+            // TODO(Linka) @decorations: Add Line actor between desmina and enervator. Missing skillID
             case (int)TargetID.SpiritHorde1:
             case (int)TargetID.SpiritHorde2:
             case (int)TargetID.SpiritHorde3:

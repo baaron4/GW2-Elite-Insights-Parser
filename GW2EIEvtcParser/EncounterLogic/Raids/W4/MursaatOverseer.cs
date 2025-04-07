@@ -96,22 +96,28 @@ internal class MursaatOverseer : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Jade:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                {
+                    switch (cast.SkillId)
+                    {
+                        case JadeSoldierExplosion:
+                            long start = cast.Time;
+                            long precast = 1350;
+                            long duration = 100;
+                            uint radius = 1200;
+                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), Colors.Red, 0.05, new AgentConnector(target)));
+                            replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), Colors.Red, 0.25, new AgentConnector(target)));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // Jade Scout Shield
                 var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                uint shieldRadius = 100;
                 foreach (var seg in shields)
                 {
-                    replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
-                }
-                var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion);
-                foreach (CastEvent c in explosion)
-                {
-                    int start = (int)c.Time;
-                    int precast = 1350;
-                    int duration = 100;
-                    uint radius = 1200;
-                    replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), Colors.Red, 0.05, new AgentConnector(target)));
-                    replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), Colors.Red, 0.25, new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(100, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                 }
                 break;
             default:
