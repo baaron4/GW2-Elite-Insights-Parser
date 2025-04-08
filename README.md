@@ -21,7 +21,7 @@ The key for verifying the release's signature can be found on [openpgp](https://
 
 ## Logging
 
-We suggest following [this guide](https://snowcrows.com/guides/getting-started/arc-dps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
+We suggest following [this guide](https://snowcrows.com/guides/arcdps/arcdps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
 
 ## Set Up
 
@@ -158,7 +158,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 ## HTML Overview
 
-For a more detailed look, please check [this guide](https://snowcrows.com/en/guides/starting-to-raid/reading-logs) written by Snow Crows.
+For a more detailed look, please check [this guide](https://snowcrows.com/guides/arcdps/reading-logs) written by Snow Crows.
 
 ### Header
 
