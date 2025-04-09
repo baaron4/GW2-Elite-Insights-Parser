@@ -28,6 +28,9 @@
             };
         },
         computed: {
+            player: function () {
+                return logData.players[this.playerindex];
+            },
             healingtaken: function () {      
                 if (this.distmode === -1) {
                     return healingStatsExtension.playerHealingDetails[this.playerindex].incomingHealingDistributions[this.phaseindex];

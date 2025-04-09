@@ -12,14 +12,14 @@
             </ul>
         </div>
         <barrierdist-table-component :barrierdist="barriertaken" :tableid="'barriertakendist-' + playerindex"
-            :actorindex="-1" :minionindex="distmost" :istarget="false" :player="true"
+            :actorindex="-1" :minionindex="distmode" :istarget="false" :player="true"
             :phaseindex="phaseindex">
         </barrierdist-table-component>
     </div>
 </template>
 
 <script>
-    Vue.component('barrierdist-player-component', {
+    Vue.component('barriertakendist-player-component', {
         props: ['playerindex','phaseindex'],
         template: `${template}`,
         data: function () {
@@ -28,6 +28,9 @@
             };
         },
         computed: {
+            player: function () {
+                return logData.players[this.playerindex];
+            },
             barriertaken: function () {
                 if (this.distmode === -1) {
                     return barrierStatsExtension.playerBarrierDetails[this.playerindex].incomingBarrierDistributions[this.phaseindex];
