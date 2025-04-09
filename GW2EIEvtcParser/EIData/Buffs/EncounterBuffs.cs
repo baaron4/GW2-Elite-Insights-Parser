@@ -423,9 +423,9 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: This Bug Can Dance", AchievementEligibilityThisBugCanDance, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
-            new Buff("Might (Greer)", MightUnstrippable, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Might),
-            new Buff("Protection (Greer)", ProtectionUnstrippable, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Protection),
-            new Buff("Resolution (Greer)", ResolutionGreer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other, BuffImages.Resolution),
+            new Buff("Might (Unstrippable)", MightUnstrippable, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Might),
+            new Buff("Protection (Unstrippable)", ProtectionUnstrippable, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Protection),
+            new Buff("Resolution (Unstrippable)", ResolutionUnstrippable, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other, BuffImages.Resolution),
             new Buff("Damage Immunity 1", DamageImmunity1, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
             new Buff("Damage Immunity 2", DamageImmunity2, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
             new Buff("Damage Immunity 3", DamageImmunity3, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),

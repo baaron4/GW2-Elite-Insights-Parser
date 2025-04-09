@@ -4719,6 +4719,7 @@ public static class SkillIDs
     public const long DecimaConduitWallBuffCM = 75479;
     public const long Sparkwave = 75484;
     public const long FulgentAuraTier2CM = 75486;
+    public const long HarmoniousThunder = 75518;
     public const long RipplesOfRotCM2 = 75519;
     public const long ChargedLeapW8 = 75520;
     public const long ChorusOfThunderCM = 75523;
@@ -4759,7 +4760,7 @@ public static class SkillIDs
     public const long RelicOfTheHolosmith = 75748;
     public const long EnfeeblingMiasma3 = 75749;
     public const long DamageImmunity3 = 75754;
-    public const long ResolutionGreer = 75755;
+    public const long ResolutionUnstrippable = 75755;
     public const long DecimaConduitWallWarningBuffCM = 75763;
     public const long SeismicReposition2 = 75764;
     public const long SeismicCrashDamageCM2 = 75793;
