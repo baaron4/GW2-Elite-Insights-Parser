@@ -3,8 +3,8 @@
         <keep-alive>
             <healingdist-player-component v-if="tabmode === 0" :key="'healingdist' + playerindex" :playerindex="playerindex"
                 :phaseindex="phaseindex" :activetargets="activetargets"></healingdist-player-component>
-            <healingtaken-component v-if="tabmode ===1" :key="'healingtaken' + playerindex" :actorindex="playerindex"
-                :tableid="'healingtaken-player-'+playerindex" :phaseindex="phaseindex"></healingtaken-component>
+            <healingtakendist-player-component v-if="tabmode ===1" :key="'healingtaken' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></healingtakendist-player-component>
             <player-healing-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id + 'healing-graph' + playerindex"
                 :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
             </player-healing-graph-tab-component>
@@ -18,8 +18,8 @@
                 :phaseindex="phaseindex"></food-component>
             <barrierdist-player-component v-if="tabmode === 6" :key="'barrierdist' + playerindex" :playerindex="playerindex"
                 :phaseindex="phaseindex" :activetargets="activetargets"></barrierdist-player-component>
-            <barriertaken-component v-if="tabmode ===7" :key="'barriertaken' + playerindex" :actorindex="playerindex"
-                :tableid="'barriertaken-player-'+playerindex" :phaseindex="phaseindex"></barriertaken-component>
+            <barriertakendist-player-component v-if="tabmode ===7" :key="'barriertaken' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></barriertakendist-player-component>
         </keep-alive>
     </div>
 </template>

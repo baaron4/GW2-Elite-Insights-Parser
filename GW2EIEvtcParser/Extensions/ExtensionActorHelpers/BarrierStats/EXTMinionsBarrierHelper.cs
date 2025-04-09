@@ -65,7 +65,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
     }
 #pragma warning restore CS8774 // must have non null value when exiting
 
-    public override IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         InitIncomingBarrierEvents(log);
 

@@ -3,8 +3,8 @@
         <keep-alive>
             <dmgdist-player-component v-if="tabmode === 0" :key="'dist' + playerindex" :playerindex="playerindex"
                 :phaseindex="phaseindex" :activetargets="activetargets"></dmgdist-player-component>
-            <dmgtaken-component v-if="tabmode ===1" :key="'taken' + playerindex" :actorindex="playerindex" :player="true"
-                :tableid="'dmgtaken-player-'+playerindex" :phaseindex="phaseindex"></dmgtaken-component>
+            <dmgtakendist-player-component v-if="tabmode ===1" :key="'taken' + playerindex" 
+                :playerindex="playerindex" :phaseindex="phaseindex"></dmgtakendist-player-component>
             <player-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id + 'graph' + playerindex"
                 :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
             </player-graph-tab-component>

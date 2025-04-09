@@ -63,6 +63,7 @@ internal class ActorDetailsDto
         {
             DmgDistributions        = new(phases.Count),
             DmgDistributionsTargets = new(phases.Count),
+            DmgDistributionsTaken = new(phases.Count),
         };
 
         foreach (PhaseData phase in phases)
@@ -75,6 +76,7 @@ internal class ActorDetailsDto
             }
             dto.DmgDistributionsTargets.Add(dmgTargetsDto);
             dto.DmgDistributions.Add(DamageDistributionDto.BuildFriendlyMinionDamageDistributionData(log, actor, minion, null, phase, usedSkills, usedBuffs));
+            dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildFriendlyMinionDamageTakenDistributionData(log, minion, null, phase, usedSkills, usedBuffs));
         }
         return dto;
     }
@@ -138,22 +140,26 @@ internal class ActorDetailsDto
         foreach (var minion in minions.Values)
         {
             var dmgDistributions = new List<DamageDistributionDto>(phases.Count);
+            var dmgTakenDistributions = new List<DamageDistributionDto>(phases.Count);
 
             foreach (PhaseData phase in phases)
             {
                 if (phase.Targets.ContainsKey(target))
                 {
                     dmgDistributions.Add(DamageDistributionDto.BuildTargetMinionDamageDistributionData(log, target, minion, phase, usedSkills, usedBuffs));
+                    dmgDistributions.Add(DamageDistributionDto.BuildTargetMinionDamageTakenDistributionData(log, minion, phase, usedSkills, usedBuffs));
                 }
                 else
                 {
                     dmgDistributions.Add(DamageDistributionDto.EmptyInstance);
+                    dmgTakenDistributions.Add(DamageDistributionDto.EmptyInstance);
                 }
             }
 
             dto.Minions.Add(new()
             {
-                DmgDistributions = dmgDistributions
+                DmgDistributions = dmgDistributions,
+                DmgDistributionsTaken = dmgTakenDistributions
             });
         }
 
