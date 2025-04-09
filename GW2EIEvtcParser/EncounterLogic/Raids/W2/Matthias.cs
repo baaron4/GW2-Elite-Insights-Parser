@@ -6,6 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -17,7 +18,7 @@ internal class Matthias : SalvationPass
     public Matthias(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
-        
+
 
             new PlayerDstHitMechanic([OppressiveGazeHuman, OppressiveGazeAbomination], new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken", "Oppressive Gaze (Hadouken projectile)","Hadouken", 0),
             new MechanicGroup([
@@ -31,10 +32,10 @@ internal class Matthias : SalvationPass
             new MechanicGroup([
                 new PlayerDstHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
                 new PlayerDstBuffApplyMechanic(Slow, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD", "Knockdown by Icy Patch","Icy Patch KD", 0)
-                    .UsingChecker((br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
+                    .UsingChecker((br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(Thunder, new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.Teal), "Storm", "Thunder Storm hit (air phase)","Storm cloud", 0),
                 new PlayerDstBuffRemoveMechanic(Unbalanced, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0)
-                    .UsingChecker( (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
+                    .UsingChecker( (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, Stability, br.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(Surrender, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit", "Surrender (hit by walking Spirit)","Spirit hit", 0)
             ]),
             new PlayerDstBuffApplyMechanic(UnstableBloodMagic, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Well", "Unstable Blood Magic application","Well", 0),
@@ -46,9 +47,9 @@ internal class Matthias : SalvationPass
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(MatthiasSacrifice, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Sacrifice", "Sacrifice (Breakbar)","Sacrifice", 0),
                 new PlayerDstBuffRemoveMechanic(MatthiasSacrifice, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0)
-                    .UsingChecker((br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
+                    .UsingChecker((br,log) => br.RemovedDuration > 25 && !log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ServerDelayConstant)),
                 new PlayerDstBuffRemoveMechanic(MatthiasSacrifice, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail","Sacrifice time ran out", "Sacrificed",0)
-                    .UsingChecker( (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ParserHelper.ServerDelayConstant)),
+                    .UsingChecker( (br,log) => br.RemovedDuration <= 25 || log.CombatData.GetDeadEvents(br.To).Any(x => Math.Abs(br.Time - x.Time) < ServerDelayConstant)),
             ]),
             //new Mechanic(Unbalanced, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,"rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(Unbalanced, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,"rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
@@ -85,8 +86,8 @@ internal class Matthias : SalvationPass
         {
             int playersWithBisque = 0;
             int expectedPlayersForSuccess = 0;
-            long fightEnd = log.FightData.FightEnd - ParserHelper.ServerDelayConstant;
-            long fightStart = log.FightData.FightStart + ParserHelper.ServerDelayConstant;
+            long fightEnd = log.FightData.FightEnd - ServerDelayConstant;
+            long fightStart = log.FightData.FightStart + ServerDelayConstant;
             foreach (Player p in log.PlayerList)
             {
                 IReadOnlyDictionary<long, BuffGraph> graphs = p.GetBuffGraphs(log);
@@ -353,25 +354,63 @@ internal class Matthias : SalvationPass
             // Circle on player and overhead icon
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
-            
+
             // Progress bar on the well
             lifespan = (seg.End, seg.End + 100000);
-            if (p.TryGetCurrentInterpolatedPosition(log, lifespan.start, out var position))
+            var playerPositions = p.GetCombatReplayNonPolledPositions(log);
+
+            if (playerPositions.Count > 0)
             {
-                float curDistance = 99999;
-                int curIndex = 0;
-                
-                for (int i = 0; i < WellsPositions.Count; i++)
+                // Get position when you lose the buff
+                var positionsFiltered = playerPositions.Where(x => x.Time >= seg.End - ServerDelayConstant && x.Time <= seg.End + ArcDPSPollingRate);
+                Vector3 foundPosition = new(0, 0, 0);
+                bool found = false;
+
+                // Search well by distance
+                foreach (ParametricPoint3D playerPosition in positionsFiltered)
                 {
-                    float distance = Vector3.Distance(position, WellsPositions.ElementAt(i).Value);
-                    if (distance < curDistance)
+                    if (found)
                     {
-                        curDistance = distance;
-                        curIndex = i;
+                        break;
+                    }
+
+                    foreach (Vector3 wellPosition in WellsPositions)
+                    {
+                        if ((wellPosition.XY() - playerPosition.XYZ.XY()).Length() < 200)
+                        {
+                            foundPosition = wellPosition;
+                            found = true;
+                            break;
+                        }
                     }
                 }
-                Vector3 closestWell = WellsPositions.ElementAt(curIndex).Value;
-                replay.Decorations.Add(new ProgressBarDecoration(240, 48, lifespan, Colors.Black, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new PositionConnector(closestWell)));
+
+                // Other search method if first has failed
+                if (!found)
+                {
+                    // Separated if in case TryGet also returns false
+                    if (p.TryGetCurrentInterpolatedPosition(log, lifespan.start - ServerDelayConstant, out var position))
+                    {
+                        float curDistance = 99999;
+                        int curIndex = 0;
+
+                        for (int i = 0; i < WellsPositions.Count; i++)
+                        {
+                            float distance = Vector3.Distance(position, WellsPositions.ElementAt(i));
+                            if (distance < curDistance)
+                            {
+                                curDistance = distance;
+                                curIndex = i;
+                            }
+                        }
+                        Vector3 closestWell = WellsPositions.ElementAt(curIndex);
+                        replay.Decorations.Add(new ProgressBarDecoration(240, 48, lifespan, Colors.Black, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new PositionConnector(closestWell)));
+                    }
+                }
+                else
+                {
+                    replay.Decorations.Add(new ProgressBarDecoration(240, 48, lifespan, Colors.Black, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new PositionConnector(foundPosition)));
+                }
             }
         }
 
@@ -392,19 +431,19 @@ internal class Matthias : SalvationPass
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
-        
+
         // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
-        
+
         // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
-            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
-        
+
         // Zealous Benediction - AoE Bombs on players
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in zealousBenediction)
@@ -412,7 +451,7 @@ internal class Matthias : SalvationPass
             lifespan = (c.Time, c.Time + 5000);
             replay.Decorations.AddWithGrowing(new CircleDecoration(180, lifespan, Colors.Orange, 0.2, new AgentConnector(p)), lifespan.end);
         }
-        
+
         // Unbalanced
         var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
@@ -450,12 +489,12 @@ internal class Matthias : SalvationPass
     /// <summary>
     /// Coordinates of the wells.
     /// </summary>
-    private static readonly Dictionary<string, Vector3> WellsPositions = new()
+    private static readonly List<Vector3> WellsPositions = new()
     {
-        { "North West", new Vector3(-6810, 6770, -5157) },
-        { "North East", new Vector3(-5040, 6770, -5157) },
-        { "South East", new Vector3(-5040, 5020, -5157) },
-        { "South West", new Vector3(-6810, 5020, -5157) },
+        { new Vector3(-6871.6543f, 6823.631f, -5180.869f) }, // North West
+        { new Vector3(-5011.504f, 6834.5103f, -5180.869f) }, // North East
+        { new Vector3(-6859.2817f, 4965.546f, -5180.869f) }, // South West
+        { new Vector3(-5002.0090f, 4976.911f, -5180.869f) }, // South East
     };
 
 }
