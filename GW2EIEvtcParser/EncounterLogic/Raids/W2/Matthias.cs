@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -324,13 +325,13 @@ internal class Matthias : SalvationPass
                 break;
             case (int)TargetID.Spirit:
             case (int)TargetID.Spirit2:
-                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.LightOrange, 0.3, new AgentConnector(target)));
                 break;
             case (int)TargetID.IcePatch:
                 replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Blue, 0.5, new AgentConnector(target)));
                 break;
             case (int)TargetID.Tornado:
-                replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.LightOrange, 0.3, new AgentConnector(target)));
                 break;
             default:
                 break;
@@ -341,52 +342,120 @@ internal class Matthias : SalvationPass
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
+
+        long growing;
+        (long start, long end) lifespan;
+
         // Corruption
         var corruptedMatthias = p.GetBuffStatus(log, [Corruption1, Corruption2], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in corruptedMatthias)
         {
-            int corruptedMatthiasEnd = (int)seg.End;
+            // Circle on player and overhead icon
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
-            if (p.TryGetCurrentInterpolatedPosition(log, corruptedMatthiasEnd, out var position))
-            {
-                var fountainActiveTime = corruptedMatthiasEnd + 100000;
-                replay.Decorations.Add(new ProgressBarDecoration(240, 48, (corruptedMatthiasEnd, fountainActiveTime), Colors.Black, 0.6, Colors.Black, 0.2, [(corruptedMatthiasEnd, 0), (fountainActiveTime, 100)], new PositionConnector(position)));
-            }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
+            
+            // Progress bar on the well
+            lifespan = (seg.End, seg.End + 100000);
+            if (p.TryGetCurrentInterpolatedPosition(log, lifespan.start, out var position))
+            {
+                float curDistance = 99999;
+                int curIndex = 0;
+                
+                for (int i = 0; i < WellsPositions.Count; i++)
+                {
+                    float distance = Vector3.Distance(position, WellsPositions.ElementAt(i).Value);
+                    if (distance < curDistance)
+                    {
+                        curDistance = distance;
+                        curIndex = i;
+                    }
+                }
+                Vector3 closestWell = WellsPositions.ElementAt(curIndex).Value;
+                replay.Decorations.Add(new ProgressBarDecoration(240, 48, lifespan, Colors.Black, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new PositionConnector(closestWell)));
+            }
         }
-        // Well of profane
+
+        // Well of the Profane - Unstable Blood Magic SAK AoE
         var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in wellMatthias)
         {
-            int wellMatthiasEnd = (int)seg.End;
-            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
-            if (p.TryGetCurrentInterpolatedPosition(log, wellMatthiasEnd, out var position))
+            growing = seg.Start + 9000;
+
+            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(120, seg, Colors.DarkerLime, 0.5, new AgentConnector(p)).UsingFilled(false), true, growing);
+            if (!log.CombatData.HasEffectData)
             {
-                replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new PositionConnector(position)));
+                if (p.TryGetCurrentInterpolatedPosition(log, seg.End, out var position))
+                {
+                    lifespan = (seg.End, seg.End + 90000);
+                    replay.Decorations.Add(new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(position)));
+                }
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
-                // Sacrifice Selection
+        
+        // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
-                // Sacrifice
+        
+        // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
-            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
-                // Bombs
+        
+        // Zealous Benediction - AoE Bombs on players
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in zealousBenediction)
         {
-            int zealousStart = (int)c.Time;
-            int zealousEnd = zealousStart + 5000;
-            replay.Decorations.AddWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
+            lifespan = (c.Time, c.Time + 5000);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(180, lifespan, Colors.Orange, 0.2, new AgentConnector(p)), lifespan.end);
         }
-                // Unbalanced
+        
+        // Unbalanced
         var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        (long start, long end) lifespan;
+
+        // Shards of Rage AoEs
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MatthiasShardsOfRageAoEs, out var shards))
+        {
+            foreach (EffectEvent effect in shards)
+            {
+                lifespan = effect.ComputeLifespan(log, 3000);
+                var circle = new CircleDecoration(120, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position)).UsingFilled(false);
+                EnvironmentDecorations.Add(circle);
+            }
+        }
+
+        // Well of the Profane - Unstable Blood Magic SAK AoE
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MatthiasWellOfTheProfane, out var wellsOfTheProfane))
+        {
+            foreach (var effect in wellsOfTheProfane)
+            {
+                lifespan = effect.ComputeLifespan(log, 90000);
+                var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
+                EnvironmentDecorations.Add(circle);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Coordinates of the wells.
+    /// </summary>
+    private static readonly Dictionary<string, Vector3> WellsPositions = new()
+    {
+        { "North West", new Vector3(-6810, 6770, -5157) },
+        { "North East", new Vector3(-5040, 6770, -5157) },
+        { "South East", new Vector3(-5040, 5020, -5157) },
+        { "South West", new Vector3(-6810, 5020, -5157) },
+    };
 
 }

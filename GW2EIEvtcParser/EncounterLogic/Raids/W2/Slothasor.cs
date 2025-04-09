@@ -187,10 +187,12 @@ internal class Slothasor : SalvationPass
                         // Tantrum - 3 sets ground AoEs
                         case TantrumSkill:
                             // Generic indicator of casting
-                            // TODO(Linka) @decorations: Add tantrum AoEs to Environment Decorations and lock this behind !log.CombatData.HasEffectData
-                            lifespan = (cast.Time, cast.EndTime);
-                            var tantrum = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target));
-                            replay.Decorations.AddWithFilledWithGrowing(tantrum.UsingFilled(false), true, lifespan.end);
+                            if (!log.CombatData.HasEffectData)
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                var tantrum = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target));
+                                replay.Decorations.AddWithFilledWithGrowing(tantrum.UsingFilled(false), true, lifespan.end);
+                            }
                             break;
                         // Spore Release - Shake
                         case SporeRelease:
@@ -210,6 +212,17 @@ internal class Slothasor : SalvationPass
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
+                }
+
+                // Tantrum - Knockdown AoEs
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.SlothasorTantrum, out var tantrums))
+                {
+                    foreach (EffectEvent effect in tantrums)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2000);
+                        var circle = new CircleDecoration(100, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
+                    }
                 }
                 break;
             case (int)TargetID.PoisonMushroom:

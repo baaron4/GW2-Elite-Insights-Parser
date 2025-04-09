@@ -21,8 +21,12 @@ internal class River : HallOfChains
         MechanicList.Add(new MechanicGroup([
         
             new PlayerDstHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
-            new PlayerDstHitMechanic(TimedBomb, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb","Stunned by Mini Bomb", "Stun Bomb", 0)
+            new PlayerDstHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+            new EnemySrcHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Bomb Hit Desmina", "Hollowed Bomber hit Desmina", "Bomb Desmina", 0)
+                .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
+            new EnemySrcHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", 0)
+                .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
         ])
         );
         GenericFallBackMethod = FallBackMethod.ChestGadget;
@@ -158,7 +162,30 @@ internal class River : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        // TODO(Linka) @decorations: Bombs dual following circle actor (one growing, other static) + dual static circle actor (one growing with min radius the final radius of the previous, other static). Missing buff id
+
+        (long start, long end) lifespan;
+
+        // Soulless Torrent - Player Bomb AoE - Inner Circle
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.RiverSoullessTorrentInnerPlayerAoE, out var soullessTorrentInner))
+        {
+            foreach (EffectEvent effect in soullessTorrentInner)
+            {
+                lifespan = effect.ComputeLifespan(log, 3000);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(70, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p)), lifespan.end);
+            }
+        }
+
+        // Soulless Torrent - Player Bomb AoE - Outer Circle
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.RiverSoullessTorrentOuterPlayerAoE, out var soullessTorrentOuter))
+        {
+            foreach (EffectEvent effect in soullessTorrentOuter)
+            {
+                // The effect duration is 4000 but at 3000 it snaps off the player to the ground.
+                // The ground effect is added in Environment Decorations.
+                lifespan = (effect.Time, effect.Time + 3000);
+                replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p)));
+            }
+        }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -215,7 +242,16 @@ internal class River : HallOfChains
                 break;
 
             case (int)TargetID.Enervator:
-            // TODO(Linka) @decorations: Add Line actor between desmina and enervator. Missing skillID
+                // Tether between Enervator and Desmina
+                // We use the damage events due to the lack of buff or effect applications between the two NPCs.
+                var damageEvents = log.CombatData.GetDamageData(target.AgentItem).Where(x => x.To.IsSpecies(TargetID.Desmina));
+                foreach (var dmg in damageEvents)
+                {
+                    long damageInterval = 600; // The damage is applied every 600ms
+                    lifespan = (dmg.Time, dmg.Time + damageInterval);
+                    replay.Decorations.Add(new LineDecoration(lifespan, Colors.GreenishYellow, 0.5, new AgentConnector(dmg.To), new AgentConnector(dmg.CreditedFrom)).WithThickess(15, true));
+                }
+                break;
             case (int)TargetID.SpiritHorde1:
             case (int)TargetID.SpiritHorde2:
             case (int)TargetID.SpiritHorde3:
@@ -224,6 +260,23 @@ internal class River : HallOfChains
                 break;
         }
 
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // Soulless Torrent - Player Bomb AoE - Ground Circle & Damage effect
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.RiverSoullessTorrentLightningStrikeDamage, out var soullessTorrentLightnings))
+        {
+            foreach (var effect in soullessTorrentLightnings)
+            {
+                (long start, long end) lifespanLightning = effect.ComputeLifespan(log, 1000);
+                (long start, long end) lifespanIndicator = (lifespanLightning.start - 1000, lifespanLightning.start);
+                EnvironmentDecorations.Add(new CircleDecoration(100, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(100, lifespanLightning, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)));
+            }
+        }
     }
     internal override int GetTriggerID()
     {
