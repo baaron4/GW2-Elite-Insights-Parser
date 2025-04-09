@@ -305,12 +305,14 @@ internal class SoullessHorror : HallOfChains
                 break;
 
             case (int)TargetID.TormentedDead:
-                // TODO(Linka) @decorations: Add the explosion AoE to Environment Decorations and lock this behind !log.CombatData.HasEffectData
-                if (replay.Positions.Count == 0)
+                if (!log.CombatData.HasEffectData)
                 {
-                    break;
+                    if (replay.Positions.Count == 0)
+                    {
+                        break;
+                    }
+                    replay.Decorations.Add(new CircleDecoration(400, (lifespan.end, lifespan.end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
                 }
-                replay.Decorations.Add(new CircleDecoration(400, (lifespan.end, lifespan.end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
                 break;
 
             case (int)TargetID.SurgingSoul:
@@ -348,17 +350,34 @@ internal class SoullessHorror : HallOfChains
         replay.Decorations.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        (long start, long end) lifespan;
+
+        // Soul Rift - Tormented Dead death AoE
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SoullessHorrorSoulRift, out var soulRifts))
+        {
+            foreach (EffectEvent effect in soulRifts)
+            {
+                lifespan = effect.ComputeLifespan(log, 57000);
+                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)));
+            }
+        }
+    }
+
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        var necrosis = combatData.GetBuffData(Necrosis).Where(x => x is BuffApplyEvent);
-        if (!necrosis.Any())
-        {
-            return 0;
-        }
         // split necrosis
         var splitNecrosis = new Dictionary<AgentItem, List<BuffEvent>>();
-        foreach (BuffEvent c in necrosis)
+        foreach (BuffEvent c in combatData.GetBuffData(Necrosis))
         {
+            if (c is not BuffApplyEvent)
+            {
+                continue;
+            }
+
             AgentItem tank = c.To;
             if (!splitNecrosis.TryGetValue(tank, out var value))
             {
@@ -368,7 +387,13 @@ internal class SoullessHorror : HallOfChains
 
             value.Add(c);
         }
-        List<BuffEvent> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
+
+        if (splitNecrosis.Count == 0)
+        {
+            return 0;
+        }
+
+        List<BuffEvent> longestNecrosis = splitNecrosis.Values.OrderByDescending(x => x.Count).First();
         long minDiff = long.MaxValue;
         for (int i = 0; i < longestNecrosis.Count - 1; i++)
         {

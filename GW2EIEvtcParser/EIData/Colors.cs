@@ -56,6 +56,7 @@ internal static class Colors
     public static Color LightBrown = new(196, 164, 132);
     public static Color Brown = new(120, 100, 0);
     public static Color Chocolate = new(123, 63, 0);
+    public static Color DarkerLime = new(150, 255, 80);
     public static Color Lime = new(200, 255, 100);
     public static Color Green = new(0, 255, 0);
     public static Color GreenishYellow = new(220, 255, 0);

@@ -2667,7 +2667,7 @@ public static class SkillIDs
     public const long FractalGod = 47222;
     public const long FractalSavant = 47248;
     public const long ExposedStatueOfDarkness = 47251;
-    public const long TimedBomb = 47258;
+    public const long SoullessTorrent = 47258;
     public const long LastGraspFate = 47278;
     public const long MistlockInstabilityToxicSickness = 47288;
     public const long HungeringMiasma = 47303;
@@ -2744,6 +2744,7 @@ public static class SkillIDs
     public const long DhuumShacklesBuff2 = 48591;
     public const long HowlingDeath = 48662;
     public const long DhuumPlayerToSoulTrackBuff = 48670; // Buff applied from the player to the soul gadget
+    public const long EnervatorDamageSkillToDesmina = 48730;
     public const long CullDamage = 48752;
     public const long CullSkill = 48758;
     public const long PutridBomb = 48760;
@@ -4578,6 +4579,7 @@ public static class SkillIDs
     public const long CageOfDecay = 74773;
     public const long FluxlanceTargetBuff1 = 74774;
     public const long Ejects = 74775;
+    public const long AcidRain = 74783;
     public const long TargetOrder3JW = 74789;
     public const long FluxNova = 74790;
     public const long NovaShield = 74791;

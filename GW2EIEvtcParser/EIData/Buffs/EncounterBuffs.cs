@@ -453,6 +453,7 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: No Geysers, No Problems", AchievementEligibilityNoGeysersNoProblems, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Hopscotch Master", AchievementEligibilityHopscotchMaster, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Toxic Buildup", ToxicBuildup, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Acid Rain", AcidRain, Source.FightSpecific, BuffClassification.Other, BuffImages.ScaldingWater),
             //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
