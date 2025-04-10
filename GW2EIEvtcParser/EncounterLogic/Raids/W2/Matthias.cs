@@ -231,6 +231,7 @@ internal class Matthias : SalvationPass
             if (copies.Count != 0)
             {
                 combatData.AddRange(copies);
+                combatData.SortByTime();
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);

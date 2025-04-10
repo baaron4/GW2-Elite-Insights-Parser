@@ -383,6 +383,7 @@ internal class Deimos : BastionOfThePenitent
             MergeWithGadgets(deimos.AgentItem, _deimos10PercentTime, gadgetAgents, deimosStructBody, combatData, agentData, extensions);
             // Add custom spawn event
             combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
+            combatData.SortByTime();
         }
         deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         deimos.OverrideName("Deimos");

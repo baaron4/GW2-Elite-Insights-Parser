@@ -324,14 +324,17 @@ public static class ParserHelper
         }
         // Copy attack targets
         var attackTargetAgents = new HashSet<AgentItem>();
-        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList() ;
+        var attackTargetsToCopy = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList() ;
         var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1);
-        foreach (CombatItem c in attackTargets)
+        // Events copied
+        var copied = new List<CombatItem>(attackTargetsToCopy.Count + 10);
+        foreach (CombatItem c in attackTargetsToCopy)
         {
             var cExtra = new CombatItem(c);
-            cExtra.OverrideTime(to.FirstAware);
+            cExtra.OverrideTime(to.FirstAware - 1); // To make sure they are put before all actual agent events
             cExtra.OverrideDstAgent(to.Agent);
             combatData.Add(cExtra);
+            copied.Add(cExtra);
             AgentItem at = agentData.GetAgent(c.SrcAgent, c.Time);
             if (targetableOns.Any(x => x.SrcMatchesAgent(at)))
             {
@@ -339,7 +342,7 @@ public static class ParserHelper
             }
         }
         // Copy states
-        var toCopy = new List<CombatItem>();
+        var stateEventsToCopy = new List<CombatItem>();
         Func<CombatItem, bool> canCopyFromAgent = (evt) => stateCopyFroms.Any(x => evt.SrcMatchesAgent(x));
         var stateChangeCopyFromAgentConditions = new List<Func<CombatItem, bool>>()
         {
@@ -362,7 +365,7 @@ public static class ParserHelper
             CombatItem? stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAgent(x) && x.Time <= to.FirstAware);
             if (stateToCopy != null)
             {
-                toCopy.Add(stateToCopy);
+                stateEventsToCopy.Add(stateToCopy);
             }
         }
         // Copy positional data from attack targets
@@ -380,16 +383,28 @@ public static class ParserHelper
                 CombatItem? stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAttackTarget(x) && x.Time <= to.FirstAware);
                 if (stateToCopy != null)
                 {
-                    toCopy.Add(stateToCopy);
+                    stateEventsToCopy.Add(stateToCopy);
                 }
             }
         }
-        foreach (CombatItem c in toCopy)
+        if (stateEventsToCopy.Count > 0)
         {
-            var cExtra = new CombatItem(c);
-            cExtra.OverrideTime(to.FirstAware);
-            cExtra.OverrideSrcAgent(to.Agent);
-            combatData.Add(cExtra);
+            foreach (CombatItem c in stateEventsToCopy)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware-1); // To make sure they are put before all actual agent events
+                cExtra.OverrideSrcAgent(to.Agent);
+                combatData.Add(cExtra);
+                copied.Add(cExtra);
+            }
+        }
+        if (copied.Count > 0)
+        {
+            combatData.SortByTime();
+            foreach (CombatItem c in copied)
+            {
+                c.OverrideTime(to.FirstAware);
+            }
         }
         // Redirect NPC masters
         foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
