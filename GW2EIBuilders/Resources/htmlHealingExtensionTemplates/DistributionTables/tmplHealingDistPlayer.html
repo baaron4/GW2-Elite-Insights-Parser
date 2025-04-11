@@ -63,31 +63,31 @@
                 return healingStatsExtension.playerHealingDetails[this.playerindex].minions[this.distmode].healingDistributionsTargets[this.phaseindex];
             },
             healingdisttarget: function () {
-                var cacheID = this.phaseindex + '-' + this.distmode + '-';
+                let cacheID = this.phaseindex + '-' + this.distmode + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var dist = {
+                const dist = {
                     contributedHealing: 0,
                     contributedDownedHealing: 0,
                     totalHealing: 0,
                     totalCasting: 0,
                     distribution: [],
                 };
-                var rows = new Map();
-                for (var i = 0; i < this.activetargets.length; i++) {
-                    var targetid = this.activetargets[i];
-                    var targetDist = this._healingdisttarget[targetid];
+                const rows = new Map();
+                for (let i = 0; i < this.activetargets.length; i++) {
+                    const targetid = this.activetargets[i];
+                    const targetDist = this._healingdisttarget[targetid];
                     dist.contributedHealing += targetDist.contributedHealing;
                     dist.contributedDownedHealing += targetDist.contributedDownedHealing;
                     dist.totalHealing += targetDist.totalHealing;
                     dist.totalCasting = targetDist.totalCasting;
-                    var distribution = targetDist.distribution;
-                    for (var k = 0; k < distribution.length; k++) {
-                        var targetDistribution = distribution[k];
+                    const distribution = targetDist.distribution;
+                    for (let k = 0; k < distribution.length; k++) {
+                        const targetDistribution = distribution[k];
                         if (rows.has(targetDistribution[1])) {
-                            var row = rows.get(targetDistribution[1]);
+                            const row = rows.get(targetDistribution[1]);
                             row[2] += targetDistribution[2];
                             row[3] = Math.min(targetDistribution[3], row[3]);
                             row[4] = Math.max(targetDistribution[4], row[4]);

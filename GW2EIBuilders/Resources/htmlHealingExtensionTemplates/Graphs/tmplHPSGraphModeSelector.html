@@ -74,7 +74,7 @@
         props: ['data', 'phaseduration', 'phasehassubphases', "column"],
         template: `${template}`,
         mounted() {
-            var _this = this;
+            const _this = this;
             $('#customHPS').on("input ", function () {
                 _this.data.hpsmode = Math.ceil(Number.parseFloat($(this).val()) / 2) * 2;
             });
