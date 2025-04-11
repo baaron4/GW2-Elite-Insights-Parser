@@ -26,7 +26,8 @@
                                 {{ targetHealthValues(target) }}
                             </div>
                         </div>
-                    <div class="mb-2">Duration: {{ encounter.duration }}</div>
+                    </div>
+                    <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                     <div class="mb-2 text-warning" v-if="encounter.start"> {{ encounter.start }}</div>
                     <div v-if="!wvw" class="text" :class="resultStatus.class">
