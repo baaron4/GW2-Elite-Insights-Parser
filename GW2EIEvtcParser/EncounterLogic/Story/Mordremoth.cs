@@ -36,7 +36,7 @@ internal class Mordremoth : StoryInstance
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -86,7 +86,7 @@ internal class Mordremoth : StoryInstance
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
-        return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
+        return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.StoryCM : FightData.EncounterMode.Story;
     }
 
     protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
