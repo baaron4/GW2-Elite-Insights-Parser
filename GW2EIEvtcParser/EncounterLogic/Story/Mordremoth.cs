@@ -86,7 +86,7 @@ internal class Mordremoth : StoryInstance
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
-        return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.StoryCM : FightData.EncounterMode.Story;
+        return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
     }
 
     protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()

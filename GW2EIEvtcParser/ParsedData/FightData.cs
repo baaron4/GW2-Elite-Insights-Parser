@@ -38,18 +38,15 @@ public class FightData
     {
         NotSet,
         Story,
-        StoryCM,
         Normal,
-        NormalEmboldened,
         LegendaryCM,
         CM,
         CMNoName
     }
 
-    public EncounterMode FightMode = EncounterMode.NotSet;
-    public bool IsCM => FightMode == EncounterMode.CMNoName || FightMode == EncounterMode.CM || FightMode == EncounterMode.StoryCM;
+    public EncounterMode FightMode { get; private set; } = EncounterMode.NotSet;
+    public bool IsCM => FightMode == EncounterMode.CMNoName || FightMode == EncounterMode.CM;
     public bool IsLegendaryCM => FightMode == EncounterMode.LegendaryCM;
-    public bool IsEmboldened => FightMode == EncounterMode.NormalEmboldened;
 
     public enum EncounterStartStatus
     {
@@ -58,7 +55,7 @@ public class FightData
         Late,
         NoPreEvent
     }
-    public EncounterStartStatus FightStartStatus = EncounterStartStatus.NotSet;
+    public EncounterStartStatus FightStartStatus { get; private set; } = EncounterStartStatus.NotSet;
     public bool IsLateStart => FightStartStatus == EncounterStartStatus.Late || MissingPreEvent;
     public bool MissingPreEvent => FightStartStatus == EncounterStartStatus.NoPreEvent;
 
@@ -303,8 +300,8 @@ public class FightData
     internal void CompleteFightName(CombatData combatData, AgentData agentData)
     {
         FightNameNoMode = Logic.GetLogicName(combatData, agentData);
-        FightName = Logic.GetLogicName(combatData, agentData)
-            + (FightMode == EncounterMode.CM || FightMode == EncounterMode.StoryCM ? " CM" : "")
+        FightName = FightNameNoMode
+            + (FightMode == EncounterMode.CM ? " CM" : "")
             + (FightMode == EncounterMode.LegendaryCM ? " LCM" : "")
             + (FightMode == EncounterMode.Story ? " Story" : "")
             + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
@@ -355,10 +352,6 @@ public class FightData
             if (FightMode == EncounterMode.Story)
             {
                 Logic.InvalidateEncounterID();
-            }
-            if (combatData.GetBuffData(Emboldened).Any())
-            {
-                FightMode = EncounterMode.NormalEmboldened;
             }
             FightStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
         }

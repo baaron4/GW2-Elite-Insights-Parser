@@ -12,6 +12,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
@@ -146,14 +147,8 @@ internal class LogDataDto
             case FightData.EncounterMode.Story:
                 FightMode = "Story Mode";
                 break;
-            case FightData.EncounterMode.StoryCM:
-                FightMode = "Story Challenge Mode";
-                break;
-            case FightData.EncounterMode.NormalEmboldened:
-                FightMode = "Emboldened Normal Mode";
-                break;
             case FightData.EncounterMode.Normal:
-                FightMode = "Normal Mode";
+                FightMode = log.FightData.Logic.GetInstanceBuffs(log).Where(x => x.buff.ID == Emboldened) != null ? "Emboldened Normal Mode" : "Normal Mode";
                 break;
             case FightData.EncounterMode.CM:
             case FightData.EncounterMode.CMNoName:
