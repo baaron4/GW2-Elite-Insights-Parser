@@ -12,27 +12,36 @@ internal static class ReaperHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new BuffGainCastFinder(EnterReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
-        new BuffLossCastFinder(ExitReaperShroud, ReapersShroud).UsingBeforeWeaponSwap(true),
+        new BuffGainCastFinder(EnterReaperShroud, ReapersShroud)
+            .UsingBeforeWeaponSwap(true),
+        new BuffLossCastFinder(ExitReaperShroud, ReapersShroud)
+            .UsingBeforeWeaponSwap(true),
         new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorBuff),
-        new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings).UsingDisableWithEffectData(),
+        new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings)
+            .UsingDisableWithEffectData(),
         new EffectCastFinder(YouAreAllWeaklings, EffectGUIDs.ReaperYouAreAllWeaklings1)
             .UsingSrcSpecChecker(Spec.Reaper)
             .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings2)
             .UsingSecondaryEffectChecker(EffectGUIDs.ReaperYouAreAllWeaklings3),
-        new DamageCastFinder(Suffer, Suffer).UsingDisableWithEffectData(),
-        new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer).UsingSrcSpecChecker(Spec.Reaper),
+        new DamageCastFinder(Suffer, Suffer)
+            .UsingDisableWithEffectData(),
+        new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer)
+            .UsingSrcSpecChecker(Spec.Reaper),
         // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
         new MinionSpawnCastFinder(Rise, (int)MinionID.ShamblingHorror)
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.GetFinalMaster().Spec == Spec.Reaper),
-        new DamageCastFinder(ChillingNova, ChillingNova).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new DamageCastFinder(ChillingNova, ChillingNova)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
         new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)

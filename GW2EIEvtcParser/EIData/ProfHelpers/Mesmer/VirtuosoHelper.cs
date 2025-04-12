@@ -15,21 +15,25 @@ internal static class VirtuosoHelper
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
-            if(evt.Src.Spec != Spec.Virtuoso) {
-                return false;
-            }
-            if (!combatData.GetBuffDataByIDByDst(DistortionBuff, evt.Src).Any(buffEvt => buffEvt is BuffApplyEvent && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
-            {
-                return false;
-            }
-            if (combatData.GetAnimatedCastData(BladeRenewal).Any(castEvt => castEvt.Caster == evt.Src && evt.Time <= castEvt.EndTime && evt.Time >= castEvt.Time)) {
-                return false;
-            }
-            return true;
-        }).WithBuilds(GW2Builds.October2022Balance),
-        new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem).UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts).UsingSrcSpecChecker(Spec.Virtuoso),
+        new EffectCastFinder(BladesongDistortion, EffectGUIDs.MesmerDistortionOrMindWrack)
+            .UsingChecker((evt, combatData, agentData, skillData) => {
+                if(evt.Src.Spec != Spec.Virtuoso) {
+                    return false;
+                }
+                if (!combatData.GetBuffDataByIDByDst(DistortionBuff, evt.Src).Any(buffEvt => buffEvt is BuffApplyEvent && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                {
+                    return false;
+                }
+                if (combatData.GetAnimatedCastData(BladeRenewal).Any(castEvt => castEvt.Caster == evt.Src && evt.Time <= castEvt.EndTime && evt.Time >= castEvt.Time)) {
+                    return false;
+                }
+                return true;
+            })
+            .WithBuilds(GW2Builds.October2022Balance),
+        new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem)
+            .UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts)
+            .UsingSrcSpecChecker(Spec.Virtuoso),
     ];
 
 
@@ -39,8 +43,11 @@ internal static class VirtuosoHelper
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, TraitImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+            , DamageModifierMode.PvE)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, TraitImages.DeadlyBlades, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

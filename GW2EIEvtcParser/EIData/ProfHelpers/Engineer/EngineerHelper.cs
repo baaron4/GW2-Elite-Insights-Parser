@@ -68,7 +68,8 @@ internal static class EngineerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff)
-            .WithBuilds(GW2Builds.February2020Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .WithBuilds(GW2Builds.February2020Balance)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(ElixirSSkill, ElixirSBuff),
         new BuffGainCastFinder(SlickShoesSkill, SlickShoesBuff),
         new BuffGainCastFinder(IncendiaryAmmoSkill, IncendiaryAmmoBuff),
@@ -113,6 +114,17 @@ internal static class EngineerHelper
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
     ];
 
+    private static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+        if (selfHP < 0.0 || dstHP < 0.0)
+        {
+            return false;
+        }
+        return selfHP > dstHP;
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
@@ -129,39 +141,12 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.All ).UsingApproximate(true)
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All ).UsingApproximate(true)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.sPvPWvW )
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.sPvPWvW )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.PvE )
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.PvE )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
         // Firearms

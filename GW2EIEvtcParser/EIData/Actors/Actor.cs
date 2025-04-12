@@ -139,7 +139,7 @@ public abstract class Actor
                 dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
                 break;
             case ParserHelper.DamageType.LifeLeech:
-                dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !ndhd.IsLifeLeech);
+                dls.RemoveAll(x => !x.IsLifeLeech);
                 break;
             case ParserHelper.DamageType.Condition:
                 dls.RemoveAll(x => !x.ConditionDamageBased(log));
@@ -147,8 +147,11 @@ public abstract class Actor
             case ParserHelper.DamageType.StrikeAndCondition:
                 dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
                 break;
+            case ParserHelper.DamageType.ConditionAndLifeLeech:
+                dls.RemoveAll(x => !x.ConditionDamageBased(log) && !x.IsLifeLeech);
+                break;
             case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
-                dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
+                dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log) && !x.IsLifeLeech);
                 break;
             case ParserHelper.DamageType.All:
                 break;

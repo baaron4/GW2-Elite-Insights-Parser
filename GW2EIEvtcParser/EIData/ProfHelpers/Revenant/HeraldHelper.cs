@@ -74,13 +74,15 @@ internal static class HeraldHelper
     [
         new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.NoPets, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2019Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [         
         // Skills
-        new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, SkillImages.CrystalHibernation)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Facets
         new Buff("Facet of Light", FacetOfLightBuff, Source.Herald, BuffClassification.Other, SkillImages.FacetOfLight),
         new Buff("Facet of Light (Traited)", FacetOfLightTraited, Source.Herald, BuffClassification.Other, SkillImages.FacetOfLight), //Lingering buff with Draconic Echo trait

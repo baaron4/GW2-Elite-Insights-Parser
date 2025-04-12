@@ -17,8 +17,10 @@ internal static class SpecterHelper
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new BuffGainCastFinder(EnterShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Enter
-        new BuffLossCastFinder(ExitShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Exit
+        new BuffGainCastFinder(EnterShadowShroud, ShadowShroud)
+            .UsingBeforeWeaponSwap(true),
+        new BuffLossCastFinder(ExitShadowShroud, ShadowShroud)
+            .UsingBeforeWeaponSwap(true),
     ];
 
     private static readonly HashSet<long> _shroudTransform =
@@ -35,7 +37,8 @@ internal static class SpecterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, SkillImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
+        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, SkillImages.EnterShadowShroud, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2022Balance),
     ];
 
 
@@ -49,7 +52,7 @@ internal static class SpecterHelper
         new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, TraitImages.ConsumeShadows),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.SpecterAsura1,
         (int)MinionID.SpecterHuman1,

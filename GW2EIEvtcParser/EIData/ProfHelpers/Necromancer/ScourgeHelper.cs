@@ -19,20 +19,25 @@ internal static class ScourgeHelper
         // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
         new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
         new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
-        new BuffGainCastFinder(DesertShroud, DesertShroudBuff).UsingDurationChecker(6000),
-        new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff).UsingDurationChecker(3500),
+        new BuffGainCastFinder(DesertShroud, DesertShroudBuff)
+            .UsingDurationChecker(6000),
+        new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff)
+            .UsingDurationChecker(3500),
         // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
         new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
-        new BuffGainCastFinder(SadisticSearing, SadisticSearing).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing).UsingChecker((blcf, combatData, agentData, skillData) =>
-        {
-            long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
-            if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom == blcf.To && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time))
+        new BuffGainCastFinder(SadisticSearing, SadisticSearing)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffLossCastFinder(SadisticSearingActivation, SadisticSearing)
+            .UsingChecker((blcf, combatData, agentData, skillData) =>
             {
-                return true;
-            }
-            return false;
-        }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+                long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
+                if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom == blcf.To && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time))
+                {
+                    return true;
+                }
+                return false;
+            })
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];

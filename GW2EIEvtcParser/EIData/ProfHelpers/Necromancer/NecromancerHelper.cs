@@ -17,14 +17,20 @@ internal static class NecromancerHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
-        new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
-        new DamageCastFinder(LesserEnfeeble, LesserEnfeeble).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(EnterDeathShroud, DeathShroud)
+            .UsingBeforeWeaponSwap(true),
+        new BuffLossCastFinder(ExitDeathShroud, DeathShroud)
+            .UsingBeforeWeaponSwap(true),
+        new DamageCastFinder(LesserEnfeeble, LesserEnfeeble)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
         // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
         new DamageCastFinder(UnholyBurst, UnholyBurst),
-        new DamageCastFinder(SpitefulSpirit, SpitefulSpirit).UsingDisableWithEffectData().UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new DamageCastFinder(SpitefulSpirit, SpitefulSpirit)
+            .UsingDisableWithEffectData()
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
             .UsingSrcBaseSpecChecker(Spec.Necromancer)
             .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(DesertShroudBuff).OfType<BuffRemoveAllEvent>(), evt.Time, 50).Any()) // collides with sandstorm shroud

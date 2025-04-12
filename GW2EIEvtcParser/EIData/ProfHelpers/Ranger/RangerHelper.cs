@@ -117,146 +117,127 @@ internal static class RangerHelper
     [
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
-        new BuffGainCastFinder(SicEmSkill, SicEmBuff).WithMinions(true),
-        new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff).WithMinions(true),
-        new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-        new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
+        new BuffGainCastFinder(SicEmSkill, SicEmBuff)
+            .WithMinions(true),
+        new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
+            .WithMinions(true),
+        new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+        new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
         new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
-        new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(EvasivePurity, EvasivePurity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(QuickDraw, QuickDraw)
+            .UsingAfterWeaponSwap(true)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(WindborneNotes, WindborneNotes)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(EvasivePurity, EvasivePurity)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTBarrierCastFinder(ProtectMe, ProtectMe),
-        new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
-        new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
-        new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs).UsingNotAccurate(true),
+        new BuffGiveCastFinder(GuardSkill, GuardBuff)
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
+        new BuffGiveCastFinder(LesserGuardSkill, GuardBuff)
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
+            .UsingICD(1100).UsingNotAccurate(true),
+        new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
+            .UsingSrcBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
+            .UsingNotAccurate(true),
     ];
 
+    private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
+    {
+        AgentItem src = x.From;
+        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+        if (effectApply != null)
+        {
+            return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+        }
+        return false;
+    }
+
+    private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.Skill.IsWeaponSkill
+        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+        && (currentPosition - currentTargetPosition).Length() <= 600;
+    }
+    private static bool TargetAbove600Range(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.Skill.IsWeaponSkill
+        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+        && (currentPosition - currentTargetPosition).Length() > 600;
+    }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Skills
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All).UsingChecker( (x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.sPvPWvW)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.May2021Balance),
         // Marksmanship
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill 
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvP)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
         //
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-            x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvP)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All).UsingApproximate(true),
+        new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
+            .UsingApproximate(true),
         // Skirmishing
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
         // Nature Magic
         // We can't check buffs on minions yet
@@ -297,19 +278,29 @@ internal static class RangerHelper
         new Buff("Signet of the Hunt (Pet)", SignetOfTheHuntPetBuff, Source.Ranger, BuffClassification.Other, SkillImages.SignetOfTheHunt),
         // Spirits
         // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, SkillImages.WaterSpirit),
-        new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
-        new Buff("Sun Spirit", SunSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
-        new Buff("Stone Spirit", StoneSpiritOld, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Sun Spirit", SunSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Stone Spirit", StoneSpiritOld, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
         //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, SkillImages.StormSpirit),
         // Spirits reworked
-        new Buff("Water Spirit", WaterSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.WaterSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Frost Spirit", FrostSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Sun Spirit", SunSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Stone Spirit", StoneSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, SkillImages.StormSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Water Spirit", WaterSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.WaterSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Frost Spirit", FrostSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Sun Spirit", SunSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Stone Spirit", StoneSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, SkillImages.StormSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
         // Skills
-        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, SkillImages.CallOfTheWild).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
+        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, SkillImages.CallOfTheWild)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild)
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
         new Buff("Strength of the Pack!", StrengthOfThePack, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
         new Buff("Sic 'Em!", SicEmBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Sic 'Em! (PvP)", SicEmPvPBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
@@ -317,11 +308,13 @@ internal static class RangerHelper
         new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SharpenSpines),
         new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.Guard),
         new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, SkillImages.SearchAndRescue),
-        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Traits
         new Buff("Attack of Opportunity", AttackOfOpportunity, Source.Ranger, BuffClassification.Other, TraitImages.MomentOfClarity),
         new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, TraitImages.ClarionBond),
-        new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, TraitImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+        new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, TraitImages.Spotter)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, TraitImages.OpeningStrike),
         new Buff("Quick Draw", QuickDraw, Source.Ranger, BuffClassification.Other, TraitImages.QuickDraw),
         new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, TraitImages.LightOnYourFeet),

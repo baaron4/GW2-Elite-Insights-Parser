@@ -17,7 +17,8 @@ internal static class ThiefHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(Shadowstep, Infiltration),
-        new BuffLossCastFinder(ShadowReturn, Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
+        new BuffLossCastFinder(ShadowReturn, Infiltration)
+            .UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
         new DamageCastFinder(Mug, Mug),
         new DamageCastFinder(InfiltratorsStrike, InfiltratorsStrike),
         new BuffGainCastFinder(AssassinsSignet, AssassinsSignetActive),
@@ -25,7 +26,9 @@ internal static class ThiefHelper
         new BuffGiveCastFinder(IceDrakeVenomSkill, IceDrakeVenomBuff),
         new BuffGiveCastFinder(SkaleVenomSkill, SkaleVenomBuff),
         new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomBuff),
-        new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
+        new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).
+            UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant)
+            .UsingNotAccurate(true), // same id as leeching venom trait?
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
@@ -43,8 +46,10 @@ internal static class ThiefHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Deadly arts
-        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
-        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.ExposedWeakness, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
+        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, TraitImages.ExposedWeakness, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2018Balance),
+        new BuffOnFoeDamageModifier(Mod_ExposedWeakness, NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.ExposedWeakness, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
         new DamageLogDamageModifier(Mod_Executioner, "Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
         // Critical Strikes
         new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All)
@@ -56,7 +61,8 @@ internal static class ThiefHelper
         // Trickery
         new BuffOnActorDamageModifier(Mod_LeadAttacks, LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, TraitImages.LeadAttacks, DamageModifierMode.All), 
         // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
-        new BuffOnActorDamageModifier(Mod_FluidStrikes, FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+        new BuffOnActorDamageModifier(Mod_FluidStrikes, FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, TraitImages.FluidStrikes, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         // Spear       
         new BuffOnActorDamageModifier(Mod_DistractingThrow, DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, SkillImages.DistractingThrow, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_DistractingThrow, DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, SkillImages.DistractingThrow, DamageModifierMode.sPvPWvW),
@@ -68,7 +74,9 @@ internal static class ThiefHelper
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 360
-            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
+            , DamageModifierMode.All)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.April2019Balance)
     ];
 
 
@@ -77,7 +85,8 @@ internal static class ThiefHelper
         // Skills
         new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, SkillImages.PrepareShadowPortal),
         new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.ShadowPortal),
-        new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, SkillImages.Kneel).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Kneeling", Kneeling, Source.Thief, BuffClassification.Other, SkillImages.Kneel)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Signets
         new Buff("Signet of Malice", SignetOfMalice, Source.Thief, BuffClassification.Other, SkillImages.SignetOfMalice),
         new Buff("Assassin's Signet (Passive)", AssassinsSignetPassive, Source.Thief, BuffClassification.Other, SkillImages.AssassinsSignet),
@@ -102,14 +111,15 @@ internal static class ThiefHelper
         new Buff("Hidden Killer", HiddenKiller, Source.Thief, BuffClassification.Other, TraitImages.Hiddenkiller),
         new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, TraitImages.LeadAttacks),
         new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, TraitImages.InstantReflexes),
-        new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, TraitImages.FluidStrikes).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+        new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, TraitImages.FluidStrikes)
+            .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         // Spear
         new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.DistractingThrow),
         new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, SkillImages.ShadowVeil),
         new Buff("Shadow Veil (Stacks)", ShadowVeilBuffStacks, Source.Thief, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShadowVeil),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.ThiefDaggerHuman,
         (int)MinionID.ThiefPistolHuman,

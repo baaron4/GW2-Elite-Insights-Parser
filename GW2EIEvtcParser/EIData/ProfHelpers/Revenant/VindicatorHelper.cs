@@ -30,9 +30,12 @@ internal static class VindicatorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.EODBeta2, GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.September2023Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -51,6 +54,7 @@ internal static class VindicatorHelper
         new Buff("Urn of Saint Viktor", UrnOfSaintViktorBuff, Source.Vindicator, BuffClassification.Other, SkillImages.UrnOfSaintViktor),
         new Buff("Saint of zu Heltzer", SaintOfzuHeltzer, Source.Vindicator, BuffClassification.Other, TraitImages.SaintOfZuHeltzer),
         new Buff("Forerunner of Death", ForerunnerOfDeath, Source.Vindicator, BuffClassification.Other, TraitImages.ForerunnerOfDeath),
-        new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
 }

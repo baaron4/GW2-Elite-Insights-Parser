@@ -80,33 +80,52 @@ internal static class RevenantHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Retribution
-        new BuffOnFoeDamageModifier(Mod_DwarvenBattleTraining, Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DwarvenBattleTraining, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance),
-        new BuffOnActorDamageModifier(Mod_ViciousReprisal, Retaliation, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ViciousReprisal, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ViciousReprisal, Resolution, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, TraitImages.ViciousReprisal, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_DwarvenBattleTraining, Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DwarvenBattleTraining, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.December2018Balance),
+        new BuffOnActorDamageModifier(Mod_ViciousReprisal, Retaliation, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ViciousReprisal, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ViciousReprisal, Resolution, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, TraitImages.ViciousReprisal, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance),
         // Invocation
-        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "10% under fury", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.August2022Balance),
+        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "10% under fury", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
-        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance).UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2022Balance).UsingApproximate(true),
         // Devastation
-        new BuffOnActorDamageModifier(Mod_ViciousLacerations, ViciousLacerations, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_ViciousLacerations, ViciousLacerations, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
+        new BuffOnActorDamageModifier(Mod_ViciousLacerations, ViciousLacerations, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.ViciousLacerations, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_ViciousLacerations, ViciousLacerations, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.ViciousLacerations, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
-            , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
+            , DamageModifierMode.PvE )
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
-            , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.May2021BalanceHotFix),
+            , DamageModifierMode.PvE )
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
-            , DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.TargetedDestruction, DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
+            , DamageModifierMode.sPvPWvW )
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.TargetedDestruction, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.TargetedDestruction, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.TargetedDestruction, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new DamageLogDamageModifier(Mod_SwiftTermination, "Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
     ];
 
@@ -115,24 +134,36 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.All, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2018Balance, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2020Balance),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.May2021Balance),
         new DamageLogDamageModifier(Mod_CloseQuarters, "Close Quarters", "-10% from foes beyond 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.CloseQuarters, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 360
             , DamageModifierMode.All)
             .UsingApproximate(true),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-15% under resolution", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2022FractalInstabilitiesRework),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-15% under resolution", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2022FractalInstabilitiesRework),
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -150,16 +181,22 @@ internal static class RevenantHelper
         new Buff("Legendary Dwarf Stance", LegendaryDwarfStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryDwarfStance),
         new Buff("Legendary Demon Stance", LegendaryDemonStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryDemonStance),
         new Buff("Legendary Assassin Stance", LegendaryAssassinStanceBuff, Source.Revenant, BuffClassification.Other, SkillImages.LegendaryAssassinStance),
-        new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, SkillImages.CrystalHibernation).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Crystal Hibernation", CrystalHibernation, Source.Revenant, BuffClassification.Other, SkillImages.CrystalHibernation)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Imperial Guard", ImperialGuard, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Traits
-        new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.ViciousLacerations).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, TraitImages.AssassinsPresence).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+        new Buff("Vicious Lacerations", ViciousLacerations, Source.Revenant, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.ViciousLacerations)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+        new Buff("Assassin's Presence", AssassinsPresence, Source.Revenant, BuffClassification.Offensive, TraitImages.AssassinsPresence)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Expose Defenses", ExposeDefenses, Source.Revenant, BuffClassification.Other, TraitImages.MutilateDefenses),
         new Buff("Invoking Harmony", InvokingHarmony, Source.Revenant, BuffClassification.Other, TraitImages.InvokingHarmony),
-        new Buff("Unyielding Spirit", UnyieldingSpirit, Source.Revenant, BuffClassification.Other, TraitImages.UnyieldingDevotion).WithBuilds(GW2Builds.April2019Balance),
+        new Buff("Unyielding Spirit", UnyieldingSpirit, Source.Revenant, BuffClassification.Other, TraitImages.UnyieldingDevotion)
+            .WithBuilds(GW2Builds.April2019Balance),
         new Buff("Selfless Amplification", SelflessAmplification, Source.Revenant, BuffClassification.Other, TraitImages.SelflessAmplification),
-        new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.ThrillOfCombat).WithBuilds(GW2Builds.February2020Balance),
+        new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.ThrillOfCombat)
+            .WithBuilds(GW2Builds.February2020Balance),
         new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.SteadfastRejuvenation),
         // Scepter
         new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, SkillImages.BlossomingAura),

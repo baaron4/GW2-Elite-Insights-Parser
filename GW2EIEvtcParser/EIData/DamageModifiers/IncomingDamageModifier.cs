@@ -21,6 +21,7 @@ public class IncomingDamageModifier : DamageModifier
             DamageType.LifeLeech                      => defenseData.LifeLeechDamageTaken,
             DamageType.Strike                         => defenseData.StrikeDamageTaken,
             DamageType.StrikeAndCondition             => defenseData.StrikeDamageTaken + defenseData.ConditionDamageTaken,
+            DamageType.ConditionAndLifeLeech          => defenseData.ConditionDamageTaken + defenseData.LifeLeechDamageTaken,
             DamageType.StrikeAndConditionAndLifeLeech => defenseData.StrikeDamageTaken + defenseData.ConditionDamageTaken + defenseData.LifeLeechDamageTaken,
             _ => throw new NotImplementedException("Not implemented damage type " + CompareType),
         };
