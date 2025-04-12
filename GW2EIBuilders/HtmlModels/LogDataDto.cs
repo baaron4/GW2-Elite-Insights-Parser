@@ -148,7 +148,7 @@ internal class LogDataDto
                 FightMode = "Story Mode";
                 break;
             case FightData.EncounterMode.Normal:
-                FightMode = log.FightData.Logic.GetInstanceBuffs(log).Where(x => x.buff.ID == Emboldened) != null ? "Emboldened Normal Mode" : "Normal Mode";
+                FightMode = log.FightData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
                 break;
             case FightData.EncounterMode.CM:
             case FightData.EncounterMode.CMNoName:
