@@ -66,6 +66,7 @@ public static class SkillIDs
     public const long RelicOgreSpawn = -47;
     public const long RelicGolemancerSpawn = -48;
     public const long RelicPrivateerSpawn = -49;
+    public const long RelicOfTheSteamshrieker = -50;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

@@ -113,6 +113,7 @@ public class SkillItem
         { RelicOgreSpawn, "Relic of the Ogre (Spawn Minion)" },
         { RelicGolemancerSpawn, "Relic of the Golemancer (Spawn Minion)" },
         { RelicPrivateerSpawn, "Relic of the Privateer (Spawn Minion)" },
+        { RelicOfTheSteamshrieker, "Relic of the Steamshrieker" },
         #endregion Relics
         #region Elementalist
         { DualFireAttunement, "Dual Fire Attunement" },
@@ -543,6 +544,7 @@ public class SkillItem
         { RelicOgreSpawn, ItemImages.RelicOfTheOgre },
         { RelicGolemancerSpawn, ItemImages.RelicOfTheGolemancer },
         { RelicPrivateerSpawn, ItemImages.RelicOfThePrivateer },
+        { RelicOfTheSteamshrieker, ItemImages.RelicOfTheSteamshrieker },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, SkillImages.FireAttunement },
