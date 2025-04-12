@@ -557,6 +557,11 @@ public static class EffectGUIDs
     public static readonly GUID SabethaPlatformCrush = new("1EAC8EDCB57CDC4DB19DA7F2D37D25E8"); // 1000 duration - No Src - Platform debris falling
     public static readonly GUID SabethaFlakShot = new("1D17794F2428F344A5D9755AB8899633"); // 25000 duration - Src Sabetha
     public static readonly GUID SabethaSapperBombGroundAoE = new("09D5D14BE3AFEA48958B1A8D7634B08A"); // 1000 duration - No Src
+    // Slothasor
+    public static readonly GUID SlothasorTantrum = new("CAF62AE316C2D445A08D8E84C89027D2"); // 2000 duration - Src Slothasor
+    // Matthias
+    public static readonly GUID MatthiasShardsOfRageAoEs = new("0D2192849D53B4469F56B1C74542DBE9"); // 3000 duration - No Src
+    public static readonly GUID MatthiasWellOfTheProfane = new("9BEF037F1B8C2346B5F71A88128DF1A4"); // 90000 duration - Matthias Src
     // Escort Glenna
     public static readonly GUID EscortOverHere = new("64CD79C1A121EC42B1278DEF9280ED35");
     // Xera
@@ -585,6 +590,12 @@ public static class EffectGUIDs
     public static readonly GUID DeimosSoulFeast = new("1BBF189B7174604F822656C5A85FC0D6"); // Src Hands - 2000 duration - hand - reapplied each animation
     public static readonly GUID DeimosAnnihilateSliceIndicator = new("F5B44356708C9243BE2D67986FDD0CF4"); // Src Deimos - 1500 duration - Pizza slice indicator
     public static readonly GUID DeimosAnnihilateHit = new("D94547E5FC797B458BF25D06C8E32C68"); // Src Deimos - 1000 duration - Pizza slice hit
+    // Soulless Horror
+    public static readonly GUID SoullessHorrorSoulRift = new("AB9A517AE2F63B419522D57B7AD3B82F"); // 57000 duration - Src Volatile Soul - Tormented Dead death AoE
+    // River of Souls
+    public static readonly GUID RiverSoullessTorrentInnerPlayerAoE = new("301D9FC427E7BE4BAD4DBFA87D085B51"); // 3000 duration - Src River of Souls
+    public static readonly GUID RiverSoullessTorrentOuterPlayerAoE = new("B4C41DD0D494464B948532D9EA00D132"); // 4000 duration - Src River of Souls
+    public static readonly GUID RiverSoullessTorrentLightningStrikeDamage = new("E52B6BD6BE3A0243B5BD26A486C21CAD"); // 1000 duration - No Src No Dst
     // Broken King
     public static readonly GUID BrokenKingNumbingBreachIndicator = new("5341E83B29B534408E90DBE7BE6F452D");
     public static readonly GUID BrokenKingNumbingBreachDamage = new("1BF014091BFD1E40A11ED36B92601342");
