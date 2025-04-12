@@ -22,6 +22,7 @@ public class OutgoingDamageModifier : DamageModifier
             DamageType.LifeLeech          => DmgSrc == DamageSource.All ? damageData.LifeLeechDamage : damageData.ActorLifeLeechDamage,
             DamageType.Strike             => DmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage,
             DamageType.StrikeAndCondition => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.ConditionDamage : damageData.ActorStrikeDamage + damageData.ActorConditionDamage,
+            DamageType.StrikeAndLifeLeech => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorLifeLeechDamage,
             DamageType.ConditionAndLifeLeech => DmgSrc == DamageSource.All ? damageData.ConditionDamage + damageData.LifeLeechDamage : damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage,
             DamageType.StrikeAndConditionAndLifeLeech => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.ConditionDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage,
             _ => throw new NotImplementedException("Not implemented damage type " + CompareType),

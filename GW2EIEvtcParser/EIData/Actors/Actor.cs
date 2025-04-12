@@ -150,6 +150,9 @@ public abstract class Actor
             case ParserHelper.DamageType.ConditionAndLifeLeech:
                 dls.RemoveAll(x => !x.ConditionDamageBased(log) && !x.IsLifeLeech);
                 break;
+            case ParserHelper.DamageType.StrikeAndLifeLeech:
+                dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.IsLifeLeech);
+                break;
             case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
                 dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log) && !x.IsLifeLeech);
                 break;
