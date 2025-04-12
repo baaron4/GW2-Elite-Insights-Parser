@@ -397,14 +397,14 @@ internal class Matthias : SalvationPass
 
                         for (int i = 0; i < WellsPositions.Count; i++)
                         {
-                            float distance = Vector3.Distance(position, WellsPositions.ElementAt(i));
+                            float distance = Vector3.Distance(position, WellsPositions[i]);
                             if (distance < curDistance)
                             {
                                 curDistance = distance;
                                 curIndex = i;
                             }
                         }
-                        Vector3 closestWell = WellsPositions.ElementAt(curIndex);
+                        Vector3 closestWell = WellsPositions[curIndex];
                         replay.Decorations.Add(new ProgressBarDecoration(240, 48, lifespan, Colors.Black, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new PositionConnector(closestWell)));
                     }
                 }
@@ -490,12 +490,12 @@ internal class Matthias : SalvationPass
     /// <summary>
     /// Coordinates of the wells.
     /// </summary>
-    private static readonly List<Vector3> WellsPositions = new()
-    {
-        { new Vector3(-6871.6543f, 6823.631f, -5180.869f) }, // North West
-        { new Vector3(-5011.504f, 6834.5103f, -5180.869f) }, // North East
-        { new Vector3(-6859.2817f, 4965.546f, -5180.869f) }, // South West
-        { new Vector3(-5002.0090f, 4976.911f, -5180.869f) }, // South East
-    };
+    private static readonly List<Vector3> WellsPositions =
+    [
+        new Vector3(-6871.6543f, 6823.631f, -5180.869f), // North West
+        new Vector3(-5011.504f, 6834.5103f, -5180.869f), // North East
+        new Vector3(-6859.2817f, 4965.546f, -5180.869f), // South West
+        new Vector3(-5002.0090f, 4976.911f, -5180.869f), // South East
+    ];
 
 }
