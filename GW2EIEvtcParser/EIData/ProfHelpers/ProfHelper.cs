@@ -178,6 +178,8 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheHolosmith, EffectGUIDs.RelicOfTheHolosmith)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfTheSteamshrieker, EffectGUIDs.RelicOfTheSteamshrieker)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
