@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -16,8 +17,10 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class Xera : StrongholdOfTheFaithful
 {
 
-    private long _xeraSecondPhaseStartTime = 0;
-    private long _xeraFirstPhaseEndTime = 0;
+    private long _xeraSecondPhaseStartTime = long.MaxValue;
+    private bool _hasSecondPhase => _xeraSecondPhaseStartTime != long.MaxValue;
+    private long _xeraFirstPhaseEndTime = long.MaxValue;
+    private bool _hasSplitPhase => _xeraFirstPhaseEndTime != long.MaxValue;
     private bool _hasPreEvent = false;
     private long _xeraFirstPhaseStart = 0;
 
@@ -80,17 +83,17 @@ internal class Xera : StrongholdOfTheFaithful
     {
         SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
         var res = new List<BuffEvent>();
-        if (_xeraSecondPhaseStartTime != 0)
+        if (_hasSplitPhase)
         {
-            res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue));
-            res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown));
+            res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraFirstPhaseEndTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue));
+            res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraFirstPhaseEndTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown));
         }
         return res;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (_xeraSecondPhaseStartTime == 0)
+        if (!_hasSecondPhase)
         {
             return;
         }
@@ -118,6 +121,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
                 phases.Add(phasePreEvent);
                 phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
+                phase100to0.AddParentPhase(phases[0]);
                 phase100to0.AddTarget(mainTarget);
                 phases.Add(phase100to0);
             }
@@ -126,26 +130,40 @@ internal class Xera : StrongholdOfTheFaithful
             if (invulXera != null)
             {
                 var phase1 = new PhaseData(_xeraFirstPhaseStart, invulXera.Time, "Phase 1");
-                phase1.AddParentPhase(phases[0]);
                 if (phase100to0 != null)
                 {
                     phase1.AddParentPhase(phase100to0);
+                } 
+                else
+                {
+                    phase1.AddParentPhase(phases[0]);
                 }
                 phase1.AddTarget(mainTarget);
                 phases.Add(phase1);
 
-                long glidingEndTime = _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime : fightEnd;
+                long glidingEndTime = _hasSecondPhase ? _xeraSecondPhaseStartTime : fightEnd;
                 var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
+                if (phase100to0 != null)
+                {
+                    glidingPhase.AddParentPhase(phase100to0);
+                }
+                else
+                {
+                    glidingPhase.AddParentPhase(phases[0]);
+                }
                 glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)));
                 phases.Add(glidingPhase);
 
-                if (_xeraSecondPhaseStartTime > 0)
+                if (_hasSecondPhase)
                 {
                     var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
-                    phase2.AddParentPhase(phases[0]);
                     if (phase100to0 != null)
                     {
                         phase2.AddParentPhase(phase100to0);
+                    } 
+                    else
+                    {
+                        phase2.AddParentPhase(phases[0]);
                     }
                     phase2.AddTarget(mainTarget);
                     phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)));
@@ -338,13 +356,13 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                if (_xeraFirstPhaseEndTime != 0)
+                if (_hasSplitPhase)
                 {
-                    replay.Hidden.Add(new(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
+                    replay.Hidden.Add(new(_xeraFirstPhaseEndTime, _hasSecondPhase ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
                 }
                 break;
             case (int)TargetID.ChargedBloodstone:
-                if (_xeraFirstPhaseEndTime != 0)
+                if (_hasSplitPhase)
                 {
                     long end = replay.TimeOffsets.end;
                     HealthDamageEvent? lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
@@ -399,6 +417,50 @@ internal class Xera : StrongholdOfTheFaithful
                 var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
                 EnvironmentDecorations.Add(circle);
                 EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraHalfArenaGravityWell, out var halfGravityWells))
+        {
+            var cur = 0;
+            var pos = new PositionConnector(new Vector3(-3020.77f, -3153.32f, -20338.6f));
+            bool resetCurForSecondPhase = true;
+            foreach (var halfGravityWell in halfGravityWells)
+            {
+                // Float happens after 7000 ms, extra 500ms to display the hit
+                float angle = 0;
+                (long start, long end) lifespan = (halfGravityWell.Time, halfGravityWell.Time + 7500);
+                (long start, long end) lifespanIndicator = (halfGravityWell.Time, halfGravityWell.Time + 7000);
+                bool hasFired = true;
+                if (halfGravityWell.Time < _xeraFirstPhaseEndTime)
+                {
+                    angle = -30 + (cur++) * 90;
+                    if (lifespanIndicator.end > _xeraFirstPhaseEndTime)
+                    {
+                        hasFired = false;
+                    }
+                    lifespan.end = Math.Min(lifespan.end, _xeraFirstPhaseEndTime);
+                }
+                else
+                {
+                    if (cur > 0 && resetCurForSecondPhase)
+                    {
+                        cur = 0;
+                        resetCurForSecondPhase = false;
+                    }
+                    angle = -210 - (cur++) * 90;
+                }
+                var angleConnector = new AngleConnector(angle);
+                EnvironmentDecorations.AddWithFilledWithGrowing(
+                        (PieDecoration)new PieDecoration(1150, 180, lifespan, Colors.Purple, 0.15, pos)
+                            .UsingRotationConnector(angleConnector),
+                        true,
+                        lifespanIndicator.end
+                );
+                if (hasFired)
+                {
+                    EnvironmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
+                            .UsingRotationConnector(angleConnector));
+                }
             }
         }
     }

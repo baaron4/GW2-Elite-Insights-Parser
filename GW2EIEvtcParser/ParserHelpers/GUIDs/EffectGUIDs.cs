@@ -571,6 +571,7 @@ public static class EffectGUIDs
     public static readonly GUID XeraIntervention1 = new("63C34770B4EFF64B8EAA21BB835BB560"); // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
     public static readonly GUID XeraIntervention2 = new("79EA3F01274B4F418B2C571BAE1B9E17"); // 0 duration - Src Player
     public static readonly GUID XeraIntervention3 = new("5FA6527231BB8041AC783396142C6200"); // 0 duration - No Src No Dst
+    public static readonly GUID XeraHalfArenaGravityWell = new("66E848A88B572940852764912BFC5DF3"); // 0 duration - No Src, Dst is a plateform related gadget
     // Cairn
     public static readonly GUID CairnDisplacement = new("7798B97ED6B6EB489F7E33DF9FE6BD99");
     public static readonly GUID CairnDashGreen = new("D2E6D55CC94F79418BB907F063CBDD81");
