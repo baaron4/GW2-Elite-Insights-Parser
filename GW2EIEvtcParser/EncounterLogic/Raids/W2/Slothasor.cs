@@ -244,9 +244,9 @@ internal class Slothasor : SalvationPass
             int toDropEnd = (int)seg.End;
             var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
             replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
-            if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
+            if (!log.CombatData.HasEffectData && p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
-                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
+                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropStart + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropEnd + 82000));
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
@@ -262,6 +262,24 @@ internal class Slothasor : SalvationPass
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorGrowingVolatilePoison, out var growingVolatilePoisons))
+        {
+            foreach (var growingVolatilePoison in growingVolatilePoisons)
+            {
+                var volatilePoisonApply = log.CombatData.GetBuffApplyData(VolatilePoisonBuff).LastOrDefault(x => x.Time <= growingVolatilePoison.Time);
+                if (volatilePoisonApply != null)
+                {
+                    var lifespan = growingVolatilePoison.ComputeLifespan(log, 82000);
+                    EnvironmentDecorations.Add(new CircleDecoration(900, 180, (lifespan.start, volatilePoisonApply.Time + 90000), Colors.Red, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(lifespan.end));
+                }
+                
+            }       
         }
     }
 }

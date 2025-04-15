@@ -560,6 +560,7 @@ public static class EffectGUIDs
     public static readonly GUID SabethaSapperBombGroundAoE = new("09D5D14BE3AFEA48958B1A8D7634B08A"); // 1000 duration - No Src
     // Slothasor
     public static readonly GUID SlothasorTantrum = new("CAF62AE316C2D445A08D8E84C89027D2"); // 2000 duration - Src Slothasor
+    public static readonly GUID SlothasorGrowingVolatilePoison = new("49D370B638503348AC174C049051304D"); // 82000 duration, has dynamic end - Src Slothasor
     // Matthias
     public static readonly GUID MatthiasShardsOfRageAoEs = new("0D2192849D53B4469F56B1C74542DBE9"); // 3000 duration - No Src
     public static readonly GUID MatthiasWellOfTheProfane = new("9BEF037F1B8C2346B5F71A88128DF1A4"); // 90000 duration - Matthias Src

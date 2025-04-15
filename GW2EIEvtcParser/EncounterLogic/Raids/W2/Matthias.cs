@@ -291,10 +291,12 @@ internal class Matthias : SalvationPass
                         // Shards of Rage - Jump with AoEs
                         case ShardsOfRageHuman:
                         case ShardsOfRageAbomination:
-                            // Generic indicator of casting
-                            // TODO(Linka) @decorations: Add Shards of Rage AoEs to Environment Decorations and lock this behind !log.CombatData.HasEffectData
-                            lifespan = (cast.Time, cast.EndTime);
-                            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(300, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, lifespan.end);
+                            if (log.CombatData.HasEffectData)
+                            {
+                                // Generic indicator of casting
+                                lifespan = (cast.Time, cast.EndTime);
+                                replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(300, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, lifespan.end);
+                            }
                             break;
                         // Oppressive Gaze - Haduken Orb
                         case OppressiveGazeHuman:
