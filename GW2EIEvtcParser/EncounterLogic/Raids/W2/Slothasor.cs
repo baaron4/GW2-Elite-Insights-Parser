@@ -197,9 +197,12 @@ internal class Slothasor : SalvationPass
                         // Spore Release - Shake
                         case SporeRelease:
                             // Generic indicator of casting
-                            lifespan = (cast.Time, cast.EndTime);
-                            var sporeRelease = new CircleDecoration(700, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
-                            replay.Decorations.AddWithFilledWithGrowing(sporeRelease, true, lifespan.end);
+                            if (!log.CombatData.HasEffectData)
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                var sporeRelease = new CircleDecoration(700, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
+                                replay.Decorations.AddWithFilledWithGrowing(sporeRelease, true, lifespan.end);
+                            }
                             break;
                         default:
                             break;
@@ -221,6 +224,16 @@ internal class Slothasor : SalvationPass
                     {
                         lifespan = effect.ComputeLifespan(log, 2000);
                         var circle = new CircleDecoration(100, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
+                    }
+                }
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorSporeReleaseProjectileImpacts, out var sporeReleaseImpacts))
+                {
+                    foreach (var sporeReleaseImpact in sporeReleaseImpacts)
+                    {
+                        // TODO: confirm size
+                        lifespan = sporeReleaseImpact.ComputeLifespan(log, 1000);
+                        var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(sporeReleaseImpact.Position));
                         replay.Decorations.Add(circle);
                     }
                 }
