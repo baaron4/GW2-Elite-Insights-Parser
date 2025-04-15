@@ -246,7 +246,7 @@ internal class Slothasor : SalvationPass
             replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
             if (!log.CombatData.HasEffectData && p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
-                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropStart + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropEnd + 82000));
+                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropStart + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropEnd + 82000));
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
@@ -275,8 +275,8 @@ internal class Slothasor : SalvationPass
                 var volatilePoisonApply = log.CombatData.GetBuffApplyData(VolatilePoisonBuff).LastOrDefault(x => x.Time <= growingVolatilePoison.Time);
                 if (volatilePoisonApply != null)
                 {
-                    var lifespan = growingVolatilePoison.ComputeLifespan(log, 82000);
-                    EnvironmentDecorations.Add(new CircleDecoration(900, 180, (lifespan.start, volatilePoisonApply.Time + 90000), Colors.Red, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(lifespan.end));
+                    // Compute life span not reliable, has a dynamic end, which cuts the AoE short when encounter ends, use the expected durations
+                    EnvironmentDecorations.Add(new CircleDecoration(900, 180, (growingVolatilePoison.Time, volatilePoisonApply.Time + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(growingVolatilePoison.Time + 82000));
                 }
                 
             }       
