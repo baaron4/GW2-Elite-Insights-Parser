@@ -208,8 +208,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-03-11
     public const ulong March2025W8CMReleaseAndNewCoreRelics = 176750;
 
-    // TODO
-    public const ulong April2025BalancePatch = ulong.MaxValue;
+    // https://wiki.guildwars2.com/wiki/Game_updates/2025-04-15
+    public const ulong April2025BalancePatch = 178947;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }
