@@ -10,6 +10,7 @@ internal static class DamageModifiersUtils
     public enum DamageSource { All, NoPets, NotApplicable };
 
     internal delegate bool DamageLogChecker(HealthDamageEvent dl, ParsedEvtcLog log);
+    internal delegate bool ActorChecker(SingleActor actor, ParsedEvtcLog log);
 
     internal static readonly GainComputerByPresence ByPresence = new();
     internal static readonly GainComputerByMultiPresence ByMultiPresence = new();

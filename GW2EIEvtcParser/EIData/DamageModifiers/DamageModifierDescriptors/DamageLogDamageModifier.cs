@@ -20,6 +20,10 @@ internal class DamageLogDamageModifier : DamageModifierDescriptor
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
+        if (CheckEarlyExit(actor, log))
+        {
+            return [];
+        }
         var res = new List<DamageModifierEvent>();
         if (ComputeGain(null, null, log, out double gain))
         {

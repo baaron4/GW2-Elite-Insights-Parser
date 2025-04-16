@@ -62,6 +62,10 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
+        if (CheckEarlyExit(actor, log))
+        {
+            return [];
+        }
         IReadOnlyDictionary<long, BuffGraph> bgmsSource = actor.GetBuffGraphs(log);
         if (_trackerSource != null)
         {

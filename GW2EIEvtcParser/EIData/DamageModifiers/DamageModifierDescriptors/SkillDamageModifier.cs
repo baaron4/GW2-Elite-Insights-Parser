@@ -31,6 +31,10 @@ internal class SkillDamageModifier : DamageModifierDescriptor
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
+        if (CheckEarlyExit(actor, log))
+        {
+            return [];
+        }
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
         foreach (HealthDamageEvent evt in typeHits)

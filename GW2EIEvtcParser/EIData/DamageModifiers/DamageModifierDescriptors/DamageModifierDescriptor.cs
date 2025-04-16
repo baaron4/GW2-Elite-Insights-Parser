@@ -32,6 +32,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
 
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private List<DamageLogChecker> _dlCheckers;
+    private List<ActorChecker> _earlyExitCheckers;
 
     internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
     {
@@ -71,6 +72,12 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return this;
     }
 
+    internal virtual DamageModifierDescriptor UsingEarlyExit(ActorChecker actorChecker)
+    {
+        _earlyExitCheckers.Add(actorChecker);
+        return this;
+    }
+
     internal virtual DamageModifierDescriptor UsingChecker(DamageLogChecker dlChecker)
     {
         _dlCheckers.Add(dlChecker);
@@ -80,6 +87,11 @@ internal abstract class DamageModifierDescriptor : IVersionable
     protected bool CheckCondition(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         return _dlCheckers.All(checker => checker(dl, log));
+    }
+
+    protected bool CheckEarlyExit(SingleActor actor, ParsedEvtcLog log)
+    {
+        return _earlyExitCheckers.Any(checker => checker(actor, log));
     }
 
     public bool Available(CombatData combatData)
