@@ -26,73 +26,221 @@ internal static class RangerHelper
         (int)MinionID.SpiritOfNatureRenewal,
     ];
 
-    private static HashSet<int> JuvenilePetIDs =
+    private static HashSet<int> JuvenileFelinePetIDs =
     [
-        (int)MinionID.JuvenileAlpineWolf,
-        (int)MinionID.JuvenileArctodus,
-        (int)MinionID.JuvenileArmorFish,
-        (int)MinionID.JuvenileBlackBear,
-        (int)MinionID.JuvenileBlackMoa,
-        (int)MinionID.JuvenileBlackWidowSpider,
-        (int)MinionID.JuvenileBlueJellyfish,
-        (int)MinionID.JuvenileBlueMoa,
-        (int)MinionID.JuvenileBoar,
-        (int)MinionID.JuvenileBristleback,
-        (int)MinionID.JuvenileBrownBear,
-        (int)MinionID.JuvenileCarrionDevourer,
-        (int)MinionID.JuvenileCaveSpider,
         (int)MinionID.JuvenileCheetah,
-        (int)MinionID.JuvenileEagle,
-        (int)MinionID.JuvenileEletricWywern,
-        (int)MinionID.JuvenileFangedIboga,
-        (int)MinionID.JuvenileFernHound,
-        (int)MinionID.JuvenileFireWywern,
-        (int)MinionID.JuvenileForestSpider,
-        (int)MinionID.JuvenileHawk,
-        (int)MinionID.JuvenileIceDrake,
-        (int)MinionID.JuvenileJacaranda,
         (int)MinionID.JuvenileJaguar,
-        (int)MinionID.JuvenileJungleSpider,
         (int)MinionID.JuvenileJungleStalker,
-        (int)MinionID.JuvenileKrytanDrakehound,
-        (int)MinionID.JuvenileLashtailDevourer,
         (int)MinionID.JuvenileLynx,
-        (int)MinionID.JuvenileMarshDrake,
-        (int)MinionID.JuvenileMurellow,
-        (int)MinionID.JuvenileOwl,
-        (int)MinionID.JuvenilePhoenix,
-        (int)MinionID.JuvenilePig,
-        (int)MinionID.JuvenilePinkMoa,
-        (int)MinionID.JuvenilePolarBear,
-        (int)MinionID.JuvenileRainbowJellyfish,
-        (int)MinionID.JuvenileRaven,
-        (int)MinionID.JuvenileRedJellyfish,
-        (int)MinionID.JuvenileRedMoa,
-        (int)MinionID.JuvenileReefDrake,
-        (int)MinionID.JuvenileRiverDrake,
-        (int)MinionID.JuvenileRockGazelle,
-        (int)MinionID.JuvenileSalamanderDrake,
         (int)MinionID.JuvenileSandLion,
-        (int)MinionID.JuvenileShark,
-        (int)MinionID.JuvenileSiamoth,
-        (int)MinionID.JuvenileSiegeTurtle,
-        (int)MinionID.JuvenileSmokescale,
         (int)MinionID.JuvenileSnowLeopard,
         (int)MinionID.JuvenileTiger,
-        (int)MinionID.JuvenileWallow,
-        (int)MinionID.JuvenileWarthog,
-        (int)MinionID.JuvenileWhiptailDevourer,
-        (int)MinionID.JuvenileWhiteMoa,
-        (int)MinionID.JuvenileWhiteRaven,
         (int)MinionID.JuvenileWhiteTiger,
-        (int)MinionID.JuvenileWolf,
+    ];
+
+    private static HashSet<int> JuvenileBirdPetIDs =
+    [
+        (int)MinionID.JuvenileEagle,
+        (int)MinionID.JuvenileHawk,
+        (int)MinionID.JuvenileOwl,
+        (int)MinionID.JuvenileRaven,
+        (int)MinionID.JuvenileWhiteRaven,
+    ];
+
+    private static HashSet<int> JuvenileDrakePetIDs =
+    [
+        (int)MinionID.JuvenileIceDrake,
+        (int)MinionID.JuvenileMarshDrake,
+        (int)MinionID.JuvenileReefDrake,
+        (int)MinionID.JuvenileRiverDrake,
+        (int)MinionID.JuvenileSalamanderDrake,
+    ];
+
+    private static HashSet<int> JuvenileUrsinePetIDs =
+    [
+        (int)MinionID.JuvenileArctodus,
+        (int)MinionID.JuvenileBlackBear,
+        (int)MinionID.JuvenileBrownBear,
+        (int)MinionID.JuvenileMurellow,
+        (int)MinionID.JuvenilePolarBear,
+    ];
+
+    private static HashSet<int> JuvenilePorcinePetIDs =
+    [
+        (int)MinionID.JuvenileBoar,
+        (int)MinionID.JuvenilePig,
+        (int)MinionID.JuvenileSiamoth,
+        (int)MinionID.JuvenileWarthog,
+    ];
+
+    private static HashSet<int> JuvenileMoaPetIDs =
+    [
+        (int)MinionID.JuvenileBlackMoa,
+        (int)MinionID.JuvenileBlueMoa,
+        (int)MinionID.JuvenilePinkMoa,
+        (int)MinionID.JuvenileRedMoa,
+        (int)MinionID.JuvenileWhiteMoa,
+    ];
+    private static HashSet<int> JuvenileSpiderPetIDs =
+    [
+        (int)MinionID.JuvenileBlackWidowSpider,
+        (int)MinionID.JuvenileCaveSpider,
+        (int)MinionID.JuvenileForestSpider,
+        (int)MinionID.JuvenileJungleSpider,
+    ];
+
+    private static HashSet<int> JuvenileDevourerPetIDs =
+    [
+        (int)MinionID.JuvenileCarrionDevourer,
+        (int)MinionID.JuvenileLashtailDevourer,
+        (int)MinionID.JuvenileWhiptailDevourer,
+    ]; 
+    
+    private static HashSet<int> JuvenileCaninePetIDs =
+    [
+        (int)MinionID.JuvenileAlpineWolf,
+        (int)MinionID.JuvenileFernHound,
         (int)MinionID.JuvenileHyena,
+        (int)MinionID.JuvenileKrytanDrakehound,
+        (int)MinionID.JuvenileWolf,
+    ];
+
+    private static HashSet<int> JuvenileJellyfishPetIDs =
+    [
+        (int)MinionID.JuvenileBlueJellyfish,
+        (int)MinionID.JuvenileRainbowJellyfish,
+        (int)MinionID.JuvenileRedJellyfish,
+    ];
+
+    private static HashSet<int> JuvenileWyvernPetIDs =
+    [
+        (int)MinionID.JuvenileEletricWywern,
+        (int)MinionID.JuvenileFireWywern,
+    ];
+
+    private static HashSet<int> JuvenilePetIDs = (HashSet<int>) new HashSet<int>() { 
+        (int)MinionID.JuvenileArmorFish,
+        (int)MinionID.JuvenileBristleback,
+        (int)MinionID.JuvenileFangedIboga,
+        (int)MinionID.JuvenileJacaranda,
+        (int)MinionID.JuvenilePhoenix,
+        (int)MinionID.JuvenileRockGazelle,
+        (int)MinionID.JuvenileShark,
+        (int)MinionID.JuvenileSiegeTurtle,
+        (int)MinionID.JuvenileSmokescale,
+        (int)MinionID.JuvenileWallow,
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileWarclaw,
         (int)MinionID.JuvenileJanthiriBee,
-    ];
+    }
+    .Union(JuvenileFelinePetIDs)
+    .Union(JuvenileBirdPetIDs)
+    .Union(JuvenileDrakePetIDs)
+    .Union(JuvenileUrsinePetIDs)
+    .Union(JuvenilePorcinePetIDs)
+    .Union(JuvenileMoaPetIDs)
+    .Union(JuvenileSpiderPetIDs)
+    .Union(JuvenileDevourerPetIDs)
+    .Union(JuvenileCaninePetIDs)
+    .Union(JuvenileJellyfishPetIDs)
+    .Union(JuvenileWyvernPetIDs);
+
+    internal static bool IsJuvelineFelinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileFelinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineBirdPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileBirdPetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineDrakePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileDrakePetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineUrsinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileUrsinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelinePorcinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenilePorcinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineMoaPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileMoaPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineSpiderPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileSpiderPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineDevourerPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileDevourerPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineCaninePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileCaninePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineJellyfishPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileJellyfishPetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineWyvernPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileWyvernPetIDs.Contains(agentItem.ID);
+    }
 
     private static bool IsJuvenilePetID(int id)
     {
