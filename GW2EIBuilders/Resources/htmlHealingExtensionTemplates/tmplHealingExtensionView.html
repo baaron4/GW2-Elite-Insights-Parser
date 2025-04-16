@@ -86,8 +86,8 @@
         },
         computed: {
             activePhase: function () {
-                var phases = this.reactiveLogdata.phases;
-                for (var i = 0; i < phases.length; i++) {
+                const phases = this.reactiveLogdata.phases;
+                for (let i = 0; i < phases.length; i++) {
                     if (phases[i].active) {
                         return i;
                     }
@@ -97,8 +97,8 @@
                 return logData.phases[this.activePhase];
             },
             activePlayer: function () {
-                var players = this.reactiveLogdata.players;
-                for (var i = 0; i < players.length; i++) {
+                const players = this.reactiveLogdata.players;
+                for (let i = 0; i < players.length; i++) {
                     if (players[i].active) {
                         return i;
                     }
@@ -109,9 +109,9 @@
                 return this.phase.name + " Healing Summary";
             },
             activePlayerTargets: function () {
-                var res = [];
-                for (var i = 0; i < logData.players.length; i++) {
-                    var player = this.reactiveLogdata.players[i];
+                const res = [];
+                for (let i = 0; i < logData.players.length; i++) {
+                    const player = this.reactiveLogdata.players[i];
                     if (player.targetActive) {
                         res.push(i);
                     }
@@ -128,8 +128,8 @@
                 return hasRotations();
             },
             everybodyRunning: function() {
-                for (var i = 0; i < logData.usedExtensions.length; i++) {
-                    var usedExtension = logData.usedExtensions[i];
+                for (let i = 0; i < logData.usedExtensions.length; i++) {
+                    const usedExtension = logData.usedExtensions[i];
                     if (usedExtension.includes("Healing Stats")) {
                         return logData.playersRunningExtensions[i].length === logData.players.filter(x => !x.notInSquad).length;
                     }

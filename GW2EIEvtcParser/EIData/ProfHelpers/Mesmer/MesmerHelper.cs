@@ -69,9 +69,10 @@ internal static class MesmerHelper
         new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
         new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
         new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance, GW2Builds.February2024NewWeapons),
-        new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
-            .UsingSrcBaseSpecChecker(Spec.Mesmer)
-            .UsingSecondaryEffectChecker(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse2)
+        new EffectCastFinderByDst(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse2)
+            .UsingSrcNotBaseSpecChecker(Spec.Mesmer)
+            .UsingDstBaseSpecChecker(Spec.Mesmer)
+            .UsingSecondaryEffectCheckerInvertedSrc(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
         new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),

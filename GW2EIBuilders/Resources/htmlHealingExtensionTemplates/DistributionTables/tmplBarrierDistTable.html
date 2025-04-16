@@ -256,7 +256,7 @@
                 if (this.actorindex < 0) {
                     return null;
                 }
-                var master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
+                const master = !this.player ? logData.targets[this.actorindex] : logData.players[this.actorindex];
                 if (this.isminion) {
                     return master.minions[this.minionindex];
                 }

@@ -187,17 +187,22 @@ internal class Slothasor : SalvationPass
                         // Tantrum - 3 sets ground AoEs
                         case TantrumSkill:
                             // Generic indicator of casting
-                            // TODO(Linka) @decorations: Add tantrum AoEs to Environment Decorations and lock this behind !log.CombatData.HasEffectData
-                            lifespan = (cast.Time, cast.EndTime);
-                            var tantrum = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target));
-                            replay.Decorations.AddWithFilledWithGrowing(tantrum.UsingFilled(false), true, lifespan.end);
+                            if (!log.CombatData.HasEffectData)
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                var tantrum = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.4, new AgentConnector(target));
+                                replay.Decorations.AddWithFilledWithGrowing(tantrum.UsingFilled(false), true, lifespan.end);
+                            }
                             break;
                         // Spore Release - Shake
                         case SporeRelease:
                             // Generic indicator of casting
-                            lifespan = (cast.Time, cast.EndTime);
-                            var sporeRelease = new CircleDecoration(700, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
-                            replay.Decorations.AddWithFilledWithGrowing(sporeRelease, true, lifespan.end);
+                            if (!log.CombatData.HasEffectData)
+                            {
+                                lifespan = (cast.Time, cast.EndTime);
+                                var sporeRelease = new CircleDecoration(700, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
+                                replay.Decorations.AddWithFilledWithGrowing(sporeRelease, true, lifespan.end);
+                            }
                             break;
                         default:
                             break;
@@ -210,6 +215,27 @@ internal class Slothasor : SalvationPass
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
+                }
+
+                // Tantrum - Knockdown AoEs
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.SlothasorTantrum, out var tantrums))
+                {
+                    foreach (EffectEvent effect in tantrums)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2000);
+                        var circle = new CircleDecoration(100, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position));
+                        replay.Decorations.Add(circle);
+                    }
+                }
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorSporeReleaseProjectileImpacts, out var sporeReleaseImpacts))
+                {
+                    foreach (var sporeReleaseImpact in sporeReleaseImpacts)
+                    {
+                        // TODO: confirm size
+                        lifespan = sporeReleaseImpact.ComputeLifespan(log, 1000);
+                        var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(sporeReleaseImpact.Position));
+                        replay.Decorations.Add(circle);
+                    }
                 }
                 break;
             case (int)TargetID.PoisonMushroom:
@@ -231,9 +257,9 @@ internal class Slothasor : SalvationPass
             int toDropEnd = (int)seg.End;
             var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
             replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
-            if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
+            if (!log.CombatData.HasEffectData && p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
-                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
+                replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropStart + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropEnd + 82000));
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
@@ -249,6 +275,24 @@ internal class Slothasor : SalvationPass
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorGrowingVolatilePoison, out var growingVolatilePoisons))
+        {
+            foreach (var growingVolatilePoison in growingVolatilePoisons)
+            {
+                var volatilePoisonApply = log.CombatData.GetBuffApplyData(VolatilePoisonBuff).LastOrDefault(x => x.Time <= growingVolatilePoison.Time);
+                if (volatilePoisonApply != null)
+                {
+                    // Compute life span not reliable, has a dynamic end, which cuts the AoE short when encounter ends, use the expected durations
+                    EnvironmentDecorations.Add(new CircleDecoration(900, 180, (growingVolatilePoison.Time, volatilePoisonApply.Time + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(growingVolatilePoison.Time + 82000));
+                }
+                
+            }       
         }
     }
 }

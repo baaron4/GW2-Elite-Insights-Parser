@@ -138,11 +138,11 @@
                 return this.getHeaderClassBase(this.sortdata, key, index);
             },
             getBodyClass: function(key, index) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                const classes = this.getBodyClassBase(this.sortdata, key, index);
                 return classes;
             },
             sortData: function(rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
+                const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
                         rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
@@ -157,7 +157,7 @@
                         rows.sort((x,y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Data":
-                        var index = this.sortdata.index;
+                    const index = this.sortdata.index;
                         rows.sort((x,y) => order * (x.hps[index] - y.hps[index]) || this.sortByPlayerName(x, y));
                         break;
                     default:
@@ -170,8 +170,8 @@
                 return this.round2(row[index] * 100 / sums[sums.length - 1].hps[index]) + '% of total';
             },
             computeGroupContribution: function (groupIndex, index, row, sums) {
-                var sumId = 0;
-                for (var sumId = 0; sumId < sums.length; sumId++) {
+                let sumId = 0;
+                for (sumId = 0; sumId < sums.length; sumId++) {
                     if (sums[sumId].name.includes(groupIndex)) {
                         break;
                     }
@@ -196,48 +196,48 @@
                 return barrierStatsExtension.barrierPhases[this.phaseindex];
             },
             tableData: function () {
-                var cacheID = this.phaseindex + '-';
+                let cacheID = this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
-                var rows = [];
-                var sums = [];
-                var total = [0, 0, 0, 0, 0, 0, 0, 0];
+                const rows = [];
+                const sums = [];
+                const total = [0, 0, 0, 0, 0, 0, 0, 0];
                 if (this.hasBarrier) {
-                    total = total.concat([0,0]);
+                    total.push(0, 0);
                 }
-                var groups = [];
-                for (var i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
-                    var hpsStat = this.hPhase.outgoingHealingStats[i].slice();
-                    var hpsTargetStat = [0, 0, 0, 0];
-                    for (var j = 0; j < this.activetargets.length; j++) {
-                        var tar = this.hPhase.outgoingHealingStatsTargets[i][this.activetargets[j]];
-                        for (var k = 0; k < hpsTargetStat.length; k++) {
+                const groups = [];
+                for (let i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
+                    const hpsStat = this.hPhase.outgoingHealingStats[i].slice();
+                    const hpsTargetStat = [0, 0, 0, 0];
+                    for (let j = 0; j < this.activetargets.length; j++) {
+                        const tar = this.hPhase.outgoingHealingStatsTargets[i][this.activetargets[j]];
+                        for (let k = 0; k < hpsTargetStat.length; k++) {
                             hpsTargetStat[k] += tar[k];
                         }
                     }
                     if (this.hasBarrier) {
-                        hpsStat = hpsStat.concat(this.bPhase.outgoingBarrierStats[i]);
-                        var bpsTargetStat = [0];
-                        for (var j = 0; j < this.activetargets.length; j++) {
-                            var tar = this.bPhase.outgoingBarrierStatsTargets[i][this.activetargets[j]];
-                            for (var k = 0; k < bpsTargetStat.length; k++) {
+                        hpsStat.push(...this.bPhase.outgoingBarrierStats[i]);
+                        const bpsTargetStat = [0];
+                        for (let j = 0; j < this.activetargets.length; j++) {
+                            const tar = this.bPhase.outgoingBarrierStatsTargets[i][this.activetargets[j]];
+                            for (let k = 0; k < bpsTargetStat.length; k++) {
                                 bpsTargetStat[k] += tar[k];
                             }
                         }
-                        hpsTargetStat = hpsTargetStat.concat(bpsTargetStat);
+                        hpsTargetStat.push(...bpsTargetStat);
                     }
-                    var hps = hpsTargetStat.concat(hpsStat);
+                    const hps = hpsTargetStat.concat(hpsStat);
                     //
-                    var player = logData.players[i];
+                    const player = logData.players[i];
                     if (!groups[player.group]) {
                         groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                         if (this.hasBarrier) {
                             groups[player.group] = groups[player.group].concat([0,0]);
                         }
                     }
-                    for (var j = 0; j < hps.length; j++) {
+                    for (let j = 0; j < hps.length; j++) {
                         total[j] += hps[j];
                         groups[player.group][j] += hps[j];
                     }
@@ -246,7 +246,7 @@
                         hps: hps
                     });
                 }
-                for (var i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push({
                             name: "Group " + i,
@@ -258,7 +258,7 @@
                     name: "Total",
                     hps: total
                 });
-                var res = {
+                let res = {
                     rows: rows,
                     sums: sums
                 };

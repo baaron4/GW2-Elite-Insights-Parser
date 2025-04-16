@@ -8,6 +8,10 @@ internal class EffectCastFinderByDst : EffectCastFinder
     {
         return effectEvent.IsAroundDst ? effectEvent.Dst : ParserHelper._unknownAgent;
     }
+    protected override AgentItem GetOtherKeyAgent(EffectEvent effectEvent)
+    {
+        return effectEvent.Src;
+    }
 
     //TODO(Rennorb) @perf @cleanup: move to tests? 
     protected override bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)

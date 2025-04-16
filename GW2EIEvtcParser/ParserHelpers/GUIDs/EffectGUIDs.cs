@@ -54,6 +54,7 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfMountBalrior1 = new("7CD892DAA47D194CA3FE962ADE6F626F"); // Duration 6000, Player Src, ground effect
     public static readonly GUID RelicOfMountBalrior2 = new("1558621A51FE5F4B848A8B252AFE616C"); // Duration infinite, Player Src, ground effect with effect end
     public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
+    public static readonly GUID RelicOfTheSteamshrieker = new("C0B2EC5CAE1FF3468FD5D62157625E77"); // Effect Event duration 0, default duration 2000
     #endregion
 
     #region Mesmer
@@ -557,12 +558,20 @@ public static class EffectGUIDs
     public static readonly GUID SabethaPlatformCrush = new("1EAC8EDCB57CDC4DB19DA7F2D37D25E8"); // 1000 duration - No Src - Platform debris falling
     public static readonly GUID SabethaFlakShot = new("1D17794F2428F344A5D9755AB8899633"); // 25000 duration - Src Sabetha
     public static readonly GUID SabethaSapperBombGroundAoE = new("09D5D14BE3AFEA48958B1A8D7634B08A"); // 1000 duration - No Src
+    // Slothasor
+    public static readonly GUID SlothasorTantrum = new("CAF62AE316C2D445A08D8E84C89027D2"); // 2000 duration - Src Slothasor
+    public static readonly GUID SlothasorGrowingVolatilePoison = new("49D370B638503348AC174C049051304D"); // 82000 duration, has dynamic end - Src Slothasor
+    public static readonly GUID SlothasorSporeReleaseProjectileImpacts = new("E1853AD68E650C4BBD29A17F03EDEA39"); // 1000 duration - No Src
+    // Matthias
+    public static readonly GUID MatthiasShardsOfRageAoEs = new("0D2192849D53B4469F56B1C74542DBE9"); // 3000 duration - No Src
+    public static readonly GUID MatthiasWellOfTheProfane = new("9BEF037F1B8C2346B5F71A88128DF1A4"); // 90000 duration - Matthias Src
     // Escort Glenna
     public static readonly GUID EscortOverHere = new("64CD79C1A121EC42B1278DEF9280ED35");
     // Xera
     public static readonly GUID XeraIntervention1 = new("63C34770B4EFF64B8EAA21BB835BB560"); // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
     public static readonly GUID XeraIntervention2 = new("79EA3F01274B4F418B2C571BAE1B9E17"); // 0 duration - Src Player
     public static readonly GUID XeraIntervention3 = new("5FA6527231BB8041AC783396142C6200"); // 0 duration - No Src No Dst
+    public static readonly GUID XeraHalfArenaGravityWell = new("66E848A88B572940852764912BFC5DF3"); // 0 duration - No Src, Dst is a plateform related gadget
     // Cairn
     public static readonly GUID CairnDisplacement = new("7798B97ED6B6EB489F7E33DF9FE6BD99");
     public static readonly GUID CairnDashGreen = new("D2E6D55CC94F79418BB907F063CBDD81");
@@ -585,6 +594,12 @@ public static class EffectGUIDs
     public static readonly GUID DeimosSoulFeast = new("1BBF189B7174604F822656C5A85FC0D6"); // Src Hands - 2000 duration - hand - reapplied each animation
     public static readonly GUID DeimosAnnihilateSliceIndicator = new("F5B44356708C9243BE2D67986FDD0CF4"); // Src Deimos - 1500 duration - Pizza slice indicator
     public static readonly GUID DeimosAnnihilateHit = new("D94547E5FC797B458BF25D06C8E32C68"); // Src Deimos - 1000 duration - Pizza slice hit
+    // Soulless Horror
+    public static readonly GUID SoullessHorrorSoulRift = new("AB9A517AE2F63B419522D57B7AD3B82F"); // 57000 duration - Src Volatile Soul - Tormented Dead death AoE
+    // River of Souls
+    public static readonly GUID RiverSoullessTorrentInnerPlayerAoE = new("301D9FC427E7BE4BAD4DBFA87D085B51"); // 3000 duration - Src River of Souls
+    public static readonly GUID RiverSoullessTorrentOuterPlayerAoE = new("B4C41DD0D494464B948532D9EA00D132"); // 4000 duration - Src River of Souls
+    public static readonly GUID RiverSoullessTorrentLightningStrikeDamage = new("E52B6BD6BE3A0243B5BD26A486C21CAD"); // 1000 duration - No Src No Dst
     // Broken King
     public static readonly GUID BrokenKingNumbingBreachIndicator = new("5341E83B29B534408E90DBE7BE6F452D");
     public static readonly GUID BrokenKingNumbingBreachDamage = new("1BF014091BFD1E40A11ED36B92601342");

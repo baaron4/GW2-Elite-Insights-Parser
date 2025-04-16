@@ -321,6 +321,7 @@ internal class Escort : StrongholdOfTheFaithful
         return
         [
             new EffectCastFinder(OverHere, EffectGUIDs.EscortOverHere),
+            new DamageCastFinder(TeleportDisplacementField, TeleportDisplacementField).UsingICD(50),
         ];
     }
 }

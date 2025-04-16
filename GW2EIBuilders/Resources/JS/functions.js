@@ -555,7 +555,7 @@ function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
             fixedrange: true,
             side: 'right',
             range: [0, 1.5],
-            nticks: 1
+            nticks: 2
         },
         yaxis4: {
             title: 'Intensity Buffs',

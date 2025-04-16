@@ -20,9 +20,19 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
     }
 
+    protected AgentItem GetOtherAgent(EffectEvent effectEvent)
+    {
+        return Minions ? GetOtherKeyAgent(effectEvent).GetFinalMaster() : GetOtherKeyAgent(effectEvent);
+    }
+
     protected virtual AgentItem GetKeyAgent(EffectEvent effectEvent)
     {
         return effectEvent.Src;
+    }
+
+    protected virtual AgentItem GetOtherKeyAgent(EffectEvent effectEvent)
+    {
+        return effectEvent.IsAroundDst? effectEvent.Dst: ParserHelper._unknownAgent;
     }
 
     public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)
@@ -41,6 +51,18 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     internal EffectCastFinder UsingDstBaseSpecChecker(Spec spec)
     {
         UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.BaseSpec == spec);
+        return this;
+    }
+
+    internal EffectCastFinder UsingSrcNotBaseSpecChecker(Spec spec)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) => evt.Src.BaseSpec != spec);
+        return this;
+    }
+
+    internal EffectCastFinder UsingDstNotBaseSpecChecker(Spec spec)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.BaseSpec != spec);
         return this;
     }
 
@@ -97,6 +119,18 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
                 return effectEvents.Any(other => other != evt && GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+            }
+            return false;
+        });
+        return this;
+    }
+    internal EffectCastFinder UsingSecondaryEffectCheckerInvertedSrc(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) =>
+        {
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
+            {
+                return effectEvents.Any(other => other != evt && GetOtherAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             }
             return false;
         });

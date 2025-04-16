@@ -99,11 +99,11 @@
                 return this.getHeaderClassBase(this.sortdata, key, index);
             },
             getBodyClass: function(key, index) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                const classes = this.getBodyClassBase(this.sortdata, key, index);
                 return classes;
             },
             sortData: function(rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
+                const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
                         rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
@@ -118,7 +118,7 @@
                         rows.sort((x,y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Data":
-                        var index = this.sortdata.index;
+                        const index = this.sortdata.index;
                         rows.sort((x,y) => order * (x.incomingHeal[index] - y.incomingHeal[index]) || this.sortByPlayerName(x, y));
                         break;
                     default:
@@ -148,20 +148,19 @@
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
-                var rows = [];
-                var sums = [];
-                var total = [0, 0, 0, 0];
+                const rows = [];
+                const sums = [];
+                const total = [0, 0, 0, 0];
                 if (this.hasBarrier) {
                     total.push(0);
                 }
-                var groups = [];
-                var i;
-                for (i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
-                    var incomingHeal = this.hPhase.incomingHealingStats[i].slice();
+                const groups = [];
+                for (let i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
+                    const incomingHeal = this.hPhase.incomingHealingStats[i].slice();
                     if (this.hasBarrier) {
-                        incomingHeal = incomingHeal.concat(this.bPhase.incomingBarrierStats[i])
+                        incomingHeal.push(...this.bPhase.incomingBarrierStats[i]);
                     }
-                    var player = logData.players[i];
+                    const player = logData.players[i];
                     if (player.isFake) {
                         continue;
                     }
@@ -175,12 +174,12 @@
                             groups[player.group].push(0);
                         }
                     }
-                    for (var j = 0; j < total.length; j++) {
+                    for (let j = 0; j < total.length; j++) {
                         total[j] += incomingHeal[j];
                         groups[player.group][j] += incomingHeal[j];
                     }
                 }
-                for (i = 0; i < groups.length; i++) {
+                for (let i = 0; i < groups.length; i++) {
                     if (groups[i]) {
                         sums.push({
                             name: "Group " + i,
@@ -192,7 +191,7 @@
                     name: "Total",
                     incomingHeal: total
                 });
-                var res = {
+                const res = {
                     rows: rows,
                     sums: sums
                 };

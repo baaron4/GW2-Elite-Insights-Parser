@@ -2,7 +2,7 @@
 "use strict";
 
 function healingGraphTypeEnumToString(mode, healingMode) {
-    var name = "";
+    let name = "";
     switch (mode) {
         case GraphType.DPS:
             name = healingMode === HealingType.Barrier ? "BPS" : "HPS";
@@ -20,7 +20,7 @@ function healingGraphTypeEnumToString(mode, healingMode) {
 }
 
 function healingTypeEnumToString(mode) {
-    var name = "";
+    let name = "";
     switch (mode) {
         case HealingType.All:
             name = "All";
@@ -55,9 +55,9 @@ function getHealingGraphName(healingMode, graphMode) {
 }
 
 function computePlayersHealingGraphData(graph, data, yaxis) {
-    var offset = 0;
-    for (var i = 0; i < logData.players.length; i++) {
-        var player = logData.players[i];
+    let offset = 0;
+    for (let i = 0; i < logData.players.length; i++) {
+        const player = logData.players[i];
         if (player.isFake) {
             continue;
         }
