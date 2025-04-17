@@ -8,10 +8,10 @@ public class IconOverheadDecorationRenderingDescription : IconDecorationRenderin
 
     internal IconOverheadDecorationRenderingDescription(ParsedEvtcLog log, IconOverheadDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        Type = "IconOverhead";
+        Type = Types.IconOverhead;
         if (decoration.IsSquadMarker)
         {
-            Type = "OverheadSquadMarker";
+            Type = Types.SquadMarkerOverhead;
         }
     }
 }

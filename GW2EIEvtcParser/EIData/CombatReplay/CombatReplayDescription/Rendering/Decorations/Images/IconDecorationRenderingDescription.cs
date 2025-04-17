@@ -7,10 +7,10 @@ public class IconDecorationRenderingDescription : ImageDecorationRenderingDescri
 {
     internal IconDecorationRenderingDescription(ParsedEvtcLog log, IconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        Type = "Icon";
+        Type = Types.Icon;
         if (decoration.IsSquadMarker)
         {
-            Type = "SquadMarker";
+            Type = Types.SquadMarker;
         }
     }
 }

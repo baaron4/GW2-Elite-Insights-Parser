@@ -48,6 +48,32 @@ let overheadAnimationIncrement = 1;
 const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
+
+// Define the type of the decoration. Must match ordering of the enum in CombatReplayDescription.cs
+const Types = {
+    ActorOrientation: 0,
+    BackgroundIcon: 1,
+    Circle: 2,
+    Doughnut: 3,
+    Friendly: 4,
+    FriendlyPlayer: 5,
+    Icon: 6,
+    IconOverhead: 7,
+    Line: 8,
+    Mob: 9,
+    MovingPlatform: 10,
+    Pie: 11,
+    Player: 12,
+    ProgressBar: 13,
+    ProgressBarOverhead: 14,
+    Rectangle: 15,
+    SquadMarker: 16,
+    SquadMarkerOverhead: 17,
+    Target: 18,
+    TargetPlayer: 19,
+    Text: 20,
+};
+
 function getDefaultCombatReplayTime() {
     var time = EIUrlParams.get("crTime");
     if (!time) {
@@ -341,43 +367,43 @@ class Animator {
             const metadata = decorationMetadata[i];
             let MetadataClass = null;
             switch (metadata.type) {
-                case "ActorOrientation":
+                case Types.ActorOrientation:
                     MetadataClass = ActorOrientationMetadata;
                     break;
-                case "Circle":
+                case Types.Circle:
                     MetadataClass = CircleMetadata;
                     break;
-                case "Doughnut":
+                case Types.Doughnut:
                     MetadataClass = DoughnutMetadata;
                     break;
-                case "Line":
+                case Types.Line:
                     MetadataClass = LineMetadata;
                     break;
-                case "Pie":
+                case Types.Pie:
                     MetadataClass = PieMetadata;
                     break;
-                case "Rectangle":
+                case Types.Rectangle:
                     MetadataClass = RectangleMetadata;
                     break;
-                case "ProgressBar":
+                case Types.ProgressBar:
                     MetadataClass = ProgressBarMetadata;
                     break;
-                case "BackgroundIcon":
+                case Types.BackgroundIcon:
                     MetadataClass = IconMetadata;
                     break;
-                case "Icon":
+                case Types.Icon:
                     MetadataClass = IconMetadata;
                     break;
-                case "IconOverhead":
+                case Types.IconOverhead:
                     MetadataClass = IconOverheadMetadata;
                     break;
-                case "OverheadProgressBar":
+                case Types.ProgressBarOverhead:
                     MetadataClass = OverheadProgressBarMetadata;
                     break;
-                case "MovingPlatform":
+                case Types.MovingPlatform:
                     MetadataClass = MovingPlatformMetadata;
                     break;
-                case "Text":
+                case Types.Text:
                     MetadataClass = TextMetadata;
                     break;
                 default:
@@ -391,7 +417,7 @@ class Animator {
             let actorSize = 0;
             let mapToFill;
             switch (actor.type) {
-                case "Player":
+                case Types.Player:
                     ActorClass = SquadIconDrawable;
                     actorSize = 22;
                     mapToFill = this.playerData;
@@ -402,19 +428,19 @@ class Animator {
                         reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
                     }
                     break;
-                case "Target":
-                case "TargetPlayer":
+                case Types.Target:
+                case Types.TargetPlayer:
                     ActorClass = NonSquadIconDrawable;
                     actorSize = 30;
                     mapToFill = this.targetData;
                     break;
-                case "Mob":
+                case Types.Mob:
                     ActorClass = NonSquadIconDrawable;
                     actorSize = 25;
                     mapToFill = this.trashMobData;
                     break;
-                case "FriendlyPlayer":
-                case "Friendly":
+                case Types.FriendlyPlayer:
+                case Types.Friendly:
                     ActorClass = NonSquadIconDrawable;
                     actorSize = 20;
                     mapToFill = this.friendlyMobData;
@@ -430,13 +456,13 @@ class Animator {
             Object.assign(decorationRendering, decorationRenderings[i]);
             if (!decorationRendering.isMechanicOrSkill) {
                 switch (decorationRendering.type) {
-                    case "ActorOrientation":
+                    case Types.ActorOrientation:
                         this.actorOrientationData.set(decorationRendering.connectedTo.masterId, new FacingMechanicDrawable(decorationRendering));
                         break;
-                    case "MovingPlatform":
+                    case Types.MovingPlatform:
                         this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
                         break;
-                    case "BackgroundIcon":
+                    case Types.BackgroundIcon:
                         this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
                         break;
                     default:
@@ -445,44 +471,44 @@ class Animator {
             } else {
                 let DecorationClass;
                 switch (decorationRendering.type) {
-                    case "Text":
+                    case Types.Text:
                         if (decorationRendering.connectedTo.isScreenSpace) {
                             this.screenSpaceActorData.add(new TextDrawable(decorationRendering));
                             continue;
                         }
                         DecorationClass = TextDrawable;
                         break;
-                    case "Circle":
+                    case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
                         break;
-                    case "Rectangle":
+                    case Types.Rectangle:
                         DecorationClass = RectangleMechanicDrawable;
                         break;
-                    case "ProgressBar":
+                    case Types.ProgressBar:
                         DecorationClass = ProgressBarMechanicDrawable;
                         break;
-                    case "Doughnut":
+                    case Types.Doughnut:
                         DecorationClass = DoughnutMechanicDrawable;
                         break;
-                    case "Pie":
+                    case Types.Pie:
                         DecorationClass = PieMechanicDrawable;
                         break;
-                    case "Line":
+                    case Types.Line:
                         DecorationClass = LineMechanicDrawable;
                         break;
-                    case "Icon":
+                    case Types.Icon:
                         DecorationClass = IconMechanicDrawable;
                         break;
-                    case "IconOverhead":
+                    case Types.IconOverhead:
                         this.overheadActorData.add(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
-                    case "OverheadProgressBar":
+                    case Types.ProgressBarOverhead:
                         this.overheadActorData.add(new OverheadProgressBarMechanicDrawable(decorationRendering));
                         continue;
-                    case "SquadMarker":
+                    case Types.SquadMarker:
                         this.squadMarkerData.add(new IconMechanicDrawable(decorationRendering));
                         continue;
-                    case "OverheadSquadMarker":
+                    case Types.SquadMarkerOverhead:
                         this.overheadSquadMarkerData.add(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     default:

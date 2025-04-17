@@ -9,7 +9,7 @@ public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescr
 
     internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Doughnut";
+        Type = Types.Doughnut;
         OuterRadius = decoration.OuterRadius;
         InnerRadius = decoration.InnerRadius;
     }

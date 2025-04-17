@@ -8,7 +8,7 @@ public class DoughnutDecorationRenderingDescription : FormDecorationRenderingDes
 
     internal DoughnutDecorationRenderingDescription(ParsedEvtcLog log, DoughnutDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        Type = "Doughnut";
+        Type = Types.Doughnut;
     }
 
 }

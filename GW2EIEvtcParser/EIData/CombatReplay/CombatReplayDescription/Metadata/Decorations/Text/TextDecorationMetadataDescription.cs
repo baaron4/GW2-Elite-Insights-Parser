@@ -10,7 +10,7 @@ public class TextDecorationMetadataDescription : DecorationMetadataDescription
     public readonly string? BackgroundColor;
     internal TextDecorationMetadataDescription(TextDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Text";
+        Type = Types.Text;
         Color = decoration.Color;
         BackgroundColor = decoration.BackgroundColor;
     }

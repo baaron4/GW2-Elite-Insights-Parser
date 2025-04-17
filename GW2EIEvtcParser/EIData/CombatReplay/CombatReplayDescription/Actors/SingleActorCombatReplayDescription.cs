@@ -21,29 +21,29 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
 
     public readonly long HitboxWidth;
 
-    private static string GetActorType(SingleActor actor, ParsedEvtcLog log)
+    private static Types GetActorType(SingleActor actor, ParsedEvtcLog log)
     {
         if (actor.AgentItem.IsPlayer)
         {
             if (log.PlayerAgents.Contains(actor.AgentItem))
             {
-                return "Player";
+                return Types.Player;
             }
             if (log.FightData.Logic.NonPlayerFriendlyAgents.Contains(actor.AgentItem))
             {
-                return "FriendlyPlayer";
+                return Types.FriendlyPlayer;
             }
-            return "TargetPlayer";
+            return Types.TargetPlayer;
         }
         if (log.FightData.Logic.TargetAgents.Contains(actor.AgentItem))
         {
-            return "Target";
+            return Types.Target;
         }
         if (log.FightData.Logic.NonPlayerFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
         {
-            return "Friendly";
+            return Types.Friendly;
         }
-        return "Mob";
+        return Types.Mob;
     }
 
     internal SingleActorCombatReplayDescription(SingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay)

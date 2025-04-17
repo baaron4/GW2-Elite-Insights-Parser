@@ -9,7 +9,7 @@ public class RectangleDecorationMetadataDescription : FormDecorationMetadataDesc
 
     internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Rectangle";
+        Type = Types.Rectangle;
         Width = decoration.Width;
         Height = decoration.Height;
     }

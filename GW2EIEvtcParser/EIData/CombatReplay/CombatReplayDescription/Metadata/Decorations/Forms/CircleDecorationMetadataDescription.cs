@@ -9,7 +9,7 @@ public class CircleDecorationMetadataDescription : FormDecorationMetadataDescrip
 
     internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Circle";
+        Type = Types.Circle;
         Radius = decoration.Radius;
         MinRadius = decoration.MinRadius;
     }

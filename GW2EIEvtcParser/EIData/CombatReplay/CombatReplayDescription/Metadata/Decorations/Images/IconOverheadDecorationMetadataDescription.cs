@@ -7,6 +7,6 @@ public class IconOverheadDecorationMetadataDescription : IconDecorationMetadataD
 
     internal IconOverheadDecorationMetadataDescription(IconOverheadDecorationMetadata decoration) : base(decoration)
     {
-        Type = "IconOverhead";
+        Type = Types.IconOverhead;
     }
 }
