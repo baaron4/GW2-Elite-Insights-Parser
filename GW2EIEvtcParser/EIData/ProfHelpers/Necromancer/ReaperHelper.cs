@@ -51,11 +51,11 @@ internal static class ReaperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.sPvPWvW),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.NoPets, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
+        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.Incoming, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
         // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
     ];
 

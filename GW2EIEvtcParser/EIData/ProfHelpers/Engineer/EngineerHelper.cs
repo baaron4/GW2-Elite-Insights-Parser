@@ -166,8 +166,8 @@ internal static class EngineerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_OverShield, Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
-        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_OverShield, Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.Incoming, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
+        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

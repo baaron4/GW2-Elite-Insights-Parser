@@ -245,8 +245,8 @@ internal static class WeaverHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
     ];
 
 

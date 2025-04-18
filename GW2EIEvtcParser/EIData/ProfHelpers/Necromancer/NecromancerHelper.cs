@@ -75,9 +75,9 @@ internal static class NecromancerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
-        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.NoPets, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
             .UsingChecker((dl, log) => dl.To.GetBuffStatus(log, DeathsCarapace, dl.Time).Value >= 10)
             .WithBuilds(GW2Builds.October2019Balance),
     ];

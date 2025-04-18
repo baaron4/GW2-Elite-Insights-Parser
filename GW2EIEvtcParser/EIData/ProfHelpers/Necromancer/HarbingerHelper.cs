@@ -66,7 +66,7 @@ internal static class HarbingerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.Incoming, -50, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

@@ -131,38 +131,38 @@ internal static class RevenantHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.All, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfCondition, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfStrike, RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RiteOfTheGreatDwarfEcho, RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_DemonicResistance, Resistance, "Demonic Resistance", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DemonicResistance, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance),
-        new DamageLogDamageModifier(Mod_CloseQuarters, "Close Quarters", "-10% from foes beyond 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.CloseQuarters, (x,log) =>
+        new DamageLogDamageModifier(Mod_CloseQuarters, "Close Quarters", "-10% from foes beyond 360 range", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.CloseQuarters, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 360
             , DamageModifierMode.All)
             .UsingApproximate(true),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-15% under resolution", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-15% under resolution", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2022FractalInstabilitiesRework),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
-        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
     ];
 

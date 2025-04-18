@@ -51,8 +51,8 @@ internal static class DaredevilHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.WeakeningStrikes, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_UnhideredCombatant, UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.UnhinderedCombatant, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.WeakeningStrikes, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_UnhideredCombatant, UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.UnhinderedCombatant, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

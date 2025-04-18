@@ -116,14 +116,14 @@ internal static class WarriorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, SkillImages.EndurePain, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, SkillImages.EndurePain, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2020Balance),
-        new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_DolyakSignet, DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.DolyakSignet, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DolyakSignet, DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.DolyakSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2024Balance),
     ];
 

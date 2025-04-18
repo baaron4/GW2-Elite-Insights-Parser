@@ -69,13 +69,13 @@ internal static class RenegadeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.NoPets, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.BreakrazorsBastion, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.Incoming, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.BreakrazorsBastion, DamageModifierMode.All),
         //
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-33%", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, TraitImages.RighteousRebel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-33%", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, TraitImages.RighteousRebel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.NoPets, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.Incoming, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.NoPets, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.Incoming, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
     ];
 

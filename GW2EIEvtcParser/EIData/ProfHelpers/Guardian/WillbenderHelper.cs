@@ -86,9 +86,9 @@ internal static class WillbenderHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "50%", DamageSource.Incoming, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "20%", DamageSource.Incoming, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
     ];
 

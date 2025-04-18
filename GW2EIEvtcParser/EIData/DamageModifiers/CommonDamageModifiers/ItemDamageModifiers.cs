@@ -20,21 +20,21 @@ internal static class ItemDamageModifiers
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_FractalDefensive, FractalDefensive, "Fractal Defensive", "-5% per stack", DamageSource.NoPets, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, ItemImages.FractalDefensive, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FractalDefensive, FractalDefensive, "Fractal Defensive", "-5% per stack", DamageSource.Incoming, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, ItemImages.FractalDefensive, DamageModifierMode.PvE),
         // Regroup consumables that reduce inc damage by their reduction instead of adding one modifier per consumable to reduce cluttering
-        new BuffOnActorDamageModifier(Mod_Food8, CanOfStewedOysters, "Food: -8%", "-8%", DamageSource.All, -8.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
+        new BuffOnActorDamageModifier(Mod_Food8, CanOfStewedOysters, "Food: -8%", "-8%", DamageSource.Incoming, -8.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
         new BuffOnActorDamageModifier(Mod_Food10Mult,
             [
                 PlateOfPeppercornSpicedCoqAuVin, MistsInfusedPeppercornCrustedSousVideSteak, PeppercornCrustedSousVideSteak, PlateOfPepperedClearTruffleRavioli,
                 PlateOfPeppercornSpicedBeefCarpaccio, PlateOfPeppercornSpicedPoultryAspic, PeppercornSpicedEggsBenedict, SpicedPepperCremeBrulee,
                 SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad,
                 SpherifiedPeppercornSpicedOysterSoup, MistsInfusedSpherifiedPeppercornSpicedOysterSoup,
-            ], "Ascended Food: -10%", "-10% Multiplicative", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
+            ], "Ascended Food: -10%", "-10% Multiplicative", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
         new BuffOnActorDamageModifier(Mod_Food10Add,
             [
                 FriedOysters, FriedOysterSandwich, OystersWithCocktailSauce, BowlOfLemongrassMusselPasta, BowlOfMusselSoup, PlateOfMusselsGnashblade,
                 OystersWithSpicySauce, OystersGnashblade, OystersWithZestySauce, OystersWithPestoSauce, BowlOfCurryMusselSoup, WeightOfTheWorld,
-            ], "Food: -10%", "-10% Additive", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
+            ], "Food: -10%", "-10% Additive", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, ItemImages.NourishmentFood, DamageModifierMode.PvEWvW),
     ];
 
 }

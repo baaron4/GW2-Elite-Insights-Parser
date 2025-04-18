@@ -40,11 +40,11 @@ internal static class VindicatorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
-        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-33%", DamageSource.NoPets, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
-        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.PvEWvW)
+        new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
     ];
 

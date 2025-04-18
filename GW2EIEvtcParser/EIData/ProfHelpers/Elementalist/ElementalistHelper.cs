@@ -146,9 +146,9 @@ internal static class ElementalistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneFlesh, DamageModifierMode.All),
-        new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.GeomancersTraining, (x,log) => 
+        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.Incoming, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneFlesh, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.GeomancersTraining, (x,log) => 
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 360.0

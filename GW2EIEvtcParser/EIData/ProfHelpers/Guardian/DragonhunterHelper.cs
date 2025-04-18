@@ -94,7 +94,7 @@ internal static class DragonhunterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HuntersFortification, NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, TraitImages.HuntersFortification, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_HuntersFortification, NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.Incoming, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, TraitImages.HuntersFortification, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

@@ -68,13 +68,13 @@ internal static class DeadeyeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.All)
             .UsingChecker(DeadeyesGazeFromSrc)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.sPvPWvW)
             .UsingChecker(DeadeyesGazeFromSrc)
             .WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_IronSight,DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_IronSight,DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, TraitImages.IronSight, DamageModifierMode.PvE)
             .UsingChecker(DeadeyesGazeFromSrc)
             .WithBuilds(GW2Builds.August2022Balance),
     ];

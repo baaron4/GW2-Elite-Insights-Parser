@@ -71,15 +71,15 @@ internal static class SoulbeastHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.PvEWvW)
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-20% under protection", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2024Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-25% under protection", DamageSource.NoPets, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-25% under protection", DamageSource.Incoming, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.October2024Balance),
-        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, SkillImages.DolyakStance, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, SkillImages.DolyakStance, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

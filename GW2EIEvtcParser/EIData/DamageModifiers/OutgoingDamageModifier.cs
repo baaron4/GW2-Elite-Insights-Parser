@@ -6,8 +6,12 @@ namespace GW2EIEvtcParser.EIData;
 
 public class OutgoingDamageModifier : DamageModifier
 {
-    internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor, damageModDescriptor.DmgSrc)
+    internal OutgoingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor)
     {
+        if (damageModDescriptor.DmgSrc == DamageSource.Incoming)
+        {
+            throw new InvalidDataException("OutgoingDamageModifier must not have Incoming Damage Source type");
+        }
         Incoming = false;
     }
 

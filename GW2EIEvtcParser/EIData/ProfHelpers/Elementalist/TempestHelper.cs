@@ -45,7 +45,7 @@ internal static class TempestHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HardyConduit, Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
+        new BuffOnActorDamageModifier(Mod_HardyConduit, Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.Incoming, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
     ];
 
 

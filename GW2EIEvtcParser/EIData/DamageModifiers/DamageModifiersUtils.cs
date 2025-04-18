@@ -7,7 +7,7 @@ internal static class DamageModifiersUtils
 {
 
     public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW, PvEsPvP };
-    public enum DamageSource { All, NoPets, PetsOnly, NotApplicable };
+    public enum DamageSource { All, NoPets, PetsOnly, Incoming };
 
     internal delegate bool DamageLogChecker(HealthDamageEvent dl, ParsedEvtcLog log);
     internal delegate bool ActorChecker(SingleActor actor, ParsedEvtcLog log);

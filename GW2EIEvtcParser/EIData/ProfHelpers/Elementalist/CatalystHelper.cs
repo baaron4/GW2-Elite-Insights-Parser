@@ -63,7 +63,7 @@ internal static class CatalystHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HardenedAuras, HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, TraitImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
+        new BuffOnActorDamageModifier(Mod_HardenedAuras, HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.Incoming, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, TraitImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
     ];
 
 

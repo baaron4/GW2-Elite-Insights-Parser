@@ -59,23 +59,23 @@ internal static class UntamedHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(Mod_PerilousGift, PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, SkillImages.PerilousGift, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_PerilousGift, PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.Incoming, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, SkillImages.PerilousGift, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.April2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-33%", DamageSource.NoPets, -33.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.April2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.PvEWvW)
+        new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.April2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-25% when not unleashed", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-25% when not unleashed", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2022Balance, GW2Builds.February2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-15% when not unleashed", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-15% when not unleashed", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.February2025BalancePatch),
     ];
 

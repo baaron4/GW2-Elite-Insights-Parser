@@ -37,7 +37,7 @@ internal static class SpecterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, SkillImages.EnterShadowShroud, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, SkillImages.EnterShadowShroud, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance),
     ];
 

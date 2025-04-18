@@ -74,7 +74,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.BarrierSignet, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.Incoming, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.BarrierSignet, DamageModifierMode.All),
     ];
 
 

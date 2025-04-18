@@ -79,20 +79,20 @@ internal static class GearDamageModifiers
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Runes
-        new DamageLogDamageModifier(Mod_RuneOfHoelbrak, "Rune of Hoelbrak", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_RuneOfHoelbrak, "Rune of Hoelbrak", "-10% condition damamge", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier(Mod_RuneOfTheStars, "Rune of the Stars", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfTheStars, (x, log) => true, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier(Mod_RuneOfMercy, "Rune of Mercy", "-20%", DamageSource.NoPets, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_RuneOfTheStars, "Rune of the Stars", "-10% condition damamge", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfTheStars, (x, log) => true, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new DamageLogDamageModifier(Mod_RuneOfMercy, "Rune of Mercy", "-20%", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier(Mod_RuneOfTheScrapper, "Rune of the Scrapper", "-10% condition damamge", DamageSource.NoPets, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfTheScrapper, (x,log) =>
+        new DamageLogDamageModifier(Mod_RuneOfTheScrapper, "Rune of the Scrapper", "-10% condition damamge", DamageSource.Incoming, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ItemImages.SuperiorRuneOfTheScrapper, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 600.0
             , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Mod_RuneOfPerplexity, Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new BuffOnFoeDamageModifier(Mod_RuneOfPerplexity, Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         // Relics
-        new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfNourys, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.NoPets, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheSorrow, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfNourys, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.Incoming, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, ItemImages.RelicOfTheSorrow, DamageModifierMode.All),
     ];
 }

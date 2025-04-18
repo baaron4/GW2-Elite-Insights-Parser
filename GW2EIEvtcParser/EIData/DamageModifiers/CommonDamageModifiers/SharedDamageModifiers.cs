@@ -56,12 +56,12 @@ internal static class SharedDamageModifiers
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_Vulnerability, Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_Vulnerability, Vulnerability, "Vulnerability", "1% per Stack", DamageSource.Incoming, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
             .UsingChecker(VulnerabilityActiveCheck),
-        new BuffOnActorDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.All, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_FrostAura, FrostAura, "Frost Aura", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostAura, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_LightAura, LightAura, "Light Aura", "-10%", DamageSource.All, -10.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.LightAura, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_DarkAura, DarkAura, "Dark Aura", "-20%", DamageSource.All, -20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.DarkAura, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_Protection, Protection, "Protection", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.Protection, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_Resolution, Resolution, "Resolution", "-33%", DamageSource.Incoming, -33.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.Resolution, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FrostAura, FrostAura, "Frost Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostAura, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_LightAura, LightAura, "Light Aura", "-10%", DamageSource.Incoming, -10.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.LightAura, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_DarkAura, DarkAura, "Dark Aura", "-20%", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.DarkAura, DamageModifierMode.All),
     ];
 }

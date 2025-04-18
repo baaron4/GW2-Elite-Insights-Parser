@@ -414,8 +414,8 @@ internal static class RangerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_OakheartSlave, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
-        new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_OakheartSlave, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.Incoming, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 

@@ -26,11 +26,11 @@ public abstract class DamageModifier
 
     public bool NeedsMinions => DmgSrc == DamageSource.All || DmgSrc == DamageSource.PetsOnly;
 
-    internal DamageModifier(DamageModifierDescriptor damageModDescriptor, DamageSource dmgSrc)
+    internal DamageModifier(DamageModifierDescriptor damageModDescriptor)
     {
         DamageModDescriptor = damageModDescriptor;
         Tooltip = damageModDescriptor.InitialTooltip;
-        DmgSrc = dmgSrc;
+        DmgSrc = damageModDescriptor.DmgSrc;
         switch (DmgSrc)
         {
             case DamageSource.All:
