@@ -46,24 +46,39 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
+        var res = new List<DamageModifierEvent>();
         if (CheckEarlyExit(actor, log))
         {
-            return [];
+            return res;
         }
-        IReadOnlyDictionary<long, BuffGraph> bgms = actor.GetBuffGraphs(log);
-        if (Skip(Tracker, bgms, GainComputer))
-        {
-            return [];
-        }
-        var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-        foreach (HealthDamageEvent evt in typeHits)
+        if (damageModifier.NeedsMinions)
         {
-            if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
+            foreach (HealthDamageEvent evt in typeHits)
             {
-                res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
+                var singleActor = log.FindActor(evt.From);
+                if (ComputeGain(singleActor.GetBuffGraphs(log), evt, log, out double gain) && CheckCondition(evt, log))
+                {
+                    res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
+                }
+            }
+        } 
+        else
+        {
+            IReadOnlyDictionary<long, BuffGraph> bgms = actor.GetBuffGraphs(log);
+            if (Skip(Tracker, bgms, GainComputer))
+            {
+                return res;
+            }
+            foreach (HealthDamageEvent evt in typeHits)
+            {
+                if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
+                {
+                    res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
+                }
             }
         }
         return res;
+
     }
 }
