@@ -8,7 +8,7 @@ public class IconDecorationMetadataDescription : ImageDecorationMetadataDescript
 
     internal IconDecorationMetadataDescription(IconDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Icon";
+        Type = Types.Icon;
         Opacity = decoration.Opacity;
     }
 }

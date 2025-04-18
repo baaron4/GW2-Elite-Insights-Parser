@@ -8,7 +8,7 @@ public class PieDecorationMetadataDescription : CircleDecorationMetadataDescript
 
     internal PieDecorationMetadataDescription(PieDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Pie";
+        Type = Types.Pie;
         OpeningAngle = decoration.OpeningAngle;
     }
 

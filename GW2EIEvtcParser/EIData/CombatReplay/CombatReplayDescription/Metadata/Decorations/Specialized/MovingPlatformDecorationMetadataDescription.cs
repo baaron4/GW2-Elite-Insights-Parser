@@ -10,7 +10,7 @@ public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationM
 
     internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration) : base(decoration)
     {
-        Type = "MovingPlatform";
+        Type = Types.MovingPlatform;
         Image = decoration.Image;
         Width = decoration.Width;
         Height = decoration.Height;

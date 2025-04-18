@@ -7,7 +7,7 @@ public class PieDecorationRenderingDescription : CircleDecorationRenderingDescri
 {
     internal PieDecorationRenderingDescription(ParsedEvtcLog log, PieDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        Type = "Pie";
+        Type = Types.Pie;
     }
 
 }

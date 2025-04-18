@@ -7,7 +7,7 @@ public class ActorOrientationDecorationMetadataDescription : AttachedDecorationM
 
     internal ActorOrientationDecorationMetadataDescription(ActorOrientationDecorationMetadata decoration) : base(decoration)
     {
-        Type = "ActorOrientation";
+        Type = Types.ActorOrientation;
     }
 
 }

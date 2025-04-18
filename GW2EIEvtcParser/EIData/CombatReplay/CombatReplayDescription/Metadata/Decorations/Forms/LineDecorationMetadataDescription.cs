@@ -9,7 +9,7 @@ public class LineDecorationMetadataDescription : FormDecorationMetadataDescripti
     public readonly uint Thickness;
     internal LineDecorationMetadataDescription(LineDecorationMetadata decoration) : base(decoration)
     {
-        Type = "Line";
+        Type = Types.Line;
         WorldSizeThickness = decoration.WorldSizeThickness;
         Thickness = decoration.Thickness;
     }

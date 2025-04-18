@@ -8,7 +8,7 @@ public class ProgressBarDecorationMetadataDescription : RectangleDecorationMetad
     public readonly string SecondaryColor;
     internal ProgressBarDecorationMetadataDescription(ProgressBarDecorationMetadata decoration) : base(decoration)
     {
-        Type = "ProgressBar";
+        Type = Types.ProgressBar;
         SecondaryColor = decoration.SecondaryColor;
     }
 }

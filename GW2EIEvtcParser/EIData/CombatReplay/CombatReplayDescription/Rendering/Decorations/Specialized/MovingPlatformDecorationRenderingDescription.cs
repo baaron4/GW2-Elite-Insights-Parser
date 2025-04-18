@@ -40,7 +40,7 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
 
     internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)
     {
-        Type = "MovingPlatform";
+        Type = Types.MovingPlatform;
         Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
         {
             (pos.x, pos.y) = map.GetMapCoordRounded(pos.x, pos.y);

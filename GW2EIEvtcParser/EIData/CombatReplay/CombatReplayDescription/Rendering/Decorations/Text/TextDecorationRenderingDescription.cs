@@ -14,7 +14,7 @@ public class TextDecorationRenderingDescription : DecorationRenderingDescription
     internal TextDecorationRenderingDescription(ParsedEvtcLog log, TextDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(decoration, metadataSignature)
     {
         IsMechanicOrSkill = true;
-        Type = "Text";
+        Type = Types.Text;
         Text = decoration.Text;
         FontType = decoration.FontType;
         FontSize = decoration.FontSize;
