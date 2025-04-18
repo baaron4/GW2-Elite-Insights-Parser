@@ -81,7 +81,16 @@ internal static class MesmerHelper
         new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
     ];
-
+    private static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+        if (selfHP < 0.0 || dstHP < 0.0)
+        {
+            return false;
+        }
+        return selfHP > dstHP;
+    }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
@@ -91,36 +100,9 @@ internal static class MesmerHelper
         new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
         new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
         //
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
-        {
-            double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-            double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (selfHP < 0.0 || dstHP < 0.0)
-            {
-                return false;
-            }
-            return selfHP > dstHP;
-        }, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
         //
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
         // Dueling

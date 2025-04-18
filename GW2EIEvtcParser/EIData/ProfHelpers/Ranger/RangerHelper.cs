@@ -26,73 +26,221 @@ internal static class RangerHelper
         (int)MinionID.SpiritOfNatureRenewal,
     ];
 
-    private static HashSet<int> JuvenilePetIDs =
+    private static HashSet<int> JuvenileFelinePetIDs =
     [
-        (int)MinionID.JuvenileAlpineWolf,
-        (int)MinionID.JuvenileArctodus,
-        (int)MinionID.JuvenileArmorFish,
-        (int)MinionID.JuvenileBlackBear,
-        (int)MinionID.JuvenileBlackMoa,
-        (int)MinionID.JuvenileBlackWidowSpider,
-        (int)MinionID.JuvenileBlueJellyfish,
-        (int)MinionID.JuvenileBlueMoa,
-        (int)MinionID.JuvenileBoar,
-        (int)MinionID.JuvenileBristleback,
-        (int)MinionID.JuvenileBrownBear,
-        (int)MinionID.JuvenileCarrionDevourer,
-        (int)MinionID.JuvenileCaveSpider,
         (int)MinionID.JuvenileCheetah,
-        (int)MinionID.JuvenileEagle,
-        (int)MinionID.JuvenileEletricWywern,
-        (int)MinionID.JuvenileFangedIboga,
-        (int)MinionID.JuvenileFernHound,
-        (int)MinionID.JuvenileFireWywern,
-        (int)MinionID.JuvenileForestSpider,
-        (int)MinionID.JuvenileHawk,
-        (int)MinionID.JuvenileIceDrake,
-        (int)MinionID.JuvenileJacaranda,
         (int)MinionID.JuvenileJaguar,
-        (int)MinionID.JuvenileJungleSpider,
         (int)MinionID.JuvenileJungleStalker,
-        (int)MinionID.JuvenileKrytanDrakehound,
-        (int)MinionID.JuvenileLashtailDevourer,
         (int)MinionID.JuvenileLynx,
-        (int)MinionID.JuvenileMarshDrake,
-        (int)MinionID.JuvenileMurellow,
-        (int)MinionID.JuvenileOwl,
-        (int)MinionID.JuvenilePhoenix,
-        (int)MinionID.JuvenilePig,
-        (int)MinionID.JuvenilePinkMoa,
-        (int)MinionID.JuvenilePolarBear,
-        (int)MinionID.JuvenileRainbowJellyfish,
-        (int)MinionID.JuvenileRaven,
-        (int)MinionID.JuvenileRedJellyfish,
-        (int)MinionID.JuvenileRedMoa,
-        (int)MinionID.JuvenileReefDrake,
-        (int)MinionID.JuvenileRiverDrake,
-        (int)MinionID.JuvenileRockGazelle,
-        (int)MinionID.JuvenileSalamanderDrake,
         (int)MinionID.JuvenileSandLion,
-        (int)MinionID.JuvenileShark,
-        (int)MinionID.JuvenileSiamoth,
-        (int)MinionID.JuvenileSiegeTurtle,
-        (int)MinionID.JuvenileSmokescale,
         (int)MinionID.JuvenileSnowLeopard,
         (int)MinionID.JuvenileTiger,
-        (int)MinionID.JuvenileWallow,
-        (int)MinionID.JuvenileWarthog,
-        (int)MinionID.JuvenileWhiptailDevourer,
-        (int)MinionID.JuvenileWhiteMoa,
-        (int)MinionID.JuvenileWhiteRaven,
         (int)MinionID.JuvenileWhiteTiger,
-        (int)MinionID.JuvenileWolf,
+    ];
+
+    private static HashSet<int> JuvenileBirdPetIDs =
+    [
+        (int)MinionID.JuvenileEagle,
+        (int)MinionID.JuvenileHawk,
+        (int)MinionID.JuvenileOwl,
+        (int)MinionID.JuvenileRaven,
+        (int)MinionID.JuvenileWhiteRaven,
+    ];
+
+    private static HashSet<int> JuvenileDrakePetIDs =
+    [
+        (int)MinionID.JuvenileIceDrake,
+        (int)MinionID.JuvenileMarshDrake,
+        (int)MinionID.JuvenileReefDrake,
+        (int)MinionID.JuvenileRiverDrake,
+        (int)MinionID.JuvenileSalamanderDrake,
+    ];
+
+    private static HashSet<int> JuvenileUrsinePetIDs =
+    [
+        (int)MinionID.JuvenileArctodus,
+        (int)MinionID.JuvenileBlackBear,
+        (int)MinionID.JuvenileBrownBear,
+        (int)MinionID.JuvenileMurellow,
+        (int)MinionID.JuvenilePolarBear,
+    ];
+
+    private static HashSet<int> JuvenilePorcinePetIDs =
+    [
+        (int)MinionID.JuvenileBoar,
+        (int)MinionID.JuvenilePig,
+        (int)MinionID.JuvenileSiamoth,
+        (int)MinionID.JuvenileWarthog,
+    ];
+
+    private static HashSet<int> JuvenileMoaPetIDs =
+    [
+        (int)MinionID.JuvenileBlackMoa,
+        (int)MinionID.JuvenileBlueMoa,
+        (int)MinionID.JuvenilePinkMoa,
+        (int)MinionID.JuvenileRedMoa,
+        (int)MinionID.JuvenileWhiteMoa,
+    ];
+    private static HashSet<int> JuvenileSpiderPetIDs =
+    [
+        (int)MinionID.JuvenileBlackWidowSpider,
+        (int)MinionID.JuvenileCaveSpider,
+        (int)MinionID.JuvenileForestSpider,
+        (int)MinionID.JuvenileJungleSpider,
+    ];
+
+    private static HashSet<int> JuvenileDevourerPetIDs =
+    [
+        (int)MinionID.JuvenileCarrionDevourer,
+        (int)MinionID.JuvenileLashtailDevourer,
+        (int)MinionID.JuvenileWhiptailDevourer,
+    ]; 
+    
+    private static HashSet<int> JuvenileCaninePetIDs =
+    [
+        (int)MinionID.JuvenileAlpineWolf,
+        (int)MinionID.JuvenileFernHound,
         (int)MinionID.JuvenileHyena,
+        (int)MinionID.JuvenileKrytanDrakehound,
+        (int)MinionID.JuvenileWolf,
+    ];
+
+    private static HashSet<int> JuvenileJellyfishPetIDs =
+    [
+        (int)MinionID.JuvenileBlueJellyfish,
+        (int)MinionID.JuvenileRainbowJellyfish,
+        (int)MinionID.JuvenileRedJellyfish,
+    ];
+
+    private static HashSet<int> JuvenileWyvernPetIDs =
+    [
+        (int)MinionID.JuvenileEletricWywern,
+        (int)MinionID.JuvenileFireWywern,
+    ];
+
+    private static HashSet<int> JuvenilePetIDs = (HashSet<int>) new HashSet<int>() { 
+        (int)MinionID.JuvenileArmorFish,
+        (int)MinionID.JuvenileBristleback,
+        (int)MinionID.JuvenileFangedIboga,
+        (int)MinionID.JuvenileJacaranda,
+        (int)MinionID.JuvenilePhoenix,
+        (int)MinionID.JuvenileRockGazelle,
+        (int)MinionID.JuvenileShark,
+        (int)MinionID.JuvenileSiegeTurtle,
+        (int)MinionID.JuvenileSmokescale,
+        (int)MinionID.JuvenileWallow,
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
         (int)MinionID.JuvenileWarclaw,
         (int)MinionID.JuvenileJanthiriBee,
-    ];
+    }
+    .Union(JuvenileFelinePetIDs)
+    .Union(JuvenileBirdPetIDs)
+    .Union(JuvenileDrakePetIDs)
+    .Union(JuvenileUrsinePetIDs)
+    .Union(JuvenilePorcinePetIDs)
+    .Union(JuvenileMoaPetIDs)
+    .Union(JuvenileSpiderPetIDs)
+    .Union(JuvenileDevourerPetIDs)
+    .Union(JuvenileCaninePetIDs)
+    .Union(JuvenileJellyfishPetIDs)
+    .Union(JuvenileWyvernPetIDs);
+
+    internal static bool IsJuvelineFelinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileFelinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineBirdPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileBirdPetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineDrakePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileDrakePetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineUrsinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileUrsinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelinePorcinePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenilePorcinePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineMoaPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileMoaPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineSpiderPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileSpiderPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineDevourerPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileDevourerPetIDs.Contains(agentItem.ID);
+    }
+    internal static bool IsJuvelineCaninePet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileCaninePetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineJellyfishPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileJellyfishPetIDs.Contains(agentItem.ID);
+    }
+
+    internal static bool IsJuvelineWyvernPet(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return JuvenileWyvernPetIDs.Contains(agentItem.ID);
+    }
 
     private static bool IsJuvenilePetID(int id)
     {
@@ -117,146 +265,127 @@ internal static class RangerHelper
     [
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
-        new BuffGainCastFinder(SicEmSkill, SicEmBuff).WithMinions(true),
-        new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff).WithMinions(true),
-        new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
-        new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive).UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
+        new BuffGainCastFinder(SicEmSkill, SicEmBuff)
+            .WithMinions(true),
+        new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
+            .WithMinions(true),
+        new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
+        new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
+            .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 5000) < ServerDelayConstant)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
         new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
-        new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(EvasivePurity, EvasivePurity).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(QuickDraw, QuickDraw)
+            .UsingAfterWeaponSwap(true)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(WindborneNotes, WindborneNotes)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EXTHealingCastFinder(EvasivePurity, EvasivePurity)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTBarrierCastFinder(ProtectMe, ProtectMe),
-        new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
-        new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff).UsingICD(1100).UsingNotAccurate(true),
-        new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes).UsingSrcBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
-        new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs).UsingNotAccurate(true),
+        new BuffGiveCastFinder(GuardSkill, GuardBuff)
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
+        new BuffGiveCastFinder(LesserGuardSkill, GuardBuff)
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
+            .UsingICD(1100).UsingNotAccurate(true),
+        new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
+            .UsingSrcBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
+            .UsingDstBaseSpecChecker(Spec.Ranger),
+        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
+            .UsingNotAccurate(true),
     ];
 
+    private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
+    {
+        AgentItem src = x.From;
+        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+        if (effectApply != null)
+        {
+            return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+        }
+        return false;
+    }
+
+    private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.Skill.IsWeaponSkill
+        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+        && (currentPosition - currentTargetPosition).Length() <= 600;
+    }
+    private static bool TargetAbove600Range(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.Skill.IsWeaponSkill
+        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+        && (currentPosition - currentTargetPosition).Length() > 600;
+    }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Skills
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All).UsingChecker( (x, log) => {
-            AgentItem src = x.From;
-            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
-            if (effectApply != null)
-            {
-                return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
-            }
-            return false;
-        }).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.sPvPWvW)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
+            .UsingChecker(SicEmFromDst)
+            .WithBuilds(GW2Builds.May2021Balance),
         // Marksmanship
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill 
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvP)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
         //
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-            x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.sPvP)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvP)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, (x, log) =>
-                x.Skill.IsWeaponSkill
-                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() > 600
-            , DamageModifierMode.PvEWvW)
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All).UsingApproximate(true),
+        new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
+            .UsingApproximate(true),
         // Skirmishing
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
         // Nature Magic
         // We can't check buffs on minions yet
@@ -274,6 +403,13 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
+        //
+        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvelineUrsinePet(x.From) || IsJuvelinePorcinePet(x.From) , DamageModifierMode.All)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -297,19 +433,29 @@ internal static class RangerHelper
         new Buff("Signet of the Hunt (Pet)", SignetOfTheHuntPetBuff, Source.Ranger, BuffClassification.Other, SkillImages.SignetOfTheHunt),
         // Spirits
         // new Boon("Water Spirit (old)", 50386, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, SkillImages.WaterSpirit),
-        new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
-        new Buff("Sun Spirit", SunSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
-        new Buff("Stone Spirit", StoneSpiritOld, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Frost Spirit", FrostSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Sun Spirit", SunSpiritOld, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
+        new Buff("Stone Spirit", StoneSpiritOld, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2018Balance),
         //new Boon("Storm Spirit (old)", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, SkillImages.StormSpirit),
         // Spirits reworked
-        new Buff("Water Spirit", WaterSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.WaterSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Frost Spirit", FrostSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Sun Spirit", SunSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Stone Spirit", StoneSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, SkillImages.StormSpirit).WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Water Spirit", WaterSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.WaterSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Frost Spirit", FrostSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.FrostSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Sun Spirit", SunSpiritBuff, Source.Ranger, BuffClassification.Offensive, SkillImages.SunSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Stone Spirit", StoneSpiritBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.StoneSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        new Buff("Storm Spirit", StormSpiritBuff, Source.Ranger, BuffClassification.Support, SkillImages.StormSpirit)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
         // Skills
-        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, SkillImages.CallOfTheWild).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
+        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffClassification.Other, SkillImages.CallOfTheWild)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new Buff("Call of the Wild", CallOfTheWild, Source.Ranger, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.CallOfTheWild)
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
         new Buff("Strength of the Pack!", StrengthOfThePack, Source.Ranger, BuffClassification.Other, SkillImages.StrengthOfThePack),
         new Buff("Sic 'Em!", SicEmBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
         new Buff("Sic 'Em! (PvP)", SicEmPvPBuff, Source.Ranger, BuffClassification.Other, SkillImages.SicEm),
@@ -317,11 +463,13 @@ internal static class RangerHelper
         new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SharpenSpines),
         new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Defensive, SkillImages.Guard),
         new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, SkillImages.SearchAndRescue),
-        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, SkillImages.AncestralGrace)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // Traits
         new Buff("Attack of Opportunity", AttackOfOpportunity, Source.Ranger, BuffClassification.Other, TraitImages.MomentOfClarity),
         new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, TraitImages.ClarionBond),
-        new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, TraitImages.Spotter).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+        new Buff("Spotter", Spotter, Source.Ranger, BuffClassification.Offensive, TraitImages.Spotter)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Opening Strike", OpeningStrike, Source.Ranger, BuffClassification.Other, TraitImages.OpeningStrike),
         new Buff("Quick Draw", QuickDraw, Source.Ranger, BuffClassification.Other, TraitImages.QuickDraw),
         new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, TraitImages.LightOnYourFeet),

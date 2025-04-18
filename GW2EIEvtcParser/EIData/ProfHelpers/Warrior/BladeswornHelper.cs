@@ -14,15 +14,22 @@ internal static class BladeswornHelper
     /////////////////////
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new BuffLossCastFinder(GunsaberSheath, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
-        new BuffGainCastFinder(Gunsaber, GunsaberMode).WithBuilds(GW2Builds.EODBeta2).UsingBeforeWeaponSwap(true),
-        new DamageCastFinder(UnseenSword, UnseenSword).WithBuilds(GW2Builds.EODBeta2).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffLossCastFinder(GunsaberSheath, GunsaberMode)
+            .WithBuilds(GW2Builds.EODBeta2)
+            .UsingBeforeWeaponSwap(true),
+        new BuffGainCastFinder(Gunsaber, GunsaberMode)
+            .WithBuilds(GW2Builds.EODBeta2)
+            .UsingBeforeWeaponSwap(true),
+        new DamageCastFinder(UnseenSword, UnseenSword)
+            .WithBuilds(GW2Builds.EODBeta2)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(FlowStabilizer, PositiveFlow)
             .UsingChecker((bae, combatData, agentData, skillData) =>
             {
                 return 2 == CombatData.FindRelatedEvents(combatData.GetBuffDataByIDByDst(PositiveFlow, bae.To).OfType<BuffApplyEvent>(), bae.Time).Count(apply => apply.By == bae.To);
             }),
-        new EffectCastFinder(DragonspikeMineSkill, EffectGUIDs.BladeswornDragonspikeMine).UsingSrcSpecChecker(Spec.Bladesworn),
+        new EffectCastFinder(DragonspikeMineSkill, EffectGUIDs.BladeswornDragonspikeMine)
+            .UsingSrcSpecChecker(Spec.Bladesworn),
     ];
 
     private static readonly HashSet<long> _gunsaberForm =
@@ -50,7 +57,8 @@ internal static class BladeswornHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
@@ -64,7 +72,8 @@ internal static class BladeswornHelper
         new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, SkillImages.CombatStimulant),
         new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.GunsAndGlory),
         new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, SkillImages.TacticalReload),
-        new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance),
+        new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.OverchargedCartridges)
+            .WithBuilds(GW2Builds.June2022Balance),
     ];
 
 

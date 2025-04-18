@@ -42,7 +42,7 @@ internal static class ChronomancerHelper
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
 
-    private static HashSet<int> NonCloneMinions = [];
+    private static readonly HashSet<int> NonCloneMinions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return NonCloneMinions.Contains(id);

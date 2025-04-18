@@ -22,6 +22,7 @@ public abstract partial class SingleActor : Actor
     private Dictionary<long, Minions>? _minions;
     // Replay
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsHitDamageEvents = [];
     private CombatReplay? CombatReplay;
     // Statistics
     private CachingCollectionWithTarget<DamageStatistics>? _dpsStats;
@@ -734,6 +735,21 @@ public abstract partial class SingleActor : Actor
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
             dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+            hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+
+    internal IReadOnlyList<HealthDamageEvent> GetJustMinionsHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
+    {
+        if (!_typedMinionsHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
+        {
+            hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
+            _typedMinionsHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+        }
+        if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
+        {
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != AgentItem).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;

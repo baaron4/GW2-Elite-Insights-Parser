@@ -40,13 +40,19 @@ internal static class RenegadeHelper
     [
         new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
         //
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.April2025BalancePatch),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervorConditionLifeLeech, ImprovedKallasFervor, "Improved Kalla's Fervor (Condition and Lifeleech)", "3% per stack", DamageSource.NoPets, 3.0, DamageType.ConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervorStrike, ImprovedKallasFervor, "Improved Kalla's Fervor (Strike)", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
         //
         new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),

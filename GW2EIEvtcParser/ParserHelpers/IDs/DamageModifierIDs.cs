@@ -332,5 +332,11 @@ public static class DamageModifierIDs
     public const int Mod_RelicOfTheEagle = 319;
     public const int Mod_UnstrippableProtection = 320;
     public const int Mod_UnstrippableResolution = 321;
+    public const int Mod_TyrantsLethalTempoStrike = 322;
+    public const int Mod_TyrantsLethalTempoCondition = 323;
+    public const int Mod_ImprovedKallasFervorStrike = 324;
+    public const int Mod_ImprovedKallasFervorConditionLifeLeech = 325;
+    public const int Mod_Wolfsong = 326;
+    public const int Mod_BeastlyWardenPetOnly = 327;
 }
 

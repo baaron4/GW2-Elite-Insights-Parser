@@ -51,21 +51,25 @@ internal static class MechanistHelper
         new MinionCastCastFinder(SkyCircus, SkyCircus),
     ];
 
+    private static bool WithMechChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        // Need to check mech specy id for those
         new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.EODBeta4)
-            .UsingChecker((x,log) =>
-            {
-                return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
-            }),
+            .WithBuilds(GW2Builds.EODBeta4, GW2Builds.April2025BalancePatch)
+            .UsingChecker(WithMechChecker),
+        new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2025BalancePatch)
+            .UsingChecker(WithMechChecker),
+        new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "15%, including Mech", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2025BalancePatch)
+            .UsingChecker(WithMechChecker),
         new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.SuperconductingSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
-            .UsingChecker((x,log) =>
-            {
-                return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
-            }),
+            .UsingChecker(WithMechChecker),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

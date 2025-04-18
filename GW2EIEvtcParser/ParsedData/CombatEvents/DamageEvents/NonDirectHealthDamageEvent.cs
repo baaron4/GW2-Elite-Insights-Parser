@@ -4,12 +4,10 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class NonDirectHealthDamageEvent : HealthDamageEvent
 {
-    private readonly BuffCycle _cycle;
-
-    public bool IsLifeLeech => _cycle == BuffCycle.NotCycle_DamageToTargetOnHit || _cycle == BuffCycle.NotCycle_DamageToTargetOnStackRemove;
-
     internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ConditionResult result) : base(evtcItem, agentData, skillData)
     {
+        var cycle = GetBuffCycle(evtcItem.IsOffcycle);
+        IsLifeLeech = cycle == BuffCycle.NotCycle_DamageToTargetOnHit || cycle == BuffCycle.NotCycle_DamageToTargetOnStackRemove;
         HealthDamage = evtcItem.BuffDmg;
         IsAbsorbed = result == ConditionResult.InvulByBuff ||
             result == ConditionResult.InvulByPlayerSkill1 ||
@@ -17,7 +15,6 @@ public class NonDirectHealthDamageEvent : HealthDamageEvent
             result == ConditionResult.InvulByPlayerSkill3;
         HasHit = result == ConditionResult.ExpectedToHit;
         ShieldDamage = evtcItem.IsShields > 0 ? HealthDamage : 0;
-        _cycle = GetBuffCycle(evtcItem.IsOffcycle);
         AgainstDowned = evtcItem.Pad1 == 1;
     }
 

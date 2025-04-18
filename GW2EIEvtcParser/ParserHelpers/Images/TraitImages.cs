@@ -156,6 +156,9 @@ internal static class TraitImages
     public const string SecondSkin = "https://wiki.guildwars2.com/images/5/51/Second_Skin.png";
     public const string ImplacableFoe = "https://wiki.guildwars2.com/images/7/79/Implacable_Foe.png";
     public const string Spotter = "https://wiki.guildwars2.com/images/b/b0/Spotter.png";
+    public const string FangAndClaw = "https://render.guildwars2.com/file/F56EB274FA516609317A6540ABC20B6116C8051D/3613096.png";
+    public const string Wolfsong = "https://render.guildwars2.com/file/55D102432B71E1E26280DF6118AE5663650FEAA3/3613094.png";
+    public const string BeastlyWarden = "https://render.guildwars2.com/file/EF61D1061135B1EC57FDFD94795ED125D43962E1/1012612.png";
     public const string OpeningStrike = "https://render.guildwars2.com/file/A537B362D8AC54BC7907E050B596BA93E4CBE5F2/1012627.png";
     public const string QuickDraw = "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png";
     public const string SteadyFocus = "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png";

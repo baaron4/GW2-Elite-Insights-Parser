@@ -83,6 +83,8 @@ public static class ParserHelper
         Condition = 1 << 2,
         StrikeAndCondition = Strike | Condition, // Common
         LifeLeech = 1 << 3,
+        StrikeAndLifeLeech = Strike | LifeLeech, // Common
+        ConditionAndLifeLeech = Condition | LifeLeech, // Common
         StrikeAndConditionAndLifeLeech = Strike | Condition | LifeLeech, // Common
     };
     public static string DamageTypeToString(this DamageType damageType)

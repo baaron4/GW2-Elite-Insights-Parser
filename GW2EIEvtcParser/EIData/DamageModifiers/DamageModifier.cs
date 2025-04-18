@@ -24,6 +24,8 @@ public abstract class DamageModifier
 
     public bool Incoming { get; protected set; }
 
+    public bool NeedsMinions => DmgSrc == DamageSource.All || DmgSrc == DamageSource.PetsOnly;
+
     internal DamageModifier(DamageModifierDescriptor damageModDescriptor, DamageSource dmgSrc)
     {
         DamageModDescriptor = damageModDescriptor;
@@ -33,6 +35,9 @@ public abstract class DamageModifier
         {
             case DamageSource.All:
                 Tooltip += "<br>Actor + Minions";
+                break;
+            case DamageSource.PetsOnly:
+                Tooltip += "<br>Minions only";
                 break;
             case DamageSource.NoPets:
                 Tooltip += "<br>No Minions";

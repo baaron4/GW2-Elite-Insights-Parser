@@ -17,6 +17,8 @@ public abstract class HealthDamageEvent : DamageEvent
     public bool IsBlocked { get; protected set; }
     public bool IsEvaded { get; protected set; }
 
+    public bool IsLifeLeech { get; protected set; } = false;
+
     internal HealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
     }
