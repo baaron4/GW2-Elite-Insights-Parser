@@ -130,9 +130,7 @@ public class OutgoingDamageModifier : DamageModifier
             case DamageSource.NoPets:
                 return actor.GetJustActorHitDamageEvents(t, log, start, end, SrcType);
             case DamageSource.PetsOnly:
-                var result = actor.GetHitDamageEvents(t, log, start, end, SrcType).ToList();
-                result.RemoveAll(x => x.CreditedFrom == x.From);
-                return result;
+                return actor.GetJustMinionsHitDamageEvents(t, log, start, end, SrcType);
         }
         throw new NotImplementedException("Not implemented damage source " + DmgSrc);
     }
