@@ -802,3 +802,64 @@ td.approximate::before {
     overflow: auto;
     overscroll-behavior: contain;
 }
+
+.card-header {
+    padding: 0.25rem 1.25rem !important;
+}
+
+.card-header-fightMode {
+    padding: 0.10rem 1.25rem;
+    margin-bottom: 0px;
+}
+
+.card-body-encounter {
+    padding: 1rem !important;
+}
+
+/* Fight Mode Header - Light Theme */
+.fightModeStory-light {
+    background-color: #EEEEEE;
+}
+
+.fightModeEmboldened-light {
+    background-color: #39925A;
+}
+
+.fightModeNormal-light {
+    background-color: #00779E;
+}
+
+.fightModeChallenge-light {
+    background-color: #E99002;
+}
+
+.fightModeLegendary-light {
+    background-color: #C9A0FF;
+}
+
+/* Fight Mode Header - Dark Theme */
+.fightModeStory-dark {
+    background-color: #515960;
+}
+
+.fightModeEmboldened-dark {
+    background-color: #036E09;
+}
+
+.fightModeNormal-dark {
+    background-color: #0C5E94;
+}
+
+.fightModeChallenge-dark {
+    background-color: #736625;
+}
+
+.fightModeLegendary-dark {
+    background-color: #6C4DA3;
+}
+
+.healthBar {
+    height: 7px;
+    width: 100%;
+    border-radius: 5px;
+}
