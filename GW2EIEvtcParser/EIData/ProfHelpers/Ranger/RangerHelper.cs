@@ -26,7 +26,7 @@ internal static class RangerHelper
         (int)MinionID.SpiritOfNatureRenewal,
     ];
 
-    private static HashSet<int> JuvenileFelinePetIDs =
+    private static readonly HashSet<int> JuvenileFelinePetIDs =
     [
         (int)MinionID.JuvenileCheetah,
         (int)MinionID.JuvenileJaguar,
@@ -47,7 +47,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileWhiteRaven,
     ];
 
-    private static HashSet<int> JuvenileDrakePetIDs =
+    private static readonly HashSet<int> JuvenileDrakePetIDs =
     [
         (int)MinionID.JuvenileIceDrake,
         (int)MinionID.JuvenileMarshDrake,
@@ -56,7 +56,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSalamanderDrake,
     ];
 
-    private static HashSet<int> JuvenileUrsinePetIDs =
+    private static readonly HashSet<int> JuvenileUrsinePetIDs =
     [
         (int)MinionID.JuvenileArctodus,
         (int)MinionID.JuvenileBlackBear,
@@ -65,7 +65,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenilePolarBear,
     ];
 
-    private static HashSet<int> JuvenilePorcinePetIDs =
+    private static readonly HashSet<int> JuvenilePorcinePetIDs =
     [
         (int)MinionID.JuvenileBoar,
         (int)MinionID.JuvenilePig,
@@ -73,7 +73,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileWarthog,
     ];
 
-    private static HashSet<int> JuvenileMoaPetIDs =
+    private static readonly HashSet<int> JuvenileMoaPetIDs =
     [
         (int)MinionID.JuvenileBlackMoa,
         (int)MinionID.JuvenileBlueMoa,
@@ -81,7 +81,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileRedMoa,
         (int)MinionID.JuvenileWhiteMoa,
     ];
-    private static HashSet<int> JuvenileSpiderPetIDs =
+    private static readonly HashSet<int> JuvenileSpiderPetIDs =
     [
         (int)MinionID.JuvenileBlackWidowSpider,
         (int)MinionID.JuvenileCaveSpider,
@@ -89,14 +89,14 @@ internal static class RangerHelper
         (int)MinionID.JuvenileJungleSpider,
     ];
 
-    private static HashSet<int> JuvenileDevourerPetIDs =
+    private static readonly HashSet<int> JuvenileDevourerPetIDs =
     [
         (int)MinionID.JuvenileCarrionDevourer,
         (int)MinionID.JuvenileLashtailDevourer,
         (int)MinionID.JuvenileWhiptailDevourer,
     ]; 
     
-    private static HashSet<int> JuvenileCaninePetIDs =
+    private static readonly HashSet<int> JuvenileCaninePetIDs =
     [
         (int)MinionID.JuvenileAlpineWolf,
         (int)MinionID.JuvenileFernHound,
@@ -105,20 +105,20 @@ internal static class RangerHelper
         (int)MinionID.JuvenileWolf,
     ];
 
-    private static HashSet<int> JuvenileJellyfishPetIDs =
+    private static readonly HashSet<int> JuvenileJellyfishPetIDs =
     [
         (int)MinionID.JuvenileBlueJellyfish,
         (int)MinionID.JuvenileRainbowJellyfish,
         (int)MinionID.JuvenileRedJellyfish,
     ];
 
-    private static HashSet<int> JuvenileWyvernPetIDs =
+    private static readonly HashSet<int> JuvenileWyvernPetIDs =
     [
         (int)MinionID.JuvenileEletricWywern,
         (int)MinionID.JuvenileFireWywern,
     ];
 
-    private static HashSet<int> JuvenilePetIDs = (HashSet<int>) new HashSet<int>() { 
+    private static readonly HashSet<int> JuvenilePetIDs = new HashSet<int>() { 
         (int)MinionID.JuvenileArmorFish,
         (int)MinionID.JuvenileBristleback,
         (int)MinionID.JuvenileFangedIboga,
@@ -145,7 +145,8 @@ internal static class RangerHelper
     .Union(JuvenileDevourerPetIDs)
     .Union(JuvenileCaninePetIDs)
     .Union(JuvenileJellyfishPetIDs)
-    .Union(JuvenileWyvernPetIDs);
+    .Union(JuvenileWyvernPetIDs)
+    .ToHashSet();
 
     internal static bool IsJuvenileFelinePet(AgentItem agentItem)
     {
