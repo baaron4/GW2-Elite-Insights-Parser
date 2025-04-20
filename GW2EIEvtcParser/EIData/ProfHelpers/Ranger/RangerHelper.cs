@@ -147,7 +147,7 @@ internal static class RangerHelper
     .Union(JuvenileJellyfishPetIDs)
     .Union(JuvenileWyvernPetIDs);
 
-    internal static bool IsJuvelineFelinePet(AgentItem agentItem)
+    internal static bool IsJuvenileFelinePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -156,7 +156,7 @@ internal static class RangerHelper
         return JuvenileFelinePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelineBirdPet(AgentItem agentItem)
+    internal static bool IsJuvenileBirdPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -165,7 +165,7 @@ internal static class RangerHelper
         return JuvenileBirdPetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelineDrakePet(AgentItem agentItem)
+    internal static bool IsJuvenileDrakePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -173,7 +173,7 @@ internal static class RangerHelper
         }
         return JuvenileDrakePetIDs.Contains(agentItem.ID);
     }
-    internal static bool IsJuvelineUrsinePet(AgentItem agentItem)
+    internal static bool IsJuvenileUrsinePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -182,7 +182,7 @@ internal static class RangerHelper
         return JuvenileUrsinePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelinePorcinePet(AgentItem agentItem)
+    internal static bool IsJuvenilePorcinePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -191,7 +191,7 @@ internal static class RangerHelper
         return JuvenilePorcinePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelineMoaPet(AgentItem agentItem)
+    internal static bool IsJuvenileMoaPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -199,7 +199,7 @@ internal static class RangerHelper
         }
         return JuvenileMoaPetIDs.Contains(agentItem.ID);
     }
-    internal static bool IsJuvelineSpiderPet(AgentItem agentItem)
+    internal static bool IsJuvenileSpiderPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -207,7 +207,7 @@ internal static class RangerHelper
         }
         return JuvenileSpiderPetIDs.Contains(agentItem.ID);
     }
-    internal static bool IsJuvelineDevourerPet(AgentItem agentItem)
+    internal static bool IsJuvenileDevourerPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -215,7 +215,7 @@ internal static class RangerHelper
         }
         return JuvenileDevourerPetIDs.Contains(agentItem.ID);
     }
-    internal static bool IsJuvelineCaninePet(AgentItem agentItem)
+    internal static bool IsJuvenileCaninePet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -224,7 +224,7 @@ internal static class RangerHelper
         return JuvenileCaninePetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelineJellyfishPet(AgentItem agentItem)
+    internal static bool IsJuvenileJellyfishPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -233,7 +233,7 @@ internal static class RangerHelper
         return JuvenileJellyfishPetIDs.Contains(agentItem.ID);
     }
 
-    internal static bool IsJuvelineWyvernPet(AgentItem agentItem)
+    internal static bool IsJuvenileWyvernPet(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
@@ -408,7 +408,10 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.April2025BalancePatch),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.April2025BalancePatch),
-        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvelineUrsinePet(x.From) || IsJuvelinePorcinePet(x.From) , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From) , DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => {
+                return a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.Value.ReferenceAgentItem) || IsJuvenilePorcinePet(x.Value.ReferenceAgentItem));
+            })
             .WithBuilds(GW2Builds.April2025BalancePatch),
     ];
 

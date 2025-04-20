@@ -56,6 +56,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
         GainComputer = gainComputer;
         Mode = mode;
         _dlCheckers = [];
+        _earlyExitCheckers = [];
     }
 
     internal DamageModifierDescriptor WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
