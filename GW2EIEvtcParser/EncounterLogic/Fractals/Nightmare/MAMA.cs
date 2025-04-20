@@ -78,12 +78,7 @@ internal class MAMA : Nightmare
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
         phases[0].AddTarget(mama);
-        var knightIds = new List<TargetID>
-        {
-            TargetID.GreenKnight,
-            TargetID.RedKnight,
-            TargetID.BlueKnight,
-        };
+        var knightIds = KnightPhases.Select((pair) => pair.Item1).ToList();
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
@@ -97,10 +92,17 @@ internal class MAMA : Nightmare
             if (i % 2 == 0)
             {
                 AddTargetsToPhaseAndFit(phase, knightIds, log);
+                phase.Name = "Split " + i / 2;
                 if (phase.Targets.Count > 0)
                 {
-                    SingleActor phaseTar = phase.Targets.Keys.First();
-                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string? phaseName) ? phaseName : "Unknown";
+                    foreach (var (species, name) in KnightPhases)
+                    {
+                        if (phase.Targets.Keys.Any(target => target.IsSpecies(species)))
+                        {
+                            phase.Name = name;
+                            break;
+                        }
+                    }
                 }
             }
             else
@@ -140,11 +142,12 @@ internal class MAMA : Nightmare
         return trashIDs;
     }
 
-    private static readonly Dictionary<int, string> PhaseNames = new()
+    private static readonly List<(TargetID, string)> KnightPhases = new()
     {
-        { (int)TargetID.GreenKnight, "Green Knight" },
-        { (int)TargetID.RedKnight, "Red Knight" },
-        { (int)TargetID.BlueKnight, "Blue Knight" }
+        // reverse order for phase name priority
+        (TargetID.BlueKnight, "Blue Knight"),
+        (TargetID.GreenKnight, "Green Knight"),
+        (TargetID.RedKnight, "Red Knight"),
     };
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
