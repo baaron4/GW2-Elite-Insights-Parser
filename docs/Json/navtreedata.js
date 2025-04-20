@@ -43,10 +43,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#aa1fa708744f90014d3d7fe0d1fe6b46a",
-"class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#aae43e3f93a1c58a3889ae01eb858d761",
-"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aef542a4c7fef69d6241918b5a3adb026",
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab2ed1d3f0ecfb1c6af3b8e885c262fc7"
+"class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc",
+"class_g_w2_e_i_j_s_o_n_1_1_json_log.html#afb9e8015dcf0c93b4a1a4ca45566f025",
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aca1eb483924c6e3cc30fb572ed40dec6",
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#af1dea7f6523746ef87dcd2f8d3022a77"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
