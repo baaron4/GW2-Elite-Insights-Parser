@@ -111,7 +111,11 @@ public static class EffectGUIDs
     public static readonly GUID VirtuosoBladeturnRequiem = new("87B761200637AC48B71469F553BA6F60");
     public static readonly GUID VirtuosoRainOfSwords = new("83834EDBA8E79946A6D5665E3519B72C");
     public static readonly GUID VirtuosoThousandCuts = new("E4002B7AD7DF024394D0184B47A316E7");
-    public static readonly GUID MesmerRifleAbstraction = new("90A4ECA144416A4790FC0D68EB0C1A8C");
+    public static readonly GUID MesmerRifleInspiringImagery = new ("90A4ECA144416A4790FC0D68EB0C1A8C"); // 0 Duration - Src Mesmer Dst Mesmer
+    public static readonly GUID MesmerRifleInspiringImagery2 = new ("B540F7C3B88A9641892E794C141BE803"); // 2000 Duration - Src Mesmer - Ground AoE
+    public static readonly GUID MesmerRifleInspiringImagery3 = new ("116644F736CDFE4F8FF3E1EB5C5C57A2"); // 2000 Duration - Src Mesmer - Ground AoE
+    public static readonly GUID MesmerRifleAbstraction = new ("6E2B9CF3E5C95846B15BBD1EAA9B3E98"); // 3300 Default Duration - Src Mesmer - Ground Effect
+    public static readonly GUID MesmerRifleAbstraction2 = new ("593E668A006AB24D84999AED68F2E4C4"); // 2000 Default Duration - Src Mesmer - Ground Effect
     // public static readonly GUID MirageJauntConflict1                    = new("B6557C336041B24FA7CC198B6EBDAD9A"); // used with e.g. jaunt & axes of symmetry
     // public static readonly GUID MirageJauntConflict2                    = new("D7A05478BA0E164396EB90C037DCCF42"); // used with e.g. jaunt, axes of symmetry, illusionary ambush
     // public static readonly GUID MesmerTrail                             = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
