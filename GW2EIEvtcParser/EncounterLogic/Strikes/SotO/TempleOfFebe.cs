@@ -3,7 +3,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -271,6 +273,27 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
         }
         return phases;
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        long startToUse = GetGenericFightOffset(fightData);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            var enterCombatTime = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            var cerus = agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
+            var spawnEvent = combatData.Where(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(cerus)).FirstOrDefault();
+            if (spawnEvent != null && enterCombatTime >= spawnEvent.Time)
+            {
+                return spawnEvent.Time;
+            } 
+            else
+            {
+                return cerus.FirstAware;
+            }
+        }
+        return startToUse;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
