@@ -288,10 +288,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             {
                 return spawnEvent.Time;
             } 
-            else
-            {
-                return cerus.FirstAware;
-            }
+            return cerus.FirstAware;
         }
         return startToUse;
     }

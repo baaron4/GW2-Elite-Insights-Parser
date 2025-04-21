@@ -6,6 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -180,6 +181,30 @@ internal class DecimaTheStormsinger : MountBalrior
             new DamageCastFinder(ThrummingPresenceBuff, ThrummingPresenceDamage),
             new DamageCastFinder(ThrummingPresenceBuffCM, ThrummingPresenceDamageCM),
         ];
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        long startToUse = GetGenericFightOffset(fightData);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            var decima = agentData.GetNPCsByID(isCM ? TargetID.DecimaCM : TargetID.Decima).FirstOrDefault() ?? throw new MissingKeyActorsException("Decima not found");
+            var determined = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Determined762);
+            var determinedLost = determined.Where(x => x.IsBuffRemoval() && x.DstMatchesAgent(decima)).FirstOrDefault();
+            var determinedApply = determined.Where(x => x.IsBuffApply() && x.SrcMatchesAgent(decima)).FirstOrDefault();
+            var enterCombatTime = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            if (determinedLost != null && enterCombatTime >= determinedLost.Time)
+            {
+                return determinedLost.Time;
+            } 
+            else if (determinedApply != null)
+            {
+                return decima.LastAware;
+            }
+            return decima.FirstAware;
+        }
+        return startToUse;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
