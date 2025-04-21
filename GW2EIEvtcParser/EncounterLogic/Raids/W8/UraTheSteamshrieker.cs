@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -138,6 +139,38 @@ internal class UraTheSteamshrieker : MountBalrior
         [
             new BuffGainCastFinder(UraDispelSAK, BloodstoneSaturation),
         ];
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        long startToUse = GetGenericFightOffset(fightData);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            var deterrences = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Deterrence);
+            var activeDeterrences = new Dictionary<ulong, long>();
+            foreach ( var deterrence in deterrences)
+            {
+                if (deterrence.IsBuffApply())
+                {
+                    activeDeterrences[deterrence.DstAgent] = deterrence.Time;
+                } 
+                else
+                {
+                    activeDeterrences.Remove(deterrence.SrcAgent);
+                }
+                if (activeDeterrences.Count == 2)
+                {
+                    break;
+                }
+            }
+            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            if (activeDeterrences.Count == 2)
+            {
+                startToUse = Math.Min(startToUse, activeDeterrences.Values.Max());
+            }
+        }
+        return startToUse;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
