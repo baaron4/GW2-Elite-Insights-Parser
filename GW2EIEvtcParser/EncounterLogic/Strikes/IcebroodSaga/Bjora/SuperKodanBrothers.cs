@@ -96,9 +96,9 @@ internal class SuperKodanBrothers : Bjora
         {
             throw new MissingKeyActorsException("Claw or Voice not found");
         }
-        phases[0].AddTarget(voice);
-        phases[0].AddTarget(claw);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(voice, log);
+        phases[0].AddTarget(claw, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)), log, PhaseData.TargetPriority.Blocking);
         long fightEnd = log.FightData.FightEnd;
         if (!requirePhases)
         {
@@ -110,8 +110,8 @@ internal class SuperKodanBrothers : Bjora
         {
             unmergedPhases[i].Name = "Phase " + (i + 1);
             unmergedPhases[i].AddParentPhase(phases[0]);
-            unmergedPhases[i].AddTarget(claw);
-            unmergedPhases[i].AddTarget(voice);
+            unmergedPhases[i].AddTarget(claw, log);
+            unmergedPhases[i].AddTarget(voice, log);
         }
         phases.AddRange(unmergedPhases);
         //
@@ -135,7 +135,7 @@ internal class SuperKodanBrothers : Bjora
                 phaseEnd = nextUnmergedPhase.Start - 1;
             }
             var phase = new PhaseData(phaseStart, phaseEnd, "Voice and Claw " + ++voiceAndClawCount);
-            phase.AddTarget(voiceAndClaw);
+            phase.AddTarget(voiceAndClaw, log);
             phases.Add(phase);
         }
         //
@@ -160,8 +160,8 @@ internal class SuperKodanBrothers : Bjora
                         long postMergedEnd = oldEnd;
                         var phase = new PhaseData(postMergedStart, postMergedEnd, "Position " + (++tpCount));
                         phase.AddParentPhases(unmergedPhases);
-                        phase.AddTarget(claw);
-                        phase.AddTarget(voice);
+                        phase.AddTarget(claw, log);
+                        phase.AddTarget(voice, log);
                         phases.Add(phase);
                     }
 
@@ -171,8 +171,8 @@ internal class SuperKodanBrothers : Bjora
             {
                 var phase = new PhaseData(preTPPhaseStart, preTPPhaseEnd, "Position " + (++tpCount));
                 phase.AddParentPhases(unmergedPhases);
-                phase.AddTarget(claw);
-                phase.AddTarget(voice);
+                phase.AddTarget(claw, log);
+                phase.AddTarget(voice, log);
                 phases.Add(phase);
             }
             preTPPhaseStart = teleport.EndTime;
@@ -184,7 +184,7 @@ internal class SuperKodanBrothers : Bjora
         {
             var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
             phase.AddParentPhases(unmergedPhases);
-            phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice);
+            phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice, log);
             phases.Add(phase);
         }
         // Missing final position event
@@ -204,8 +204,8 @@ internal class SuperKodanBrothers : Bjora
             {
                 var phase = new PhaseData(finalStart, finalPositionEnd, "Position " + (++tpCount));
                 phase.AddParentPhases(unmergedPhases);
-                phase.AddTarget(claw);
-                phase.AddTarget(voice);
+                phase.AddTarget(claw, log);
+                phase.AddTarget(voice, log);
                 phases.Add(phase);
             }
         }

@@ -250,8 +250,8 @@ internal class DecimaTheStormsinger : MountBalrior
             }
         }
         var phase = new PhaseData(start, end, name);
-        phase.AddTargets(boulders);
-        phase.AddTarget(decima, PhaseData.TargetPriority.Blocking);
+        phase.AddTargets(boulders, log);
+        phase.AddTarget(decima, log, PhaseData.TargetPriority.Blocking);
         return phase;
     }
 
@@ -259,7 +259,7 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor decima = Decima;
-        phases[0].AddTarget(decima);
+        phases[0].AddTarget(decima, log);
         if (!requirePhases)
         {
             return phases;
@@ -288,14 +288,14 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Decima gets nova shield during enrage, not a phase
                 if (decima.GetBuffStatus(log, ChargeDecima, phase.Start + ServerDelayConstant).Value < 10)
                 {
-                    phase.AddTarget(decima);
+                    phase.AddTarget(decima, log);
                 }
             }
             else if (i % 2 == 1)
             {
                 mainPhases.Add(phase);
                 phase.Name = "Phase " + (currentMainPhase);
-                phase.AddTarget(decima);
+                phase.AddTarget(decima, log);
             }
         }
         // Final phases + Boulder phases
@@ -306,19 +306,19 @@ internal class DecimaTheStormsinger : MountBalrior
             {
                 var preFinalPhase = new PhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
                 preFinalPhase.AddParentPhases(mainPhases);
-                preFinalPhase.AddTarget(Decima);
+                preFinalPhase.AddTarget(Decima, log);
                 phases.Add(preFinalPhase);
                 var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllData(SeismicRepositionInvul).FirstOrDefault(x => x.To == decima.AgentItem);
                 if (finalPhaseStartEvent != null)
                 {
                     var finalPhase = new PhaseData(finalPhaseStartEvent.Time, log.FightData.FightEnd, "10% - 0%");
                     finalPhase.AddParentPhases(mainPhases);
-                    finalPhase.AddTarget(Decima);
+                    finalPhase.AddTarget(Decima, log);
                     phases.Add(finalPhase);
                 }
             }
             var boulders = Targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
-            phases[0].AddTargets(boulders, PhaseData.TargetPriority.Blocking);
+            phases[0].AddTargets(boulders, log, PhaseData.TargetPriority.Blocking);
             var firstBoulders = boulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {

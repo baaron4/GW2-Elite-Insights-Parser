@@ -74,7 +74,7 @@ internal class Cairn : BastionOfThePenitent
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
-        phases[0].AddTarget(cairn);
+        phases[0].AddTarget(cairn, log);
         if (!requirePhases)
         {
             return phases;
@@ -86,14 +86,14 @@ internal class Cairn : BastionOfThePenitent
             {
                 Name = "Calm"
             };
-            normalPhase.AddTarget(cairn);
+            normalPhase.AddTarget(cairn, log);
             normalPhase.AddParentPhase(phases[0]);
 
             var enragePhase = new PhaseData(enrageApply.Time, log.FightData.FightEnd)
             {
                 Name = "Angry"
             };
-            enragePhase.AddTarget(cairn);
+            enragePhase.AddTarget(cairn, log);
             enragePhase.AddParentPhase(phases[0]);
 
             phases.Add(normalPhase);

@@ -37,7 +37,7 @@ internal class Mordremoth : StoryInstance
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -49,7 +49,7 @@ internal class Mordremoth : StoryInstance
             PhaseData phase = phases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = "Phase " + i;
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
         }
         return phases;
     }

@@ -209,7 +209,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
-        phases[0].AddTarget(cerus);
+        phases[0].AddTarget(cerus, log);
         var embodimentIds = new List<TargetID>
         {
             TargetID.EmbodimentOfDespair,
@@ -221,7 +221,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         };
         var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIds));
         var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
-        phases[0].AddTargets(embodimentsKilled, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(embodimentsKilled, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -243,12 +243,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 });
                 var priority = killed.Any() ? PhaseData.TargetPriority.NonBlocking : PhaseData.TargetPriority.Main; // default to all as main if none killed
                 AddTargetsToPhaseAndFit(phase, embodimentIds, log, priority);
-                phase.AddTargets(killed); // overwrite priority for killed
+                phase.AddTargets(killed, log); // overwrite priority for killed
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(cerus);
+                phase.AddTarget(cerus, log);
             }
         }
         // Enraged Smash phase - After 10% bar is broken
@@ -258,7 +258,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             var finalPhase = phases[^1];
             var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
             phase.AddParentPhase(finalPhase);
-            phase.AddTarget(cerus);
+            phase.AddTarget(cerus, log);
             phases.Add(phase);
             // Sub Phase for 50%-10%
             PhaseData? phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
@@ -266,7 +266,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             {
                 var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
                 phase50_10.AddParentPhase(finalPhase);
-                phase50_10.AddTarget(cerus);
+                phase50_10.AddTarget(cerus, log);
                 phases.Add(phase50_10);
             }
         }

@@ -198,7 +198,7 @@ internal class BanditTrio : SalvationPass
             }
             var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(target);
+            phase.AddTarget(target, log);
             phase.Name = target.ID switch
             {
                 (int)TargetID.Narella => "Narella",
@@ -226,7 +226,7 @@ internal class BanditTrio : SalvationPass
         SingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Berg)) ?? throw new MissingKeyActorsException("Berg not found");
         SingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
         SingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
-        phases[0].AddTargets(Targets);
+        phases[0].AddTargets(Targets, log);
         if (!requirePhases)
         {
             return phases;

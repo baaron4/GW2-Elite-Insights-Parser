@@ -62,7 +62,7 @@ internal class IcebroodConstruct : IcebroodSagaStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.IcebroodConstruct)) ?? throw new MissingKeyActorsException("Icebrood Construct not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -74,7 +74,7 @@ internal class IcebroodConstruct : IcebroodSagaStrike
             PhaseData phase = phases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = "Phase " + i;
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
         }
         return phases;
     }

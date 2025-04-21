@@ -357,7 +357,7 @@ public abstract class FightLogic
                 {
                     BreakbarPhase = true
                 };
-                phase.AddTarget(target);
+                phase.AddTarget(target, log);
                 breakbarPhases.Add(phase);
             }
         }
@@ -368,7 +368,7 @@ public abstract class FightLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         return phases;
     }
 
@@ -381,20 +381,20 @@ public abstract class FightLogic
         return [ ];
     }
 
-    protected void AddTargetsToPhase(PhaseData phase, List<TargetID> ids, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected void AddTargetsToPhase(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         foreach (SingleActor target in Targets)
         {
             if (target.IsAnySpecies(ids))
             {
-                phase.AddTarget(target, priority);
+                phase.AddTarget(target, log, priority);
             }
         }
     }
 
     protected void AddTargetsToPhaseAndFit(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
-        AddTargetsToPhase(phase, ids, priority);
+        AddTargetsToPhase(phase, ids, log, priority);
         phase.OverrideTimes(log);
     }
 

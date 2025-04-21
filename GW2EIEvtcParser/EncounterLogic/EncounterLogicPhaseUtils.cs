@@ -48,14 +48,14 @@ internal static class EncounterLogicPhaseUtils
                 break;
             }
             var phase = new PhaseData(start, Math.Min(evt.Time, fightEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
             start = Math.Max(evt.Time, log.FightData.FightStart);
         }
         if (phases.Count > 0 && phases.Count < thresholds.Count)
         {
             var lastPhase = new PhaseData(start, fightEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
-            lastPhase.AddTarget(mainTarget);
+            lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
         return phases;

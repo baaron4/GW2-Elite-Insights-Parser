@@ -237,7 +237,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         {
             subPhases[i].Name = phaseNames[i];
             subPhases[i].AddParentPhase(fullFightPhase);
-            subPhases[i].AddTarget(target);
+            subPhases[i].AddTarget(target, log);
         }
         return subPhases;
     }
@@ -279,7 +279,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         bool canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
         if (vermilion != null)
         {
-            phases[0].AddTarget(vermilion);
+            phases[0].AddTarget(vermilion, log);
             if (canComputePhases)
             {
                 phases.AddRange(GetSubPhases(vermilion, log, "Vermilion", phases[0]));
@@ -288,7 +288,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         SingleActor? indigo = Indigo();
         if (indigo != null)
         {
-            phases[0].AddTarget(indigo);
+            phases[0].AddTarget(indigo, log);
             if (canComputePhases)
             {
                 phases.AddRange(GetSubPhases(indigo, log, "Indigo", phases[0]));
@@ -297,7 +297,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         SingleActor? arsenite = Arsenite();
         if (arsenite != null)
         {
-            phases[0].AddTarget(arsenite);
+            phases[0].AddTarget(arsenite, log);
             if (canComputePhases)
             {
                 phases.AddRange(GetSubPhases(arsenite, log, "Arsenite", phases[0]));

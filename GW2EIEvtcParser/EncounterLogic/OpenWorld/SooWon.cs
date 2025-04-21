@@ -72,7 +72,7 @@ internal class SooWon : OpenWorldLogic
             throw new MissingKeyActorsException("Soo-Won not found");
         }
 
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -82,7 +82,7 @@ internal class SooWon : OpenWorldLogic
             log.FightData.FightEnd));
 
         int phaseOffset = GetPhaseOffset(log, mainTarget);
-        InitPhases(phases, mainTarget, tailTarget, phaseOffset);
+        InitPhases(phases, mainTarget, tailTarget, log, phaseOffset);
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].AddParentPhase(phases[0]);
@@ -149,8 +149,7 @@ internal class SooWon : OpenWorldLogic
         return offset;
     }
 
-    private void InitPhases(List<PhaseData> phases, SingleActor mainTarget,
-        SingleActor? tailTarget, int phaseOffset)
+    private void InitPhases(List<PhaseData> phases, SingleActor mainTarget, SingleActor? tailTarget, ParsedEvtcLog log, int phaseOffset)
     {
         for (int i = 1; i < phases.Count; i++)
         {
@@ -159,56 +158,56 @@ internal class SooWon : OpenWorldLogic
             {
                 case 1:
                     phase.Name = "100% - 80%";
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     break;
                 case 2:
                     phase.Name = "First Greens";
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     break;
                 case 3:
                     phase.Name = "80% - 60%";
-                    phase.AddTarget(mainTarget);
-                    phase.AddTarget(tailTarget);
+                    phase.AddTarget(mainTarget, log);
+                    phase.AddTarget(tailTarget, log);
                     break;
                 case 4:
                     phase.Name = "First Spear";
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     break;
                 case 5:
                     phase.Name = "First Champions";
                     phase.AddTargets(Targets.Where(x =>
                         x.IsSpecies(TargetID.VoidGiant2) ||
-                        x.IsSpecies(TargetID.VoidTimeCaster2)));
+                        x.IsSpecies(TargetID.VoidTimeCaster2)), log);
                     break;
                 case 6:
                     phase.Name = "60% - 40%";
-                    phase.AddTarget(mainTarget);
-                    phase.AddTarget(tailTarget);
+                    phase.AddTarget(mainTarget, log);
+                    phase.AddTarget(tailTarget, log);
                     break;
                 case 7:
                     phase.Name = "Second Greens";
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     break;
                 case 8:
                     phase.Name = "40% - 20%";
-                    phase.AddTarget(mainTarget);
-                    phase.AddTarget(tailTarget);
+                    phase.AddTarget(mainTarget, log);
+                    phase.AddTarget(tailTarget, log);
                     break;
                 case 9:
                     phase.Name = "Second Spear";
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     break;
                 case 10:
                     phase.Name = "Second Champions";
                     phase.AddTargets(Targets.Where(x =>
                         x.IsSpecies(TargetID.VoidBrandstalker) ||
                         x.IsSpecies(TargetID.VoidColdsteel2) ||
-                        x.IsSpecies(TargetID.VoidObliterator2)));
+                        x.IsSpecies(TargetID.VoidObliterator2)), log);
                     break;
                 case 11:
                     phase.Name = "20% - 0%";
-                    phase.AddTarget(mainTarget);
-                    phase.AddTarget(tailTarget);
+                    phase.AddTarget(mainTarget, log);
+                    phase.AddTarget(tailTarget, log);
                     break;
             }
         }

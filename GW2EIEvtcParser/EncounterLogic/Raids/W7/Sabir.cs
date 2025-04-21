@@ -108,7 +108,7 @@ internal class Sabir : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -122,7 +122,7 @@ internal class Sabir : TheKeyOfAhdashim
         {
             var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
             CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
             if (nextAttack == null)
@@ -137,7 +137,7 @@ internal class Sabir : TheKeyOfAhdashim
         {
             var phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
         }
 

@@ -65,7 +65,7 @@ internal class Escort : StrongholdOfTheFaithful
         {
             Name = "McLeod The Silent"
         };
-        mainPhase.AddTarget(mcLeod);
+        mainPhase.AddTarget(mcLeod, log);
         phases.Add(mainPhase);
         //
         phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mcLeod, true, true, mcLeodStart, mcLeodEnd));
@@ -78,14 +78,14 @@ internal class Escort : StrongholdOfTheFaithful
                 phase.Name = "McLeod Split " + (i) / 2;
                 SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.RadiantMcLeod) && x.LastAware > phase.Start);
                 SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CrimsonMcLeod) && x.LastAware > phase.Start);
-                phase.AddTarget(whiteMcLeod);
-                phase.AddTarget(redMcLeod);
+                phase.AddTarget(whiteMcLeod, log);
+                phase.AddTarget(redMcLeod, log);
                 phase.OverrideTimes(log);
             }
             else
             {
                 phase.Name = "McLeod Phase " + (i + 1) / 2;
-                phase.AddTarget(mcLeod);
+                phase.AddTarget(mcLeod, log);
             }
         }
         //
@@ -96,7 +96,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
-        phases[0].AddTarget(mcLeod);
+        phases[0].AddTarget(mcLeod, log);
         if (!requirePhases)
         {
             return phases;
@@ -110,9 +110,9 @@ internal class Escort : StrongholdOfTheFaithful
             {
                 Name = "Escort",
             };
-            preEventPhase.AddTargets(preEventWargs);
+            preEventPhase.AddTargets(preEventWargs, log);
             preEventPhase.AddParentPhase(phases[0]);
-            preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget));
+            preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget), log);
             phases.Add(preEventPhase);
         }
         var mcLeodPhases = GetMcLeodPhases(mcLeod, log);
@@ -125,7 +125,7 @@ internal class Escort : StrongholdOfTheFaithful
         if (mcLeodWargs.Any())
         {
             var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "McLeod Wargs");
-            phase.AddTargets(mcLeodWargs);
+            phase.AddTargets(mcLeodWargs, log);
             phase.AddParentPhase(preEventPhase);
             phase.OverrideTimes(log);
             phases.Add(phase);

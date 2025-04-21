@@ -84,14 +84,14 @@ internal class Sabetha : SpiritVale
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
-        phases[0].AddTarget(sabetha);
+        phases[0].AddTarget(sabetha, log);
         var miniBossIds = new List<TargetID>
         {
              TargetID.Karde, // reverse order for mini boss phase detection
              TargetID.Knuckles,
              TargetID.Kernan,
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -119,14 +119,14 @@ internal class Sabetha : SpiritVale
                         break; // we found our main target
                     }
                 }
-                AddTargetsToPhase(phase, miniBossIds, PhaseData.TargetPriority.NonBlocking);
+                AddTargetsToPhase(phase, miniBossIds, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 int phaseID = (i + 1) / 2;
                 phase.Name = "Phase " + phaseID;
-                phase.AddTarget(sabetha);
-                AddTargetsToPhase(phase, miniBossIds, PhaseData.TargetPriority.NonBlocking);
+                phase.AddTarget(sabetha, log);
+                AddTargetsToPhase(phase, miniBossIds, log, PhaseData.TargetPriority.NonBlocking);
             }
         }
         return phases;

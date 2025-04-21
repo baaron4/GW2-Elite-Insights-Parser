@@ -338,7 +338,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -417,7 +417,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     TargetID.EliteTheTormented,
                     TargetID.ChampionTheTormented,
                 };
-                AddTargetsToPhase(phase, ids);
+                AddTargetsToPhase(phase, ids, log);
             }
             else
             {
@@ -432,7 +432,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 };
             }
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
         }
         return phases;

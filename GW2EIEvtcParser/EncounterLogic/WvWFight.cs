@@ -57,7 +57,7 @@ internal class WvWFight : FightLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -65,7 +65,7 @@ internal class WvWFight : FightLogic
         if (_detailed)
         {
             var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, "Detailed Full Fight");
-            detailedPhase.AddTargets(Targets);
+            detailedPhase.AddTargets(Targets, log);
             if (detailedPhase.Targets.Any())
             {
                 detailedPhase.RemoveTarget(mainTarget);
@@ -80,7 +80,7 @@ internal class WvWFight : FightLogic
             var fightPhases = GetPhasesByLogStartLogEnd(log);
             fightPhases.ForEach(x =>
             {
-                x.AddTargets(phases[0].Targets.Keys);
+                x.AddTargets(phases[0].Targets.Keys, log);
                 x.AddParentPhase(phases[0]);
             });
             phases.AddRange(fightPhases);

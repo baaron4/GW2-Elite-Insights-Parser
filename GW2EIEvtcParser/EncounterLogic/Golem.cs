@@ -117,7 +117,7 @@ internal class Golem : FightLogic
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
         phases[0].Name = "Final Number";
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -134,7 +134,7 @@ internal class Golem : FightLogic
                 if (hpUpdate != null)
                 {
                     var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j]);
-                    phase.AddTarget(mainTarget);
+                    phase.AddTarget(mainTarget, log);
                     phases.Add(phase);
                 }
             }
@@ -154,7 +154,7 @@ internal class Golem : FightLogic
             if (firstExitCombat != null && (log.FightData.FightEnd - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
             {
                 var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase));
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(mainTarget, log);
                 phases.Add(phase);
             }
             foreach (EnterCombatEvent ece in log.CombatData.GetEnterCombatEvents(pov))
@@ -162,7 +162,7 @@ internal class Golem : FightLogic
                 ExitCombatEvent? exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                 long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
                 var phase = new PhaseData(Math.Max(ece.Time, log.FightData.FightStart), Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase));
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(mainTarget, log);
                 phases.Add(phase);
             }
         }

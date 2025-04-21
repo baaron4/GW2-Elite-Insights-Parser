@@ -40,13 +40,13 @@ internal class ColdWar : IcebroodSagaStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor varinia = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VariniaStormsounder)) ?? throw new MissingKeyActorsException("Varinia Stormsounder not found");
-        phases[0].AddTarget(varinia);
+        phases[0].AddTarget(varinia, log);
         //
         // TODO - add phases if applicable
         //
         for (int i = 1; i < phases.Count; i++)
         {
-            phases[i].AddTarget(varinia);
+            phases[i].AddTarget(varinia, log);
             phases[i].AddParentPhase(phases[0]);
         }
         return phases;

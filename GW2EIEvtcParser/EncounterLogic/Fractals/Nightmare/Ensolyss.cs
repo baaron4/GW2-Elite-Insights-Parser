@@ -99,7 +99,7 @@ internal class Ensolyss : Nightmare
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
-        phases[0].AddTarget(enso);
+        phases[0].AddTarget(enso, log);
         if (!requirePhases)
         {
             return phases;
@@ -112,12 +112,12 @@ internal class Ensolyss : Nightmare
             if (i % 2 == 0)
             {
                 phase.Name = "Nightmare Altars";
-                phase.AddTarget(enso);
+                phase.AddTarget(enso, log);
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(enso);
+                phase.AddTarget(enso, log);
             }
         }
         return phases;

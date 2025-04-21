@@ -105,8 +105,8 @@ internal class Eparch : LonelyTower
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
-        phases[0].AddTarget(eparch);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.IncarnationOfCruelty) || x.IsSpecies(TargetID.IncarnationOfJudgement)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(eparch, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.IncarnationOfCruelty) || x.IsSpecies(TargetID.IncarnationOfJudgement)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases || !log.FightData.IsCM)
         {
             return phases;
@@ -125,12 +125,12 @@ internal class Eparch : LonelyTower
                     TargetID.IncarnationOfJudgement,
                     TargetID.KryptisRift,
                 };
-                AddTargetsToPhase(phase, ids);
+                AddTargetsToPhase(phase, ids, log);
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(eparch);
+                phase.AddTarget(eparch, log);
             }
         }
         return phases;

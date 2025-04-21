@@ -162,7 +162,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             switch (target.ID)
             {
                 case (int)TargetID.KillableVoidAmalgamate:
-                    phases[0].AddTarget(target, PhaseData.TargetPriority.Blocking);
+                    phases[0].AddTarget(target, log, PhaseData.TargetPriority.Blocking);
                     break;
                 case (int)TargetID.VoidGiant:
                     giants.Add(target);
@@ -180,23 +180,23 @@ internal class HarvestTemple : EndOfDragonsStrike
                     subPhasesData.Add((phaseStart, phaseEnd, "Void Goliath", target, null));
                     break;
                 case (int)TargetID.TheDragonVoidJormag:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Jormag", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidKralkatorrik:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Kralkatorrik", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidMordremoth:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Mordremoth", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidPrimordus:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Primordus", target, "Full Fight"));
                     break;
                 case (int)TargetID.TheDragonVoidSooWon:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
@@ -219,7 +219,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                     break;
                 case (int)TargetID.TheDragonVoidZhaitan:
-                    phases[0].AddTarget(target);
+                    phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Zhaitan", target, "Full Fight"));
                     break;
             }
@@ -239,7 +239,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 end = Math.Max(end, giant.LastAware);
             }
             var subPhase = new PhaseData(start, end, "Giants");
-            subPhase.AddTargets(giants);
+            subPhase.AddTargets(giants, log);
             subPhase.OverrideEndTime(log);
             phases.Add(subPhase);
         }
@@ -247,9 +247,9 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach ((long start, long end, string name, SingleActor target, string? subPhaseOf) in subPhasesData)
         {
             var subPhase = new PhaseData(start, end, name);
-            subPhase.AddTarget(target);
+            subPhase.AddTarget(target, log);
             subPhase.OverrideEndTime(log);
-            subPhase.AddTargets(subPhaseNonBlockings, PhaseData.TargetPriority.NonBlocking);
+            subPhase.AddTargets(subPhaseNonBlockings, log, PhaseData.TargetPriority.NonBlocking);
             if (subPhaseOf != null)
             {
                 subPhase.AddParentPhase(phases.FirstOrDefault(x => x.Name == subPhaseOf));
@@ -261,9 +261,9 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (SingleActor voidAmal in Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)))
         {
             var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), voidAmal.LastAware, "Purification " + (++purificationID));
-            purificationPhase.AddTarget(voidAmal);
+            purificationPhase.AddTarget(voidAmal, log);
             purificationPhase.OverrideEndTime(log);
-            purificationPhase.AddTargets(purificationNonBlockings, PhaseData.TargetPriority.NonBlocking);
+            purificationPhase.AddTargets(purificationNonBlockings, log, PhaseData.TargetPriority.NonBlocking);
             phases.Add(purificationPhase);
             if (voidAmal.IsSpecies(TargetID.PushableVoidAmalgamate))
             {
@@ -293,7 +293,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             {
                 var sooWonPhase = phases.FirstOrDefault(x => x.Name == "Soo-Won");
                 purificationPhase.AddParentPhase(sooWonPhase);
-                sooWonPhase?.AddTarget(voidAmal, PhaseData.TargetPriority.Blocking);
+                sooWonPhase?.AddTarget(voidAmal, log, PhaseData.TargetPriority.Blocking);
             }
         }
         return phases;
