@@ -105,45 +105,6 @@ internal abstract class FractalLogic : FightLogic
             }
         }
     }
-    protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID)
-    {
-        long startToUse = GetGenericFightOffset(fightData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
-        AgentItem? target;
-        if (logStartNPCUpdate != null)
-        {
-            target = agentData.GetNPCsByIDAndAgent(targetID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(targetID).FirstOrDefault();
-            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, targetID, logStartNPCUpdate.DstAgent);
-        }
-        else
-        {
-            target = agentData.GetNPCsByID(targetID).FirstOrDefault();
-        }
-        if (target == null)
-        {
-            throw new MissingKeyActorsException("Main target of the fight not found");
-        }
-        // check first invul gain
-        CombatItem? invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsBuffApply() && x.SkillID == invulID && x.Time >= startToUse);
-        // get invul lost
-        CombatItem? invulLost = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsBuffRemove == BuffRemove.All && x.SkillID == invulID && x.Time >= startToUse);
-        // invul gain at the start and invul loss matches the gained invul
-        if (invulGain != null && (invulGain.IsStateChange == StateChange.BuffInitial || invulGain.Time - target.FirstAware < 200) && invulLost != null && invulLost.Time >= invulGain.Time)
-        {
-            return invulLost.Time + 1;
-        }
-        else if (invulLost != null && (invulGain == null || invulLost.Time < invulGain.Time))
-        {
-            // only invul lost, missing buff apply event
-            CombatItem? enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
-            // no buff apply -> target was invul the whole time
-            if (enterCombat != null && enterCombat.Time >= invulLost.Time)
-            {
-                return invulLost.Time + 1;
-            }
-        }
-        return startToUse;
-    }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {

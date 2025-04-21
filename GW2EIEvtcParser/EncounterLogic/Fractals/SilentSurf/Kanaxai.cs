@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -153,6 +154,13 @@ internal class Kanaxai : SilentSurf
                     break;
             }
         }
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        // kanaxai spawns with invulnerability
+        var kanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
+        return GetFightOffsetByInvulnStart(fightData, combatData, kanaxai, Determined762);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

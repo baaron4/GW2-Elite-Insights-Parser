@@ -199,19 +199,10 @@ internal class Arkk : ShatteredObservatory
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
-        if (logStartNPCUpdate != null)
-        {
-            if (!agentData.TryGetFirstAgentItem(TargetID.Arkk, out var arkk))
-            {
-                throw new MissingKeyActorsException("Arkk not found");
-            }
-            long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
-            CombatItem? firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
-            CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
-            return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
-        }
-        return GetGenericFightOffset(fightData);
+        var arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault() ?? throw new MissingKeyActorsException("Arkk not found");
+        long start = GetFightOffsetBySpawn(fightData, combatData, arkk);
+        CombatItem? startBuffApply = combatData.FirstOrDefault(x => x.SkillID == ArkkStartBuff && x.SrcMatchesAgent(arkk) && x.IsBuffApply());
+        return startBuffApply?.Time ?? GetFightOffsetBySpawn(fightData, combatData, arkk);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

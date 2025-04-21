@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -83,16 +84,36 @@ internal class Ensolyss : Nightmare
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var mainEnsolyssMaxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6 && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.Ensolyss));
-        var ensolysses = agentData.GetNPCsByID(TargetID.Ensolyss);
-        foreach(var ensolyss in ensolysses)
+        var targetEnsolyss = FindTargetEnsolyss(agentData, combatData);
+        foreach (var ensolyss in agentData.GetNPCsByID(TargetID.Ensolyss))
         {
-            if (!mainEnsolyssMaxHPUpdates.Any(y => y.SrcMatchesAgent(ensolyss)))
+            if (ensolyss != targetEnsolyss)
             {
                 ensolyss.OverrideID(IgnoredSpecies, agentData);
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+    }
+
+    private static AgentItem FindTargetEnsolyss(AgentData agentData, List<CombatItem> combatData)
+    {
+        // some logs have duplicates with the same species id, find target by max hp
+        foreach (var maxHealthUpdate in combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6))
+        {
+            var agent = agentData.GetAgent(maxHealthUpdate.SrcAgent, maxHealthUpdate.Time);
+            if (agent.IsSpecies(TargetID.Ensolyss))
+            {
+                return agent;
+            }
+        }
+        throw new MissingKeyActorsException("Ensolyss not found");
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        // ensolyss spawns with invulnerability
+        var ensolyss = FindTargetEnsolyss(agentData, combatData);
+        return GetFightOffsetByInvulnStart(fightData, combatData, ensolyss, Determined762);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -270,7 +291,7 @@ internal class Ensolyss : Nightmare
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId) 
+                    switch (cast.SkillId)
                     {
                         // Tail Lash - Cone Swipe
                         case TailLashEnsolyss:
