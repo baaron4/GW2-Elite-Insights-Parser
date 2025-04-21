@@ -482,6 +482,15 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         ];
     }
 
+    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        return
+        [
+            TargetID.EliteTheTormented,
+            TargetID.VeteranTheTormented,
+        ];
+    }
+
     protected override List<TargetID> GetTrashMobsIDs()
     {
         return
