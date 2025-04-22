@@ -24,99 +24,108 @@ public class OutgoingDamageModifier : DamageModifier
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.Damage;
                     case DamageSource.NoPets:
                         return damageData.ActorDamage;
-                    case DamageSource.PetsOnly:
-                        return damageData.Damage - damageData.ActorDamage;
+                    /*case DamageSource.PetsOnly:
+                        return damageData.Damage - damageData.ActorDamage;*/
                 }
                 break;
             case DamageType.Condition:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.ConditionDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorConditionDamage;
-                    case DamageSource.PetsOnly:
-                        return damageData.ConditionDamage - damageData.ActorConditionDamage;
+                    /*case DamageSource.PetsOnly:
+                        return damageData.ConditionDamage - damageData.ActorConditionDamage;*/
                 }
                 break;
             case DamageType.Power:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.PowerDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorPowerDamage;
-                    case DamageSource.PetsOnly:
-                        return damageData.PowerDamage - damageData.ActorPowerDamage;
+                    /*case DamageSource.PetsOnly:
+                        return damageData.PowerDamage - damageData.ActorPowerDamage;*/
                 }
                 break;
             case DamageType.LifeLeech:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.LifeLeechDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorLifeLeechDamage;
-                    case DamageSource.PetsOnly:
-                        return damageData.LifeLeechDamage - damageData.ActorLifeLeechDamage;
+                    /*case DamageSource.PetsOnly:
+                        return damageData.LifeLeechDamage - damageData.ActorLifeLeechDamage;*/
                 }
                 break;
             case DamageType.Strike:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.StrikeDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorStrikeDamage;
-                    case DamageSource.PetsOnly:
-                        return damageData.StrikeDamage - damageData.ActorStrikeDamage;
+                    /*case DamageSource.PetsOnly:
+                        return damageData.StrikeDamage - damageData.ActorStrikeDamage;*/
                 }
                 break;
             case DamageType.StrikeAndCondition:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.StrikeDamage + damageData.ConditionDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorStrikeDamage + damageData.ActorConditionDamage;
-                    case DamageSource.PetsOnly:
-                        return (damageData.StrikeDamage + damageData.ConditionDamage) - (damageData.ActorStrikeDamage + damageData.ActorConditionDamage);
+                    /*case DamageSource.PetsOnly:
+                        return (damageData.StrikeDamage + damageData.ConditionDamage) - (damageData.ActorStrikeDamage + damageData.ActorConditionDamage);*/
                 }
                 break;
             case DamageType.StrikeAndLifeLeech:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.StrikeDamage + damageData.LifeLeechDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorStrikeDamage + damageData.ActorLifeLeechDamage;
-                    case DamageSource.PetsOnly:
-                        return (damageData.StrikeDamage + damageData.LifeLeechDamage) - (damageData.ActorStrikeDamage + damageData.ActorLifeLeechDamage);
+                    /*case DamageSource.PetsOnly:
+                        return (damageData.StrikeDamage + damageData.LifeLeechDamage) - (damageData.ActorStrikeDamage + damageData.ActorLifeLeechDamage);*/
                 }
                 break;
             case DamageType.ConditionAndLifeLeech:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.ConditionDamage + damageData.LifeLeechDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage;
-                    case DamageSource.PetsOnly:
-                        return (damageData.ConditionDamage + damageData.LifeLeechDamage) - (damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage);
+                    /*case DamageSource.PetsOnly:
+                        return (damageData.ConditionDamage + damageData.LifeLeechDamage) - (damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage);*/
                 }
                 break;
             case DamageType.StrikeAndConditionAndLifeLeech:
                 switch (DmgSrc)
                 {
                     case DamageSource.All:
+                    case DamageSource.PetsOnly:
                         return damageData.StrikeDamage + damageData.ConditionDamage + damageData.LifeLeechDamage;
                     case DamageSource.NoPets:
                         return damageData.ActorStrikeDamage + damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage;
-                    case DamageSource.PetsOnly:
-                        return (damageData.StrikeDamage + damageData.ConditionDamage + damageData.LifeLeechDamage) - (damageData.ActorStrikeDamage + damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage);
+                    /*case DamageSource.PetsOnly:
+                        return (damageData.StrikeDamage + damageData.ConditionDamage + damageData.LifeLeechDamage) - (damageData.ActorStrikeDamage + damageData.ActorConditionDamage + damageData.ActorLifeLeechDamage);*/
                 }
                 break;
             default:
