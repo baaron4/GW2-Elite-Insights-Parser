@@ -54,7 +54,7 @@ internal abstract class FractalLogic : FightLogic
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -63,7 +63,7 @@ internal abstract class FractalLogic : FightLogic
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = "Phase " + i;
-            phases[i].AddTarget(mainTarget);
+            phases[i].AddTarget(mainTarget, log);
         }
         return phases;
     }

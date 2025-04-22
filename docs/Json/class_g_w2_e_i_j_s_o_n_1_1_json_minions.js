@@ -8,9 +8,13 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_minions =
     [ "Rotation", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a5154642da2c51a1b323b2506b4f95edb", null ],
     [ "TargetDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a6c54b67096f72d620bea3e625bff2d55", null ],
     [ "TotalBreakbarDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a3bfd4e257efe41a2765636b46f7a4aaa", null ],
+    [ "TotalBreakbarDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#aeac20558fb05c9327d7e436c448f0a7a", null ],
     [ "TotalDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a49bf2ef630093b099a08b76239792568", null ],
     [ "TotalDamageDist", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#aa8ea14287daf52c8ff3218e3dfc25ce7", null ],
+    [ "TotalDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a61edfb6a3ad881d5b3aee0e2b2e7f7fd", null ],
+    [ "TotalDamageTakenDist", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a18abb41deff6e9c28ea5f86a62f00034", null ],
     [ "TotalShieldDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a00a7753b0e7e976126efbedecad6c3d9", null ],
+    [ "TotalShieldDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#aa3982212fdfcb9d3152a66d6d570e5e9", null ],
     [ "TotalTargetBreakbarDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a566b4ae4e9cb02765e29b711a3ddaab1", null ],
     [ "TotalTargetDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a78d8ad3bea3695408b9383045c7f6031", null ],
     [ "TotalTargetShieldDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_minions.html#a0267bb2d33252a196eb4f6387544eedf", null ]

@@ -109,7 +109,7 @@ internal class Xera : StrongholdOfTheFaithful
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (requirePhases)
         {
             PhaseData? phase100to0 = null;
@@ -117,12 +117,12 @@ internal class Xera : StrongholdOfTheFaithful
             {
                 var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
-                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)));
-                phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)));
+                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
+                phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 phases.Add(phasePreEvent);
                 phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
-                phase100to0.AddTarget(mainTarget);
+                phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
             }
             BuffEvent? invulXera = GetInvulXeraEvent(log, mainTarget);
@@ -138,7 +138,7 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     phase1.AddParentPhase(phases[0]);
                 }
-                phase1.AddTarget(mainTarget);
+                phase1.AddTarget(mainTarget, log);
                 phases.Add(phase1);
 
                 long glidingEndTime = _hasSecondPhase ? _xeraSecondPhaseStartTime : fightEnd;
@@ -151,7 +151,7 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     glidingPhase.AddParentPhase(phases[0]);
                 }
-                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)));
+                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)), log);
                 phases.Add(glidingPhase);
 
                 if (_hasSecondPhase)
@@ -165,8 +165,8 @@ internal class Xera : StrongholdOfTheFaithful
                     {
                         phase2.AddParentPhase(phases[0]);
                     }
-                    phase2.AddTarget(mainTarget);
-                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)));
+                    phase2.AddTarget(mainTarget, log);
+                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(phase2);
                 }

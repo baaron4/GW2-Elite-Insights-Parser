@@ -129,7 +129,7 @@ internal class StatueOfDarkness : HallOfChains
                     {
                         Name = eye.Character + " " + (++count)
                     };
-                    phase.AddTarget(eye);
+                    phase.AddTarget(eye, log);
                     res.Add(phase);
                 }
                 else
@@ -144,7 +144,7 @@ internal class StatueOfDarkness : HallOfChains
                 {
                     Name = eye.Character + " " + (++count)
                 };
-                phase.AddTarget(eye);
+                phase.AddTarget(eye, log);
                 res.Add(phase);
             }
         }
@@ -160,8 +160,8 @@ internal class StatueOfDarkness : HallOfChains
         {
             throw new MissingKeyActorsException("Eyes not found");
         }
-        phases[0].AddTarget(eyeJudgement);
-        phases[0].AddTarget(eyeFate);
+        phases[0].AddTarget(eyeJudgement, log);
+        phases[0].AddTarget(eyeFate, log);
         phases.AddRange(GetSubPhases(eyeFate, log));
         phases.AddRange(GetSubPhases(eyeJudgement, log));
         return phases;

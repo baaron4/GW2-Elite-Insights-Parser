@@ -78,7 +78,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         {
             throw new MissingKeyActorsException("Freezie not found");
         }
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -91,12 +91,12 @@ internal class Freezie : FestivalStrikeMissionLogic
             if (i % 2 == 1)
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(mainTarget, log);
             }
             else
             {
                 phase.Name = "Heal " + (i) / 2;
-                phase.AddTarget(heartTarget);
+                phase.AddTarget(heartTarget, log);
             }
         }
         return phases;

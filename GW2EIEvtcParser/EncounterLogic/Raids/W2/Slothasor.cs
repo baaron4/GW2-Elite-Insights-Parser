@@ -91,7 +91,7 @@ internal class Slothasor : SalvationPass
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -103,13 +103,13 @@ internal class Slothasor : SalvationPass
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Phase " + i++);
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             start = c.EndTime;
             phases.Add(phase);
         }
         var lastPhase = new PhaseData(start, fightEnd, "Phase " + i++);
         lastPhase.AddParentPhase(phases[0]);
-        lastPhase.AddTarget(mainTarget);
+        lastPhase.AddTarget(mainTarget, log);
         phases.Add(lastPhase);
         return phases;
     }

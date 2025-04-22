@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -140,6 +141,38 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        long startToUse = GetGenericFightOffset(fightData);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        if (logStartNPCUpdate != null)
+        {
+            var deterrences = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Deterrence);
+            var activeDeterrences = new Dictionary<ulong, long>();
+            foreach ( var deterrence in deterrences)
+            {
+                if (deterrence.IsBuffApply())
+                {
+                    activeDeterrences[deterrence.DstAgent] = deterrence.Time;
+                } 
+                else
+                {
+                    activeDeterrences.Remove(deterrence.SrcAgent);
+                }
+                if (activeDeterrences.Count == 2)
+                {
+                    break;
+                }
+            }
+            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            if (activeDeterrences.Count == 2)
+            {
+                startToUse = Math.Min(startToUse, activeDeterrences.Values.Max());
+            }
+        }
+        return startToUse;
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Toxic geysers
@@ -250,7 +283,7 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found"); ;
-        phases[0].AddTarget(ura);
+        phases[0].AddTarget(ura, log);
         if (!requirePhases)
         {
             return phases;
@@ -266,14 +299,14 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             var before1 = new PhaseData(start, hp1.Time, "100% - 1%");
             before1.AddParentPhase(parentPhase);
-            before1.AddTarget(ura);
+            before1.AddTarget(ura, log);
             phases.Add(before1);
             var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == ura.AgentItem && x.Time >= hp1.Time);
             if (determinedLost != null)
             {
                 var after1 = new PhaseData(determinedLost.Time, end, "Healed");
                 after1.AddParentPhase(parentPhase);
-                after1.AddTarget(ura);
+                after1.AddTarget(ura, log);
                 phases.Add(after1);
             }
             parentPhase = before1;
@@ -285,7 +318,7 @@ internal class UraTheSteamshrieker : MountBalrior
         // 100-70
         var before70 = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
         before70.AddParentPhase(parentPhase);
-        before70.AddTarget(ura);
+        before70.AddTarget(ura, log);
         phases.Add(before70);
         // 70-40
         if (!hp70.IsEmpty())
@@ -294,16 +327,16 @@ internal class UraTheSteamshrieker : MountBalrior
             if (!hp40.IsEmpty())
             {
                 var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
-                after70before40.AddTarget(ura);
+                after70before40.AddTarget(ura, log);
                 phases.Add(after70before40);
 
                 var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
-                after40.AddTarget(ura);
+                after40.AddTarget(ura, log);
                 phases.Add(after40);
 
                 var after70 = new PhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
                 after70.AddParentPhase(parentPhase);
-                after70.AddTarget(ura);
+                after70.AddTarget(ura, log);
                 phases.Add(after70);
 
                 after70before40.AddParentPhase(after70);
@@ -312,7 +345,7 @@ internal class UraTheSteamshrieker : MountBalrior
             else
             {
                 var after70 = new PhaseData(hp70.Start, end, "70% - 40%");
-                after70.AddTarget(ura);
+                after70.AddTarget(ura, log);
                 phases.Add(after70);
                 after70.AddParentPhase(parentPhase);
             }

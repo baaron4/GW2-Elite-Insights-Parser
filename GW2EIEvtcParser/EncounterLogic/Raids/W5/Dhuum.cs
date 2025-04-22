@@ -130,7 +130,7 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO(Rennorb) @perf
-    private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, long fightDuration, long start, PhaseData mainFightPhase)
+    private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long fightDuration, long start, PhaseData mainFightPhase)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
         // Dhuum brought down to 10%
@@ -138,7 +138,7 @@ internal class Dhuum : HallOfChains
         {
             long end = shield.Time;
             var dhuumFight = new PhaseData(start, end, "Dhuum Fight");
-            dhuumFight.AddTarget(dhuum);
+            dhuumFight.AddTarget(dhuum, log);
             dhuumFight.AddParentPhase(mainFightPhase);
             phases.Add(dhuumFight);
             CastEvent? firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
@@ -147,10 +147,10 @@ internal class Dhuum : HallOfChains
             {
                 var shieldPhase = new PhaseData(end, firstDamageable.Time, "Shielded Dhuum");
                 shieldPhase.AddParentPhase(mainFightPhase);
-                shieldPhase.AddTarget(dhuum);
+                shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
                 var ritualPhase = new PhaseData(firstDamageable.Time, fightDuration, "Ritual");
-                ritualPhase.AddTarget(dhuum);
+                ritualPhase.AddTarget(dhuum, log);
                 ritualPhase.AddParentPhase(mainFightPhase);
                 phases.Add(ritualPhase);
             }
@@ -158,7 +158,7 @@ internal class Dhuum : HallOfChains
             {
                 var shieldPhase = new PhaseData(end, fightDuration, "Shielded Dhuum");
                 shieldPhase.AddParentPhase(mainFightPhase);
-                shieldPhase.AddTarget(dhuum);
+                shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
             }
         }
@@ -186,17 +186,17 @@ internal class Dhuum : HallOfChains
             ++i;
 
             var preSoulSplit = new PhaseData(start, end, "Pre-Soulsplit " + i).WithParentPhase(parentPhase);
-            preSoulSplit.AddTarget(dhuum);
-            preSoulSplit.AddTargets(enforcers, PhaseData.TargetPriority.NonBlocking);
+            preSoulSplit.AddTarget(dhuum, log);
+            preSoulSplit.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
             phases.Add(preSoulSplit);
 
             var soulSplit = new PhaseData(end, soulsplitEnd, "Soulsplit " + i).WithParentPhase(parentPhase);
-            soulSplit.AddTarget(dhuum);
+            soulSplit.AddTarget(dhuum, log);
             phases.Add(soulSplit);
             start = cataCycle.EndTime;
         }
         var final = new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe").WithParentPhase(parentPhase);
-        final.AddTarget(dhuum);
+        final.AddTarget(dhuum, log);
         phases.Add(final);
         return phases;
     }
@@ -206,7 +206,7 @@ internal class Dhuum : HallOfChains
         long fightDuration = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
-        phases[0].AddTarget(dhuum);
+        phases[0].AddTarget(dhuum, log);
         if (!requirePhases)
         {
             return phases;
@@ -219,7 +219,7 @@ internal class Dhuum : HallOfChains
         if (!_hasPrevent)
         {
             // full fight does not contain the pre event
-            ComputeFightPhases(phases, dhuum, castLogs, fightDuration, 0, phases[0]);
+            ComputeFightPhases(phases, dhuum, castLogs, log, fightDuration, 0, phases[0]);
         }
         else
         {
@@ -230,14 +230,14 @@ internal class Dhuum : HallOfChains
             {
                 long end = invulDhuum.Time;
                 var preEvent = new PhaseData(0, end, "Pre Event").WithParentPhase(phases[0]);
-                preEvent.AddTarget(dhuum);
-                preEvent.AddTargets(enforcers, PhaseData.TargetPriority.NonBlocking);
+                preEvent.AddTarget(dhuum, log);
+                preEvent.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(preEvent);
 
                 mainFight = new PhaseData(end, fightDuration, "Main Fight");
-                mainFight.AddTarget(dhuum);
+                mainFight.AddTarget(dhuum, log);
                 phases.Add(mainFight.WithParentPhase(phases[0]));
-                ComputeFightPhases(phases, dhuum, castLogs, fightDuration, end, mainFight);
+                ComputeFightPhases(phases, dhuum, castLogs, log, fightDuration, end, mainFight);
             }
         }
         bool hasRitual = phases.Last().Name == "Ritual";

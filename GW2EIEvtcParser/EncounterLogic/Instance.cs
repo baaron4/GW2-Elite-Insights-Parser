@@ -110,7 +110,7 @@ internal class Instance : FightLogic
                 var fightPhases = GetPhasesByLogStartLogEnd(log);
                 fightPhases.ForEach(x =>
                 {
-                    x.AddTargets(phases[0].Targets.Keys);
+                    x.AddTargets(phases[0].Targets.Keys, log);
                     x.AddParentPhase(phases[0]);
                 });
                 phases.AddRange(fightPhases);
@@ -118,12 +118,12 @@ internal class Instance : FightLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets);
+        phases[0].AddTargets(Targets, log);
         int phaseCount = 0;
         foreach (SingleActor target in Targets)
         {
             var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
-            phase.AddTarget(target);
+            phase.AddTarget(target, log);
             phases.Add(phase);
         }
         return phases;

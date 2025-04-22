@@ -98,7 +98,7 @@ internal class CerusAndDeimos : LonelyTower
         BuffApplyEvent? determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
         var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName);
-        bossPhase.AddTarget(target);
+        bossPhase.AddTarget(target, log);
         return bossPhase;
     }
 
@@ -107,8 +107,8 @@ internal class CerusAndDeimos : LonelyTower
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
-        phases[0].AddTarget(cerus);
-        phases[0].AddTarget(deimos);
+        phases[0].AddTarget(cerus, log);
+        phases[0].AddTarget(deimos, log);
         if (!requirePhases)
         {
             return phases;

@@ -125,7 +125,7 @@ internal class TwinLargos : MythwrightGambit
             PhaseData phase = targetPhases[i];
             phase.Name = baseName + " P" + (i + 1);
             phase.AddParentPhase(fullFightPhase);
-            phase.AddTarget(target);
+            phase.AddTarget(target, log);
         }
         return targetPhases;
     }
@@ -226,11 +226,11 @@ internal class TwinLargos : MythwrightGambit
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        phases[0].AddTarget(nikare);
+        phases[0].AddTarget(nikare, log);
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
-            phases[0].AddTarget(kenut);
+            phases[0].AddTarget(kenut, log);
         }
         if (!requirePhases)
         {

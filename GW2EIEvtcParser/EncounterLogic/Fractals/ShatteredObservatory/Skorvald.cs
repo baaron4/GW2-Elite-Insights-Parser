@@ -64,7 +64,7 @@ internal class Skorvald : ShatteredObservatory
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-        phases[0].AddTarget(skorvald);
+        phases[0].AddTarget(skorvald, log);
         var anomalyIds = new List<TargetID>
         {
             TargetID.FluxAnomaly1,
@@ -76,7 +76,7 @@ internal class Skorvald : ShatteredObservatory
             TargetID.FluxAnomalyCM3,
             TargetID.FluxAnomalyCM4,
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -94,7 +94,7 @@ internal class Skorvald : ShatteredObservatory
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(skorvald);
+                phase.AddTarget(skorvald, log);
             }
         }
         return phases;

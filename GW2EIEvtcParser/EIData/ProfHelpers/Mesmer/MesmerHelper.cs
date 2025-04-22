@@ -79,6 +79,7 @@ internal static class MesmerHelper
         // Rifle
         new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
         new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
+            .UsingSecondaryEffectChecker(EffectGUIDs.MesmerRifleAbstraction2)
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
     ];
     private static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)

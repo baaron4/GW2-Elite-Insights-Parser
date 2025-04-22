@@ -36,8 +36,8 @@ internal class Mordremoth : StoryInstance
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
-        phases[0].AddTarget(mainTarget);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -49,7 +49,7 @@ internal class Mordremoth : StoryInstance
             PhaseData phase = phases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = "Phase " + i;
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
         }
         return phases;
     }

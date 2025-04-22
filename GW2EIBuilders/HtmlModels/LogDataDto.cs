@@ -12,6 +12,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
@@ -60,12 +61,16 @@ internal class LogDataDto
     public BarrierStatsExtension? BarrierStatsExtension;
     // meta data
     public string EncounterDuration;
+    public string EvtcRecordingDuration;
     public bool Success;
     public bool Wvw;
     public bool HasCommander;
     public bool Targetless;
+    public string FightNameNoMode;
     public string FightName;
     public string FightIcon;
+    public string FightMode;
+    public string FightStartStatus;
     public bool LightTheme;
     public bool NoMechanics;
     public bool SingleGroup;
@@ -130,11 +135,46 @@ internal class LogDataDto
         }
 
         EncounterDuration = log.FightData.DurationString;
+        EvtcRecordingDuration = log.FightData.EvtcRecordingDuration;
         Success = log.FightData.Success;
         Wvw = log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
         Targetless = log.FightData.Logic.Targetless;
+        FightNameNoMode = log.FightData.FightNameNoMode;
         FightName = log.FightData.FightName;
         FightIcon = log.FightData.Logic.Icon;
+        switch (log.FightData.FightMode)
+        {
+            case FightData.EncounterMode.Story:
+                FightMode = "Story Mode";
+                break;
+            case FightData.EncounterMode.Normal:
+                FightMode = log.FightData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
+                break;
+            case FightData.EncounterMode.CM:
+            case FightData.EncounterMode.CMNoName:
+                FightMode = "Challenge Mode";
+                break;
+            case FightData.EncounterMode.LegendaryCM:
+                FightMode = "Legendary Challenge Mode";
+                break;
+            default:
+                break;
+        }
+        switch (log.FightData.FightStartStatus)
+        {
+            case FightData.EncounterStartStatus.Normal:
+                break;
+            case FightData.EncounterStartStatus.NotSet:
+                break;
+            case FightData.EncounterStartStatus.Late:
+                FightStartStatus = "Late Start";
+                break;
+            case FightData.EncounterStartStatus.NoPreEvent:
+                FightStartStatus = "No Pre-Event";
+                break;
+            default:
+                break;
+        }
         LightTheme = light;
         SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
         HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;

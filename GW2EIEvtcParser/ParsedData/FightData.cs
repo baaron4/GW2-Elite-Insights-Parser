@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.EncounterLogic.OpenWorld;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -18,10 +19,11 @@ public class FightData
     public long FightDuration => FightEnd;
 
     public string FightName { get; private set; }
+    public string FightNameNoMode { get; private set; }
     public long LogStart { get; private set; }
     public long LogEnd { get; private set; }
     public long LogOffset { get; private set; }
-
+    public string EvtcRecordingDuration {  get; private set; }
     public long FightStartOffset => -LogStart;
     public string DurationString
     {
@@ -32,7 +34,7 @@ public class FightData
     }
     public bool Success { get; private set; }
 
-    internal enum EncounterMode
+    public enum EncounterMode
     {
         NotSet,
         Story,
@@ -41,20 +43,21 @@ public class FightData
         CM,
         CMNoName
     }
-    private EncounterMode _encounterMode = EncounterMode.NotSet;
-    public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
-    public bool IsLegendaryCM => _encounterMode == EncounterMode.LegendaryCM;
 
-    internal enum EncounterStartStatus
+    public EncounterMode FightMode { get; private set; } = EncounterMode.NotSet;
+    public bool IsCM => FightMode == EncounterMode.CMNoName || FightMode == EncounterMode.CM;
+    public bool IsLegendaryCM => FightMode == EncounterMode.LegendaryCM;
+
+    public enum EncounterStartStatus
     {
         NotSet,
         Normal,
         Late,
         NoPreEvent
     }
-    private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
-    public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
-    public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
+    public EncounterStartStatus FightStartStatus { get; private set; } = EncounterStartStatus.NotSet;
+    public bool IsLateStart => FightStartStatus == EncounterStartStatus.Late || MissingPreEvent;
+    public bool MissingPreEvent => FightStartStatus == EncounterStartStatus.NoPreEvent;
 
     // Constructors
     internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)
@@ -62,6 +65,7 @@ public class FightData
         LogStart = start;
         LogEnd = end;
         FightEnd = end - start;
+        EvtcRecordingDuration = ParserHelper.ToDurationString(FightEnd);
 
         Logic = DetectFight(id, agentData, parserSettings, evtcVersion);
         Logic = Logic.AdjustLogic(agentData, combatData, parserSettings);
@@ -295,10 +299,11 @@ public class FightData
 
     internal void CompleteFightName(CombatData combatData, AgentData agentData)
     {
-        FightName = Logic.GetLogicName(combatData, agentData)
-            + (_encounterMode == EncounterMode.CM ? " CM" : "")
-            + (_encounterMode == EncounterMode.LegendaryCM ? " LCM" : "")
-            + (_encounterMode == EncounterMode.Story ? " Story" : "")
+        FightNameNoMode = Logic.GetLogicName(combatData, agentData);
+        FightName = FightNameNoMode
+            + (FightMode == EncounterMode.CM ? " CM" : "")
+            + (FightMode == EncounterMode.LegendaryCM ? " LCM" : "")
+            + (FightMode == EncounterMode.Story ? " Story" : "")
             + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
             + (MissingPreEvent ? " (No Pre-Event)" : "");
     }
@@ -341,14 +346,14 @@ public class FightData
     // Setters
     internal void ProcessEncounterStatus(CombatData combatData, AgentData agentData)
     {
-        if (_encounterMode == EncounterMode.NotSet)
+        if (FightMode == EncounterMode.NotSet)
         {
-            _encounterMode = Logic.GetEncounterMode(combatData, agentData, this);
-            if (_encounterMode == EncounterMode.Story)
+            FightMode = Logic.GetEncounterMode(combatData, agentData, this);
+            if (FightMode == EncounterMode.Story)
             {
                 Logic.InvalidateEncounterID();
             }
-            _encounterStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
+            FightStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
         }
     }
 

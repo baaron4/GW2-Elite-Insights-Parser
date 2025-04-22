@@ -76,7 +76,7 @@ internal class Artsariiv : ShatteredObservatory
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
-        phases[0].AddTarget(artsariiv);
+        phases[0].AddTarget(artsariiv, log);
         if (!requirePhases)
         {
             return phases;
@@ -98,7 +98,7 @@ internal class Artsariiv : ShatteredObservatory
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(artsariiv);
+                phase.AddTarget(artsariiv, log);
             }
         }
         return phases;

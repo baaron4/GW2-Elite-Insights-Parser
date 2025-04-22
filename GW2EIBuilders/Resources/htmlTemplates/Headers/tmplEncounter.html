@@ -1,7 +1,8 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
-        <div class="card-body container">
+        <h7 class="card-header-fightMode text-center" :class="fightModeColorClass">{{ encounter.mode }}</h7>
+        <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
                     <div v-if="instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
@@ -13,30 +14,25 @@
                     </div>
                     <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
                 </div>
-                <div class="ml-3 d-flex flex-column justify-content-center">
-                    <div v-if="!wvw" class="mb-2" v-for="target in encounter.targets">
+                <div class="ml-1 d-flex flex-column justify-content-center">
+                    <div v-if="!wvw" class="mb-1" v-for="target in encounter.targets">
                         <div class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
-                        <div v-if="target.health > 0" class="super-small" style="text-align:center;">
-                            {{ target.health }} Health
-                        </div>
                         <div :data-original-title="healthRemaining(target)">
-                            <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
+                            <div class="healthBar" :style="{'background': getGradient(target)}">
                             </div>
-                            <div v-if="target.hpLeftPercent > 0" class="small" style="text-align:center;">
-                                {{ target.hpLeftPercent }}% health remaining
-                            </div>
-                            <div v-if="target.barrierLeftPercent > 0" class="small" style="text-align:center;">
-                                {{ target.barrierLeftPercent }}% barrier remaining
+                            <div v-if="target.health > 0" class="super-small" style="text-align: center;">
+                                {{ targetHealthValues(target) }}
                             </div>
                         </div>
                     </div>
-                    <div v-if="!wvw" class="mb-2 text" :class="resultStatus.class">
+                    <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
+                    <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
+                    <div class="mb-2 text-warning" v-if="encounter.start"> {{ encounter.start }}</div>
+                    <div v-if="!wvw" class="text" :class="resultStatus.class">
                         Result: {{resultStatus.text}}
                     </div>
-                    <div class="mb-2">Duration: {{ encounter.duration }}</div>
-                    <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                 </div>
             </div>
         </div>
@@ -45,7 +41,7 @@
 
 <script>
     Vue.component("encounter-component", {
-        props: [],
+        props: ["light"],
         template: `${template}`,
         data: function () {
             return {
@@ -71,15 +67,27 @@
                 var hpLeft = target.hpLeft;
                 var barrierLeft = target.barrierLeft;
                 if (hpLeft > 0 && barrierLeft > 0) {
-                    return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
+                    return 'Remaining:<br>Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
                 }
                 else if (hpLeft > 0 && barrierLeft == 0) {
-                    return 'Health: ' + hpLeft;
+                    return 'Remaining:<br>Health: ' + hpLeft;
                 }
                 else if (barrierLeft > 0) {
-                    return 'Barrier: ' + barrierLeft;
+                    return 'Remaining:<br>Barrier: ' + barrierLeft;
                 }
                 return false;
+            },
+            targetHealthValues: function (target) {
+                var health = target.health;
+                var hpLeft = target.hpLeftPercent;
+                var barrierLeft = target.barrierLeftPercent;
+                if ((hpLeft > 0 && barrierLeft > 0) || (hpLeft == 0 && barrierLeft > 0)) { // If only barrier is left, show 0 + x.y barrier
+                    return health + " HP (" + hpLeft + "% + " + barrierLeft + "%)";
+                }
+                else if (hpLeft > 0 && barrierLeft == 0) {
+                    return health + " HP (" + hpLeft + "%)";
+                }
+                return health + " HP";
             },
         },
         computed: {
@@ -101,10 +109,12 @@
                 }
 
                 var encounter = {
-                    name: logData.fightName,
+                    name: logData.fightNameNoMode,
                     icon: logData.fightIcon,
                     duration: logData.encounterDuration,
-                    targets: targets
+                    targets: targets,
+                    mode: logData.fightMode,
+                    start: logData.fightStartStatus,
                 };
                 return encounter;
             },
@@ -112,7 +122,7 @@
                 return logData.fractalScale;
             },
             resultStatus: function () {
-                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-warning"] };
+                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
             },
             instanceBuffs: function () {
                 if (logData.instanceBuffs.length == 0) {
@@ -123,6 +133,28 @@
                     res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
                 }
                 return res;
+            },
+            fightModeColorClass: function () {
+                switch (logData.fightMode) {
+                    case "Story Mode":
+                        return { 'fightModeStory-light': this.light, 'fightModeStory-dark': !this.light };
+                        break;
+                    case "Emboldened Normal Mode":
+                        return { 'fightModeEmboldened-light': this.light, 'fightModeEmboldened-dark': !this.light };
+                        break;
+                    case "Normal Mode":
+                        return { 'fightModeNormal-light': this.light, 'fightModeNormal-dark': !this.light };
+                        break;
+                    case "Challenge Mode":
+                        return { 'fightModeChallenge-light': this.light, 'fightModeChallenge-dark': !this.light };
+                        break;
+                    case "Legendary Challenge Mode":
+                        return { 'fightModeLegendary-light': this.light, 'fightModeLegendary-dark': !this.light };
+                        break;
+                    default:
+                        break;
+                }
+                return;
             },
         }
     });
