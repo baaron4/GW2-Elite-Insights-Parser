@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Security.Cryptography;
+
+namespace GW2EIEvtcParser.EIData;
 
 internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
 {
@@ -16,6 +18,13 @@ internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
 
     public override bool Has(IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        return bgms.Keys.Intersect(_ids).Any();
+        foreach (long id in _ids)
+        {
+            if (bgms.TryGetValue(id, out var bgm) && !bgm.IsEmpty)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ public class StateGraph<T>
     public IReadOnlyList<GenericSegment<T>> Values => _values;
     private readonly List<GenericSegment<T>> _values;
 
+
     public StateGraph()
     {
         _values = [];

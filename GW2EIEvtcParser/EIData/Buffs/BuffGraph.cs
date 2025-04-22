@@ -7,17 +7,21 @@ public class BuffGraph
     public IReadOnlyList<Segment> Values => _buffChart.Values;
     private StateGraph<double> _buffChart;
 
+    public bool IsEmpty { get; private set; }
+
     // Constructor
     internal BuffGraph(Buff buff)
     {
         Buff = buff;
         _buffChart = new StateGraph<double>();
+        IsEmpty = true;
     }
     internal BuffGraph(Buff buff, List<Segment> buffChartWithSource)
     {
         Buff = buff;
         _buffChart = new StateGraph<double>(buffChartWithSource);
         _buffChart.FuseSegments();
+        IsEmpty = !_buffChart.Values.Any(x => x.Value > 0);
     }
 
     public Segment GetBuffStatus(long time)
@@ -133,6 +137,11 @@ public class BuffGraph
         }
         // Merge consecutive segments with same value, otherwise expect exponential growth
         _buffChart.FuseSegments();
+        // If the graph was not empty, this method can not empty it
+        if (IsEmpty)
+        {
+            IsEmpty = !_buffChart.Values.Any(x => x.Value > 0);
+        }
     }
 
 }

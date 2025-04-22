@@ -16,6 +16,10 @@ internal class BuffsTrackerSingle : BuffsTracker
 
     public override bool Has(IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        return bgms.ContainsKey(_id);
+        if (bgms.TryGetValue(_id, out var bgm))
+        {
+            return !bgm.IsEmpty;
+        }
+        return false;
     }
 }
