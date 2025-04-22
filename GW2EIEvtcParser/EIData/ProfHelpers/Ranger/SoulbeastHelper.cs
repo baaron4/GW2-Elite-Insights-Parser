@@ -54,7 +54,9 @@ internal static class SoulbeastHelper
             .WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All).UsingChecker((x,log) => x.IsOverNinety).WithBuilds(GW2Builds.May2018Balance),
+        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All)
+            .UsingChecker((x,log) => x.IsOverNinety)
+            .WithBuilds(GW2Builds.May2018Balance),
         new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.OppressiveSuperiority, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);

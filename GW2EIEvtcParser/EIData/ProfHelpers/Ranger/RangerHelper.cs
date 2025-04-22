@@ -36,9 +36,10 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSnowLeopard,
         (int)MinionID.JuvenileTiger,
         (int)MinionID.JuvenileWhiteTiger,
+        (int)MinionID.JuvenileWarclaw,
     ];
 
-    private static HashSet<int> JuvenileBirdPetIDs =
+    private static readonly HashSet<int> JuvenileBirdPetIDs =
     [
         (int)MinionID.JuvenileEagle,
         (int)MinionID.JuvenileHawk,
@@ -132,7 +133,6 @@ internal static class RangerHelper
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
-        (int)MinionID.JuvenileWarclaw,
         (int)MinionID.JuvenileJanthiriBee,
     }
     .Union(JuvenileFelinePetIDs)
@@ -291,7 +291,8 @@ internal static class RangerHelper
         new BuffGiveCastFinder(GuardSkill, GuardBuff)
             .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
         new BuffGiveCastFinder(LesserGuardSkill, GuardBuff)
-            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant))
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
             .UsingICD(1100).UsingNotAccurate(true),
         new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
@@ -309,7 +310,7 @@ internal static class RangerHelper
     private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
     {
         AgentItem src = x.From;
-        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).LastOrDefault(y => y is BuffApplyEvent && y.Time <= x.Time);
         if (effectApply != null)
         {
             return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -344,6 +345,7 @@ internal static class RangerHelper
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
             .UsingChecker(SicEmFromDst)
             .WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em!", "40% Pet", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
         // Marksmanship
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
             .UsingApproximate(true)
@@ -389,8 +391,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
         // Nature Magic
-        // We can't check buffs on minions yet
-        new BuffOnActorDamageModifier(Mod_BountifulHunter, NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1% per boon (player and pet)", DamageSource.All, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)

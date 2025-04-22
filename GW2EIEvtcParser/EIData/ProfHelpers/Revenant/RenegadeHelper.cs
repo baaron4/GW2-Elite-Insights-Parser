@@ -90,7 +90,7 @@ internal static class RenegadeHelper
         new Buff("All for One", AllForOne, Source.Renegade, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.AllForOne),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.JasRazorclaw,
         (int)MinionID.ViskIcerazor,

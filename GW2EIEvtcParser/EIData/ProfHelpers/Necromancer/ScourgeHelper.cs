@@ -15,8 +15,6 @@ internal static class ScourgeHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishBuff),
-        // Trail of Anguish? Unique effect?
-        // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
         new DamageCastFinder(NefariousFavorSkill, NefariousFavorShadeHit),
         new DamageCastFinder(GarishPillarSkill, GarishPillarHit),
         new BuffGainCastFinder(DesertShroud, DesertShroudBuff)
@@ -48,6 +46,7 @@ internal static class ScourgeHelper
     [
         new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, TraitImages.SadisticSearing),
         new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SandSwell),
+        new Buff("Trail of Anguish", TrailOfAnguishBuff, Source.Scourge, BuffClassification.Other, SkillImages.TrailofAnguish),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

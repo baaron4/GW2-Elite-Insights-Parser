@@ -87,7 +87,7 @@ internal static class DeadeyeHelper
         new Buff("Deadeye's Gaze", DeadeyesGaze, Source.Deadeye, BuffClassification.Other, SkillImages.DeadeyesMark),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.DeadeyeSylvari1,
         (int)MinionID.DeadeyeHuman1,

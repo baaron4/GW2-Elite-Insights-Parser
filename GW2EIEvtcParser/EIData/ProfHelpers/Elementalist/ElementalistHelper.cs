@@ -252,14 +252,14 @@ internal static class ElementalistHelper
     ];
 
 
-    private static readonly HashSet<long> _elementalSwaps =
+    private static readonly HashSet<long> _attunements =
     [
-        FireAttunementSkill,WaterAttunementSkill,AirAttunementSkill, EarthAttunementSkill, DualFireAttunement, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, WaterFireAttunement, DualWaterAttunement, WaterAirAttunement, WaterEarthAttunement, AirFireAttunement, AirWaterAttunement, DualAirAttunement, AirEarthAttunement, EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement
+        FireAttunementSkill, WaterAttunementSkill, AirAttunementSkill, EarthAttunementSkill
     ];
 
-    public static bool IsElementalSwap(long id)
+    public static bool IsAttunementSwap(long id)
     {
-        return _elementalSwaps.Contains(id);
+        return _attunements.Contains(id);
     }
 
     public static void RemoveDualBuffs(IReadOnlyList<BuffEvent> buffsPerDst, Dictionary<long, List<BuffEvent>> buffsByID, SkillData skillData)
@@ -283,7 +283,7 @@ internal static class ElementalistHelper
         }
     }
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.LesserAirElemental,
         (int)MinionID.LesserEarthElemental,

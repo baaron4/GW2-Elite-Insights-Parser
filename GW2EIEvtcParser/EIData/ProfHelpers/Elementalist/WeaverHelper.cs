@@ -12,16 +12,21 @@ namespace GW2EIEvtcParser.EIData;
 internal static class WeaverHelper
 {
     private const long extraOrbHammerDelay = 520;
-    private static readonly IReadOnlyList<long> _weaverAtunements = new List<long>
+    private static readonly IReadOnlyList<long> _weaverAttunements = new List<long>
     {
         DualFireAttunement, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, WaterFireAttunement, DualWaterAttunement, WaterAirAttunement, WaterEarthAttunement, AirFireAttunement, AirWaterAttunement, DualAirAttunement, AirEarthAttunement, EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement
     };
+
+    public static bool IsAttunementSwap(long id)
+    {
+        return _weaverAttunements.Contains(id);
+    }
 
     private static long GetLastAttunement(AgentItem agent, long time, CombatData combatData)
     {
         time = Math.Max(time, ServerDelayConstant);
         var list = new List<BuffEvent>();
-        foreach (long attunement in _weaverAtunements)
+        foreach (long attunement in _weaverAttunements)
         {
             list.AddRange(combatData.GetBuffDataByIDByDst(attunement, agent).Where(x => x is BuffApplyEvent && x.Time <= time + ServerDelayConstant));
         }
@@ -213,9 +218,12 @@ internal static class WeaverHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
@@ -227,7 +235,8 @@ internal static class WeaverHelper
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenFire, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenAir, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
+        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenAir, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2023Balance),
         new BuffOnActorDamageModifier(Mod_PerfectWeaveCondition, PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),

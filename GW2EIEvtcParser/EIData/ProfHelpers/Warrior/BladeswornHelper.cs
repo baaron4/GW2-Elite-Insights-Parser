@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class BladeswornHelper
 {
-    /////////////////////
+
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffLossCastFinder(GunsaberSheath, GunsaberMode)

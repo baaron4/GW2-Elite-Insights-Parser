@@ -95,9 +95,12 @@ internal static class RevenantHelper
             .WithBuilds(GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_FerociousAggression, Fury, "Ferocious Aggression", "10% under fury", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, TraitImages.FerociousAggression, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.August2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance).UsingApproximate(true),
         // Devastation
@@ -206,13 +209,13 @@ internal static class RevenantHelper
 
     private static readonly HashSet<long> _legendSwaps =
     [
-        LegendaryAssassinStanceSkill, // Assassin
-        LegendaryDemonStanceSkill, // Demon
-        LegendaryDwarfStanceSkill, // Dwarf
-        LegendaryCentaurStanceSkill, // Centaur
-        LegendaryDragonStanceSkill, // Dragon
-        LegendaryRenegadeStanceSkill, // Renegade
-        LegendaryAllianceStanceSkill, // Alliance
+        LegendaryAssassinStanceSkill,
+        LegendaryDemonStanceSkill,
+        LegendaryDwarfStanceSkill,
+        LegendaryCentaurStanceSkill,
+        LegendaryDragonStanceSkill,
+        LegendaryRenegadeStanceSkill,
+        LegendaryAllianceStanceSkill,
         //LegendaryAllianceStanceUWSkill, // Alliance (UW)
     ];
 
@@ -221,7 +224,7 @@ internal static class RevenantHelper
         return _legendSwaps.Contains(id);
     }
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.VentariTablet
     ];

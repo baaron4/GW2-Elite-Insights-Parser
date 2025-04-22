@@ -60,7 +60,8 @@ internal static class BerserkerHelper
         new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.BloodReckoning)
             .WithBuilds(GW2Builds.October2022Balance),
         new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, SkillImages.ShatteringBlow),
-        new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, TraitImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance),
+        new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, TraitImages.SavageInstinct)
+            .WithBuilds(GW2Builds.April2019Balance),
         new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, TraitImages.AlwaysAngry)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.Other, TraitImages.HeatTheSoul),

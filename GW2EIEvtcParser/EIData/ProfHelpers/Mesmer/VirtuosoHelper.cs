@@ -31,7 +31,8 @@ internal static class VirtuosoHelper
             })
             .WithBuilds(GW2Builds.October2022Balance),
         new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem)
-            .UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+            .UsingSrcSpecChecker(Spec.Virtuoso)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts)
             .UsingSrcSpecChecker(Spec.Virtuoso),
     ];

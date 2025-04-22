@@ -72,8 +72,10 @@ internal static class HeraldHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
-        new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.Incoming, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2018Balance),
+        new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.Incoming, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.Incoming, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
     ];

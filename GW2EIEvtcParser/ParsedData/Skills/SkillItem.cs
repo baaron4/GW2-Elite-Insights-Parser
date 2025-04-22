@@ -1396,7 +1396,12 @@ public class SkillItem
     //public int Range { get; private set; } = 0;
     private readonly bool AA;
 
-    public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID) || NecromancerHelper.IsDeathShroudTransform(ID) || HarbingerHelper.IsHarbingerShroudTransform(ID);
+    public bool IsSwap => ID == WeaponSwap 
+        || ElementalistHelper.IsAttunementSwap(ID)
+        || WeaverHelper.IsAttunementSwap(ID)
+        || RevenantHelper.IsLegendSwap(ID)
+        || NecromancerHelper.IsDeathShroudTransform(ID)
+        || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
     public bool IsAutoAttack(ParsedEvtcLog log) => AA || FirebrandHelper.IsAutoAttack(log, ID) || BladeswornHelper.IsAutoAttack(log, ID);

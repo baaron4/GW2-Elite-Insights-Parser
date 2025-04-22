@@ -394,6 +394,14 @@ public class AgentItem
         return log.FindActor(this).HasBuff(log, by, buffId, time);
     }
 
+    /// <summary>
+    /// Checks if the buffs are present on the actor.  Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise.
+    /// </summary>
+    public bool HasAnyBuff(ParsedEvtcLog log, IEnumerable<long> buffIds, long time, long window = 0)
+    {
+        return buffIds.Any(id => log.FindActor(this).HasBuff(log, id, time, window));
+    }
+
     public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
     {
         return log.FindActor(this).GetBuffStatus(log, buffId, time);

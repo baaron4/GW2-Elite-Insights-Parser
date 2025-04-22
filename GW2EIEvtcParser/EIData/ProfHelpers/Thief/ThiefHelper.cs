@@ -29,18 +29,22 @@ internal static class ThiefHelper
         new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).
             UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant)
             .UsingNotAccurate(true), // same id as leeching venom trait?
-        new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+        new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
+            .UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
             .UsingNotAccurate(true),
-        new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
+        new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE)
+            .UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedBuff),
         new EffectCastFinderByDst(InfiltratorsSignetSkill, EffectGUIDs.ThiefInfiltratorsSignet1)
             .UsingDstBaseSpecChecker(Spec.Thief)
             .UsingSecondaryEffectChecker(EffectGUIDs.ThiefInfiltratorsSignet2),
-        new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
-        new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
+        new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility)
+            .UsingDstBaseSpecChecker(Spec.Thief),
+        new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows)
+            .UsingDstBaseSpecChecker(Spec.Thief),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

@@ -15,21 +15,30 @@ internal static class ChronomancerHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new BuffGainCastFinder(ContinuumSplit, TimeAnchored), // Continuum Split
-        new BuffLossCastFinder(ContinuumShift, TimeAnchored), // Continuum Shift
-        new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond).UsingSrcSpecChecker(Spec.Chronomancer)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter),
-        new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder).UsingSrcSpecChecker(Spec.Chronomancer)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter),
-        new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingSrcSpecChecker(Spec.Chronomancer)
-            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter),
+        new BuffGainCastFinder(ContinuumSplit, TimeAnchored),
+        new BuffLossCastFinder(ContinuumShift, TimeAnchored),
+        new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond)
+            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSrcSpecChecker(Spec.Chronomancer),
+        new EffectCastFinder(Rewinder, EffectGUIDs.ChronomancerRewinder)
+            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSrcSpecChecker(Spec.Chronomancer),
+        new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink)
+            .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter)
+            .UsingSrcSpecChecker(Spec.Chronomancer),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
-        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
+        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.HasCrit)
+            .WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
+        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.HasCrit)
+            .WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.HasCrit)
+            .WithBuilds(GW2Builds.August2022BalanceHotFix),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
@@ -37,7 +46,8 @@ internal static class ChronomancerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.ContinuumSplit),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
