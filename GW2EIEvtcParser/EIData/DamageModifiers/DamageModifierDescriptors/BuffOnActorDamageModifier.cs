@@ -54,10 +54,21 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
         if (damageModifier.NeedsMinions)
         {
+            var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {
                 var singleActor = log.FindActor(evt.From);
-                if (ComputeGain(singleActor.GetBuffGraphs(log), evt, log, out double gain) && CheckCondition(evt, log))
+                if (ignoredSources.Contains(singleActor))
+                {
+                    continue;
+                }
+                var bgms = singleActor.GetBuffGraphs(log);
+                if (Skip(Tracker, bgms, GainComputer))
+                {
+                    ignoredSources.Add(singleActor);
+                    continue;
+                }
+                if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }
