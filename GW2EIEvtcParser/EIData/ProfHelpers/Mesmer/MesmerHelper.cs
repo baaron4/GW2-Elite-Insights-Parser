@@ -102,7 +102,7 @@ internal static class MesmerHelper
 
     private static bool WithIllusionsChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.From == x.CreditedFrom || x.From.IsAnySpecies(Illusions());
+        return x.From == x.CreditedFrom || x.From.IsAnySpecies(_clones) || x.From.IsAnySpecies(_phantasms);
     }
 
     private static bool SuperiorityComplexBonusChecker(HealthDamageEvent x, ParsedEvtcLog log)
@@ -356,11 +356,6 @@ internal static class MesmerHelper
         (int)MinionID.IllusionarySharpShooter,
         (int)MinionID.IllusionaryLancer,
     ];
-
-    private static IEnumerable<int> Illusions()
-    {
-        return _phantasms.Concat(_clones);
-    }
 
     internal static bool IsKnownMinionID(int id)
     {
