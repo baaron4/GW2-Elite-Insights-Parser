@@ -354,6 +354,7 @@ internal static class MesmerHelper
         (int)MinionID.IllusionaryWhaler,
         (int)MinionID.IllusionaryAvenger,
         (int)MinionID.IllusionarySharpShooter,
+        (int)MinionID.IllusionaryLancer,
     ];
 
     private static IEnumerable<int> Illusions()
