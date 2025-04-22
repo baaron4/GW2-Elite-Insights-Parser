@@ -41,7 +41,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 
     protected static bool Skip(BuffsTracker tracker, IReadOnlyDictionary<long, BuffGraph> bgms, GainComputer gainComputer)
     {
-        return (!tracker.Has(bgms) && gainComputer != ByAbsence) || (tracker.Has(bgms) && gainComputer == ByAbsence);
+        return (gainComputer != ByAbsence && tracker.IsEmpty(bgms)) || (gainComputer == ByAbsence && tracker.IsFull(bgms));
     }
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)

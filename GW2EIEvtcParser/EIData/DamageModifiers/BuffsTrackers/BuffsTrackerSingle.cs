@@ -14,12 +14,13 @@ internal class BuffsTrackerSingle : BuffsTracker
         return bgms.TryGetValue(_id, out var bgm) ? bgm.GetStackCount(time) : 0;
     }
 
-    public override bool Has(IReadOnlyDictionary<long, BuffGraph> bgms)
+    public override bool IsEmpty(IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        if (bgms.TryGetValue(_id, out var bgm))
-        {
-            return !bgm.IsEmpty;
-        }
-        return false;
+        return !bgms.TryGetValue(_id, out var bgm) || bgm.IsEmpty;
+    }
+
+    public override bool IsFull(IReadOnlyDictionary<long, BuffGraph> bgms)
+    {
+        return bgms.TryGetValue(_id, out var bgm) && bgm.IsFull;
     }
 }

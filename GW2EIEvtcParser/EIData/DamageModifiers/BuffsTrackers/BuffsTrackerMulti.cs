@@ -16,15 +16,13 @@ internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
         return stack;
     }
 
-    public override bool Has(IReadOnlyDictionary<long, BuffGraph> bgms)
+    public override bool IsEmpty(IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        foreach (long id in _ids)
-        {
-            if (bgms.TryGetValue(id, out var bgm) && !bgm.IsEmpty)
-            {
-                return true;
-            }
-        }
-        return false;
+        return _ids.All(x => !bgms.TryGetValue(x, out var bgm) || bgm.IsEmpty);
+    }
+
+    public override bool IsFull(IReadOnlyDictionary<long, BuffGraph> bgms)
+    {
+        return _ids.All(x => bgms.TryGetValue(x, out var bgm) && bgm.IsFull);
     }
 }
