@@ -146,13 +146,13 @@ public class BuffGraph
         }
         // Merge consecutive segments with same value, otherwise expect exponential growth
         _buffChart.FuseSegments();
-        // If the graph was not empty, this method can not empty it
-        if (!IsEmpty)
+        // This method can not empty the graph
+        if (IsEmpty)
         {
             IsEmpty = !_buffChart.Values.Any(x => x.Value > 0);
         }
         // This method can not add 0s to the graph
-        if (IsFull)
+        if (!IsFull)
         {
             IsFull = _buffChart.Values.All(x => x.Value > 0);
         }
