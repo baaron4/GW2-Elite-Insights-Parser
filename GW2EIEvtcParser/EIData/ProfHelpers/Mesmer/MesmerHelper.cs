@@ -154,15 +154,15 @@ internal static class MesmerHelper
             .UsingApproximate(true),
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
         // Dueling
-        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
             .UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
-        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
             .UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         // Illusions
         new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
