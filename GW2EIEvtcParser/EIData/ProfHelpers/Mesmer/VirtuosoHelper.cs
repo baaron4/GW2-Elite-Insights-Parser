@@ -106,7 +106,7 @@ internal static class VirtuosoHelper
         return res;
     }
 
-    private static HashSet<int> Minions = [];
+    private static readonly HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

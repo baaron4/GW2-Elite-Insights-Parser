@@ -2445,7 +2445,7 @@ public static class SkillIDs
     public const long DualAirAttunement = 42264;
     public const long TrailOfAnguishBuff = 42311; // longer duration (12s vs 6s) but not pov only
     public const long AntiairBallistaBoltDamage3 = 42334;
-    public const long EchoOfTrue = 42360;
+    public const long EchoOfTruth = 42360;
     public const long TomeOfCourageOpen = 42404;
     public const long ElementsOfRage = 42416;
     public const long MagebaneTetherBuff = 42428;

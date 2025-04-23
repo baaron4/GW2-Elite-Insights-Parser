@@ -213,10 +213,6 @@ internal static class RevenantHelper
         LegendaryDemonStanceSkill,
         LegendaryDwarfStanceSkill,
         LegendaryCentaurStanceSkill,
-        LegendaryDragonStanceSkill,
-        LegendaryRenegadeStanceSkill,
-        LegendaryAllianceStanceSkill,
-        //LegendaryAllianceStanceUWSkill, // Alliance (UW)
     ];
 
     public static bool IsLegendSwap(long id)

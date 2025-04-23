@@ -101,6 +101,5 @@ internal static class WillbenderHelper
         //
         new Buff("Repose", Repose, Source.Willbender, BuffClassification.Other, SkillImages.Repose),
         new Buff("Lethal Tempo", LethalTempo, Source.Willbender, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.LethalTempo),
-        //new Buff("Tyrant's Lethal Tempo", 62657, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, BuffImages.TyrantsMomentum),
     ];
 }

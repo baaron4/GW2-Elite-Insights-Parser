@@ -15,7 +15,7 @@ internal static class DeadeyeHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new EffectCastFinderByDst(Mercy, EffectGUIDs.DeadeyeMercy)
-            .UsingDstSpecChecker(Spec.Deadeye), // Needs more testing to check for collisions
+            .UsingDstSpecChecker(Spec.Deadeye),
     ];
 
     private static bool DeadeyesGazeFromDst(DamageEvent x, ParsedEvtcLog log)

@@ -90,6 +90,11 @@ internal static class RenegadeHelper
         new Buff("All for One", AllForOne, Source.Renegade, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.AllForOne),
     ];
 
+    public static bool IsLegendSwap(long id)
+    {
+        return LegendaryRenegadeStanceSkill == id;
+    }
+
     private static readonly HashSet<int> Minions =
     [
         (int)MinionID.JasRazorclaw,

@@ -345,5 +345,9 @@ public static class DamageModifierIDs
     public const int Mod_PhantasmalForce = 332;
     public const int Mod_SicEmPet = 333;
     public const int Mod_BountifulHunterWithPet = 334;
+    public const int Mod_SolarFocusingLens = 335;
+    public const int Mod_DarkDefiance = 336;
+    public const int Mod_NecromanticCorruption = 337;
+    public const int Mod_BloodAsSand = 338;
 }
 

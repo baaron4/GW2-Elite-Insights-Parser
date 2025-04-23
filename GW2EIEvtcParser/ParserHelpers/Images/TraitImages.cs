@@ -152,6 +152,9 @@ internal static class TraitImages
     public const string AuguryOfDeath = "https://render.guildwars2.com/file/CBBA2FA5F20755523E5424D0704B5B6C5F2B7C67/1012570.png";
     public const string OverflowingThirst = "https://render.guildwars2.com/file/09266890E7D1517B2D634E026A67696ABDBCDBC3/1012535.png";
     public const string SpirefulRenewal = "https://render.guildwars2.com/file/EFCE14DF279DDD28C54077500B03DEC1B692120A/1012595.png";
+    public const string DarkDefiance = "https://render.guildwars2.com/file/07E34F107B380DFDEFAF1894C66973BCFC3B3D9D/1012562.png";
+    public const string NecromanticCorruption = "https://render.guildwars2.com/file/AE61EAFBE6F1CC7902189CE79FA3FAB103F53F59/1012561.png";
+    public const string BloodAsSand = "https://render.guildwars2.com/file/BE75E965AB68DC0E5BFE5F3EA3A69C23CC01D5CC/1769974.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";

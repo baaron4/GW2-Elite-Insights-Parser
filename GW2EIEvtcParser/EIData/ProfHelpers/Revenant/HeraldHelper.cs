@@ -111,4 +111,9 @@ internal static class HeraldHelper
         new Buff("Burst of Strength", BurstOfStrength, Source.Herald, BuffClassification.Other, SkillImages.BurstOfStrength),
         new Buff("Rising Momentum", RisingMomentum, Source.Herald, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.RisingMomentum),
     ];
+
+    public static bool IsLegendSwap(long id)
+    {
+        return LegendaryDragonStanceSkill == id;
+    }
 }

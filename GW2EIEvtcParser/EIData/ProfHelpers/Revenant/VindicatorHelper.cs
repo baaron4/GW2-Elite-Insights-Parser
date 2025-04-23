@@ -57,4 +57,9 @@ internal static class VindicatorHelper
         new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
+
+    public static bool IsLegendSwap(long id)
+    {
+        return LegendaryAllianceStanceSkill == id;
+    }
 }
