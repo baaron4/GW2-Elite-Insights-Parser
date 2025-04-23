@@ -114,17 +114,6 @@ internal static class EngineerHelper
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
     ];
 
-    private static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
-    {
-        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-        if (selfHP < 0.0 || dstHP < 0.0)
-        {
-            return false;
-        }
-        return selfHP > dstHP;
-    }
-
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
@@ -141,7 +130,8 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All ).UsingApproximate(true)
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All )
+            .UsingApproximate(true)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.sPvPWvW )
             .UsingApproximate(true)
@@ -257,7 +247,7 @@ internal static class EngineerHelper
         }
     }
 
-    private static HashSet<int> Minions = [];
+    private static readonly HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

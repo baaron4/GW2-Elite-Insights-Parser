@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class SpellbreakerHelper
 {
-    /////////////////////
+
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(SightBeyondSightSkill, SightBeyondSightBuff),

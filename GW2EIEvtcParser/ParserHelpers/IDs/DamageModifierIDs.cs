@@ -338,5 +338,12 @@ public static class DamageModifierIDs
     public const int Mod_ImprovedKallasFervorConditionLifeLeech = 325;
     public const int Mod_Wolfsong = 326;
     public const int Mod_BeastlyWardenPetOnly = 327;
+    public const int Mod_EmpoweredIllusions = 328;
+    public const int Mod_ViciousExpressionWithIllusions = 329;
+    public const int Mod_SuperiorityComplex = 330;
+    public const int Mod_SuperiorityComplexBonus = 331;
+    public const int Mod_PhantasmalForce = 332;
+    public const int Mod_SicEmPet = 333;
+    public const int Mod_BountifulHunterWithPet = 334;
 }
 

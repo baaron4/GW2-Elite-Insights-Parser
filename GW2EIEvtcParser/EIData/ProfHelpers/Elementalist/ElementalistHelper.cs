@@ -128,7 +128,6 @@ internal static class ElementalistHelper
         new DamageLogDamageModifier(Mod_FlowLikeWater5, "Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance)
             .UsingApproximate(true),
-        //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance),
         // Arcane
         new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.BountifulPower, DamageModifierMode.All),
         new BuffOnFoeDamageModifier(Mod_StormSoul, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, TraitImages.Stormsoul, DamageModifierMode.All)
@@ -152,7 +151,9 @@ internal static class ElementalistHelper
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 360.0
-            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
+            , DamageModifierMode.All)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.July2019Balance)
     ];
 
 
@@ -165,13 +166,9 @@ internal static class ElementalistHelper
         new Buff("Signet of Fire", SignetOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
         new Buff("Signet of Water", SignetOfWater, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
         // Attunements
-        // Fire
         new Buff("Fire Attunement", FireAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FireAttunement),
-        // Water
         new Buff("Water Attunement", WaterAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.WaterAttunement),
-        // Air
         new Buff("Air Attunement", AirAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.AirAttunement),
-        // Earth
         new Buff("Earth Attunement", EarthAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.EarthAttunement),
         // Forms
         new Buff("Mist Form", MistForm, Source.Elementalist, BuffClassification.Other, SkillImages.MistForm),
@@ -204,7 +201,7 @@ internal static class ElementalistHelper
         new Buff("Arcane Power (Ferocity)", ArcanePowerFerocityBuff, Source.Elementalist, BuffClassification.Other, SkillImages.ArcanePower),
         new Buff("Arcane Shield", ArcaneShieldBuff, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.ArcaneShield),
         new Buff("Renewal of Fire", RenewalOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.RenewalOfFire),
-        new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, SkillImages.RockBarrier),//750?
+        new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, SkillImages.RockBarrier),
         new Buff("Magnetic Wave", MagneticWave, Source.Elementalist, BuffClassification.Other, SkillImages.MagneticWave),
         new Buff("Obsidian Flesh", ObsidianFlesh, Source.Elementalist, BuffClassification.Other, SkillImages.ObsidianFlesh),
         new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.PersistingFlames)
@@ -252,14 +249,14 @@ internal static class ElementalistHelper
     ];
 
 
-    private static readonly HashSet<long> _elementalSwaps =
+    private static readonly HashSet<long> _attunements =
     [
-        FireAttunementSkill,WaterAttunementSkill,AirAttunementSkill, EarthAttunementSkill, DualFireAttunement, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, WaterFireAttunement, DualWaterAttunement, WaterAirAttunement, WaterEarthAttunement, AirFireAttunement, AirWaterAttunement, DualAirAttunement, AirEarthAttunement, EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement
+        FireAttunementSkill, WaterAttunementSkill, AirAttunementSkill, EarthAttunementSkill
     ];
 
-    public static bool IsElementalSwap(long id)
+    public static bool IsAttunementSwap(long id)
     {
-        return _elementalSwaps.Contains(id);
+        return _attunements.Contains(id);
     }
 
     public static void RemoveDualBuffs(IReadOnlyList<BuffEvent> buffsPerDst, Dictionary<long, List<BuffEvent>> buffsByID, SkillData skillData)
@@ -283,7 +280,7 @@ internal static class ElementalistHelper
         }
     }
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.LesserAirElemental,
         (int)MinionID.LesserEarthElemental,

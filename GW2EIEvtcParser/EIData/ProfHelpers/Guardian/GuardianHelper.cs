@@ -165,7 +165,8 @@ internal static class GuardianHelper
         new Buff("Signet of Wrath (PI)", SignetOfWrathPI, Source.Guardian, BuffClassification.Other, SkillImages.SignetOfWrath)
             .WithBuilds(GW2Builds.June2022Balance),
         new Buff("Signet of Courage", SignetOfCourage, Source.Guardian, BuffClassification.Other, SkillImages.SignetOfCourage),
-        new Buff("Signet of Courage (Shared)", SignetOfCourageShared , Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, SkillImages.SignetOfCourage).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+        new Buff("Signet of Courage (Shared)", SignetOfCourageShared , Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, SkillImages.SignetOfCourage)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Signet of Courage (PI)", SignetOfCouragePI , Source.Guardian, BuffClassification.Other, SkillImages.SignetOfCourage)
             .WithBuilds(GW2Builds.June2022Balance),
         // Virtues
@@ -183,14 +184,15 @@ internal static class GuardianHelper
             .WithBuilds(GW2Builds.July2019Balance),
         new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.VirtuousSolace)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, TraitImages.VirtuousSolace).WithBuilds(GW2Builds.February2020Balance2),
+        new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, TraitImages.VirtuousSolace)
+            .WithBuilds(GW2Builds.February2020Balance2),
         new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, TraitImages.ForceOfWill),
         // Spear
         new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, SkillImages.SymbolOfLuminance),
         new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, SkillImages.Illuminated),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.BowOfTruth,
         (int)MinionID.HammerOfWisdom,

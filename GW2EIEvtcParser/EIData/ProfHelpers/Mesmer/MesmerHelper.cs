@@ -23,11 +23,14 @@ internal static class MesmerHelper
             })
             .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
             .UsingDisableWithEffectData(),
-        new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight).UsingDstBaseSpecChecker(Spec.Mesmer),
+        new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight)
+            .UsingDstBaseSpecChecker(Spec.Mesmer),
         new BuffGainCastFinder(PortalEntre, PortalWeaving),
         new BuffGainCastFinder(PortalExeunt, PortalUses),
-        new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
+        new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback)
+            .UsingSrcBaseSpecChecker(Spec.Mesmer),
         // identify swap by buff remove
         // identify phase retreat by spawned staff clone
         // fallback to blink or phase retreat
@@ -62,61 +65,121 @@ internal static class MesmerHelper
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
             .WithBuilds(GW2Builds.October2022Balance),
         // Mantras        
-        new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-        new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.February2023Balance),
-        new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
-        new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
-        new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-        new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance, GW2Builds.February2024NewWeapons),
+        new DamageCastFinder(PowerSpike, PowerSpike)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new DamageCastFinder(MantraOfPain, MantraOfPain)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+        new DamageCastFinder(PowerSpike, PowerSpike)
+            .WithBuilds(GW2Builds.February2023Balance),
+        new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
+        new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn)
+            .UsingDstBaseSpecChecker(Spec.Mesmer)
+            .WithBuilds(GW2Builds.February2023Balance),
+        new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
+            .UsingSrcBaseSpecChecker(Spec.Mesmer)
+            .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
+        new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
+            .UsingSrcBaseSpecChecker(Spec.Mesmer)
+            .WithBuilds(GW2Builds.February2023Balance, GW2Builds.February2024NewWeapons),
         new EffectCastFinderByDst(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse2)
             .UsingSrcNotBaseSpecChecker(Spec.Mesmer)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
             .UsingSecondaryEffectCheckerInvertedSrc(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
-        new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+        new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak)
+            .UsingDstBaseSpecChecker(Spec.Mesmer)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
+        new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak)
+            .UsingDstBaseSpecChecker(Spec.Mesmer)
+            .WithBuilds(GW2Builds.February2023Balance),
         // Rifle
         new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
         new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
             .UsingSecondaryEffectChecker(EffectGUIDs.MesmerRifleAbstraction2)
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
     ];
-    private static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+
+    private static bool WithIllusionsChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
-        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
-        if (selfHP < 0.0 || dstHP < 0.0)
+        return x.From == x.CreditedFrom || x.From.IsAnySpecies(_clones) || x.From.IsAnySpecies(_phantasms);
+    }
+
+    private static bool SuperiorityComplexBonusChecker(HealthDamageEvent x, ParsedEvtcLog log)
+    {
+        // Damage event must be a critical hit
+        if (!x.HasCrit)
         {
             return false;
         }
-        return selfHP > dstHP;
+
+        bool isCC = false;
+        bool hasCCBuffs = false;
+
+        // If the target doesn't have a defiance bar, it can be CC'd
+        if (x.To.GetCurrentBreakbarState(log, x.Time) == BreakbarState.None)
+        {
+            var ccEvents = log.CombatData.GetIncomingCrowdControlData(x.To);
+            isCC = ccEvents.Any(cc => x.Time >= cc.Time && x.Time <= cc.Time + cc.Duration);
+        }
+        // Otherwise check for these buffs being applied
+        else
+        {
+            long[] buffs = [Stun, Daze, Fear, Taunt];
+            hasCCBuffs = x.To.HasAnyBuff(log, buffs, x.Time);
+        }
+
+        // Conditions are: Must be a crowd control event or below 50% HP.
+        return isCC || hasCCBuffs || x.To.GetCurrentHealthPercent(log, x.Time) < 50.0;
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Domination
-        // Empowered illusions require knowing all illusion species ID
-        // We need illusion species ID to enable Vicious Expression on All
-        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
-        //
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
-        //
+        new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "Illusions deal 15% increased strike damage", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, WithIllusionsChecker, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
+            .UsingChecker(WithIllusionsChecker)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
+            .UsingChecker(WithIllusionsChecker)
+            .WithBuilds(GW2Builds.February2020Balance2),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)
+            .UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)
+            .UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.February2023Balance)
+            .UsingApproximate(true),
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
         // Dueling
-        // Superiority Complex can all the conditions be tracked?
+        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
+            .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
+            .UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
+            .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
+            .UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         // Illusions
-        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
-        // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
-        // Chaos       
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
+            .UsingChecker(WithIllusionsChecker),
+        // Chaos
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -151,7 +214,7 @@ internal static class MesmerHelper
         new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.FencersFinesse),
         new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.IllusionaryDefense),
         new Buff("Compounding Power", CompoundingPower, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.CompoundingPower),
-        new Buff("Phantasmal Force", PhantasmalForce, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.Mistrust),
+        new Buff("Phantasmal Force", PhantasmalForce, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.PhantasmalForce_Mistrust),
         new Buff("Reflection", Reflection, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
         new Buff("Reflection 2", Reflection2, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
         // Transformations
@@ -161,7 +224,7 @@ internal static class MesmerHelper
         new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, SkillImages.Clarity),
     ];
 
-    private static readonly HashSet<int> _cloneIDs =
+    private static readonly HashSet<int> _clones =
     [
         (int)MinionID.CloneSword,
         (int)MinionID.CloneScepter,
@@ -273,15 +336,10 @@ internal static class MesmerHelper
         {
             return false;
         }
-        return _cloneIDs.Contains(agentItem.ID);
+        return _clones.Contains(agentItem.ID);
     }
 
-    private static bool IsClone(int id)
-    {
-        return _cloneIDs.Contains(id);
-    }
-
-    private static HashSet<int> NonCloneMinions =
+    private static readonly HashSet<int> _phantasms =
     [
         (int)MinionID.IllusionaryWarlock,
         (int)MinionID.IllusionaryWarden,
@@ -296,11 +354,12 @@ internal static class MesmerHelper
         (int)MinionID.IllusionaryWhaler,
         (int)MinionID.IllusionaryAvenger,
         (int)MinionID.IllusionarySharpShooter,
+        (int)MinionID.IllusionaryLancer,
     ];
 
     internal static bool IsKnownMinionID(int id)
     {
-        return NonCloneMinions.Contains(id) || IsClone(id);
+        return _phantasms.Contains(id) || _clones.Contains(id);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

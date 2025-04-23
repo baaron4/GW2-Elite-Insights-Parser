@@ -15,9 +15,12 @@ internal static class UntamedHelper
     [
         new BuffGainCastFinder(UnleashPet, PetUnleashed),
         new BuffGainCastFinder(UnleashRanger, Unleashed),
-        new BuffGainCastFinder(RestorativeStrikes, RestorativeStrikes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions).UsingDstSpecChecker(Spec.Untamed),
-        new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal).UsingDstSpecChecker(Spec.Untamed),
+        new BuffGainCastFinder(RestorativeStrikes, RestorativeStrikes)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions)
+            .UsingDstSpecChecker(Spec.Untamed),
+        new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal)
+            .UsingDstSpecChecker(Spec.Untamed),
 
         // Pet
         new EffectCastFinder(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst)

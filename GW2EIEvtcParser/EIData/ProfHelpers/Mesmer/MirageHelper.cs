@@ -13,8 +13,7 @@ internal static class MirageHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new DamageCastFinder(Jaunt, Jaunt),
-        // new EffectCastFinderByDst(Jaunt, EffectGUIDs.MirageJaunt).UsingDstSpecChecker(Spec.Mirage),
-        new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
+        new BuffGainCastFinder(MirageCloakDodge, MirageCloak),
         //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
     ];
 
@@ -39,7 +38,7 @@ internal static class MirageHelper
         new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, TraitImages.MirageMantle),
     ];
 
-    private static HashSet<int> Minions = [];
+    private static readonly HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

@@ -40,7 +40,8 @@ internal static class MechanistHelper
         new MinionCastCastFinder(RoilingSmash, RoilingSmash),
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-        new BuffGainCastFinder(DischargeArray, DischargeArrayBuff).WithMinions(true),
+        new BuffGainCastFinder(DischargeArray, DischargeArrayBuff)
+            .WithMinions(true),
         new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
             .WithMinions(true)
             .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
@@ -98,7 +99,7 @@ internal static class MechanistHelper
         new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, SkillImages.OverclockSignet),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.JadeMech,
     ];

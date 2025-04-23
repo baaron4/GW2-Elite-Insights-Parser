@@ -826,4 +826,18 @@ internal static class ProfHelper
         replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
         replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
     }
+
+    /// <summary>
+    /// Checks for self HP to be higher than the target HP.
+    /// </summary>
+    internal static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+        if (selfHP < 0.0 || dstHP < 0.0)
+        {
+            return false;
+        }
+        return selfHP > dstHP;
+    }
 }

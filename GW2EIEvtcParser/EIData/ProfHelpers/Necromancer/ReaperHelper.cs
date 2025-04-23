@@ -27,7 +27,6 @@ internal static class ReaperHelper
             .UsingDisableWithEffectData(),
         new EffectCastFinder(Suffer, EffectGUIDs.ReaperSuffer)
             .UsingSrcSpecChecker(Spec.Reaper),
-        // new BuffGainCastFinder(Rise, DarkBond).UsingICD(500), // buff reapplied on every minion attack
         new MinionSpawnCastFinder(Rise, (int)MinionID.ShamblingHorror)
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.GetFinalMaster().Spec == Spec.Reaper),
         new DamageCastFinder(ChillingNova, ChillingNova)
@@ -53,9 +52,12 @@ internal static class ReaperHelper
     [
         new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.sPvPWvW),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.Incoming, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.Incoming, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.May2023Balance), 
         // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
     ];
 
@@ -78,7 +80,7 @@ internal static class ReaperHelper
         return _reaperShroudTransform.Contains(id);
     }
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.ShamblingHorror,
     ];
