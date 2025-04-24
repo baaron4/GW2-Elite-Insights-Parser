@@ -394,7 +394,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         // - Light on your Feet
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
@@ -411,7 +411,7 @@ internal static class RangerHelper
 
         // Beastmastery
         // - Beastly Warden
-        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From) , DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From), DamageModifierMode.All)
             .UsingEarlyExit((a, log) => {
                 return a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.Value.ReferenceAgentItem) || IsJuvenilePorcinePet(x.Value.ReferenceAgentItem));
             })
