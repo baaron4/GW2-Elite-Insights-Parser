@@ -63,7 +63,7 @@ internal static class WarriorHelper
         // - Merciless Hammer
         new DamageLogDamageModifier(Mod_MercilessHammerDefiant, "Merciless Hammer", "20% to hammer and mace skills when hitting defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
             .WithBuilds(GW2Builds.November2022Balance)
-            .WithEvtcBuilds(ArcDPSBuilds.NewLogStart, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+            .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         new DamageLogDamageModifier(Mod_MercilessHammer, "Merciless Hammer", "20% to hammer and mace skills when hitting disabled or defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         // - Cull the Weak

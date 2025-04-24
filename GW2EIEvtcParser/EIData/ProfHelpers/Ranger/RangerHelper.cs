@@ -320,17 +320,11 @@ internal static class RangerHelper
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.Skill.IsWeaponSkill
-        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-        && (currentPosition - currentTargetPosition).Length() <= 600;
+        return x.Skill.IsWeaponSkill && TargetWithinRangeChecker(x, log, 600);
     }
     private static bool TargetAbove600Range(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.Skill.IsWeaponSkill
-        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-        && (currentPosition - currentTargetPosition).Length() > 600;
+        return x.Skill.IsWeaponSkill && !TargetWithinRangeChecker(x, log, 600, false);
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

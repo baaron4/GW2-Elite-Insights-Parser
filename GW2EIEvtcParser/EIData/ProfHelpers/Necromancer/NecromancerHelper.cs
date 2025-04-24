@@ -96,7 +96,8 @@ internal static class NecromancerHelper
 
         // Death Magic
         // - Necromantic Corruption
-        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsKnownMinionID(x.From.ID) || ReaperHelper.IsKnownMinionID(x.From.ID) || x.From.IsSpecies(MinionID.JaggedHorror), DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsKnownMinionID(x.From.ID) || ReaperHelper.IsKnownMinionID(x.From.ID) || x.From.IsSpecies(MinionID.JaggedHorror), DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => a.GetMinions(log).Any(x => IsAnyUndeadMinion(x.Value.ReferenceAgentItem))),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -194,6 +195,18 @@ internal static class NecromancerHelper
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);
+    }
+
+    /// <summary>
+    /// Checks if a minion is a Necromancer, Reaper or Rune/Relic of the Lich minion.
+    /// </summary>
+    internal static bool IsAnyUndeadMinion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return IsKnownMinionID(agentItem.ID) || ReaperHelper.IsKnownMinionID(agentItem.ID) || agentItem.IsSpecies(MinionID.JaggedHorror);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
