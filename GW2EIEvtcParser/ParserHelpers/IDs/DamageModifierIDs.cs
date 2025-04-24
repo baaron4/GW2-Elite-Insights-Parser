@@ -142,7 +142,7 @@ public static class DamageModifierIDs
     public const int Mod_InfusingTerror = 129;
     public const int Mod_SicEm = 130;
     public const int Mod_ForceOfNature = 131;
-    public const int Mod_OakheartSlave = 132;
+    public const int Mod_OakheartSalve = 132;
     public const int Mod_LightOnYourFeet = 133;
     public const int Mod_BountifulHunter = 134;
     public const int Mod_FrostSpirit = 135;
@@ -273,7 +273,7 @@ public static class DamageModifierIDs
     public const int Mod_HeavyLightDefiant = 260;
     public const int Mod_BigGameHunter = 261;
     public const int Mod_ZealotsAggression = 262;
-    public const int Mod_SerratedStoned = 263;
+    public const int Mod_SerratedStones = 263;
     public const int Mod_PiercingShardsWater = 264;
     public const int Mod_PiercingShardsNoWater = 265;
     public const int Mod_UnnaturalSignet = 266;
@@ -349,5 +349,9 @@ public static class DamageModifierIDs
     public const int Mod_DarkDefiance = 336;
     public const int Mod_NecromanticCorruption = 337;
     public const int Mod_BloodAsSand = 338;
+    public const int Mod_MercilessHammer = 339;
+    public const int Mod_MercilessHammerDefiant = 340;
+    public const int Mod_ObsidianFlesh = 341;
+    public const int Mod_VengefulHammers = 342;
 }
 

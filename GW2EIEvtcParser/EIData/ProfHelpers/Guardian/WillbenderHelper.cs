@@ -79,13 +79,14 @@ internal static class WillbenderHelper
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.March2022Balance2),
-        //
+        // Rushing Justice
         new CounterOnActorDamageModifier(Mod_RushingJustice, RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, SkillImages.RushingJustice, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1)
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Crashing Courage
         new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "50%", DamageSource.Incoming, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "20%", DamageSource.Incoming, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, TraitImages.DeathlessCourage, DamageModifierMode.sPvPWvW)

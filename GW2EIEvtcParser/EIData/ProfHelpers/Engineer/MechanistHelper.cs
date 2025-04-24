@@ -59,6 +59,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Force Signet
         new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.April2025BalancePatch)
             .UsingChecker(WithMechChecker),
@@ -68,6 +69,7 @@ internal static class MechanistHelper
         new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "15%, including Mech", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025BalancePatch)
             .UsingChecker(WithMechChecker),
+        // Superconducting Signet
         new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.SuperconductingSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker(WithMechChecker),
@@ -75,6 +77,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Barrier Signet
         new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.Incoming, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.BarrierSignet, DamageModifierMode.All),
     ];
 

@@ -41,16 +41,19 @@ internal static class CatalystHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Flame Wheel
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2022Balance2, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        // Relentless Fire
         new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance),
         new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2022Balance),
         new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2022Balance),
+        // Empowering Auras
         new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
@@ -63,6 +66,7 @@ internal static class CatalystHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Hardened Auras
         new BuffOnActorDamageModifier(Mod_HardenedAuras, HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.Incoming, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, TraitImages.HardenedAuras, DamageModifierMode.All),
     ];
 

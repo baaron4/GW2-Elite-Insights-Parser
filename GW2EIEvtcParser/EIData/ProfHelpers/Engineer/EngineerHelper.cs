@@ -117,6 +117,7 @@ internal static class EngineerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
+        // - Glass Cannon
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
@@ -126,10 +127,12 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.May2021Balance),
+        // - Shaped Charge
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
+        // - Big Boomer
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
@@ -139,24 +142,34 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.PvE )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
+        
         // Firearms
+        // - Thermal Vision
         new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, TraitImages.ThermalVision, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance),
         new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, TraitImages.ThermalVision, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
+        // - Modified Ammunition
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2024JWRelease),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.August2024JWRelease),
         new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.August2024JWRelease),
+        
         // Tools
+        // - Excessive Energy
         new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExcessiveEnergy, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Inventions
+        // - Over Shield
         new BuffOnActorDamageModifier(Mod_OverShield, Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.Incoming, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
+
+        // Alchemy
+        // - Iron Blooded
         new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
     ];
 

@@ -26,6 +26,7 @@ internal static class SpellbreakerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Pure Strike
         new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.PureStrike, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
@@ -44,19 +45,12 @@ internal static class SpellbreakerHelper
         new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "15% crit damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, TraitImages.PureStrike, DamageModifierMode.PvE)
             .UsingChecker( (x, log) => x.HasCrit)
             .WithBuilds(GW2Builds.August2022Balance),
+        // Magebane Tether
         new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly)
-            .UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AgentItem dst = x.To;
-                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTetherBuff, x.Time);
-            })
+            .UsingChecker((x, log) => x.To.HasBuff(log, log.FindActor(x.From), MagebaneTetherBuff, x.Time))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly)
-            .UsingChecker((x, log) => {
-                AgentItem src = x.From;
-                AgentItem dst = x.To;
-                return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTetherBuff, x.Time);
-            })
+            .UsingChecker((x, log) => x.To.HasBuff(log, log.FindActor(x.From), MagebaneTetherBuff, x.Time))
             .WithBuilds(GW2Builds.August2022Balance),
     ];
 

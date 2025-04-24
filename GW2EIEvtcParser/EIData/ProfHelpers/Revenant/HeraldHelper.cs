@@ -23,6 +23,7 @@ internal static class HeraldHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Reinforced Potency
         new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.sPvPWvW)
@@ -37,7 +38,7 @@ internal static class HeraldHelper
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_ReinforcedPotency, NumberOfBoons, "Reinforced Potency", "1.0% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.EnvoyOfSustenance, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        //
+        // Burst of Strength
         new BuffOnActorDamageModifier(Mod_BurstOfStrength, BurstOfStrength, "Burst of Strength", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.BurstOfStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_BurstOfStrength, BurstOfStrength, "Burst of Strength", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, SkillImages.BurstOfStrength, DamageModifierMode.PvE)
@@ -54,7 +55,7 @@ internal static class HeraldHelper
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_BurstOfStrengthCondition, BurstOfStrength, "Burst of Strength (Condition)", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Herald, ByPresence, SkillImages.BurstOfStrength, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        // 
+        // Forceful Persistence (Facets)
         new BuffOnActorDamageModifier(Mod_ForcefulPersistenceFacets, [FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff], "Forceful Persistence (Facets)", "3% per active Facet", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, TraitImages.ForcefulPersistence, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.October2024Balance),
         new BuffOnActorDamageModifier(Mod_ForcefulPersistenceFacets, [FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff], "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, TraitImages.ForcefulPersistence, DamageModifierMode.sPvPWvW)
@@ -72,8 +73,10 @@ internal static class HeraldHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Facet of Nature - Dwarf
         new BuffOnActorDamageModifier(Mod_FacetOfNatureDwarf, FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FacetOfNatureDwarf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance),
+        // Hardening Persistence
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.Incoming, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_HardeningPersistence, HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.Incoming, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, TraitImages.HardeningPersistence, DamageModifierMode.All)

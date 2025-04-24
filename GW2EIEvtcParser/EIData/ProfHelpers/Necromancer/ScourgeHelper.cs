@@ -44,6 +44,7 @@ internal static class ScourgeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
+        // Blood as Sand
         new DamageLogDamageModifier(Mod_BloodAsSand, "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, TraitImages.BloodAsSand, ShadeCheck, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];

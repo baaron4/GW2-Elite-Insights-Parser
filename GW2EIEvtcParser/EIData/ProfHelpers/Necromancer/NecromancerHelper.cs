@@ -62,13 +62,16 @@ internal static class NecromancerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Spite
+        // - Spiteful Talisman
         new BuffOnFoeDamageModifier(Mod_SpitefulTalisman, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.All),
+        // - Death's Embrace
         new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "5% on while downed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance),
+        // - Dread
         new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "20% on feared target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
         new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "33% on feared target", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.All)
@@ -77,26 +80,35 @@ internal static class NecromancerHelper
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
         new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "15% on feared target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
+        // - Close to Death
         new DamageLogDamageModifier(Mod_CloseToDeath, "Close to Death", "20% below 50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.CloseToDeath, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        
         // Soul Reaping
+        // - Soul Barbs
         new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All)
             .WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
+        // - Death Perception
         new BuffOnActorDamageModifier(Mod_DeathPerception, [DeathShroud, ReapersShroud, DesertShroudBuff, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathPerception, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .WithBuilds(GW2Builds.June2022Balance),
+
         // Death Magic
-        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage to minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => x.From == x.CreditedFrom || IsKnownMinionID(x.From.ID) || ReaperHelper.IsKnownMinionID(x.From.ID) || x.From.IsSpecies(MinionID.JaggedHorror), DamageModifierMode.All),
+        // - Necromantic Corruption
+        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsKnownMinionID(x.From.ID) || ReaperHelper.IsKnownMinionID(x.From.ID) || x.From.IsSpecies(MinionID.JaggedHorror), DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        // Shroud
+        // Death Shroud
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
+        
         // Death Magic
+        // - Dark Defiance
         new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All),
+        // - Beyond the Veil
         new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
             .UsingChecker((dl, log) => dl.To.GetBuffStatus(log, DeathsCarapace, dl.Time).Value >= 10)
             .WithBuilds(GW2Builds.October2019Balance),

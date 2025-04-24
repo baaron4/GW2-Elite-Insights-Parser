@@ -130,19 +130,22 @@ internal static class MesmerHelper
         }
 
         // Conditions are: Must be a crowd control event or below 50% HP.
-        return isCC || hasCCBuffs || x.To.GetCurrentHealthPercent(log, x.Time) < 50.0;
+        return isCC || hasCCBuffs || x.AgainstUnderFifty;
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Domination
+        // - Empowered Illusions
         new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "Illusions deal 15% increased strike damage", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, WithIllusionsChecker, DamageModifierMode.All),
+        // - Vicious Expression
         new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
             .UsingChecker(WithIllusionsChecker)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
         new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
             .UsingChecker(WithIllusionsChecker)
             .WithBuilds(GW2Builds.February2020Balance2),
+        // - Egotism
         new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance)
             .UsingApproximate(true),
@@ -152,8 +155,11 @@ internal static class MesmerHelper
         new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance)
             .UsingApproximate(true),
+        // - Fragility
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
+        
         // Dueling
+        // - Superiority Complex
         new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
             .UsingApproximate(true),
@@ -164,14 +170,19 @@ internal static class MesmerHelper
             .UsingApproximate(true),
         new DamageLogDamageModifier(Mod_SuperiorityComplexBonus, "Superiority Complex", "25% against disabled foes or below 50% hp", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, SuperiorityComplexBonusChecker, DamageModifierMode.PvEInstanceOnly)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+        
         // Illusions
+        // - Compounding Power
         new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2023Balance),
+        // - Phantasmal Force
         new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
             .UsingChecker(WithIllusionsChecker),
+        
         // Chaos
+        // - Illusionary Membrane
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All)
@@ -184,6 +195,7 @@ internal static class MesmerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Distortion
         new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Mesmer, SkillImages.Distortion, DamageModifierMode.All)
     ];
 

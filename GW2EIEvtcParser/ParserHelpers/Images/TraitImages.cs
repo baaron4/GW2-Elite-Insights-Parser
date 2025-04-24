@@ -290,6 +290,7 @@ internal static class TraitImages
     public const string EnchantmentCollapse = "https://render.guildwars2.com/file/AE076D6974ED7BD015E2EBBDDBCDEC1E21220CE7/1770018.png";
     public const string VigorousShouts = "https://render.guildwars2.com/file/087A225EC4070E5B271B360D583AE4CC4210BFC0/1012829.png";
     public const string ShrugItOff = "https://render.guildwars2.com/file/3D09CE385264C492CC3638AD3A7D753FC80A0D34/2207779.png";
+    public const string MercilessHammer = "https://render.guildwars2.com/file/203E0DEC94900B5305F309A1337D03D70FF9426E/1012804.png";
     #endregion
 }
 #pragma warning restore CA1823 // Unused field
