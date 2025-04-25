@@ -1575,6 +1575,7 @@ public static class SkillIDs
     public const long InvigoratedBulwark = 30207;
     public const long JusticeDragonhunter = 30232;
     public const long MedBlasterHeal = 30235;
+    public const long DebilitatingArcRoll = 30246;
     public const long LesserSignetOfWrath = 30255;
     public const long Outrage = 30258;
     public const long VampiricAura = 30285;
@@ -1598,6 +1599,7 @@ public static class SkillIDs
     public const long SoulSpiral = 30504;
     public const long SelflessAmplification = 30509;
     public const long PulmonaryImpactBuff = 30510;
+    public const long DebilitatingArc = 30520;
     public const long WellOfCalamity = 30525;
     public const long SoulEater = 30539;
     public const long FragmentsOfFaith = 30553;
@@ -4824,6 +4826,7 @@ public static class SkillIDs
     public const long SparkingAuraTier2CM = 76034;
     public const long AchievementEligibilityThisBugCanDance = 76042;
     public const long ForeshockCM4 = 76048;
+    public const long IllusionaryMembrane = 76074;
     //
     #endregion
 }

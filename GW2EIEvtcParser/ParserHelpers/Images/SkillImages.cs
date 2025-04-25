@@ -559,6 +559,7 @@ internal static class SkillImages
     public const string InfiltratorsStrike = "https://render.guildwars2.com/file/2A5C30A8FE579C0169BE3B6FEC05C7E4AFE7FB1D/104067.png";
     public const string BarbedSpear = "https://render.guildwars2.com/file/3A5C3F7697DAE8C90B450B92323937A396EDC4EC/3379188.png";
     public const string BolaShot = "https://render.guildwars2.com/file/C203DEA0472BEEA173A60DF41C66F75E7FC0D80A/2261529.png";
+    public const string DebilitatingArc = "https://render.guildwars2.com/file/5AC578E641FC79E9B2F11F43EAF857140F937CF3/1058626.png";
     #endregion Thief
     #region Warrior
     public const string Riposte = "https://wiki.guildwars2.com/images/d/de/Riposte.png";

@@ -12,9 +12,14 @@ internal static class MirageHelper
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
-        new DamageCastFinder(Jaunt, Jaunt),
+        new DamageCastFinder(Jaunt, Jaunt)
+            .UsingDisableWithEffectData(),
+        new EffectCastFinder(Jaunt, EffectGUIDs.MirageJaunt)
+            .UsingSecondaryEffectChecker(EffectGUIDs.MirageJauntConflict1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.MirageJauntConflict2)
+            .UsingSrcSpecChecker(Spec.Mirage),
         new BuffGainCastFinder(MirageCloakDodge, MirageCloak),
-        //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
+        // Illusionary Ambush not trackable due to conflicting effects with Jaunt and Axe of Symmetry
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
