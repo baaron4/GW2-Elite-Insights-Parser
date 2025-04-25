@@ -96,7 +96,7 @@ internal static class NecromancerHelper
 
         // Death Magic
         // - Necromantic Corruption
-        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsKnownMinionID(x.From.ID) || ReaperHelper.IsKnownMinionID(x.From.ID) || x.From.IsSpecies(MinionID.JaggedHorror), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsAnyUndeadMinion(x.From), DamageModifierMode.All)
             .UsingEarlyExit((a, log) => a.GetMinions(log).Any(x => IsAnyUndeadMinion(x.Value.ReferenceAgentItem))),
     ];
 
