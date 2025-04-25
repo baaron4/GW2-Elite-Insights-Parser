@@ -334,6 +334,7 @@ internal static class SkillImages
     public const string ShamblingSlash = "https://wiki.guildwars2.com/images/a/ad/Shambling_Slash.png";
     public const string SoulSpiral = "https://render.guildwars2.com/file/4BFAEBD27404BDCB3A0255F1441560D3772F0CF5/1012937.png";
     public const string TrailofAnguish = "https://render.guildwars2.com/file/707877465DF8AD08E7E7F30EC908CAA4684D203B/1770544.png";
+    public const string DesertSandstormShroud = "https://i.imgur.com/e0IXt8w.png";
     #endregion Necromancer
     #region Ranger
     public const string SicEm = "https://wiki.guildwars2.com/images/9/9d/%22Sic_%27Em%21%22.png";

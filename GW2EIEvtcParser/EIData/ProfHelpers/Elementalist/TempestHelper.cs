@@ -22,8 +22,10 @@ internal static class TempestHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Harmonious Conduit
         new BuffOnActorDamageModifier(Mod_HarmoniousConduit, HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HarmoniousConduit, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.October2019Balance),
+        // Trascendent Tempest
         new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.sPvPWvW)
@@ -32,6 +34,7 @@ internal static class TempestHelper
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
+        // Tempestuous Aria
         new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
@@ -44,6 +47,7 @@ internal static class TempestHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Hardy Conduit
         new BuffOnActorDamageModifier(Mod_HardyConduit, Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.Incoming, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
     ];
 

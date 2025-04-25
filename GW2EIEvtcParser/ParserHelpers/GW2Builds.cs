@@ -22,6 +22,9 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2017-07-25
     public const ulong July2017ShatteredObservatoryRelease = 79873;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2017-08-08
+    public const ulong August2017Balance = 80647;
+
     // https://wiki.guildwars2.com/wiki/Game_updates/2017-09-22
     public const ulong September2017PathOfFireRelease = 82356;
 

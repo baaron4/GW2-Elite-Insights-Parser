@@ -37,9 +37,8 @@ internal static class HarbingerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Wicked Corruption (Blight)
         new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
         new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2024BalanceAndCerusLegendary),
@@ -47,6 +46,7 @@ internal static class HarbingerHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        // Wicked Corruption (Crit with Torment)
         new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "10% critical to foes with torment", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.WickedCorruption, DamageModifierMode.All)
             .UsingChecker((evt, log) => evt.HasCrit)
             .WithBuilds(GW2Builds.EODRelease, GW2Builds.March2024BalanceAndCerusLegendary),
@@ -56,6 +56,9 @@ internal static class HarbingerHelper
         new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "12.5% critical to foes with torment", DamageSource.NoPets, 12.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.WickedCorruption, DamageModifierMode.PvE)
             .UsingChecker((evt, log) => evt.HasCrit)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        // Septic Corruption
+        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
         new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.25% per blight stack", DamageSource.NoPets, 0.25, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.PvE)

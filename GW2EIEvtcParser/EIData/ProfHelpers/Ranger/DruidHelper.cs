@@ -45,12 +45,14 @@ internal static class DruidHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Natural Balance
         new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Druid, ByPresence, TraitImages.NaturalBalance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Natural Balance
         new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "-10% after leaving or entering Celestial Avatar", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Druid, ByPresence, TraitImages.NaturalBalance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.March2024BalanceAndCerusLegendary),
     ];

@@ -40,18 +40,24 @@ internal static class HolosmithHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Laser's Edge
         new BuffOnActorDamageModifier(Mod_LasersEdge, LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, TraitImages.LasersEdge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        // Solar Focusing Lens
+        new DamageLogDamageModifier(Mod_SolarFocusingLens, "Solar Focusing Lens", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Holosmith, TraitImages.SolarFocusingLens, (x, log) => log.CombatData.HasLostBuff(Afterburner, x.From, x.Time, ServerDelayConstant), DamageModifierMode.All)
+            .UsingApproximate(true),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Spectrum Shield
         new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.sPvP)
             .WithBuilds(GW2Builds.February2020Balance),
+        // Light Density Amplifier
         new BuffOnActorDamageModifier(Mod_LightDensityAmplifier, PhotonForge, "Light Density Amplifier", "-15%", DamageSource.Incoming, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, TraitImages.LightDensityAmplifier, DamageModifierMode.All),
     ];
 

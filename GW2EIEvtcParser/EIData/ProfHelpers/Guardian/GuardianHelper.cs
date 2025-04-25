@@ -93,24 +93,33 @@ internal static class GuardianHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Zeal
+        // - Fiery Wrath
         new BuffOnFoeDamageModifier(Mod_FieryWrath, Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FieryWrath, DamageModifierMode.All),
+        // - Symbolic Exposure
         new BuffOnFoeDamageModifier(Mod_SymbolicExposure, Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.SymbolicExposure, DamageModifierMode.All),
+        // - Symbolic Avenger
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
+        
         // Radiance
+        // - Retribution
         new BuffOnActorDamageModifier(Mod_Retribution, Retaliation, "Retribution", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_Retribution, Resolution, "Retribution", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
+        
         // Virtues
+        // - Unscathed Contender
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender", "20% under aegis", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender (Aegis)", "7% under aegis", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds( GW2Builds.February2023Balance),
+        // - Power of the Virtuous
         new BuffOnActorDamageModifier(Mod_PowerOfTheVirtuous, NumberOfBoons, "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.PowerOfTheVirtuous,  DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        // - Inspiring Virtue
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.InspiredVirtue, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_InspiringVirtue, InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.VirtuousSolace, DamageModifierMode.All)
@@ -119,8 +128,11 @@ internal static class GuardianHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Skills
+        // - Signet of Judgment
         new BuffOnActorDamageModifier(Mod_SignetOfJudgment, SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.Incoming, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, SkillImages.SignetOfJudgment, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_SignetOfJudgmentPI, SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.Incoming, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, SkillImages.SignetOfJudgment, DamageModifierMode.All),
+        // - Renewed Focus
         new CounterOnActorDamageModifier(Mod_RenewedFocus, RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Guardian, SkillImages.RenewedFocus, DamageModifierMode.All)
     ];
 

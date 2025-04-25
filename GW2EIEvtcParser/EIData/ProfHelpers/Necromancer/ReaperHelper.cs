@@ -2,6 +2,7 @@
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -35,23 +36,25 @@ internal static class ReaperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Cold Shoulder
         new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
-        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x,log) =>
-                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() >= 300.0
-            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
+        // Soul Eater
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => !TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.All)
+            .UsingApproximate(true)
+            .WithBuilds(GW2Builds.July2019Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Reaper's Shroud
         new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.ReapersShroud, DamageModifierMode.sPvPWvW),
+        // Infusing Terror
         new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
         new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.Incoming, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, SkillImages.InfusingTerror, DamageModifierMode.sPvPWvW)

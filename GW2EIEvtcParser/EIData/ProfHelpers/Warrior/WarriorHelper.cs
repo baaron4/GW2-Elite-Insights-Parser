@@ -40,7 +40,8 @@ internal static class WarriorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        // Peak Performance
+        // Strength
+        // - Peak Performance
         new BuffOnActorDamageModifier(Mod_PeakPerformance, PeakPerformance, "Peak Performance", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.PeakPerformace, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_PeakPerformance, PeakPerformance, "Peak Performance", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.PeakPerformace, DamageModifierMode.PvE)
@@ -49,32 +50,43 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.July2018Balance),
         new BuffOnActorDamageModifier(Mod_PeakPerformance, PeakPerformance, "Peak Performance", "33%", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.PeakPerformace, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-        // Berserker's Power
+        // - Berserker's Power
         new BuffOnActorDamageModifier(Mod_BerserkersPower, BerserkersPower, "Berserker's Power", "7% per stack", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.BerserkersPower, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new BuffOnActorDamageModifier(Mod_BerserkersPower, BerserkersPower, "Berserker's Power", "5.25% per stack", DamageSource.NoPets, 5.25, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.BerserkersPower, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2022Balance),
-        // 
+        
+        // Defense
+        // - Stalwart Strength
         new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2022Balance),
-        // Can merciless hammer conditions be tracked reliably?
-        // Cull the Weak
+        // - Merciless Hammer
+        new DamageLogDamageModifier(Mod_MercilessHammerDefiant, "Merciless Hammer", "20% to hammer and mace skills when hitting defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.November2022Balance)
+            .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+        new DamageLogDamageModifier(Mod_MercilessHammer, "Merciless Hammer", "20% to hammer and mace skills when hitting disabled or defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+        // - Cull the Weak
+        new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "5% on weakened target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.CullTheWeak, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2017Balance),
         new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.CullTheWeak, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+            .WithBuilds(GW2Builds.August2017Balance, GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.CullTheWeak, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.CullTheWeak, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance),
-        // Leg Specialist
+        
+        // Tactics
+        // - Leg Specialist
         new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.LegSpecialist, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance, GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.LegSpecialist, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "10% to movement-impaired foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.LegSpecialist, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance),
-        //
+        // - Empowered
         new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, TraitImages.Empowered, DamageModifierMode.All),
-        // Warrior's Cunning (Barrier)
+        // - Warrior's Cunning (Barrier)
         new DamageLogDamageModifier(Mod_WarriorsCunningBarrier, "Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_WarriorsCunningBarrier, "Warrior's Cunning (Barrier)", "50% against barrier", DamageSource.NoPets, 50.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.PvE)
@@ -83,7 +95,7 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_WarriorsCunningBarrier, "Warrior's Cunning (Barrier)", "10% against barrier", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        // Warrior's Cunning (High HP, no Barrier)
+        // - Warrior's Cunning (High HP, no Barrier)
         new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "25% if foe hp >=90%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) => x.ShieldDamage == 0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 90.0, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.December2019Balance, GW2Builds.May2021Balance),
@@ -102,29 +114,38 @@ internal static class WarriorHelper
         new DamageLogDamageModifier(Mod_WarriorsCunningNoBarrier, "Warrior's Cunning (High HP, no Barrier)", "7% if foe hp >=80%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.WarriorsCunning, (x, log) =>x.To.GetCurrentBarrierPercent(log, x.Time) == 0.0 && x.To.GetCurrentHealthPercent(log, x.Time) >= 80.0, DamageModifierMode.sPvPWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        // Warrior's Sprint
+        
+        // Discipline
+        // - Warrior's Sprint
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "7% under swiftness", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.WarriorsSprint, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.WarriorsSprint, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2018Balance),
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "10% under swiftness", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.WarriorsSprint, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.May2021Balance),
-        //
+        // - Destruction of the Empowered
         new BuffOnFoeDamageModifier(Mod_DestructionOfTheEmpowered, NumberOfBoons, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByMultipliyingStack, TraitImages.DestructionOfTheEmpowered, DamageModifierMode.All),
 
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Skills
+        // - Endure Pain
         new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.Incoming, DamageType.Strike, DamageType.All, Source.Warrior, SkillImages.EndurePain, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.March2020Balance),
+        // - Rampage
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.Rampage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
+        // - Dolyak Signet
         new BuffOnActorDamageModifier(Mod_DolyakSignet, DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, SkillImages.DolyakSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2024Balance),
+
+        // Defense
+        // - Hardened Armor
+        new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.March2020Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -166,7 +187,6 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Peak Performance", PeakPerformance, Source.Warrior, BuffClassification.Other, TraitImages.PeakPerformace),
         new Buff("Furious Surge", FuriousSurge, Source.Warrior, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.Furious),
-        //new Boon("Health Gain per Adrenaline bar Spent",-1, BoonSource.Warrior, BoonType.Intensity, 3, BoonEnum.GraphOnlyBuff,RemoveType.Normal),
         new Buff("Rousing Resilience", RousingResilience, Source.Warrior, BuffClassification.Other, TraitImages.RousingResilience),
         new Buff("Berserker's Power" ,BerserkersPower, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.BerserkersPower)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
@@ -179,31 +199,6 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.October2022Balance),
     ];
 
-
-    /*private static HashSet<AgentItem> FindBattleStandards(Dictionary<long, List<AbstractBuffEvent>> buffData, HashSet<AgentItem> playerAgents)
-    {
-        if (buffData.TryGetValue(725, out List<AbstractBuffEvent> list))
-        {
-            var battleBannerCandidates = new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && (playerAgents.Contains(x.To) || playerAgents.Contains(x.To.Master))).Select(x => x.By));
-            if (battleBannerCandidates.Count > 0)
-            {
-                if (buffData.TryGetValue(740, out list))
-                {
-                    battleBannerCandidates.IntersectWith(new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && (playerAgents.Contains(x.To) || playerAgents.Contains(x.To.Master))).Select(x => x.By)));
-                    if (battleBannerCandidates.Count > 0)
-                    {
-                        if (buffData.TryGetValue(Swiftness, out list))
-                        {
-                            battleBannerCandidates.IntersectWith(new HashSet<AgentItem>(list.Where(x => x is BuffApplyEvent && x.By.Type == AgentItem.AgentType.Gadget && (playerAgents.Contains(x.To) || playerAgents.Contains(x.To.Master))).Select(x => x.By)));
-                            return battleBannerCandidates;
-                        }
-                    }
-                }
-            }
-        }
-        return new HashSet<AgentItem>();
-    }*/
-
     public static void ProcessGadgets(IReadOnlyList<AgentItem> players, CombatData combatData)
     {
         var playerAgents = new HashSet<AgentItem>(players);
@@ -211,7 +206,6 @@ internal static class WarriorHelper
             defBanners = GetBannerAgents(combatData, BannerOfDefenseBuff, playerAgents),
             disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
             tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
-        //battleBanner = FindBattleStandards(buffData, playerAgents);
         var warriors = players.Where(x => x.BaseSpec == Spec.Warrior);
         var warriorsCount = warriors.Count();
         // if only one warrior, could only be that one
@@ -222,7 +216,6 @@ internal static class WarriorHelper
             ProfHelper.SetGadgetMaster(disBanners, warrior);
             ProfHelper.SetGadgetMaster(tacBanners, warrior);
             ProfHelper.SetGadgetMaster(defBanners, warrior);
-            //SetBannerMaster(battleBanner, warrior.AgentItem);
         }
         else if (warriorsCount > 1)
         {
@@ -231,8 +224,43 @@ internal static class WarriorHelper
             ProfHelper.AttachMasterToGadgetByCastData(combatData, defBanners, new List<long> { BannerOfDefenseSkill, BannerOfDefenseSkillUW }, 1000);
             ProfHelper.AttachMasterToGadgetByCastData(combatData, disBanners, new List<long> { BannerOfDisciplineSkill, BannerOfDisciplineSkillUW }, 1000);
             ProfHelper.AttachMasterToGadgetByCastData(combatData, tacBanners, new List<long> { BannerOfTacticsSkill, BannerOfTacticsSkillUW }, 1000);
-            //AttachMasterToBanner(castData, battleBanner, 14419, 14569);
         }
     }
 
+    private static bool MercilessHammerChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        long[] improvedSkills = 
+        [
+            // Mace
+            MaceSmash, MaceBash, PulverizeMace,
+            Counterblow, AdrenalineRush,
+            PommelBash,
+            CrushingBlow,
+            TremorMace,
+            SkullCrack1, SkullCrack2, SkullCrack3, SkullCrack4,
+            SkullGrinder,
+            // Hammer
+            HammerSwing, HammerBash, HammerSmash,
+            FierceBlow,
+            HammerShock,
+            StaggeringBlow,
+            Backbreaker,
+            Earthshaker1, Earthshaker2, Earthshaker3, Earthshaker4,
+            RupturingSmash,
+        ];
+
+        if (!improvedSkills.Contains(x.SkillId))
+        {
+            return false;
+        }
+
+        if (x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
+        {
+            return true;
+        }
+        else
+        {
+            return log.CombatData.GetIncomingCrowdControlData(x.To).Any(cc => x.Time >= cc.Time && x.Time <= cc.Time + cc.Duration);
+        }
+    }
 }

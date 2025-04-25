@@ -13,7 +13,6 @@ internal static class VindicatorHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff),
-        //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect),
         new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance),
         new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff),
     ];
@@ -30,6 +29,7 @@ internal static class VindicatorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Forerunner of Death
         new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Mod_ForerunnerOfDeath, ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, TraitImages.ForerunnerOfDeath, DamageModifierMode.sPvPWvW)
@@ -40,6 +40,7 @@ internal static class VindicatorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Urn of Saint Viktor
         new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.Incoming, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
         new BuffOnActorDamageModifier(Mod_UrnOfSaintViktor, UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-33%", DamageSource.Incoming, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, SkillImages.UrnOfSaintViktor, DamageModifierMode.sPvP)
@@ -57,4 +58,9 @@ internal static class VindicatorHelper
         new Buff("Imperial Guard", ImperialGuard, Source.Vindicator, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.ImperialGuard)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
     ];
+
+    public static bool IsLegendSwap(long id)
+    {
+        return LegendaryAllianceStanceSkill == id;
+    }
 }

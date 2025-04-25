@@ -1,8 +1,11 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
@@ -21,7 +24,6 @@ internal static class ScourgeHelper
             .UsingDurationChecker(6000),
         new BuffGainCastFinder(SandstormShroudSkill, DesertShroudBuff)
             .UsingDurationChecker(3500),
-        // new EXTBarrierCastFinder(DesertShroud, DesertShroud),
         new EXTBarrierCastFinder(SandCascadeSkill, SandCascadeBarrier),
         new BuffGainCastFinder(SadisticSearing, SadisticSearing)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -40,13 +42,37 @@ internal static class ScourgeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    [
+        // Blood as Sand
+        new DamageLogDamageModifier(Mod_BloodAsSand, "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, TraitImages.BloodAsSand, ShadeCheck, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+    ];
+
+    private static bool ShadeCheck(DamageEvent x, ParsedEvtcLog log)
+    {
+        // Checking when the damage reduction has become non conditional on the shades amount
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(x.To, EffectGUIDs.ScourgeShade, out var shades))
+        {
+            foreach (EffectEvent effect in shades)
+            {
+                long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP ? 15000 : 8000;
+                (long start, long end) = effect.ComputeLifespan(log, duration);
+                if (x.Time >= start && x.Time <= end)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, TraitImages.SadisticSearing),
         new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SandSwell),
         new Buff("Trail of Anguish", TrailOfAnguishBuff, Source.Scourge, BuffClassification.Other, SkillImages.TrailofAnguish),
+        new Buff("Desert / Sandstorm Shroud", DesertShroudBuff, Source.Necromancer, BuffClassification.Other, SkillImages.DesertSandstormShroud),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
@@ -86,7 +112,7 @@ internal static class ScourgeHelper
             foreach (EffectEvent effect in scourgeShades)
             {
                 long duration;
-                if (log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.sPvP)
+                if (log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP)
                 {
                     duration = log.LogData.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
                 }

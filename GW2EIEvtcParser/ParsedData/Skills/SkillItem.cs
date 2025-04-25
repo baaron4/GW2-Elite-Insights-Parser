@@ -1400,11 +1400,18 @@ public class SkillItem
         || ElementalistHelper.IsAttunementSwap(ID)
         || WeaverHelper.IsAttunementSwap(ID)
         || RevenantHelper.IsLegendSwap(ID)
+        || HeraldHelper.IsLegendSwap(ID)
+        || RenegadeHelper.IsLegendSwap(ID)
+        || VindicatorHelper.IsLegendSwap(ID)
         || NecromancerHelper.IsDeathShroudTransform(ID)
         || HarbingerHelper.IsHarbingerShroudTransform(ID);
-    public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
-    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
-    public bool IsAutoAttack(ParsedEvtcLog log) => AA || FirebrandHelper.IsAutoAttack(log, ID) || BladeswornHelper.IsAutoAttack(log, ID);
+    public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
+        || IsAnimatedDodge(skillData);
+    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId 
+        || VindicatorHelper.IsVindicatorDodge(ID);
+    public bool IsAutoAttack(ParsedEvtcLog log) => AA 
+        || FirebrandHelper.IsAutoAttack(log, ID) 
+        || BladeswornHelper.IsAutoAttack(log, ID);
     public readonly string Name = "";
     public readonly string Icon = "";
     private readonly WeaponDescriptor? _weaponDescriptor;
