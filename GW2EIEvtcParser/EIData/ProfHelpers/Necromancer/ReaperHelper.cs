@@ -44,7 +44,7 @@ internal static class ReaperHelper
         new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, TraitImages.ColdShoulder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
         // Soul Eater
-        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => !TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2019Balance),
     ];
