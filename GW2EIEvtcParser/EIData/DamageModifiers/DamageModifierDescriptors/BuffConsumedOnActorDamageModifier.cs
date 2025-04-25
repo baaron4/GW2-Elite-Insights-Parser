@@ -31,6 +31,10 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
 
     private bool CheckConditionWithBuffRemove(Dictionary<AgentItem, (IReadOnlyList<AbstractBuffRemoveEvent> buffRemoves, int currentIndex)> cache, ParsedEvtcLog log, HealthDamageEvent evt)
     {
+        if (!CheckCondition(evt, log))
+        {
+            return false;
+        }
         (IReadOnlyList<AbstractBuffRemoveEvent> buffRemoves, int currentIndex) = GetBuffRemovesWithCurrentIndex(cache, log, evt.From);
         for (int i = currentIndex; i < buffRemoves.Count; i++)
         {
@@ -42,7 +46,7 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
             else if (evt.Time - currentBuffRemove.Time < ServerDelayConstant)
             {
                 cache[evt.From] = (buffRemoves, i + 1);
-                return CheckCondition(evt, log);
+                return true;
             }
         }
         return false;
