@@ -27,7 +27,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         return this;
     }
 
-    private double ComputeAdjustedGain(HealthDamageEvent dl, ParsedEvtcLog log)
+    protected double ComputeAdjustedGain(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
     }

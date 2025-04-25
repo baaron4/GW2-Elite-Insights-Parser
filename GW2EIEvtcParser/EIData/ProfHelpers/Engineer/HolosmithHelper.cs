@@ -44,8 +44,7 @@ internal static class HolosmithHelper
         new BuffOnActorDamageModifier(Mod_LasersEdge, LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, TraitImages.LasersEdge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         // Solar Focusing Lens
-        new DamageLogDamageModifier(Mod_SolarFocusingLens, "Solar Focusing Lens", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Holosmith, TraitImages.SolarFocusingLens, (x, log) => log.CombatData.HasLostBuff(Afterburner, x.From, x.Time, ServerDelayConstant), DamageModifierMode.All)
-            .UsingApproximate(true),
+        new BuffConsumedOnActorDamageModifier(Mod_SolarFocusingLens, Afterburner, "Solar Focusing Lens", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Holosmith, TraitImages.SolarFocusingLens, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
