@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class BladeswornHelper
 {
-    /////////////////////
+
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffLossCastFinder(GunsaberSheath, GunsaberMode)
@@ -57,6 +57,7 @@ internal static class BladeswornHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Fierce as Fire
         new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4),
     ];

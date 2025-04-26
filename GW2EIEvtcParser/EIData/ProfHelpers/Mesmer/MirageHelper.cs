@@ -13,18 +13,19 @@ internal static class MirageHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new DamageCastFinder(Jaunt, Jaunt),
-        // new EffectCastFinderByDst(Jaunt, EffectGUIDs.MirageJaunt).UsingDstSpecChecker(Spec.Mirage),
-        new BuffGainCastFinder(MirageCloakDodge, MirageCloak), // Mirage Cloak
+        new BuffGainCastFinder(MirageCloakDodge, MirageCloak),
         //new EffectCastFinderByDst(IllusionaryAmbush, EffectGUIDs.MirageIllusionaryAmbush).UsingChecker((evt, log) => evt.Dst.Spec == Spec.Mirage),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Sharp Edges
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "15%", DamageSource.NoPets, 15, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "25%", DamageSource.NoPets, 25, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.sPvPWvW),
+        // Nomad's Endurance
         new BuffOnActorDamageModifier(Mod_NomadsEndurance, Vigor, "Nomad's Endurance", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.NomadsEndurance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2025BalancePatch),
     ];
@@ -39,7 +40,7 @@ internal static class MirageHelper
         new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, TraitImages.MirageMantle),
     ];
 
-    private static HashSet<int> Minions = [];
+    private static readonly HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

@@ -227,12 +227,12 @@ internal class Adina : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
-        phases[0].AddTarget(adina);
+        phases[0].AddTarget(adina, log);
         var handIds = new TargetID[] { TargetID.HandOfErosion, TargetID.HandOfEruption };
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
         BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -312,9 +312,9 @@ internal class Adina : TheKeyOfAhdashim
 
         foreach (PhaseData phase in mainPhases)
         {
-            phase.AddTarget(adina);
+            phase.AddTarget(adina, log);
             phase.AddParentPhase(phases[0]);
-            phase.AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)), PhaseData.TargetPriority.NonBlocking);
+            phase.AddTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)), log, PhaseData.TargetPriority.NonBlocking);
         }
         phases.AddRange(mainPhases);
         phases.AddRange(splitPhases);

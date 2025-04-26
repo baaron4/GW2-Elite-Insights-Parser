@@ -153,7 +153,7 @@ internal class SoullessHorror : HallOfChains
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -165,8 +165,8 @@ internal class SoullessHorror : HallOfChains
         foreach (CastEvent c in howling)
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i++);
-            phase.AddTarget(mainTarget);
-            phase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
+            phase.AddTarget(mainTarget, log);
+            phase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
             phase.AddParentPhase(phases[0]);
             start = c.EndTime;
             phases.Add(phase);
@@ -174,8 +174,8 @@ internal class SoullessHorror : HallOfChains
         if (fightEnd - start > PhaseTimeLimit)
         {
             var lastPhase = new PhaseData(start, fightEnd, "Final");
-            lastPhase.AddTarget(mainTarget);
-            lastPhase.AddTargets(tormentedDeads, PhaseData.TargetPriority.NonBlocking);
+            lastPhase.AddTarget(mainTarget, log);
+            lastPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
             lastPhase.AddParentPhase(phases[0]);
             phases.Add(lastPhase);
         }

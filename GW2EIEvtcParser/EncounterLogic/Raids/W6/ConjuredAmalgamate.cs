@@ -296,9 +296,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
         SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
         SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
         SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
-        phases[0].AddTarget(ca);
-        phases[0].AddTarget(leftArm, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(rightArm, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(ca, log);
+        phases[0].AddTarget(leftArm, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(rightArm, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -317,7 +317,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             else
             {
                 name = "Burn Phase " + (++burnPhase);
-                phase.AddTarget(ca);
+                phase.AddTarget(ca, log);
             }
             phase.Name = name;
         }
@@ -338,18 +338,18 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 if (leftExists && rightExists)
                 {
                     phase.Name = "Both Arms Phase " + (++bothArmPhase);
-                    phase.AddTarget(leftArm);
-                    phase.AddTarget(rightArm);
+                    phase.AddTarget(leftArm, log);
+                    phase.AddTarget(rightArm, log);
                 }
                 else if (leftExists)
                 {
                     phase.Name = "Left Arm Phase " + (++leftArmPhase);
-                    phase.AddTarget(leftArm);
+                    phase.AddTarget(leftArm, log);
                 }
                 else if (rightExists)
                 {
                     phase.Name = "Right Arm Phase " + (++rightArmPhase);
-                    phase.AddTarget(rightArm);
+                    phase.AddTarget(rightArm, log);
                 }
             }
         }

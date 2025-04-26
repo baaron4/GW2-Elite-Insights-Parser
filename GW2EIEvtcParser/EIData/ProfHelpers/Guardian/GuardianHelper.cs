@@ -93,24 +93,33 @@ internal static class GuardianHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Zeal
+        // - Fiery Wrath
         new BuffOnFoeDamageModifier(Mod_FieryWrath, Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.FieryWrath, DamageModifierMode.All),
+        // - Symbolic Exposure
         new BuffOnFoeDamageModifier(Mod_SymbolicExposure, Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.SymbolicExposure, DamageModifierMode.All),
+        // - Symbolic Avenger
         new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.SymbolicAvenger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
+        
         // Radiance
+        // - Retribution
         new BuffOnActorDamageModifier(Mod_Retribution, Retaliation, "Retribution", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_Retribution, Resolution, "Retribution", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
+        
         // Virtues
+        // - Unscathed Contender
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender", "20% under aegis", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
         new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender (Aegis)", "7% under aegis", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, TraitImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds( GW2Builds.February2023Balance),
+        // - Power of the Virtuous
         new BuffOnActorDamageModifier(Mod_PowerOfTheVirtuous, NumberOfBoons, "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.PowerOfTheVirtuous,  DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        // - Inspiring Virtue
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, TraitImages.InspiredVirtue, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_InspiringVirtue, InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, TraitImages.VirtuousSolace, DamageModifierMode.All)
@@ -119,8 +128,11 @@ internal static class GuardianHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Skills
+        // - Signet of Judgment
         new BuffOnActorDamageModifier(Mod_SignetOfJudgment, SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.Incoming, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, SkillImages.SignetOfJudgment, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_SignetOfJudgmentPI, SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.Incoming, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, SkillImages.SignetOfJudgment, DamageModifierMode.All),
+        // - Renewed Focus
         new CounterOnActorDamageModifier(Mod_RenewedFocus, RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.Incoming, DamageType.All, DamageType.All, Source.Guardian, SkillImages.RenewedFocus, DamageModifierMode.All)
     ];
 
@@ -165,7 +177,8 @@ internal static class GuardianHelper
         new Buff("Signet of Wrath (PI)", SignetOfWrathPI, Source.Guardian, BuffClassification.Other, SkillImages.SignetOfWrath)
             .WithBuilds(GW2Builds.June2022Balance),
         new Buff("Signet of Courage", SignetOfCourage, Source.Guardian, BuffClassification.Other, SkillImages.SignetOfCourage),
-        new Buff("Signet of Courage (Shared)", SignetOfCourageShared , Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, SkillImages.SignetOfCourage).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
+        new Buff("Signet of Courage (Shared)", SignetOfCourageShared , Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, SkillImages.SignetOfCourage)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new Buff("Signet of Courage (PI)", SignetOfCouragePI , Source.Guardian, BuffClassification.Other, SkillImages.SignetOfCourage)
             .WithBuilds(GW2Builds.June2022Balance),
         // Virtues
@@ -183,14 +196,15 @@ internal static class GuardianHelper
             .WithBuilds(GW2Builds.July2019Balance),
         new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffStackType.Queue, 99, BuffClassification.Other, TraitImages.VirtuousSolace)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, TraitImages.VirtuousSolace).WithBuilds(GW2Builds.February2020Balance2),
+        new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, TraitImages.VirtuousSolace)
+            .WithBuilds(GW2Builds.February2020Balance2),
         new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, TraitImages.ForceOfWill),
         // Spear
         new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, SkillImages.SymbolOfLuminance),
         new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, SkillImages.Illuminated),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.BowOfTruth,
         (int)MinionID.HammerOfWisdom,

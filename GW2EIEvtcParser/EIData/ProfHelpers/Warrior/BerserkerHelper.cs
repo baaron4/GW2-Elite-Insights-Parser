@@ -24,8 +24,10 @@ internal static class BerserkerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Always Angry
         new BuffOnActorDamageModifier(Mod_AlwaysAngry, AlwaysAngry, "Always Angry", "7% per stack", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, ByPresence, TraitImages.AlwaysAngry, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+        // Bloody Roar
         new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, TraitImages.BloodyRoar, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, TraitImages.BloodyRoar, DamageModifierMode.All)
@@ -47,6 +49,7 @@ internal static class BerserkerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Fell No Pain
         new CounterOnActorDamageModifier(Mod_FeelNoPain, FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.Incoming, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, TraitImages.SavageInstinct, DamageModifierMode.All)
     ];
 
@@ -60,7 +63,8 @@ internal static class BerserkerHelper
         new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.BloodReckoning)
             .WithBuilds(GW2Builds.October2022Balance),
         new Buff("Rock Guard", RockGuard , Source.Berserker, BuffClassification.Other, SkillImages.ShatteringBlow),
-        new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, TraitImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance),
+        new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, TraitImages.SavageInstinct)
+            .WithBuilds(GW2Builds.April2019Balance),
         new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, TraitImages.AlwaysAngry)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.Other, TraitImages.HeatTheSoul),

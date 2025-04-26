@@ -97,7 +97,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-        phases[0].AddTarget(ankka);
+        phases[0].AddTarget(ankka, log);
         if (!requirePhases)
         {
             return phases;
@@ -128,7 +128,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     break;
             }
             subPhases[i].AddParentPhase(phases[0]);
-            subPhases[i].AddTarget(ankka);
+            subPhases[i].AddTarget(ankka, log);
         }
         phases.AddRange(subPhases);
         // DPS Phases
@@ -136,7 +136,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         for (int i = 0; i < dpsPhase.Count; i++)
         {
             dpsPhase[i].Name = $"DPS Phase {i + 1}";
-            dpsPhase[i].AddTarget(ankka);
+            dpsPhase[i].AddTarget(ankka, log);
             dpsPhase[i].AddParentPhases(subPhases);
             // We are not using the same buff between the two types of phases, the timings may slightly differ, this makes sure to put a dps phase within a fight phase
             var currentSubPhase = subPhases.FirstOrDefault(x => x.IntersectsWindow(dpsPhase[i].Start, dpsPhase[i].End));
@@ -154,7 +154,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             if (i % 2 != 0)
             {
                 rituals[i].Name = $"Necrotic Ritual {(i + 1) / 2}";
-                rituals[i].AddTarget(ankka);
+                rituals[i].AddTarget(ankka, log);
                 rituals[i].AddParentPhases(subPhases);
             }
         }

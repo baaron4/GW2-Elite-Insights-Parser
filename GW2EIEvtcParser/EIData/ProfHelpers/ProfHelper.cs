@@ -826,4 +826,31 @@ internal static class ProfHelper
         replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
         replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
     }
+
+    /// <summary>
+    /// Checks for self HP to be higher than the target HP.
+    /// </summary>
+    internal static bool SelfHigherHPChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
+        double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
+        if (selfHP < 0.0 || dstHP < 0.0)
+        {
+            return false;
+        }
+        return selfHP > dstHP;
+    }
+
+    /// <summary>
+    /// Checks the distance between Src and Dst to be less than <paramref name="range"/>.
+    /// </summary>
+    /// <param name="includeRange">Wether the range value should be included in the distance.</param>
+    internal static bool TargetWithinRangeChecker(DamageEvent x, ParsedEvtcLog log, long range, bool includeRange = true)
+    {
+        x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition);
+        x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition);
+        var distance = (currentPosition - currentTargetPosition).Length();
+
+        return includeRange ? distance <= range : distance < range;
+    }
 }

@@ -142,8 +142,8 @@ internal class Arkk : ShatteredObservatory
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
-        phases[0].AddTarget(arkk);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Archdiviner) || x.IsSpecies(TargetID.EliteBrazenGladiator)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(arkk, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Archdiviner) || x.IsSpecies(TargetID.EliteBrazenGladiator)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -153,7 +153,7 @@ internal class Arkk : ShatteredObservatory
         {
             phases[i].Name = "Phase " + i;
             phases[i].AddParentPhase(phases[0]);
-            phases[i].AddTarget(arkk);
+            phases[i].AddTarget(arkk, log);
         }
 
         GetMiniBossPhase(TargetID.Archdiviner, log, "Archdiviner", phases);
@@ -181,7 +181,7 @@ internal class Arkk : ShatteredObservatory
             PhaseData phase = bloomPhases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = $"Blooms {i + 1}";
-            phase.AddTarget(arkk);
+            phase.AddTarget(arkk, log);
             BuffEvent? invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
             phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
         }
@@ -191,7 +191,7 @@ internal class Arkk : ShatteredObservatory
         var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
         for (int i = 1; i < phases.Count; i++)
         {
-            phases[i].AddTargets(anomalies, PhaseData.TargetPriority.Blocking);
+            phases[i].AddTargets(anomalies, log, PhaseData.TargetPriority.Blocking);
         }
 
         return phases;

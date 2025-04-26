@@ -125,7 +125,7 @@ internal class Matthias : SalvationPass
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -168,7 +168,7 @@ internal class Matthias : SalvationPass
         {
             phases[i].Name = namesMat[i - 1];
             phases[i].AddParentPhase(phases[0]);
-            phases[i].AddTarget(mainTarget);
+            phases[i].AddTarget(mainTarget, log);
         }
         return phases;
     }

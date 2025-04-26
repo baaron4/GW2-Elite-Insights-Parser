@@ -67,11 +67,11 @@ internal class FraenirOfJormag : Bjora
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.FraenirOfJormag)) ?? throw new MissingKeyActorsException("Fraenir of Jormag not found");
-        phases[0].AddTarget(fraenir);
+        phases[0].AddTarget(fraenir, log);
         SingleActor? icebrood = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.IcebroodConstructFraenir));
         if (icebrood != null)
         {
-            phases[0].AddTarget(icebrood);
+            phases[0].AddTarget(icebrood, log);
         }
         if (!requirePhases)
         {
@@ -131,11 +131,11 @@ internal class FraenirOfJormag : Bjora
             PhaseData phase = phases[i];
             if (i == 1 || i == 5)
             {
-                phase.AddTarget(fraenir);
+                phase.AddTarget(fraenir, log);
             }
             else
             {
-                phase.AddTarget(icebrood);
+                phase.AddTarget(icebrood, log);
             }
         }
         return phases;

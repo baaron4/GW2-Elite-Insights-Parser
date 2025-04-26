@@ -47,7 +47,7 @@ internal static class EXTJsonMinionsHealingStatsBuilder
             totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(list.GroupBy(x => x.SkillId), log, skillMap, buffMap));
             var listInc = minions.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
             totalIncomingHealing.Add(listInc.Sum(x => x.HealingDone));
-            totalHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(listInc.GroupBy(x => x.SkillId), log, skillMap, buffMap));
+            totalIncomingHealingDist.Add(EXTJsonHealingStatsBuilderCommons.BuildHealingDistList(listInc.GroupBy(x => x.SkillId), log, skillMap, buffMap));
         }
         return res;
     }

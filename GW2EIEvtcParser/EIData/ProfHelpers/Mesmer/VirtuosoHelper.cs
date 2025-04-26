@@ -31,7 +31,8 @@ internal static class VirtuosoHelper
             })
             .WithBuilds(GW2Builds.October2022Balance),
         new EffectCastFinder(BladeturnRequiem, EffectGUIDs.VirtuosoBladeturnRequiem)
-            .UsingSrcSpecChecker(Spec.Virtuoso).WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+            .UsingSrcSpecChecker(Spec.Virtuoso)
+            .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new EffectCastFinder(ThousandCuts, EffectGUIDs.VirtuosoThousandCuts)
             .UsingSrcSpecChecker(Spec.Virtuoso),
     ];
@@ -39,13 +40,11 @@ internal static class VirtuosoHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new DamageLogDamageModifier(Mod_MentalFocus, "Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, TraitImages.MentalFocus, (x,log) =>
-                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-                && (currentPosition - currentTargetPosition).Length() <= 600
-            , DamageModifierMode.PvE)
+        // Mental Focus
+        new DamageLogDamageModifier(Mod_MentalFocus, "Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, TraitImages.MentalFocus, (x, log) => TargetWithinRangeChecker(x, log, 600), DamageModifierMode.PvE)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta4),
+        // Deadly Blades
         new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, TraitImages.DeadlyBlades, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4),
     ];
@@ -105,7 +104,7 @@ internal static class VirtuosoHelper
         return res;
     }
 
-    private static HashSet<int> Minions = [];
+    private static readonly HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

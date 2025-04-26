@@ -77,9 +77,9 @@ internal class MAMA : Nightmare
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
-        phases[0].AddTarget(mama);
+        phases[0].AddTarget(mama, log);
         var knightIds = KnightPhases.Select((pair) => pair.Item1).ToList();
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -108,7 +108,7 @@ internal class MAMA : Nightmare
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mama);
+                phase.AddTarget(mama, log);
             }
         }
         return phases;

@@ -96,14 +96,14 @@ internal class ValeGuardian : SpiritVale
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         var splitGuardianIds = new List<TargetID>
         {
             TargetID.BlueGuardian,
             TargetID.GreenGuardian,
             TargetID.RedGuardian
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -122,7 +122,7 @@ internal class ValeGuardian : SpiritVale
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(mainTarget, log);
             }
         }
         return phases;

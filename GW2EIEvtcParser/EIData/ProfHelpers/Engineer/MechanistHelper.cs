@@ -40,7 +40,8 @@ internal static class MechanistHelper
         new MinionCastCastFinder(RoilingSmash, RoilingSmash),
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),
-        new BuffGainCastFinder(DischargeArray, DischargeArrayBuff).WithMinions(true),
+        new BuffGainCastFinder(DischargeArray, DischargeArrayBuff)
+            .WithMinions(true),
         new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
             .WithMinions(true)
             .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
@@ -58,6 +59,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Force Signet
         new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.April2025BalancePatch)
             .UsingChecker(WithMechChecker),
@@ -67,6 +69,7 @@ internal static class MechanistHelper
         new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "15%, including Mech", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025BalancePatch)
             .UsingChecker(WithMechChecker),
+        // Superconducting Signet
         new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.SuperconductingSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker(WithMechChecker),
@@ -74,6 +77,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Barrier Signet
         new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.Incoming, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.BarrierSignet, DamageModifierMode.All),
     ];
 
@@ -89,16 +93,12 @@ internal static class MechanistHelper
         new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, TraitImages.MechanicalGenius),
         new Buff("Mechanical Genius (Remain)", MechanicalGeniusRemain, Source.Mechanist, BuffClassification.Other, TraitImages.MechanicalGenius),
         new Buff("Exigency Protocols", ExigencyProtocol, Source.PetSpecific, BuffClassification.Other, TraitImages.ExigencyProtocol),
-        //
-        //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
+        // J-Drive Signet Buffs - The other signets do not gain a different buff ID.
         new Buff("Barrier Signet (J-Drive)", BarrierSignetJDrive, Source.Mechanist, BuffClassification.Other, SkillImages.BarrierSignet),
-        //new Buff("Force Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.ForceSignet),
-        //new Buff("Shift Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.ShiftSignet),
-        //new Buff("Superconducting Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.SuperconductingSignet),
         new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, SkillImages.OverclockSignet),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.JadeMech,
     ];

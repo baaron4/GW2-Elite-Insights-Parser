@@ -124,7 +124,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -176,7 +176,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         {
             var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
         }
         // intermission phase never finished, add a "dummy" log end
@@ -195,7 +195,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         {
             var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.FightData.FightEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
             phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phases.Add(phase);
         }
         return phases;

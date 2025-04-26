@@ -167,7 +167,7 @@ internal class Kanaxai : SilentSurf
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
-        phases[0].AddTarget(kanaxai);
+        phases[0].AddTarget(kanaxai, log);
         if (!requirePhases)
         {
             return phases;
@@ -236,12 +236,12 @@ internal class Kanaxai : SilentSurf
                         case (int)TargetID.AspectOfFear:
                             if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
                             {
-                                curPhase.AddTarget(aspect);
+                                curPhase.AddTarget(aspect, log);
                             }
                             break;
                     }
                 }
-                curPhase.AddTarget(kanaxai);
+                curPhase.AddTarget(kanaxai, log);
             }
             else
             {
@@ -272,7 +272,7 @@ internal class Kanaxai : SilentSurf
                 {
                     curPhase.Name = baseName + (++phaseCount);
                 }
-                curPhase.AddTarget(kanaxai);
+                curPhase.AddTarget(kanaxai, log);
             }
         }
         phases.AddRange(encounterPhases);

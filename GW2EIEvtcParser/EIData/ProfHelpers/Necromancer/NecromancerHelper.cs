@@ -37,53 +37,86 @@ internal static class NecromancerHelper
             .UsingChecker((evt, combatData, skillData, agentData) => !combatData.HasRelatedHit(UnholyBurst, evt.Src, evt.Time))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
-        new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorBuff).WithBuilds(GW2Builds.December2018Balance),
-        new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkOldBuff).WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
-        new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkBuff).WithBuilds(GW2Builds.December2018Balance),
+        new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorBuff)
+            .WithBuilds(GW2Builds.December2018Balance),
+        new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkOldBuff)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.December2018Balance),
+        new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkBuff)
+            .WithBuilds(GW2Builds.December2018Balance),
         new BuffLossCastFinder(SpectralRecallSkill, SpectralWalkTeleportBuff)
             .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(SpectralWalkBuff).OfType<BuffRemoveAllEvent>(), evt.Time + 120).Any())
             .WithBuilds(GW2Builds.December2018Balance),
-        new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet).UsingDstBaseSpecChecker(Spec.Necromancer),
-        new EXTHealingCastFinder(SpitefulRenewal, SpitefulRenewal).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet)
+            .UsingDstBaseSpecChecker(Spec.Necromancer),
+        new EXTHealingCastFinder(SpitefulRenewal, SpitefulRenewal)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Minions
         new MinionCommandCastFinder(RigorMortisSkill, (int) MinionID.BoneFiend),
         new MinionCommandCastFinder(HauntSkill, (int) MinionID.ShadowFiend),
         new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
-        // new BuffGainWithMinionsCastFinder(RigorMortisSkill, RigorMortisEffect),
-        // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
         // Spear
-        new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress).UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
+        new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress)
+            .UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Spite
+        // - Spiteful Talisman
         new BuffOnFoeDamageModifier(Mod_SpitefulTalisman, NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, TraitImages.SpitefulTalisman, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "5% on while downed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "20% on feared target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "33% on feared target", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.February2020Balance),
-        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "33% on feared target", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
-        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "15% on feared target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
+        // - Death's Embrace
+        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_DeathsEmbrace, Downed, "Death's Embrace", "5% on while downed", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathsEmbrace, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.February2020Balance),
+        // - Dread
+        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "20% on feared target", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
+        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "33% on feared target", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.August2018Balance, GW2Builds.February2020Balance),
+        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "33% on feared target", DamageSource.NoPets, 33.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
+        new BuffOnFoeDamageModifier(Mod_Dread, Fear, "Dread", "15% on feared target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.UnholyFervor, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.February2020Balance, GW2Builds.July2020Balance),
+        // - Close to Death
         new DamageLogDamageModifier(Mod_CloseToDeath, "Close to Death", "20% below 50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.CloseToDeath, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        
         // Soul Reaping
-        new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_DeathPerception, [DeathShroud, ReapersShroud, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
+        // - Soul Barbs
+        new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SoulBarbs, SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, TraitImages.SoulBarbs, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2021Balance),
+        // - Death Perception
+        new BuffOnActorDamageModifier(Mod_DeathPerception, [DeathShroud, ReapersShroud, DesertShroudBuff, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DeathPerception, DamageModifierMode.All)
+            .UsingChecker((x, log) => x.HasCrit)
+            .WithBuilds(GW2Builds.June2022Balance),
+
+        // Death Magic
+        // - Necromantic Corruption
+        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsAnyUndeadMinion(x.From), DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => a.GetMinions(log).Any(x => IsAnyUndeadMinion(x.Value.ReferenceAgentItem))),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Death Shroud
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-33%", DamageSource.Incoming, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_DeathShroud, DeathShroud, "Death Shroud", "-50%", DamageSource.Incoming, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, SkillImages.DeathShroud, DamageModifierMode.sPvPWvW),
+        
+        // Death Magic
+        // - Dark Defiance
+        new BuffOnActorDamageModifier(Mod_DarkDefiance, Protection, "Dark Defiance", "-20%", DamageSource.Incoming, -20, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.DarkDefiance, DamageModifierMode.All),
+        // - Beyond the Veil
         new BuffOnActorDamageModifier(Mod_BeyondTheVeil, DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.Incoming, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BeyondTheVeil, DamageModifierMode.PvE)
             .UsingChecker((dl, log) => dl.To.GetBuffStatus(log, DeathsCarapace, dl.Time).Value >= 10)
             .WithBuilds(GW2Builds.October2019Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
-    [     
+    [
         // Forms
         new Buff("Lich Form", LichForm, Source.Necromancer, BuffClassification.Other, SkillImages.LichForm),
         new Buff("Death Shroud", DeathShroud, Source.Necromancer, BuffClassification.Other, SkillImages.DeathShroud),
@@ -101,18 +134,25 @@ internal static class NecromancerHelper
         new Buff("Signet of Undeath", SignetOfUndeathBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfUndeath),
         new Buff("Signet of Undeath (Shroud)", SignetOfUndeathShroud, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfUndeath),
         // Skills
-        new Buff("Spectral Walk", SpectralWalkOldBuff, Source.Necromancer, BuffClassification.Other, SkillImages.NecroticTraversal).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-        new Buff("Spectral Walk", SpectralWalkOldBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk).WithBuilds(GW2Builds.July2018Balance, GW2Builds.December2018Balance),
-        new Buff("Spectral Walk", SpectralWalkBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk).WithBuilds(GW2Builds.December2018Balance),
-        new Buff("Spectral Walk (Teleport)", SpectralWalkTeleportBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk).WithBuilds(GW2Builds.December2018Balance),
+        new Buff("Spectral Walk", SpectralWalkOldBuff, Source.Necromancer, BuffClassification.Other, SkillImages.NecroticTraversal)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
+        new Buff("Spectral Walk", SpectralWalkOldBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk)
+            .WithBuilds(GW2Builds.July2018Balance, GW2Builds.December2018Balance),
+        new Buff("Spectral Walk", SpectralWalkBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk)
+            .WithBuilds(GW2Builds.December2018Balance),
+        new Buff("Spectral Walk (Teleport)", SpectralWalkTeleportBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralWalk)
+            .WithBuilds(GW2Builds.December2018Balance),
         new Buff("Spectral Armor", SpectralArmorBuff, Source.Necromancer, BuffClassification.Other, SkillImages.SpectralArmor),
         new Buff("Locust Swarm", LocustSwarm, Source.Necromancer, BuffClassification.Other, SkillImages.LocustSwarm),
         new Buff("Grim Specter", GrimSpecterBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
         new Buff("Grim Specter (Target)", GrimSpecterTargetBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
         // Traits
-        new Buff("Corrupter's Defense", CorruptersDefense, Source.Necromancer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.CorruptersFervor).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-        new Buff("Death's Carapace", DeathsCarapace, Source.Necromancer, BuffStackType.Stacking, 30, BuffClassification.Other, TraitImages.DeathsCarapace).WithBuilds(GW2Builds.October2019Balance),
-        new Buff("Flesh of the Master", FleshOfTheMaster, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.FleshOfTheMaster).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
+        new Buff("Corrupter's Defense", CorruptersDefense, Source.Necromancer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.CorruptersFervor)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
+        new Buff("Death's Carapace", DeathsCarapace, Source.Necromancer, BuffStackType.Stacking, 30, BuffClassification.Other, TraitImages.DeathsCarapace)
+            .WithBuilds(GW2Builds.October2019Balance),
+        new Buff("Flesh of the Master", FleshOfTheMaster, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.FleshOfTheMaster)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new Buff("Vampiric Aura", VampiricAura, Source.Necromancer, BuffClassification.Defensive, TraitImages.VampiricPresence),
         new Buff("Vampiric Strikes", VampiricStrikes, Source.Necromancer, BuffClassification.Other, TraitImages.VampiricPresence),
         new Buff("Last Rites", LastRites, Source.Necromancer, BuffClassification.Defensive, TraitImages.LastRites),
@@ -142,7 +182,7 @@ internal static class NecromancerHelper
             || HarbingerHelper.IsHarbingerShroudTransform(id);
     }
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.BloodFiend,
         (int)MinionID.FleshGolem,
@@ -155,6 +195,18 @@ internal static class NecromancerHelper
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);
+    }
+
+    /// <summary>
+    /// Checks if a minion is a Necromancer, Reaper or Rune/Relic of the Lich minion.
+    /// </summary>
+    internal static bool IsAnyUndeadMinion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return IsKnownMinionID(agentItem.ID) || ReaperHelper.IsKnownMinionID(agentItem.ID) || agentItem.IsSpecies(MinionID.JaggedHorror);
     }
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

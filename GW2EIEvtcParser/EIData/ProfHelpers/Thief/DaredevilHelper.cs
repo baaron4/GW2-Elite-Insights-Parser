@@ -25,6 +25,7 @@ internal static class DaredevilHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Lotus Training
         new BuffOnActorDamageModifier(Mod_LotusTraining, LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.LotusTraining, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_LotusTraining, LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.LotusTraining, DamageModifierMode.PvE)
@@ -33,6 +34,7 @@ internal static class DaredevilHelper
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2021Balance),
         new BuffOnActorDamageModifier(Mod_LotusTraining, LotusTraining, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.LotusTraining, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2021Balance),
+        // Bounding Dodger
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.BoundingDodger, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.BoundingDodger, DamageModifierMode.sPvPWvW)
@@ -41,6 +43,7 @@ internal static class DaredevilHelper
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "15% (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.BoundingDodger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2022Balance),
+        // Weakening Strikes
         new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.WeakeningStrikes, DamageModifierMode.All)
             .WithBuilds(GW2Builds.April2019Balance, GW2Builds.August2022Balance),
         new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.WeakeningStrikes, DamageModifierMode.sPvPWvW)
@@ -51,7 +54,9 @@ internal static class DaredevilHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
+        // Weakening Strikes
         new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, TraitImages.WeakeningStrikes, DamageModifierMode.All),
+        // Unhindered Combatant
         new BuffOnActorDamageModifier(Mod_UnhideredCombatant, UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, TraitImages.UnhinderedCombatant, DamageModifierMode.All),
     ];
 

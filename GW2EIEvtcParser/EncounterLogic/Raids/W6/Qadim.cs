@@ -293,7 +293,7 @@ internal class Qadim : MythwrightGambit
 
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-        phases[0].AddTarget(qadim);
+        phases[0].AddTarget(qadim, log);
         var secondaryTargetIds = new HashSet<TargetID>
                     {
                        TargetID.WyvernMatriarch,
@@ -301,7 +301,7 @@ internal class Qadim : MythwrightGambit
                        TargetID.AncientInvokedHydra,
                        TargetID.ApocalypseBringer,
                     };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -331,7 +331,7 @@ internal class Qadim : MythwrightGambit
                 {
                     phase.OverrideStart(pyresFirstAware.Max());
                 }
-                phase.AddTarget(qadim);
+                phase.AddTarget(qadim, log);
             }
             else
             {

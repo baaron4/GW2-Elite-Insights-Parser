@@ -59,8 +59,8 @@ internal class Gorseval : SpiritVale
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
-        phases[0].AddTarget(mainTarget);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(mainTarget, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -73,7 +73,7 @@ internal class Gorseval : SpiritVale
             if (i % 2 == 1)
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(mainTarget, log);
             }
             else
             {

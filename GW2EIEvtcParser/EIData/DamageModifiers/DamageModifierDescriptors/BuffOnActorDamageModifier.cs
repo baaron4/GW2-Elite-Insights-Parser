@@ -27,7 +27,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         return this;
     }
 
-    private double ComputeAdjustedGain(HealthDamageEvent dl, ParsedEvtcLog log)
+    protected double ComputeAdjustedGain(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
     }
@@ -41,7 +41,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 
     protected static bool Skip(BuffsTracker tracker, IReadOnlyDictionary<long, BuffGraph> bgms, GainComputer gainComputer)
     {
-        return (!tracker.Has(bgms) && gainComputer != ByAbsence) || (tracker.Has(bgms) && gainComputer == ByAbsence);
+        return (gainComputer != ByAbsence && tracker.IsEmpty(bgms)) || (gainComputer == ByAbsence && tracker.IsFull(bgms));
     }
 
     internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
@@ -54,10 +54,21 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
         if (damageModifier.NeedsMinions)
         {
+            var ignoredSources = new HashSet<SingleActor>();
             foreach (HealthDamageEvent evt in typeHits)
             {
                 var singleActor = log.FindActor(evt.From);
-                if (ComputeGain(singleActor.GetBuffGraphs(log), evt, log, out double gain) && CheckCondition(evt, log))
+                if (ignoredSources.Contains(singleActor))
+                {
+                    continue;
+                }
+                var bgms = singleActor.GetBuffGraphs(log);
+                if (Skip(Tracker, bgms, GainComputer))
+                {
+                    ignoredSources.Add(singleActor);
+                    continue;
+                }
+                if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
                 {
                     res.Add(new DamageModifierEvent(evt, damageModifier, gain * evt.HealthDamage));
                 }

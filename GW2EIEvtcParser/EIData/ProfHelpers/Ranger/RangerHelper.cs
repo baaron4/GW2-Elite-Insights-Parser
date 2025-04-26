@@ -36,9 +36,10 @@ internal static class RangerHelper
         (int)MinionID.JuvenileSnowLeopard,
         (int)MinionID.JuvenileTiger,
         (int)MinionID.JuvenileWhiteTiger,
+        (int)MinionID.JuvenileWarclaw,
     ];
 
-    private static HashSet<int> JuvenileBirdPetIDs =
+    private static readonly HashSet<int> JuvenileBirdPetIDs =
     [
         (int)MinionID.JuvenileEagle,
         (int)MinionID.JuvenileHawk,
@@ -132,7 +133,6 @@ internal static class RangerHelper
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
-        (int)MinionID.JuvenileWarclaw,
         (int)MinionID.JuvenileJanthiriBee,
     }
     .Union(JuvenileFelinePetIDs)
@@ -291,7 +291,8 @@ internal static class RangerHelper
         new BuffGiveCastFinder(GuardSkill, GuardBuff)
             .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
         new BuffGiveCastFinder(LesserGuardSkill, GuardBuff)
-            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant))
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
             .UsingICD(1100).UsingNotAccurate(true),
         new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
@@ -309,7 +310,7 @@ internal static class RangerHelper
     private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
     {
         AgentItem src = x.From;
-        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+        var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).LastOrDefault(y => y is BuffApplyEvent && y.Time <= x.Time);
         if (effectApply != null)
         {
             return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -319,22 +320,17 @@ internal static class RangerHelper
 
     private static bool TargetBelow600Range(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.Skill.IsWeaponSkill
-        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-        && (currentPosition - currentTargetPosition).Length() <= 600;
+        return x.Skill.IsWeaponSkill && TargetWithinRangeChecker(x, log, 600);
     }
     private static bool TargetAbove600Range(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.Skill.IsWeaponSkill
-        && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
-        && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
-        && (currentPosition - currentTargetPosition).Length() > 600;
+        return x.Skill.IsWeaponSkill && !TargetWithinRangeChecker(x, log, 600);
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Skills
+        // - Sic 'Em
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.PvE)
             .UsingChecker(SicEmFromDst)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -344,7 +340,13 @@ internal static class RangerHelper
         new BuffOnActorDamageModifier(Mod_SicEm, SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All)
             .UsingChecker(SicEmFromDst)
             .WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_SicEmPet, SicEmBuff, "Sic 'Em!", "40% Pet", DamageSource.PetsOnly, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.SicEm, DamageModifierMode.All),
+        // - Frost Spirit
+        new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+
         // Marksmanship
+        // - Farsighted (<= 600)
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
@@ -360,7 +362,7 @@ internal static class RangerHelper
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
-        //
+        // - Farsighted (> 600)
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
@@ -376,26 +378,46 @@ internal static class RangerHelper
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvEWvW)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2025BalancePatch),
+        // - Predator's Onslaught
         new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
             .UsingApproximate(true),
+        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+
         // Skirmishing
+        // - Hunter's Tactics
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2022Balance),
         new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        // - Light on your Feet
         new BuffOnActorDamageModifier(Mod_LightOnYourFeet, LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.LightOnYourFeet, DamageModifierMode.All),
+
         // Nature Magic
-        // We can't check buffs on minions yet
-        new BuffOnActorDamageModifier(Mod_BountifulHunter, NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_FrostSpirit, FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, SkillImages.FrostSpirit, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+        // - Bountiful Hunter
+        new BuffOnActorDamageModifier(Mod_BountifulHunterWithPet, NumberOfBoons, "Bountiful Hunter", "1% per boon (player and pet)", DamageSource.All, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, TraitImages.BountifulHunter, DamageModifierMode.All),
+        
+        // Wilderness Survival
+        // - Survival Instincts
         new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(true),
+
+        // Beastmastery
+        // - Beastly Warden
+        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From), DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => {
+                return a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.Value.ReferenceAgentItem) || IsJuvenilePorcinePet(x.Value.ReferenceAgentItem));
+            })
+            .WithBuilds(GW2Builds.April2025BalancePatch),
+        
+        // Mace
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.sPvPWvW)
@@ -404,21 +426,14 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
         new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
-        //
-        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
-        new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
-        new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From) , DamageModifierMode.All)
-            .UsingEarlyExit((a, log) => {
-                return a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.Value.ReferenceAgentItem) || IsJuvenilePorcinePet(x.Value.ReferenceAgentItem));
-            })
-            .WithBuilds(GW2Builds.April2025BalancePatch),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_OakheartSlave, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
+        // Wilderness Survival
+        // - Oakheart Salve
+        new BuffOnActorDamageModifier(Mod_OakheartSalve, Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.OakheartSalve, DamageModifierMode.All),
+        // - Survival Instincts
         new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.Incoming, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];

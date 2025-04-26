@@ -297,7 +297,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         else
         {
-            phases[0].AddTarget(elementalAi);
+            phases[0].AddTarget(elementalAi, log);
         }
         SingleActor? darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
         if (darkAi == null)
@@ -309,7 +309,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         else
         {
-            phases[0].AddTarget(darkAi);
+            phases[0].AddTarget(darkAi, log);
         }
         if (_hasElementalMode)
         {
@@ -320,7 +320,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             if (_hasDarkMode)
             {
                 elePhase = new PhaseData(eleStart, eleEnd, "Elemental Phase");
-                elePhase.AddTarget(elementalAi);
+                elePhase.AddTarget(elementalAi, log);
                 phases.Add(elePhase);
                 elePhase.AddParentPhase(phases[0]);
             }
@@ -334,7 +334,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     PhaseData phase = elementalPhases[i];
                     phase.Name = eleNames[i];
                     phase.AddParentPhase(elePhase);
-                    phase.AddTarget(elementalAi);
+                    phase.AddTarget(elementalAi, log);
                     if (i > 0)
                     {
                         // try to use transition skill, fallback to determined loss
@@ -365,7 +365,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             if (_hasElementalMode)
             {
                 darkPhase = new PhaseData(darkStart, darkEnd, "Dark Phase");
-                darkPhase.AddTarget(darkAi);
+                darkPhase.AddTarget(darkAi, log);
                 phases.Add(darkPhase);
                 darkPhase.AddParentPhase(phases[0]);
             }
@@ -377,7 +377,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart, fearToSorrow.Time, "Fear");
-                    fearPhase.AddTarget(darkAi);
+                    fearPhase.AddTarget(darkAi, log);
                     fearPhase.AddParentPhase(darkPhase);
                     phases.Add(fearPhase);
                     long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
@@ -385,18 +385,18 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, sorrowToGuilt.Time, "Sorrow");
-                        sorrowPhase.AddTarget(darkAi);
+                        sorrowPhase.AddTarget(darkAi, log);
                         sorrowPhase.AddParentPhase(darkPhase);
                         phases.Add(sorrowPhase);
                         var guiltPhase = new PhaseData(sorrowToGuilt.Time, darkEnd, "Guilt");
-                        guiltPhase.AddTarget(darkAi);
+                        guiltPhase.AddTarget(darkAi, log);
                         guiltPhase.AddParentPhase(darkPhase);
                         phases.Add(guiltPhase);
                     }
                     else
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, darkEnd, "Sorrow");
-                        sorrowPhase.AddTarget(darkAi);
+                        sorrowPhase.AddTarget(darkAi, log);
                         sorrowPhase.AddParentPhase(darkPhase);
                         phases.Add(sorrowPhase);
                     }

@@ -31,13 +31,16 @@ internal static class ScrapperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
+        // Object in Motion
         new BuffOnActorDamageModifier(Mod_ObjectInMotion, [Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, TraitImages.ObjectInMotion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance)
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new DamageLogDamageModifier(Mod_AdaptiveArmor, "Adaptive Armor", "-20%", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, TraitImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
+        // Adaptive Armor
+        new DamageLogDamageModifier(Mod_AdaptiveArmor, "Adaptive Armor", "-20%", DamageSource.Incoming, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, TraitImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -46,7 +49,7 @@ internal static class ScrapperHelper
         new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, SkillImages.BulwarkGyro),
     ];
 
-    private static HashSet<int> Minions =
+    private static readonly HashSet<int> Minions =
     [
         (int)MinionID.BlastGyro,
         (int)MinionID.BulwarkGyro,

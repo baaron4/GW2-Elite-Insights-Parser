@@ -183,7 +183,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
-                addPhase.AddTargets(targets);
+                addPhase.AddTargets(targets, log);
                 addPhase.AddParentPhase(phases[0]);
                 phases.Add(addPhase);
             }
@@ -199,7 +199,7 @@ internal class KainengOverlook : EndOfDragonsStrike
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
-        phases[0].AddTarget(ministerLi);
+        phases[0].AddTarget(ministerLi, log);
         //
         SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
         SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
@@ -207,11 +207,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
         SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
         //
-        phases[0].AddTarget(enforcer, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(mindblade, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(mechRider, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(sniper, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(ritualist, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(enforcer, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(mindblade, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(mechRider, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(sniper, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(ritualist, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -220,7 +220,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         for (int i = 0; i < subPhases.Count; i++)
         {
             subPhases[i].Name = "Phase " + (i + 1);
-            subPhases[i].AddTarget(ministerLi);
+            subPhases[i].AddTarget(ministerLi, log);
             subPhases[i].AddParentPhase(phases[0]);
         }
         // when wiped during a split phase, Li's LastAware is well before fight end

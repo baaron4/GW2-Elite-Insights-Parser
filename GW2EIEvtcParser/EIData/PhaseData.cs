@@ -71,13 +71,14 @@ public class PhaseData
         _targets.Remove(target);
     }
 
-    internal void AddTarget(SingleActor? target, TargetPriority priority = TargetPriority.Main)
+    internal void AddTarget(SingleActor? target, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
     {
         if (target == null)
         {
             return;
         }
-        if (!IntersectsWindow(target.FirstAware, target.LastAware))
+        var (_, _, _, actives) = target.GetStatus(log);
+        if (!actives.Any(x => IntersectsWindow(x.Start, x.End)))
         {
             return;
         }
@@ -96,11 +97,11 @@ public class PhaseData
         }
     }
 
-    internal void AddTargets(IEnumerable<SingleActor?> targets, TargetPriority priority = TargetPriority.Main)
+    internal void AddTargets(IEnumerable<SingleActor?> targets, ParsedEvtcLog log, TargetPriority priority = TargetPriority.Main)
     {
         foreach (SingleActor? target in targets)
         {
-            AddTarget(target, priority);
+            AddTarget(target, log, priority);
         }
     }
 

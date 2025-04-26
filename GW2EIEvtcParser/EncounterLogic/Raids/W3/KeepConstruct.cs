@@ -97,7 +97,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
-        phases[0].AddTarget(mainTarget);
+        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
             return phases;
@@ -126,7 +126,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         {
             mainPhases[i].Name = "Phase " + (i + 1);
             mainPhases[i].AddParentPhase(phases[0]);
-            mainPhases[i].AddTarget(mainTarget);
+            mainPhases[i].AddTarget(mainTarget, log);
         }
         phases.AddRange(mainPhases);
         // add burn phases
@@ -157,7 +157,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         foreach (Segment seg in segments)
         {
             var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
-            phase.AddTarget(mainTarget);
+            phase.AddTarget(mainTarget, log);
             phase.AddParentPhases(mainPhases);
             phases.Add(phase);
         }
@@ -179,7 +179,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     {
                         var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
                         phase.AddParentPhases(mainPhases);
-                        phase.AddTarget(mainTarget);
+                        phase.AddTarget(mainTarget, log);
                         preBurnPhase.Add(phase);
                     }
                 }
@@ -206,7 +206,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     {
                         var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                         leftOverPhase.AddParentPhases(mainPhases);
-                        leftOverPhase.AddTarget(mainTarget);
+                        leftOverPhase.AddTarget(mainTarget, log);
                         leftOverPhases.Add(leftOverPhase);
                     }
                 }

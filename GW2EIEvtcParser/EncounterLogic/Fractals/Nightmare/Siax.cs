@@ -75,8 +75,8 @@ internal class Siax : Nightmare
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
-        phases[0].AddTarget(siax);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EchoOfTheUnclean)), PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(siax, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EchoOfTheUnclean)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -98,7 +98,7 @@ internal class Siax : Nightmare
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(siax);
+                phase.AddTarget(siax, log);
             }
         }
         return phases;

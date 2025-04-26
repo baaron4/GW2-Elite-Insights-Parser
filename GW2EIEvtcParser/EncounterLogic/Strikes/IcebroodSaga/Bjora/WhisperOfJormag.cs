@@ -69,7 +69,7 @@ internal class WhisperOfJormag : Bjora
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
-        phases[0].AddTarget(woj);
+        phases[0].AddTarget(woj, log);
         if (!requirePhases)
         {
             return phases;
@@ -112,7 +112,7 @@ internal class WhisperOfJormag : Bjora
         }
         for (int i = 1; i < phases.Count; i++)
         {
-            phases[i].AddTarget(woj);
+            phases[i].AddTarget(woj, log);
             phases[i].AddParentPhase(phases[0]);
         }
         return phases;

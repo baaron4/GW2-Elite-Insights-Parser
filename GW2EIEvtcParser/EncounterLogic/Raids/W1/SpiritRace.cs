@@ -82,7 +82,7 @@ internal class SpiritRace : SpiritVale
             return base.GetPhases(log, requirePhases);
         }
         List<PhaseData> phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EtherealBarrier)));
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EtherealBarrier)), log);
         return phases;
     }
 
