@@ -252,7 +252,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         // first cast or fallback to regular offset (combat enter) for dark ai
         // old elemental ai will always end up with fallback due to idle time
         var start = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-        var firstCast = combatData.Where(x => x.SrcMatchesAgent(ai) && x.IsActivation != Activation.None).FirstOrDefault();
+        var firstCast = combatData.Where(x => x.IsActivation != Activation.None && x.SrcMatchesAgent(ai)).FirstOrDefault();
         if (firstCast != null)
         {
             return Math.Min(start, firstCast.Time);

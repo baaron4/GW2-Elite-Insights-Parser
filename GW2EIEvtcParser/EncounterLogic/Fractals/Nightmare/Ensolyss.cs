@@ -113,7 +113,16 @@ internal class Ensolyss : Nightmare
     {
         // ensolyss spawns with invulnerability
         var ensolyss = FindTargetEnsolyss(agentData, combatData);
-        return GetFightOffsetByInvulnStart(fightData, combatData, ensolyss, Determined762);
+        long start = GetFightOffsetByInvulnStart(fightData, combatData, ensolyss, Determined762);
+
+        // ensolyss exits combat during split phases and reenters after
+        // make sure we dont have a late start via caustic explosion, expected to happen 2s after invuln remove in later phases
+        var causticExplosion = combatData.FirstOrDefault(x => x.SkillID == CausticExplosionEnsolyss && x.IsActivation != Activation.None && x.SrcMatchesAgent(ensolyss) && x.Time > start);
+        if (causticExplosion != null && causticExplosion.Time <= start + 3000)
+        {
+            return GetGenericFightOffset(fightData);
+        }
+        return start;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

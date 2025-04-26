@@ -80,8 +80,6 @@ internal static class EncounterLogicTimeUtils
         return GetEnterCombatTime(fightData, agentData, combatData, upperLimit, [id], agent);
     }
 
-    internal const long MaxDelayFromStart = 200;
-
     internal static long GetFightOffsetForTarget(FightData fightData, AgentItem target)
     {
         return Math.Max(target.FirstAware, GetGenericFightOffset(fightData));
@@ -90,7 +88,7 @@ internal static class EncounterLogicTimeUtils
     internal static long GetFightOffsetBySpawn(FightData fightData, List<CombatItem> combatData, AgentItem target)
     {
         long start = GetFightOffsetForTarget(fightData, target);
-        CombatItem? spawn = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(target) && x.Time <= start + MaxDelayFromStart);
+        CombatItem? spawn = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(target) && x.Time <= start + ParserHelper.TimeThresholdConstant);
         if (spawn != null)
         {
             return Math.Max(start, spawn.Time);
@@ -101,26 +99,48 @@ internal static class EncounterLogicTimeUtils
     internal static long GetFightOffsetByInvulnStart(FightData fightData, List<CombatItem> combatData, AgentItem target, long invulnID)
     {
         long start = GetFightOffsetForTarget(fightData, target);
-        CombatItem? invulnRemove = combatData.FirstOrDefault(x => x.SkillID == invulnID && x.SrcMatchesAgent(target) && x.IsBuffRemove == BuffRemove.All && x.Time >= start);
+        CombatItem? invulnRemove = combatData.FirstOrDefault(x => x.SkillID == invulnID && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(target) && x.Time >= start);
         if (invulnRemove != null)
         {
             CombatItem? invulnApply = combatData.FirstOrDefault(x => x.SkillID == invulnID && x.DstMatchesAgent(target) && x.IsBuffApply() && x.Time >= start);
-            if (invulnApply == null || invulnRemove.Time < invulnApply.Time)
+            if (invulnApply != null && invulnApply.Time <= invulnRemove.Time)
             {
-                // no invuln present at start, check if target was full health
-                CombatItem? healthUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(target) && x.Time >= start);
-                if (healthUpdate != null && HealthUpdateEvent.GetHealthPercent(healthUpdate) == 100.0)
+                // check if invuln was applied at start rather than already present (otherwise could be a late start)
+                // this is a faster check for targets that get their starting invuln applied as they spawn or as the encounter starts
+                if (invulnApply.IsStateChange == StateChange.None && invulnApply.Time <= target.FirstAware + ParserHelper.TimeThresholdConstant)
                 {
-                    return invulnRemove.Time + 1;
+                    return invulnRemove.Time;
+                }
+
+                // try to verify via target combat enter after invuln apply
+                CombatItem? enterCombat = GetEnterCombatForStart(combatData, target, start);
+                if (enterCombat != null && enterCombat.Time + ParserHelper.ServerDelayConstant >= invulnApply.Time)
+                {
+                    return invulnRemove.Time;
                 }
             }
-            else if ((invulnApply.IsStateChange == StateChange.BuffInitial || invulnApply.Time <= start + MaxDelayFromStart) && invulnRemove.Time >= invulnApply.Time)
+            else
             {
-                // invuln was present at start and removed after
-                return invulnRemove.Time + 1;
+                // no matching apply recorded, try to verify via combat enter after invuln remove
+                CombatItem? enterCombat = GetEnterCombatForStart(combatData, target, start);
+                if (enterCombat != null && enterCombat.Time >= invulnRemove.Time)
+                {
+                    return invulnRemove.Time;
+                }
             }
         }
         return start;
+    }
+
+    internal static CombatItem? GetEnterCombatForStart(List<CombatItem> combatData, AgentItem target, long start)
+    {
+        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(target) && x.Time >= start);
+        CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.ExitCombat && x.SrcMatchesAgent(target) && x.Time >= start);
+        if (enterCombat != null && (exitCombat == null || exitCombat.Time > enterCombat.Time))
+        {
+            return enterCombat;
+        }
+        return null;
     }
 
     internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
