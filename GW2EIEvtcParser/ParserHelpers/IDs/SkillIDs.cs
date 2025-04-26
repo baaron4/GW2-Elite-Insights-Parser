@@ -73,6 +73,28 @@ public static class SkillIDs
     internal const long ArcDPSGenericBreakbar = 65002;
     internal const long ArcDPSDodge20220307 = 23275;
     internal const long ArcDPSGenericBreakbar20220307 = 23276;
+    internal const long ArcDPSSelfCast1 = 23277;
+    internal const long ArcDPSEnemyCast1 = 23278;
+    internal const long ArcDPSSelfCast2 = 23279;
+    internal const long ArcDPSEnemyCast2 = 23280;
+    internal const long ArcDPSSelfCast3 = 23281;
+    internal const long ArcDPSEnemyCast3 = 23282;
+    internal const long ArcDPSBreakbarDefunc = 23283;
+    public const long WeaponDraw = 23284;
+    public const long WeaponStow = 23285;
+    internal const long ArcDPSGenericKill = 23288;
+    internal const long ArcDPSGenericDown = 23289;
+    internal const long ArcDPSGenericEvade = 23290;
+    internal const long ArcDPSGenericInterrupt = 23291;
+    internal const long ArcDPSGenericAbsorb = 23292;
+    internal const long ArcDPSGenericMiss = 23293;
+    internal const long ArcDPSGenericKnockdown = 23294;
+    internal const long ArcDPSGenericKnockbackPull = 23295;
+    internal const long ArcDPSGenericFloat = 23296;
+    internal const long ArcDPSGenericLaunch = 23297;
+    internal const long ArcDPSGenericWaterFloatSink = 23298;
+    internal const long ArcDPSGenericCCBuff = 23299;
+    internal const long ArcDPSGenericStagger = 23300;
     #endregion
     #region Core
     public const long Protection = 717;
@@ -990,7 +1012,7 @@ public static class SkillIDs
     public const long BannerOfDisciplineSkill = 14407;
     public const long BannerOfTacticsSkill = 14408;
     public const long SignetOfFurySkill = 14410;
-    public const long BalancedStanceSill = 14412;
+    public const long BalancedStanceSkill = 14412;
     public const long DolyakSignetSkill = 14413;
     public const long SkullCrack1 = 14414;
     public const long TremorMace = 14415;
@@ -1358,9 +1380,6 @@ public static class SkillIDs
     public const long PowerfulPotionOfSlayingScarletsArmies = 23228;
     public const long Enraged2_Unknown = 23235;
     public const long SwiftMoaFeather = 23239;
-    public const long WeaponDraw = 23284;
-    public const long WeaponStow = 23285;
-    public const long GenericKill = 23288;
     public const long GuildShieldFinisher = 23978;
     public const long HiddenMinstrelFinisher = 23996;
     public const long GolemPummelerFinisher = 23997;
