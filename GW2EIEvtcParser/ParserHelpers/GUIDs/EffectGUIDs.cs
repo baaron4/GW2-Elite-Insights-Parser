@@ -105,7 +105,9 @@ public static class EffectGUIDs
     public static readonly GUID ChronomancerGravityWellExplosion = new("E0D03976A4BC034E8ABFBBECCC828932"); // 1 second after final pulse
     public static readonly GUID MirageCloak = new("4C7A5E148F7FD642B34EE4996DDCBBAB");
     public static readonly GUID MirageMirror = new("1370CDF5F2061445A656A1D77C37A55C");
-    public static readonly GUID MirageJaunt = new("3A5A38C26A1FFB438EAD734F3ED42E5E"); // may have collisions! not known which
+    public static readonly GUID MirageJaunt = new("3A5A38C26A1FFB438EAD734F3ED42E5E"); // Src Mirage, Dst Mirage
+    public static readonly GUID MirageJauntConflict1 = new("B6557C336041B24FA7CC198B6EBDAD9A"); // Src Mirage, Dst Mirage - used with e.g. jaunt & axes of symmetry
+    public static readonly GUID MirageJauntConflict2 = new("D7A05478BA0E164396EB90C037DCCF42"); // Src Mirage, Dst Mirage - used with e.g. jaunt, axes of symmetry, illusionary ambush
     public static readonly GUID VirtuosoUnstableBladestorm = new("DEF12997FAEA6847A8786CD2920ACA91"); // has effect end
     public static readonly GUID VirtuosoUnstableBladestorm2 = new("242B1513FCF07842B658A56CDE4851C8");
     public static readonly GUID VirtuosoBladeturnRequiem = new("87B761200637AC48B71469F553BA6F60");
@@ -116,9 +118,7 @@ public static class EffectGUIDs
     public static readonly GUID MesmerRifleInspiringImagery3 = new ("116644F736CDFE4F8FF3E1EB5C5C57A2"); // 2000 Duration - Src Mesmer - Ground AoE
     public static readonly GUID MesmerRifleAbstraction = new ("6E2B9CF3E5C95846B15BBD1EAA9B3E98"); // 3300 Default Duration - Src Mesmer - Ground Effect
     public static readonly GUID MesmerRifleAbstraction2 = new ("593E668A006AB24D84999AED68F2E4C4"); // 2000 Default Duration - Src Mesmer - Ground Effect
-    // public static readonly GUID MirageJauntConflict1                    = new("B6557C336041B24FA7CC198B6EBDAD9A"); // used with e.g. jaunt & axes of symmetry
-    // public static readonly GUID MirageJauntConflict2                    = new("D7A05478BA0E164396EB90C037DCCF42"); // used with e.g. jaunt, axes of symmetry, illusionary ambush
-    // public static readonly GUID MesmerTrail                             = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
+    // public static readonly GUID MesmerTrail = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
     #endregion
       
     #region Necromancer
