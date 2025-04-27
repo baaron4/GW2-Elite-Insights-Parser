@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -129,6 +130,12 @@ internal class Siax : Nightmare
                 AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
             }
         }
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        var siax = agentData.GetNPCsByID(TargetID.Siax).FirstOrDefault() ?? throw new MissingKeyActorsException("Siax not found");
+        return GetFightOffsetBySpawn(fightData, combatData, siax);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

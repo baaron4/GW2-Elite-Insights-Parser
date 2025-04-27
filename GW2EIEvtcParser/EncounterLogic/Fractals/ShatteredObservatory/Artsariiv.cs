@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -67,7 +68,7 @@ internal class Artsariiv : ShatteredObservatory
         trashIDs.Add(TargetID.SmallArtsariiv);
         trashIDs.Add(TargetID.MediumArtsariiv);
         trashIDs.Add(TargetID.BigArtsariiv);
-        
+
         return trashIDs;
     }
 
@@ -119,17 +120,12 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
-        if (artsariivs.Count != 0)
+        var targetArtsariiv = FindTargetArtsariiv(agentData);
+        foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
         {
-            //TODO(Rennorb) perf
-            artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
-            if (artsariivs.Count != 0)
+            if (artsariiv != targetArtsariiv)
             {
-                foreach (AgentItem subartsariiv in artsariivs)
-                {
-                    subartsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
-                }
+                artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -173,9 +169,17 @@ internal class Artsariiv : ShatteredObservatory
         return FightData.EncounterMode.CMNoName;
     }
 
+    static private AgentItem FindTargetArtsariiv(AgentData agentData)
+    {
+        // cc artsariiv clones have the same species id, find target with longest aware time
+        return agentData.GetNPCsByID(TargetID.Artsariiv).MaxBy(x => x.LastAware - x.FirstAware) ?? throw new MissingKeyActorsException("Artsariiv not found");
+    }
+
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)TargetID.Artsariiv, Determined762);
+        // artsarriv starts invulnerable
+        var artsariiv = FindTargetArtsariiv(agentData);
+        return GetFightOffsetByInvulnStart(fightData, combatData, artsariiv, Determined762);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

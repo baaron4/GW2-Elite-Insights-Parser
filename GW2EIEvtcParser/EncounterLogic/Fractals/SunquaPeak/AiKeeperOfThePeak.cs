@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -163,7 +164,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
     {
         var trashIDs = base.GetTrashMobsIDs();
         trashIDs.ReserveAdditional(9);
-        
+
         trashIDs.Add(TargetID.FearDemon);
         trashIDs.Add(TargetID.GuiltDemon);
         trashIDs.Add(TargetID.AiDoubtDemon);
@@ -174,7 +175,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         trashIDs.Add(TargetID.TransitionSorrowDemon2);
         trashIDs.Add(TargetID.TransitionSorrowDemon3);
         trashIDs.Add(TargetID.TransitionSorrowDemon4);
-        
+
         return trashIDs;
     }
 
@@ -236,6 +237,27 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 }
             }
         }
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
+        // check invulnerability remove for new elemental ai
+        var ai = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
+        var invulnStart = GetFightOffsetByInvulnStart(fightData, combatData, ai, Determined895);
+        if (invulnStart > ai.FirstAware)
+        {
+            return invulnStart;
+        }
+
+        // first cast or fallback to regular offset (combat enter) for dark ai
+        // old elemental ai will always end up with fallback due to idle time
+        var start = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+        var firstCast = combatData.Where(x => x.StartCasting() && x.SrcMatchesAgent(ai)).FirstOrDefault();
+        if (firstCast != null)
+        {
+            return Math.Min(start, firstCast.Time);
+        }
+        return start;
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -467,11 +489,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // tether between sprite and player
-        var spriteFixations = GetFilteredList(log.CombatData, [ FixatedEnragedWaterSprite ], p, true, true);
+        var spriteFixations = GetFilteredList(log.CombatData, [FixatedEnragedWaterSprite], p, true, true);
         replay.Decorations.AddTether(spriteFixations, Colors.Purple, 0.5);
 
         // Tethering Players to Fears
-        var fearFixations = GetFilteredList(log.CombatData, [ FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 ], p, true, true);
+        var fearFixations = GetFilteredList(log.CombatData, [FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], p, true, true);
         replay.Decorations.AddTether(fearFixations, Colors.Magenta, 0.5);
     }
 
@@ -528,7 +550,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             case (int)TargetID.GuiltDemon:
                 {
                     // tether between guilt and player/boss, buff applied TO guilt
-                    var fixationBuffs = GetFilteredList(log.CombatData, [ FixatedGuilt ], target, true, true);
+                    var fixationBuffs = GetFilteredList(log.CombatData, [FixatedGuilt], target, true, true);
                     replay.Decorations.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
                     break;
                 }
@@ -552,7 +574,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
 
         // orbs
-        if (log.CombatData.TryGetEffectEventsByGUIDs([ EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat ], out var orbs))
+        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat], out var orbs))
         {
             foreach (EffectEvent effect in orbs)
             {
@@ -657,7 +679,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 AddScalingCircleDecorations(log, filteredCircles, 300);
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUIDs([ EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing ], out var circlePulsing))
+        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing], out var circlePulsing))
         {
             AddScalingCircleDecorations(log, circlePulsing, 8000);
         }
