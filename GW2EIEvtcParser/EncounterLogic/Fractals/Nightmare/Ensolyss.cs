@@ -117,7 +117,7 @@ internal class Ensolyss : Nightmare
 
         // ensolyss exits combat during split phases and reenters after
         // make sure we dont have a late start via caustic explosion, expected to happen 2s after invuln remove in later phases
-        var causticExplosion = combatData.FirstOrDefault(x => x.SkillID == CausticExplosionEnsolyss && x.IsActivation != Activation.None && x.SrcMatchesAgent(ensolyss) && x.Time > start);
+        var causticExplosion = combatData.FirstOrDefault(x => x.SkillID == CausticExplosionEnsolyss && x.StartCasting() && x.SrcMatchesAgent(ensolyss) && x.Time > start);
         if (causticExplosion != null && causticExplosion.Time <= start + 3000)
         {
             return GetGenericFightOffset(fightData);
