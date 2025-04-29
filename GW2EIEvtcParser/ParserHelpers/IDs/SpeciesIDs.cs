@@ -457,7 +457,6 @@ public static class SpeciesIDs
         // - Harvest Temple - Void Amalgamate
         GadgetTheDragonVoid1 = 43488, // Gadget
         GadgetTheDragonVoid2 = 1378, // Gadget
-        VoidAmalgamate1 = 24375,
         TheDragonVoidZhaitan = SpeciesIDs.TheDragonVoidZhaitan,
         TheDragonVoidJormag = SpeciesIDs.TheDragonVoidJormag,
         TheDragonVoidKralkatorrik = SpeciesIDs.TheDragonVoidKralkatorrik,

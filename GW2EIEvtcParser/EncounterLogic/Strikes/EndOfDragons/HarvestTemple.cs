@@ -233,7 +233,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         {
             long start = log.FightData.FightEnd;
             long end = log.FightData.FightStart;
-            foreach (NPC giant in giants)
+            foreach (SingleActor giant in giants)
             {
                 start = Math.Min(start, giant.FirstAware);
                 end = Math.Max(end, giant.LastAware);

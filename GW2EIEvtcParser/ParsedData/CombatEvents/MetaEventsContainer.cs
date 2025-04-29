@@ -25,4 +25,8 @@ internal class MetaEventsContainer
     public readonly Dictionary<GUID, EffectGUIDEvent> EffectGUIDEventsByGUID = [];
     public readonly Dictionary<long, MarkerGUIDEvent> MarkerGUIDEventsByMarkerID = [];
     public readonly Dictionary<GUID, MarkerGUIDEvent> MarkerGUIDEventsByGUID = [];
+    public readonly Dictionary<long, SpeciesGUIDEvent> SpeciesGUIDEventsBySpeciesID = [];
+    public readonly Dictionary<GUID, SpeciesGUIDEvent> SpeciesGUIDEventsByGUID = [];
+    public readonly Dictionary<long, SkillGUIDEvent> SkillGUIDEventsBySkillID = [];
+    public readonly Dictionary<GUID, SkillGUIDEvent> SkillGUIDEventsByGUID = [];
 }

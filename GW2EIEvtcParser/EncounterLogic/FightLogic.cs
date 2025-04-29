@@ -232,7 +232,7 @@ public abstract class FightLogic
 
 // Build targets
 #if !DEBUG2
-        foreach (int id in targetIDs)
+        foreach (TargetID id in targetIDs)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
             foreach (AgentItem agentItem in agents)
@@ -276,7 +276,7 @@ public abstract class FightLogic
 #endif
         _trashMobs.SortByFirstAware();
 
-        foreach (int id in GetFriendlyNPCIDs())
+        foreach (TargetID id in GetFriendlyNPCIDs())
         {
             _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }

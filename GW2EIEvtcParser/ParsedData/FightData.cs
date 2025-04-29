@@ -276,8 +276,6 @@ public class FightData
                         return new SpiritRace(id);
                     case TargetID.ConjuredAmalgamate:
                     case TargetID.ConjuredAmalgamate_CHINA:
-                    case TargetID.CALeftArm_CHINA:
-                    case TargetID.CARightArm_CHINA:
                         return new ConjuredAmalgamate(id);
                     // Strike Missions
                     case TargetID.GadgetTheDragonVoid1:

@@ -712,7 +712,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         int curCC = 1;
         int curBomb = 1;
         int curBeam = 1;
-        foreach (NPC target in Targets)
+        foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {

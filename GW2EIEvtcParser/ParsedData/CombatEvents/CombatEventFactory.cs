@@ -328,6 +328,16 @@ internal static class CombatEventFactory
                             metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
                             metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.ContentGUID] = markerGUID;
                             break;
+                        case ContentLocal.Skill:
+                            var skillGUID = new SkillGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.SkillGUIDEventsBySkillID[skillGUID.ContentID] = skillGUID;
+                            metaDataEvents.SkillGUIDEventsByGUID[skillGUID.ContentGUID] = skillGUID;
+                            break;
+                        case ContentLocal.Species:
+                            var speciesGUID = new SpeciesGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
+                            metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
+                            break;
                         default:
                             break;
                     }

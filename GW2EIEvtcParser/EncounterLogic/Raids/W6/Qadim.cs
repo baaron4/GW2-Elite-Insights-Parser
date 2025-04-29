@@ -323,7 +323,7 @@ internal class Qadim : MythwrightGambit
                         TargetID.PyreGuardianRetal,
                         TargetID.PyreGuardianResolution,
                     };
-                foreach (int pyreId in pyres)
+                foreach (var pyreId in pyres)
                 {
                     pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreId).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
                 }
