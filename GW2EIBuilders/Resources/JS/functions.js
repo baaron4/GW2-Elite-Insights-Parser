@@ -586,7 +586,6 @@ function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
         shapes: [],
         annotations: [],
         autosize: true,
-        width: 1300,
         height: 850,
         datarevision: new Date().getTime(),
     };
@@ -854,7 +853,6 @@ function addTargetLayout(data, target, states, percentName, graphName, visible) 
         shapes: [],
         annotations: [],
         autosize: true,
-        width: 1100,
         height: 1100,
         datarevision: new Date().getTime(),
     };

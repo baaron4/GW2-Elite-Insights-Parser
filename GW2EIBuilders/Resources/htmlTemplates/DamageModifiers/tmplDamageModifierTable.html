@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="colPageCount > 0">
-            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="colStructure"></table-scroll-component>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -51,7 +51,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(20)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns)],
         template: `${template}`,
         data: function () {
             return {
@@ -65,6 +65,10 @@
             };
         },
         computed: {
+            transFormString: function() {
+                const translateValue = mainComponentWidth * 0.34;
+                return `translate(${translateValue}px)`;
+            },
             tableid: function() {
                 return this.id;
             },

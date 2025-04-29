@@ -38,6 +38,10 @@ const simpleLogData = {
     players: [],
     targets: []
 };
+
+const mainComponentWidth =  Math.max(0.9 * window.screen.width, 1450);
+const maxStatColumns = Math.floor((mainComponentWidth - 150) / 120);
+
 //
 // polyfill for string include
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="playerColPageCount > 0">
-            <table-scroll-component :min="0" :max="playerColPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="playerColStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="playerColPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="playerColStructure"></table-scroll-component>
         </div>
         <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tablePid">
             <thead>
@@ -33,7 +33,7 @@
             </tbody>
         </table>
         <div v-if="enemyColPageCount > 0">
-            <table-scroll-component :min="0" :max="enemyColPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="enemyColStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="enemyColPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="enemyColStructure"></table-scroll-component>
         </div>
         <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tableEid">
             <thead>
@@ -48,8 +48,13 @@
             </thead>
             <tbody>
                 <tr v-for="row in sortEnemyData(enemyMechRows)">
-                    <td :class="getEnemyBodyClass('Name')" class="text-left">{{row.enemy}}</td>
-                    <td v-for="(mech, index) in row.mechs" :class="getEnemyBodyClass('Data', index)"                 
+                    <td :class="getEnemyBodyClass('Name')" 
+                        class="text-left">
+                        {{row.enemy}}
+                    </td>
+                    <td v-for="(mech, index) in row.mechs" 
+                        class="stat-cell" 
+                        :class="getEnemyBodyClass('Data', index)"                 
                         v-show="isInEnemyColPage(index)"
                         :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
                         {{mech[0] ? mech[0] : '-'}}
@@ -67,7 +72,7 @@
     Vue.component("mechanics-table-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(10, ["player", "enemy"])],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns, ["player", "enemy"])],
         data: function () {
             return {
                 sortEdata: {
@@ -143,6 +148,10 @@
             },
         },
         computed: {
+            transFormString: function() {
+                const translateValue = mainComponentWidth * 0.34;
+                return `translate(${translateValue}px)`;
+            },
             playerColPageCount: function() {
                 return this.playerMechHeader.length - this.playerColStructure.perpage;
             },

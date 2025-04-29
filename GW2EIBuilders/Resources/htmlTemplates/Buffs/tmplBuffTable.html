@@ -3,7 +3,7 @@
         <img v-if="generation" class="mb-1 icon" :src="UIIcons.QuestionMark"
             :data-original-title="tooltipExpl" />
         <div v-if="colPageCount > 0">
-            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="transFormString" :pagestructure="colStructure"></table-scroll-component>
         </div>
         <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
             <thead>
@@ -60,7 +60,7 @@
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(20)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns)],
         data: function () {
             return {             
                 sortdata: {
@@ -167,6 +167,10 @@
             }
         },
         computed: {
+            transFormString: function() {
+                const translateValue = mainComponentWidth * 0.34;
+                return `translate(${translateValue}px)`;
+            },
             colPageCount: function() {
                 return this.buffs.length - this.colStructure.perpage;
             },
