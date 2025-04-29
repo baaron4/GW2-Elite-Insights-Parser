@@ -233,6 +233,7 @@ public class SkillItem
         { BoundHit, "Bound (Hit)" },
         { BarbedSpearMelee, "Barbed Spear (Melee)" },
         { BarbedSpearRanged, "Barbed Spear (Ranged)" },
+        { DebilitatingArcRoll, "Debilitating Arc (Roll backwards)" },
         #endregion Thief
         #region Warrior
         { RushDamage, "Rush (Hit)" },
@@ -956,6 +957,7 @@ public class SkillItem
             { TraversingDuskHeal, TraitImages.TraversingDusk },
             { DarkSaviorHealing, TraitImages.ShadowSavior },
             { ShieldingRestorationBarrier, TraitImages.ShieldingRestoration },
+            { DebilitatingArcRoll, SkillImages.DebilitatingArc },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },

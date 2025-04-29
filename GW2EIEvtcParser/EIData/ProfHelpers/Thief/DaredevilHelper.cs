@@ -20,7 +20,6 @@ internal static class DaredevilHelper
             .UsingOrigin(InstantCastOrigin.Trait),
         new BuffGainCastFinder(Dash, UnhinderedCombatant)
             .UsingOrigin(InstantCastOrigin.Trait),
-        //new DamageCastFinder(30520, 30520), // Debilitating Arc
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

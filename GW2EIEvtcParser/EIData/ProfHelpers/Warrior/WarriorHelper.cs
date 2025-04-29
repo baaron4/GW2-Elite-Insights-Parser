@@ -19,7 +19,7 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.December2017Balance)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
-        new BuffGainCastFinder(BalancedStanceSill, BalancedStanceBuff),
+        new BuffGainCastFinder(BalancedStanceSkill, BalancedStanceBuff),
         new BuffGainCastFinder(EndurePainSkill, EnduringPainBuff),
         new BuffGainCastFinder(SignetOfFurySkill, SignetOfFuryActive),
         new EffectCastFinderByDst(SignetOfMightSkill, EffectGUIDs.WarriorSignetOfMight)
@@ -144,8 +144,10 @@ internal static class WarriorHelper
 
         // Defense
         // - Hardened Armor
+        new BuffOnActorDamageModifier(Mod_HardenedArmor, Retaliation, "Hardened Armor", "-10% under retaliation", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.March2020Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.HardenedArmor, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.March2020Balance),
+            .WithBuilds(GW2Builds.May2021Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
