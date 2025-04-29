@@ -51,7 +51,7 @@ public static class BuffImages
     public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
     public const string Daze = "https://render.guildwars2.com/file/9AE125E930C92FEA0DD99E7EBAEDE4CF5EC556B6/433474.png";
     public const string Exposed = "https://wiki.guildwars2.com/images/6/6b/Exposed.png";
-    public const string Unblockable = "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png";
+    public const string Unblockable = "https://render.guildwars2.com/file/BD6C4CEEC95711F20FC62A4CA310C5A6574F9664/2261523.png";
     public const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";
     public const string SpeedMushroom = "https://wiki.guildwars2.com/images/7/7b/Blazing_Speed_Mushrooms.png";
     public const string AchillesBane = "https://wiki.guildwars2.com/images/5/55/Achilles_Bane.png";
@@ -434,4 +434,20 @@ public static class BuffImages
     public const string LowlandExpertise = "https://wiki.guildwars2.com/images/7/7c/Lowland_Expertise.png";
     #endregion Misc
 
+    #region Engineer
+    // Holoforge Heat Levels
+    public const string Heat = "https://render.guildwars2.com/file/1BA1F3645206FB4BE92C5AD6326054250DC7D0DB/1770205.png";
+    public const string HeatLvl1 = "https://i.imgur.com/nNQEVpb.png";
+    public const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
+    public const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
+    #endregion
+
+    #region Ranger
+    // Soulbeast Archetypes
+    public const string DeadlyArchetype = "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png";
+    public const string FerociousArchetype = "https://wiki.guildwars2.com/images/e/e9/Ferocious_%28Archetype%29.png";
+    public const string SupportiveArchetype = "https://wiki.guildwars2.com/images/3/32/Supportive_%28Archetype%29.png";
+    public const string VersatileArchetype = "https://wiki.guildwars2.com/images/b/bb/Versatile_%28Archetype%29.png";
+    public const string StoutArchetype = "https://wiki.guildwars2.com/images/8/80/Stout_%28Archetype%29.png";
+    #endregion
 }

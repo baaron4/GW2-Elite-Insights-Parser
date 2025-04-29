@@ -125,7 +125,6 @@ internal static class NecromancerHelper
         new Buff("Vampiric Mark", VampiricMark, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SignetOfVampirism),
         new Buff("Signet of Vampirism (Shroud)", SignetOfVampirismShroud, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfVampirism),
         new Buff("Plague Signet", PlagueSignetBuff, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet),
-        new Buff("Plague Sending", PlagueSending, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSending),
         new Buff("Plague Signet (Shroud)", PlagueSignetShroud, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet),
         new Buff("Signet of Spite", SignetOfSpite, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfSpite),
         new Buff("Signet of Spite (Shroud)", SignetOfSpiteShroud, Source.Necromancer, BuffClassification.Other,SkillImages.SignetOfSpite),
@@ -147,6 +146,7 @@ internal static class NecromancerHelper
         new Buff("Grim Specter", GrimSpecterBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
         new Buff("Grim Specter (Target)", GrimSpecterTargetBuff, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.GrimSpecter),
         // Traits
+        new Buff("Plague Sending", PlagueSending, Source.Necromancer, BuffClassification.Other, TraitImages.PlagueSending),
         new Buff("Corrupter's Defense", CorruptersDefense, Source.Necromancer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.CorruptersFervor)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new Buff("Death's Carapace", DeathsCarapace, Source.Necromancer, BuffStackType.Stacking, 30, BuffClassification.Other, TraitImages.DeathsCarapace)

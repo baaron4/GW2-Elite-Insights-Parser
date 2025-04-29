@@ -144,9 +144,9 @@ internal static class FirebrandHelper
         new Buff("Tome of Courage Open", TomeOfCourageOpen, Source.Firebrand, BuffClassification.Hidden, SkillImages.TomeOfCourage),
         new Buff("Tome of Resolve Open", TomeOfResolveOpen, Source.Firebrand, BuffClassification.Hidden, SkillImages.TomeOfResolve),
         new Buff("Quickfire", Quickfire, Source.Firebrand, BuffClassification.Other, TraitImages.Quickfire),
-        new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, TraitImages.DormantJustice),
-        new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, TraitImages.DormantCourage),
-        new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, TraitImages.DormantResolve),
+        new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, SkillImages.DormantJustice),
+        new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, SkillImages.DormantCourage),
+        new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, SkillImages.DormantResolve),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
