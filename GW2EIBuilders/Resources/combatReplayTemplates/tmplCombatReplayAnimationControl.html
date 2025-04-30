@@ -38,7 +38,8 @@
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
                         :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
-                    <p style="position: absolute; color: black; pointer-events:none;">{{sliderDelimiter.name}}</p>
+                    <p style="position: absolute; color: black; pointer-events:none;"
+                        :style="{'width': phaseNameWidth}">{{sliderDelimiter.name}}</p>
                     <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text"
                         :id="htmlElementIDs.timeRangeDisplayID" value="0"
                         @input="updateInputTime($event.target.value);">
@@ -72,6 +73,9 @@
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
         },
         computed: {
+            phaseNameWidth: function() {
+                return (this.sliderDelimiter.name.length * 7.7) + 'px';
+            },
             showNormalPhases: function () {
                 return this.normalPhases.length > 1 || this.hasBreakbarPhases;
             },
