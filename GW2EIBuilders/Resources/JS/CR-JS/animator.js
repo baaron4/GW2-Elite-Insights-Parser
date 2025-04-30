@@ -931,8 +931,11 @@ class Animator {
             {
 
                 this._moveToSelected(ctx);
-
-                ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+                try {
+                    ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+                } catch (e) {
+        
+                }
 
                 //ctx.globalCompositeOperation = "color-burn";
                 ctx.save();
