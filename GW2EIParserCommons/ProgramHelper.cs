@@ -314,22 +314,22 @@ public sealed class ProgramHelper : IDisposable
             }
             operation.BasicMetaData = new OperationController.OperationBasicMetaData(log!);
             string[] uploadStrings = UploadOperation(fInfo, log!, operation);
-            if (Settings.SendEmbedToWebhook && Settings.UploadToDPSReports)
-            {
-                if (Settings.SendSimpleMessageToWebhook)
-                {
-                    WebhookController.SendMessage(Settings.WebhookURL, uploadStrings[0], out string message);
-                    operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
-                }
-                else
-                {
-                    WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log!, uploadStrings[0]), out string message);
-                    operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
-                }
-            }
             if (uploadStrings[0].Contains("https"))
             {
                 operation.DPSReportLink = uploadStrings[0];
+                if (Settings.SendEmbedToWebhook)
+                {
+                    if (Settings.SendSimpleMessageToWebhook)
+                    {
+                        WebhookController.SendMessage(Settings.WebhookURL, uploadStrings[0], out string message);
+                        operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
+                    }
+                    else
+                    {
+                        WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log!, uploadStrings[0]), out string message);
+                        operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
+                    }
+                }
             }
             //Creating File
             GenerateFiles(log!, operation, uploadStrings, fInfo);
