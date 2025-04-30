@@ -418,13 +418,13 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.April2025BalancePatch),
         
         // Mace
-        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
-        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
-        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, SkillImages.ForceOfNature, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ForceOfNature, ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
     ];
 
@@ -495,11 +495,11 @@ internal static class RangerHelper
         new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, TraitImages.LightOnYourFeet),
         new Buff("Poison Master", PoisonMasterBuff, Source.Ranger, BuffClassification.Other, TraitImages.PoisonMaster),
         // Mace
-        new Buff("Force of Nature", ForceOfNature, Source.Ranger, BuffClassification.Other, SkillImages.ForceOfNature)
+        new Buff("Force of Nature", ForceOfNature, Source.Ranger, BuffClassification.Other, BuffImages.ForceOfNature)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Nature's Strength", NaturesStrength, Source.Ranger, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.NaturesStrength)
+        new Buff("Nature's Strength", NaturesStrength, Source.Ranger, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.NaturesStrength)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Tapped Out", TappedOut, Source.Ranger, BuffClassification.Other, SkillImages.TappedOut)
+        new Buff("Tapped Out", TappedOut, Source.Ranger, BuffClassification.Other, BuffImages.TappedOut)
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new Buff("Pet Heal (Oaken Cudgel)", OakenCudgelPetHeal, Source.Ranger, BuffClassification.Other, SkillImages.OakenCudgel)
             .WithBuilds(GW2Builds.February2024NewWeapons),

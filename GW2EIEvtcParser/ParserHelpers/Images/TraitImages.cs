@@ -52,7 +52,6 @@ internal static class TraitImages
     public const string PinpointDistribution = "https://render.guildwars2.com/file/68380515301D93ABD5E7A4C89748F80CD819EB3F/1012357.png";
     public const string ExplosiveEntrance = "https://render.guildwars2.com/file/61510F0752BC696F210F92CA0E13AD290F13AD33/2261507.png";
     public const string ExplosiveTemper = "https://render.guildwars2.com/file/273E26303F072C3EEEF0DA25D5ACC1E59AECACF6/2261504.png";
-    
     public const string LasersEdge = "https://render.guildwars2.com/file/0D5D9B2C77B736E0609004026A06756D5142690B/1769938.png";
     public const string SolarFocusingLens = "https://render.guildwars2.com/file/19FE5C016ACFF174DE03752D40D202F9B75FB0C2/1769929.png";
     public const string HeatTherapy = "https://render.guildwars2.com/file/C1B0A2466701BF6CB45176D967D5C29B940F6397/1769937.png";

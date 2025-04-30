@@ -20,7 +20,6 @@ public static class BuffImages
     public const string Resistance = "https://render.guildwars2.com/file/50BAC1B8E10CFAB9E749A5D910D4A9DCF29EBB7C/961398.png";
     public const string Resolution = "https://render.guildwars2.com/file/D104A6B9344A2E2096424A3C300E46BC2926E4D7/2440718.png";
     #endregion Boons
-
     #region Conditions
     public const string Bleeding = "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png";
     public const string Burning = "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png";
@@ -37,7 +36,6 @@ public static class BuffImages
     public const string Taunt = "https://render.guildwars2.com/file/02EED459AD65FAF7DF32A260E479C625070841B9/1228472.png";
     public const string Vulnerability = "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png";
     #endregion Conditions
-
     #region Commons
     // Generics
     public const string Unknown = "https://i.imgur.com/nSYuby8.png";
@@ -72,7 +70,10 @@ public static class BuffImages
     public const string DarkAura = "https://wiki.guildwars2.com/images/e/ef/Dark_Aura.png";
     // Wing 4
     public const string CrystallineHeart = "https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png";
-    // WvW
+    // Others
+    public const string RoyalDecree = "https://wiki.guildwars2.com/images/1/1a/Royal_Decree.png";
+    #endregion
+    #region WvW
     public const string BorderlandBloodlust = "https://wiki.guildwars2.com/images/f/f7/Major_Borderlands_Bloodlust.png";
     public const string BlessingOfAir = "https://wiki.guildwars2.com/images/3/3c/Blessing_of_Air.png";
     public const string FlamesEmbrace = "https://wiki.guildwars2.com/images/5/53/Flame%27s_Embrace.png";
@@ -112,46 +113,14 @@ public static class BuffImages
     public const string GuildHallPvEMode = "https://wiki.guildwars2.com/images/4/4b/3240357.png";
     public const string GuildHallsPvPMode = "https://wiki.guildwars2.com/images/8/87/3240358.png";
     public const string GuildHallWvWMode = "https://wiki.guildwars2.com/images/7/70/3240359.png";
+    public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
+    public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
     #endregion Commons
-
-    #region Fractal
-    // Generic
-    public const string DesertCarapace = "https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png";
-    public const string Malign9Infusion = "https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png";
-    public const string Mighty9Infusion = "https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png";
-    public const string Precise9Infusion = "https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png";
-    public const string Healing9Infusion = "https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png";
-    // Instability
-    public const string Instability = "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png";
-    public const string InstabilityBirds = "https://wiki.guildwars2.com/images/e/e8/Mistlock_Instability_Birds.png";
-    public const string InstabilitySlipperySlope = "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png";
-    public const string InstabilityAdrenalineRush = "https://wiki.guildwars2.com/images/7/72/Mistlock_Instability_Adrenaline_Rush.png";
-    public const string InstabilityAfflicted = "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Afflicted.png";
-    public const string InstabilityBoonOverload = "https://wiki.guildwars2.com/images/d/d7/Mistlock_Instability_Boon_Overload.png";
-    public const string InstabilityFluxBomb = "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Flux_Bomb.png";
-    public const string InstabilityFractalVindicator = "https://wiki.guildwars2.com/images/4/48/Mistlock_Instability_Fractal_Vindicators.png";
-    public const string InstabilityFrailty = "https://wiki.guildwars2.com/images/d/d6/Mistlock_Instability_Frailty.png";
-    public const string InstabilityHamstrung = "https://wiki.guildwars2.com/images/9/99/Mistlock_Instability_Hamstrung.png";
-    public const string InstabilityLastLaugh = "https://wiki.guildwars2.com/images/5/58/Mistlock_Instability_Last_Laugh.png";
-    public const string InstabilityMistsConvergence = "https://wiki.guildwars2.com/images/9/95/Mistlock_Instability_Mists_Convergence.png";
-    public const string InstabilityNoPainNoGain = "https://wiki.guildwars2.com/images/c/c3/Mistlock_Instability_No_Pain%2C_No_Gain.png";
-    public const string InstabilityOutflanked = "https://wiki.guildwars2.com/images/0/0c/Mistlock_Instability_Outflanked.png";
-    public const string InstabilitySocialAwkwardness = "https://wiki.guildwars2.com/images/d/d2/Mistlock_Instability_Social_Awkwardness.png";
-    public const string InstabilityStickTogether = "https://wiki.guildwars2.com/images/5/59/Mistlock_Instability_Stick_Together.png";
-    public const string InstabilitySugarRush = "https://wiki.guildwars2.com/images/4/4c/Mistlock_Instability_Sugar_Rush.png";
-    public const string InstabilityToxicTrail = "https://wiki.guildwars2.com/images/d/df/Mistlock_Instability_Toxic_Trail.png";
-    public const string InstabilityVengeance = "https://wiki.guildwars2.com/images/c/c6/Mistlock_Instability_Vengeance.png";
-    public const string InstabilityWeBleedFire = "https://wiki.guildwars2.com/images/2/24/Mistlock_Instability_We_Bleed_Fire.png";
-    public const string InstabilityToxicSickness = "https://wiki.guildwars2.com/images/6/6f/Mistlock_Instability_Toxic_Sickness.png";
-    #endregion Fractal
-
     #region Fight Specific
     // Generic
     public const string Emboldened = "https://wiki.guildwars2.com/images/6/69/Emboldened.png";
     public const string Debilitated = "https://wiki.guildwars2.com/images/8/80/Debilitated.png";
     public const string SpectralAgony = "https://wiki.guildwars2.com/images/7/70/Spectral_Agony.png";
-    public const string Agony = "https://wiki.guildwars2.com/images/b/be/Agony.png";
-    public const string Hamstrung = "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png";
     public const string Enraged = "https://wiki.guildwars2.com/images/7/78/Vengeance_%28Mordrem%29.png";
     public const string Fixated = "https://wiki.guildwars2.com/images/6/66/Fixated.png";
     public const string AchievementEffect = "https://wiki.guildwars2.com/images/1/10/Achievement_effect.png";
@@ -355,6 +324,39 @@ public static class BuffImages
     public const string RageAttunement = "https://wiki.guildwars2.com/images/1/1c/Rage_Attunement.png";
     public const string RegretAttunement = "https://wiki.guildwars2.com/images/5/5f/Regret_Attunement.png";
     public const string Consumed = "https://wiki.guildwars2.com/images/7/71/Scion%27s_Absorption.png";
+    public const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
+    public const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
+    public const string Agony = "https://wiki.guildwars2.com/images/b/be/Agony.png";
+    public const string Hamstrung = "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png";
+    // Mistlock Singularity
+    public const string DesertCarapace = "https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png";
+    // Infusions (Fractal Augmentations)
+    public const string Malign9Infusion = "https://wiki.guildwars2.com/images/c/cb/Malign_9_Agony_Infusion.png";
+    public const string Mighty9Infusion = "https://wiki.guildwars2.com/images/1/11/Mighty_9_Agony_Infusion.png";
+    public const string Precise9Infusion = "https://wiki.guildwars2.com/images/3/3d/Precise_9_Agony_Infusion.png";
+    public const string Healing9Infusion = "https://wiki.guildwars2.com/images/2/22/Healing_9_Agony_Infusion.png";
+    // Instability
+    public const string Instability = "https://wiki.guildwars2.com/images/7/7d/Mistlock_Instability.png";
+    public const string InstabilityBirds = "https://wiki.guildwars2.com/images/e/e8/Mistlock_Instability_Birds.png";
+    public const string InstabilitySlipperySlope = "https://wiki.guildwars2.com/images/c/c2/Mistlock_Instability_Slippery_Slope.png";
+    public const string InstabilityAdrenalineRush = "https://wiki.guildwars2.com/images/7/72/Mistlock_Instability_Adrenaline_Rush.png";
+    public const string InstabilityAfflicted = "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Afflicted.png";
+    public const string InstabilityBoonOverload = "https://wiki.guildwars2.com/images/d/d7/Mistlock_Instability_Boon_Overload.png";
+    public const string InstabilityFluxBomb = "https://wiki.guildwars2.com/images/3/3f/Mistlock_Instability_Flux_Bomb.png";
+    public const string InstabilityFractalVindicator = "https://wiki.guildwars2.com/images/4/48/Mistlock_Instability_Fractal_Vindicators.png";
+    public const string InstabilityFrailty = "https://wiki.guildwars2.com/images/d/d6/Mistlock_Instability_Frailty.png";
+    public const string InstabilityHamstrung = "https://wiki.guildwars2.com/images/9/99/Mistlock_Instability_Hamstrung.png";
+    public const string InstabilityLastLaugh = "https://wiki.guildwars2.com/images/5/58/Mistlock_Instability_Last_Laugh.png";
+    public const string InstabilityMistsConvergence = "https://wiki.guildwars2.com/images/9/95/Mistlock_Instability_Mists_Convergence.png";
+    public const string InstabilityNoPainNoGain = "https://wiki.guildwars2.com/images/c/c3/Mistlock_Instability_No_Pain%2C_No_Gain.png";
+    public const string InstabilityOutflanked = "https://wiki.guildwars2.com/images/0/0c/Mistlock_Instability_Outflanked.png";
+    public const string InstabilitySocialAwkwardness = "https://wiki.guildwars2.com/images/d/d2/Mistlock_Instability_Social_Awkwardness.png";
+    public const string InstabilityStickTogether = "https://wiki.guildwars2.com/images/5/59/Mistlock_Instability_Stick_Together.png";
+    public const string InstabilitySugarRush = "https://wiki.guildwars2.com/images/4/4c/Mistlock_Instability_Sugar_Rush.png";
+    public const string InstabilityToxicTrail = "https://wiki.guildwars2.com/images/d/df/Mistlock_Instability_Toxic_Trail.png";
+    public const string InstabilityVengeance = "https://wiki.guildwars2.com/images/c/c6/Mistlock_Instability_Vengeance.png";
+    public const string InstabilityWeBleedFire = "https://wiki.guildwars2.com/images/2/24/Mistlock_Instability_We_Bleed_Fire.png";
+    public const string InstabilityToxicSickness = "https://wiki.guildwars2.com/images/6/6f/Mistlock_Instability_Toxic_Sickness.png";
     // Strikes
     public const string SpiritNova = "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png";
     public const string ShatteredPsyche = "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png";
@@ -396,8 +398,10 @@ public static class BuffImages
     public const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
     public const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
     public const string SporeInducedRage = "https://wiki.guildwars2.com/images/1/1e/Spore-Induced_Rage.png";
-    // Ai
-    public const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
+    public const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
+    public const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
+    public const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
+    public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
     // Open World
     public const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
     public const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";
@@ -414,26 +418,22 @@ public static class BuffImages
     public const string SeraphMorale08 = "https://wiki.guildwars2.com/images/0/0a/Seraph_Morale_08.png";
     public const string SeraphMorale09 = "https://wiki.guildwars2.com/images/9/9e/Seraph_Morale_09.png";
     public const string SeraphMorale10 = "https://wiki.guildwars2.com/images/7/7b/Seraph_Morale_10.png";
+    public const string LowlandExpertise = "https://wiki.guildwars2.com/images/7/7c/Lowland_Expertise.png";
     #endregion Fight Specific
-
-    #region Misc
-    // Others
+    #region Mounts
     public const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
     public const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";
     public const string BondOfVigorEffect = "https://wiki.guildwars2.com/images/b/b5/Bond_of_Vigor_%28effect%29.png";
     public const string StealthMountEffect = "https://wiki.guildwars2.com/images/a/ad/Stealth_%28mount_effect%29.png";
-    public const string UnboundDeathPool = "https://wiki.guildwars2.com/images/1/12/Unbound_Death_Pool.png";
-    public const string AppliedFortitude = "https://wiki.guildwars2.com/images/7/72/Applied_Fortitude.png";
     public const string OpenAccessEffect = "https://wiki.guildwars2.com/images/c/ce/Open_Access_%28effect%29.png";
-    public const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
-    public const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
-    public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
-    public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
-    public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
-    public const string RoyalDecree = "https://wiki.guildwars2.com/images/1/1a/Royal_Decree.png";
-    public const string LowlandExpertise = "https://wiki.guildwars2.com/images/7/7c/Lowland_Expertise.png";
-    #endregion Misc
-
+    #endregion
+    #region Elementalist
+    // Weave Self
+    public const string WovenFire = "https://wiki.guildwars2.com/images/b/b1/Woven_Fire.png";
+    public const string WovenAir = "https://wiki.guildwars2.com/images/b/bc/Woven_Air.png";
+    public const string WovenEarth = "https://wiki.guildwars2.com/images/7/7a/Woven_Earth.png";
+    public const string WovenWater = "https://wiki.guildwars2.com/images/a/a6/Woven_Water.png";
+    #endregion
     #region Engineer
     // Holoforge Heat Levels
     public const string Heat = "https://render.guildwars2.com/file/1BA1F3645206FB4BE92C5AD6326054250DC7D0DB/1770205.png";
@@ -441,7 +441,20 @@ public static class BuffImages
     public const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
     public const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
     #endregion
-
+    #region Guardian
+    // Spear
+    public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
+    #endregion
+    #region Mesmer
+    // Mimic
+    public const string Echo = "https://render.guildwars2.com/file/1D2BA931036005D1D84D7212970064A0A66C4977/103774.png";
+    // Spear
+    public const string Clarity = "https://render.guildwars2.com/file/A45B1CCBE523E6A13D05E4C1BBE769ED0C18C993/3379004.png";
+    #endregion
+    #region Necromancer
+    // Spear
+    public const string SoulShards = "https://render.guildwars2.com/file/7FD7260567C1DAD4A2ACE5B6E8B57078E17A3E0A/3379000.png";
+    #endregion
     #region Ranger
     // Soulbeast Archetypes
     public const string DeadlyArchetype = "https://wiki.guildwars2.com/images/9/94/Deadly_%28Archetype%29.png";
@@ -449,5 +462,15 @@ public static class BuffImages
     public const string SupportiveArchetype = "https://wiki.guildwars2.com/images/3/32/Supportive_%28Archetype%29.png";
     public const string VersatileArchetype = "https://wiki.guildwars2.com/images/b/bb/Versatile_%28Archetype%29.png";
     public const string StoutArchetype = "https://wiki.guildwars2.com/images/8/80/Stout_%28Archetype%29.png";
+    // Maces
+    public const string NaturesStrength = "https://render.guildwars2.com/file/B8D91BDCD577469CF7C74FC498E708E193135FBE/3256319.png";
+    public const string ForceOfNature = "https://render.guildwars2.com/file/4016A1FF035FC6F8A95809B5ABDAF50A92BC029B/3256318.png";
+    public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
+    #endregion
+    #region Revenant
+    #endregion
+    #region Thief
+    #endregion
+    #region Warrior
     #endregion
 }

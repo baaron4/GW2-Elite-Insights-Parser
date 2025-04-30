@@ -8,12 +8,12 @@ internal static class SkillImages
     public const string WeaponSwap = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
     public const string WeaponStow = "https://i.imgur.com/K7taOUe.png";
     public const string WeaponDraw = "https://i.imgur.com/7TAlNtd.png";
+    public const string Dodge = "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
     #region Down
     public const string Anchor = "https://wiki.guildwars2.com/images/c/c0/Anchor.png";
     public const string Resurrect = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
     public const string Bandage = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
     #endregion Down
-    public const string Dodge = "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
     #region Racial Skills
     // Sylvari
     public const string TakeRoot = "https://render.guildwars2.com/file/F0050C0A64BAA86D650029D2052A55260CD8E513/240703.png";
@@ -28,18 +28,13 @@ internal static class SkillImages
     public const string ReaperOfGrenth = "https://render.guildwars2.com/file/E89D4FBD4A92327800F440F9ECC2F40DC0CBF807/103943.png";
     // Asura
     public const string PowerSuit = "https://render.guildwars2.com/file/E630A9FECBF0DF10FDB54ED49E746D39741F49F4/240686.png";
+    public const string WhirlingAssault = "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png";
     // Charr
     public const string Charrzooka = "https://render.guildwars2.com/file/AC98B4ECED0D0638751B4939CC3B021991CECDAB/103934.png";
     #endregion
-    public const string WhirlingAssault = "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png";
-    // TODO: organize this
-    //
     #region Elementalist
     public const string FireShield = "https://render.guildwars2.com/file/2AE8672D7A08BB4129B6F0F40C2BC10642D55C28/102884.png";
-    public const string WovenFire = "https://wiki.guildwars2.com/images/b/b1/Woven_Fire.png";
-    public const string WovenAir = "https://wiki.guildwars2.com/images/b/bc/Woven_Air.png";
-    public const string WovenEarth = "https://wiki.guildwars2.com/images/7/7a/Woven_Earth.png";
-    public const string WovenWater = "https://wiki.guildwars2.com/images/a/a6/Woven_Water.png";
+    
     public const string WeaveSelf = "https://render.guildwars2.com/file/E656D3A8B1339603A70BBB7237F2BA004258ED55/1770326.png";
     // Attunements
     public const string FireAttunement = "https://render.guildwars2.com/file/1C91E9C799469ACC6EAF1ACD4B0AD8ACAB0C69A2/103035.png";
@@ -246,7 +241,6 @@ internal static class SkillImages
     public const string MightyBlow = "https://render.guildwars2.com/file/7CF5FFD35624B6D243B97CE4344018C3F1E6ACB7/103682.png";
     public const string Repose = "https://render.guildwars2.com/file/3D9C99D66E6CD2B0529DED46AC38AA51F4E2A61E/2479374.png";
     public const string MercifulIntervention = "https://render.guildwars2.com/file/4B93D8CA0663ABD94BAF9FCE80D6280A56C01099/103706.png";
-    public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
     public const string SymbolOfLuminance = "https://render.guildwars2.com/file/0E1E2D69CBC3C0E36217506C6CCB710138035373/3379129.png";
     public const string FireJurisdiction = "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png";
     public const string ProtectorsStrike = "https://render.guildwars2.com/file/7C42A81ACFBFFE32A528DFCA8014E7C4476358C8/103202.png";
@@ -280,7 +274,6 @@ internal static class SkillImages
     public const string DejaVu = "https://render.guildwars2.com/file/1D7202A8359923DDF74119BFB663AF077DBC7CCD/1012896.png";
     public const string Distortion = "https://render.guildwars2.com/file/D0969802A76808ACD65A56A6D54F2A40E355F7C3/103284.png";
     public const string Mirror = "https://render.guildwars2.com/file/CED3F1AE9294F9C5045DA8017F25170CE87C0AE2/103726.png";
-    public const string Echo = "https://render.guildwars2.com/file/1D2BA931036005D1D84D7212970064A0A66C4977/103774.png";
     public const string IllusionaryCounter = "https://render.guildwars2.com/file/C1135A9C6D504426132CCB6200DAB6C66A756709/103766.png";
     public const string IllusionaryRiposte = "https://render.guildwars2.com/file/AED869739FD016F10AEFE4520B155DEE731005A0/103767.png";
     public const string IllusionaryLeap = "https://render.guildwars2.com/file/D7202F9A1D73AAF4D478B892BDEE017AAFA93EFB/103722.png";
@@ -293,7 +286,6 @@ internal static class SkillImages
     public const string MorphedPolymorphTuna = "https://wiki.guildwars2.com/images/2/24/Chomp_%28armorfish%29.png";
     public const string DimensionalAperture = "https://render.guildwars2.com/file/4342CE56CCFF5669FE084891F377B95D1026AFA1/3256364.png";
     public const string PhantasmalWarlock = "https://render.guildwars2.com/file/095CB8FCE947F9D538CAD84839B475F2EEAC4A0C/103746.png";
-    public const string Clarity = "https://render.guildwars2.com/file/A45B1CCBE523E6A13D05E4C1BBE769ED0C18C993/3379004.png";
     public const string BlinkOrPhaseRetreat = "https://i.imgur.com/yxMF7D1.png";
     public const string UnstableBladestorm = "https://render.guildwars2.com/file/449039B4B74B133D226BEED819B7C408AF2B61BB/2479391.png";
     public const string PhantasmalBerserker = "https://render.guildwars2.com/file/3EE57D40E5F2B376FF921FA7455D00319C7DB8A8/103747.png";
@@ -341,7 +333,6 @@ internal static class SkillImages
     public const string NecroticTraversal = "https://render.guildwars2.com/file/BBAA911903B9E640DD6D02B14A6F6D58F2ADFE0C/103308.png";
     public const string GrimSpecter = "https://render.guildwars2.com/file/A6CAF2146D9DF2EBEFD9285CB0E9E3617A659071/1770528.png";
     public const string Extirpate = "https://render.guildwars2.com/file/7209CFEA65160A2F0154D015B12167744AD814FC/3379166.png";
-    public const string SoulShards = "https://render.guildwars2.com/file/7FD7260567C1DAD4A2ACE5B6E8B57078E17A3E0A/3379000.png";
     public const string Distress = "https://render.guildwars2.com/file/08B9D63645B11ACD3404B2F50539EDE8916CEE25/3379165.png";
     public const string ManifestSandShade = "https://render.guildwars2.com/file/E15557DE4FC766EE28E31F73B3125FDC1AEFE608/1770539.png";
     public const string NefariousFavor = "https://render.guildwars2.com/file/076FD4FE99097163B3A861CDDEEE15C460E80FA8/1770537.png";
@@ -410,10 +401,7 @@ internal static class SkillImages
     public const string AncestralGrace = "https://render.guildwars2.com/file/DF1223B769A504A6CC381A4A281C0130C9BF67A0/1128624.png";
     public const string PerilousGift = "https://render.guildwars2.com/file/CF914B52D8B0B47D19245203726BF6C7366F33B5/2503724.png";
     public const string ForestsFortification = "https://render.guildwars2.com/file/387423FEEF4639CFF0A4532C06CBCB5701933331/2503712.png";
-    public const string ForceOfNature = "https://render.guildwars2.com/file/4016A1FF035FC6F8A95809B5ABDAF50A92BC029B/3256318.png";
-    public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
     public const string OakenCudgel = "https://render.guildwars2.com/file/AF04C49117A8634CDDAA1AB3B35B25111B394FEC/3256385.png";
-    public const string NaturesStrength = "https://render.guildwars2.com/file/B8D91BDCD577469CF7C74FC498E708E193135FBE/3256319.png";
     public const string SearchAndRescue = "https://render.guildwars2.com/file/4345CDEAFF22E0A45DE84F42ED6B4862760D5731/104014.png";
     public const string UnflinchingFortitude = "https://render.guildwars2.com/file/0A0059CF0F036DBBE3EDAAFBC6136EA5F01E43CD/1770567.png";
     public const string DefyPain = "https://render.guildwars2.com/file/2A79C7DD0AFEEFC9C1D1C9E20845CA140734CE27/103951.png";
@@ -744,6 +732,7 @@ internal static class SkillImages
     public const string OutrunACentaur = "https://wiki.guildwars2.com/images/7/7d/Outrun_a_Centaur.png";
     #endregion WvW
     #region Mount
+    // Mounts
     public const string BondOfLife = "https://wiki.guildwars2.com/images/2/23/Bond_of_Life.png";
     public const string BondOfVigor = "https://wiki.guildwars2.com/images/6/60/Bond_of_Vigor.png";
     public const string BondOfFaith = "https://wiki.guildwars2.com/images/c/c7/Bond_of_Faith.png";

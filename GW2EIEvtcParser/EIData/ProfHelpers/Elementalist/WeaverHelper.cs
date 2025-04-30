@@ -237,9 +237,9 @@ internal static class WeaverHelper
         new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance),
         // Woven Fire
-        new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenFire, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
         // Woven Air
-        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenAir, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenAir, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
         // Perfect Weave
         new BuffOnActorDamageModifier(Mod_PerfectWeaveCondition, PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
@@ -261,7 +261,7 @@ internal static class WeaverHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Woven Earth
-        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
         // Perfect Wave
         new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.Incoming, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
     ];
@@ -288,10 +288,10 @@ internal static class WeaverHelper
         new Buff("Primordial Stance", PrimordialStanceBuff, Source.Weaver, BuffClassification.Other, SkillImages.PrimordialStance),
         new Buff("Unravel", UnravelBuff, Source.Weaver, BuffClassification.Other, SkillImages.Unravel),
         new Buff("Weave Self", WeaveSelf, Source.Weaver, BuffClassification.Other, SkillImages.WeaveSelf),
-        new Buff("Woven Air", WovenAir, Source.Weaver, BuffClassification.Other, SkillImages.WovenAir),
-        new Buff("Woven Fire", WovenFire, Source.Weaver, BuffClassification.Other, SkillImages.WovenFire),
-        new Buff("Woven Earth", WovenEarth, Source.Weaver, BuffClassification.Other, SkillImages.WovenEarth),
-        new Buff("Woven Water", WovenWater, Source.Weaver, BuffClassification.Other, SkillImages.WovenWater),
+        new Buff("Woven Air", WovenAir, Source.Weaver, BuffClassification.Other, BuffImages.WovenAir),
+        new Buff("Woven Fire", WovenFire, Source.Weaver, BuffClassification.Other, BuffImages.WovenFire),
+        new Buff("Woven Earth", WovenEarth, Source.Weaver, BuffClassification.Other, BuffImages.WovenEarth),
+        new Buff("Woven Water", WovenWater, Source.Weaver, BuffClassification.Other, BuffImages.WovenWater),
         new Buff("Perfect Weave", PerfectWeave, Source.Weaver, BuffClassification.Other, SkillImages.WeaveSelf),
         new Buff("Molten Armor", MoltenArmor, Source.Weaver, BuffClassification.Other, SkillImages.LavaSkin),
         new Buff("Weaver's Prowess", WeaversProwess, Source.Weaver, BuffClassification.Other, TraitImages.WeaversProwess),
