@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EIData.Trigonometry;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -16,7 +17,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 {
     public KeepConstruct(int triggerID) : base(triggerID)
     {
-        MechanicList.Add(new MechanicGroup([    
+        MechanicList.Add(new MechanicGroup([
             new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", 0),
             new PlayerDstHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", 0),
             new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", 0),
@@ -449,15 +450,15 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
         }
         // Fixated Statue tether to Player
-        var fixatedStatue = GetFilteredList(log.CombatData, [ StatueFixated1, StatueFixated2 ], p, true, true);
+        var fixatedStatue = GetFilteredList(log.CombatData, [StatueFixated1, StatueFixated2], p, true, true);
         replay.Decorations.AddTether(fixatedStatue, Colors.Magenta, 0.5);
         // Fixation Overhead
-        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [ StatueFixated1, StatueFixated2 ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [StatueFixated1, StatueFixated2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         // Attunements Overhead
-        IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [ CrimsonAttunementPhantasm, CrimsonAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [CrimsonAttunementPhantasm, CrimsonAttunementOrb], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
-        IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [ RadiantAttunementPhantasm, RadiantAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [RadiantAttunementPhantasm, RadiantAttunementOrb], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
     }
 
