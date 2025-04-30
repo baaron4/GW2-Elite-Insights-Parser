@@ -7,56 +7,56 @@ namespace GW2EIDPSReport.DPSReportJsons;
 public class DPSReportUploadObject
 {
     
-    public string Id;
+    public string? Id;
     
-    public string Permalink;
+    public string? Permalink;
     
-    public string Identifier;
+    public string? Identifier;
     
-    public long UploadTime;
+    public long? UploadTime;
     
-    public long EncounterTime;
+    public long? EncounterTime;
     
-    public string Generator;
+    public string? Generator;
     
-    public int GeneratorId;
+    public int? GeneratorId;
     
-    public int GeneratorVersion;
+    public int? GeneratorVersion;
     
-    public string Language;
+    public string? Language;
     
-    public int LanguageId;
+    public int? LanguageId;
     
-    public string UserToken;
+    public string? UserToken;
     
-    public string Error;
+    public string? Error;
     
-    public DPSReportUploadEncounterObject Encounter;
+    public DPSReportUploadEncounterObject? Encounter;
     
-    public DPSReportUploadEvtcObject Evtc;
+    public DPSReportUploadEvtcObject? Evtc;
 
     [JsonIgnore]
-    public Dictionary<string, DPSReportUploadPlayerObject> Players
+    public Dictionary<string, DPSReportUploadPlayerObject>? Players
     {
         get
         {
-            var json = PlayersJson.ToString()!;
+            var json = PlayersJson?.ToString()!;
             try
             {
                 return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json)!;
             }
             catch
             {
-                return [];
+                return null;
             }
         }
     }
 
     [JsonPropertyName("players")]
-    internal object PlayersJson;
+    internal object? PlayersJson;
     
-    public DPSReportReportObject Report;
+    public DPSReportReportObject? Report;
     
-    public string TempApiId;
+    public string? TempApiId;
 }
 #pragma warning restore CS0649 // field never assigned to

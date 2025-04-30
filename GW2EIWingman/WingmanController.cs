@@ -168,7 +168,7 @@ public static class WingmanController
         WingmanCheckLogQueuedOrDBObject? wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler);
         if (wingmanCheck != null)
         {
-            if (wingmanCheck.InDB || wingmanCheck.InQueue)
+            if (wingmanCheck.InDB.GetValueOrDefault(false) || wingmanCheck.InQueue.GetValueOrDefault(false))
             {
                 traceHandler("Upload failed - Log already present in Wingman DB");
                 return false;

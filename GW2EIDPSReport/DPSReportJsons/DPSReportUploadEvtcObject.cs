@@ -2,7 +2,7 @@
 
 public class DPSReportUploadEvtcObject
 {
-    public string Type;
-    public string Version;
-    public long BossId;
+    public string? Type;
+    public string? Version;
+    public long? BossId;
 }

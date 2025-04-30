@@ -186,7 +186,7 @@ public sealed class ProgramHelper : IDisposable
             DPSReportUploadObject? response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Settings.DPSReportUserToken,
             originalLog.ParserSettings.AnonymousPlayers,
             originalLog.ParserSettings.DetailedWvWParse);
-            uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
+            uploadresult[0] = response != null ? response.Permalink ?? "Upload process failed" : "Upload process failed";
             originalController.UpdateProgressWithCancellationCheck("DPSReport: " + uploadresult[0]);
             /*
             if (Properties.Settings.Default.UploadToWingman)
