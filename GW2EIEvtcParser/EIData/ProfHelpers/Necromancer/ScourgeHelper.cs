@@ -72,7 +72,7 @@ internal static class ScourgeHelper
         new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, TraitImages.SadisticSearing),
         new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SandSwell),
         new Buff("Trail of Anguish", TrailOfAnguishBuff, Source.Scourge, BuffClassification.Other, SkillImages.TrailofAnguish),
-        new Buff("Desert / Sandstorm Shroud", DesertShroudBuff, Source.Necromancer, BuffClassification.Other, SkillImages.DesertSandstormShroud),
+        new Buff("Desert / Sandstorm Shroud", DesertShroudBuff, Source.Scourge, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.DesertSandstormShroud),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

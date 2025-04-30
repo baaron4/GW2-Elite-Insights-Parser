@@ -30,7 +30,7 @@ internal static class WvWBuffs
         new Buff("Force Dome", ForceDomeTier5Buff, Source.Common, BuffClassification.Support, BuffImages.ForceDome),
         new Buff("Structural Vulnerability", StructuralVulnerability, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.StructuralVulnerability),
         new Buff("Sabotage Depot", SabotageDepot, Source.Common, BuffClassification.Other, BuffImages.SabotagedWeaponParts),
-        new Buff("Iron Hide (Ram)", IronHideRam, Source.Common, BuffClassification.Defensive, BuffImages.IronHide),
+        new Buff("Iron Hide (Ram)", IronHideRam, Source.Common, BuffStackType.Stacking, 1, BuffClassification.Defensive, BuffImages.IronHide),
         new Buff("Iron Hide (Guard)", IronHideGuards, Source.Common, BuffClassification.Other, BuffImages.IronHide),
         new Buff("Siege Decay Timer", SiegeDecayTimer, Source.Common, BuffClassification.Other, BuffImages.SiegeDecayTimer),
         new Buff("Presence of the Keep I", PresenceOfTheKeepI, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
