@@ -431,10 +431,10 @@ internal static class SkillImages
     public const string JacarandasEmbrace = "https://render.guildwars2.com/file/62C42A056E3B30C8770D5BA3E4301C06069BE21E/1770562.png";
     public const string RootSlap = "https://wiki.guildwars2.com/images/7/7d/Root_Slap.png";
     public const string Peck = "https://wiki.guildwars2.com/images/8/83/Peck.png";
-    public const string FrenziedAttack = "https://render.guildwars2.com/file/E4C75BA1A9056A684EDDF0CBCB746B36D707A842/103007.pngg";
+    public const string FrenziedAttack = "https://render.guildwars2.com/file/E4C75BA1A9056A684EDDF0CBCB746B36D707A842/103007.png";
     public const string HeavyShotTurtle = "https://render.guildwars2.com/file/7D451452DD3DC3B6D1AF52B397F5AF91B7AEC24B/2565744.png";
     public const string JadeCannonTurtle = "https://wiki.guildwars2.com/images/2/27/Jade_Cannon_%28turtle%29.png";
-    public const string SlamTurtle = "https://render.guildwars2.com/file/42093A336F337E45FD91B058E12864E738D83E42/2604868.pngg";
+    public const string SlamTurtle = "https://render.guildwars2.com/file/42093A336F337E45FD91B058E12864E738D83E42/2604868.png";
     public const string Swoop = "https://render.guildwars2.com/file/329E3C6524785BB37A3040AC4F362BEC23F8D625/103311.png";
     public const string TailSwipePet = "https://render.guildwars2.com/file/150DEE60799B04CF20A66DE020A81DA7D4D139A4/103596.png";
     public const string BiteCanine = "https://wiki.guildwars2.com/images/d/d1/Snap_%28wolf%29.png";
