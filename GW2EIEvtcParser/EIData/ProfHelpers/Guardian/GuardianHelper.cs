@@ -201,7 +201,7 @@ internal static class GuardianHelper
         new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, TraitImages.ForceOfWill),
         // Spear
         new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, SkillImages.SymbolOfLuminance),
-        new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, SkillImages.Illuminated),
+        new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, BuffImages.Illuminated),
     ];
 
     private static readonly HashSet<int> Minions =

@@ -83,8 +83,8 @@ public class SkillItem
         { SmashBottle, "Smash (Bottle)" },
         { ThrowBottle, "Throw (Bottle)" },
         { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
-        // Mounts
         #region Mounts
+        // Mounts
         { BondOfLifeSkill, "Bond of Life" },
         { BondOfVigorSkill, "Bond of Vigor" },
         { BondOfFaithSkill, "Bond of Faith" },
@@ -267,6 +267,8 @@ public class SkillItem
         // Escort
         { GlennaCap, "Capture" },
         { OverHere, "Over Here!" },
+        // Keep Construct
+        { MagicBlastCharge, "Magic Blast Charge" },
         // Xera
         { InterventionSAK, "Intervetion" },
         // Cairn
@@ -282,8 +284,7 @@ public class SkillItem
         // Dhuum
         { MajorSoulSplit, "Major Soul Split" },
         { ExpelEnergySAK, "Expel Energy" },
-        // Keep Construct
-        { MagicBlastCharge, "Magic Blast Charge" },
+        { DeathMarkKnockback, "Death Mark (Knockback)" },
         // Conjured Amalgamate
         { ConjuredSlashSAK, "Conjured Slash" },
         { ConjuredProtection, "Conjured Protection" },
@@ -569,7 +570,7 @@ public class SkillItem
         { LightningJolt, SkillImages.OverloadAir },
         { ShatteringIceDamage, SkillImages.ShatteringIce },
         { ArcaneShieldDamage, SkillImages.ArcaneShield },
-        { ConeOfColdHealing, SkillImages.CondOfCold },
+        { ConeOfColdHealing, SkillImages.ConeOfCold },
         { HealingRipple, TraitImages.HealingRipple },
         { HealingRippleWvW, TraitImages.HealingRipple },
         { HealingRain, SkillImages.HealingRain },
@@ -1518,141 +1519,4 @@ public class SkillItem
             _skillInfo = skillInfo;
         }
     }
-
-    // Public Methods
-
-    /*public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
-    {
-        CC = 0;
-        if (_apiSkill != null)
-        {
-            GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)_apiSkill;
-            GW2APISkillCheck apiskillchec = (GW2APISkillCheck)_apiSkill;
-            GW2APIfacts[] factsList = apiskilldet != null ? apiskilldet.facts : apiskillchec.facts;
-            bool daze = false;
-            bool stun = false;
-            bool knockdown = false;
-            bool flaot = false;
-            bool knockback = false;
-            bool launch = false;
-            bool pull = false;
-           
-            foreach (GW2APIfacts fact in factsList)
-            {
-                if (daze == false)
-                {
-                    if (fact.text == "Daze" || fact.status == "Daze")
-                    {
-                        if (fact.duration < 1)
-                        {
-                            CC += 100;
-                        }
-                        else
-                        {
-                            CC += fact.duration * 100;
-                        }
-                        daze = true;
-                    }
-
-                }
-                if (stun == false)
-                {
-                    if (fact.text == "Stun" || fact.status == "Stun")
-                    {
-                        if (fact.duration < 1)
-                        {
-                            CC += 100;
-                        }
-                        else
-                        {
-                            CC += fact.duration * 100;
-                        }
-                        stun = true;
-                    }
-                }
-                if (knockdown == false)
-                {
-                    if (fact.text == "Knockdown" || fact.status == "Knockdown")
-                    {
-                        if (fact.duration < 1)
-                        {
-                            CC += 100;
-                        }
-                        else
-                        {
-                            CC += fact.duration * 100;
-                        }
-                        knockdown = true;
-                    }
-                }
-                if (launch == false)
-                {
-                    if (fact.text == "Launch" || fact.status == "Launch")
-                    {
-
-                        CC += 232;//Wiki says either 232 or 332 based on duration? launch doesn't provide duration in api however
-                       
-                        launch = true;
-                    }
-                }
-                if (knockback == false)
-                {
-                    if (fact.text == "Knockback" || fact.status == "Knockback")
-                    {
-
-                        CC += 150;//always 150 unless special case of 232 for ranger pet?
-                        knockback = true;
-                    }
-                }
-                if (pull == false)
-                {
-                    if (fact.text == "Pull" || fact.status == "Pull")
-                    {
-
-                        CC += 150;
-
-                        pull = true;
-                    }
-                }
-                if (flaot == false)
-                {
-                    if (fact.text == "Float" || fact.status == "Float")
-                    {
-                        if (fact.duration < 1)
-                        {
-                            CC += 100;
-                        }
-                        else
-                        {
-                            CC += fact.duration * 100;
-                        }
-                        flaot = true;
-                    }
-                }
-                if (fact.text == "Stone Duration" || fact.status == "Stone Duration")
-                {
-                    if (fact.duration < 1)
-                    {
-                        CC += 100;
-                    }
-                    else
-                    {
-                        CC += fact.duration * 100;
-                    }
-                    
-                }
-
-            
-            }
-            if (ID == 30725)//toss elixir x
-            {
-                CC = 300;
-            }
-            if (ID == 29519)//MOA signet
-            {
-                CC = 1000;
-            }
-           
-        }
-    }*/
 }

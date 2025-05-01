@@ -890,6 +890,7 @@ public static class SkillIDs
     public const long Quicksand_StoneSpiritNPC = 12599;
     public const long ColdSnap_FrostSpiritNPC = 12600;
     public const long NaturesRenewal_SpiritOfNatureRenewalNPC = 12601;
+    public const long SerpentsPreparation = 12623;
     public const long SignetOfTheHuntPetBuff = 12626;
     public const long SignetOfStonePetBuff = 12627;
     public const long ProtectMe = 12631;
@@ -2698,6 +2699,7 @@ public static class SkillIDs
     public const long SuperiorSigilOfTheStars = 46953;
     public const long MushroomKingsBlessing = 46970;
     public const long AchievementEligibilityNecroDancer = 46994;
+    public const long DeathMarkKnockback = 47002;
     public const long KingsWrathConeAoE = 47005;
     public const long Hailstorm = 47013;
     public const long Glaciate = 47022;

@@ -73,8 +73,8 @@ internal static class HolosmithHelper
         new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, SkillImages.Overheat),
         new Buff("Photon Barrier", PhotonBarrierBuff, Source.Holosmith, BuffClassification.Defensive, SkillImages.PhotonWall),
         // heat buffs only present in forge
-        new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl1),
-        new Buff("50-100 Heat (Photon Forge)", PhotonForgeAbove50Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl2),
-        new Buff("100-150 Heat (Photon Forge)", PhotonForgeAbove100Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl3),
+        new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, BuffImages.HeatLvl1),
+        new Buff("50-100 Heat (Photon Forge)", PhotonForgeAbove50Heat, Source.Holosmith, BuffClassification.Other, BuffImages.HeatLvl2),
+        new Buff("100-150 Heat (Photon Forge)", PhotonForgeAbove100Heat, Source.Holosmith, BuffClassification.Other, BuffImages.HeatLvl3),
     ];
 }
