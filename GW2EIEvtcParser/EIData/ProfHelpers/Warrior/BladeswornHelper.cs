@@ -71,7 +71,7 @@ internal static class BladeswornHelper
         new Buff("Positive Flow", PositiveFlow, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.AttributeBonus),
         new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.FierceAsFire),
         new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, SkillImages.CombatStimulant),
-        new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.GunsAndGlory),
+        new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.GunsAndGlory),
         new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, SkillImages.TacticalReload),
         new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.OverchargedCartridges)
             .WithBuilds(GW2Builds.June2022Balance),

@@ -203,7 +203,7 @@ internal static class ElementalistHelper
         new Buff("Tornado", Tornado, Source.Elementalist, BuffClassification.Other, SkillImages.Tornado),
         new Buff("Whirlpool", Whirlpool, Source.Elementalist, BuffClassification.Other, SkillImages.Whirlpool),
         new Buff("Electrified Tornado", ElectrifiedTornado, Source.Elementalist, BuffClassification.Other, SkillImages.ChainLightning),
-        new Buff("Arcane Lightning", ArcaneLightning, Source.Elementalist, BuffClassification.Other, SkillImages.ElementalSurge),
+        new Buff("Arcane Lightning", ArcaneLightning, Source.Elementalist, BuffClassification.Other, TraitImages.ElementalSurge),
         // Conjures
         new Buff("Conjure Earth Shield", ConjureEarthShield, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureEarthShield),
         new Buff("Conjure Flame Axe", ConjureFlameAxe, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFlameAxe),

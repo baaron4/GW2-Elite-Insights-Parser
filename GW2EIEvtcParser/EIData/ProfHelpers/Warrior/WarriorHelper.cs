@@ -194,7 +194,7 @@ internal static class WarriorHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new Buff("Berserker's Power", BerserkersPower, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, TraitImages.BerserkersPower)
             .WithBuilds(GW2Builds.October2022Balance),
-        new Buff("Signet of Ferocity", SignetOfFerocity, Source.Warrior, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.SignetMastery),
+        new Buff("Signet of Ferocity", SignetOfFerocity, Source.Warrior, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.SignetMastery),
         new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, TraitImages.AdrenalHealth)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, TraitImages.AdrenalHealth)

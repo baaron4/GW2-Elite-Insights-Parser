@@ -217,7 +217,7 @@ internal static class MesmerHelper
         new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.Distortion),
         new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, SkillImages.Distortion),
         new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, SkillImages.Mirror),
-        new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, SkillImages.Echo),
+        new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
         new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryCounter),
         new Buff("Illusionary Riposte", IllusionaryRiposteBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryRiposte),
         new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryLeap),
@@ -239,7 +239,7 @@ internal static class MesmerHelper
         new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphMoa),
         new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphTuna),
         // Spear
-        new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, SkillImages.Clarity),
+        new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.Clarity),
     ];
 
     private static readonly HashSet<int> _clones =

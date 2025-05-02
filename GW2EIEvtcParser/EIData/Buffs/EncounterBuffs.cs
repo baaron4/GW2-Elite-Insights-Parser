@@ -648,7 +648,7 @@ internal static class EncounterBuffs
             new Buff("Destructive Aura", DestructiveAuraBuff, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, BuffImages.ToxicGas),
             new Buff("Enhanced Destructive Aura", EnhancedDestructiveAuraBuff, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Other, BuffImages.ToxicGas),
             new Buff("Equalization Matrix", EqualizationMatrix, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EqualizationMatrix),
-            new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, BuffImages.PowerOfTheVoid),
+            new Buff("Lethal Inspiration", LethalInspiration, Source.FightSpecific, BuffStackType.Stacking, 1, BuffClassification.Other, BuffImages.CrowdFavor),
             new Buff("Extreme Vulnerability", ExtremeVulnerability, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExtremeVulnerability),
             new Buff("Fixated (Ankka & Kaineng Overlook)", FixatedAnkkaKainengOverlook, Source.FightSpecific, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, BuffImages.Fixated),
             //new Buff("Shared Destruction (Li)", PoV_SharedDestructionLi, Source.FightSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
