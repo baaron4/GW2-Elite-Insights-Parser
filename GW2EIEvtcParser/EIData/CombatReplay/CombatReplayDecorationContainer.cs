@@ -306,7 +306,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
     internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, PlayerActor player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
     {
-        var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId));
+        var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
         var buffApplies = buffEvents.OfType<BuffApplyEvent>();
         var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>();
         var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId);
@@ -386,9 +386,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the <paramref name="color"/>.</param>
     /// <param name="radius">Radius of the shockwave.</param>
     /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
-    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius)
+    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius, bool reverse = false)
     {
-        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius);
+        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius, reverse);
     }
 
     /// <summary>
@@ -399,9 +399,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color.</param>
     /// <param name="radius">Radius of the shockwave.</param>
     /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
-    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, string color, uint radius)
+    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, string color, uint radius, bool reverse = false)
     {
-        Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+        Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end, reverse));
     }
 
 

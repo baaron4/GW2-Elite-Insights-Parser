@@ -541,15 +541,21 @@ public static class EffectGUIDs
     public static readonly GUID HarrowshotAoE = new("3AE17719B3D7374BAC4899DA0A3E7DF9");
     // Lonely Tower Fractal
     public static readonly GUID EparchRedCircle = new("0D2192849D53B4469F56B1C74542DBE9"); // owned by eparch, 2s duration, REUSED
+    public static readonly GUID EparchDespairPoolIndicator = new("0D2192849D53B4469F56B1C74542DBE9"); // Src Eparch - Duration 2000
     public static readonly GUID EparchDespairPool = new("FF359460D95C96478CE2A4415EACD312"); // owned by eparch, 15s duration
     public static readonly GUID EparchRageImpact = new("968B7C89FEF01C4298294E86800B9BA9"); // owned by eparch, no duration
     public static readonly GUID EparchRageFissure = new("797210B1B11C984AACBD2AFC80D02BC7"); // no owner, 24s duration
-    public static readonly GUID EparchArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // owned by eparch, 1.5s duration, REUSED for envy, incarnation of judgement
+    public static readonly GUID EparchArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // Src Eparch or Unknown - 1500 Duration - REUSED Wave of Envy has Eparch Src, Eye of Judgment has Unknown Src
     public static readonly GUID EparchInhale = new("FADE0B1FF0CAC146950DB6B69DBAFEDF"); // owned by eparch, 5s duration
     public static readonly GUID EparchCircleIndicator = new("B90A382180F3BD478F59D3DE7AA305B6"); // owned by eparch, 1s duration, REUSED for malice
     public static readonly GUID EparchSpikeOfMalice = new("4550118E2A59DB459CB8AFA3AB3F16A4"); // owned by eparch, no duration
+    public static readonly GUID EparchCrueltyWallsOfTalons = new("E8A3F145A613D2449C4FDD85EE16AD8D"); // No Src - Has end event - Duration 22000
+    public static readonly GUID EparchJudgmentPoolOfDraining = new("46E00F75A40BD448BCCBF0C02C0C26F5"); // Judgment Src - 0 Duration - Default Duration 1266
+    public static readonly GUID EparchJudgmentUnliddedEyeWarning = new("78D6E7A7FD3C1B4DACF3DE09258ED533"); // Src Judgment - 2000 Duration
+    public static readonly GUID EparchJudgmentUnliddedEyeWave = new("28FF802C476BF545AB9A4FF6D33FC6F7"); // Src Judgment - Dst Judgment - 2400 Duration
+    public static readonly GUID EparchEyeOfJudgmentArrowHits = new("564C69F260387449A354A7B37C8FEB2C"); // Src Judgment - 0 Duration - 0 Default Duration
     #endregion
-      
+
     #region Raids
     // Vale Guardian
     public static readonly GUID ValeGuardianDistributedMagic = new("43FD739499BB6040BBF9EEF37781B2CE"); // 6000 duration

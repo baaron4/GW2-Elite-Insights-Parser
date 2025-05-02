@@ -4195,6 +4195,7 @@ public static class SkillIDs
     public const long ShootingStars = 69560;
     public const long EmpoweredRageCerus = 69576;
     public const long EnviousGazeEmpoweredNM = 69601;
+    public const long UnliddedEye = 69605;
     public const long RelicOfTheHerald = 69606;
     public const long POV_SoulFeastTargetBuff = 69616;
     public const long MabonsStrength = 69620;
@@ -4210,12 +4211,14 @@ public static class SkillIDs
     public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
     public const long EnviousGazeNM = 69814;
     public const long DagdaDemonicAuraTimer = 69827;
+    public const long CruelDetonation1 = 69828;
     public const long EnviousGazeEmpoweredRearNM = 69829;
     public const long RelicOfTheNightmare = 69849;
     public const long RelicOfFireworks = 69855;
     public const long InsatiableHunger8 = 69861;
     public const long RelicOfCerusBuff = 69867;
     public const long RelicOfPeithaTargetBuff = 69882;
+    public const long CruelDetonation2 = 69928;
     public const long ChargingConstellationDamage = 69950;
     public const long RelicOfVass = 69961;
     public const long SpinningNebulaCentral = 69989; // The attack when Dagda doesn't teleport off the center
@@ -4252,6 +4255,7 @@ public static class SkillIDs
     public const long InsatiableHungerSkillNM = 70385;
     public const long RelicOfTheWeaver = 70390;
     public const long EmpoweredGluttonyCerus = 70395;
+    public const long PoolOfDraining = 70410;
     public const long MaliciousIntentSpawnDamageNM = 70427;
     public const long SkyscaleFireballSkill = 70431;
     public const long RelicOfTheZephyrite = 70460;
@@ -4285,12 +4289,14 @@ public static class SkillIDs
     public const long MaliciousIntentCM = 70786;
     public const long EnviousGazeCM = 70790;
     public const long InsatiableHunger9 = 70792;
+    public const long EyeOfJudgment = 70810;
     public const long RelicOfIsgarrenTargetBuff = 70806;
     public const long EmpoweredDespairCerus = 70821;
     public const long FearOfTheKing = 70822;
     public const long RainOfComets = 70837; // Health % damage, can't be tracked
     public const long RelicOfTheDaredevil = 70839;
     public const long PlanetCrashSkill = 70840;
+    public const long WallOfTalons = 70843;
     public const long InsatiableHunger10 = 70880;
     public const long PetrifyDamage = 70909;
     public const long RelicOfTheBrawler = 70913;
