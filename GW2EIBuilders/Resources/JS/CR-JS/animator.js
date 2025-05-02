@@ -831,6 +831,15 @@ class Animator {
             return xform;
         };
 
+        var drawImage = ctx.drawImage;
+        ctx.drawImage = function() {
+            const image = arguments[0];
+            if (!image || !image.complete || image.naturalWidth === 0) {
+                return;
+            }
+            return drawImage.call(ctx, ...arguments);
+        }
+
         var savedTransforms = [];
         var save = ctx.save;
         ctx.save = function () {
@@ -853,6 +862,7 @@ class Animator {
             _this.scale = Math.max(xAxis, yAxis) / resolutionMultiplier;
             return scale.call(ctx, sx, sy);
         };
+        
 
         var rotate = ctx.rotate;
         ctx.rotate = function (radians) {
@@ -931,11 +941,7 @@ class Animator {
             {
 
                 this._moveToSelected(ctx);
-                try {
-                    ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-                } catch (e) {
-        
-                }
+                ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
 
                 //ctx.globalCompositeOperation = "color-burn";
                 ctx.save();

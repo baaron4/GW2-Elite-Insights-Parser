@@ -495,12 +495,8 @@ class FacingMechanicDrawable extends MechanicDrawable {
             ctx.fillStyle = "rgba(0, 255, 200, 0.3)";
             ctx.fill();
             ctx.restore();
-        }
-        try {
-            ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
-        } catch (e) {
-
-        }
+        }    
+        ctx.drawImage(facingIcon, -facingHalfSize, -facingHalfSize, facingFullSize, facingFullSize);
         ctx.restore();
     }
 }
@@ -1030,12 +1026,8 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         ctx.save();
         ctx.translate(pos.x, pos.y);
         ctx.rotate(rads % (2 * Math.PI));
-        ctx.globalAlpha = pos.opacity;
-        try {
-            ctx.drawImage(this.image, -0.5 * this.width, -0.5 * this.height, this.width, this.height);
-        } catch (e) {
-
-        }
+        ctx.globalAlpha = pos.opacity;    
+        ctx.drawImage(this.image, -0.5 * this.width, -0.5 * this.height, this.width, this.height);
         ctx.restore();
     }
 
@@ -1185,12 +1177,8 @@ class IconMechanicDrawable extends MechanicDrawable {
             // Don't rotate the icon
             ctx.rotate(-ToRadians(rot + this.rotationOffset));
         }
-        const size = this.getSize();
-        try {
-            ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
-        } catch (e) {
-
-        }
+        const size = this.getSize();   
+        ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
     }
 }

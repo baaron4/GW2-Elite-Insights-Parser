@@ -223,13 +223,8 @@ class IconDrawable {
                 ctx.arc(pos.x, pos.y, InchToPixel * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
-        }
-        try {
-            ctx.drawImage(this.getIcon(),
-                pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
-        } catch (e) {
-
-        }
+        }      
+        ctx.drawImage(this.getIcon(), pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
     }
 
     drawPicking() {
