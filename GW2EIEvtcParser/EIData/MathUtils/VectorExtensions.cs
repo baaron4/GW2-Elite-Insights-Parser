@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
+using static GW2EIEvtcParser.EIData.Trigonometry;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -144,6 +146,6 @@ static class Vector
 
     public static float GetRoundedZRotationDeg(this in Vector3 facing)
     {
-        return (float)Math.Round(ParserHelper.RadianToDegree(Math.Atan2(facing.Y, facing.X)), ParserHelper.CombatReplayDataDigit);
+        return (float)Math.Round(RadianToDegree(Math.Atan2(facing.Y, facing.X)), CombatReplayDataDigit);
     }
 }
