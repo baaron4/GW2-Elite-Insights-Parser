@@ -471,11 +471,23 @@ public partial class CombatData
         var damageData = new List<HealthDamageEvent>(combatEvents.Count / 2);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
+        // First iteration to create necessary metadata events first
+        foreach (CombatItem combatItem in combatEvents)
+        {
+            if (combatItem.IsEssentialMetadata)
+            {
+                CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion);
+            }
+        }
         foreach (CombatItem combatItem in combatEvents)
         {
             bool insertToSkillIDs = false;
             if (combatItem.IsStateChange != StateChange.None)
             {
+                if (combatItem.IsEssentialMetadata)
+                {
+                    continue;
+                }
                 if (combatItem.IsExtension)
                 {
                     if (extensions.TryGetValue(combatItem.Pad, out var handler))
