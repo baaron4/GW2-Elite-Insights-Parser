@@ -367,7 +367,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
                         FormDecoration decoration;
-                        if (effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart)
+                        if (effect.GUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart)
                         {
                             decoration = new DoughnutDecoration(600, 2000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                         } 
@@ -384,7 +384,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration
                         FormDecoration decoration;
-                        if (effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation)
+                        if (effect.GUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation)
                         {
                             decoration = new DoughnutDecoration(600, 2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                         }
@@ -434,7 +434,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
                             FormDecoration white;
-                            if (effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner)
+                            if (effect.GUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner)
                             {
                                 white = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
                             } 
@@ -569,7 +569,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     hasUltimatumIndicators = true;
                     foreach (EffectEvent effect in ultimatumIndicators)
                     {
-                        var flipped = effect.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
+                        var flipped = effect.GUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
                         (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
                         var rotation = new AngleConnector(effect.Rotation.Z - (flipped ? 270 : 90));
                         int openingAngle = flipped ? 120 : 240;
@@ -590,7 +590,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         EffectEvent? previousIndicator = ultimatumIndicators.LastOrDefault(x => x.Time <= effect.Time);
                         if (target.TryGetCurrentFacingDirection(log, effect.Time, out var currentRotation) && previousIndicator != null)
                         {
-                            var flipped = previousIndicator.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
+                            var flipped = previousIndicator.GUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
                             var rotationOffset = flipped ? 180 : 0;
                             var rotation = new AngleConnector(currentRotation.GetRoundedZRotationDeg() + rotationOffset);
                             var openingAngle = flipped ? 120 : 240;

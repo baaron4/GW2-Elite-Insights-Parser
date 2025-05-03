@@ -140,9 +140,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
-        var testGUIDs = test.Select(x => x.GUIDEvent.ContentGUID);
+        var testGUIDs = test.Select(x => x.GUID);
         var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
-        var test2GUIDs = test2.Select(x => x.GUIDEvent.ContentGUID);
+        var test2GUIDs = test2.Select(x => x.GUID);
         return true;
     }
 

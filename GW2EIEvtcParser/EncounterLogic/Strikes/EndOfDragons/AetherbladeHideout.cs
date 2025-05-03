@@ -826,7 +826,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         Color color = Colors.LightOrange;
         var species = new List<int>();
 
-        switch (effect.GUIDEvent.ContentGUID)
+        switch (effect.GUID)
         {
             case var value when value == EffectGUIDs.AetherbladeHideoutFocusedDestructionGreen:
                 color = Colors.DarkGreen;

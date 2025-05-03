@@ -13,7 +13,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public EffectGUIDEvent GUIDEvent { get; private set; } = EffectGUIDEvent.DummyEffectGUID;
+    public GUID GUID { get; private set; } = EffectGUIDEvent.DummyEffectGUID.ContentGUID;
 
     /// <summary>
     /// End of the effect, provided by an <see cref="EffectEndEvent"/>
@@ -204,10 +204,11 @@ public abstract class EffectEvent : AbstractEffectEvent
     }
     internal void SetGUIDEvent(CombatData combatData)
     {
-        GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
-        if (Duration == 0 && GUIDEvent.DefaultDuration > 0)
+        var guidEvent = combatData.GetEffectGUIDEvent(EffectID);
+        GUID = guidEvent.ContentGUID;
+        if (Duration == 0 && guidEvent.DefaultDuration > 0)
         {
-            Duration = (long)Math.Min(GUIDEvent.DefaultDuration, int.MaxValue); // To avoid overflow, end time could be start + duration, 13 days is more than enough to cover a log's duration
+            Duration = (long)Math.Min(guidEvent.DefaultDuration, int.MaxValue); // To avoid overflow, end time could be start + duration, 13 days is more than enough to cover a log's duration
         }
     }
 }
