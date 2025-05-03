@@ -4449,6 +4449,7 @@ public static class SkillIDs
     public const long Consumed = 72888;
     public const long EnragedLonelyTower = 72878;
     public const long BrothersUnited = 72892;
+    public const long HeartOfTheObscure = 72893;
     #endregion
     #region Janthir Wilds
     public const long EntanglingAsp = 72896;
