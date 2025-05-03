@@ -55,13 +55,13 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
-                var logStartEvent = new LogStartEvent(stateChangeEvent);
-                metaDataEvents.LogStartEvents.Add(logStartEvent);
-                if (metaDataEvents.LogStartEvent != null || (metaDataEvents.LogEndEvent != null && metaDataEvents.LogEndEvent.ServerUnixTimeStamp <= logStartEvent.ServerUnixTimeStamp))
+                var squadCombatStart = new SquadCombatStartEvent(stateChangeEvent);
+                metaDataEvents.SquadCombatStartEvents.Add(squadCombatStart);
+                if (metaDataEvents.LogStartEvent != null || (metaDataEvents.LogEndEvent != null && metaDataEvents.LogEndEvent.ServerUnixTimeStamp <= squadCombatStart.ServerUnixTimeStamp))
                 {
                     break;
                 }
-                metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
+                metaDataEvents.LogStartEvent = new SquadCombatStartEvent(stateChangeEvent);
                 break;
             case StateChange.LogNPCUpdate:
                 metaDataEvents.LogNPCUpdateEvents.Add(new LogNPCUpdateEvent(stateChangeEvent, agentData));
@@ -71,9 +71,9 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
-                var logEndEvent = new LogEndEvent(stateChangeEvent);
-                metaDataEvents.LogEndEvent = logEndEvent;
-                metaDataEvents.LogEndEvents.Add(logEndEvent);
+                var squadCombatEndEvent = new SquadCombatEndEvent(stateChangeEvent);
+                metaDataEvents.LogEndEvent = squadCombatEndEvent;
+                metaDataEvents.SquadCombatEndEvents.Add(squadCombatEndEvent);
                 break;
             case StateChange.MaxHealthUpdate:
                 var maxHealthEvt = new MaxHealthUpdateEvent(stateChangeEvent, agentData);
@@ -313,7 +313,7 @@ internal static class CombatEventFactory
                     Add(statusEvents.EffectEventsByDst!, effectEvt.Dst, effectEvt);
                 }
                 break;
-            case StateChange.EffectIDToGUID:
+            case StateChange.IDToGUID:
                 if (evtcVersion.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                 {
                     switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))

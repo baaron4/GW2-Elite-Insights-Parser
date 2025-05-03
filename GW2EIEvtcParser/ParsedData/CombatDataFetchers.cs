@@ -68,14 +68,14 @@ partial class CombatData
         return _metaDataEvents.InstanceStartEvent;
     }
 
-    public LogStartEvent? GetLogStartEvent()
+    public SquadCombatStartEvent? GetLogStartEvent()
     {
         return _metaDataEvents.LogStartEvent;
     }
 
-    public IReadOnlyList<LogStartEvent> GetLogStartEvents()
+    public IReadOnlyList<SquadCombatStartEvent> GetSquadCombatStartEvents()
     {
-        return _metaDataEvents.LogStartEvents;
+        return _metaDataEvents.SquadCombatStartEvents;
     }
 
     public IReadOnlyList<LogNPCUpdateEvent> GetLogNPCUpdateEvents()
@@ -83,13 +83,13 @@ partial class CombatData
         return _metaDataEvents.LogNPCUpdateEvents;
     }
 
-    public LogEndEvent? GetLogEndEvent()
+    public SquadCombatEndEvent? GetLogEndEvent()
     {
         return _metaDataEvents.LogEndEvent;
     }
-    public IReadOnlyList<LogEndEvent> GetLogEndEvents()
+    public IReadOnlyList<SquadCombatEndEvent> GetSquadCombatEndEvents()
     {
-        return _metaDataEvents.LogEndEvents;
+        return _metaDataEvents.SquadCombatEndEvents;
     }
     #endregion DATE
 

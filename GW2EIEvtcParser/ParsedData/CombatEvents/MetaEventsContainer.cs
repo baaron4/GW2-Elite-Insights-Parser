@@ -5,10 +5,10 @@ internal class MetaEventsContainer
     public GW2BuildEvent? GW2BuildEvent { get; set; }
     public InstanceStartEvent? InstanceStartEvent { get; set; }
     public LanguageEvent? LanguageEvent { get; set; }
-    public LogEndEvent? LogEndEvent { get; set; }
-    public LogStartEvent? LogStartEvent { get; set; }
-    public List<LogEndEvent> LogEndEvents { get; } = [];
-    public List<LogStartEvent> LogStartEvents { get; } = [];
+    public SquadCombatEndEvent? LogEndEvent { get; set; }
+    public SquadCombatStartEvent? LogStartEvent { get; set; }
+    public List<SquadCombatEndEvent> SquadCombatEndEvents { get; } = [];
+    public List<SquadCombatStartEvent> SquadCombatStartEvents { get; } = [];
     public readonly List<LogNPCUpdateEvent> LogNPCUpdateEvents = [];
     public readonly List<MapIDEvent> MapIDEvents = [];
     public readonly List<ShardEvent> ShardEvents = [];

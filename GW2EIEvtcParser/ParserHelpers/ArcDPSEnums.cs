@@ -231,7 +231,7 @@ public static class ArcDPSEnums
         TickRate = 43,
         Last90BeforeDown = 44,
         Effect_45 = 45,
-        EffectIDToGUID = 46,
+        IDToGUID = 46,
         LogNPCUpdate = 47,
         Idle = 48,
         ExtensionCombat = 49,

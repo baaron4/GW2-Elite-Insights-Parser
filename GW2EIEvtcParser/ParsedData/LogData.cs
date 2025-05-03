@@ -63,7 +63,7 @@ public class LogData
         }
         operation.UpdateProgressWithCancellationCheck("Parsing: Language " + Language);
         //
-        LogStartEvent? logStr = combatData.GetLogStartEvent();
+        SquadCombatStartEvent? logStr = combatData.GetLogStartEvent();
         if (logStr != null)
         {
             SetLogStart(logStr.ServerUnixTimeStamp);
@@ -71,7 +71,7 @@ public class LogData
             unixStart = logStr.ServerUnixTimeStamp;
         }
         //
-        LogEndEvent? logEnd = combatData.GetLogEndEvent();
+        SquadCombatEndEvent? logEnd = combatData.GetLogEndEvent();
         if (logEnd != null)
         {
             SetLogEnd(logEnd.ServerUnixTimeStamp);
