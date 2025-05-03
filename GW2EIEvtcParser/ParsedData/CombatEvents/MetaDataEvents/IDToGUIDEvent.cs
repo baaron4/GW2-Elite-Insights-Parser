@@ -2,22 +2,21 @@
 
 public abstract class IDToGUIDEvent : MetaDataEvent
 {
-    public readonly GUID ContentGUID;
-    public readonly long ContentID;
+    private readonly IDAndGUID Content;
+    public GUID ContentGUID => Content.GUID!.Value; // GUID can't be null here, by construction
+    public long ContentID => Content.ID;
 
     public bool IsValid => ContentID >= 0;
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
         //TODO(Rennorb) @explain: Why do the source and destination get packed here?
-        ContentGUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
-        ContentID = evtcItem.SkillID;
+        Content = new(evtcItem.SkillID, new(evtcItem.SrcAgent, evtcItem.DstAgent));
     }
 
     internal IDToGUIDEvent() : base()
     {
-        ContentGUID = new();
-        ContentID = -1;
+        Content = new(-1, new());
     }
 
 }

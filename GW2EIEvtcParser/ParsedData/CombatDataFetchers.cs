@@ -918,9 +918,9 @@ partial class CombatData
         return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : null;
     }
 
-    internal SkillGUIDEvent GetSkillGUIDEvent(long skillID)
+    internal SkillGUIDEvent? GetSkillGUIDEvent(long skillID)
     {
-        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : SkillGUIDEvent.DummySkillGUID;
+        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : null;
     }
 
     public SpeciesGUIDEvent? GetSpeciesGUIDEvent(GUID species)
@@ -928,9 +928,9 @@ partial class CombatData
         return _metaDataEvents.SpeciesGUIDEventsByGUID.TryGetValue(species, out var evt) ? evt : null;
     }
 
-    internal SpeciesGUIDEvent GetSpeciesGUIDEvent(long speciesID)
+    internal SpeciesGUIDEvent? GetSpeciesGUIDEvent(long speciesID)
     {
-        return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : SpeciesGUIDEvent.DummSpeciesGUID;
+        return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : null;
     }
 
     public MarkerGUIDEvent? GetMarkerGUIDEvent(GUID marker)

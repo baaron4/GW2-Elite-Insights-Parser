@@ -23,8 +23,12 @@ public readonly struct IDAndGUID : IEquatable<IDAndGUID>
 
     public static bool operator ==(IDAndGUID left, IDAndGUID right)
     {
-        if (left.GUID != null && right.GUID != null)
+        if (left.GUID != null || right.GUID != null)
         {
+            if (left.GUID == null || right.GUID == null)
+            {
+                return false;
+            }
             return left.GUID.Equals(right.GUID);
         }
         return left.ID == right.ID;
