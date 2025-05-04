@@ -1086,6 +1086,8 @@ public class SkillItem
             { NovaLaunchSAK, SkillImages.CelestialDash },
             // - Arkk
             { HypernovaLaunchSAK, SkillImages.CelestialDash },
+            // - Eparch
+            { HeartOfTheObscure, "https://wiki.guildwars2.com/images/5/5a/Scan_for_Rift.png" },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
             // Generic Encounter Skills

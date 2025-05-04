@@ -385,10 +385,11 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color.</param>
     /// <param name="opacity">Opacity of the <paramref name="color"/>.</param>
     /// <param name="radius">Radius of the shockwave.</param>
+    /// <param name="reverse">If the shockwave grows outwards or inwards, outwards is set by default.</param>
     /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
-    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius)
+    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius, bool reverse = false)
     {
-        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius);
+        AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius, reverse);
     }
 
     /// <summary>
@@ -398,10 +399,11 @@ internal class CombatReplayDecorationContainer
     /// <param name="lifespan">Lifespan of the shockwave.</param>
     /// <param name="color">Color.</param>
     /// <param name="radius">Radius of the shockwave.</param>
+    /// <param name="reverse">If the shockwave grows outwards or inwards, outwards is set by default.</param>
     /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
-    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, string color, uint radius)
+    internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, string color, uint radius, bool reverse = false)
     {
-        Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+        Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end, reverse));
     }
 
 

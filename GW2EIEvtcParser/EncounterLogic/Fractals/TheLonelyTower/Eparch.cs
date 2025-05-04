@@ -18,6 +18,49 @@ internal class Eparch : LonelyTower
     {
         MechanicList.AddRange(
         [
+            // Player Attunements
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(DespairAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Blue), "Desp.Att", "Collected Despair Attunement", "Despair Attunement", 0),
+                new PlayerDstBuffApplyMechanic(EnvyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Emvy.Att", "Collected Envy Attunement", "Envy Attunement", 0),
+                new PlayerDstBuffApplyMechanic(GluttonyAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Glut.Att", "Collected Gluttony Attunement", "Gluttony Attunement", 0),
+                new PlayerDstBuffApplyMechanic(MaliceAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Mali.Att", "Collected Malice Attunement", "Malice Attunement", 0),
+                new PlayerDstBuffApplyMechanic(RageAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Rage.Att", "Collected Rage Attunement", "Rage Attunement", 0),
+                new PlayerDstBuffApplyMechanic(RegretAttunement, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Regr.Att", "Collected Regret Attunement", "Regret Attunement", 0),
+            ]),
+            // Eparch Empowerments
+            new MechanicGroup([
+                new EnemyDstBuffApplyMechanic(DespairEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Blue), "Desp.Emp", "Eparch Absorbed Despair Empowerment", "Despair Empowerment", 0),
+                new EnemyDstBuffApplyMechanic(EnvyEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Emvy.Emp", "Eparch Absorbed Envy Empowerment", "Envy Empowerment", 0),
+                new EnemyDstBuffApplyMechanic(GluttonyEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Orange), "Glut.Emp", "Eparch Absorbed Gluttony Empowerment", "Gluttony Empowerment", 0),
+                new EnemyDstBuffApplyMechanic(MaliceEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Purple), "Mali.Emp", "Eparch Absorbed Malice Empowerment", "Malice Empowerment", 0),
+                new EnemyDstBuffApplyMechanic(RageEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Rage.Emp", "Eparch Absorbed Rage Empowerment", "Rage Empowerment", 0),
+                new EnemyDstBuffApplyMechanic(RegretEmpowerment, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Yellow), "Regr.Emp", "Eparch Absorbed Regret Empowerment", "Regret Empowerment", 0),
+            ]),
+            // Eparch Attacks
+            new MechanicGroup([
+                new PlayerDstHitMechanic([RainOfDespair, RainOfDespairPool], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.RedSkin), "Desp.H", "Hit by Rain of Despair", "Rain of Despair Hit", 0),
+                new PlayerDstHitMechanic(WaveOfEnvy, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkGreen), "Envy.H", "Hit by Wave of Envy", "Wave of Envy Hit", 0),
+                new PlayerDstHitMechanic(Inhale, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Glut.H", "Hit by Inhile", "Inhile Hit", 0),
+                new PlayerDstHitMechanic(SpikeOfMaliceHit, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Mali.H", "Hit by Spike of Malice", "Spike of Malice Hit", 0),
+                new PlayerDstHitMechanic(RageFissure, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rage.H", "Hit by Rage Fissure", "Rage Fissure Hit", 0),
+            ]),
+            // Consume
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(Consumed, new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkGreen), "Consumed", "Consumed by Eparch", "Consumed", 0),
+            ]),
+            // Split Phase
+            new MechanicGroup([
+                new PlayerDstHitMechanic([CruelDetonation1, CruelDetonation2], new MechanicPlotlySetting(Symbols.Square, Colors.Ice), "CruDeto.H", "Hit by Cruel Detonation", "Cruel Detonation Hit", 0),
+                new PlayerDstHitMechanic(WallOfTalons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "Wall.H", "Hit by Wall of Talons", "Wall of Talons Hit", 0),
+                new PlayerDstHitMechanic(PoolOfDraining, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "PoolDra.H", "Hit by Pool of Draining (Boonstrip)", "Pool of Draining Hit", 0),
+                new PlayerDstHitMechanic(UnliddedEye, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "EyeWave.H", "Hit by Unlidded Eye (Shockwave)", "Unlidded Eye Hit", 0),
+                new PlayerDstHitMechanic(EyeOfJudgment, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.LightOrange), "EyeArrow.H", "Hit by Eye of Judgment (Arrows)", "Eye of Judgment Hit", 0),
+            ]),
+            // Eparch Casts
+            new MechanicGroup([
+                new EnemyCastStartMechanic(BreakbarEparch, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkGreen), "Breakbar", "Cast Breakbar", "Cast Breakbar", 0),
+                new EnemyCastStartMechanic(RegretSkillEparch, new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Yellow), "Regret", "Cast Regret Skill", "Cast Regret Skill", 0),
+            ])
         ]);
         Extension = "eparch";
         Icon = EncounterIconEparch;
@@ -94,7 +137,7 @@ internal class Eparch : LonelyTower
         if (fightData.IsCM && determinedApplies.Count >= 3)
         {
             fightData.SetSuccess(true, determinedApplies[2].Time);
-        } 
+        }
         else if (!fightData.IsCM && determinedApplies.Count >= 1)
         {
             fightData.SetSuccess(true, determinedApplies[0].Time);
@@ -179,9 +222,9 @@ internal class Eparch : LonelyTower
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
-        // consume fixations
-        var  consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var consumeEvents = GetFilteredList(log.CombatData, [ Consume ], player, true, true);
+        // Consume fixations
+        var consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var consumeEvents = GetFilteredList(log.CombatData, [Consume], player, true, true);
         replay.Decorations.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
         replay.Decorations.AddTether(consumeEvents, Colors.Red, 0.5);
     }
@@ -189,14 +232,80 @@ internal class Eparch : LonelyTower
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
+
+        (long start, long end) lifespan;
+        long duration;
+
         switch (target.ID)
         {
+            case (int)TargetID.EparchLonelyTower:
+                // Pool of Despair - Indicator
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EparchDespairPoolIndicator, out var poolsIndicators))
+                {
+                    foreach (EffectEvent effect in poolsIndicators)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2000);
+                        var circle = new CircleDecoration(110, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
+                        replay.Decorations.Add(circle);
+                        if (target.TryGetCurrentPosition(log, effect.Time, out var eparchPos))
+                        {
+                            replay.Decorations.AddProjectile(eparchPos, effect.Position, lifespan, Colors.Black, 0.4);
+                        }
+                    }
+                }
+
+                // Consume Breakbar
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
+                {
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
+                }
+                break;
             case (int)TargetID.KryptisRift:
                 {
-                    var events = GetFilteredList(log.CombatData, [ KryptisRiftIncarnationTether ], target, true, true);
+                    var events = GetFilteredList(log.CombatData, [KryptisRiftIncarnationTether], target, true, true);
                     replay.Decorations.AddTether(events, Colors.Red, 0.5);
                     break;
                 }
+            case (int)TargetID.IncarnationOfJudgement:
+                // Unlidded Eye - Reverse Shockwave - Wave Warning
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EparchJudgmentUnliddedEyeWarning, out var eyeWarning))
+                {
+                    foreach (EffectEvent effect in eyeWarning)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2000);
+                        replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.LightOrange, 0.3, 600, true);
+                    }
+                }
+
+                // Unlidded Eye - Reverse Shockwave - Wave Hit
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EparchJudgmentUnliddedEyeWave, out var eyeWave))
+                {
+                    foreach (EffectEvent effect in eyeWave)
+                    {
+                        lifespan = effect.ComputeLifespan(log, 2400);
+                        replay.Decorations.AddShockwave(new AgentConnector(target), lifespan, Colors.Yellow, 0.5, 1200, true);
+                    }
+                }
+
+                // Pool of Draining - AoE underneath boon removal
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EparchJudgmentPoolOfDraining, out var drainingPools))
+                {
+                    foreach (EffectEvent effect in drainingPools)
+                    {
+                        duration = 1266;
+                        long growing = effect.Time + duration;
+                        lifespan = effect.ComputeLifespan(log, duration);
+                        lifespan.end = ComputeEndCastTimeByBuffApplication(log, target, Stun, effect.Time, duration);
+                        var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(circle, growing);
+                    }
+                }
+                break;
+            default:
+                break;
+
         }
     }
 
@@ -204,23 +313,22 @@ internal class Eparch : LonelyTower
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
+        (long start, long end) lifespan;
+
         AddGlobuleDecorations(log);
 
-        // rain of despair pools
+        // Rain of Despair - Pools
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchDespairPool, out var pools))
         {
             foreach (EffectEvent effect in pools)
             {
-                // TODO: pools are differently sized?
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 15000);
-                var position = new PositionConnector(effect.Position);
-                var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.2, position);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                lifespan = effect.ComputeDynamicLifespan(log, 15000);
+                var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
-        // rage wave
+        // Rage Fissure - Shockwave
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageImpact, out var rageWaves))
         {
             const float velocity = 450.0f; // units per second
@@ -228,74 +336,92 @@ internal class Eparch : LonelyTower
             const long duration = (long)(1000.0f * maxRange / velocity);
             foreach (EffectEvent effect in rageWaves)
             {
-                var start = effect.Time;
-                var end = start + duration;
-                var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(maxRange, (start, end), Colors.Orange, 0.3, position).UsingFilled(false).UsingGrowingEnd(end));
+                lifespan = (effect.Time, effect.Time + duration);
+                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Orange, 0.3, maxRange);
             }
         }
 
-        // rage fissures
+        // Rage Fissures
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageFissure, out var fissures))
         {
             const uint width = 40;
             const uint length = 220;
             foreach (EffectEvent effect in fissures)
             {
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 24000);
+                lifespan = effect.ComputeDynamicLifespan(log, 24000);
                 GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
-                var rotation = new AngleConnector(effect.Rotation.Z);
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation));
+                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(new AngleConnector(effect.Rotation.Z)));
             }
         }
 
-        // envy arrow indicators
+        // Wave of Envy - Arrows
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchArrowIndicator, out var envyArrows))
         {
             const uint width = 60;
             const uint length = 800;
             foreach (EffectEvent effect in envyArrows)
             {
-                (long start, long end)= effect.ComputeLifespan(log, 1500);
+                lifespan = effect.ComputeLifespan(log, 1500);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, (start, end), Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, (end, end + 300), Colors.Red, 0.2, position).UsingRotationConnector(rotation));
+                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
+                if (effect.Src.IsSpecies(TargetID.EparchLonelyTower))
+                {
+                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, (lifespan.end, lifespan.end + 300), Colors.DarkGreen, 0.2, position).UsingRotationConnector(rotation));
+                }
             }
         }
 
-        // inhale indicator
+        // Inhale - Gluttony Indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchInhale, out var inhales))
         {
             foreach (EffectEvent effect in inhales)
             {
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 5000);
-                GeographicalConnector position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, position));
+                lifespan = effect.ComputeDynamicLifespan(log, 5000);
+                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
-        // spike of malice
+        // Spike of Malice - Indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchCircleIndicator, out var spikeIndicators))
         {
             foreach (EffectEvent effect in spikeIndicators)
             {
-                (long start, long end) = effect.ComputeDynamicLifespan(log, 1000);
-                GeographicalConnector position = new PositionConnector(effect.Position);
-                var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, position);
-                FormDecoration circleBorder = circle.Copy().UsingFilled(false);
-                FormDecoration circleFiller = circle.UsingGrowingEnd(end);
-                EnvironmentDecorations.Add(circleBorder);
-                EnvironmentDecorations.Add(circleFiller);
+                lifespan = effect.ComputeDynamicLifespan(log, 1000);
+                var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
+
+        // Spike of Malice - Damage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchSpikeOfMalice, out var spikes))
         {
             foreach (EffectEvent effect in spikes)
             {
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 300);
-                GeographicalConnector position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, position));
+                lifespan = effect.ComputeDynamicLifespan(log, 300);
+                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+            }
+        }
+
+        // Walls of Talons - Incarnation of Cruelty 
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchCrueltyWallsOfTalons, out var crueltyWalls))
+        {
+            foreach (EffectEvent effect in crueltyWalls)
+            {
+                lifespan = effect.ComputeDynamicLifespan(log, 22000);
+                var wall = (RectangleDecoration)new RectangleDecoration(200, 100, lifespan, Colors.Grey, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                EnvironmentDecorations.AddWithBorder(wall, Colors.Red, 0.2);
+            }
+        }
+
+        // Eye of Judgment - Arrow circle hits
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchEyeOfJudgmentArrowHits, out var eyeHits))
+        {
+            foreach (EffectEvent effect in eyeHits)
+            {
+                lifespan = (effect.Time, effect.Time + 300);
+                var circle = new CircleDecoration(80, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.Add(circle);
             }
         }
     }
