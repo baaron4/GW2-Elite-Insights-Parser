@@ -238,18 +238,6 @@ partial class CombatData
     #endregion STATES
 
     #region INFO
-    public BuffInfoEvent? GetBuffInfoEvent(IDAndGUID buffID)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffInfoEvent(evt.ContentID);
-            }
-        }
-        return GetBuffInfoEvent(buffID.ID);
-    }
 
     public BuffInfoEvent? GetBuffInfoEvent(long buffID)
     {
@@ -261,18 +249,6 @@ partial class CombatData
         return _metaDataEvents.BuffInfoEventsByCategory.GetValueOrEmpty(category);
     }
 
-    public SkillInfoEvent? GetSkillInfoEvent(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetSkillInfoEvent(evt.ContentID);
-            }
-        }
-        return GetSkillInfoEvent(skillID.ID);
-    }
     public SkillInfoEvent? GetSkillInfoEvent(long skillID)
     {
         return _metaDataEvents.SkillInfoEvents.GetValueOrDefault(skillID);
@@ -290,33 +266,9 @@ partial class CombatData
     }
     #endregion LAST90
     #region BUFFS
-    public IReadOnlyList<BuffEvent> GetBuffData(IDAndGUID buffID)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffData(evt.ContentID);
-            }
-        }
-        return GetBuffData(buffID.ID);
-    }
     public IReadOnlyList<BuffEvent> GetBuffData(long buffID)
     {
         return _buffData.GetValueOrEmpty(buffID);
-    }
-    public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyData(IDAndGUID buffID)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffApplyData(evt.ContentID);
-            }
-        }
-        return GetBuffApplyData(buffID.ID);
     }
     public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyData(long buffID)
     {
@@ -330,19 +282,6 @@ partial class CombatData
     public IReadOnlyList<BuffEvent> GetBuffDataBySrc(AgentItem src)
     {
         return _buffDataBySrc.GetValueOrEmpty(src);
-    }
-
-    public IReadOnlyList<BuffEvent> GetBuffDataByIDByDst(IDAndGUID buffID, AgentItem dst)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffDataByIDByDst(evt.ContentID, dst);
-            }
-        }
-        return GetBuffDataByIDByDst(buffID.ID, dst);
     }
     /// <summary>
     /// Returns list of buff events applied on agent for given id
@@ -358,19 +297,6 @@ partial class CombatData
         }
         return [];
     }
-
-    public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyDataByIDByDst(IDAndGUID buffID, AgentItem dst)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffApplyDataByIDByDst(evt.ContentID, dst);
-            }
-        }
-        return GetBuffApplyDataByIDByDst(buffID.ID, dst);
-    }
     /// <summary>
     /// Returns list of buff apply events applied on agent for given id
     /// </summary>
@@ -384,18 +310,6 @@ partial class CombatData
             }
         }
         return [];
-    }
-    public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(IDAndGUID buffID, uint instanceID)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffDataByInstanceID(evt.ContentID, instanceID);
-            }
-        }
-        return GetBuffDataByInstanceID(buffID.ID, instanceID);
     }
     public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
     {
@@ -412,34 +326,9 @@ partial class CombatData
         }
         return [];
     }
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(IDAndGUID buffID)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffRemoveAllData(evt.ContentID);
-            }
-        }
-        return GetBuffRemoveAllData(buffID.ID);
-    }
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID)
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
-    }
-
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(IDAndGUID buffID, AgentItem src)
-    {
-        if (buffID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(buffID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBuffRemoveAllData(evt.ContentID, src);
-            }
-        }
-        return GetBuffRemoveAllData(buffID.ID, src);
     }
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID, AgentItem src)
     {
@@ -474,38 +363,12 @@ partial class CombatData
     {
         return _breakbarDamageData.GetValueOrEmpty(src);
     }
-
-    public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetBreakbarDamageData(evt.ContentID);
-            }
-        }
-        return GetBreakbarDamageData(skillID.ID);
-    }
     /// <summary>
     /// Returns list of breakbar damage events done by skill id
     /// </summary>
     public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(long skillID)
     {
         return _breakbarDamageDataById.GetValueOrEmpty(skillID);
-    }
-
-    public IReadOnlyList<HealthDamageEvent> GetDamageData(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetDamageData(evt.ContentID);
-            }
-        }
-        return GetDamageData(skillID.ID);
     }
     /// <summary>
     /// Returns list of damage events applied by a skill
@@ -537,19 +400,6 @@ partial class CombatData
     public IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlData(AgentItem src)
     {
         return _crowControlData.GetValueOrEmpty(src);
-    }
-
-    public IReadOnlyList<CrowdControlEvent> GetCrowdControlData(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetCrowdControlData(evt.ContentID);
-            }
-        }
-        return GetCrowdControlData(skillID.ID);
     }
     /// <summary>
     /// Returns list of crowd control events done by skill id
@@ -588,19 +438,6 @@ partial class CombatData
     {
         return _instantCastData.GetValueOrEmpty(caster);
     }
-
-    public IReadOnlyList<InstantCastEvent> GetInstantCastData(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetInstantCastData(evt.ContentID);
-            }
-        }
-        return GetInstantCastData(skillID.ID);
-    }
     /// <summary>
     /// Returns list of instant cast events done by Agent
     /// </summary>
@@ -615,18 +452,6 @@ partial class CombatData
     public IReadOnlyList<WeaponSwapEvent> GetWeaponSwapData(AgentItem caster)
     {
         return _weaponSwapData.GetValueOrEmpty(caster);
-    }
-    public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(IDAndGUID skillID)
-    {
-        if (skillID.GUID != null)
-        {
-            var evt = GetSkillGUIDEvent(skillID.GUID.Value);
-            if (evt != null)
-            {
-                return GetAnimatedCastData(evt.ContentID);
-            }
-        }
-        return GetAnimatedCastData(skillID.ID);
     }
     /// <summary>
     /// Returns list of cast events from skill
