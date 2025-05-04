@@ -56,6 +56,7 @@ public partial class CombatData
 
     public readonly bool HasBreakbarDamageData = false;
     public readonly bool HasEffectData = false;
+    public readonly bool HasSpeciesAndSkillGUIDs = false;
 
     private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
     {
@@ -543,7 +544,8 @@ public partial class CombatData
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
-        
+        HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
         skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
         
