@@ -3,6 +3,7 @@
 #pragma warning disable CA1823 // Unused field
 internal static class EncounterImages
 {
+    private const string GW2LogProofsURL = "https://raw.githubusercontent.com/baaron4/GW2-Elite-Insights-Parser/refs/heads/master/GW2EICustomAssets/FromGW2LogProofs/";
     #region GENERICS
 
     internal const string EncounterIconGeneric = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
@@ -13,14 +14,14 @@ internal static class EncounterImages
     #region FRACTALS
 
     // Encounters Icons
-    internal const string EncounterIconMAMA = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/MAMA.png?raw=true";
+    internal const string EncounterIconMAMA = $"{GW2LogProofsURL}MAMA.png";
     internal const string EncounterIconSiax = "https://assets.gw2dat.com/665772.png";
     internal const string EncounterIconEnsolyss = "https://assets.gw2dat.com/665770.png";
-    internal const string EncounterIconSkorvald = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Skorvald.png?raw=true";
-    internal const string EncounterIconArtsariiv = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Artsariiv.png?raw=true";
-    internal const string EncounterIconArkk = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Arkk.png?raw=true";
+    internal const string EncounterIconSkorvald = $"{GW2LogProofsURL}Skorvald.png";
+    internal const string EncounterIconArtsariiv = $"{GW2LogProofsURL}Artsariiv.png";
+    internal const string EncounterIconArkk = $"{GW2LogProofsURL}Arkk.png";
     internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
-    internal const string EncounterIconKanaxai = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Kanaxai.png?raw=true";
+    internal const string EncounterIconKanaxai = $"{GW2LogProofsURL}Kanaxai.png";
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://wiki.guildwars2.com/images/5/5a/Mini_Eparch.png";
 
@@ -61,14 +62,14 @@ internal static class EncounterImages
     internal const string EncounterIconCairn = "https://assets.gw2dat.com/1633961.png";
     internal const string EncounterIconMursaatOverseer = "https://assets.gw2dat.com/1633963.png";
     internal const string EncounterIconSamarog = "https://assets.gw2dat.com/1633967.png";
-    internal const string EncounterIconDeimos = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Deimos.png?raw=true";
+    internal const string EncounterIconDeimos = $"{GW2LogProofsURL}Deimos.png";
     internal const string EncounterIconSoullessHorror = "https://assets.gw2dat.com/1894936.png";
-    internal const string EncounterIconRiver = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/River_Of_Souls.png?raw=true";
-    internal const string EncounterIconStatueOfDarkness = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Eyes_Of_Fate.png?raw=true";
-    internal const string EncounterIconStatueOfDeath = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Eater_Of_Souls.png?raw=true";
+    internal const string EncounterIconRiver = $"{GW2LogProofsURL}River_Of_Souls.png";
+    internal const string EncounterIconStatueOfDarkness = $"{GW2LogProofsURL}Eyes_Of_Fate.png";
+    internal const string EncounterIconStatueOfDeath = $"{GW2LogProofsURL}Eater_Of_Souls.png";
     internal const string EncounterIconStatueOfIce = "https://assets.gw2dat.com/1894935.png";
     internal const string EncounterIconDhuum = "https://assets.gw2dat.com/1894937.png";
-    internal const string EncounterIconConjuredAmalgamate = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Conjured_Amalgamate.png?raw=true";
+    internal const string EncounterIconConjuredAmalgamate = $"{GW2LogProofsURL}Conjured_Amalgamate.png";
     internal const string EncounterIconTwinLargos = "https://i.imgur.com/6O5MT7v.png";
     internal const string EncounterIconQadim = "https://assets.gw2dat.com/2038618.png";
     internal const string EncounterIconAdina = "https://assets.gw2dat.com/1766806.png";
