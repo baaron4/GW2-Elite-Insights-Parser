@@ -12,10 +12,7 @@ internal abstract class EffectEndEvent : AbstractEffectEvent
         if (effectEventsByTrackingID.TryGetValue(TrackingID, out var effectEvents))
         {
             EffectEvent? startEvent = effectEvents.LastOrDefault(x => x.Time <= Time);
-            if (startEvent != null)
-            {
-                startEvent.SetDynamicEndTime(this);
-            }
+            startEvent?.SetDynamicEndTime(this);
         }
     }
 }

@@ -22,7 +22,7 @@ public class EffectEventCBTS45 : EffectEvent
         return new(orientationFloats[0], orientationFloats[1], -BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
     }
 
-    internal EffectEventCBTS45(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal EffectEventCBTS45(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs) : base(evtcItem, agentData, effectGUIDs)
     {
         Orientation = ReadOrientation(evtcItem);
     }

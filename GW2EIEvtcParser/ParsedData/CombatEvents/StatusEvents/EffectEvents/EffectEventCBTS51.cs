@@ -56,10 +56,14 @@ public class EffectEventCBTS51 : EffectEvent
         return trackingIDUInt[0];
     }
 
-    internal EffectEventCBTS51(CombatItem evtcItem, AgentData agentData, Dictionary<long, List<EffectEvent>> effectEventsByTrackingID) : base(evtcItem, agentData)
+    internal EffectEventCBTS51(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs, Dictionary<long, List<EffectEvent>> effectEventsByTrackingID) : base(evtcItem, agentData, effectGUIDs)
     {
         Orientation = ReadOrientation(evtcItem);
         Duration = ReadDuration(evtcItem);
+        if (Duration == 0 && GUIDEvent.DefaultDuration > 0)
+        {
+            Duration = (long)Math.Min(GUIDEvent.DefaultDuration, int.MaxValue); // To avoid overflow, end time could be start + duration, 13 days is more than enough to cover a log's duration
+        }
         TrackingID = ReadTrackingID(evtcItem);
         OnNonStaticPlatform = evtcItem.IsFlanking > 0;
         if (TrackingID != 0)

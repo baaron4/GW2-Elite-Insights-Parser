@@ -273,7 +273,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         {
             foreach (EffectEvent effect in greenEndEffectEvents)
             {
-                bool isSuccess = effect.GUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
+                bool isSuccess = effect.GUIDEvent.ContentGUID == EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess;
                 AddSharedDestructionDecoration(p, replay, (effect.Time - greenDuration, effect.Time), isSuccess);
             }
         }

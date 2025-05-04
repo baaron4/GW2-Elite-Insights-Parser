@@ -826,15 +826,15 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         Color color = Colors.LightOrange;
         var species = new List<int>();
 
-        switch (effect.GUID)
+        switch (effect.GUIDEvent.ContentGUID)
         {
-            case var value when value == EffectGUIDs.AetherbladeHideoutFocusedDestructionGreen:
+            case var focusedDestruction when focusedDestruction == EffectGUIDs.AetherbladeHideoutFocusedDestructionGreen:
                 color = Colors.DarkGreen;
                 species.Add((int)TargetID.ScarletPhantomHP);
                 species.Add((int)TargetID.ScarletPhantomHPCM);
                 break;
-            case var value2 when value2 == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosNM:
-            case var value3 when value3 == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosCM:
+            case var chaosNM when chaosNM == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosNM:
+            case var chaosCM when chaosCM == EffectGUIDs.AetherbladeHideoutKaleidoscopicChaosCM:
                 color = Colors.LightOrange;
                 species.Add((int)TargetID.ScarletPhantomBreakbar);
                 break;

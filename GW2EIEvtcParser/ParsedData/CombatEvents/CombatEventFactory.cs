@@ -171,7 +171,7 @@ internal static class CombatEventFactory
                 metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                 break;
             case StateChange.Marker:
-                var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
+                var markerEvent = new MarkerEvent(stateChangeEvent, agentData, metaDataEvents.MarkerGUIDEventsByMarkerID);
                 if (evtcVersion.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
                 {
                     // End event
@@ -283,7 +283,7 @@ internal static class CombatEventFactory
                         {
                             return;
                         }
-                        effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
+                        effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID);
                         break;
                     case StateChange.Effect_51:
                         if (stateChangeEvent.SkillID == 0)
@@ -293,7 +293,7 @@ internal static class CombatEventFactory
                         }
                         else
                         {
-                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
+                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID, statusEvents.EffectEventsByTrackingID);
                         }
                         break;
                     default:

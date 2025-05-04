@@ -536,8 +536,6 @@ public partial class CombatData
                 _skillIds.Add(combatItem.SkillID);
             }
         }
-        _statusEvents.EffectEvents.ForEach(x => x.SetGUIDEvent(this));
-        _statusEvents.MarkerEvents.ForEach(x => x.SetGUIDEvent(this));
 
         HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
         UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);

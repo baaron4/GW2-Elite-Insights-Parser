@@ -21,9 +21,13 @@ public class MarkerEvent : StatusEvent
 
     internal bool EndNotSet => EndTime == int.MaxValue;
 
-    internal MarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal MarkerEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, MarkerGUIDEvent> markerGUIDs) : base(evtcItem, agentData)
     {
         MarkerID = evtcItem.Value;
+        if (markerGUIDs.TryGetValue(MarkerID, out var markerGUID))
+        {
+            GUIDEvent = markerGUID;
+        }
     }
 
     internal void SetEndTime(long endTime)
@@ -34,11 +38,6 @@ public class MarkerEvent : StatusEvent
             return;
         }
         EndTime = endTime;
-    }
-
-    internal void SetGUIDEvent(CombatData combatData)
-    {
-        GUIDEvent = combatData.GetMarkerGUIDEvent(MarkerID);
     }
 
 }
