@@ -140,7 +140,7 @@ partial class SingleActor
         {
             return;
         }
-        var casting = GetCastEvents(log, log.FightData.LogStart, log.FightData.LogEnd);
+        var casting = GetCastEvents(log, log.FightData.LogStart, log.FightData.FightEnd);
         int swapped = WeaponSetIDs.NoSet;
         long swappedTime = log.FightData.FightStart;
         List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
