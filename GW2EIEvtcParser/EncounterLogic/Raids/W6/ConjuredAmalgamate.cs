@@ -69,7 +69,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
-        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.EffectIDToGUID);
+        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
         if (effectIDToGUIDs.Any())
         {
             CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);

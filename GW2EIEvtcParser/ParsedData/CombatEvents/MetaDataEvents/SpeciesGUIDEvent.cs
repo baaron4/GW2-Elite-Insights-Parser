@@ -2,7 +2,7 @@
 
 public class SpeciesGUIDEvent : IDToGUIDEvent
 {
-    internal static SpeciesGUIDEvent DummSpeciesGUID = new();
+    internal static SpeciesGUIDEvent DummySpeciesGUID = new();
     internal SpeciesGUIDEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
     }

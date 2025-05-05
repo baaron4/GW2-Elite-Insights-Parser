@@ -7,13 +7,13 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal static class EncounterLogicPhaseUtils
 {
 
-    internal static List<PhaseData> GetPhasesByLogStartLogEnd(ParsedEvtcLog log)
+    internal static List<PhaseData> GetPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
         int sequence = 1;
-        foreach (var startEvent in log.CombatData.GetLogStartEvents())
+        foreach (var startEvent in log.CombatData.GetSquadCombatStartEvents())
         {
-            var logEndEvent = log.CombatData.GetLogEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
+            var logEndEvent = log.CombatData.GetSquadCombatEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
             if (logEndEvent != null)
             {
                 var fightPhase = new PhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++));

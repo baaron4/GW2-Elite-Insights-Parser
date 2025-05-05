@@ -1928,7 +1928,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         // fallback for late logs
-        if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen) != null || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+        if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
         {
             return FightData.EncounterMode.CM;
         }

@@ -17,7 +17,7 @@ public abstract class IDToGUIDEvent : MetaDataEvent
     internal IDToGUIDEvent() : base()
     {
         ContentGUID = new();
-        ContentID = -1;
+        ContentID = long.MinValue;
     }
 
 }

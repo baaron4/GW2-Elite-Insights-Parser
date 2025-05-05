@@ -32,9 +32,13 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// </summary>
     public bool OnNonStaticPlatform { get; protected set; }
 
-    internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal EffectEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs) : base(evtcItem, agentData)
     {
         EffectID = evtcItem.SkillID;
+        if (effectGUIDs.TryGetValue(EffectID, out var effectGUID))
+        {
+            GUIDEvent = effectGUID;
+        }
     }
 
     internal void SetDynamicEndTime(EffectEndEvent endEvent)
@@ -201,13 +205,5 @@ public abstract class EffectEvent : AbstractEffectEvent
             end = Math.Min(target.LastAware, end);
         }
         return (start, end);
-    }
-    internal void SetGUIDEvent(CombatData combatData)
-    {
-        GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
-        if (Duration == 0 && GUIDEvent.DefaultDuration > 0)
-        {
-            Duration = (long)Math.Min(GUIDEvent.DefaultDuration, int.MaxValue); // To avoid overflow, end time could be start + duration, 13 days is more than enough to cover a log's duration
-        }
     }
 }

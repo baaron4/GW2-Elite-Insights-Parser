@@ -8,7 +8,6 @@ partial class CombatData
     {
         return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
     }
-
     public bool HasRelatedHit(long skillID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         return FindRelatedEvents(GetDamageData(skillID), time, epsilon)

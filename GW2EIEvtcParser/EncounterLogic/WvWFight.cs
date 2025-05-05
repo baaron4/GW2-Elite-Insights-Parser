@@ -77,7 +77,7 @@ internal class WvWFight : FightLogic
         }
         if (_isFromInstance && log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
         {
-            var fightPhases = GetPhasesByLogStartLogEnd(log);
+            var fightPhases = GetPhasesBySquadCombatStartEnd(log);
             fightPhases.ForEach(x =>
             {
                 x.AddTargets(phases[0].Targets.Keys, log);

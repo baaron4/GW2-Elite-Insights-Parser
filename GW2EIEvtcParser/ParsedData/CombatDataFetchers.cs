@@ -68,14 +68,14 @@ partial class CombatData
         return _metaDataEvents.InstanceStartEvent;
     }
 
-    public LogStartEvent? GetLogStartEvent()
+    public SquadCombatStartEvent? GetLogStartEvent()
     {
         return _metaDataEvents.LogStartEvent;
     }
 
-    public IReadOnlyList<LogStartEvent> GetLogStartEvents()
+    public IReadOnlyList<SquadCombatStartEvent> GetSquadCombatStartEvents()
     {
-        return _metaDataEvents.LogStartEvents;
+        return _metaDataEvents.SquadCombatStartEvents;
     }
 
     public IReadOnlyList<LogNPCUpdateEvent> GetLogNPCUpdateEvents()
@@ -83,13 +83,13 @@ partial class CombatData
         return _metaDataEvents.LogNPCUpdateEvents;
     }
 
-    public LogEndEvent? GetLogEndEvent()
+    public SquadCombatEndEvent? GetLogEndEvent()
     {
         return _metaDataEvents.LogEndEvent;
     }
-    public IReadOnlyList<LogEndEvent> GetLogEndEvents()
+    public IReadOnlyList<SquadCombatEndEvent> GetSquadCombatEndEvents()
     {
-        return _metaDataEvents.LogEndEvents;
+        return _metaDataEvents.SquadCombatEndEvents;
     }
     #endregion DATE
 
@@ -172,9 +172,9 @@ partial class CombatData
     public bool TryGetMarkerEventsByGUID(GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
         var markerGUIDEvent = GetMarkerGUIDEvent(marker);
-        if (markerGUIDEvent != null)
+        markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
+        if (markerEvents.Count > 0)
         {
-            markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
             return true;
         }
         markerEvents = null;
@@ -266,12 +266,10 @@ partial class CombatData
     }
     #endregion LAST90
     #region BUFFS
-
     public IReadOnlyList<BuffEvent> GetBuffData(long buffID)
     {
         return _buffData.GetValueOrEmpty(buffID);
     }
-
     public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyData(long buffID)
     {
         return _buffApplyData.GetValueOrEmpty(buffID);
@@ -285,7 +283,6 @@ partial class CombatData
     {
         return _buffDataBySrc.GetValueOrEmpty(src);
     }
-
     /// <summary>
     /// Returns list of buff events applied on agent for given id
     /// </summary>
@@ -300,7 +297,6 @@ partial class CombatData
         }
         return [];
     }
-
     /// <summary>
     /// Returns list of buff apply events applied on agent for given id
     /// </summary>
@@ -315,7 +311,6 @@ partial class CombatData
         }
         return [];
     }
-
     public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
     {
         if (instanceID == 0)
@@ -331,12 +326,10 @@ partial class CombatData
         }
         return [];
     }
-
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID)
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
     }
-
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID, AgentItem src)
     {
         if (_buffRemoveAllDataBySrc.TryGetValue(buffID, out var bySrc))
@@ -370,7 +363,6 @@ partial class CombatData
     {
         return _breakbarDamageData.GetValueOrEmpty(src);
     }
-
     /// <summary>
     /// Returns list of breakbar damage events done by skill id
     /// </summary>
@@ -378,7 +370,6 @@ partial class CombatData
     {
         return _breakbarDamageDataById.GetValueOrEmpty(skillID);
     }
-
     /// <summary>
     /// Returns list of damage events applied by a skill
     /// </summary>
@@ -410,7 +401,6 @@ partial class CombatData
     {
         return _crowControlData.GetValueOrEmpty(src);
     }
-
     /// <summary>
     /// Returns list of crowd control events done by skill id
     /// </summary>
@@ -448,7 +438,6 @@ partial class CombatData
     {
         return _instantCastData.GetValueOrEmpty(caster);
     }
-
     /// <summary>
     /// Returns list of instant cast events done by Agent
     /// </summary>
@@ -464,7 +453,6 @@ partial class CombatData
     {
         return _weaponSwapData.GetValueOrEmpty(caster);
     }
- 
     /// <summary>
     /// Returns list of cast events from skill
     /// </summary>
@@ -503,13 +491,10 @@ partial class CombatData
     public bool TryGetEffectEventsByGUID(GUID effectGUID, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         var effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
-        if (effectGUIDEvent != null)
+        effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
+        if (effectEvents.Count > 0)
         {
-            effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
-            if (effectEvents.Count > 0)
-            {
-                return true;
-            }
+            return true;
         }
         effectEvents = null;
         return false;
@@ -744,9 +729,9 @@ partial class CombatData
     }
     #endregion EFFECTS
     #region GUIDS
-    public EffectGUIDEvent? GetEffectGUIDEvent(GUID effectGUID)
+    public EffectGUIDEvent GetEffectGUIDEvent(GUID effectGUID)
     {
-        return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out var evt) ? evt : null;
+        return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out var evt) ? evt : EffectGUIDEvent.DummyEffectGUID;
     }
 
     internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
@@ -766,27 +751,27 @@ partial class CombatData
 
     public SkillGUIDEvent? GetSkillGUIDEvent(GUID skill)
     {
-        return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : null;
+        return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
-    internal SkillGUIDEvent GetSkillGUIDEvent(long skillID)
+    internal SkillGUIDEvent? GetSkillGUIDEvent(long skillID)
     {
-        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : SkillGUIDEvent.DummySkillGUID;
+        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
     public SpeciesGUIDEvent? GetSpeciesGUIDEvent(GUID species)
     {
-        return _metaDataEvents.SpeciesGUIDEventsByGUID.TryGetValue(species, out var evt) ? evt : null;
+        return _metaDataEvents.SpeciesGUIDEventsByGUID.TryGetValue(species, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SpeciesGUIDEvent.DummySpeciesGUID : null;
     }
 
-    internal SpeciesGUIDEvent GetSpeciesGUIDEvent(long speciesID)
+    internal SpeciesGUIDEvent? GetSpeciesGUIDEvent(long speciesID)
     {
-        return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : SpeciesGUIDEvent.DummSpeciesGUID;
+        return _metaDataEvents.SpeciesGUIDEventsBySpeciesID.TryGetValue(speciesID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SpeciesGUIDEvent.DummySpeciesGUID : null;
     }
 
-    public MarkerGUIDEvent? GetMarkerGUIDEvent(GUID marker)
+    public MarkerGUIDEvent GetMarkerGUIDEvent(GUID marker)
     {
-        return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out var evt) ? evt : null;
+        return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
 
     internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)

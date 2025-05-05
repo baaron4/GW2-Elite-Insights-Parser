@@ -55,13 +55,13 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
-                var logStartEvent = new LogStartEvent(stateChangeEvent);
-                metaDataEvents.LogStartEvents.Add(logStartEvent);
-                if (metaDataEvents.LogStartEvent != null || (metaDataEvents.LogEndEvent != null && metaDataEvents.LogEndEvent.ServerUnixTimeStamp <= logStartEvent.ServerUnixTimeStamp))
+                var squadCombatStart = new SquadCombatStartEvent(stateChangeEvent);
+                metaDataEvents.SquadCombatStartEvents.Add(squadCombatStart);
+                if (metaDataEvents.LogStartEvent != null || (metaDataEvents.LogEndEvent != null && metaDataEvents.LogEndEvent.ServerUnixTimeStamp <= squadCombatStart.ServerUnixTimeStamp))
                 {
                     break;
                 }
-                metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
+                metaDataEvents.LogStartEvent = new SquadCombatStartEvent(stateChangeEvent);
                 break;
             case StateChange.LogNPCUpdate:
                 metaDataEvents.LogNPCUpdateEvents.Add(new LogNPCUpdateEvent(stateChangeEvent, agentData));
@@ -71,9 +71,9 @@ internal static class CombatEventFactory
                 {
                     return;
                 }
-                var logEndEvent = new LogEndEvent(stateChangeEvent);
-                metaDataEvents.LogEndEvent = logEndEvent;
-                metaDataEvents.LogEndEvents.Add(logEndEvent);
+                var squadCombatEndEvent = new SquadCombatEndEvent(stateChangeEvent);
+                metaDataEvents.LogEndEvent = squadCombatEndEvent;
+                metaDataEvents.SquadCombatEndEvents.Add(squadCombatEndEvent);
                 break;
             case StateChange.MaxHealthUpdate:
                 var maxHealthEvt = new MaxHealthUpdateEvent(stateChangeEvent, agentData);
@@ -171,7 +171,7 @@ internal static class CombatEventFactory
                 metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                 break;
             case StateChange.Marker:
-                var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
+                var markerEvent = new MarkerEvent(stateChangeEvent, agentData, metaDataEvents.MarkerGUIDEventsByMarkerID);
                 if (evtcVersion.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
                 {
                     // End event
@@ -283,7 +283,7 @@ internal static class CombatEventFactory
                         {
                             return;
                         }
-                        effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData);
+                        effectEvt = new EffectEventCBTS45(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID);
                         break;
                     case StateChange.Effect_51:
                         if (stateChangeEvent.SkillID == 0)
@@ -293,7 +293,7 @@ internal static class CombatEventFactory
                         }
                         else
                         {
-                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
+                            effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID, statusEvents.EffectEventsByTrackingID);
                         }
                         break;
                     default:
@@ -313,7 +313,7 @@ internal static class CombatEventFactory
                     Add(statusEvents.EffectEventsByDst!, effectEvt.Dst, effectEvt);
                 }
                 break;
-            case StateChange.EffectIDToGUID:
+            case StateChange.IDToGUID:
                 if (evtcVersion.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                 {
                     switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))

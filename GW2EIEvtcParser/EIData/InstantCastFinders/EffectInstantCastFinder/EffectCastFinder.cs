@@ -32,7 +32,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     protected virtual AgentItem GetOtherKeyAgent(EffectEvent effectEvent)
     {
-        return effectEvent.IsAroundDst? effectEvent.Dst: ParserHelper._unknownAgent;
+        return effectEvent.IsAroundDst ? effectEvent.Dst : ParserHelper._unknownAgent;
     }
 
     public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)
@@ -140,9 +140,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
-        var testGUIDs = test.Select(x => x.GUIDEvent.ContentGUID);
+        var testGUIDs = test.Select(x => x.GUIDEvent);
         var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
-        var test2GUIDs = test2.Select(x => x.GUIDEvent.ContentGUID);
+        var test2GUIDs = test2.Select(x => x.GUIDEvent);
         return true;
     }
 
@@ -162,37 +162,34 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
         var res = new List<InstantCastEvent>();
         var effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
-        if (effectGUIDEvent != null)
+        var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
+        foreach (var group in effects)
         {
-            var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
-            foreach (var group in effects)
+            if (group.Key.IsUnknown)
             {
-                if (group.Key.IsUnknown)
+                continue;
+            }
+            long lastTime = int.MinValue;
+            foreach (EffectEvent effectEvent in group)
+            {
+                if (CheckCondition(effectEvent, combatData, agentData, skillData))
                 {
-                    continue;
-                }
-                long lastTime = int.MinValue;
-                foreach (EffectEvent effectEvent in group)
-                {
-                    if (CheckCondition(effectEvent, combatData, agentData, skillData))
+                    if (effectEvent.Time - lastTime < ICD)
                     {
-                        if (effectEvent.Time - lastTime < ICD)
-                        {
-                            lastTime = effectEvent.Time;
-                            continue;
-                        }
                         lastTime = effectEvent.Time;
-                        var caster = group.Key;
-                        if (_speciesId > 0 && caster.IsUnamedSpecies())
-                        {
-                            AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
-                            if (agent != null)
-                            {
-                                caster = agent;
-                            }
-                        }
-                        res.Add(new InstantCastEvent(GetTime(effectEvent, caster!, combatData), skillData.Get(SkillID), caster!));
+                        continue;
                     }
+                    lastTime = effectEvent.Time;
+                    var caster = group.Key;
+                    if (_speciesId > 0 && caster.IsUnamedSpecies())
+                    {
+                        AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
+                        if (agent != null)
+                        {
+                            caster = agent;
+                        }
+                    }
+                    res.Add(new InstantCastEvent(GetTime(effectEvent, caster!, combatData), skillData.Get(SkillID), caster!));
                 }
             }
         }

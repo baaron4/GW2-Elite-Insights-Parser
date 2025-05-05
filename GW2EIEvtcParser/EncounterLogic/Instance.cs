@@ -107,7 +107,7 @@ internal class Instance : FightLogic
             phases = base.GetPhases(log, requirePhases);
             if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
             {
-                var fightPhases = GetPhasesByLogStartLogEnd(log);
+                var fightPhases = GetPhasesBySquadCombatStartEnd(log);
                 fightPhases.ForEach(x =>
                 {
                     x.AddTargets(phases[0].Targets.Keys, log);
