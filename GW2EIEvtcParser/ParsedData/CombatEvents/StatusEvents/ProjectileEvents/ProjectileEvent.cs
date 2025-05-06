@@ -6,12 +6,13 @@ namespace GW2EIEvtcParser.ParsedData;
 public class ProjectileEvent : StatusEvent
 {
     public readonly Vector3 Origin = new(0, 0, 0);
-    public readonly long SkillID;
+    public readonly SkillItem Skill;
+    public long SkillID => Skill.ID;
 
     private readonly List<ProjectileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<ProjectileLaunchEvent> LaunchEvents => _launchEvents;
     public ProjectileRemoveEvent? RemoveEvent { get; private set; }
-    internal ProjectileEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal ProjectileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[3 * sizeof(float)]);
         // 2 
@@ -30,7 +31,7 @@ public class ProjectileEvent : StatusEvent
                     );
             }
         }
-        SkillID = evtcItem.BuffDmg;
+        Skill = skillData.Get(evtcItem.BuffDmg);
         /*
             iff -> (float*)f[1] something to do with range, maybe you can find out
             shields/offcycle -> flags as per game. DE rifle 4 change one of them, thats all i know
