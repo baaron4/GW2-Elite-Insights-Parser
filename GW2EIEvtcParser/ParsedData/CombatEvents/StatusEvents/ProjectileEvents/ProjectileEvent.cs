@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class ProjectileEvent : StatusEvent
 {
-    public readonly Vector3 Origin = new(0, 0, 0);
+    public readonly Vector3 Origin;
     public readonly SkillItem Skill;
     public long SkillID => Skill.ID;
 

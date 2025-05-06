@@ -422,9 +422,10 @@ internal static class CombatEventFactory
                     if (startEvent != null)
                     {
                         startEvent.SetRemoveEvent(projectileRemoveEvent);
-                        if (projectileRemoveEvent.MaybeHitAnAgent)
+                        if (projectileRemoveEvent.DidDamage)
                         {
-                            Add(statusEvents.ProjectileRemoveEventsByDst, projectileRemoveEvent.GuessedHitAgent, projectileRemoveEvent);
+                            Add(statusEvents.ProjectileDamagingEventsBySrc, projectileRemoveEvent.DamagingAgent, startEvent);
+                            Add(statusEvents.ProjectileDamagingEventsByDst, projectileRemoveEvent.DamagedAgent, startEvent);
                         }
                     }
                 }

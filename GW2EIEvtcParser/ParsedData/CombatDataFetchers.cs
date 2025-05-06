@@ -792,9 +792,13 @@ partial class CombatData
     {
         return _statusEvents.ProjectileLaunchEventsByDst.GetValueOrEmpty(dst);
     }
-    public IReadOnlyList<ProjectileRemoveEvent> GetProjectileRemoveEventsByDst(AgentItem dst)
+    public IReadOnlyList<ProjectileEvent> GetProjectileDamagingEventsByDst(AgentItem dst)
     {
-        return _statusEvents.ProjectileRemoveEventsByDst.GetValueOrEmpty(dst);
+        return _statusEvents.ProjectileDamagingEventsByDst.GetValueOrEmpty(dst);
+    }
+    public IReadOnlyList<ProjectileEvent> GetProjectileDamagingEventsBySrc(AgentItem src)
+    {
+        return _statusEvents.ProjectileDamagingEventsBySrc.GetValueOrEmpty(src);
     }
     #endregion
 }

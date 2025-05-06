@@ -7,13 +7,14 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class ProjectileLaunchEvent : TimeCombatEvent
 {
-    public bool LaunchedTowardsAgent => _targetedAgent != null;
+    public bool LaunchedTowardsAgent => _targetedAgent != null && !_targetedAgent.IsNonIdentifiedSpecies();
     private readonly AgentItem? _targetedAgent = null;
     public AgentItem TargetedAgent => LaunchedTowardsAgent ? _targetedAgent! : _unknownAgent;
 
-    public readonly Vector3 TargetPosition = new(0, 0, 0);
+    public readonly Vector3 TargetPosition;
+    public readonly Vector3 LaunchPosition;
 
-    public readonly float Velocity;
+    public readonly ushort Velocity;
     public ProjectileEvent Projectile { get; internal set; }
     internal ProjectileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
@@ -26,21 +27,49 @@ public class ProjectileLaunchEvent : TimeCombatEvent
             BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
             BitConverter.Int32BitsToSingle(unchecked((int)evtcItem.OverstackValue))
         );
-        var velocityBytes = new ByteBuffer(stackalloc byte[1 * sizeof(float)]);
+        var velocityBytes = new ByteBuffer(stackalloc byte[1 * sizeof(ushort)]);
         // 0.5 
-        velocityBytes.PushNative(evtcItem.IFFByte);
+        velocityBytes.PushNative(evtcItem.IsShields);
         // 0.5
-        velocityBytes.PushNative(evtcItem.IsBuff);
-        // 0.5 
-        velocityBytes.PushNative(evtcItem.Result);
-        // 0.5
-        velocityBytes.PushNative(evtcItem.IsActivationByte);
+        velocityBytes.PushNative(evtcItem.IsOffcycle);
         unsafe
         {
             fixed (byte* ptr = velocityBytes.Span)
             {
-                var velocityFloats = (float*)ptr;
-                Velocity = velocityFloats[0];
+                var velocityUShorts = (ushort*)ptr;
+                Velocity = velocityUShorts[0];
+            }
+        }
+
+        var launchPositionBytes = new ByteBuffer(stackalloc byte[3 * sizeof(float)]);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IFFByte);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsBuff);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.Result);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsActivationByte);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsBuffRemoveByte);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsNinety);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsFifty);
+        // 0.5
+        launchPositionBytes.PushNative(evtcItem.IsMoving);
+        // 4
+        launchPositionBytes.PushNative(evtcItem.Pad);
+        unsafe
+        {
+            fixed (byte* ptr = launchPositionBytes.Span)
+            {
+                var launchPositionFloats = (float*)ptr;
+                LaunchPosition = new(
+                    launchPositionFloats[0],
+                    launchPositionFloats[1],
+                    launchPositionFloats[2]
+                );
             }
         }
     }
