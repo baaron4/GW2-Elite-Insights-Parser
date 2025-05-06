@@ -21,14 +21,11 @@ public class ProjectileLaunchEvent : TimeCombatEvent
         {
             _targetedAgent = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
         } 
-        else
-        {
-            TargetPosition = new(
-                BitConverter.Int32BitsToSingle(evtcItem.Value),
-                BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
-                BitConverter.Int32BitsToSingle(unchecked((int)evtcItem.OverstackValue))
-            );
-        }
+        TargetPosition = new(
+            BitConverter.Int32BitsToSingle(evtcItem.Value),
+            BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
+            BitConverter.Int32BitsToSingle(unchecked((int)evtcItem.OverstackValue))
+        );
         var velocityBytes = new ByteBuffer(stackalloc byte[1 * sizeof(float)]);
         // 0.5 
         velocityBytes.PushNative(evtcItem.IFFByte);
