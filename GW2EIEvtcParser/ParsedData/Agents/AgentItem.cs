@@ -179,6 +179,15 @@ public class AgentItem
         {
             return;
         }
+        AgentItem cur = master;
+        while (cur.Master != null)
+        {
+            cur = cur.Master;
+            if (cur == this)
+            {
+                return;
+            }
+        }
         Master = master;
     }
 
