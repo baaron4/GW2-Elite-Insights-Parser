@@ -353,5 +353,6 @@ public static class DamageModifierIDs
     public const int Mod_MercilessHammerDefiant = 340;
     public const int Mod_ObsidianFlesh = 341;
     public const int Mod_VengefulHammers = 342;
+    public const int Mod_ResoluteEvasion = 343;
 }
 

@@ -195,6 +195,7 @@ internal static class TraitImages
     #region Revenant
     public const string CloseQuarters = "https://render.guildwars2.com/file/4DD75C0C7D64F2A80F24955E0CAE031530554AF7/1012690.png";
     public const string DeterminedResolution = "https://render.guildwars2.com/file/F3DB5663A9C9C8630247D463050B05A12C69E542/1012699.png";
+    public const string ResoluteEvasion = "https://render.guildwars2.com/file/CA9478C84998F038B949E4BAD01CEFB70811386E/1012697.png";
     public const string DemonicResistance = "https://render.guildwars2.com/file/ECAAB201A864A10C54A2A0027C335B647F3F49DA/2029283.png";
     public const string RighteousRebel = "https://render.guildwars2.com/file/2374691454FF114724B41E1BF0CD98ECA645380A/1769996.png";
     public const string EnvoyOfSustenance = "https://render.guildwars2.com/file/52070CB9BA3EDCCE2FF8AECBE769559FE2DE7619/1058545.png";

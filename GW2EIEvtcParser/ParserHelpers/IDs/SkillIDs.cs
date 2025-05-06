@@ -4606,6 +4606,7 @@ public static class SkillIDs
     public const long SpearmarshalsSupportBombard = 74290;
     public const long RelicOfSorrowBuff = 74410;
     public const long PhantasmalLancerDamage = 74619;
+    public const long ResoluteEvasion = 74632;
     public const long SeismicCrashDamage = 74653;
     public const long GalvanicSensitivity = 74659;
     public const long FluxlanceFusillade = 74660;

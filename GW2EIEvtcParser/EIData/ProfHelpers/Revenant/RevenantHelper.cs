@@ -167,13 +167,23 @@ internal static class RevenantHelper
         // - Determined Resolution
         new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Vigor, "Determined Resolution", "-15 under vigor", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-15% under resolution", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
         new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.May2021BalanceHotFix),
-
+            .WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.May2025BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-7% under resolution", DamageSource.Incoming, -7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.May2025BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_DeterminedResolution, Resolution, "Determined Resolution", "-10% under resolution", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.May2025BalanceHotFix),
+        // Resolute Evasion
+        new BuffOnActorDamageModifier(Mod_ResoluteEvasion, ResoluteEvasion, "Resolute Evasion", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ResoluteEvasion, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.October2024Balance, GW2Builds.May2025BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_ResoluteEvasion, ResoluteEvasion, "Resolute Evasion", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ResoluteEvasion, DamageModifierMode.PvEWvW)
+            .WithBuilds(GW2Builds.May2025BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_ResoluteEvasion, ResoluteEvasion, "Resolute Evasion", "-5%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.ResoluteEvasion, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.May2025BalanceHotFix),
         // Salvation
         // - Unyielding Devotion (Spirit Buff)
         new BuffOnActorDamageModifier(Mod_UnyieldingSpirit, UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.UnyieldingDevotion, DamageModifierMode.All)
@@ -216,6 +226,7 @@ internal static class RevenantHelper
         new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.ThrillOfCombat)
             .WithBuilds(GW2Builds.February2020Balance),
         new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.SteadfastRejuvenation),
+        new Buff("Resolute Evasion", ResoluteEvasion, Source.Revenant, BuffClassification.Other, TraitImages.ResoluteEvasion),
         // Scepter
         new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, SkillImages.BlossomingAura),
         // Spear
