@@ -667,7 +667,7 @@ public class EvtcParser
                 return _enabledExtensions.ContainsKey(combatItem.Pad);
             }
         }
-        if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == IFF.Unknown && !combatItem.IsEffect)
+        if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == IFF.Unknown && !combatItem.IsEffect && !combatItem.IsProjectile)
         {
             return false;
         }
