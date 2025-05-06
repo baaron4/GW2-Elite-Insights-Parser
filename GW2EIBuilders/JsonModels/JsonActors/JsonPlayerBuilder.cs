@@ -41,7 +41,7 @@ internal static class JsonPlayerBuilder
         if (player is Player p)
         {
             jsonPlayer.HasCommanderTag = p.IsCommander(log);
-            jsonPlayer.CommanderTagStates = jsonPlayer.HasCommanderTag ? p.GetCommanderStatesNoTagValues(log).Select(x => (x.Start, x.End)).ToList() : null;
+            jsonPlayer.CommanderTagStates = jsonPlayer.HasCommanderTag ? p.GetCommanderStatesNoTagValues(log).Select(x => new List<long>() { x.Start, x.End }).ToList() : null;
         }
         //
         jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonAllySupport(player.GetToAllySupportStats(log, phase.Start, phase.End))).ToArray();

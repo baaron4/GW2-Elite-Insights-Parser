@@ -18,7 +18,7 @@ public class JsonCombatReplayMetaData
         /// Interval in ms, between which the map should be used.\n
         /// Interval[0] is start and Interval[1] is end.
         /// </summary>
-        public (long Start, long End) Interval;
+        public IReadOnlyList<long>? Interval;
     }
     /// <summary>
     /// Factor to convert inches (in game unit) to pixels (map unit)
@@ -34,7 +34,7 @@ public class JsonCombatReplayMetaData
     /// Sizes[0] is width of the map in pixel and Sizes[1] is height of the map in pixel. \n
     /// All maps in <see cref="Maps"/> are of the same pixel size.
     /// </summary>
-    public (int Width, int Height) Sizes; //TODO(Rennorb) @rename: Sizes -> Size
+    public IReadOnlyList<int>? Sizes; //TODO(Rennorb) @rename: Sizes -> Size
     /// <summary>
     /// List of maps used for Combat Replay
     /// </summary>

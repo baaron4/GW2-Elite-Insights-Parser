@@ -94,8 +94,8 @@ internal static class JsonActorBuilder
                 jsonActor.ActiveCombatMinions = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
             }
             // Health
-            jsonActor.HealthPercents = actor.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
-            jsonActor.BarrierPercents = actor.GetBarrierUpdates(log).Select(x => (x.Start, x.Value)).ToList();
+            jsonActor.HealthPercents = actor.GetHealthUpdates(log).Select(x => new List<double>() { x.Start, x.Value }).ToList();
+            jsonActor.BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new List<double>() { x.Start, x.Value }).ToList();
         }
         if (log.CanCombatReplay)
         {

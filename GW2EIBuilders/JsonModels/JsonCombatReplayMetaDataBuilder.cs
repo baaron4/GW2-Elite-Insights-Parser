@@ -13,7 +13,7 @@ internal static class JsonCombatReplayMetaDataBuilder
         var jsonCR = new JsonCombatReplayMetaData()
         {
             InchToPixel = map.GetInchToPixel(),
-            Sizes = map.GetPixelMapSize(),
+            Sizes = [map.GetPixelMapSize().width, map.GetPixelMapSize().height],
             PollingRate = ParserHelper.CombatReplayPollingRate,
             Maps = maps
         };
@@ -23,7 +23,7 @@ internal static class JsonCombatReplayMetaDataBuilder
             maps.Add(new JsonCombatReplayMetaData.CombatReplayMap()
             {
                 Url = mapItem.Link,
-                Interval = (mapItem.Start, mapItem.End)
+                Interval = [mapItem.Start, mapItem.End]
             });
         }
         //

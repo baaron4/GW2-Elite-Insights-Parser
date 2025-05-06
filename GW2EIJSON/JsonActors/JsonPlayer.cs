@@ -25,7 +25,7 @@ public class JsonPlayer : JsonActor
     /// Array[i][0] will be the time at which player got tag. \n
     /// Array[i][1] will be the time at which player lost tag.
     /// </summary>
-    public IReadOnlyList<(long GotTagTime, long LostTagTime)>? CommanderTagStates;
+    public IReadOnlyList<IReadOnlyList<long>>? CommanderTagStates;
 
     /// <summary>
     /// Profession of the player
@@ -62,7 +62,7 @@ public class JsonPlayer : JsonActor
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
     /// Only relevant for clone summoning capable specs.
     /// </summary>
-    public IReadOnlyList<(long Time, int CloneCount)>? ActiveClones;
+    public IReadOnlyList<IReadOnlyList<long>>? ActiveClones;
 
     /// <summary>
     /// Array of int[2] that represents the number of active ranger pets \n
@@ -70,7 +70,7 @@ public class JsonPlayer : JsonActor
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
     /// Only relevant for rangers.
     /// </summary>
-    public IReadOnlyList<(long Time, int PetCount)>? ActiveRangerPets;
+    public IReadOnlyList<IReadOnlyList<long>>? ActiveRangerPets;
 
     /// <summary>
     /// Array of Total DPS stats \n

@@ -7,11 +7,7 @@ namespace GW2EIJSON;
 // compile-time generated serialization logic
 [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
-    Converters = [
-        //TODO(Rennorb) @perf: Replace with explicit attributes so it doesn't need to be invoked dynamically.
-        typeof(Tuple2ToArrayConverterFactory),
-    ]
+    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
 )]
 [JsonSerializable(typeof(JsonLog))]
 public partial class JsonLogSerializerContext : JsonSerializerContext {  }
@@ -411,7 +407,7 @@ public class JsonLog
     /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
     /// </summary>
     /// <seealso cref="BuffMap"/>
-    public IReadOnlyList<(long BuffId, int StackSize)>? PresentInstanceBuffs;
+    public IReadOnlyList<IReadOnlyList<long>>? PresentInstanceBuffs;
 
     /// <summary>
     /// List of error messages given by ArcDPS

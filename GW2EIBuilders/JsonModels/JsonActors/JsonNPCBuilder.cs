@@ -53,7 +53,7 @@ internal static class JsonNPCBuilder
         // Breakbar
         if (settings.RawFormatTimelineArrays)
         {
-            jsonNPC.BreakbarPercents = npc.GetBreakbarPercentUpdates(log).Select(x => (x.Start, x.Value)).ToList();
+            jsonNPC.BreakbarPercents = npc.GetBreakbarPercentUpdates(log).Select(x => new List<double>() { x.Start, x.Value }).ToList();
         }
         return jsonNPC;
     }

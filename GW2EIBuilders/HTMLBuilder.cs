@@ -12,10 +12,7 @@ namespace GW2EIBuilders;
 // compile-time generated serialization logic
 [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
-    Converters = [
-        typeof(GW2EIJSON.Tuple2ToArrayConverterFactory),
-    ]
+    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
 )]
 [JsonSerializable(typeof(LogDataDto))]
 partial class LogDataDtoSerializerContext : JsonSerializerContext {  }

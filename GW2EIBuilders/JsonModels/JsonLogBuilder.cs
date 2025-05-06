@@ -138,7 +138,7 @@ internal static class JsonLogBuilder
         if (instanceBuffs.Any())
         {
             var presentFractalInstabilities = new List<long>(3); //TODO(Rennorb) @perf
-            var presentInstanceBuffs = new List<(long, int)>(instanceBuffs.Count);
+            var presentInstanceBuffs = new List<IReadOnlyList<long>>(instanceBuffs.Count);
             foreach ((Buff instanceBuff, int stack) in instanceBuffs)
             {
                 if (!buffMap.ContainsKey(instanceBuff.ID))
@@ -149,7 +149,7 @@ internal static class JsonLogBuilder
                 {
                     presentFractalInstabilities.Add(instanceBuff.ID);
                 }
-                presentInstanceBuffs.Add((instanceBuff.ID, stack));
+                presentInstanceBuffs.Add([instanceBuff.ID, stack]);
             }
             jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
             jsonLog.PresentInstanceBuffs = presentInstanceBuffs;

@@ -54,7 +54,7 @@ internal static class JsonBuffsUptimeBuilder
             IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.FightData.FightStart, log.FightData.FightEnd);
             if (buffDicts.TryGetValue(buffID, out var buffDict))
             {
-                var statesPerSource = new Dictionary<string, IReadOnlyList<(long Time, int BoonCount)>>(buffDict.GeneratedBy.Count);
+                var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<long>>>(buffDict.GeneratedBy.Count);
                 foreach (SingleActor source in buffDict.GeneratedBy.Keys)
                 {
                     statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]).ToList();
@@ -64,13 +64,13 @@ internal static class JsonBuffsUptimeBuilder
         }
         return jsonBuffsUptime;
     }
-    public static IEnumerable<(long Time, int BoonCount)> GetBuffStates(BuffGraph? bgm)
+    public static IEnumerable<IReadOnlyList<long>> GetBuffStates(BuffGraph? bgm)
     {
         if (bgm == null || bgm.Values.Count == 0)
         {
             return [];
         }
 
-        return bgm.Values.Select(x => (x.Start, (int)x.Value));
+        return bgm.Values.Select(x => new List<long>() { x.Start, (int)x.Value });
     }
 }

@@ -17,10 +17,7 @@ using static GW2EIEvtcParser.SkillIDs;
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
 
-using BuffInstanceItem = (
-    long buffID,
-    int stack
-);
+using BuffInstanceItem = long[];
 
 //TODO(Rennorb) @perf
 internal class LogDataDto
@@ -363,7 +360,7 @@ internal class LogDataDto
         InstanceBuffs = new(instanceBuffs.Count);
         foreach ((Buff instanceBuff, int stack) in instanceBuffs)
         {
-            InstanceBuffs.Add((instanceBuff.ID, stack));
+            InstanceBuffs.Add([instanceBuff.ID, stack]);
             usedBuffs[instanceBuff.ID] = instanceBuff;
         }
     }

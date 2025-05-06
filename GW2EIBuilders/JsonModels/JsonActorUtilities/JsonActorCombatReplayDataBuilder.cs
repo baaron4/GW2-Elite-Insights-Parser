@@ -19,37 +19,37 @@ internal static class JsonActorCombatReplayDataBuilder
         if (settings.RawFormatTimelineArrays)
         {
             //
-            var jsonPositions = new List<(float, float)>(description.Positions.Count / 2);
+            var jsonPositions = new List<IReadOnlyList<float>>(description.Positions.Count / 2);
             for (int i = 0; i < description.Positions.Count; i += 2)
             {
-                jsonPositions.Add((description.Positions[i], description.Positions[i + 1]));
+                jsonPositions.Add([description.Positions[i], description.Positions[i + 1]]);
             }
             actorCombatReplayData.Positions = jsonPositions;
             //
             if (description.Dead != null)
             {
-                var jsonDeads = new List<(long, long)>(description.Dead.Count / 2);
+                var jsonDeads = new List<IReadOnlyList<long>>(description.Dead.Count / 2);
                 for (int i = 0; i < description.Dead.Count; i += 2)
                 {
-                    jsonDeads.Add((description.Dead[i], description.Dead[i + 1]));
+                    jsonDeads.Add([description.Dead[i], description.Dead[i + 1]]);
                 }
                 actorCombatReplayData.Dead = jsonDeads;
             }
             if (description.Dc != null)
             {
-                var jsonDcs = new List<(long, long)>(description.Dc.Count / 2);
+                var jsonDcs = new List<IReadOnlyList<long>>(description.Dc.Count / 2);
                 for (int i = 0; i < description.Dc.Count; i += 2)
                 {
-                    jsonDcs.Add((description.Dc[i], description.Dc[i + 1]));
+                    jsonDcs.Add([description.Dc[i], description.Dc[i + 1]]);
                 }
                 actorCombatReplayData.Dc = jsonDcs;
             }
             if (description.Down != null)
             {
-                var jsonDowns = new List<(long, long)>(description.Down.Count / 2);
+                var jsonDowns = new List<IReadOnlyList<long>>(description.Down.Count / 2);
                 for (int i = 0; i < description.Down.Count; i += 2)
                 {
-                    jsonDowns.Add((description.Down[i], description.Down[i + 1]));
+                    jsonDowns.Add([description.Down[i], description.Down[i + 1]]);
                 }
                 actorCombatReplayData.Down = jsonDowns;
             }

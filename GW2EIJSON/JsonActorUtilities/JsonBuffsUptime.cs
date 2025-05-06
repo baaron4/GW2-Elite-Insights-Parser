@@ -70,7 +70,7 @@ public class JsonBuffsUptime
     /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight
     /// </summary>
-    public IReadOnlyList<(long Time, int BoonCount)>? States;
+    public IReadOnlyList<IReadOnlyList<long>>? States;
 
 
     /// <summary>
@@ -79,5 +79,5 @@ public class JsonBuffsUptime
     /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight
     /// </summary>
-    public IReadOnlyDictionary<string, IReadOnlyList<(long Time, int BoonCount)>>? StatesPerSource;
+    public IReadOnlyDictionary<string, IReadOnlyList<IReadOnlyList<long>>>? StatesPerSource;
 }

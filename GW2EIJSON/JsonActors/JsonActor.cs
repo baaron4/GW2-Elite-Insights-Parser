@@ -1,4 +1,6 @@
-﻿namespace GW2EIJSON;
+﻿using System.Collections.Generic;
+
+namespace GW2EIJSON;
 
 /// <summary>
 /// Base class for Players and NPCs
@@ -148,34 +150,34 @@ public abstract class JsonActor
     /// Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] \n
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
     /// </summary>
-    public IReadOnlyList<(long Time, int ConditionCount)>? ConditionsStates;
+    public IReadOnlyList<IReadOnlyList<long>>? ConditionsStates;
 
     /// <summary>
     /// Array of int[2] that represents the number of boons \n
     /// Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] \n
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight
     /// </summary>
-    public IReadOnlyList<(long Time, int BoonCount)>? BoonsStates;
+    public IReadOnlyList<IReadOnlyList<long>>? BoonsStates;
 
     /// <summary>
     /// Array of int[2] that represents the number of active combat minions \n
     /// Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] \n
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight
     /// </summary>
-    public IReadOnlyList<(long Time, int ActiveMinions)>? ActiveCombatMinions;
+    public IReadOnlyList<IReadOnlyList<long>>? ActiveCombatMinions;
 
     /// <summary>
     /// Array of double[2] that represents the health status of the actor \n
     /// Array[i][0] will be the time, Array[i][1] will be health % \n
     /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
     /// </summary>
-    public IReadOnlyList<(long Time, double Health)>? HealthPercents;
+    public IReadOnlyList<IReadOnlyList<double>>? HealthPercents;
     /// <summary>
     /// Array of double[2] that represents the barrier status of the actor \n
     /// Array[i][0] will be the time, Array[i][1] will be barrier % \n
     /// If i corresponds to the last element that means the health did not change for the remainder of the fight \n
     /// </summary>
-    public IReadOnlyList<(long Time, double Barrier)>? BarrierPercents;
+    public IReadOnlyList<IReadOnlyList<double>>? BarrierPercents;
     /// <summary>
     /// Contains combat replay related data
     /// </summary>
