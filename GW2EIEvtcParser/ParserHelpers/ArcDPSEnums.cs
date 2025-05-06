@@ -243,6 +243,9 @@ public static class ArcDPSEnums
         ArcBuild = 54,
         Glider = 55,
         StunBreak = 56,
+        ProjectileCreate = 57,
+        ProjectileLaunch = 58,
+        ProjectileRemove = 59,
         Unknown
     };
 

@@ -43,6 +43,7 @@ public class CombatItem
     public bool IsExtension => IsStateChange == StateChange.Extension || IsStateChange == StateChange.ExtensionCombat;
 
     public bool IsEffect => IsStateChange == StateChange.Effect_51 || IsStateChange == StateChange.Effect_45;
+    public bool IsProjectile => IsStateChange == StateChange.ProjectileCreate || IsStateChange == StateChange.ProjectileLaunch || IsStateChange == StateChange.ProjectileRemove;
 
     public bool IsEssentialMetadata => IsStateChange == StateChange.IDToGUID || IsStateChange == StateChange.Language 
         || IsStateChange == StateChange.GWBuild || IsStateChange == StateChange.InstanceStart 
@@ -252,6 +253,9 @@ public class CombatItem
             || IsStateChange == StateChange.Effect_51
             || IsStateChange == StateChange.Glider
             || IsStateChange == StateChange.StunBreak
+            || IsStateChange == StateChange.ProjectileCreate
+            || IsStateChange == StateChange.ProjectileLaunch
+            || IsStateChange == StateChange.ProjectileRemove
             ;
     }
 
@@ -272,6 +276,8 @@ public class CombatItem
             || IsStateChange == StateChange.Effect_45
             || IsStateChange == StateChange.LogNPCUpdate
             || IsStateChange == StateChange.Effect_51
+            || IsStateChange == StateChange.ProjectileLaunch
+            || IsStateChange == StateChange.ProjectileRemove
         ;
     }
 

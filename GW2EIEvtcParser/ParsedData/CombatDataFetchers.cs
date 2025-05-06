@@ -779,5 +779,22 @@ partial class CombatData
         return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
     #endregion GUIDS
-
+    #region PROJECTILE
+    public IReadOnlyList<ProjectileEvent> GetProjectileEventsBySrc(AgentItem src)
+    {
+        return _statusEvents.ProjectileEventsBySrc.GetValueOrEmpty(src);
+    }
+    public IReadOnlyList<ProjectileEvent> GetProjectileEventsBySkillID(long skillID)
+    {
+        return _statusEvents.ProjectileEventsBySkillID.GetValueOrEmpty(skillID);
+    }
+    public IReadOnlyList<ProjectileLaunchEvent> GetProjectileLaunchEventsByDst(AgentItem dst)
+    {
+        return _statusEvents.ProjectileLaunchEventsByDst.GetValueOrEmpty(dst);
+    }
+    public IReadOnlyList<ProjectileRemoveEvent> GetProjectileRemoveEventsByDst(AgentItem dst)
+    {
+        return _statusEvents.ProjectileRemoveEventsByDst.GetValueOrEmpty(dst);
+    }
+    #endregion
 }

@@ -390,6 +390,45 @@ internal static class CombatEventFactory
                 var stunbreakEvent = new StunBreakEvent(stateChangeEvent, agentData);
                 Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
                 break;
+            case StateChange.ProjectileCreate:
+                var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData);
+                Add(statusEvents.ProjectileEventsBySrc, projectileEvent.Src, projectileEvent);
+                Add(statusEvents.ProjectileEventsBySkillID, projectileEvent.SkillID, projectileEvent);
+                var projectileTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                Add(statusEvents.ProjectileEventsByTrackingID, projectileTrackingID, projectileEvent);
+                break;
+            case StateChange.ProjectileLaunch:
+                var projectileLaunchEvent = new ProjectileLaunchEvent(stateChangeEvent, agentData);
+                var projectileLaunchTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileLaunchTrackingID, out var projectileEvents))
+                {
+                    ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileLaunchEvent.Time);
+                    if (startEvent != null)
+                    {
+                        startEvent.AddLaunchEvent(projectileLaunchEvent);
+                        if (projectileLaunchEvent.LaunchedTowardsAgent)
+                        {
+                            Add(statusEvents.ProjectileLaunchEventsByDst, projectileLaunchEvent.TargetedAgent, projectileLaunchEvent);
+                        }
+                    }
+                }
+                break;
+            case StateChange.ProjectileRemove:
+                var projectileRemoveEvent = new ProjectileRemoveEvent(stateChangeEvent, agentData);
+                var projectileRemoveTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileRemoveTrackingID, out projectileEvents))
+                {
+                    ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileRemoveEvent.Time);
+                    if (startEvent != null)
+                    {
+                        startEvent.SetRemoveEvent(projectileRemoveEvent);
+                        if (projectileRemoveEvent.MaybeHitAnAgent)
+                        {
+                            Add(statusEvents.ProjectileRemoveEventsByDst, projectileRemoveEvent.GuessedHitAgent, projectileRemoveEvent);
+                        }
+                    }
+                }
+                break;
             default:
                 break;
         }
