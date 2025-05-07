@@ -308,6 +308,35 @@ public class CombatReplay
 
     #endregion DEBUG EFFECTS
 
+    #region DEBUG PROJECTILES
+    internal static void DebugAllProjectiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
+    {
+        var allProjectileEvents = log.CombatData.GetProjectileEvents()
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
+        foreach (ProjectileEvent projectileEvent in allProjectileEvents)
+        {
+            (long start, long end) lifeSpan = (projectileEvent.Time, projectileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < projectileEvent.LaunchEvents.Count; i++)
+            {
+                var launch = projectileEvent.LaunchEvents[i];
+                (long start, long end) trajectoryLifeSpan = (launch.Time, i != projectileEvent.LaunchEvents.Count - 1 ? projectileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
+                var velocity = launch.Velocity;
+                var direction = (launch.TargetPosition - launch.LaunchPosition);
+                direction /= direction.Length();
+                var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
+                replay.Decorations.Add(
+                    new CircleDecoration(180, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
+                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                        new ParametricPoint3D(finalPosition, trajectoryLifeSpan.end)
+                        ], 
+                        Connector.InterpolationMethod.Linear)
+                    )
+                );
+            }
+        }
+    }
+    #endregion DEBUG PROJECTILES
+
     /// <summary>
     /// Add hide based on buff's presence
     /// </summary>

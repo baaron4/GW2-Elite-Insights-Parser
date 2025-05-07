@@ -392,6 +392,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.ProjectileCreate:
                 var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData, skillData);
+                statusEvents.ProjectileEvents.Add(projectileEvent);
                 Add(statusEvents.ProjectileEventsBySrc, projectileEvent.Src, projectileEvent);
                 Add(statusEvents.ProjectileEventsBySkillID, projectileEvent.SkillID, projectileEvent);
                 var projectileTrackingID = stateChangeEvent.OverstackValue;

@@ -48,6 +48,7 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<StunBreakEvent>> StunBreakEventsBySrc = [];
 
 
+    public readonly List<ProjectileEvent> ProjectileEvents = [];
     public readonly Dictionary<AgentItem, List<ProjectileEvent>> ProjectileEventsBySrc = [];
     public readonly Dictionary<AgentItem, List<ProjectileLaunchEvent>> ProjectileLaunchEventsByDst = [];
     public readonly Dictionary<AgentItem, List<ProjectileEvent>> ProjectileDamagingEventsBySrc = [];

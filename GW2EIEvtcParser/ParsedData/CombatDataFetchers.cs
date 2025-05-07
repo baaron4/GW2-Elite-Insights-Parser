@@ -780,6 +780,11 @@ partial class CombatData
     }
     #endregion GUIDS
     #region PROJECTILE
+
+    public IReadOnlyList<ProjectileEvent> GetProjectileEvents()
+    {
+        return _statusEvents.ProjectileEvents;
+    }
     public IReadOnlyList<ProjectileEvent> GetProjectileEventsBySrc(AgentItem src)
     {
         return _statusEvents.ProjectileEventsBySrc.GetValueOrEmpty(src);
