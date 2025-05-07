@@ -50,9 +50,4 @@ public class ProjectileEvent : StatusEvent
         removeEvent.Projectile = this;
     }
 
-    internal static uint GetTrackableID(CombatItem evtcItem)
-    {
-        return evtcItem.OverstackValue;
-    }
-
 }

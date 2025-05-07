@@ -394,12 +394,12 @@ internal static class CombatEventFactory
                 var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData, skillData);
                 Add(statusEvents.ProjectileEventsBySrc, projectileEvent.Src, projectileEvent);
                 Add(statusEvents.ProjectileEventsBySkillID, projectileEvent.SkillID, projectileEvent);
-                var projectileTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                var projectileTrackingID = stateChangeEvent.OverstackValue;
                 Add(statusEvents.ProjectileEventsByTrackingID, projectileTrackingID, projectileEvent);
                 break;
             case StateChange.ProjectileLaunch:
                 var projectileLaunchEvent = new ProjectileLaunchEvent(stateChangeEvent, agentData);
-                var projectileLaunchTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                var projectileLaunchTrackingID = stateChangeEvent.SkillID;
                 if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileLaunchTrackingID, out var projectileEvents))
                 {
                     ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileLaunchEvent.Time);
@@ -415,7 +415,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.ProjectileRemove:
                 var projectileRemoveEvent = new ProjectileRemoveEvent(stateChangeEvent, agentData);
-                var projectileRemoveTrackingID = ProjectileEvent.GetTrackableID(stateChangeEvent);
+                var projectileRemoveTrackingID = stateChangeEvent.OverstackValue;
                 if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileRemoveTrackingID, out projectileEvents))
                 {
                     ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileRemoveEvent.Time);
