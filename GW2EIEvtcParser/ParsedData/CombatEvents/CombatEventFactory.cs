@@ -396,7 +396,7 @@ internal static class CombatEventFactory
                 Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
                 break;
             case StateChange.ProjectileCreate:
-                var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData, skillData);
+                var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData, skillData, metaDataEvents.ProjectileGUIDEventsByProjectileID);
                 statusEvents.ProjectileEvents.Add(projectileEvent);
                 Add(statusEvents.ProjectileEventsBySrc, projectileEvent.Src, projectileEvent);
                 Add(statusEvents.ProjectileEventsBySkillID, projectileEvent.SkillID, projectileEvent);

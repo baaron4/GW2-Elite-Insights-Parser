@@ -754,9 +754,9 @@ partial class CombatData
         return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
-    internal SkillGUIDEvent? GetSkillGUIDEvent(long skillID)
+    internal SkillGUIDEvent? GetSkillGUIDEvent(long projectileID)
     {
-        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
+        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(projectileID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
     public SpeciesGUIDEvent? GetSpeciesGUIDEvent(GUID species)
@@ -778,6 +778,15 @@ partial class CombatData
     {
         return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
+    public ProjectileGUIDEvent GetProjectileGUIDEvent(GUID projectile)
+    {
+        return _metaDataEvents.ProjectileGUIDEventsByGUID.TryGetValue(projectile, out var evt) ? evt : ProjectileGUIDEvent.DummyProjectileGUID;
+    }
+
+    internal ProjectileGUIDEvent GetProjectileGUIDEvent(long projectileID)
+    {
+        return _metaDataEvents.ProjectileGUIDEventsByProjectileID.TryGetValue(projectileID, out var evt) ? evt : ProjectileGUIDEvent.DummyProjectileGUID;
+    }
     #endregion GUIDS
     #region PROJECTILE
 
@@ -793,6 +802,11 @@ partial class CombatData
     {
         return _statusEvents.ProjectileEventsBySkillID.GetValueOrEmpty(skillID);
     }
+
+    public IReadOnlyList<ProjectileEvent> GetProjectileEventsByProjectileID(long projectileID)
+    {
+        return _statusEvents.ProjectileEventsByProjectileID.GetValueOrEmpty(projectileID);
+    }
     public IReadOnlyList<ProjectileLaunchEvent> GetProjectileLaunchEventsByDst(AgentItem dst)
     {
         return _statusEvents.ProjectileLaunchEventsByDst.GetValueOrEmpty(dst);
@@ -804,6 +818,17 @@ partial class CombatData
     public IReadOnlyList<ProjectileEvent> GetProjectileDamagingEventsBySrc(AgentItem src)
     {
         return _statusEvents.ProjectileDamagingEventsBySrc.GetValueOrEmpty(src);
+    }
+    public bool TryGetProjectileEventsByGUID(GUID projectileGUID, [NotNullWhen(true)] out IReadOnlyList<ProjectileEvent>? projectileEvents)
+    {
+        var projectileGUIDEvent = GetProjectileGUIDEvent(projectileGUID);
+        projectileEvents = GetProjectileEventsByProjectileID(projectileGUIDEvent.ContentID);
+        if (projectileEvents.Count > 0)
+        {
+            return true;
+        }
+        projectileEvents = null;
+        return false;
     }
     #endregion
 }
