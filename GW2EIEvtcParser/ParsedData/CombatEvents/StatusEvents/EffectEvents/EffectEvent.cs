@@ -13,7 +13,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public EffectGUIDEvent GUIDEvent { get; private set; } = EffectGUIDEvent.DummyEffectGUID;
+    public readonly EffectGUIDEvent GUIDEvent = EffectGUIDEvent.DummyEffectGUID;
 
     /// <summary>
     /// End of the effect, provided by an <see cref="EffectEndEvent"/>
@@ -35,7 +35,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     internal EffectEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs) : base(evtcItem, agentData)
     {
         EffectID = evtcItem.SkillID;
-        if (effectGUIDs.TryGetValue(EffectID, out var effectGUID))
+        if (effectGUIDs.TryGetValue(evtcItem.SkillID, out var effectGUID))
         {
             GUIDEvent = effectGUID;
         }

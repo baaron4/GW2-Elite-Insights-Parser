@@ -338,6 +338,11 @@ internal static class CombatEventFactory
                             metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
                             break;
+                        case ContentLocal.Missile:
+                            var projectileGUID = new ProjectileGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.ProjectileGUIDEventsByProjectileID[projectileGUID.ContentID] = projectileGUID;
+                            metaDataEvents.ProjectileGUIDEventsByGUID[projectileGUID.ContentGUID] = projectileGUID;
+                            break;
                         default:
                             break;
                     }
