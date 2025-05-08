@@ -3,7 +3,6 @@
 #pragma warning disable CA1823 // Unused field
 internal static class EncounterImages
 {
-    private const string GW2LogProofsURL = "https://raw.githubusercontent.com/baaron4/GW2-Elite-Insights-Parser/refs/heads/master/GW2EICustomAssets/FromGW2LogProofs/";
     #region GENERICS
 
     internal const string EncounterIconGeneric = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
@@ -14,14 +13,14 @@ internal static class EncounterImages
     #region FRACTALS
 
     // Encounters Icons
-    internal const string EncounterIconMAMA = $"{GW2LogProofsURL}MAMA.png";
+    internal const string EncounterIconMAMA = "https://i.imgur.com/PEAobId.png";
     internal const string EncounterIconSiax = "https://assets.gw2dat.com/665772.png";
     internal const string EncounterIconEnsolyss = "https://assets.gw2dat.com/665770.png";
-    internal const string EncounterIconSkorvald = $"{GW2LogProofsURL}Skorvald.png";
-    internal const string EncounterIconArtsariiv = $"{GW2LogProofsURL}Artsariiv.png";
-    internal const string EncounterIconArkk = $"{GW2LogProofsURL}Arkk.png";
+    internal const string EncounterIconSkorvald = "https://i.imgur.com/DImBzpy.png";
+    internal const string EncounterIconArtsariiv = "https://i.imgur.com/eYYQWEJ.png";
+    internal const string EncounterIconArkk = "https://i.imgur.com/XkLP4U8.png";
     internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
-    internal const string EncounterIconKanaxai = $"{GW2LogProofsURL}Kanaxai.png";
+    internal const string EncounterIconKanaxai = "https://i.imgur.com/Q0qgy0t.png";
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://wiki.guildwars2.com/images/5/5a/Mini_Eparch.png";
 
@@ -57,19 +56,19 @@ internal static class EncounterImages
     internal const string EncounterIconMatthias = "https://assets.gw2dat.com/1377391.png";
     internal const string EncounterIconEscort = "https://assets.gw2dat.com/1451172.png";
     internal const string EncounterIconKeepConstruct = "https://assets.gw2dat.com/1451173.png";
-    internal const string EncounterIconTwistedCastle = "https://i.imgur.com/xpQnu35.png";
+    internal const string EncounterIconTwistedCastle = "https://i.imgur.com/BFFxArc.png";
     internal const string EncounterIconXera = "https://assets.gw2dat.com/1451174.png";
     internal const string EncounterIconCairn = "https://assets.gw2dat.com/1633961.png";
     internal const string EncounterIconMursaatOverseer = "https://assets.gw2dat.com/1633963.png";
     internal const string EncounterIconSamarog = "https://assets.gw2dat.com/1633967.png";
-    internal const string EncounterIconDeimos = $"{GW2LogProofsURL}Deimos.png";
+    internal const string EncounterIconDeimos = "https://i.imgur.com/KbTRa5F.png";
     internal const string EncounterIconSoullessHorror = "https://assets.gw2dat.com/1894936.png";
-    internal const string EncounterIconRiver = $"{GW2LogProofsURL}River_Of_Souls.png";
-    internal const string EncounterIconStatueOfDarkness = $"{GW2LogProofsURL}Eyes_Of_Fate.png";
-    internal const string EncounterIconStatueOfDeath = $"{GW2LogProofsURL}Eater_Of_Souls.png";
+    internal const string EncounterIconRiver = "https://i.imgur.com/Am73toQ.png";
+    internal const string EncounterIconStatueOfDarkness = "https://i.imgur.com/SMW6jZo.png";
+    internal const string EncounterIconStatueOfDeath = "https://i.imgur.com/3QJU2GV.png";
     internal const string EncounterIconStatueOfIce = "https://assets.gw2dat.com/1894935.png";
     internal const string EncounterIconDhuum = "https://assets.gw2dat.com/1894937.png";
-    internal const string EncounterIconConjuredAmalgamate = $"{GW2LogProofsURL}Conjured_Amalgamate.png";
+    internal const string EncounterIconConjuredAmalgamate = "https://i.imgur.com/oMb2kNC.png";
     internal const string EncounterIconTwinLargos = "https://i.imgur.com/6O5MT7v.png";
     internal const string EncounterIconQadim = "https://assets.gw2dat.com/2038618.png";
     internal const string EncounterIconAdina = "https://assets.gw2dat.com/1766806.png";
