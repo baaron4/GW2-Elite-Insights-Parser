@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
 {
