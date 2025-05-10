@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-row justify-content-center flex-wrap" :style="{'width': totalWidth}">
-        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 328px;">
+        <div class="d-flex flex-row justify-content-center align-items-center flex-wrap" style="max-width: 408px;">
             <div v-for="target in mainTargets">
                 <img class="icon-lg mr-2 ml-2 target-cell" 
                     :src="getTargetData(target.id).icon" 
@@ -11,7 +11,7 @@
                 <target-data-component :targetid="target.id"></target-data-component>
             </div>
         </div>
-        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" style="max-width: 330px;">           
+        <div v-show="secondaryTargets.length > 0" class="ml-4 d-flex flex-column justify-content-center align-items-center" style="max-width: 362px;">           
             <div class="d-flex flex-row justify-content-center align-items-center flex-wrap">
                 <div v-for="target in secondaryTargets">
                     <img class=" icon-ll mr-2 ml-2 target-cell" 
@@ -47,7 +47,7 @@
         template: `${template}`,
         computed: {
             totalWidth: function() {
-                let totalWidth = Math.min(this.mainTargets.length, 4) * 80 + Math.min(this.secondaryTargets.length, 5) * 72;
+                let totalWidth = Math.min(this.mainTargets.length, 5) * 80 + Math.min(this.secondaryTargets.length, 5) * 72;
                 if (this.secondaryTargets.length > 0) {
                     // margin between main and secondary
                     totalWidth += 30;
