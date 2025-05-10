@@ -339,9 +339,9 @@ internal static class CombatEventFactory
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
                             break;
                         case ContentLocal.Missile:
-                            var projectileGUID = new ProjectileGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.ProjectileGUIDEventsByProjectileID[projectileGUID.ContentID] = projectileGUID;
-                            metaDataEvents.ProjectileGUIDEventsByGUID[projectileGUID.ContentGUID] = projectileGUID;
+                            var missileGUID = new MissileGUIDEvent(stateChangeEvent, evtcVersion);
+                            metaDataEvents.MissileGUIDEventsByMissileID[missileGUID.ContentID] = missileGUID;
+                            metaDataEvents.MissileGUIDEventsByGUID[missileGUID.ContentGUID] = missileGUID;
                             break;
                         default:
                             break;
@@ -395,43 +395,43 @@ internal static class CombatEventFactory
                 var stunbreakEvent = new StunBreakEvent(stateChangeEvent, agentData);
                 Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
                 break;
-            case StateChange.ProjectileCreate:
-                var projectileEvent = new ProjectileEvent(stateChangeEvent, agentData, skillData, metaDataEvents.ProjectileGUIDEventsByProjectileID);
-                statusEvents.ProjectileEvents.Add(projectileEvent);
-                Add(statusEvents.ProjectileEventsBySrc, projectileEvent.Src, projectileEvent);
-                Add(statusEvents.ProjectileEventsBySkillID, projectileEvent.SkillID, projectileEvent);
-                var projectileTrackingID = stateChangeEvent.OverstackValue;
-                Add(statusEvents.ProjectileEventsByTrackingID, projectileTrackingID, projectileEvent);
+            case StateChange.MissileCreate:
+                var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData, metaDataEvents.MissileGUIDEventsByMissileID);
+                statusEvents.MissileEvents.Add(missileEvent);
+                Add(statusEvents.MissileEventsBySrc, missileEvent.Src, missileEvent);
+                Add(statusEvents.MissileEventsBySkillID, missileEvent.SkillID, missileEvent);
+                var missileTrackingID = stateChangeEvent.OverstackValue;
+                Add(statusEvents.MissileEventsByTrackingID, missileTrackingID, missileEvent);
                 break;
-            case StateChange.ProjectileLaunch:
-                var projectileLaunchEvent = new ProjectileLaunchEvent(stateChangeEvent, agentData);
-                var projectileLaunchTrackingID = stateChangeEvent.SkillID;
-                if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileLaunchTrackingID, out var projectileEvents))
+            case StateChange.MissileLaunch:
+                var missileLaunchEvent = new MissileLaunchEvent(stateChangeEvent, agentData);
+                var missileLaunchTrackingID = stateChangeEvent.SkillID;
+                if (statusEvents.MissileEventsByTrackingID.TryGetValue(missileLaunchTrackingID, out var missileEvents))
                 {
-                    ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileLaunchEvent.Time);
+                    MissileEvent? startEvent = missileEvents.LastOrDefault(x => x.Time <= missileLaunchEvent.Time);
                     if (startEvent != null)
                     {
-                        startEvent.AddLaunchEvent(projectileLaunchEvent);
-                        if (projectileLaunchEvent.LaunchedTowardsAgent)
+                        startEvent.AddLaunchEvent(missileLaunchEvent);
+                        if (missileLaunchEvent.LaunchedTowardsAgent)
                         {
-                            Add(statusEvents.ProjectileLaunchEventsByDst, projectileLaunchEvent.TargetedAgent, projectileLaunchEvent);
+                            Add(statusEvents.MissileLaunchEventsByDst, missileLaunchEvent.TargetedAgent, missileLaunchEvent);
                         }
                     }
                 }
                 break;
-            case StateChange.ProjectileRemove:
-                var projectileRemoveEvent = new ProjectileRemoveEvent(stateChangeEvent, agentData);
-                var projectileRemoveTrackingID = stateChangeEvent.OverstackValue;
-                if (statusEvents.ProjectileEventsByTrackingID.TryGetValue(projectileRemoveTrackingID, out projectileEvents))
+            case StateChange.MissileRemove:
+                var missileRemoveEvent = new MissileRemoveEvent(stateChangeEvent, agentData);
+                var missileRemoveTrackingID = stateChangeEvent.OverstackValue;
+                if (statusEvents.MissileEventsByTrackingID.TryGetValue(missileRemoveTrackingID, out missileEvents))
                 {
-                    ProjectileEvent? startEvent = projectileEvents.LastOrDefault(x => x.Time <= projectileRemoveEvent.Time);
+                    MissileEvent? startEvent = missileEvents.LastOrDefault(x => x.Time <= missileRemoveEvent.Time);
                     if (startEvent != null)
                     {
-                        startEvent.SetRemoveEvent(projectileRemoveEvent);
-                        if (projectileRemoveEvent.DidDamage)
+                        startEvent.SetRemoveEvent(missileRemoveEvent);
+                        if (missileRemoveEvent.DidDamage)
                         {
-                            Add(statusEvents.ProjectileDamagingEventsBySrc, projectileRemoveEvent.DamagingAgent, startEvent);
-                            Add(statusEvents.ProjectileDamagingEventsByDst, projectileRemoveEvent.DamagedAgent, startEvent);
+                            Add(statusEvents.MissileDamagingEventsBySrc, missileRemoveEvent.DamagingAgent, startEvent);
+                            Add(statusEvents.MissileDamagingEventsByDst, missileRemoveEvent.DamagedAgent, startEvent);
                         }
                     }
                 }

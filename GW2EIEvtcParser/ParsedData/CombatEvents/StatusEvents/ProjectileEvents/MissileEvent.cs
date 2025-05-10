@@ -3,19 +3,19 @@ using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class ProjectileEvent : StatusEvent
+public class MissileEvent : StatusEvent
 {
     public readonly Vector3 Origin;
     public readonly SkillItem Skill;
     public long SkillID => Skill.ID;
-    public readonly long ProjectileID;
-    public GUID ProjectileGUID => GUIDEvent.ContentGUID;
-    public readonly ProjectileGUIDEvent GUIDEvent = ProjectileGUIDEvent.DummyProjectileGUID;
+    public readonly long MissileID;
+    public GUID MissileGUID => GUIDEvent.ContentGUID;
+    public readonly MissileGUIDEvent GUIDEvent = MissileGUIDEvent.DummyMissileGUID;
 
-    private readonly List<ProjectileLaunchEvent> _launchEvents = [];
-    public IReadOnlyList<ProjectileLaunchEvent> LaunchEvents => _launchEvents;
-    public ProjectileRemoveEvent? RemoveEvent { get; private set; }
-    internal ProjectileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, IReadOnlyDictionary<long, ProjectileGUIDEvent> projectileGUIDs) : base(evtcItem, agentData)
+    private readonly List<MissileLaunchEvent> _launchEvents = [];
+    public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
+    public MissileRemoveEvent? RemoveEvent { get; private set; }
+    internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, IReadOnlyDictionary<long, MissileGUIDEvent> missileGUIDs) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[3 * sizeof(float)]);
         // 2 
@@ -39,23 +39,23 @@ public class ProjectileEvent : StatusEvent
             iff -> (float*)f[1] something to do with range, maybe you can find out
             shields/offcycle -> flags as per game. DE rifle 4 change one of them, thats all i know
         */
-        ProjectileID = evtcItem.SkillID;
-        if (projectileGUIDs.TryGetValue(ProjectileID, out var projectileGUID))
+        MissileID = evtcItem.SkillID;
+        if (missileGUIDs.TryGetValue(MissileID, out var missileGUID))
         {
-            GUIDEvent = projectileGUID;
+            GUIDEvent = missileGUID;
         }
     }
 
-    internal void AddLaunchEvent(ProjectileLaunchEvent launchEvent)
+    internal void AddLaunchEvent(MissileLaunchEvent launchEvent)
     {
         _launchEvents.Add(launchEvent);
-        launchEvent.Projectile = this;
+        launchEvent.Missile = this;
     }
 
-    internal void SetRemoveEvent(ProjectileRemoveEvent removeEvent)
+    internal void SetRemoveEvent(MissileRemoveEvent removeEvent)
     {
         RemoveEvent = removeEvent;
-        removeEvent.Projectile = this;
+        removeEvent.Missile = this;
     }
 
 }

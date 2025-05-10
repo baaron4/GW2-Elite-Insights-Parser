@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class ProjectileRemoveEvent : TimeCombatEvent
+public class MissileRemoveEvent : TimeCombatEvent
 {
     public readonly bool MaybeCollidedWithTerrain;
     public bool DidDamage => _damagedAgent != null && _damagingAgent != null;
@@ -13,8 +13,8 @@ public class ProjectileRemoveEvent : TimeCombatEvent
 
     private readonly AgentItem? _damagingAgent = null;
     public AgentItem DamagingAgent => DidDamage ? _damagingAgent! : _unknownAgent;
-    public ProjectileEvent Projectile { get; internal set; }
-    internal ProjectileRemoveEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
+    public MissileEvent Missile { get; internal set; }
+    internal MissileRemoveEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
         if (evtcItem.SrcAgent != 0)
         {

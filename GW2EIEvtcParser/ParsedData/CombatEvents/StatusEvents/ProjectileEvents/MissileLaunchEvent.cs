@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class ProjectileLaunchEvent : TimeCombatEvent
+public class MissileLaunchEvent : TimeCombatEvent
 {
     public bool LaunchedTowardsAgent => _targetedAgent != null && !_targetedAgent.IsNonIdentifiedSpecies();
     private readonly AgentItem? _targetedAgent = null;
@@ -15,8 +15,8 @@ public class ProjectileLaunchEvent : TimeCombatEvent
     public readonly Vector3 LaunchPosition;
 
     public readonly ushort Velocity;
-    public ProjectileEvent Projectile { get; internal set; }
-    internal ProjectileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
+    public MissileEvent Missile { get; internal set; }
+    internal MissileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
         if (evtcItem.DstAgent != 0)
         {

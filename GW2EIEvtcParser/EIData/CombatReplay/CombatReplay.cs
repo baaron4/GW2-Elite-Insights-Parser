@@ -308,18 +308,18 @@ public class CombatReplay
 
     #endregion DEBUG EFFECTS
 
-    #region DEBUG PROJECTILES
-    internal static void DebugAllProjectiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
+    #region DEBUG MISSILES
+    internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
     {
-        var allProjectileEvents = log.CombatData.GetProjectileEvents()
+        var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
-        foreach (ProjectileEvent projectileEvent in allProjectileEvents)
+        foreach (MissileEvent missileEvent in allMissileEvents)
         {
-            (long start, long end) lifeSpan = (projectileEvent.Time, projectileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
-            for (int i = 0; i < projectileEvent.LaunchEvents.Count; i++)
+            (long start, long end) lifeSpan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
             {
-                var launch = projectileEvent.LaunchEvents[i];
-                (long start, long end) trajectoryLifeSpan = (launch.Time, i != projectileEvent.LaunchEvents.Count - 1 ? projectileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
+                var launch = missileEvent.LaunchEvents[i];
+                (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
                 var velocity = launch.Velocity;
                 var direction = (launch.TargetPosition - launch.LaunchPosition);
                 direction /= direction.Length();
@@ -335,7 +335,7 @@ public class CombatReplay
             }
         }
     }
-    #endregion DEBUG PROJECTILES
+    #endregion DEBUG MISSILES
 
     /// <summary>
     /// Add hide based on buff's presence

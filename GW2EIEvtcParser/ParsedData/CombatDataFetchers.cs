@@ -754,9 +754,9 @@ partial class CombatData
         return _metaDataEvents.SkillGUIDEventsByGUID.TryGetValue(skill, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
-    internal SkillGUIDEvent? GetSkillGUIDEvent(long projectileID)
+    internal SkillGUIDEvent? GetSkillGUIDEvent(long skillID)
     {
-        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(projectileID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
+        return _metaDataEvents.SkillGUIDEventsBySkillID.TryGetValue(skillID, out var evt) ? evt : HasSpeciesAndSkillGUIDs ? SkillGUIDEvent.DummySkillGUID : null;
     }
 
     public SpeciesGUIDEvent? GetSpeciesGUIDEvent(GUID species)
@@ -778,57 +778,57 @@ partial class CombatData
     {
         return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
-    public ProjectileGUIDEvent GetProjectileGUIDEvent(GUID projectile)
+    public MissileGUIDEvent GetMissileGUIDEvent(GUID missile)
     {
-        return _metaDataEvents.ProjectileGUIDEventsByGUID.TryGetValue(projectile, out var evt) ? evt : ProjectileGUIDEvent.DummyProjectileGUID;
+        return _metaDataEvents.MissileGUIDEventsByGUID.TryGetValue(missile, out var evt) ? evt : MissileGUIDEvent.DummyMissileGUID;
     }
 
-    internal ProjectileGUIDEvent GetProjectileGUIDEvent(long projectileID)
+    internal MissileGUIDEvent GetMissileGUIDEvent(long missileID)
     {
-        return _metaDataEvents.ProjectileGUIDEventsByProjectileID.TryGetValue(projectileID, out var evt) ? evt : ProjectileGUIDEvent.DummyProjectileGUID;
+        return _metaDataEvents.MissileGUIDEventsByMissileID.TryGetValue(missileID, out var evt) ? evt : MissileGUIDEvent.DummyMissileGUID;
     }
     #endregion GUIDS
-    #region PROJECTILE
+    #region MISSILE
 
-    public IReadOnlyList<ProjectileEvent> GetProjectileEvents()
+    public IReadOnlyList<MissileEvent> GetMissileEvents()
     {
-        return _statusEvents.ProjectileEvents;
+        return _statusEvents.MissileEvents;
     }
-    public IReadOnlyList<ProjectileEvent> GetProjectileEventsBySrc(AgentItem src)
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySrc(AgentItem src)
     {
-        return _statusEvents.ProjectileEventsBySrc.GetValueOrEmpty(src);
+        return _statusEvents.MissileEventsBySrc.GetValueOrEmpty(src);
     }
-    public IReadOnlyList<ProjectileEvent> GetProjectileEventsBySkillID(long skillID)
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySkillID(long skillID)
     {
-        return _statusEvents.ProjectileEventsBySkillID.GetValueOrEmpty(skillID);
+        return _statusEvents.MissileEventsBySkillID.GetValueOrEmpty(skillID);
     }
 
-    public IReadOnlyList<ProjectileEvent> GetProjectileEventsByProjectileID(long projectileID)
+    public IReadOnlyList<MissileEvent> GetMissileEventsByMissileID(long missileID)
     {
-        return _statusEvents.ProjectileEventsByProjectileID.GetValueOrEmpty(projectileID);
+        return _statusEvents.MissileEventsByMissileID.GetValueOrEmpty(missileID);
     }
-    public IReadOnlyList<ProjectileLaunchEvent> GetProjectileLaunchEventsByDst(AgentItem dst)
+    public IReadOnlyList<MissileLaunchEvent> GetMissileLaunchEventsByDst(AgentItem dst)
     {
-        return _statusEvents.ProjectileLaunchEventsByDst.GetValueOrEmpty(dst);
+        return _statusEvents.MissileLaunchEventsByDst.GetValueOrEmpty(dst);
     }
-    public IReadOnlyList<ProjectileEvent> GetProjectileDamagingEventsByDst(AgentItem dst)
+    public IReadOnlyList<MissileEvent> GetMissileDamagingEventsByDst(AgentItem dst)
     {
-        return _statusEvents.ProjectileDamagingEventsByDst.GetValueOrEmpty(dst);
+        return _statusEvents.MissileDamagingEventsByDst.GetValueOrEmpty(dst);
     }
-    public IReadOnlyList<ProjectileEvent> GetProjectileDamagingEventsBySrc(AgentItem src)
+    public IReadOnlyList<MissileEvent> GetMissileDamagingEventsBySrc(AgentItem src)
     {
-        return _statusEvents.ProjectileDamagingEventsBySrc.GetValueOrEmpty(src);
+        return _statusEvents.MissileDamagingEventsBySrc.GetValueOrEmpty(src);
     }
-    public bool TryGetProjectileEventsByGUID(GUID projectileGUID, [NotNullWhen(true)] out IReadOnlyList<ProjectileEvent>? projectileEvents)
+    public bool TryGetMissileEventsByGUID(GUID missileGUID, [NotNullWhen(true)] out IReadOnlyList<MissileEvent>? missileEvents)
     {
-        var projectileGUIDEvent = GetProjectileGUIDEvent(projectileGUID);
-        projectileEvents = GetProjectileEventsByProjectileID(projectileGUIDEvent.ContentID);
-        if (projectileEvents.Count > 0)
+        var missileGUIDEvent = GetMissileGUIDEvent(missileGUID);
+        missileEvents = GetMissileEventsByMissileID(missileGUIDEvent.ContentID);
+        if (missileEvents.Count > 0)
         {
             return true;
         }
-        projectileEvents = null;
+        missileEvents = null;
         return false;
     }
-    #endregion
+    #endregion MISSILE
 }
