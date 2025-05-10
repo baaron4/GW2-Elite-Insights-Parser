@@ -337,7 +337,7 @@ public abstract class FightLogic
         var noBreakbarSpecies = ForbidBreakbarPhasesFor();
         foreach (SingleActor target in Targets)
         {
-            if (target.IsAnySpecies(noBreakbarSpecies))
+            if (target.IsAnySpecies(noBreakbarSpecies) || target.AgentItem.IsPlayer)
             {
                 continue;
             }
