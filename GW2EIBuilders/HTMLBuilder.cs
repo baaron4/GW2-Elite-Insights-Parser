@@ -180,12 +180,30 @@ public class HTMLBuilder
         html.Replace("<!--${HealingExtensionJS}-->", BuildHealingExtensionJS(externalPath, cdnPath));
 
         var logData = LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink);
+        var crData = logData.CrData;
+        var graphData = logData.GraphData;
+        var healingExtData = logData.HealingStatsExtension;
+        var barrierExtData = logData.BarrierStatsExtension;
+        logData.CrData = null;
+        logData.GraphData = null;
+        logData.HealingStatsExtension = null;
+        logData.BarrierStatsExtension = null;
         _t.Log("built log data");
         //NOTE(Rennoeb): json last, because its large
         string json = JsonSerializer.Serialize(logData, LogDataDtoSerializerContext.Default.LogDataDto);
+        string jsonGraph = graphData != null ? JsonSerializer.Serialize(graphData, LogDataDtoSerializerContext.Default.ChartDataDto) : "null";
+        string jsonCR = crData != null ? JsonSerializer.Serialize(crData, LogDataDtoSerializerContext.Default.CombatReplayDto) : "null";
+        _t.Log("Serialized JSON");
+        string jsonHeal = healingExtData != null ? JsonSerializer.Serialize(healingExtData, LogDataDtoSerializerContext.Default.HealingStatsExtension) : "null";
+        _t.Log("Serialized JSON");
+        string jsonBarrier = barrierExtData != null ? JsonSerializer.Serialize(barrierExtData, LogDataDtoSerializerContext.Default.BarrierStatsExtension) : "null";
         _t.Log("Serialized JSON");
 
         html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
+        html.Replace("'${CRDataJson}'", _compressJson ? ("'" + CompressAndBase64(jsonCR) + "'") : jsonCR);
+        html.Replace("'${graphDataJson}'", _compressJson ? ("'" + CompressAndBase64(jsonGraph) + "'") : jsonGraph);
+        html.Replace("'${healingDataJson}'", _compressJson ? ("'" + CompressAndBase64(jsonHeal) + "'") : jsonHeal);
+        html.Replace("'${barrierDataJson}'", _compressJson ? ("'" + CompressAndBase64(jsonBarrier) + "'") : jsonBarrier);
         _t.Log("appended JSON");
 
         sw.Write(html);

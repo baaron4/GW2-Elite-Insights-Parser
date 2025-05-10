@@ -34,15 +34,24 @@
         initTheme();
     </script>
     <script>
-        var _logData = '${logDataJson}';
-        var logData = _logData;
+        const _logData = '${logDataJson}';
+        const _crData = '${CRDataJson}';
+        const _graphData = '${graphDataJson}';
+        const _healingStatsExtension = '${healingDataJson}';
+        const _barrierStatsExtension = '${barrierDataJson}';
+
+        let logData = _logData;
+        let crData = _crData;
+        let graphData = _graphData;
+        let healingStatsExtension = _healingStatsExtension;
+        let barrierStatsExtension = _barrierStatsExtension;
         if (window.pako) {
-            logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(logData))))
+            logData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_logData))));
+            crData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_crData))));
+            graphData = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_graphData))));
+            healingStatsExtension = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_healingStatsExtension))));
+            barrierStatsExtension = JSON.parse(new TextDecoder("utf-8").decode(pako.inflate(base64DecToArr(_barrierStatsExtension))));
         }
-        var graphData = logData.graphData;
-        var healingStatsExtension = logData.healingStatsExtension;
-        var barrierStatsExtension = logData.barrierStatsExtension;
-        var crData = logData.crData;
     </script>
     <!--${Js}-->
     <!--${CombatReplayJS}-->
