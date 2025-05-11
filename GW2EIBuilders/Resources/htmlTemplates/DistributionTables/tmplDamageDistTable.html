@@ -158,7 +158,7 @@
                     <td class="text-left" :class="getBodyClass('Skill')"
                         :data-original-title="getSkill(row).name + ' ' + getSkillID(row)">
                         <img :src="getSkill(row).icon" class="icon">
-                        {{getSkill(row).name.length > 15 ? (getSkill(row).name.slice(0, 15)) + '...': getSkill(row).name}}
+                        {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
                         {{ round3(100*getDamage(row)/dmgdist.contributedDamage) }}%
@@ -365,6 +365,12 @@
             }
         },
         computed: {
+            maxSkillCharacters: function() {
+                if (!this.actor) {
+                    return (mainComponentWidth - 1450)/10 + 25;
+                }
+                return (mainComponentWidth - 1450)/10 + 15;
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },

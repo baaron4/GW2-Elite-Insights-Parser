@@ -112,7 +112,7 @@
                 <tr v-for="row in sortData(healingdist.distribution)" :class="{hybridH: getSkill(row).healingMode === 2, conversionH: getSkill(row).healingMode === 1}">
                     <td class="text-left" :class="getBodyClass('Skill')":data-original-title="getSkillID(row)">
                         <img :src="getSkill(row).icon" class="icon">
-                        {{getSkill(row).name}}
+                        {{getSkill(row).name.length > maxSkillCharacters ? (getSkill(row).name.slice(0, maxSkillCharacters)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
                         {{ round3(100*getHealingOutput(row)/healingdist.contributedHealing) }}%
@@ -275,6 +275,12 @@
             },
         },
         computed: {
+            maxSkillCharacters: function() {
+                if (!this.actor) {
+                    return (mainComponentWidth - 1450)/10 + 50;
+                }
+                return (mainComponentWidth - 1450)/10 + 25;
+            },
             phase: function () {
                 return logData.phases[this.phaseindex];
             },
