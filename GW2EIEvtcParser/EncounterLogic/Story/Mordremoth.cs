@@ -75,7 +75,7 @@ internal class Mordremoth : StoryInstance
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new EvtcAgentException("Mordremoth not found");
+        SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
         BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, mordremoth.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (buffApply != null)
         {

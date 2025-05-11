@@ -113,7 +113,7 @@ internal class Freezie : FestivalStrikeMissionLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault() ?? throw new EvtcAgentException("Freezie not found");
+        AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault() ?? throw new MissingKeyActorsException("Freezie not found");
         HealthUpdateEvent? freezieHpUpdate = combatData.GetHealthUpdateEvents(freezie).FirstOrDefault(x => x.Time >= freezie.FirstAware);
         if ((freezieHpUpdate != null && freezieHpUpdate.HealthPercent <= 90))
         {

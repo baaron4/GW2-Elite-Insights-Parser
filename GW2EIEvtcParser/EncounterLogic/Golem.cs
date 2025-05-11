@@ -92,7 +92,7 @@ internal class Golem : FightLogic
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? throw new EvtcAgentException("Golem not found");
+        AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? throw new MissingKeyActorsException("Golem not found");
         foreach (CombatItem c in combatData)
         {
             // redirect all attacks to the main golem
@@ -175,7 +175,7 @@ internal class Golem : FightLogic
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem golem = (agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault()) ?? throw new EvtcAgentException("Golem not found");
+            AgentItem golem = (agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault()) ?? throw new MissingKeyActorsException("Golem not found");
             return GetFirstDamageEventTime(fightData, agentData, combatData, golem);
         }
         return GetGenericFightOffset(fightData);

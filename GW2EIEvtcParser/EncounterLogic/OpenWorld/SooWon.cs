@@ -57,7 +57,7 @@ internal class SooWon : OpenWorldLogic
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new EvtcAgentException("SooWon not found"));
+            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new MissingKeyActorsException("SooWon not found"));
         }
         return startToUse;
     }
