@@ -143,7 +143,7 @@ public class Buff : IVersionable
     {
         BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
         int capacity = Capacity;
-        if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity)
+        if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity && buffInfoEvent.MaxStacks > 0)
         {
             capacity = buffInfoEvent.MaxStacks;
         }
