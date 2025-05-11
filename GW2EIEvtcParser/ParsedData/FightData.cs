@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.EncounterLogic.OpenWorld;
+using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
 using static GW2EIEvtcParser.SkillIDs;
@@ -312,8 +313,16 @@ public class FightData
         if (_phases.Count == 0)
         {
             _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
+            if (_phases.Count == 0)
+            {
+                throw new InvalidOperationException("At least one phase must be present");
+            }
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
-            _phases.RemoveAll(x => x.Targets.Count == 0);
+            var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
+            if (_phases.Count == 0 && removed > 0)
+            {
+                throw new EvtcAgentException("No valid targets found for phases");
+            }
             if (_phases.Any(phase => phase.Targets.Keys.Any(target => !Logic.Targets.Contains(target))))
             {
                 throw new InvalidOperationException("Phases can only have targets");
