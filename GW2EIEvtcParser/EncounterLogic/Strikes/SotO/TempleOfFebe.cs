@@ -304,11 +304,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             TargetID.EmbodimentOfRage,
             TargetID.EmbodimentOfRegret,
         };
+        var cerus = agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
         foreach (TargetID embodimentID in embodimentIDs)
         {
             foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
             {
-                if (embodiment.FirstAware < 0)
+                if (Math.Abs(cerus.FirstAware - embodiment.FirstAware) < ServerDelayConstant)
                 {
                     switch (embodiment.ID)
                     {
@@ -333,6 +334,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         default:
                             break;
                     }
+                    break;
                 }
             }
         }
