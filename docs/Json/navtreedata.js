@@ -45,7 +45,7 @@ var NAVTREEINDEX =
 "annotated.html",
 "class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc",
 "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#afb9e8015dcf0c93b4a1a4ca45566f025",
-"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aca1eb483924c6e3cc30fb572ed40dec6",
+"class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ac99374227546838fafef550fdc3864ac",
 "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#af1dea7f6523746ef87dcd2f8d3022a77"
 ];
 

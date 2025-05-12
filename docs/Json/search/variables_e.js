@@ -5,7 +5,7 @@ var searchData=
   ['phases_2',['Phases',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aba1a656991c7a29e4b8a9f0c75482744',1,'GW2EIJSON::JsonLog']]],
   ['players_3',['Players',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a8f7d4b5ea5545c5d4339d3f74e0fd004',1,'GW2EIJSON::JsonLog']]],
   ['pollingrate_4',['PollingRate',['../class_g_w2_e_i_j_s_o_n_1_1_json_combat_replay_meta_data.html#a9f103ab4f5abb1305a116052f2bb48ce',1,'GW2EIJSON::JsonCombatReplayMetaData']]],
-  ['positions_5',['Positions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#abddcc4451c83d72520e5842a66b7a0d0',1,'GW2EIJSON::JsonActorCombatReplayData']]],
+  ['positions_5',['Positions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a4f61a9a714ea35d3c85dd390f6aa6f6c',1,'GW2EIJSON::JsonActorCombatReplayData']]],
   ['powerdamage_6',['PowerDamage',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a0581d378bc6fef3a84db91c6cad29d14',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['powerdamage1s_7',['PowerDamage1S',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a889e0f86b20a48ded084cfb1ef54b787',1,'GW2EIJSON::JsonActor']]],
   ['powerdamagetaken_8',['PowerDamageTaken',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a194778e7d37df5919af820b676b13558',1,'GW2EIJSON::JsonStatistics::JsonDefensesAll']]],
@@ -14,6 +14,6 @@ var searchData=
   ['powerdps_11',['PowerDps',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a6f2de79c1c635be8dbcf30e94e853dd1',1,'GW2EIJSON::JsonStatistics::JsonDPS']]],
   ['presence_12',['Presence',['../class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime_1_1_json_buffs_uptime_data.html#a3de8ba243388bd87a142f6a8f4e307b5',1,'GW2EIJSON::JsonBuffsUptime::JsonBuffsUptimeData']]],
   ['presentfractalinstabilities_13',['PresentFractalInstabilities',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1cc2e4ca65d247922a5805394a5498c4',1,'GW2EIJSON::JsonLog']]],
-  ['presentinstancebuffs_14',['PresentInstanceBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aef0708c2b83bc567a0d58b6bb51d43da',1,'GW2EIJSON::JsonLog']]],
+  ['presentinstancebuffs_14',['PresentInstanceBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3fce7d07b3909695f61d83701f9a668c',1,'GW2EIJSON::JsonLog']]],
   ['profession_15',['Profession',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a0e4b15622b14a94fd471a3b561ac39b1',1,'GW2EIJSON::JsonPlayer']]]
 ];

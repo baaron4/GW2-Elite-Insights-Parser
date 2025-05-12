@@ -1,9 +1,9 @@
 var searchData=
 [
   ['account_0',['Account',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a31330062483063f1e5acb9b01a2d3ac8',1,'GW2EIJSON::JsonPlayer']]],
-  ['activeclones_1',['ActiveClones',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ae6f33e240e2d72b0716eecb8e86fe721',1,'GW2EIJSON::JsonPlayer']]],
-  ['activecombatminions_2',['ActiveCombatMinions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7a24f12cc0a364a85364db31aa3acd46',1,'GW2EIJSON::JsonActor']]],
-  ['activerangerpets_3',['ActiveRangerPets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a916c43b3425fe4dc8a7336ec5a2cc091',1,'GW2EIJSON::JsonPlayer']]],
+  ['activeclones_1',['ActiveClones',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ac28410be1b1096899f457d87a9751463',1,'GW2EIJSON::JsonPlayer']]],
+  ['activecombatminions_2',['ActiveCombatMinions',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a814d96740f4a94e4b6a4276d2e52eb63',1,'GW2EIJSON::JsonActor']]],
+  ['activerangerpets_3',['ActiveRangerPets',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2a40fb029e4a214cb3eccbbb5bc13dfe',1,'GW2EIJSON::JsonPlayer']]],
   ['activetimes_4',['ActiveTimes',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#afa2cc79acd6c7badf8fdc6956771ed1d',1,'GW2EIJSON::JsonPlayer']]],
   ['actor_5',['Actor',['../class_g_w2_e_i_j_s_o_n_1_1_json_mechanics_1_1_json_mechanic.html#a0798a326d98721471a1edb868e992630',1,'GW2EIJSON::JsonMechanics::JsonMechanic']]],
   ['actorbarrier_6',['ActorBarrier',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_statistics_1_1_e_x_t_json_outgoing_barrier_statistics.html#a584a0fec448b0d147c291b8d63414e78',1,'GW2EIJSON::EXTJsonBarrierStatistics::EXTJsonOutgoingBarrierStatistics']]],

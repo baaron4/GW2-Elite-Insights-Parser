@@ -1,15 +1,15 @@
 var class_g_w2_e_i_j_s_o_n_1_1_json_player =
 [
     [ "Account", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a31330062483063f1e5acb9b01a2d3ac8", null ],
-    [ "ActiveClones", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ae6f33e240e2d72b0716eecb8e86fe721", null ],
-    [ "ActiveRangerPets", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a916c43b3425fe4dc8a7336ec5a2cc091", null ],
+    [ "ActiveClones", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ac28410be1b1096899f457d87a9751463", null ],
+    [ "ActiveRangerPets", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2a40fb029e4a214cb3eccbbb5bc13dfe", null ],
     [ "ActiveTimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#afa2cc79acd6c7badf8fdc6956771ed1d", null ],
     [ "BreakbarDamageTaken1S", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aec93fafd4f8f1f60287bab313cb36018", null ],
     [ "BuffUptimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a783014bb5f7843f708d516e6600814c3", null ],
     [ "BuffUptimesActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a10e18a8b5b12a28507b8fb301962f050", null ],
     [ "BuffVolumes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a94c31be94fa400b4daa8f1d7c0156d0a", null ],
     [ "BuffVolumesActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#add3b370f69e7647ea2c8318b66b416c3", null ],
-    [ "CommanderTagStates", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a5a4cb49929ad7123d0a3a3f592c09413", null ],
+    [ "CommanderTagStates", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a7a5eb37bc79bccea2933ca452cfeb88f", null ],
     [ "ConditionDamageTaken1S", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a610ff5a4870b1d6f4740867189d5c592", null ],
     [ "Consumables", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a8dbbc5a127335f8bf9dd641f05b2ccf7", null ],
     [ "DamageModifiers", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ae98856f262e6087931d7d5e55b9c2219", null ],

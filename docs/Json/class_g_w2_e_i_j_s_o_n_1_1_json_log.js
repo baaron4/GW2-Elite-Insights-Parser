@@ -35,7 +35,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "Phases", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aba1a656991c7a29e4b8a9f0c75482744", null ],
     [ "Players", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a8f7d4b5ea5545c5d4339d3f74e0fd004", null ],
     [ "PresentFractalInstabilities", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1cc2e4ca65d247922a5805394a5498c4", null ],
-    [ "PresentInstanceBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aef0708c2b83bc567a0d58b6bb51d43da", null ],
+    [ "PresentInstanceBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3fce7d07b3909695f61d83701f9a668c", null ],
     [ "RecordedAccountBy", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a61d15ea407f226226ff285437311ea03", null ],
     [ "RecordedBy", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aa6198c1dc2545988041a3c065e16bdc4", null ],
     [ "SkillMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad098dd22fd0d4b2fbe7075bc6e826221", null ],
