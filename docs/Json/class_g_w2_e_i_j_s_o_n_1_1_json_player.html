@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.8.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.9.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -123,13 +123,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>Group</b></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>HasCommanderTag</b></td></tr>
 <tr class="memdesc:a66c207adcd20b26b2179ec82e1ba9e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if a player has a commander tag. <br /></td></tr>
 <tr class="separator:a66c207adcd20b26b2179ec82e1ba9e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a4cb49929ad7123d0a3a3f592c09413" id="r_a5a4cb49929ad7123d0a3a3f592c09413"><td class="memItemLeft" align="right" valign="top"><a id="a5a4cb49929ad7123d0a3a3f592c09413" name="a5a4cb49929ad7123d0a3a3f592c09413"></a>
-IReadOnlyList&lt;(long GotTagTime, long LostTagTime)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>CommanderTagStates</b></td></tr>
-<tr class="memdesc:a5a4cb49929ad7123d0a3a3f592c09413"><td class="mdescLeft">&#160;</td><td class="mdescRight">If HasCommanderTag is true, will contain the states of the tag. <br  />
+<tr class="memitem:a7a5eb37bc79bccea2933ca452cfeb88f" id="r_a7a5eb37bc79bccea2933ca452cfeb88f"><td class="memItemLeft" align="right" valign="top"><a id="a7a5eb37bc79bccea2933ca452cfeb88f" name="a7a5eb37bc79bccea2933ca452cfeb88f"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>CommanderTagStates</b></td></tr>
+<tr class="memdesc:a7a5eb37bc79bccea2933ca452cfeb88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If HasCommanderTag is true, will contain the states of the tag. <br  />
 Array of int[2] that represents the commander tag status <br  />
 Array[i][0] will be the time at which player got tag. <br  />
 Array[i][1] will be the time at which player lost tag. <br /></td></tr>
-<tr class="separator:a5a4cb49929ad7123d0a3a3f592c09413"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a7a5eb37bc79bccea2933ca452cfeb88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e4b15622b14a94fd471a3b561ac39b1" id="r_a0e4b15622b14a94fd471a3b561ac39b1"><td class="memItemLeft" align="right" valign="top"><a id="a0e4b15622b14a94fd471a3b561ac39b1" name="a0e4b15622b14a94fd471a3b561ac39b1"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>Profession</b></td></tr>
 <tr class="memdesc:a0e4b15622b14a94fd471a3b561ac39b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profession of the player. <br /></td></tr>
@@ -154,20 +154,20 @@ IReadOnlyList&lt; string &gt;?&#160;</td><td class="memItemRight" valign="bottom
 When unknown, 'Unknown' value will appear <br  />
 If 2 handed weapon even indices will have "2Hand" as value. <br /></td></tr>
 <tr class="separator:a73c3b6690930f732071ab5087069eeb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6f33e240e2d72b0716eecb8e86fe721" id="r_ae6f33e240e2d72b0716eecb8e86fe721"><td class="memItemLeft" align="right" valign="top"><a id="ae6f33e240e2d72b0716eecb8e86fe721" name="ae6f33e240e2d72b0716eecb8e86fe721"></a>
-IReadOnlyList&lt;(long Time, int CloneCount)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveClones</b></td></tr>
-<tr class="memdesc:ae6f33e240e2d72b0716eecb8e86fe721"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active clones <br  />
+<tr class="memitem:ac28410be1b1096899f457d87a9751463" id="r_ac28410be1b1096899f457d87a9751463"><td class="memItemLeft" align="right" valign="top"><a id="ac28410be1b1096899f457d87a9751463" name="ac28410be1b1096899f457d87a9751463"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveClones</b></td></tr>
+<tr class="memdesc:ac28410be1b1096899f457d87a9751463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active clones <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of clones present from Array[i][0] to Array[i+1][0] <br  />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
 Only relevant for clone summoning capable specs. <br /></td></tr>
-<tr class="separator:ae6f33e240e2d72b0716eecb8e86fe721"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a916c43b3425fe4dc8a7336ec5a2cc091" id="r_a916c43b3425fe4dc8a7336ec5a2cc091"><td class="memItemLeft" align="right" valign="top"><a id="a916c43b3425fe4dc8a7336ec5a2cc091" name="a916c43b3425fe4dc8a7336ec5a2cc091"></a>
-IReadOnlyList&lt;(long Time, int PetCount)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveRangerPets</b></td></tr>
-<tr class="memdesc:a916c43b3425fe4dc8a7336ec5a2cc091"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active ranger pets <br  />
+<tr class="separator:ac28410be1b1096899f457d87a9751463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a40fb029e4a214cb3eccbbb5bc13dfe" id="r_a2a40fb029e4a214cb3eccbbb5bc13dfe"><td class="memItemLeft" align="right" valign="top"><a id="a2a40fb029e4a214cb3eccbbb5bc13dfe" name="a2a40fb029e4a214cb3eccbbb5bc13dfe"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveRangerPets</b></td></tr>
+<tr class="memdesc:a2a40fb029e4a214cb3eccbbb5bc13dfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active ranger pets <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of ranger pets present from Array[i][0] to Array[i+1][0] <br  />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
 Only relevant for rangers. <br /></td></tr>
-<tr class="separator:a916c43b3425fe4dc8a7336ec5a2cc091"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a2a40fb029e4a214cb3eccbbb5bc13dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97dfee2aa3cf9fe6ff27a518303c084b" id="r_a97dfee2aa3cf9fe6ff27a518303c084b"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html">JsonStatistics.JsonDPS</a> &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a97dfee2aa3cf9fe6ff27a518303c084b">DpsTargets</a></td></tr>
 <tr class="memdesc:a97dfee2aa3cf9fe6ff27a518303c084b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br  />
 Length == # of targets and the length of each sub array is equal to # of phases.  <br /></td></tr>
@@ -408,39 +408,39 @@ Length == # of phases.  <br /></td></tr>
 <tr class="memdesc:ae93304def3aeb260fa12d07c29850de0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage points <br  />
 Length == # of phases.  <br /></td></tr>
 <tr class="separator:ae93304def3aeb260fa12d07c29850de0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad69b8855c5a632123a6da04ed249adae inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_ad69b8855c5a632123a6da04ed249adae"><td class="memItemLeft" align="right" valign="top">
-IReadOnlyList&lt;(long Time, int ConditionCount)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ConditionsStates</b></td></tr>
-<tr class="memdesc:ad69b8855c5a632123a6da04ed249adae inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br  />
+<tr class="memitem:a2742b34879f4e8691a563369ee286778 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a2742b34879f4e8691a563369ee286778"><td class="memItemLeft" align="right" valign="top">
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ConditionsStates</b></td></tr>
+<tr class="memdesc:a2742b34879f4e8691a563369ee286778 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br  />
 If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
 . <br /></td></tr>
-<tr class="separator:ad69b8855c5a632123a6da04ed249adae inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d9d2a5d82ebf91a876765997a72a25 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a72d9d2a5d82ebf91a876765997a72a25"><td class="memItemLeft" align="right" valign="top">
-IReadOnlyList&lt;(long Time, int BoonCount)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BoonsStates</b></td></tr>
-<tr class="memdesc:a72d9d2a5d82ebf91a876765997a72a25 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br  />
+<tr class="separator:a2742b34879f4e8691a563369ee286778 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7bf645171350e485eb27946e0f8505b0"><td class="memItemLeft" align="right" valign="top">
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BoonsStates</b></td></tr>
+<tr class="memdesc:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br  />
 If i corresponds to the last element that means the status did not change for the remainder of the fight. <br /></td></tr>
-<tr class="separator:a72d9d2a5d82ebf91a876765997a72a25 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a24f12cc0a364a85364db31aa3acd46 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7a24f12cc0a364a85364db31aa3acd46"><td class="memItemLeft" align="right" valign="top">
-IReadOnlyList&lt;(long Time, int ActiveMinions)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveCombatMinions</b></td></tr>
-<tr class="memdesc:a7a24f12cc0a364a85364db31aa3acd46 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br  />
+<tr class="separator:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a814d96740f4a94e4b6a4276d2e52eb63"><td class="memItemLeft" align="right" valign="top">
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveCombatMinions</b></td></tr>
+<tr class="memdesc:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br  />
 If i corresponds to the last element that means the status did not change for the remainder of the fight. <br /></td></tr>
-<tr class="separator:a7a24f12cc0a364a85364db31aa3acd46 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c807f617504e38ae8e37dedcd072b47 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7c807f617504e38ae8e37dedcd072b47"><td class="memItemLeft" align="right" valign="top">
-IReadOnlyList&lt;(long Time, double Health)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>HealthPercents</b></td></tr>
-<tr class="memdesc:a7c807f617504e38ae8e37dedcd072b47 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br  />
+<tr class="separator:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7f88b049d563616bab149f5a5c87c679"><td class="memItemLeft" align="right" valign="top">
+IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>HealthPercents</b></td></tr>
+<tr class="memdesc:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br  />
 Array[i][0] will be the time, Array[i][1] will be health % <br  />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br  />
 . <br /></td></tr>
-<tr class="separator:a7c807f617504e38ae8e37dedcd072b47 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a938fae3ff77959d9338467bbdf79d011 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a938fae3ff77959d9338467bbdf79d011"><td class="memItemLeft" align="right" valign="top">
-IReadOnlyList&lt;(long Time, double Barrier)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BarrierPercents</b></td></tr>
-<tr class="memdesc:a938fae3ff77959d9338467bbdf79d011 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the barrier status of the actor <br  />
+<tr class="separator:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a045dcd1d37a0519524dde4d749940e8b"><td class="memItemLeft" align="right" valign="top">
+IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BarrierPercents</b></td></tr>
+<tr class="memdesc:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the barrier status of the actor <br  />
 Array[i][0] will be the time, Array[i][1] will be barrier % <br  />
 If i corresponds to the last element that means the health did not change for the remainder of the fight <br  />
 . <br /></td></tr>
-<tr class="separator:a938fae3ff77959d9338467bbdf79d011 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2b3bcc076c9fe12662d1c9ffa1fdbd4 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_af2b3bcc076c9fe12662d1c9ffa1fdbd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html">JsonActorCombatReplayData</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#af2b3bcc076c9fe12662d1c9ffa1fdbd4">CombatReplayData</a></td></tr>
 <tr class="memdesc:af2b3bcc076c9fe12662d1c9ffa1fdbd4 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains combat replay related data.  <br /></td></tr>
 <tr class="separator:af2b3bcc076c9fe12662d1c9ffa1fdbd4 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>

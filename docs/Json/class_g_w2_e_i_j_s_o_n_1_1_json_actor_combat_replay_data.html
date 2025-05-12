@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.8.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.9.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -114,32 +114,32 @@ long&#160;</td><td class="memItemRight" valign="bottom"><b>End</b></td></tr>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>IconURL</b></td></tr>
 <tr class="memdesc:add80e3f76fec25bdbf2d210f308c1611"><td class="mdescLeft">&#160;</td><td class="mdescRight">Url to the actor's icon. <br /></td></tr>
 <tr class="separator:add80e3f76fec25bdbf2d210f308c1611"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abddcc4451c83d72520e5842a66b7a0d0" id="r_abddcc4451c83d72520e5842a66b7a0d0"><td class="memItemLeft" align="right" valign="top"><a id="abddcc4451c83d72520e5842a66b7a0d0" name="abddcc4451c83d72520e5842a66b7a0d0"></a>
-IReadOnlyList&lt;(float X, float Y)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Positions</b></td></tr>
-<tr class="memdesc:abddcc4451c83d72520e5842a66b7a0d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of 2D positions in pixels. <br  />
+<tr class="memitem:a4f61a9a714ea35d3c85dd390f6aa6f6c" id="r_a4f61a9a714ea35d3c85dd390f6aa6f6c"><td class="memItemLeft" align="right" valign="top"><a id="a4f61a9a714ea35d3c85dd390f6aa6f6c" name="a4f61a9a714ea35d3c85dd390f6aa6f6c"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; float &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Positions</b></td></tr>
+<tr class="memdesc:a4f61a9a714ea35d3c85dd390f6aa6f6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of 2D positions in pixels. <br  />
 The corresponding time for a given index i is ceil(Start / JsonCombatReplayMetaData.PollingRate) * JsonCombatReplayMetaData.PollingRate + i * JsonCombatReplayMetaData.PollingRate <br /></td></tr>
-<tr class="separator:abddcc4451c83d72520e5842a66b7a0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a4f61a9a714ea35d3c85dd390f6aa6f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1fa708744f90014d3d7fe0d1fe6b46a" id="r_aa1fa708744f90014d3d7fe0d1fe6b46a"><td class="memItemLeft" align="right" valign="top"><a id="aa1fa708744f90014d3d7fe0d1fe6b46a" name="aa1fa708744f90014d3d7fe0d1fe6b46a"></a>
 IReadOnlyList&lt; float &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Orientations</b></td></tr>
 <tr class="memdesc:aa1fa708744f90014d3d7fe0d1fe6b46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of orientation angles in degree. <br  />
 The corresponding time for a given index i is ceil(Start / JsonCombatReplayMetaData.PollingRate) * JsonCombatReplayMetaData.PollingRate + i * JsonCombatReplayMetaData.PollingRate. <br  />
 Can be null. <br /></td></tr>
 <tr class="separator:aa1fa708744f90014d3d7fe0d1fe6b46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a619fa1727d0da9f57c8767afe8fece24" id="r_a619fa1727d0da9f57c8767afe8fece24"><td class="memItemLeft" align="right" valign="top"><a id="a619fa1727d0da9f57c8767afe8fece24" name="a619fa1727d0da9f57c8767afe8fece24"></a>
-IReadOnlyList&lt;(long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#acaee9fa09259b4349fcd80f23aca647a">Start</a>, long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc">End</a>)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Dead</b></td></tr>
-<tr class="memdesc:a619fa1727d0da9f57c8767afe8fece24"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is dead. <br  />
+<tr class="memitem:a792bb1f8d5e555a8e2967b90c73e38d5" id="r_a792bb1f8d5e555a8e2967b90c73e38d5"><td class="memItemLeft" align="right" valign="top"><a id="a792bb1f8d5e555a8e2967b90c73e38d5" name="a792bb1f8d5e555a8e2967b90c73e38d5"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Dead</b></td></tr>
+<tr class="memdesc:a792bb1f8d5e555a8e2967b90c73e38d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is dead. <br  />
 Can be null. <br /></td></tr>
-<tr class="separator:a619fa1727d0da9f57c8767afe8fece24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89ee253ee4efac95f698482e2b3c685f" id="r_a89ee253ee4efac95f698482e2b3c685f"><td class="memItemLeft" align="right" valign="top"><a id="a89ee253ee4efac95f698482e2b3c685f" name="a89ee253ee4efac95f698482e2b3c685f"></a>
-IReadOnlyList&lt;(long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#acaee9fa09259b4349fcd80f23aca647a">Start</a>, long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc">End</a>)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Down</b></td></tr>
-<tr class="memdesc:a89ee253ee4efac95f698482e2b3c685f"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is in downstate. <br  />
+<tr class="separator:a792bb1f8d5e555a8e2967b90c73e38d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1d4e0d8ef00179f2c0a91982f6dfe18" id="r_ab1d4e0d8ef00179f2c0a91982f6dfe18"><td class="memItemLeft" align="right" valign="top"><a id="ab1d4e0d8ef00179f2c0a91982f6dfe18" name="ab1d4e0d8ef00179f2c0a91982f6dfe18"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Down</b></td></tr>
+<tr class="memdesc:ab1d4e0d8ef00179f2c0a91982f6dfe18"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is in downstate. <br  />
 Can be null. ///. <br /></td></tr>
-<tr class="separator:a89ee253ee4efac95f698482e2b3c685f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25f6f72cc3358f1299c975e7229c532b" id="r_a25f6f72cc3358f1299c975e7229c532b"><td class="memItemLeft" align="right" valign="top"><a id="a25f6f72cc3358f1299c975e7229c532b" name="a25f6f72cc3358f1299c975e7229c532b"></a>
-IReadOnlyList&lt;(long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#acaee9fa09259b4349fcd80f23aca647a">Start</a>, long <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#a01bcd595b1041b99cd2f9716d91ca0bc">End</a>)&gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Dc</b></td></tr>
-<tr class="memdesc:a25f6f72cc3358f1299c975e7229c532b"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is disconnected/not spawned. <br  />
+<tr class="separator:ab1d4e0d8ef00179f2c0a91982f6dfe18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f8d3cb72fb96f1e085c2abcf40808c2" id="r_a3f8d3cb72fb96f1e085c2abcf40808c2"><td class="memItemLeft" align="right" valign="top"><a id="a3f8d3cb72fb96f1e085c2abcf40808c2" name="a3f8d3cb72fb96f1e085c2abcf40808c2"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>Dc</b></td></tr>
+<tr class="memdesc:a3f8d3cb72fb96f1e085c2abcf40808c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of time intervals between which the actor is disconnected/not spawned. <br  />
 Can be null. <br /></td></tr>
-<tr class="separator:a25f6f72cc3358f1299c975e7229c532b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3f8d3cb72fb96f1e085c2abcf40808c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class corresponding to an actor's combat replay data. </p>

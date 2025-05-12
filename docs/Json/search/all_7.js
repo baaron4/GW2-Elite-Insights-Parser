@@ -11,7 +11,7 @@ var searchData=
   ['healingpowerhps_8',['HealingPowerHps',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_statistics_1_1_e_x_t_json_outgoing_healing_statistics.html#a3453620480d866ed4c4d418df6d3703f',1,'GW2EIJSON::EXTJsonHealingStatistics::EXTJsonOutgoingHealingStatistics']]],
   ['healingreceived1s_9',['HealingReceived1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#acd3bb96467034d2dbe7744a0d10dc333',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
   ['healthpercentburned_10',['HealthPercentBurned',['../class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#ab0842d6f5fec2ca25764c9fc771bdaa6',1,'GW2EIJSON::JsonNPC']]],
-  ['healthpercents_11',['HealthPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7c807f617504e38ae8e37dedcd072b47',1,'GW2EIJSON::JsonActor']]],
+  ['healthpercents_11',['HealthPercents',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a7f88b049d563616bab149f5a5c87c679',1,'GW2EIJSON::JsonActor']]],
   ['hitboxheight_12',['HitboxHeight',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#ac1d45d1c96b60c59e72819eeba87e1a5',1,'GW2EIJSON::JsonActor']]],
   ['hitboxwidth_13',['HitboxWidth',['../class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#a5b6f7c0c2b730e6f54e181dba74277a5',1,'GW2EIJSON::JsonActor']]],
   ['hitcount_14',['HitCount',['../class_g_w2_e_i_j_s_o_n_1_1_json_damage_modifier_data_1_1_json_damage_modifier_item.html#a52725f5dbf9b4e660a514f18b6f84302',1,'GW2EIJSON::JsonDamageModifierData::JsonDamageModifierItem']]],
