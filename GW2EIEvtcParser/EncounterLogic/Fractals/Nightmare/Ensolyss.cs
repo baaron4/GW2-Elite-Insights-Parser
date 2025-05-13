@@ -199,7 +199,6 @@ internal class Ensolyss : Nightmare
         switch (target.ID)
         {
             case (int)TargetID.Ensolyss:
-                CombatReplay.DebugAllNPCMissiles(log, replay);
                 IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
                 Segment? percent66treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 66);
                 Segment? percent15treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 15);
