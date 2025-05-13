@@ -37,7 +37,4 @@ internal class MetaEventsContainer
 
     public readonly Dictionary<long, SkillGUIDEvent> SkillGUIDEventsBySkillID = [];
     public readonly Dictionary<GUID, SkillGUIDEvent> SkillGUIDEventsByGUID = [];
-
-    public readonly Dictionary<long, MissileGUIDEvent> MissileGUIDEventsByMissileID = [];
-    public readonly Dictionary<GUID, MissileGUIDEvent> MissileGUIDEventsByGUID = [];
 }

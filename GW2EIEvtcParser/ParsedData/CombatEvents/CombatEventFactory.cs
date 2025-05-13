@@ -338,11 +338,6 @@ internal static class CombatEventFactory
                             metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
                             break;
-                        case ContentLocal.Missile:
-                            var missileGUID = new MissileGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.MissileGUIDEventsByMissileID[missileGUID.ContentID] = missileGUID;
-                            metaDataEvents.MissileGUIDEventsByGUID[missileGUID.ContentGUID] = missileGUID;
-                            break;
                         default:
                             break;
                     }
@@ -396,7 +391,7 @@ internal static class CombatEventFactory
                 Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
                 break;
             case StateChange.MissileCreate:
-                var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData, metaDataEvents.MissileGUIDEventsByMissileID);
+                var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData);
                 statusEvents.MissileEvents.Add(missileEvent);
                 Add(statusEvents.MissileEventsBySrc, missileEvent.Src, missileEvent);
                 Add(statusEvents.MissileEventsBySkillID, missileEvent.SkillID, missileEvent);

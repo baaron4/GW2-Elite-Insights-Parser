@@ -462,7 +462,6 @@ public static class ArcDPSEnums
         Marker = 1,
         Skill = 2,
         Species = 3,
-        Missile = 4,
         Unknown
     }
     public static ContentLocal GetContentLocal(byte bt)
