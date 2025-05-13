@@ -30,7 +30,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly Vector3 TargetPosition;
     public readonly Vector3 LaunchPosition;
 
-    public readonly ushort Speed;
+    public readonly float Speed;
 
     public readonly bool IsFirstLaunch;
     public MissileEvent Missile { get; internal set; }
@@ -68,7 +68,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         var speedBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
         speedBytes.PushNative(evtcItem.IsShields);
         speedBytes.PushNative(evtcItem.IsOffcycle);
-        Speed = BitConverter.ToUInt16(speedBytes);
+        Speed = BitConverter.ToUInt16(speedBytes) / 1000.0f;
     }
 
 }

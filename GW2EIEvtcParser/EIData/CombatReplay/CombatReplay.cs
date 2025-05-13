@@ -325,7 +325,7 @@ public class CombatReplay
                 direction /= direction.Length();
                 var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
                 replay.Decorations.Add(
-                    new CircleDecoration(180, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
+                    new CircleDecoration(40, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
                         new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
                         new ParametricPoint3D(finalPosition, trajectoryLifeSpan.end)
                         ], 
@@ -346,12 +346,12 @@ public class CombatReplay
             {
                 var launch = missileEvent.LaunchEvents[i];
                 (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
-                var velocity = launch.Velocity;
+                var velocity = launch.Speed;
                 var direction = (launch.TargetPosition - launch.LaunchPosition);
                 direction /= direction.Length();
                 var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
                 replay.Decorations.Add(
-                    new CircleDecoration(180, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
+                    new CircleDecoration(40, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
                         new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
                         new ParametricPoint3D(finalPosition, trajectoryLifeSpan.end)
                         ],
