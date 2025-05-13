@@ -35,7 +35,7 @@ public abstract class AbstractEffectEvent : StatusEvent
     /// <summary>
     /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
     /// </summary>
-    public AgentItem Dst => IsAroundDst ? _dst! : _unknownAgent;
+    public AgentItem Dst => _dst ?? _unknownAgent;
 
     /// <summary>
     /// Unique id for tracking a created effect.
