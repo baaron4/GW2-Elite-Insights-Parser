@@ -335,6 +335,32 @@ public class CombatReplay
             }
         }
     }
+    internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
+    {
+        var allMissileEvents = log.CombatData.GetMissileEvents()
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.IsNPC);
+        foreach (MissileEvent missileEvent in allMissileEvents)
+        {
+            (long start, long end) lifeSpan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+            {
+                var launch = missileEvent.LaunchEvents[i];
+                (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
+                var velocity = launch.Velocity;
+                var direction = (launch.TargetPosition - launch.LaunchPosition);
+                direction /= direction.Length();
+                var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
+                replay.Decorations.Add(
+                    new CircleDecoration(180, trajectoryLifeSpan, Colors.Red, 0.5, new InterpolationConnector([
+                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                        new ParametricPoint3D(finalPosition, trajectoryLifeSpan.end)
+                        ],
+                        Connector.InterpolationMethod.Linear)
+                    )
+                );
+            }
+        }
+    }
     #endregion DEBUG MISSILES
 
     /// <summary>
