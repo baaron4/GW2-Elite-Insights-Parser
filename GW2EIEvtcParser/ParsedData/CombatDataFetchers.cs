@@ -802,10 +802,6 @@ partial class CombatData
     {
         return _statusEvents.MissileLaunchEventsByDst.GetValueOrEmpty(dst);
     }
-    public IReadOnlyList<MissileEvent> GetMissileDamagingEventsByDst(AgentItem dst)
-    {
-        return _statusEvents.MissileDamagingEventsByDst.GetValueOrEmpty(dst);
-    }
     public IReadOnlyList<MissileEvent> GetMissileDamagingEventsBySrc(AgentItem src)
     {
         return _statusEvents.MissileDamagingEventsBySrc.GetValueOrEmpty(src);
