@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net8-windows</TargetFramework>
         <LangVersion>12.0</LangVersion>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
 
