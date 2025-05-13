@@ -32,7 +32,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     protected virtual AgentItem GetOtherKeyAgent(EffectEvent effectEvent)
     {
-        return effectEvent.IsAroundDst ? effectEvent.Dst : ParserHelper._unknownAgent;
+        return effectEvent.Dst;
     }
 
     public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)

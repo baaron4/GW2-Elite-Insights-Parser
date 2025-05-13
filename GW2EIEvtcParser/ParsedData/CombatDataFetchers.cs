@@ -778,15 +778,6 @@ partial class CombatData
     {
         return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
-    public MissileGUIDEvent GetMissileGUIDEvent(GUID missile)
-    {
-        return _metaDataEvents.MissileGUIDEventsByGUID.TryGetValue(missile, out var evt) ? evt : MissileGUIDEvent.DummyMissileGUID;
-    }
-
-    internal MissileGUIDEvent GetMissileGUIDEvent(long missileID)
-    {
-        return _metaDataEvents.MissileGUIDEventsByMissileID.TryGetValue(missileID, out var evt) ? evt : MissileGUIDEvent.DummyMissileGUID;
-    }
     #endregion GUIDS
     #region MISSILE
 
@@ -811,24 +802,9 @@ partial class CombatData
     {
         return _statusEvents.MissileLaunchEventsByDst.GetValueOrEmpty(dst);
     }
-    public IReadOnlyList<MissileEvent> GetMissileDamagingEventsByDst(AgentItem dst)
-    {
-        return _statusEvents.MissileDamagingEventsByDst.GetValueOrEmpty(dst);
-    }
     public IReadOnlyList<MissileEvent> GetMissileDamagingEventsBySrc(AgentItem src)
     {
         return _statusEvents.MissileDamagingEventsBySrc.GetValueOrEmpty(src);
-    }
-    public bool TryGetMissileEventsByGUID(GUID missileGUID, [NotNullWhen(true)] out IReadOnlyList<MissileEvent>? missileEvents)
-    {
-        var missileGUIDEvent = GetMissileGUIDEvent(missileGUID);
-        missileEvents = GetMissileEventsByMissileID(missileGUIDEvent.ContentID);
-        if (missileEvents.Count > 0)
-        {
-            return true;
-        }
-        missileEvents = null;
-        return false;
     }
     #endregion MISSILE
 }

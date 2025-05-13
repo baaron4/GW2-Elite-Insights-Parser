@@ -338,11 +338,6 @@ internal static class CombatEventFactory
                             metaDataEvents.SpeciesGUIDEventsBySpeciesID[speciesGUID.ContentID] = speciesGUID;
                             metaDataEvents.SpeciesGUIDEventsByGUID[speciesGUID.ContentGUID] = speciesGUID;
                             break;
-                        case ContentLocal.Missile:
-                            var missileGUID = new MissileGUIDEvent(stateChangeEvent, evtcVersion);
-                            metaDataEvents.MissileGUIDEventsByMissileID[missileGUID.ContentID] = missileGUID;
-                            metaDataEvents.MissileGUIDEventsByGUID[missileGUID.ContentGUID] = missileGUID;
-                            break;
                         default:
                             break;
                     }
@@ -396,16 +391,16 @@ internal static class CombatEventFactory
                 Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
                 break;
             case StateChange.MissileCreate:
-                var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData, metaDataEvents.MissileGUIDEventsByMissileID);
+                var missileEvent = new MissileEvent(stateChangeEvent, agentData, skillData);
                 statusEvents.MissileEvents.Add(missileEvent);
                 Add(statusEvents.MissileEventsBySrc, missileEvent.Src, missileEvent);
                 Add(statusEvents.MissileEventsBySkillID, missileEvent.SkillID, missileEvent);
-                var missileTrackingID = stateChangeEvent.OverstackValue;
+                var missileTrackingID = stateChangeEvent.Pad;
                 Add(statusEvents.MissileEventsByTrackingID, missileTrackingID, missileEvent);
                 break;
             case StateChange.MissileLaunch:
                 var missileLaunchEvent = new MissileLaunchEvent(stateChangeEvent, agentData);
-                var missileLaunchTrackingID = stateChangeEvent.SkillID;
+                var missileLaunchTrackingID = stateChangeEvent.Pad;
                 if (statusEvents.MissileEventsByTrackingID.TryGetValue(missileLaunchTrackingID, out var missileEvents))
                 {
                     MissileEvent? startEvent = missileEvents.LastOrDefault(x => x.Time <= missileLaunchEvent.Time);
@@ -421,17 +416,16 @@ internal static class CombatEventFactory
                 break;
             case StateChange.MissileRemove:
                 var missileRemoveEvent = new MissileRemoveEvent(stateChangeEvent, agentData);
-                var missileRemoveTrackingID = stateChangeEvent.OverstackValue;
+                var missileRemoveTrackingID = stateChangeEvent.Pad;
                 if (statusEvents.MissileEventsByTrackingID.TryGetValue(missileRemoveTrackingID, out missileEvents))
                 {
                     MissileEvent? startEvent = missileEvents.LastOrDefault(x => x.Time <= missileRemoveEvent.Time);
                     if (startEvent != null)
                     {
                         startEvent.SetRemoveEvent(missileRemoveEvent);
-                        if (missileRemoveEvent.DidDamage)
+                        if (missileRemoveEvent.DidHit)
                         {
                             Add(statusEvents.MissileDamagingEventsBySrc, missileRemoveEvent.DamagingAgent, startEvent);
-                            Add(statusEvents.MissileDamagingEventsByDst, missileRemoveEvent.DamagedAgent, startEvent);
                         }
                     }
                 }

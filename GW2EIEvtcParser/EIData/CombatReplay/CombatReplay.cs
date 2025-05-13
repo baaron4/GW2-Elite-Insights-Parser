@@ -320,7 +320,7 @@ public class CombatReplay
             {
                 var launch = missileEvent.LaunchEvents[i];
                 (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifeSpan.end);
-                var velocity = launch.Velocity;
+                var velocity = launch.Speed;
                 var direction = (launch.TargetPosition - launch.LaunchPosition);
                 direction /= direction.Length();
                 var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
