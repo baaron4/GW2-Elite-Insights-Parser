@@ -73,7 +73,7 @@
 }
 
 .ei-container-small {
-    max-width: 90%;
+    max-width: min(1600px, 90%);
     min-width: 1450px;
     margin-right: auto;
     margin-left: auto;

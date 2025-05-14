@@ -60,7 +60,7 @@
     Vue.component("buff-table-component", {
         props: ["buffs", "playerdata", "generation", "condition", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
         data: function () {
             return {             
                 sortdata: {

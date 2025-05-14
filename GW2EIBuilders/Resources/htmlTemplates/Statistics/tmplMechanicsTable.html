@@ -72,7 +72,7 @@
     Vue.component("mechanics-table-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns, ["player", "enemy"])],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxMechColumns, ["player", "enemy"])],
         data: function () {
             return {
                 sortEdata: {

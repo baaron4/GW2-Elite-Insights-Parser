@@ -62,7 +62,7 @@
     Vue.component("buff-volume-table-component", {
         props: ["buffs", "playerdata", "outgoing", "sums", "id", "playerindex", "hidecustom"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
         data: function () {
             return {             
                 sortdata: {

@@ -51,7 +51,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxStatColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
         template: `${template}`,
         data: function () {
             return {
