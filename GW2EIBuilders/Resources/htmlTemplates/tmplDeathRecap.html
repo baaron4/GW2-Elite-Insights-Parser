@@ -33,7 +33,7 @@
                         dying afterwards
                     </div>
                 </div>
-                <graph-component :id="'deathrecap-' + playerindex + '-' + index" :layout="data.layout"
+                <graph-component :id="'deathrecap-' + playerindex + '-' + index" :layout="data.layout" :removerangecontrol="true"
                     :data="[data.data[index]]"></graph-component>
             </div>
             <div v-show="phaseRecaps === null || phaseRecaps.length === 0">
