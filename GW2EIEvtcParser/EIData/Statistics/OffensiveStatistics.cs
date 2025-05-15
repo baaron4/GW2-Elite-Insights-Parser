@@ -128,6 +128,14 @@ public class OffensiveStatistics
                             }
                             DirectDamageCount++;
                             DirectDamage += dl.HealthDamage;
+                            if (dl.IsFlanking)
+                            {
+                                FlankingCount++;
+                            }
+                            if (dl.HasGlanced)
+                            {
+                                GlancingCount++;
+                            }
                         }
                         PowerDamageCount++;
                         PowerDamage += dl.HealthDamage;
@@ -145,14 +153,6 @@ public class OffensiveStatistics
                     if (dl.AgainstMoving)
                     {
                         AgainstMovingCount++;
-                    }
-                    if (dl.IsFlanking)
-                    {
-                        FlankingCount++;
-                    }
-                    if (dl.HasGlanced)
-                    {
-                        GlancingCount++;
                     }
                 }
                 if (dl.IsAbsorbed)
