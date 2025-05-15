@@ -62,19 +62,19 @@ internal class CombatReplayDecorationContainer
     /// <param name="icon">URL of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddOverheadIcon(Segment segment, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcon(Segment segment, SingleActor actor, string icon, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
     }
-    internal void AddOverheadIcon((long start, long end) lifespan, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcon((long start, long end) lifespan, SingleActor actor, string icon, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, lifespan, new AgentConnector(actor)));
     }
-    internal void AddOverheadIcon(Segment segment, AgentItem actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcon(Segment segment, AgentItem actor, string icon, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
     }
-    internal void AddOverheadIcon((long start, long end) lifespan, AgentItem actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcon((long start, long end) lifespan, AgentItem actor, string icon, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, lifespan, new AgentConnector(actor)));
     }
@@ -88,7 +88,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="rotation">rotation of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddRotatedOverheadIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddRotatedOverheadIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
     }
@@ -102,7 +102,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="rotation">rotation of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddRotatedOverheadMarkerIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddRotatedOverheadMarkerIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingSquadMarker(true).UsingRotationConnector(new AngleConnector(rotation)));
     }
@@ -115,7 +115,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="icon">URL of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddOverheadIcons(IEnumerable<Segment> segments, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcons(IEnumerable<Segment> segments, SingleActor actor, string icon, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
         foreach (Segment segment in segments)
         {
@@ -216,8 +216,8 @@ internal class CombatReplayDecorationContainer
     internal void AddTether(IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
     {
         int tetherStart = 0;
-        AgentItem src = ParserHelper._unknownAgent;
-        AgentItem dst = ParserHelper._unknownAgent;
+        AgentItem src = _unknownAgent;
+        AgentItem dst = _unknownAgent;
         foreach (BuffEvent tether in tethers)
         {
             if (tether is BuffApplyEvent)
@@ -232,8 +232,8 @@ internal class CombatReplayDecorationContainer
                 if (!src.IsUnknown && !dst.IsUnknown)
                 {
                     Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)).WithThickess(thickness, worldSizeThickess));
-                    src = ParserHelper._unknownAgent;
-                    dst = ParserHelper._unknownAgent;
+                    src = _unknownAgent;
+                    dst = _unknownAgent;
                 }
             }
         }
