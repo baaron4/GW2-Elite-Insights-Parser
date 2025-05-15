@@ -315,7 +315,8 @@
                         var index = this.sortdata.index;
                         var divideIndex = this.sortdata.divideIndex;
                         if (divideIndex !== -1) {
-                            rows.sort((x, y) => order * (x.data[index]/x.data[divideIndex] - y.data[index]/y.data[divideIndex]) || this.sortByPlayerName(x, y));
+                            var round2 = this.round2;
+                            rows.sort((x, y) => order * (round2(100*x.data[index]/x.data[divideIndex]) - round2(100*y.data[index]/y.data[divideIndex])) || this.sortByPlayerName(x, y));
                         } else {
                             rows.sort((x, y) => order * (x.data[index] - y.data[index]) || this.sortByPlayerName(x, y));
                         }
