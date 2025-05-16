@@ -154,11 +154,11 @@ const InterpolationMethod = {
 };
 
 function interpolatedPositionFetcher(connection, master) {
-    var index = -1;
-    var totalPoints = connection.positions.length / 3;
-    var time = animator.reactiveDataStatus.time;
-    for (var i = 0; i < totalPoints; i++) {
-        var posTime = connection.positions[3 * i + 2];
+    let index = -1;
+    const totalPoints = connection.positions.length / 3;
+    const time = animator.reactiveDataStatus.time;
+    for (let i = 0; i < totalPoints; i++) {
+        const posTime = connection.positions[3 * i + 2];
         if (time < posTime) {
             break;
         }
@@ -175,19 +175,19 @@ function interpolatedPositionFetcher(connection, master) {
             y: connection.positions[3 * index + 1]
         };
     } else {
-        var cur = {
+        const cur = {
             x: connection.positions[3 * index],
             y: connection.positions[3 * index + 1]
         };
         switch (connection.interpolationMethod) {
             case InterpolationMethod.LINEAR:
-                var curTime = connection.positions[3 * index + 2];
-                var next = {
+                const curTime = connection.positions[3 * index + 2];
+                const next = {
                     x: connection.positions[3 * (index + 1)],
                     y: connection.positions[3 * (index + 1) + 1]
                 };
-                var nextTime = connection.positions[3 * (index + 1) + 2];
-                var pt = {
+                const nextTime = connection.positions[3 * (index + 1) + 2];
+                const pt = {
                     x: 0,
                     y: 0
                 };
@@ -224,6 +224,33 @@ function staticOffsetFetcher(connection) {
     };
 }
 
+function positionToMasterPositionFetcher(connection, master) {
+    const targetPosition = master && master.getPosition();
+    if (!targetPosition) {
+        return null;
+    }
+    const initialPosition = {
+        x: connection.position[0],
+        y: connection.position[1],
+    }
+    const initialTime = connection.position[2];
+    const velocity = connection.velocity;
+    const time = animator.reactiveDataStatus.time;
+    const vector = {
+        x: targetPosition.x - initialPosition.x,
+        y: targetPosition.y - initialPosition.y,
+    }
+    const length = Math.sqrt(vector.x * vector.x +vector.y * vector.y );
+    vector.x /= Math.max(length, 1e-6);
+    vector.y /= Math.max(length, 1e-6);
+    const factor = (time - initialTime) * velocity;
+    // TBC: what happens when said projectile goes past its target?
+    return {
+        x: initialPosition.x + factor * vector.x,
+        x: initialPosition.y + factor * vector.y,
+    };
+}
+
 function masterPositionFetcher(connection, master) {
     if (!master) {
         return null;
@@ -236,11 +263,11 @@ function noAngleFetcher(connection, master, start, end) {
 }
 
 function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
-    var index = -1;
-    var totalPoints = connection.angles.length / 2;
-    var time = animator.reactiveDataStatus.time;
-    for (var i = 0; i < totalPoints; i++) {
-        var posTime = connection.angles[2 * i + 1];
+    let index = -1;
+    const totalPoints = connection.angles.length / 2;
+    const time = animator.reactiveDataStatus.time;
+    for (let i = 0; i < totalPoints; i++) {
+        const posTime = connection.angles[2 * i + 1];
         if (time < posTime) {
             break;
         }
@@ -251,19 +278,19 @@ function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
     } else if (index === totalPoints - 1) {
         return connection.angles[2 * index];
     } else {
-        var cur = connection.angles[2 * index];
+        const cur = connection.angles[2 * index];
         switch (connection.interpolationMethod) {
             case InterpolationMethod.LINEAR:
-                var curTime = connection.angles[2 * index + 1];
-                var next = connection.angles[2 * (index + 1)];
-                var nextTime = connection.angles[2 * (index + 1) + 1];
+                const curTime = connection.angles[2 * index + 1];
+                let next = connection.angles[2 * (index + 1)];
+                const nextTime = connection.angles[2 * (index + 1) + 1];
                 // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
                 if (next - cur < -180) {
                     next += 360.0;
                 } else if (next - cur > 180) {
                     next -= 360.0;
                 }
-                var interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
+                const interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
                 return interpolatedAngle;
             case InterpolationMethod.STEP:
                 return cur;
@@ -274,8 +301,8 @@ function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
 }
 
 function staticAngleFetcher(connection, master, dstMaster, start, end) {
-    var time = animator.reactiveDataStatus.time;
-    var velocity = Math.min((time - start) / (end - start), 1.0);
+    const time = animator.reactiveDataStatus.time;
+    const velocity = Math.min((time - start) / (end - start), 1.0);
     return connection.angles[0] + velocity * connection.angles[1];
 }
 
@@ -290,12 +317,12 @@ function masterToMasterRotationFetcher(connection, master, dstMaster, start, end
     if (!master || !dstMaster) {
         return null;
     }
-    var origin = master.getPosition();
-    var dst = dstMaster.getPosition();
+    const origin = master.getPosition();
+    const dst = dstMaster.getPosition();
     if (!origin || !dst) {
         return null;
     }
-    var vector = {
+    const vector = {
         x: dst.x - origin.x,
         y: dst.y - origin.y,
     }
@@ -314,7 +341,9 @@ class MechanicDrawable {
         this.end = params.end;
         this.positionFetcher = null;
         this.connectedTo = params.connectedTo;
-        if (this.connectedTo.interpolationMethod >= 0) {
+        if (this.connectedTo.velocity >= 0) {
+            this.positionFetcher = positionToMasterPositionFetcher;
+        } else if (this.connectedTo.interpolationMethod >= 0) {
             this.positionFetcher = interpolatedPositionFetcher;
         } else if (this.connectedTo.position) {
             this.positionFetcher = staticPositionFetcher;
@@ -363,7 +392,7 @@ class MechanicDrawable {
     }
 
     getOffset() {
-        var time = animator.reactiveDataStatus.time;
+        const time = animator.reactiveDataStatus.time;
         if (this.start > time || this.end < time) {
             return null;
         }
@@ -371,7 +400,7 @@ class MechanicDrawable {
     }
 
     getRotation() {
-        var time = animator.reactiveDataStatus.time;
+        const time = animator.reactiveDataStatus.time;
         if (this.start > time || this.end < time) {
             return null;
         }
@@ -379,7 +408,7 @@ class MechanicDrawable {
     }
 
     getPosition() {
-        var time = animator.reactiveDataStatus.time;
+        const time = animator.reactiveDataStatus.time;
         if (this.start > time || this.end < time) {
             return null;
         }
@@ -415,7 +444,7 @@ class MechanicDrawable {
         if (this.connectedTo === null) {
             return false;
         }
-        if (this.positionFetcher === masterPositionFetcher) {
+        if (this.positionFetcher === masterPositionFetcher || this.positionFetcher === positionToMasterPositionFetcher) {
             if (this.master === null) {
                 let masterId = this.connectedTo.masterId;
                 this.master = animator.getActorData(masterId);
@@ -478,16 +507,16 @@ class FacingMechanicDrawable extends MechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         const facingFullSize = 5 * this.master.getSize() / 3;
         const facingHalfSize = facingFullSize / 2;
         if (this.master !== null && animator.coneControl.enabled && this.master.isSelected()) {           
             ctx.save(); 
-            var coneOpening = ToRadians(animator.coneControl.openingAngle);
+            const coneOpening = ToRadians(animator.coneControl.openingAngle);
             ctx.rotate(0.5 * coneOpening);
-            var coneRadius = InchToPixel * animator.coneControl.radius;
+            const coneRadius = InchToPixel * animator.coneControl.radius;
             ctx.beginPath();
             ctx.arc(0, 0, coneRadius, -coneOpening, 0, false);
             ctx.arc(0, 0, 0, 0, coneOpening, true);
@@ -517,8 +546,8 @@ class FormMechanicDrawable extends MechanicDrawable {
         if (this.growingEnd <= this.start) {
             return 1.0;
         }
-        var time = animator.reactiveDataStatus.time;
-        var value = Math.min((time - this.start) / (this.growingEnd - this.start), 1.0);
+        const time = animator.reactiveDataStatus.time;
+        let value = Math.min((time - this.start) / (this.growingEnd - this.start), 1.0);
         if (this.growingReverse) {
             value = 1 - value;
         }
@@ -548,7 +577,7 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
@@ -580,7 +609,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
     }
 
     drawOuterCircle(percent) {      
-        var ctx = animator.mainContext; 
+        const ctx = animator.mainContext; 
         if (this.growingReverse) {    
             ctx.arc(0, 0, this.outerRadius , 2 * Math.PI, 0, false);
         }  else {
@@ -589,7 +618,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
     }
 
     drawInnerCircle(percent) {      
-        var ctx = animator.mainContext; 
+        const ctx = animator.mainContext; 
         if (this.growingReverse) {    
             ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
         }  else {
@@ -607,7 +636,7 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
             return;
         }
         const percent = this.getPercent();
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         if (this.fill) {
@@ -659,7 +688,7 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
             return;
         }
         const percent = this.getPercent();
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
@@ -694,11 +723,11 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
 
     computeProgress() {
         const progress = this.progress;
-        var index = -1;
-        var totalPoints = progress.length;
-        var time = animator.reactiveDataStatus.time;
-        for (var i = 0; i < totalPoints; i++) {
-            var posTime = progress[i][0];
+        let index = -1;
+        const totalPoints = progress.length;
+        const time = animator.reactiveDataStatus.time;
+        for (let i = 0; i < totalPoints; i++) {
+            const posTime = progress[i][0];
             if (time < posTime) {
                 break;
             }
@@ -709,13 +738,13 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
         } else if (index === totalPoints - 1) {
             return progress[index][1];
         } else {
-            var cur = progress[index][1];
+            const cur = progress[index][1];
             switch (this.interpolationMethod) {
                 case InterpolationMethod.LINEAR:
-                    var curTime = progress[index][0];
-                    var next = progress[index + 1][1];
-                    var nextTime = progress[index + 1][0];
-                    var interpolated = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
+                    const curTime = progress[index][0];
+                    const next = progress[index + 1][1];
+                    const nextTime = progress[index + 1][0];
+                    const interpolated = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
                     return interpolated;
                 case InterpolationMethod.STEP:
                     return cur;
@@ -743,7 +772,7 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
         }
         const size = this.getSize();
         const progressPercent = this.computeProgress() / 100.0;
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         const secondaryOffset = this.getSecondaryOffset();
@@ -853,7 +882,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         const percent = this.getPercent();
         ctx.save();
         this.moveContext(ctx, pos, rot + this.halfOpeningAngle);
@@ -901,15 +930,15 @@ class LineMechanicDrawable extends FormMechanicDrawable {
     }
 
     getTargetPosition() {
-        var time = animator.reactiveDataStatus.time;
+        const time = animator.reactiveDataStatus.time;
         if (this.start > time || this.end < time) {
             return null;
         }
-        var pos = this.targetPositionFetcher(this.connectedFrom, this.endMaster);
+        const pos = this.targetPositionFetcher(this.connectedFrom, this.endMaster);
         if (!pos) {
             return null;
         }
-        var offset = this.targetOffsetFetcher(this.connectedFrom);
+        const offset = this.targetOffsetFetcher(this.connectedFrom);
         pos.x += offset.x;
         pos.y += offset.y;
         return pos;
@@ -941,7 +970,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             return;
         }
         const percent = this.getPercent();
-        var ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         if (this.growingReverse) {
             this.moveContext(ctx, target, 0);
@@ -1021,7 +1050,7 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         if (pos === null) {
             return;
         }
-        let ctx = animator.mainContext;
+        const ctx = animator.mainContext;
         const rads = pos.angle;
         ctx.save();
         ctx.translate(pos.x, pos.y);
@@ -1196,7 +1225,7 @@ class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
         const heights = this.heights;
         const totalPoints = heights.length / 2;
         const time = animator.reactiveDataStatus.time;
-        for (var i = 0; i < totalPoints; i++) {
+        for (let i = 0; i < totalPoints; i++) {
             let heightTime = heights[2 * i + 1];
             if (time < heightTime) {
                 index = i - 1;
@@ -1219,7 +1248,7 @@ class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
         const totalPoints = opacities.length / 2;
         const time = animator.reactiveDataStatus.time;
         let interpolate = 0;
-        for (var i = 0; i < totalPoints; i++) {
+        for (let i = 0; i < totalPoints; i++) {
             let opacityTime = opacities[2 * i + 1];
             if (time < opacityTime) {
                 if (opacityTime - time <= 1500) interpolate = opacityTime;

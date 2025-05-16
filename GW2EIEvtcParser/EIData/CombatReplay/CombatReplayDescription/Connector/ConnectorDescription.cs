@@ -11,6 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonDerivedType(typeof(PositionConnectorDescription))]
 [JsonDerivedType(typeof(InterpolationConnectorDescription))]
 [JsonDerivedType(typeof(AgentConnectorDescription))]
+[JsonDerivedType(typeof(PositionToAgentConnectorDescription))]
 [JsonDerivedType(typeof(ScreenSpaceConnectorDescription))]
 public abstract class ConnectorDescription
 {

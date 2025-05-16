@@ -313,13 +313,13 @@ public class CombatReplay
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
-        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents);
+        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
     }
     internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.IsNPC);
-        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents);
+        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
     }
     #endregion DEBUG MISSILES
 
