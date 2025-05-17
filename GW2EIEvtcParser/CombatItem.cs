@@ -277,7 +277,6 @@ public class CombatItem
             || IsStateChange == StateChange.LogNPCUpdate
             || IsStateChange == StateChange.Effect_51
             || IsStateChange == StateChange.MissileLaunch
-            || IsStateChange == StateChange.MissileRemove
         ;
     }
 

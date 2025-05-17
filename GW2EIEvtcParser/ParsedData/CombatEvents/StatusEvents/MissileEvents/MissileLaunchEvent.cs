@@ -18,6 +18,8 @@ public class MissileLaunchEvent : TimeCombatEvent
         i16[4] = float_to_int16_nonprecise(xyz_current[1], 10.0f);
         i16[5] = float_to_int16_nonprecise(xyz_current[2], 10.0f);
         ev->skillid = skillid;
+        *(uint8_t*)&ev->iff = launch_type;
+        *(uint32_t*)&ev->is_buffremove = launch_flags;
         ev->is_statechange = CBTS_MISSILELAUNCH;
         ev->is_src_flanking = is_first_launch; // 1 on initial launch, 0 on re-launch/reflect
         *(uint16_t*)&ev->is_shields = float_to_int16_nonprecise(speed, 1.0f);
@@ -33,6 +35,8 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly float Speed;
 
     public readonly bool IsFirstLaunch;
+    public readonly byte LaunchType;
+    public readonly uint LaunchFlags;
     public MissileEvent Missile { get; internal set; }
     internal MissileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
@@ -65,10 +69,23 @@ public class MissileLaunchEvent : TimeCombatEvent
             }
         }
         IsFirstLaunch = evtcItem.IsFlanking > 0;
+
         var speedBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
         speedBytes.PushNative(evtcItem.IsShields);
         speedBytes.PushNative(evtcItem.IsOffcycle);
         Speed = BitConverter.ToUInt16(speedBytes) / 1000.0f;
+
+        var flagsBytes = new ByteBuffer(stackalloc byte[sizeof(uint)]);
+        // 0.25 
+        flagsBytes.PushNative(evtcItem.IsBuffRemoveByte);
+        // 0.25 
+        flagsBytes.PushNative(evtcItem.IsNinety);
+        // 0.25 
+        flagsBytes.PushNative(evtcItem.IsFifty);
+        // 0.25 
+        flagsBytes.PushNative(evtcItem.IsMoving);
+        LaunchFlags = BitConverter.ToUInt32(flagsBytes);
+        LaunchType = evtcItem.IFFByte;
     }
 
 }
