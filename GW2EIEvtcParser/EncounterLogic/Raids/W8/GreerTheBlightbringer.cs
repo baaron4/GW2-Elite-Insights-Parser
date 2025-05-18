@@ -563,10 +563,17 @@ internal class GreerTheBlightbringer : MountBalrior
                     (long start, long end) lifespan = cloud.ComputeLifespan(log, duration);
                     var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
                     replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
-                    replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
+                    if (!log.CombatData.HasMissileData)
+                    {
+                        replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
+                    }
                 }
             }
         }
+
+        // Enfeebling Miasma - Gas Projectiles
+        var enfeeblingMiasmaCloud = log.CombatData.GetMissileEventsBySkillIDs([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4]).Where(x => x.Src == target.AgentItem);
+        replay.Decorations.AddNonHomingMissiles(log, enfeeblingMiasmaCloud, Colors.Purple, 0.2, 150);
     }
 
     private static void AddCageOfDecayOrNoxiousBlight(NPC target, ParsedEvtcLog log, CombatReplay replay)

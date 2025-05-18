@@ -794,6 +794,16 @@ partial class CombatData
         return _statusEvents.MissileEventsBySkillID.GetValueOrEmpty(skillID);
     }
 
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySkillIDs(long[] skillID)
+    {
+        var events = new List<MissileEvent>();
+        foreach (long id in skillID)
+        {
+            events.AddRange(GetMissileEventsBySkillID(id));
+        }
+        return events;
+    }
+
     public IReadOnlyList<MissileEvent> GetMissileEventsByMissileID(long missileID)
     {
         return _statusEvents.MissileEventsByMissileID.GetValueOrEmpty(missileID);

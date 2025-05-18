@@ -344,8 +344,7 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.<br></br>
-    /// To be used for logs without missile data.
+    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
     /// </summary>
     /// <param name="startingPoint">Starting position.</param>
     /// <param name="endingPoint">Ending position.</param>
@@ -353,20 +352,21 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">Color of the decoration.</param>
     /// <param name="opacity">Opacity of the color.</param>
     /// <param name="radius">Radius of the circle.</param>
+    /// <remarks>To be used for logs without missile data.</remarks>
     internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
     {
         AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
     }
 
     /// <summary>
-    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.<br></br>
-    /// To be used for logs without missile data.
+    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
     /// </summary>
     /// <param name="startingPoint">Starting position.</param>
     /// <param name="endingPoint">Ending position.</param>
     /// <param name="lifespan">Duration of the animation.</param>
     /// <param name="color">Color of the decoration.</param>
     /// <param name="radius">Radius of the circle.</param>
+    /// <remarks>To be used for logs without missile data.</remarks>
     internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
     {
         if (startingPoint == default || endingPoint == default)
