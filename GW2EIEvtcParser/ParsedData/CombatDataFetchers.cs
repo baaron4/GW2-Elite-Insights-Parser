@@ -789,15 +789,28 @@ partial class CombatData
     {
         return _statusEvents.MissileEventsBySrc.GetValueOrEmpty(src);
     }
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillID(AgentItem src, long skillID)
+    {
+        return _statusEvents.MissileEventsBySrc.GetValueOrEmpty(src).Where(x => x.SkillID == skillID).ToList();
+    }
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillID(AgentItem src, long[] skillIDs)
+    {
+        var events = new List<MissileEvent>();
+        foreach (long id in skillIDs)
+        {
+            events.AddRange(GetMissileEventsBySrcBySkillID(src, id));
+        }
+        return events;
+    }
     public IReadOnlyList<MissileEvent> GetMissileEventsBySkillID(long skillID)
     {
         return _statusEvents.MissileEventsBySkillID.GetValueOrEmpty(skillID);
     }
 
-    public IReadOnlyList<MissileEvent> GetMissileEventsBySkillIDs(long[] skillID)
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySkillIDs(long[] skillIDs)
     {
         var events = new List<MissileEvent>();
-        foreach (long id in skillID)
+        foreach (long id in skillIDs)
         {
             events.AddRange(GetMissileEventsBySkillID(id));
         }

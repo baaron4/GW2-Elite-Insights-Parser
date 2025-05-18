@@ -234,7 +234,7 @@ function positionToMasterPositionFetcher(connection, master) {
         y: connection.position[1],
     }
     const initialTime = connection.position[2];
-    const velocity = connection.velocity;
+    const velocity = InchToPixel * connection.velocity;
     const time = animator.reactiveDataStatus.time;
     const vector = {
         x: targetPosition.x - initialPosition.x,
@@ -247,7 +247,7 @@ function positionToMasterPositionFetcher(connection, master) {
     // TBC: what happens when said projectile goes past its target?
     return {
         x: initialPosition.x + factor * vector.x,
-        x: initialPosition.y + factor * vector.y,
+        y: initialPosition.y + factor * vector.y,
     };
 }
 

@@ -4689,6 +4689,7 @@ public static class SkillIDs
     public const long RakeTheRot = 75036;
     public const long EruptionOfRot2 = 75037;
     public const long InvulnerableBarrier = 75042;
+    public const long EmpoweringBlast1 = 75046;
     public const long BloodstoneSaturation = 75056;
     public const long UraDispelSAK = 75066;
     public const long PressureBlastTargetBuff = 75067;
@@ -4711,6 +4712,7 @@ public static class SkillIDs
     public const long FluxlanceTargetBuff2 = 75140;
     public const long ToxicGeyser2 = 75149;
     public const long TargetOrder2JW = 75151;
+    public const long EmpoweringBlast2 = 75154;
     public const long Fluxlance = 75155;
     public const long DeployFlameRam_InfiniteFlameRam = 75158;
     public const long ChargeDecima = 75175;
