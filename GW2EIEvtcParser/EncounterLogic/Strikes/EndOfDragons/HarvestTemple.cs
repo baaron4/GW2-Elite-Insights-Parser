@@ -32,7 +32,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     .UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
                 new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0)
                     .UsingChecker((de, log) => (de.To.IsSpecies(TargetID.PushableVoidAmalgamate) || de.To.IsSpecies(TargetID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
-                new PlayerDstHitMechanic([Shockwave, TsunamiSlam1, TsunamiSlam2], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
+                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
                     .UsingAchievementEligibility(true),
                 new PlayerDstHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
                 new PlayerDstHitMechanic(MagicDischarge, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
@@ -109,7 +109,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             ]),
             // Soo Won
             new MechanicGroup([
-                new PlayerDstHitMechanic([TsunamiSlam1, TsunamiSlam2], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new PlayerDstHitMechanic([TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
                 new PlayerDstHitMechanic(ClawSlap, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
                 new PlayerDstHitMechanic(VoidPoolSooWon, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
                 new PlayerDstHitMechanic(TailSlam, new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
@@ -277,7 +277,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         voidTimeCasterPhase.OverrideEnd(Math.Min(voidTimeCasterPhase.End, purificationPhase.End));
                         voidTimeCasterPhase.AddParentPhase(purificationPhase);
                     }
-                } 
+                }
                 else if (purificationPhase.Targets.Keys.Any(x => x.IsSpecies(TargetID.VoidSaltsprayDragon)))
                 {
                     var voidSaltsprayDragonPhase = phases.FirstOrDefault(x => x.Name == "Void Saltspray Dragon");
@@ -288,7 +288,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         voidSaltsprayDragonPhase.AddParentPhase(purificationPhase);
                     }
                 }
-            } 
+            }
             else
             {
                 var sooWonPhase = phases.FirstOrDefault(x => x.Name == "Soo-Won");
@@ -367,7 +367,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
     {
-        return [ ];
+        return [];
     }
 
     protected override List<TargetID> GetTrashMobsIDs()
@@ -603,12 +603,12 @@ internal class HarvestTemple : EndOfDragonsStrike
         //
         int purificationID = 0;
         bool needRedirect = false;
-        (HashSet<ulong> jormagDamagingAgents   , SingleActor? jormag   ) = ([], null);
+        (HashSet<ulong> jormagDamagingAgents, SingleActor? jormag) = ([], null);
         (HashSet<ulong> primordusDamagingAgents, SingleActor? primordus) = ([], null);
-        (HashSet<ulong> kralkDamagingAgents    , SingleActor? kralk    ) = ([], null);
-        (HashSet<ulong> mordDamagingAgents     , SingleActor? mord     ) = ([], null);
-        (HashSet<ulong> zhaitanDamagingAgents  , SingleActor? zhaitan  ) = ([], null);
-        (HashSet<ulong> soowonDamagingAgents   , SingleActor? soowon   ) = ([], null);
+        (HashSet<ulong> kralkDamagingAgents, SingleActor? kralk) = ([], null);
+        (HashSet<ulong> mordDamagingAgents, SingleActor? mord) = ([], null);
+        (HashSet<ulong> zhaitanDamagingAgents, SingleActor? zhaitan) = ([], null);
+        (HashSet<ulong> soowonDamagingAgents, SingleActor? soowon) = ([], null);
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
@@ -667,8 +667,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                     needRedirect = true;
                     var soowonAttacks = new HashSet<long>()
                     {
-                        TsunamiSlam1,
-                        TsunamiSlam2,
+                        TsunamiSlamOrb,
+                        TsunamiSlamTailSlamOrb,
                         ClawSlap,
                         MagicHail,
                         VoidPurge,
@@ -891,6 +891,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddWithGrowing(despawn, lifespanDespawning.end, true);
                     }
                 }
+                // Soo Won - Corrupted Waters (Orbs)
+                var corruptedWaters = log.CombatData.GetMissileEventsBySkillID(SwarmOfMordremoth_CorruptedWaters);
+                replay.Decorations.AddNonHomingMissiles(log, corruptedWaters, Colors.LightBlue, 0.6, 10);
                 // Magic Discharge - Orb Explosion
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleOrbExplosion, out var orbEffects))
                 {
@@ -950,7 +953,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     replay.Trim(lifespanBeam.start, lifespanBeam.end);
                     var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
                     replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
-                } 
+                }
                 else
                 {
                     // Completely hide it
@@ -1248,7 +1251,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                             // Add aoe
                             replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
                             // Add projectile
-                            replay.Decorations.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
+                            if (!log.CombatData.HasMissileData)
+                            {
+                                replay.Decorations.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
+                            }
                         }
 
                         // AoE to AoE effects
@@ -1264,7 +1270,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                                     {
                                         break;
                                     }
-                                    
+
                                     if (endingAoEDuration == 0 && (endingAoE.Position - point.XYZ).XY().Length() < 0.5)
                                     {
                                         endingAoEDuration = point.Time;
@@ -1281,10 +1287,17 @@ internal class HarvestTemple : EndOfDragonsStrike
                             replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
                             // Add projectile - Starts when the previous AoE ends because it's bouncing
                             (long start, long end) lifespanAnimation = (startingAoE.Time + startingAoEDuration, endingAoE.Time + endingAoEDuration);
-                            replay.Decorations.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
+                            if (!log.CombatData.HasMissileData)
+                            {
+                                replay.Decorations.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
+                            }
                         }
                     }
                 }
+
+                // Torment of the Void - Claw Swipe Orbs
+                var tormentOrbs = log.CombatData.GetMissileEventsBySkillID(TormentOfTheVoid);
+                replay.Decorations.AddNonHomingMissiles(log, tormentOrbs, Colors.Black, 0.5, 50);
 
                 // Tail Slam
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out var tailSlamEffects))
@@ -1307,11 +1320,18 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
                                 replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
                                 // Add projectile
-                                replay.Decorations.AddProjectile(tailSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                if (!log.CombatData.HasMissileData)
+                                {
+                                    replay.Decorations.AddProjectile(tailSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                }
                             }
                         }
                     }
                 }
+
+                // Tail Slam Orbs
+                var tailSlamOrbs = log.CombatData.GetMissileEventsBySkillID(TsunamiSlamTailSlamOrb);
+                replay.Decorations.AddNonHomingMissiles(log, tailSlamOrbs, Colors.Black, 0.5, 50);
 
                 // Tsunami Slam AoE indicator
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSooWonTsunamiSlamIndicator, out var tsunamiSlamIndicators))
@@ -1333,13 +1353,20 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
                                 replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
                                 // Add projectile
-                                replay.Decorations.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                if (!log.CombatData.HasMissileData)
+                                {
+                                    replay.Decorations.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
+                                }
                             }
                         }
                     }
                 }
 
-                // Tsunami
+                // Tsunami Slam Orbs
+                var tsunamiOrbs = log.CombatData.GetMissileEventsBySkillID(TsunamiSlamOrb);
+                replay.Decorations.AddNonHomingMissiles(log, tsunamiOrbs, Colors.Black, 0.5, 50);
+
+                // Tsunami Wave
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTsunami1, out var tsunamiEffects))
                 {
                     foreach (EffectEvent effect in tsunamiEffects)
@@ -1352,11 +1379,16 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 break;
+            case (int)TargetID.KillableVoidAmalgamate:
+                // Grasp of the Void
+                var orbs = log.CombatData.GetMissileEventsBySkillID(GraspOfTheVoid);
+                replay.Decorations.AddNonHomingMissiles(log, orbs, Colors.Black, 0.5, 40);
+                break;
             case (int)TargetID.VoidWarforged1:
             case (int)TargetID.VoidWarforged2:
-                #if DEBUG_EFFECTS
+#if DEBUG_EFFECTS
                     CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
-                #endif
+#endif
                 break;
             case (int)TargetID.ZhaitansReach:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
@@ -1403,7 +1435,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                                     var positionConnector = new PositionConnector(brandedArtilleryAoE.Position);
                                     var aoeCircle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                     replay.Decorations.AddWithGrowing(aoeCircle, lifespan.end);
-                                    // Projective decoration
+                                    // Projectile decoration
+                                    // TODO @Linka - Lock this behind log.CombatData.HasMissileData once we have a log with this projectile
                                     replay.Decorations.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
                                 }
                             }
@@ -1423,6 +1456,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddContrenticRings(0, 40, lifespan, effect.Position, Colors.Orange);
                     }
                 }
+
                 // Nightmare Epoch - AoEs
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidTimecasterNightmareEpoch, out var nightmareEpoch))
                 {
@@ -1434,6 +1468,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddWithBorder(circle, Colors.LightRed, 0.4);
                     }
                 }
+
+                // Nightmare Epoch - Projectiles
+                var nightmareEpochProjectiles = log.CombatData.GetMissileEventsBySkillID(NightmareEpochDamage);
+                replay.Decorations.AddNonHomingMissiles(log, nightmareEpochProjectiles, Colors.Black, 0.5, 10);
                 break;
             case (int)TargetID.GravityBall:
                 // Setting the first aware to + 1600 due to the duration of the warning effect
@@ -1678,15 +1716,16 @@ internal class HarvestTemple : EndOfDragonsStrike
                                     if (bombAoE != null && target.TryGetCurrentPosition(log, cast.Time, out var obliteratorPosition))
                                     {
                                         // Shooting animation
-                                        long animationDuration = bombAoE.Time - cast.Time;
-                                        lifespan = (cast.Time, cast.Time + animationDuration);
-                                        replay.Decorations.AddProjectile(obliteratorPosition, bombAoE.Position, lifespan, Colors.Red);
+                                        if (!log.CombatData.HasMissileData)
+                                        {
+                                            long animationDuration = bombAoE.Time - cast.Time;
+                                            lifespan = (cast.Time, cast.Time + animationDuration);
+                                            replay.Decorations.AddProjectile(obliteratorPosition, bombAoE.Position, lifespan, Colors.Red);
+                                        }
 
                                         // Landed Firebomb
-                                        uint radius = 120;
                                         (long start, long end) lifespanAoE = bombAoE.ComputeLifespan(log, 21000);
-                                        var positionConnector = new PositionConnector(bombAoE.Position);
-                                        var fireCircle = new CircleDecoration(radius, lifespanAoE, Colors.Yellow, 0.2, positionConnector);
+                                        var fireCircle = new CircleDecoration(120, lifespanAoE, Colors.Yellow, 0.2, new PositionConnector(bombAoE.Position));
                                         replay.Decorations.Add(fireCircle);
                                     }
                                 }
@@ -1696,6 +1735,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                             break;
                     }
                 }
+
+                // Firebomb Missile
+                var firebombMissile = log.CombatData.GetMissileEventsBySkillID(VoidObliteratorFirebomb);
+                replay.Decorations.AddNonHomingMissiles(log, firebombMissile, Colors.Red, 0.5, 50);
 
                 // Wyvern Breath - Small fire AoEs
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidObliteratorWyvernBreathFire, out var wyvernBreahFires))

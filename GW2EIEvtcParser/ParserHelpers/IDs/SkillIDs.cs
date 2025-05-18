@@ -3744,7 +3744,7 @@ public static class SkillIDs
     public const long WaveOfTormentNM = 64669;
     public const long ToxicOrb = 64718;
     public const long StormOfSwords5 = 64738;
-    public const long TsunamiSlam1 = 64748;
+    public const long TsunamiSlamOrb = 64748;
     public const long ZhaitansReachThrashXJJ1 = 64805;
     public const long Shockwave = 64810;
     public const long BowlOfFishStew = 64829;
@@ -3882,7 +3882,7 @@ public static class SkillIDs
     public const long ElectricBlastCastSkillRightNM = 66461;
     public const long DragonSlashBurstNM = 66465;
     public const long Drown2 = 66486;
-    public const long TsunamiSlam2 = 66489;
+    public const long TsunamiSlamTailSlamOrb = 66489;
     public const long FishyRiceBowl = 66503;
     public const long ZhaitansReachGroundSlam = 66534;
     public const long DeathsHandDropped = 66564;

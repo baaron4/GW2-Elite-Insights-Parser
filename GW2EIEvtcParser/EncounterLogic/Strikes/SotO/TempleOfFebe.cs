@@ -867,9 +867,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 }
                 else
                 {
-                    replay.Decorations.Add(new CircleDecoration(20, lifespan, Colors.Black, 0.5, connector));
-                    replay.Decorations.Add(new DoughnutDecoration(20, 30, lifespan, Colors.RedSkin, 0.8, connector));
-
+                    replay.Decorations.Add(new CircleDecoration(30, lifespan, Colors.Black, 0.5, connector));
+                    replay.Decorations.Add(new DoughnutDecoration(30, 40, lifespan, Colors.RedSkin, 0.8, connector));
                 }
             }
         }

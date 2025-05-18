@@ -344,7 +344,8 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
+    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.<br></br>
+    /// To be used for logs without missile data.
     /// </summary>
     /// <param name="startingPoint">Starting position.</param>
     /// <param name="endingPoint">Ending position.</param>
@@ -358,7 +359,8 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
-    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.
+    /// Adds a moving circle resembling a projectile from a <paramref name="startingPoint"/> to an <paramref name="endingPoint"/>.<br></br>
+    /// To be used for logs without missile data.
     /// </summary>
     /// <param name="startingPoint">Starting position.</param>
     /// <param name="endingPoint">Ending position.</param>
