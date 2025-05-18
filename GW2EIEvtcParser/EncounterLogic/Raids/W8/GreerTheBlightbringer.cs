@@ -796,7 +796,7 @@ internal class GreerTheBlightbringer : MountBalrior
     private static void AddEmpoweringBlast(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         // Empowering Blast - Orbs
-        var orbs = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, [EmpoweringBlast1, EmpoweringBlast2]);
+        var orbs = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [EmpoweringBlast1, EmpoweringBlast2]);
         replay.Decorations.AddHomingMissiles(log, orbs, Colors.Purple, 0.5, 25);
     }
 

@@ -510,6 +510,45 @@ internal class Ensolyss : Nightmare
         }
 
         // Caustic Barrage
-        AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
+        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
+
+        long[] idsHealingOrbs =
+            [
+                EnsolyssNightmareRespite1,
+                EnsolyssNightmareRespite2,
+                EnsolyssNightmareRespite3,
+                EnsolyssNightmareRespite4,
+                EnsolyssNightmareRespite5,
+                EnsolyssNightmareRespite6,
+                EnsolyssNightmareRespite7,
+            ];
+        var healingOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsHealingOrbs);
+        EnvironmentDecorations.AddNonHomingMissiles(log, healingOrbs, Colors.Blue, 0.5, 10);
+
+        long[] idsRedOrbs =
+            [
+                EnsolyssNightmareBomb1,
+                EnsolyssNightmareBomb2,
+                EnsolyssNightmareBomb3,
+                EnsolyssNightmareBomb4,
+                EnsolyssNightmareBomb5,
+                EnsolyssNightmareBomb6,
+                EnsolyssNightmareBomb7,
+                EnsolyssNightmareBomb8,
+                EnsolyssNightmareBomb9,
+                EnsolyssNightmareBullet1,
+                EnsolyssNightmareBullet2,
+                EnsolyssNightmareBullet3,
+                EnsolyssNightmareBullet4,
+                EnsolyssNightmareBullet7,
+                EnsolyssNightmareBullet8,
+                EnsolyssNightmareBullet9,
+                EnsolyssNightmareBullet12,
+                EnsolyssNightmareBullet13,
+                EnsolyssNightmareBullet14,
+                EnsolyssNightmareBullet15,
+            ];
+        var redOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsRedOrbs);
+        EnvironmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.5, 20);
     }
 }

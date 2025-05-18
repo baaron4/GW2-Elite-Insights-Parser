@@ -793,7 +793,7 @@ partial class CombatData
     {
         return _statusEvents.MissileEventsBySrc.GetValueOrEmpty(src).Where(x => x.SkillID == skillID).ToList();
     }
-    public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillID(AgentItem src, long[] skillIDs)
+    public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillIDs(AgentItem src, long[] skillIDs)
     {
         var events = new List<MissileEvent>();
         foreach (long id in skillIDs)
