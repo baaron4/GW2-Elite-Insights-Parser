@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 #if !DEBUG
-[assembly: AssemblyVersion("3.9.0.0")]
+[assembly: AssemblyVersion("3.9.1.0")]
 #else
 [assembly: AssemblyVersion("3.9.*")]
 #endif
