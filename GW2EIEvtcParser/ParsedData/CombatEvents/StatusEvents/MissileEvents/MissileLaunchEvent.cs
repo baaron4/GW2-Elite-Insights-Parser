@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Trigonometry;
 using static GW2EIEvtcParser.ParserHelper;
@@ -86,6 +87,24 @@ public class MissileLaunchEvent : TimeCombatEvent
         flagsBytes.PushNative(evtcItem.IsMoving);
         LaunchFlags = BitConverter.ToUInt32(flagsBytes);
         LaunchType = evtcItem.IFFByte;
+    }
+
+    public ParametricPoint3D GetFinalPosition(long start, long end)
+    {
+        var velocity = Speed;
+        var direction = (TargetPosition - LaunchPosition);
+        direction /= Math.Max(direction.Length(), 1e-6f);
+        return new ParametricPoint3D(LaunchPosition + (velocity * direction) * (end - start), end);
+    }
+
+    public ParametricPoint3D GetFinalPosition((long start, long end) lifespan)
+    {
+        return GetFinalPosition(lifespan.start, lifespan.end);
+    }
+
+    public ParametricPoint3D GetFinalPosition(Segment lifespan)
+    {
+        return GetFinalPosition(lifespan.Start, lifespan.End);
     }
 
 }

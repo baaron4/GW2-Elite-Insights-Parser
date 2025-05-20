@@ -521,14 +521,10 @@ internal class CombatReplayDecorationContainer
 
     private void AddNonHomingMissile(MissileLaunchEvent launch, (long start, long end) trajectoryLifeSpan, Color color, double opacity, uint radius)
     {
-        var velocity = launch.Speed;
-        var direction = (launch.TargetPosition - launch.LaunchPosition);
-        direction /= direction.Length();
-        var finalPosition = launch.LaunchPosition + (velocity * direction) * (trajectoryLifeSpan.end - trajectoryLifeSpan.start);
         Add(
             new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new InterpolationConnector([
                   new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
-                  new ParametricPoint3D(finalPosition, trajectoryLifeSpan.end)
+                  launch.GetFinalPosition(trajectoryLifeSpan)
                 ],
                 Connector.InterpolationMethod.Linear)
             )
