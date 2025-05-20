@@ -153,7 +153,7 @@ const InterpolationMethod = {
     STEP: 1,
 };
 
-function interpolatedPositionFetcher(connection, master) {
+function interpolatedPositionFetcher(connection, master, start, end) {
     let index = -1;
     const totalPoints = connection.positions.length / 3;
     const time = animator.reactiveDataStatus.time;
@@ -202,7 +202,7 @@ function interpolatedPositionFetcher(connection, master) {
     }
 }
 
-function staticPositionFetcher(connection, master) {
+function staticPositionFetcher(connection, master, start, end) {
     const factor = connection.isScreenSpace ? resolutionMultiplier : 1;
     return {
         x: factor * connection.position[0],
@@ -224,9 +224,8 @@ function staticOffsetFetcher(connection) {
     };
 }
 
-function positionToMasterPositionFetcher(connection, master) {
-    const targetPosition = master && master.getPosition();
-    if (!targetPosition) {
+function positionToMasterPositionFetcher(connection, master, start, end) {
+    if (!master) {
         return null;
     }
     const initialPosition = {
@@ -234,24 +233,66 @@ function positionToMasterPositionFetcher(connection, master) {
         y: connection.position[1],
     }
     const initialTime = connection.position[2];
-    const velocity = InchToPixel * connection.velocity;
     const time = animator.reactiveDataStatus.time;
-    const vector = {
-        x: targetPosition.x - initialPosition.x,
-        y: targetPosition.y - initialPosition.y,
+    if (time <= initialTime) {
+        return null;
     }
-    const length = Math.sqrt(vector.x * vector.x +vector.y * vector.y );
-    vector.x /= Math.max(length, 1e-6);
-    vector.y /= Math.max(length, 1e-6);
-    const factor = (time - initialTime) * velocity;
-    // TBC: what happens when said projectile goes past its target?
+    if (!connection._positions) { 
+        const velocity = InchToPixel * connection.velocity;
+        let currentPosition = initialPosition;
+        connection._positions = [
+            {
+                x: currentPosition.x, 
+                y: currentPosition.y, 
+                time: initialTime
+            }
+        ];
+        for (let i = 1; i < (end - start)/ PollingRate + 1; i++) {
+            let nextTime = initialTime + i*PollingRate;
+            const targetPosition = master._getPosition(nextTime);
+            if (!targetPosition) {
+                connection._positions.push({
+                    x: currentPosition.x, 
+                    y: currentPosition.y, 
+                    time: nextTime
+                });
+            } else {
+                const vector = {
+                    x: targetPosition.x - currentPosition.x,
+                    y: targetPosition.y - currentPosition.y,
+                }
+                const length = Math.sqrt(vector.x * vector.x +vector.y * vector.y );
+                vector.x /= Math.max(length, 1e-6);
+                vector.y /= Math.max(length, 1e-6);
+                const factor = PollingRate * velocity;
+                connection._positions.push({
+                    x: currentPosition.x + factor * vector.x, 
+                    y: currentPosition.y + factor * vector.y, 
+                    time: nextTime
+                });
+                currentPosition = connection._positions[i];
+            }
+        }  
+    }
+    const positions = connection._positions;
+    // TODO: optimize if necessary
+    let i = 0;
+    for (i = 0; i < positions.length; i++) {
+        let cur = positions[i];
+        if (cur.time > time) {
+            break;
+        }
+    }
+    const cur = positions[i - 1];
+    const next = positions[i]
+    const factor = (time - cur.time) / (next.time - cur.time);
     return {
-        x: initialPosition.x + factor * vector.x,
-        y: initialPosition.y + factor * vector.y,
+        x:  factor* (next.x - cur.x) + cur.x,
+        y:  factor* (next.y - cur.y) + cur.y
     };
 }
 
-function masterPositionFetcher(connection, master) {
+function masterPositionFetcher(connection, master, start, end) {
     if (!master) {
         return null;
     }
@@ -412,7 +453,7 @@ class MechanicDrawable {
         if (this.start > time || this.end < time) {
             return null;
         }
-        return this.positionFetcher(this.connectedTo, this.master);
+        return this.positionFetcher(this.connectedTo, this.master, this.start, this.end);
     }
 
     moveContext(ctx, pos, rot) {

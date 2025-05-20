@@ -160,11 +160,10 @@ class IconDrawable {
         return this.getInterpolatedRotation(startIndex, Math.max(currentIndex, startIndex));
     }
 
-    getPosition() {
+    _getPosition(time) {
         if (this.positions === null || this.positions.length === 0 || this.disconnected()) {
             return null;
         }
-        var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
@@ -178,6 +177,10 @@ class IconDrawable {
         const startIndex = Math.ceil((animator.times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((animator.times.length - 1) * time / lastTime);
         return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex));
+    }
+
+    getPosition(_time) {
+        return this._getPosition(animator.reactiveDataStatus.time);
     }
 
     getSize() {
