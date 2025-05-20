@@ -698,7 +698,7 @@ public static class EffectGUIDs
     public static readonly GUID GreerRipplesOfRotMovingWalls = new("92746BC770773842B4034E049A40C1DD"); // 2000 duration
     public static readonly GUID GreerRipplesOfRotWalls = new("8A3F35110E95E8458CAE1D22499A7076"); // 23000 duration
     public static readonly GUID GreerBlobOfBlightIndicator = new("34724E94CD4E974C95A8D9D1D1162658"); // 0 duration
-    public static readonly GUID GreerBlobofBlight = new("1DCAF79F42B75D41AC13A9C8968AFAEA"); // 5000 duration
+    public static readonly GUID GreerBlobofBlightStationary = new("1DCAF79F42B75D41AC13A9C8968AFAEA"); // 5000 duration
     // Decima
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit

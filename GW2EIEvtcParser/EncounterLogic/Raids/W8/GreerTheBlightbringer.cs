@@ -769,11 +769,22 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
 
-        // Blob of Blight - Orbs
+        // Blob of Blight - Stationary Orb
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerBlobofBlightStationary, out var blobOfBlight))
+        {
+            foreach (EffectEvent effect in blobOfBlight)
+            {
+                lifespan = effect.ComputeLifespan(log, 7000);
+                replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, new PositionConnector(effect.Position)));
+            }
+        }
+
+        // Blob of Blight - Moving Orbs
         // Using the projectile velocity to distinguish between the main orbs and the mini orbs
-        // Main orbs have 0.3 and mini orbs have 0.5
+        // Main orbs have 0.3 and mini orbs have 0.5, once the main orb hits a player, the mini orbs have 0.4
         var blobOfBlightMainOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.3f));
-        var blobOfBlightMiniOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.5f));
+        var blobOfBlightMiniOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.4f || x.Speed == 0.5f));
 
         // Main Orbs
         foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
@@ -792,7 +803,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Mini Orbs
-        replay.Decorations.AddNonHomingMissiles(log, blobOfBlightMiniOrbs, Colors.GreenishYellow, 0.2, 25);
+        replay.Decorations.AddNonHomingMissiles(log, blobOfBlightMiniOrbs, Colors.GreenishYellow, 0.3, 25);
     }
 
     private static void AddEmpoweringBlast(NPC target, ParsedEvtcLog log, CombatReplay replay)
