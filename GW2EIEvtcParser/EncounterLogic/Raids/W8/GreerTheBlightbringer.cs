@@ -332,6 +332,8 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
 
+        (long start, long end) lifespan;
+
         switch (target.ID)
         {
             case (int)TargetID.Greer:
@@ -353,7 +355,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     {
                         foreach (EffectEvent effect in rotTheWorld.Where(x => x.Time >= breakbar.Start && x.Time <= breakbar.End))
                         {
-                            (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                            lifespan = effect.ComputeLifespan(log, effect.Duration);
                             replay.Decorations.AddWithBorder(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), Colors.LightOrange, 0.2);
                         }
                     }
@@ -372,18 +374,20 @@ internal class GreerTheBlightbringer : MountBalrior
                 {
                     foreach (EffectEvent effect in invulnerableBarriers)
                     {
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        lifespan = effect.ComputeLifespan(log, effect.Duration);
                         replay.Decorations.AddWithBorder(new CircleDecoration(600, lifespan, Colors.GreenishYellow, 0.2, new AgentConnector(target)), Colors.GreenishYellow, 0.4);
                     }
                 }
                 break;
             case (int)TargetID.Reeg:
+                AddEmpoweringBlast(target, log, replay);
                 AddScatteringSporeblast(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
             case (int)TargetID.Gree:
+                AddEmpoweringBlast(target, log, replay);
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
@@ -391,6 +395,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
             case (int)TargetID.Ereg:
+                AddEmpoweringBlast(target, log, replay);
                 AddScatteringSporeblast(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddRainOfSpores(target, log, replay);
@@ -408,7 +413,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     foreach (EffectEvent effect in blightingStabIndicator)
                     {
                         // Duration too long by 500ms, use damage effect as end time
-                        (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.GreerBlightingStabDamage);
+                        lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.GreerBlightingStabDamage);
                         replay.Decorations.Add(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
                     }
                 }
@@ -418,7 +423,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 {
                     foreach (EffectEvent effect in blightingStabDamage)
                     {
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                        lifespan = effect.ComputeLifespan(log, 1000);
                         replay.Decorations.Add(new CircleDecoration(300, lifespan, Colors.GreenishYellow, 0.2, new PositionConnector(effect.Position)));
                     }
                 }
@@ -540,12 +545,14 @@ internal class GreerTheBlightbringer : MountBalrior
 
     private static void AddEnfeeblingMiasma(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        (long start, long end) lifespan;
+
         // Enfeebling Miasma - Cone Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasma, out var miasmaIndicator))
         {
             foreach (EffectEvent effect in miasmaIndicator)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 6000);
+                lifespan = effect.ComputeLifespan(log, 6000);
                 var cone = new PieDecoration(2000, 60, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
                 replay.Decorations.Add(cone);
             }
@@ -560,23 +567,32 @@ internal class GreerTheBlightbringer : MountBalrior
                 foreach (EffectEvent cloud in miasmaClouds.Where(x => x.Time > animation.Time && x.Time < animation.Time + 6000))
                 {
                     long duration = cloud.GUIDEvent.ContentGUID == EffectGUIDs.GreerEnfeeblingMiasmaGasClouds ? 12000 : 13000;
-                    (long start, long end) lifespan = cloud.ComputeLifespan(log, duration);
+                    lifespan = cloud.ComputeLifespan(log, duration);
                     var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
                     replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
-                    replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
+                    if (!log.CombatData.HasMissileData)
+                    {
+                        replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
+                    }
                 }
             }
         }
+
+        // Enfeebling Miasma - Gas Projectiles
+        var enfeeblingMiasmaCloud = log.CombatData.GetMissileEventsBySkillIDs([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4]).Where(x => x.Src == target.AgentItem);
+        replay.Decorations.AddNonHomingMissiles(log, enfeeblingMiasmaCloud, Colors.Purple, 0.2, 150);
     }
 
     private static void AddCageOfDecayOrNoxiousBlight(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        (long start, long end) lifespan;
+
         // Cage of Decay - Arrow Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerCageOfDecayArrowIndicator, out var cageOfDecayArrows))
         {
             foreach (EffectEvent effect in cageOfDecayArrows)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                lifespan = effect.ComputeLifespan(log, 5000);
                 var offset = new Vector3(700, 0, 0);
                 var arrow = new RectangleDecoration(1400, 50, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
                 replay.Decorations.Add(arrow);
@@ -590,7 +606,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 long duration = 5000;
                 long growing = effect.Time + duration;
-                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(360, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 replay.Decorations.AddWithGrowing(circle, growing);
             }
@@ -601,7 +617,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in cageOfDecayRoots)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                lifespan = effect.ComputeLifespan(log, 2000);
                 var roots = (RectangleDecoration)new RectangleDecoration(50, 150, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(roots, Colors.Purple, 0.2);
             }
@@ -613,7 +629,7 @@ internal class GreerTheBlightbringer : MountBalrior
             foreach (EffectEvent effect in cageOfDecayCirclesDamage)
             {
                 // Durations: Cage of Decay - 23000 | Eruption of Rot - 8000
-                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var circle = new CircleDecoration(360, lifespan, Colors.LightPurple, 0.3, new PositionConnector(effect.Position));
                 replay.Decorations.AddWithBorder(circle, Colors.GreenishYellow, 0.3);
             }
@@ -624,7 +640,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in cageOfDecayWalls)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                lifespan = effect.ComputeLifespan(log, 2000);
                 var wall = (RectangleDecoration)new RectangleDecoration(100, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
@@ -635,7 +651,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in cageOfDecayCircleWalls)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 23000);
+                lifespan = effect.ComputeLifespan(log, 23000);
                 var wall = (RectangleDecoration)new RectangleDecoration(200, 100, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
@@ -691,12 +707,14 @@ internal class GreerTheBlightbringer : MountBalrior
 
     private static void AddRipplesOfRot(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        (long start, long end) lifespan;
+
         // Ripples of Rot - Inner Circle
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerRipplesOfRotIndicator1, out var ripplesOfRotIndicator1))
         {
             foreach (EffectEvent effect in ripplesOfRotIndicator1)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var innerCircle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 replay.Decorations.AddWithGrowing(innerCircle, effect.Time + effect.Duration);
             }
@@ -707,7 +725,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in ripplesOfRotIndicator2)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var outerCircle = new CircleDecoration(800, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 replay.Decorations.AddWithBorder(outerCircle, Colors.LightOrange, 0.2);
             }
@@ -718,7 +736,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in movingWalls)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                lifespan = effect.ComputeLifespan(log, 2000);
                 var wall = (RectangleDecoration)new RectangleDecoration(100, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
@@ -729,7 +747,7 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in walls)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 23000);
+                lifespan = effect.ComputeLifespan(log, 23000);
                 var wall = (RectangleDecoration)new RectangleDecoration(200, 100, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
@@ -738,16 +756,61 @@ internal class GreerTheBlightbringer : MountBalrior
 
     private static void AddBlobOfBlight(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        (long start, long end) lifespan;
+
         // Blob of Blight - AoE Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerBlobOfBlightIndicator, out var blobOfBlightIndicator))
         {
             foreach (EffectEvent effect in blobOfBlightIndicator)
             {
                 // The effect has 0 duration logged
-                (long start, long end) lifespan = effect.ComputeLifespan(log, 2315);
+                lifespan = effect.ComputeLifespan(log, 2315);
                 replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
             }
         }
+
+        // Blob of Blight - Stationary Orb
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerBlobofBlightStationary, out var blobOfBlight))
+        {
+            foreach (EffectEvent effect in blobOfBlight)
+            {
+                lifespan = effect.ComputeLifespan(log, 7000);
+                replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)));
+                replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, new PositionConnector(effect.Position)));
+            }
+        }
+
+        // Blob of Blight - Moving Orbs
+        // Using the projectile velocity to distinguish between the main orbs and the mini orbs
+        // Main orbs have 0.3 and mini orbs have 0.5, once the main orb hits a player, the mini orbs have 0.4
+        var blobOfBlightMainOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.3f));
+        var blobOfBlightMiniOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.4f || x.Speed == 0.5f));
+
+        // Main Orbs
+        foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
+        {
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+            {
+                MissileLaunchEvent? launch = missileEvent.LaunchEvents[i];
+                lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
+                if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
+                {
+                    replay.Decorations.Add(new CircleDecoration(60, lifespan, Colors.GreenishYellow, 0.3, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed)));
+                    replay.Decorations.Add(new DoughnutDecoration(60, 80, lifespan, Colors.LightPurple, 0.3, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed)));
+                }
+            }
+        }
+
+        // Mini Orbs
+        replay.Decorations.AddNonHomingMissiles(log, blobOfBlightMiniOrbs, Colors.GreenishYellow, 0.3, 25);
+    }
+
+    private static void AddEmpoweringBlast(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        // Empowering Blast - Orbs
+        var orbs = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [EmpoweringBlast1, EmpoweringBlast2]);
+        replay.Decorations.AddHomingMissiles(log, orbs, Colors.Purple, 0.5, 25);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

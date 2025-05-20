@@ -37,7 +37,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)
     {
-        UsingNotAccurate(true); // TODO: confirm if culling is server side logic
+        UsingNotAccurate(true);
         UsingEnable((combatData) => combatData.HasEffectData);
         _effectGUID = effectGUID;
     }

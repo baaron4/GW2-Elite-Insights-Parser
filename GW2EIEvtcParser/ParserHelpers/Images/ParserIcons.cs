@@ -1005,7 +1005,7 @@ internal static class ParserIcons
         { TargetID.VoidBrandstalker, TrashGenericRedEnemySkull },
         { TargetID.SpiritOfDestruction, TrashSpiritOfDestructionOrPain },
         { TargetID.SpiritOfPain, TrashSpiritOfDestructionOrPain },
-        { TargetID.DragonEnergyOrb, TrashGenericRedEnemySkull },
+        { TargetID.DragonEnergyOrb, GenericEnemyIcon },
         { TargetID.HandOfErosion, TrashHandOfErosion },
         { TargetID.HandOfEruption, TrashHandOfEruption },
         { TargetID.VoltaicWisp, TrashVoltaicWisp },

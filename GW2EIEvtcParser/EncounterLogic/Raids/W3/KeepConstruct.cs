@@ -56,13 +56,13 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             new PlayerDstHitMechanic(TowerDrop, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump", "Tower Drop (KC Jump)","Tower Drop", 0),
             new PlayerDstBuffApplyMechanic(XerasFury, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb", "Xera's Fury (Large Bombs) application","Bombs", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(WhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb", "Good White Orb","Good White Orb", 0)
+                new PlayerDstHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb", "Good White Orb","Good White Orb", 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(RedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb", "Good Red Orb","Good Red Orb", 0)
+                new PlayerDstHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "GR.Orb", "Good Red Orb","Good Red Orb", 0)
                     .UsingChecker((de,log) => de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(WhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb", "Bad White Orb","Bad White Orb", 0)
+                new PlayerDstHitMechanic(RadiantEnergyWhiteOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Grey), "BW.Orb", "Bad White Orb","Bad White Orb", 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
-                new PlayerDstHitMechanic(RedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb", "Bad Red Orb","Bad Red Orb", 0)
+                new PlayerDstHitMechanic(CrimsonEnergyRedOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "BR.Orb", "Bad Red Orb","Bad Red Orb", 0)
                     .UsingChecker((de,log) => !de.To.HasBuff(log, CrimsonAttunementOrb, de.Time)),
             ]),
             new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
@@ -460,6 +460,17 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         replay.Decorations.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
         IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [RadiantAttunementPhantasm, RadiantAttunementOrb], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // Crimson Energy (red) and Radiant Energy (white) orbs
+        var radiantOrbs = log.CombatData.GetMissileEventsBySkillID(RadiantEnergyWhiteOrb);
+        var crimsonOrbs = log.CombatData.GetMissileEventsBySkillID(CrimsonEnergyRedOrb);
+        EnvironmentDecorations.AddNonHomingMissiles(log, radiantOrbs, Colors.White, 0.4, 25);
+        EnvironmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

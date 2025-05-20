@@ -698,7 +698,7 @@ public static class EffectGUIDs
     public static readonly GUID GreerRipplesOfRotMovingWalls = new("92746BC770773842B4034E049A40C1DD"); // 2000 duration
     public static readonly GUID GreerRipplesOfRotWalls = new("8A3F35110E95E8458CAE1D22499A7076"); // 23000 duration
     public static readonly GUID GreerBlobOfBlightIndicator = new("34724E94CD4E974C95A8D9D1D1162658"); // 0 duration
-    public static readonly GUID GreerBlobofBlight = new("1DCAF79F42B75D41AC13A9C8968AFAEA"); // 5000 duration
+    public static readonly GUID GreerBlobofBlightStationary = new("1DCAF79F42B75D41AC13A9C8968AFAEA"); // 5000 duration
     // Decima
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
@@ -815,7 +815,8 @@ public static class EffectGUIDs
     public static readonly GUID HarvestTemplePurificationLightningOfJormag = new("ADDDB6E725094240845270262E59F2BD");
     public static readonly GUID HarvestTemplePurificationStormfall = new("F5A9E487E2B3A64A83661D87DE1CAF1F");
     public static readonly GUID HarvestTemplePurificationZones = new("D5B07DF36991DD48B64AC403EFAA6F9F");
-    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordus = new("D49EB86EB17A0D4793768B19978C1B2C");
+    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordus = new("D2CDF45D796C864B8B8BF81C264A4B49"); // duration 0
+    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordusIndicator = new("D49EB86EB17A0D4793768B19978C1B2C"); // Variable duration, roughly 2300
     public static readonly GUID HarvestTemplePurificationBeeLaunch = new("73FE43AEE78ADC4B9527DF683481984F");
     public static readonly GUID HarvestTemplePurificationPoolOfUndeath = new("CCBA0AD77B52774DA48EE37AED9108F4"); // duration 21000
     public static readonly GUID HarvestTemplePurificationWaterProjectiles = new("F8F9628F58DA09438574D66424399151");
