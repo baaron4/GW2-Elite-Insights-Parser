@@ -855,10 +855,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             {
                 MissileLaunchEvent? launch = orb.LaunchEvents[i];
                 lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : lifespan.end);
-                Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
-                direction /= direction.Length();
-                Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
-                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                 if (orb.SkillID == InsatiableHungerSmallOrbSkillNM
                     || orb.SkillID == InsatiableHungerSmallOrbSkillCM
                     || orb.SkillID == InsatiableHungerSmallOrbEmpoweredSkillNM

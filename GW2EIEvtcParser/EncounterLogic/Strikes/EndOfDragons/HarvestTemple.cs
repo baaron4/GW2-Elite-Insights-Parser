@@ -966,10 +966,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         MissileLaunchEvent? launch = grasp.LaunchEvents[i];
                         lifespan = (launch.Time, i != grasp.LaunchEvents.Count - 1 ? grasp.LaunchEvents[i + 1].Time : lifespan.end);
-                        Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
-                        direction /= direction.Length();
-                        Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
-                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                         var beamAoE = new CircleDecoration(160, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
                     }
@@ -1000,10 +997,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         MissileLaunchEvent? launch = breath.LaunchEvents[i];
                         lifespan = (launch.Time, i != breath.LaunchEvents.Count - 1 ? breath.LaunchEvents[i + 1].Time : lifespan.end);
-                        Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
-                        direction /= direction.Length();
-                        Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
-                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                         var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, connector);
                         replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
                     }
