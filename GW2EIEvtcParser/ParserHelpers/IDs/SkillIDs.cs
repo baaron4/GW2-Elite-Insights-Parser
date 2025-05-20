@@ -2058,7 +2058,7 @@ public static class SkillIDs
     public const long OverHere = 34903;
     public const long StatueFixated1 = 34912;
     public const long TemporalShredAoE = 34913;
-    public const long WhiteOrb = 34914;
+    public const long RadiantEnergyWhiteOrb = 34914;
     public const long BloodstoneBlessed = 34917;
     public const long SpatialDistortion = 34918;
     public const long GravityWellXera = 34921;
@@ -2076,7 +2076,7 @@ public static class SkillIDs
     public const long AchievementEligibilityMildlyInsane = 34964;
     public const long Derangement = 34965;
     public const long PhantasmalBlades3 = 34971;
-    public const long RedOrb = 34972;
+    public const long CrimsonEnergyRedOrb = 34972;
     public const long PortalWeavingWhiteMantleWatchwork = 34978;
     public const long Unbreakable = 34979;
     public const long RadiantAttunementPhantasm = 34992;
