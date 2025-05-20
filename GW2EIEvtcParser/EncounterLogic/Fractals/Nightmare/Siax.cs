@@ -267,7 +267,7 @@ internal class Siax : Nightmare
         }
 
         // Caustic Barrage
-        AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
+        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
 
         // Cascade Of Torment
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);

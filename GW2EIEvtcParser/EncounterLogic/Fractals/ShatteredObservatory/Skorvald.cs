@@ -507,7 +507,7 @@ internal class Skorvald : ShatteredObservatory
         }
 
         // Solar Bolt - Indicator
-        AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
+        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
 
         // Solar Bolt - Damage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out var solarBolts))

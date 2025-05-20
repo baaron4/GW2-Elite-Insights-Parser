@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -31,7 +32,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Insatiable, new MechanicPlotlySetting(Symbols.Hourglass, Colors.Pink), "Ins.A", "Insatiable Applied (Absorbed Gluttony Orb)", "Insatiable Application", 0),
-                new EnemyCastStartMechanic([InsatiableHungerSkillNM, InsatiableHungerEmpoweredSkillNM, InsatiableHungerSkillCM, InsatiableHungerEmpoweredSkillCM], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
+                new EnemyCastStartMechanic([InsatiableHungerSmallOrbSkillNM, InsatiableHungerSmallOrbEmpoweredSkillNM, InsatiableHungerSmallOrbSkillCM, InsatiableHungerSmallOrbEmpoweredSkillCM], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([CrushingRegretNM, CrushingRegretCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "CrushReg.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
@@ -463,6 +464,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddMaliciousIntentDecoration(target, log, replay, casts);
+                AddInsatiableHungerDecoration(target, log, replay);
                 break;
             case (int)TargetID.EmbodimentOfDespair:
                 AddDeterminedOverhead(target, log, replay);
@@ -480,9 +482,11 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 break;
             case (int)TargetID.EmbodimentOfGluttony:
                 AddDeterminedOverhead(target, log, replay);
+                AddInsatiableHungerDecoration(target, log, replay);
                 break;
             case (int)TargetID.PermanentEmbodimentOfGluttony:
                 AddHiddenWhileNotCasting(target, log, replay, 13720);
+                AddInsatiableHungerDecoration(target, log, replay);
                 break;
             case (int)TargetID.EmbodimentOfMalice:
                 AddDeterminedOverhead(target, log, replay);
@@ -830,6 +834,44 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                     var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
                     replay.Decorations.Add(rectangle3);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Adds the Insatiable Hunger mechanic decoration.
+    /// </summary>
+    /// <param name="target">The target casting.</param>
+    /// <param name="log">The log.</param>
+    /// <param name="replay">The Combat Replay.</param>
+    private static void AddInsatiableHungerDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        var orbs = log.CombatData.GetMissileEventsBySrc(target.AgentItem);
+        foreach (MissileEvent orb in orbs)
+        {
+            (long start, long end) lifespan = (orb.Time, orb.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < orb.LaunchEvents.Count; i++)
+            {
+                MissileLaunchEvent? launch = orb.LaunchEvents[i];
+                lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : lifespan.end);
+                Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
+                direction /= direction.Length();
+                Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
+                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                if (orb.SkillID == InsatiableHungerSmallOrbSkillNM
+                    || orb.SkillID == InsatiableHungerSmallOrbSkillCM
+                    || orb.SkillID == InsatiableHungerSmallOrbEmpoweredSkillNM
+                    || orb.SkillID == InsatiableHungerSmallOrbEmpoweredSkillCM
+                    || orb.SkillID == InsatiableHungerPermanentEmbodimentSmallOrbSkillCM
+                    || orb.SkillID == InsatiableHungerPermanentEmbodimentSmallOrbEmpoweredSkillCM)
+                {
+                    replay.Decorations.Add(new CircleDecoration(10, lifespan, Colors.RedSkin, 0.8, connector));
+                }
+                else
+                {
+                    replay.Decorations.Add(new CircleDecoration(30, lifespan, Colors.Black, 0.5, connector));
+                    replay.Decorations.Add(new DoughnutDecoration(30, 40, lifespan, Colors.RedSkin, 0.8, connector));
                 }
             }
         }
