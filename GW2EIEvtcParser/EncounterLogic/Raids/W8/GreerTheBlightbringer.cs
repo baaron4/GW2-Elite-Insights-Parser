@@ -770,6 +770,8 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Blob of Blight - Orbs
+        // Using the projectile velocity to distinguish between the main orbs and the mini orbs
+        // Main orbs have 0.3 and mini orbs have 0.5
         var blobOfBlightMainOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.3f));
         var blobOfBlightMiniOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.5f));
 

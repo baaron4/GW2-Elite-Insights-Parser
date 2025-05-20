@@ -1429,15 +1429,17 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 {
                                     // Shooting animation
                                     long animationDuration = brandedArtilleryAoE.Time - cast.Time;
-                                    lifespan = (cast.Time, cast.Time + animationDuration);
+                                    lifespan = (brandedArtilleryAoE.Time, brandedArtilleryAoE.Time + animationDuration);
 
                                     // Landing indicator
                                     var positionConnector = new PositionConnector(brandedArtilleryAoE.Position);
                                     var aoeCircle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                     replay.Decorations.AddWithGrowing(aoeCircle, lifespan.end);
                                     // Projectile decoration
-                                    // TODO @Linka - Lock this behind log.CombatData.HasMissileData once we have a log with this projectile
-                                    replay.Decorations.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
+                                    if (!log.CombatData.HasMissileData)
+                                    {
+                                        replay.Decorations.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
+                                    }
                                 }
                             }
                             break;
@@ -1445,6 +1447,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                             break;
                     }
                 }
+
+                // Branded Artillery Orb
+                var brandedArtilleryOrbs = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BrandedArtillery);
+                replay.Decorations.AddNonHomingMissiles(log, brandedArtilleryOrbs, Colors.DarkPurple, 0.2, 50);
                 break;
             case (int)TargetID.VoidTimeCaster:
                 // Gravity Crush - Indicator

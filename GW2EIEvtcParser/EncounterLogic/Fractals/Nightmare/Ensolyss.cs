@@ -512,6 +512,7 @@ internal class Ensolyss : Nightmare
         // Caustic Barrage
         AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
 
+        // Nightmare Respite
         long[] idsHealingOrbs =
             [
                 EnsolyssNightmareRespite1,
@@ -525,6 +526,7 @@ internal class Ensolyss : Nightmare
         var healingOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsHealingOrbs);
         EnvironmentDecorations.AddNonHomingMissiles(log, healingOrbs, Colors.Blue, 0.5, 10);
 
+        // Nightmare Bomb & Nightmare Bullet
         long[] idsRedOrbs =
             [
                 EnsolyssNightmareBomb1,

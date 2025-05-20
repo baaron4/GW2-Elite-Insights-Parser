@@ -791,7 +791,7 @@ partial class CombatData
     }
     public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillID(AgentItem src, long skillID)
     {
-        return _statusEvents.MissileEventsBySrc.GetValueOrEmpty(src).Where(x => x.SkillID == skillID).ToList();
+        return GetMissileEventsBySrc(src).Where(x => x.SkillID == skillID).ToList();
     }
     public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillIDs(AgentItem src, long[] skillIDs)
     {
