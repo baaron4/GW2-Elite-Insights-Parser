@@ -815,7 +815,8 @@ public static class EffectGUIDs
     public static readonly GUID HarvestTemplePurificationLightningOfJormag = new("ADDDB6E725094240845270262E59F2BD");
     public static readonly GUID HarvestTemplePurificationStormfall = new("F5A9E487E2B3A64A83661D87DE1CAF1F");
     public static readonly GUID HarvestTemplePurificationZones = new("D5B07DF36991DD48B64AC403EFAA6F9F");
-    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordus = new("D49EB86EB17A0D4793768B19978C1B2C");
+    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordus = new("D2CDF45D796C864B8B8BF81C264A4B49"); // duration 0
+    public static readonly GUID HarvestTemplePurificationFlamesOfPrimordusIndicator = new("D49EB86EB17A0D4793768B19978C1B2C"); // Variable duration, roughly 2300
     public static readonly GUID HarvestTemplePurificationBeeLaunch = new("73FE43AEE78ADC4B9527DF683481984F");
     public static readonly GUID HarvestTemplePurificationPoolOfUndeath = new("CCBA0AD77B52774DA48EE37AED9108F4"); // duration 21000
     public static readonly GUID HarvestTemplePurificationWaterProjectiles = new("F8F9628F58DA09438574D66424399151");

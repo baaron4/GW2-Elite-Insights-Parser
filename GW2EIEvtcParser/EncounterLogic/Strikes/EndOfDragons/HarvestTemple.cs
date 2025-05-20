@@ -114,6 +114,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 new PlayerDstHitMechanic(VoidPoolSooWon, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
                 new PlayerDstHitMechanic(TailSlam, new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
                 new PlayerDstHitMechanic(TormentOfTheVoid, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkMagenta), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
+                new PlayerDstHitMechanic(MagicHail, new MechanicPlotlySetting(Symbols.CircleX, Colors.Black), "MagHail.H", "Hit by Magic Hail", "Magic Hail Hit", 0),
                 // Obliterator
                 new MechanicGroup([
                     new PlayerDstHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", 0),
@@ -824,19 +825,33 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
-                // Primordus - Flames of Primordus
+                // Primordus - Flames of Primordus (Indicator)
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationFlamesOfPrimordusIndicator, out var flamesOfPrimordusIndicator))
+                {
+                    foreach (EffectEvent effect in flamesOfPrimordusIndicator.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
+                    {
+                        // Durations between 2300 and 2400
+                        lifespan = effect.Duration > 0 ? (effect.Time, effect.Time + effect.Duration) : (effect.Time, effect.Time + 2350);
+                        var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
+                        if (!log.CombatData.HasMissileData && target.TryGetCurrentPosition(log, lifespan.start, out var primordusPos))
+                        {
+                            replay.Decorations.AddProjectile(primordusPos, effect.Position, lifespan, Colors.Yellow, 0.2);
+                        }
+                    }
+                }
+                // Primordus - Flames of Primordus (Flames)
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationFlamesOfPrimordus, out var flamesOfPrimordus))
                 {
-                    foreach (EffectEvent fireBallEffect in flamesOfPrimordus.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
+                    foreach (EffectEvent effect in flamesOfPrimordus.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                     {
-                        (long start, long end) lifespanIndicator = (fireBallEffect.Time - 2000, fireBallEffect.Time);
-                        (long start, long end) lifespanFlame = fireBallEffect.ComputeLifespan(log, 2300);
-                        var circle = new CircleDecoration(200, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(fireBallEffect.Position));
-                        target.TryGetCurrentPosition(log, lifespanIndicator.start, out var primordusPos);
-                        replay.Decorations.AddProjectile(primordusPos, fireBallEffect.Position, lifespanIndicator, Colors.Yellow, 0.2);
-                        replay.Decorations.AddWithGrowing(circle, lifespanIndicator.end);
-                        replay.Decorations.Add(new CircleDecoration(200, lifespanFlame, Colors.Red, 0.2, new PositionConnector(fireBallEffect.Position)));
+                        (long start, long end) lifespanFlame = effect.ComputeLifespan(log, 2000); // Estimated
+                        replay.Decorations.Add(new CircleDecoration(200, lifespanFlame, Colors.Red, 0.2, new PositionConnector(effect.Position)));
                     }
+
+                    // Flame Orbs
+                    var flameOrbs = log.CombatData.GetMissileEventsBySkillID(FlamesOfPrimordus);
+                    replay.Decorations.AddNonHomingMissiles(log, flameOrbs, Colors.Red, 0.2, 50);
                 }
                 // Kralkatorrik - Stormfall (Cracks)
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationStormfall, out var stormfallEffects))
@@ -917,6 +932,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.TheDragonVoidJormag:
+                // Frost Meteor
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleJormagFrostMeteorIceField, out var meteorEffects))
                 {
                     foreach (EffectEvent effect in meteorEffects)
@@ -941,6 +957,57 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.Add(new CircleDecoration(160, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position)));
                     }
                 }
+                // Grasp of Jormag - Moving AoE
+                var graspOfJormagProjectiles = log.CombatData.GetMissileEventsBySkillID(GraspOfJormag);
+                foreach (MissileEvent grasp in graspOfJormagProjectiles)
+                {
+                    lifespan = (grasp.Time, grasp.RemoveEvent?.Time ?? Math.Min(log.FightData.FightEnd, target.LastAware));
+                    for (int i = 0; i < grasp.LaunchEvents.Count; i++)
+                    {
+                        MissileLaunchEvent? launch = grasp.LaunchEvents[i];
+                        lifespan = (launch.Time, i != grasp.LaunchEvents.Count - 1 ? grasp.LaunchEvents[i + 1].Time : lifespan.end);
+                        Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
+                        direction /= direction.Length();
+                        Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
+                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                        var beamAoE = new CircleDecoration(160, lifespan, Colors.LightBlue, 0.1, connector);
+                        replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
+                    }
+                }
+                // Frost Beam - Non-NPC sets
+                var breathOfJormag = log.CombatData.GetMissileEventsBySkillID(BreathOfJormag2);
+                foreach (MissileEvent breath in breathOfJormag)
+                {
+                    // The breath is missing MissileRemove events, we compute the removal manually
+                    long beamAgentSpawnTime = log.FightData.FightEnd;
+                    var beamAgents = log.AgentData.GetNPCsByIDs([TargetID.JormagMovingFrostBeam, TargetID.JormagMovingFrostBeamNorth, TargetID.JormagMovingFrostBeamCenter]);
+                    foreach (AgentItem agent in beamAgents)
+                    {
+                        // Find the closest velocity change event
+                        VelocityEvent? frostBeamVelocity = log.CombatData.GetMovementData(agent).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                        if (frostBeamVelocity != null && frostBeamVelocity.Time > breath.Time)
+                        {
+                            beamAgentSpawnTime = Math.Min(beamAgentSpawnTime, frostBeamVelocity.Time);
+                        }
+                    }
+                    // Find the minimum value between LastAware, VelicityEvent and FightEnd
+                    // If there isn't a VelocityEvent, it uses FightEnd, otherwise it's always LastAware
+                    // The beams can spawn after Jormag has died, they last roughly 3 seconds, if they spawn just before Jormag dies, they get cancelled
+                    var end = breath.Time >= target.LastAware ? Math.Min(target.LastAware + 3000, beamAgentSpawnTime) : Math.Min(target.LastAware, beamAgentSpawnTime);
+                    lifespan = (breath.Time, end);
+
+                    for (int i = 0; i < breath.LaunchEvents.Count; i++)
+                    {
+                        MissileLaunchEvent? launch = breath.LaunchEvents[i];
+                        lifespan = (launch.Time, i != breath.LaunchEvents.Count - 1 ? breath.LaunchEvents[i + 1].Time : lifespan.end);
+                        Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
+                        direction /= direction.Length();
+                        Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
+                        var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
+                        var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, connector);
+                        replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
+                    }
+                }
                 break;
             case (int)TargetID.JormagMovingFrostBeam:
             case (int)TargetID.JormagMovingFrostBeamNorth:
@@ -949,9 +1016,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                 // Beams are immobile at spawn for around 3 seconds
                 if (frostBeamMoveStartVelocity != null)
                 {
-                    (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
-                    replay.Trim(lifespanBeam.start, lifespanBeam.end);
-                    var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
+                    lifespan = (frostBeamMoveStartVelocity.Time, target.LastAware);
+                    replay.Trim(lifespan.start, lifespan.end);
+                    var beamAoE = new CircleDecoration(300, lifespan, Colors.LightBlue, 0.1, new AgentConnector(target));
                     replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
                 }
                 else
@@ -1106,6 +1173,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.TheDragonVoidMordremoth:
+                // Poison Roar - AoEs
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleMordremothPoisonRoarImpact, out var mordremothPoisonEffects))
                 {
                     foreach (EffectEvent effect in mordremothPoisonEffects)
@@ -1114,6 +1182,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.MilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
                     }
                 }
+                // Poison Roar - Projectiles
+                var poisonRoar = log.CombatData.GetMissileEventsBySkillID(PoisonRoar);
+                replay.Decorations.AddNonHomingMissiles(log, poisonRoar, Colors.MilitaryGreen, 0.3, 25);
                 // Shockwaves
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleMordremothShockwave1, out var shockwaves))
                 {
@@ -1149,6 +1220,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddWithBorder(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.4);
                     }
                 }
+                // Putrid Deluge - Projectiles
+                var putrid = log.CombatData.GetMissileEventsBySkillID(PutridDeluge);
+                replay.Decorations.AddNonHomingMissiles(log, putrid, Colors.LightMilitaryGreen, 0.3, 25);
                 // Tail Slam
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanTailSlamImpact, out var zhaitainTailSlam))
                 {
@@ -1378,6 +1452,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.Decorations.AddShockwave(connector, lifespan, Colors.Blue, 0.5, radius);
                     }
                 }
+
+                // Magic Hail
+                var magicHail = log.CombatData.GetMissileEventsBySkillID(MagicHail);
+                replay.Decorations.AddNonHomingMissiles(log, magicHail, Colors.Black, 0.5, 25);
                 break;
             case (int)TargetID.KillableVoidAmalgamate:
                 // Grasp of the Void

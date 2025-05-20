@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -850,11 +851,13 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         foreach (MissileEvent orb in orbs)
         {
             (long start, long end) lifespan = (orb.Time, orb.RemoveEvent?.Time ?? log.FightData.FightEnd);
-            foreach (MissileLaunchEvent launch in orb.LaunchEvents)
+            for (int i = 0; i < orb.LaunchEvents.Count; i++)
             {
-                var direction = (launch.TargetPosition - launch.LaunchPosition);
+                MissileLaunchEvent? launch = orb.LaunchEvents[i];
+                lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : lifespan.end);
+                Vector3 direction = (launch.TargetPosition - launch.LaunchPosition);
                 direction /= direction.Length();
-                var position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
+                Vector3 position = launch.LaunchPosition + (launch.Speed * direction) * (lifespan.end - lifespan.start);
                 var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), new ParametricPoint3D(position, lifespan.end)], Connector.InterpolationMethod.Linear);
                 if (orb.SkillID == InsatiableHungerSmallOrbSkillNM
                     || orb.SkillID == InsatiableHungerSmallOrbSkillCM

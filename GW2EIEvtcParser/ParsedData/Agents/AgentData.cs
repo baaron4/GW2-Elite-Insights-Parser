@@ -115,6 +115,15 @@ public class AgentData
     {
         return GetNPCsByID((int)id);
     }
+    public IReadOnlyList<AgentItem> GetNPCsByIDs(TargetID[] ids)
+    {
+        var list = new List<AgentItem>();
+        foreach (var id in ids)
+        {
+            list.AddRange(GetNPCsByID(id));
+        }
+        return list;
+    }
     public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(TargetID id, ulong agent)
     {
         return GetNPCsByIDAndAgent((int)id, agent);
