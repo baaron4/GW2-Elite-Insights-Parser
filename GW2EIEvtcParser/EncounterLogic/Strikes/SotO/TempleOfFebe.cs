@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -60,7 +59,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([MaliciousIntentSpawnDamageNM, MaliciousIntentSpawnDamageCM], new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent (Malicious Shadow Spawn)", "Malicious Intent Hit", 0),
-                new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targeted by Malicious Intent", 0),
+                new PlayerDstBuffApplyMechanic([MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targeted by Malicious Intent", 0),
                 new EnemyCastStartMechanic([MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM], new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
             ]),
             new MechanicGroup([
@@ -463,7 +462,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 replay.AddHideByBuff(target, log, InvulnerabilityCerus);
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
-                AddMaliciousIntentDecoration(target, log, replay, casts);
                 AddInsatiableHungerDecoration(target, log, replay);
                 break;
             case (int)TargetID.EmbodimentOfDespair:
@@ -490,11 +488,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 break;
             case (int)TargetID.EmbodimentOfMalice:
                 AddDeterminedOverhead(target, log, replay);
-                AddMaliciousIntentDecoration(target, log, replay, casts);
                 break;
             case (int)TargetID.PermanentEmbodimentOfMalice:
                 AddHiddenWhileNotCasting(target, log, replay, 3670);
-                AddMaliciousIntentDecoration(target, log, replay, casts);
                 break;
             case (int)TargetID.EmbodimentOfRage:
                 AddDeterminedOverhead(target, log, replay);
@@ -564,6 +560,10 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 replay.Decorations.AddWithGrowing(circle, growing);
             }
         }
+
+        // Malicious Intent - Malice Adds Tether
+        var maliciousIntent = GetFilteredList(log.CombatData, [MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], p, true, true);
+        replay.Decorations.AddTether(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -683,34 +683,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     private static void AddDeterminedOverhead(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
-    }
-
-    /// <summary>
-    /// Adds the Malicious Intent mechanic decoration.
-    /// </summary>
-    /// <param name="target">The target casting.</param>
-    /// <param name="log">The log.</param>
-    /// <param name="replay">The Combat Replay.</param>
-    /// <param name="casts">The cast events.</param>
-    private static void AddMaliciousIntentDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<CastEvent> casts)
-    {
-        // The Malicious Intent buff is only present in normal mode
-        // The effect has no Src but we can check the skill cast
-        var maliciousIntent = casts.Where(x => x.SkillId == MaliciousIntentNM || x.SkillId == MaliciousIntentEmpoweredNM || x.SkillId == MaliciousIntentCM || x.SkillId == MaliciousIntentEmpoweredCM);
-        foreach (CastEvent cast in maliciousIntent)
-        {
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebeMaliciousIntentTether, out var maliciousIntentTethers))
-            {
-                // This will only conflict if the embodiment and cerus cast the skill at the same time
-                foreach (EffectEvent effect in maliciousIntentTethers.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 2000))
-                {
-                    (long start, long end) lifespan = (effect.Time, effect.Time + 5000);
-                    lifespan = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespan);
-                    var tether = new LineDecoration(lifespan, Colors.RedSkin, 0.4, new AgentConnector(effect.Dst), new AgentConnector(target));
-                    replay.Decorations.Add(tether);
-                }
-            }
-        }
     }
 
     /// <summary>

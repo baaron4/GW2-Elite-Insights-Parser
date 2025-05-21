@@ -704,6 +704,7 @@ internal static class EncounterBuffs
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
+            new Buff("Malicious Intent Target (CM)", MaliciousIntentTargetBuffCM, Source.FightSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             new Buff("Empowered (Cerus)", EmpoweredCerus, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Empowered Despair (Cerus)", EmpoweredDespairCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),
             new Buff("Empowered Envy (Cerus)", EmpoweredEnvyCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),

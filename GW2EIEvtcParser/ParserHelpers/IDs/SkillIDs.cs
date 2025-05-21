@@ -4311,6 +4311,7 @@ public static class SkillIDs
     public const long WailOfDespairNM = 70633;
     public const long PoolOfDespairEmpoweredNM = 70659;
     public const long CryOfRageEmpoweredNM = 70668;
+    public const long MaliciousIntentTargetBuffCM = 70675;
     public const long EnragedSmashCM = 70681;
     public const long EmpoweredGluttonyEmbodiment = 70687;
     public const long SummonedPhantom = 70724;
