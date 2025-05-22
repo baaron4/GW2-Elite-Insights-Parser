@@ -238,6 +238,7 @@ function positionToMasterPositionFetcher(connection, master, start, end) {
         return null;
     }
     if (!connection._positions) { 
+        const pollingRate = PollingRate / 2;
         const velocity = InchToPixel * connection.velocity;
         let currentPosition = initialPosition;
         connection._positions = [
@@ -247,8 +248,8 @@ function positionToMasterPositionFetcher(connection, master, start, end) {
                 time: initialTime
             }
         ];
-        for (let i = 1; i < (end - start)/ PollingRate + 1; i++) {
-            let nextTime = initialTime + i*PollingRate;
+        for (let i = 1; i < (end - start)/ pollingRate + 1; i++) {
+            let nextTime = initialTime + i*pollingRate;
             const targetPosition = master._getPosition(nextTime);
             if (!targetPosition) {
                 connection._positions.push({
@@ -264,7 +265,7 @@ function positionToMasterPositionFetcher(connection, master, start, end) {
                 const length = Math.sqrt(vector.x * vector.x +vector.y * vector.y );
                 vector.x /= Math.max(length, 1e-6);
                 vector.y /= Math.max(length, 1e-6);
-                const factor = PollingRate * velocity;
+                const factor = pollingRate * velocity;
                 connection._positions.push({
                     x: currentPosition.x + factor * vector.x, 
                     y: currentPosition.y + factor * vector.y, 
