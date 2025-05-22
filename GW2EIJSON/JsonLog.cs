@@ -7,7 +7,10 @@ namespace GW2EIJSON;
 // compile-time generated serialization logic
 [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+    Converters = [
+        typeof(Tuple2ToExceptionConverterFactory),
+    ]
 )]
 [JsonSerializable(typeof(JsonLog))]
 public partial class JsonLogSerializerContext : JsonSerializerContext {  }
@@ -16,7 +19,7 @@ public partial class JsonLogSerializerContext : JsonSerializerContext {  }
 /// The root of the JSON.
 /// </summary>
 /// <remarks>
-/// Use <see cref="JsonLogSerializerContext"/> or manually use an <see cref="Tuple2ToArrayConverterFactory"/> instance with your (de)serializer.
+/// Use <see cref="JsonLogSerializerContext"/> or manually use an <see cref="Tuple2ToExceptionConverterFactory"/> instance with your (de)serializer.
 /// </remarks>
 public class JsonLog
 {
