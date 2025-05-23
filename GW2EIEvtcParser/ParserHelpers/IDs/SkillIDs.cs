@@ -2723,6 +2723,7 @@ public static class SkillIDs
     public const long CallOfTheDemon = 46856;
     public const long CallOfTheDragon = 46857;
     public const long MistlockInstabilityVengeance = 46865;
+    public const long DhuumSpiderOrb = 46889;
     public const long WatchfulEyePvP = 46910;
     public const long CorsairSharpeningStone = 46925;
     public const long IssueChallengeSAK = 46947;
@@ -2766,6 +2767,7 @@ public static class SkillIDs
     public const long ResidualAffliction = 47476;
     public const long PiercingShadow = 47518;
     public const long NumbingBreach = 47531;
+    public const long DhuumCollectableSmallOrb = 47540;
     public const long ConeSlash = 47561;
     public const long SunspearParagonSupportBuff = 47564;
     public const long ShieldOfIce = 47595;
@@ -2798,6 +2800,7 @@ public static class SkillIDs
     public const long AchievementEligibilityStatuesOfLimitation = 48122;
     public const long HatefulEphemera = 48172;
     public const long DeathMark = 48176;
+    public const long DhuumEnforcerOrb = 48189;
     public const long FractalProdigy = 48191;
     public const long Exposed48209 = 48209;
     public const long GreaterDeathMark = 48210;
@@ -2817,6 +2820,7 @@ public static class SkillIDs
     public const long ExilesEmbrace = 48439;
     public const long EmpoweredLightThief = 48477;
     public const long DeathBloom = 48500;
+    public const long DhuumMessengerOrb = 48506;
     public const long RendingSwipe = 48531;
     public const long Fixated1 = 48533;
     public const long SoulDigestion = 48541;
@@ -2852,6 +2856,7 @@ public static class SkillIDs
     public const long EchosPickup = 49125;
     public const long BondOfLifeSkill = 49128;
     public const long BowlOfPoultrySatay = 49296;
+    public const long DhuumCosmeticSmallOrb = 49594;
     public const long PlateOfBeefRendang = 49686;
     public const long Enraged_100_strike = 50070;
     public const long AvocadoSmoothie = 50091;
