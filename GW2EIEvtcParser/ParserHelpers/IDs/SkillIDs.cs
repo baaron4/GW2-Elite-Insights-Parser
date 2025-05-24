@@ -2901,6 +2901,7 @@ public static class SkillIDs
     public const long Slash = 51777;
     public const long AchievementEligibilityManipulateTheManipulator = 51867;
     public const long BodyOfFlame = 51879;
+    public const long JunkAbsorptionShield = 51914;
     public const long ShatteredEarth = 51923;
     public const long EnragedQadim = 51933;
     public const long Waterlogged = 51935;
@@ -2917,6 +2918,7 @@ public static class SkillIDs
     public const long AugmentedPower = 52074;
     public const long ResistanceLavaElemental = 52075;
     public const long JunkAbsorption = 52086;
+    public const long JunkAbsorptionSword = 52105;
     public const long JunkFall2 = 52120;
     public const long AquaticVortex = 52130;
     public const long JunkTorrent = 52150;
