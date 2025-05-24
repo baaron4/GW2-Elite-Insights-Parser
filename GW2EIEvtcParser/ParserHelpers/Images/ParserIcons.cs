@@ -415,6 +415,7 @@ internal static class ParserIcons
     private const string TrashLucidBoulder = "https://i.imgur.com/hcceqNq.png";
     private const string TrashHandOfErosion = "https://i.imgur.com/THCasXt.png";
     private const string TrashHandOfEruption = "https://i.imgur.com/pQ0bOT8.png";
+    private const string Deathling = "https://i.imgur.com/tnhj5B2.png";
     #endregion
 
     #region Minion
@@ -1073,6 +1074,7 @@ internal static class ParserIcons
         { TargetID.WhiteMantleBattleCultist1, GenericEnemyIcon },
         { TargetID.WhiteMantleBattleCultist2, GenericEnemyIcon },
         { TargetID.DhuumDesmina, TrashDhuumDesmina },
+        { TargetID.Deathling, Deathling },
         { TargetID.Glenna, TrashGlenna },
         { TargetID.VoidStormseer, TrashVoidStormseer },
         { TargetID.VoidStormseer2, TrashVoidStormseer },

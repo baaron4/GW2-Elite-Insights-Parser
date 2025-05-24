@@ -533,6 +533,51 @@ internal class Dhuum : HallOfChains
                         }
                     }
                 }
+
+                // Collection Orbs
+                var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
+                foreach (MissileEvent orb in orbs)
+                {
+                    uint radius = 0;
+                    Color color = Colors.Grey;
+                    (long start, long end) lifespanOrb = (orb.Time, orb.RemoveEvent?.Time ?? log.FightData.FightEnd);
+
+                    switch (orb.SkillID)
+                    {
+                        case DhuumEnforcerOrb:
+                            radius = 50;
+                            color = Colors.LightRed;
+                            break;
+                        case DhuumMessengerOrb:
+                            radius = 35;
+                            color = Colors.Purple;
+                            break;
+                        case DhuumSpiderOrb:
+                            radius = 20;
+                            color = Colors.Pink;
+                            break;
+                        case DhuumCollectableSmallOrb:
+                            radius = 10;
+                            color = Colors.Grey;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    for (int i = 0; i < orb.LaunchEvents.Count; i++)
+                    {
+                        var launch = orb.LaunchEvents[i];
+                        lifespanOrb = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : lifespanOrb.end);
+                        replay.Decorations.Add(
+                            new CircleDecoration(radius, lifespanOrb, color, 0.5, new InterpolationConnector([
+                                    new ParametricPoint3D(launch.LaunchPosition, lifespanOrb.start),
+                                launch.GetFinalPosition(lifespanOrb)
+                                ],
+                                Connector.InterpolationMethod.Linear)
+                            )
+                        );
+                    }
+                }
                 break;
             case (int)TargetID.DhuumDesmina:
                 break;
@@ -655,8 +700,11 @@ internal class Dhuum : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
+
+        (long start, long end) lifespan;
+
         // spirit transform
-        var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent);
+        var spiritTransform = log.CombatData.GetBuffApplyDataByIDByDst(FracturedSpirit, p.AgentItem);
         foreach (BuffEvent c in spiritTransform)
         {
             int duration = 15000;
@@ -665,22 +713,24 @@ internal class Dhuum : HallOfChains
                 duration = 30000;
             }
             BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
-            int start = (int)c.Time;
-            int end = start + duration;
+            lifespan = (c.Time, c.Time + duration);
             if (removedBuff != null)
             {
-                end = (int)removedBuff.Time;
+                lifespan.end = removedBuff.Time;
             }
-            var lifespan = new Segment(start, end, 1);
-            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(start, 0), (start + duration, 100)], new AgentConnector(p))
+
+            // Progress Bar
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.start + duration, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(130)));
-            replay.Decorations.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
+
+            // Overhead Icon
+            replay.Decorations.AddRotatedOverheadIcon(new Segment(lifespan, 1), p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
-            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, seg.TimeSpan, Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(-130)));
             replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
@@ -699,7 +749,7 @@ internal class Dhuum : HallOfChains
         var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
         foreach (AgentItem soul in souls)
         {
-            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - ServerDelayConstant);
+            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - 100);
             if (curHastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
             {
                 AddSoulSplitDecorations(p, replay, soul, curHastenedDemise.Value, soulPosition);
@@ -709,7 +759,7 @@ internal class Dhuum : HallOfChains
         foreach (var seg in hastenedDemise)
         {
             long soulSplitDeathTime = seg.Start + 10000;
-            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
     }
