@@ -521,21 +521,62 @@ internal class CombatReplayDecorationContainer
         AddBreakbar(lifespan, actor, percentUpdates, Colors.BreakbarActiveBlue);
     }
 
-    private void AddNonHomingMissile(MissileLaunchEvent launch, (long start, long end) trajectoryLifeSpan, Color color, double opacity, uint radius)
+    /// <summary>
+    /// Add a missile going from a Point A to Point B, supports multi launches
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    internal void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        Add(
-            new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new InterpolationConnector([
-                  new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
-                  launch.GetFinalPosition(trajectoryLifeSpan)
-                ],
-                Connector.InterpolationMethod.Linear)
-            )
-        );
+        long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
+        for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+        {
+            var launch = missileEvent.LaunchEvents[i];
+            (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
+            Add(
+                new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new InterpolationConnector([
+                        new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                        launch.GetFinalPosition(trajectoryLifeSpan)
+                    ],
+                    Connector.InterpolationMethod.Linear)
+                )
+            );
+        }
     }
-
-    private void AddHomingMissile(MissileLaunchEvent launch, (long start, long end) trajectoryLifeSpan, Color color, double opacity, uint radius)
+    /// <summary>
+    /// Add a missile going from a Point A to Agent, if possible, to Point B otherwise, supports multi launches
+    /// </summary>
+    /// <param name="log">Evtc log</param>
+    /// <param name="missileEvent"></param>
+    /// <param name="color"></param>
+    /// <param name="opacity"></param>
+    /// <param name="radius"></param>
+    internal void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        Add(new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed)));
+        long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
+        for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+        {
+            var launch = missileEvent.LaunchEvents[i];
+            (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
+            if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
+            {
+                Add(new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new PositionToAgentConnector(launch.TargetedAgent, launch.LaunchPosition, launch.Time, launch.Speed)));
+            }
+            else
+            {
+                Add(
+                    new CircleDecoration(radius, trajectoryLifeSpan, color, opacity, new InterpolationConnector([
+                            new ParametricPoint3D(launch.LaunchPosition, trajectoryLifeSpan.start),
+                            launch.GetFinalPosition(trajectoryLifeSpan)
+                        ],
+                        Connector.InterpolationMethod.Linear)
+                    )
+                );
+            }
+        }
     }
 
     /// <summary>
@@ -547,13 +588,7 @@ internal class CombatReplayDecorationContainer
     {
         foreach (MissileEvent missileEvent in missileEvents)
         {
-            (long start, long end) = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
-            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
-            {
-                var launch = missileEvent.LaunchEvents[i];
-                (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
-                AddNonHomingMissile(launch, trajectoryLifeSpan, color, opacity, radius);
-            }
+            AddNonHomingMissile(log, missileEvent, color, opacity, radius);
         }
     }
 
@@ -566,20 +601,7 @@ internal class CombatReplayDecorationContainer
     {
         foreach (MissileEvent missileEvent in missileEvents)
         {
-            (long start, long end) = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
-            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
-            {
-                var launch = missileEvent.LaunchEvents[i];
-                (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
-                if (!launch.TargetedAgent.IsNonIdentifiedSpecies())
-                {
-                    AddHomingMissile(launch, trajectoryLifeSpan, color, opacity, radius);
-                } 
-                else
-                {
-                    AddNonHomingMissile(launch, trajectoryLifeSpan, color, opacity, radius);
-                }
-            }
+            AddHomingMissile(log, missileEvent, color, opacity, radius);
         }
     }
 }
