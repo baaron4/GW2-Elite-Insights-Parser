@@ -1735,6 +1735,7 @@ public static class SkillIDs
     public const long DistributedMagicGreen = 31750;
     public const long FlameBlast = 31761;
     public const long PlatformQuake = 31763;
+    public const long BulletStorm = 31793;
     public const long GlyphOfEmpowerment = 31803;
     public const long MagicAuraBlueBuff = 31812;
     public const long UnstablePylonGreen = 31828;

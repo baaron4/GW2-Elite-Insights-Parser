@@ -408,7 +408,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
                 var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                 EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
-                EnvironmentDecorations.Add(new RectangleDecoration(15, 200, lifespan, Colors.White, 0.3, connector));
+                EnvironmentDecorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.White, 0.3, connector));
             }
         }
 
