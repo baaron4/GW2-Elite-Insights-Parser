@@ -112,6 +112,7 @@ internal static class EngineerHelper
             }),
          new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
+        //TODO: Magnet bomb
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
@@ -170,7 +171,8 @@ internal static class EngineerHelper
 
         // Alchemy
         // - Iron Blooded
-        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

@@ -52,15 +52,15 @@ internal static class WillbenderHelper
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.November2022Balance, GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.November2022Balance, GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempoStrike, LethalTempo, "Tyrant's Lethal Tempo (Strike)", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempoCondition, LethalTempo, "Tyrant's Lethal Tempo (Condition)", "4% per stack", DamageSource.NoPets, 4.0, DamageType.Condition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
             .UsingApproximate(true)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         // Lethal Tempo Competitive modes
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 6000))

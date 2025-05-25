@@ -157,6 +157,7 @@ internal static class MesmerHelper
             .UsingApproximate(true),
         // - Fragility
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
+        // TODO: Power block
         
         // Dueling
         // - Superiority Complex
@@ -188,13 +189,13 @@ internal static class MesmerHelper
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.January2024Balance, GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.January2024Balance, GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.January2024Balance, GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.January2024Balance, GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, IllusionaryMembrane, "Illusionary Membrane", "10%", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, IllusionaryMembrane, "Illusionary Membrane", "7%", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
