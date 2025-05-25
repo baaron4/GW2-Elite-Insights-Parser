@@ -3,12 +3,12 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class EffectEventCBTS51 : EffectEvent
+public class EffectEventCBTS51 : NonSplitEffectEvent
 {
     const float OrientationConvertConstant = 1f / 1000.0f;
 
     //TODO(Rennorb) @cleanup: replace with union
-    internal static Vector3 ReadOrientation(CombatItem evtcItem)
+    private static Vector3 ReadOrientation(CombatItem evtcItem)
     {
         var orientationBytes = new byte[3 * sizeof(short)];
         int offset = 0;

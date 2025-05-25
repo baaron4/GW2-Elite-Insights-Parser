@@ -5,6 +5,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class MissileEvent : StatusEvent
 {
+    internal static float MissileSpeedConvertConstant = 1f / 1000.0f;
+    internal static float MissilePositionConvertConstant = 10.0f;
     /*
         ev->src_agent = (uintptr_t)src_ag;
         int16_t* i16 = (int16_t*)&ev->value;
@@ -42,9 +44,9 @@ public class MissileEvent : StatusEvent
             {
                 var originShorts = (short*)ptr;
                 Origin = new(
-                        originShorts[0] * 10,
-                        originShorts[1] * 10,
-                        originShorts[2] * 10
+                        originShorts[0] * MissilePositionConvertConstant,
+                        originShorts[1] * MissilePositionConvertConstant,
+                        originShorts[2] * MissilePositionConvertConstant
                     );
             }
         }

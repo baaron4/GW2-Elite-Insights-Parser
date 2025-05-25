@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class EffectEventCBTS45 : EffectEvent
+public class EffectEventCBTS45 : NonSplitEffectEvent
 {
 
     //TODO(Rennorb) @cleanup: replace with union

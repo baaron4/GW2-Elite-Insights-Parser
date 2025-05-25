@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.Trigonometry;
+using static GW2EIEvtcParser.ParsedData.MissileEvent;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -60,14 +60,14 @@ public class MissileLaunchEvent : TimeCombatEvent
             {
                 var positionsShorts = (short*)ptr;
                 TargetPosition = new(
-                        positionsShorts[0] * 10,
-                        positionsShorts[1] * 10,
-                        positionsShorts[2] * 10
+                        positionsShorts[0] * MissilePositionConvertConstant,
+                        positionsShorts[1] * MissilePositionConvertConstant,
+                        positionsShorts[2] * MissilePositionConvertConstant
                     );
                 LaunchPosition = new(
-                        positionsShorts[3] * 10,
-                        positionsShorts[4] * 10,
-                        positionsShorts[5] * 10
+                        positionsShorts[3] * MissilePositionConvertConstant,
+                        positionsShorts[4] * MissilePositionConvertConstant,
+                        positionsShorts[5] * MissilePositionConvertConstant
                     );
             }
         }
@@ -76,7 +76,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         var speedBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
         speedBytes.PushNative(evtcItem.IsShields);
         speedBytes.PushNative(evtcItem.IsOffcycle);
-        Speed = BitConverter.ToInt16(speedBytes) / 1000.0f;
+        Speed = BitConverter.ToInt16(speedBytes) * MissileSpeedConvertConstant;
 
         var radiusBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
         radiusBytes.PushNative(evtcItem.Result);
