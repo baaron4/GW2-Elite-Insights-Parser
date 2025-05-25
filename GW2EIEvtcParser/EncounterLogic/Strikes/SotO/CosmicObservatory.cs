@@ -309,12 +309,12 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
         // Purifying Light - SAK projectile from Dagda
         // TODO - Find out if the ground effect is now logged
-        var sakk = log.CombatData.GetMissileEventsBySkillID(DagdaPurifyingLightProjectileSkill);
-        EnvironmentDecorations.AddNonHomingMissiles(log, sakk, Colors.White, 0.5, 50);
+        var purifyingLight = log.CombatData.GetMissileEventsBySkillID(DagdaPurifyingLightProjectileSkill);
+        EnvironmentDecorations.AddNonHomingMissiles(log, purifyingLight, Colors.White, 0.5, 50);
 
         // Spinning Nebula - Projectiles
-        var sec = log.CombatData.GetMissileEventsBySkillIDs([SpinningNebulaCentral, SpinningNebulaWithTeleport]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, sec, Colors.MidTeal, 0.4, 20);
+        var spinningNebula = log.CombatData.GetMissileEventsBySkillIDs([SpinningNebulaCentral, SpinningNebulaWithTeleport]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.MidTeal, 0.4, 20);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
