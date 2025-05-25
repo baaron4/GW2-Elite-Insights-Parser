@@ -7,33 +7,16 @@ internal class AngleConnector : RotationConnector
     /// <summary>
     /// Angle around Z axis in degrees
     /// </summary>
-    public readonly float StartAngle;
+    public readonly float Angle;
 
-    /// <summary>
-    /// Angle speed around Z axis in degrees
-    /// </summary>
-    public readonly float SpinAngle;
-
-    public AngleConnector(float startAngle)
+    public AngleConnector(float angle)
     {
-        StartAngle = startAngle;
-        SpinAngle = 0;
+        Angle = angle;
     }
 
     public AngleConnector(in Vector3 facingDirection)
     {
-        StartAngle = facingDirection.GetRoundedZRotationDeg();
-        SpinAngle = 0;
-    }
-
-    public AngleConnector(float startAngle, float spinAngle) : this(startAngle)
-    {
-        SpinAngle = spinAngle;
-    }
-
-    public AngleConnector(in Vector3 facingDirection, float spinAngle) : this(facingDirection)
-    {
-        SpinAngle = spinAngle;
+        Angle = facingDirection.GetRoundedZRotationDeg();
     }
 
     public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)

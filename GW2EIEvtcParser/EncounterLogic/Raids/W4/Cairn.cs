@@ -161,7 +161,7 @@ internal class Cairn : BastionOfThePenitent
                                 var rotationConnector = new AngleConnector(facing);
                                 replay.Decorations.Add(new RectangleDecoration(width, height, lifespanWarning, Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
                                 replay.Decorations.Add(new RectangleDecoration(width, height, lifespanHit, Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));
-                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanSwipe, Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
+                                replay.Decorations.Add(new RectangleDecoration(width, height, lifespanSwipe, Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new SpinningConnector(facing, 360)));
                             }
                             break;
                         // Gravity Wave - Doughnuts

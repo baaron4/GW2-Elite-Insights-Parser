@@ -409,7 +409,7 @@ internal class Adina : TheKeyOfAhdashim
         {
             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
             replay.Decorations.Add(new RectangleDecoration(width, height, lifespanWarning, Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
-            replay.Decorations.Add(new RectangleDecoration(width, height, lifespanRotating, Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
+            replay.Decorations.Add(new RectangleDecoration(width, height, lifespanRotating, Colors.Red, 0.5, positionConnector).UsingRotationConnector(new SpinningConnector(angle, 360)));
         }
     }
 }

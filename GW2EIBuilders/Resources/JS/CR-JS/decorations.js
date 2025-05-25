@@ -342,10 +342,14 @@ function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
     }
 }
 
-function staticAngleFetcher(connection, master, dstMaster, start, end) {
+function spinningAngleFetcher(connection, master, dstMaster, start, end) {
     const time = animator.reactiveDataStatus.time;
-    const velocity = Math.min((time - start) / (end - start), 1.0);
-    return connection.angles[0] + velocity * connection.angles[1];
+    const factor = Math.min((time - start) / (end - start), 0.0);
+    return connection.angle + factor * connection.spinAngle;
+}
+
+function staticAngleFetcher(connection, master, dstMaster, start, end) {
+    return connection.angle;
 }
 
 function masterRotationFetcher(connection, master, dstMaster, start, end) {
@@ -403,7 +407,9 @@ class MechanicDrawable {
         if (this.rotationConnectedTo) {
             if (this.rotationConnectedTo.interpolationMethod >= 0) {
                 this.rotationFetcher = interpolatedAngleFetcher;
-            } else if (this.rotationConnectedTo.angles) {
+            } else if (this.rotationConnectedTo.spinAngle !== undefined) {
+                this.rotationFetcher = spinningAngleFetcher;
+            } else if (this.rotationConnectedTo.angle !== undefined) {
                 this.rotationFetcher = staticAngleFetcher;
             } else if (this.rotationConnectedTo.dstMasterId) {
                 this.rotationFetcher = masterToMasterRotationFetcher;

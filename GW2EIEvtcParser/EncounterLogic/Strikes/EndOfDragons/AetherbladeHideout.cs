@@ -285,9 +285,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     if (target.TryGetCurrentPosition(log, lifespanFirstCircle.start, out var echoPosition))
                     {
                         var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true, true);
-                        var firstRotationConnector = new AngleConnector(0, 720);
-                        var secondRotationConnector = new AngleConnector(0, 480);
-                        var thirdRotationConnector = new AngleConnector(0, 240);
+                        var firstRotationConnector = new SpinningConnector(0, 720);
+                        var secondRotationConnector = new SpinningConnector(0, 480);
+                        var thirdRotationConnector = new SpinningConnector(0, 240);
 
                         var lifespans = new List<(long, long)> {
                                 lifespanFirstCircle,
@@ -490,9 +490,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                         // The second circle spawns when the first circle has complete a rotation of 120°
                         // The third circle spawns when the first circle has complete a rotation of 240° and the second circle 120°
                         var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true, true);
-                        var firstRotationConnector = new AngleConnector(0, 360);
-                        var secondRotationConnector = new AngleConnector(0, 240);
-                        var thirdRotationConnector = new AngleConnector(0, 120);
+                        var firstRotationConnector = new SpinningConnector(0, 360);
+                        var secondRotationConnector = new SpinningConnector(0, 240);
+                        var thirdRotationConnector = new SpinningConnector(0, 120);
 
                         var lifespans = new List<(long, long)> {
                                 lifespanFirstCircle,

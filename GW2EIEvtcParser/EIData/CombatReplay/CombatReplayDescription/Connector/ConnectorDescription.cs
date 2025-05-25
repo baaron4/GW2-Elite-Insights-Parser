@@ -5,6 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization)]
 [JsonDerivedType(typeof(SkillConnectorDescription))]
 [JsonDerivedType(typeof(AngleConnectorDescription))]
+[JsonDerivedType(typeof(SpinningConnectorDescription))]
 [JsonDerivedType(typeof(AngleInterpolationConnectorDescription))]
 [JsonDerivedType(typeof(AgentFacingAgentConnectorDescription))]
 [JsonDerivedType(typeof(AgentFacingConnectorDescription))]

@@ -791,7 +791,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamage);
                 double millisecondsPerDegree = (double)(lifespanDamage.end - lifespanDamage.start) / 360;
                 double degreesRotated = (lifespanDamageCancelled.end - lifespanDamageCancelled.start) / millisecondsPerDegree;
-                var rotation2 = new AngleConnector(facing, (float)degreesRotated);
+                var rotation2 = new SpinningConnector(facing, (float)degreesRotated);
                 var rectangle2 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageCancelled, Colors.Red, 0.2, agentConnector).UsingRotationConnector(rotation2);
                 replay.Decorations.Add(rectangle2);
                 if (isEmpowered)
@@ -802,7 +802,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
                     double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                     double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
-                    var rotation3 = new AngleConnector(facing, (float)degreedRotatedOpposite);
+                    var rotation3 = new SpinningConnector(facing, (float)degreedRotatedOpposite);
                     var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                     var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
                     replay.Decorations.Add(rectangle3);

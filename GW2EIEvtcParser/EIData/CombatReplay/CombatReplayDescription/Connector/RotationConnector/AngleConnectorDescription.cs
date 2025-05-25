@@ -2,12 +2,9 @@
 
 public class AngleConnectorDescription : RotationConnectorDescription
 {
-    public readonly IReadOnlyList<float> Angles;
+    public readonly float Angle;
     internal AngleConnectorDescription(AngleConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
-        Angles = [
-            -connector.StartAngle,
-            -connector.SpinAngle,
-        ];
+        Angle = -connector.Angle;
     }
 }
