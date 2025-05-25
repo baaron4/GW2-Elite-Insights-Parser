@@ -23,6 +23,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         *(uint32_t*)&ev->is_buffremove = launch_flags;
         ev->is_statechange = CBTS_MISSILELAUNCH;
         ev->is_src_flanking = is_first_launch; // 1 on initial launch, 0 on re-launch/reflect
+        *(int16_t*)&ev->result = float_to_int16_nonprecise(radius, 1.0f);
         *(uint16_t*)&ev->is_shields = float_to_int16_nonprecise(speed, 1.0f);
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
@@ -34,6 +35,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly Vector3 LaunchPosition;
 
     public readonly float Speed;
+    public readonly float MotionRadius;
 
     public readonly bool IsFirstLaunch;
     public readonly byte LaunchType;
@@ -75,6 +77,11 @@ public class MissileLaunchEvent : TimeCombatEvent
         speedBytes.PushNative(evtcItem.IsShields);
         speedBytes.PushNative(evtcItem.IsOffcycle);
         Speed = BitConverter.ToInt16(speedBytes) / 1000.0f;
+
+        var radiusBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
+        radiusBytes.PushNative(evtcItem.Result);
+        radiusBytes.PushNative(evtcItem.IsActivationByte);
+        MotionRadius = BitConverter.ToInt16(radiusBytes);
 
         var flagsBytes = new ByteBuffer(stackalloc byte[sizeof(uint)]);
         // 0.25 
