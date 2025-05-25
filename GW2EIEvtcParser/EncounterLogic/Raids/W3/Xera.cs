@@ -419,6 +419,9 @@ internal class Xera : StrongholdOfTheFaithful
                 EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
             }
         }
+
+        // Gravity Well
+        // TODO: Find the correct effect, this is wrong
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraHalfArenaGravityWell, out var halfGravityWells))
         {
             var cur = 0;
@@ -461,6 +464,20 @@ internal class Xera : StrongholdOfTheFaithful
                     EnvironmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
                             .UsingRotationConnector(angleConnector));
                 }
+            }
+        }
+
+        // Temporal Shred Projectiles
+        var temporalShred = log.CombatData.GetMissileEventsBySkillID(TemporalShredOrb);
+        EnvironmentDecorations.AddNonHomingMissiles(log, temporalShred, Colors.Red, 0.3, 25);
+
+        // Temporal Shred AoE
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraTemporalShredAoE, out var temporalShredAoEs))
+        {
+            foreach (EffectEvent effect in temporalShredAoEs)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 1500);
+                EnvironmentDecorations.AddWithBorder(new CircleDecoration(120, lifespan, Colors.LightPurple, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }
     }

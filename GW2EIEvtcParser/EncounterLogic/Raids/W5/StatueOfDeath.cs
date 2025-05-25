@@ -150,26 +150,28 @@ internal class StatueOfDeath : HallOfChains
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
-        // TODO check sizes
+
+        (long start, long end) lifespan;
+
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiritOrbs, out var orbEffectEvents))
         {
             foreach (EffectEvent effectEvent in orbEffectEvents)
             {
-                (long start, long end) lifespan = effectEvent.ComputeDynamicLifespan(log, 0);
-                EnvironmentDecorations.Add(new CircleDecoration(20, lifespan, Colors.Pink, 0.8, new PositionConnector(effectEvent.Position)));
+                lifespan = effectEvent.ComputeDynamicLifespan(log, 0);
+                // The size of the orb seems to be radius 100 but it looks way too big in the replay, 50 is more than enough
+                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Purple, 0.4, new PositionConnector(effectEvent.Position)));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiderWeb, out var webEffectEvents))
         {
             foreach (EffectEvent effectEvent in webEffectEvents)
             {
-                (long start, long end) lifespan = effectEvent.ComputeLifespan(log, effectEvent.Duration);
+                lifespan = effectEvent.ComputeLifespan(log, effectEvent.Duration);
                 uint webRadius = 320;
                 var webIndicator = new CircleDecoration(webRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effectEvent.Position));
                 var web = new CircleDecoration(webRadius, (lifespan.end, lifespan.end + 750), Colors.Orange, 0.3, new PositionConnector(effectEvent.Position));
-                EnvironmentDecorations.Add(webIndicator);
                 EnvironmentDecorations.Add(webIndicator.GetBorderDecoration(Colors.Orange, 0.3));
-                EnvironmentDecorations.Add(webIndicator.Copy().UsingGrowingEnd(lifespan.end));
+                EnvironmentDecorations.AddWithGrowing(webIndicator, lifespan.end);
                 EnvironmentDecorations.Add(web);
             }
         }
@@ -177,7 +179,7 @@ internal class StatueOfDeath : HallOfChains
         {
             foreach (EffectEvent effectEvent in orbOnGroundEffectEvents)
             {
-                (long start, long end) lifespan = effectEvent.ComputeDynamicLifespan(log, 0);
+                lifespan = effectEvent.ComputeDynamicLifespan(log, 0);
                 EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, Colors.Yellow, 0.6, new PositionConnector(effectEvent.Position)));
             }
         }
@@ -185,7 +187,7 @@ internal class StatueOfDeath : HallOfChains
         {
             foreach (EffectEvent effectEvent in orbThrowEffectEvents)
             {
-                (long start, long end) lifespan = (effectEvent.Time, effectEvent.Time + 500);
+                lifespan = (effectEvent.Time, effectEvent.Time + 500);
                 EnvironmentDecorations.Add(new CircleDecoration(40, lifespan, Colors.Yellow, 0.6, new PositionConnector(effectEvent.Position)));
             }
         }
@@ -193,10 +195,18 @@ internal class StatueOfDeath : HallOfChains
         {
             foreach (EffectEvent effectEvent in shockwaveEffectEvents)
             {
-                (long start, long end) lifespan = effectEvent.ComputeLifespan(log, 3600);
-                EnvironmentDecorations.Add(new CircleDecoration(1400, lifespan, Colors.Red, 0.3, new PositionConnector(effectEvent.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+                lifespan = effectEvent.ComputeLifespan(log, 3600);
+                EnvironmentDecorations.AddShockwave(new PositionConnector(effectEvent.Position), lifespan, Colors.Red, 0.3, 1400);
             }
         }
+
+        // Yellow orbs thrown by players
+        var orbs2 = log.CombatData.GetMissileEventsBySkillID(ReclaimedEnergySkill);
+        EnvironmentDecorations.AddNonHomingMissiles(log, orbs2, Colors.Yellow, 0.3, 80);
+
+        // Collection orbs by eater
+        var orbs = log.CombatData.GetMissileEventsBySkillID(PseudoDeathEaterOfSouls);
+        EnvironmentDecorations.AddNonHomingMissiles(log, orbs, Colors.Purple, 0.4, 50);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

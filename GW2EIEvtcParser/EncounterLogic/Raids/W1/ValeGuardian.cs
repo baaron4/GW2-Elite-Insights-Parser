@@ -19,6 +19,7 @@ internal class ValeGuardian : SpiritVale
             new MechanicGroup([
                 new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP", "Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
                 new PlayerDstHitMechanic(UnstableMagicSpike, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP", "Unstable Magic Spike (Boss Teleport)","Boss TP", 500),
+                new PlayerDstHitMechanic(BulletStorm, new MechanicPlotlySetting(Symbols.Circle, Colors.White), "Orbs", "Bullet Storm (Orbs during split)", "Bullet Storm Orbs", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green", "Distributed Magic (Stood in Green)","Green Team", 0),
@@ -184,6 +185,9 @@ internal class ValeGuardian : SpiritVale
                 EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
+
+        var bulletStorm = log.CombatData.GetMissileEventsBySkillID(BulletStorm);
+        EnvironmentDecorations.AddNonHomingMissiles(log, bulletStorm, Colors.White, 0.2, 40);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

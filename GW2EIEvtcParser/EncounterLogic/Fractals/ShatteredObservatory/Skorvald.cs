@@ -528,6 +528,10 @@ internal class Skorvald : ShatteredObservatory
                 EnvironmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
             }
         }
+
+        // Solar Bolt Orbs
+        var solarBolt = log.CombatData.GetMissileEventsBySkillID(SolarBoltCM);
+        EnvironmentDecorations.AddNonHomingMissiles(log, solarBolt, Colors.Red, 0.2, 50);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

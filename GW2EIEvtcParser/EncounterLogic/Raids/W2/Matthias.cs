@@ -307,7 +307,7 @@ internal class Matthias : SalvationPass
                             (long start, long end) lifespanHit = (lifespan.end, lifespan.end + castDuration);
                             uint width = 4000;
                             uint height = 130;
-                            if (target.TryGetCurrentFacingDirection(log, lifespan.start + 1000, out var facingOppressiveGaze))
+                            if (!log.CombatData.HasMissileData && target.TryGetCurrentFacingDirection(log, lifespan.start + 1000, out var facingOppressiveGaze))
                             {
                                 var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                                 var rotationConnextor = new AngleConnector(facingOppressiveGaze);
@@ -319,6 +319,10 @@ internal class Matthias : SalvationPass
                             break;
                     }
                 }
+
+                // Oppressive Gaze - Orb
+                var oppressiveGaze = log.CombatData.GetMissileEventsBySkillIDs([OppressiveGazeHuman, OppressiveGazeAbomination]);
+                replay.Decorations.AddNonHomingMissiles(log, oppressiveGaze, Colors.Red, 0.7, 65);
 
                 // Blood Shield - Invulnerability Bubble
                 AddMatthiasBubbles(BloodShield, target, log, replay);
