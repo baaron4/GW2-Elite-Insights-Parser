@@ -85,8 +85,7 @@ internal class IcebroodConstruct : IcebroodSagaStrike
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
 
-        (long start, long end) lifespan;
-        long duration = 0;
+        //(long start, long end) lifespan;
 
         // TODO finish the replay
 
@@ -99,9 +98,10 @@ internal class IcebroodConstruct : IcebroodSagaStrike
                     switch (cast.SkillId)
                     {
                         case IceArmSwing:
+                            /* 
                             if (!log.CombatData.HasEffectData)
                             {
-                                duration = 2250;
+                                var duration = 2250;
                                 lifespan = (cast.Time, cast.Time + duration);
                                 if (target.TryGetCurrentFacingDirection(log, cast.Time + 500, out Vector3 facing))
                                 {
@@ -110,6 +110,7 @@ internal class IcebroodConstruct : IcebroodSagaStrike
                                     // replay.Decorations.Add(cone);
                                 }
                             }
+                           */
                             break;
                         default:
                             break;
@@ -126,7 +127,6 @@ internal class IcebroodConstruct : IcebroodSagaStrike
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         (long start, long end) lifespan;
-        long duration = 0;
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.IcebroodConstructIceShockWave1, out var iceShockWave))
         {

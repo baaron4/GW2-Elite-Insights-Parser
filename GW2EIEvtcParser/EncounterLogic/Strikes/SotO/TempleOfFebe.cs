@@ -822,23 +822,23 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         var orbs = log.CombatData.GetMissileEventsBySrc(target.AgentItem);
         foreach (MissileEvent orb in orbs)
         {
-            (long start, long end) lifespan = (orb.Time, orb.RemoveEvent?.Time ?? log.FightData.FightEnd);
-            for (int i = 0; i < orb.LaunchEvents.Count; i++)
-            {
-                MissileLaunchEvent? launch = orb.LaunchEvents[i];
-                lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : lifespan.end);
-                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
-                if (orb.SkillID == InsatiableHungerSmallOrbSkillNM
+            if (orb.SkillID == InsatiableHungerSmallOrbSkillNM
                     || orb.SkillID == InsatiableHungerSmallOrbSkillCM
                     || orb.SkillID == InsatiableHungerSmallOrbEmpoweredSkillNM
                     || orb.SkillID == InsatiableHungerSmallOrbEmpoweredSkillCM
                     || orb.SkillID == InsatiableHungerPermanentEmbodimentSmallOrbSkillCM
                     || orb.SkillID == InsatiableHungerPermanentEmbodimentSmallOrbEmpoweredSkillCM)
+            {
+                replay.Decorations.AddNonHomingMissile(log, orb, Colors.RedSkin, 0.8, 10);
+            }
+            else
+            {
+                long end = orb.RemoveEvent?.Time ?? log.FightData.FightEnd;
+                for (int i = 0; i < orb.LaunchEvents.Count; i++)
                 {
-                    replay.Decorations.Add(new CircleDecoration(10, lifespan, Colors.RedSkin, 0.8, connector));
-                }
-                else
-                {
+                    MissileLaunchEvent launch = orb.LaunchEvents[i];
+                    (long start, long end ) lifespan = (launch.Time, i != orb.LaunchEvents.Count - 1 ? orb.LaunchEvents[i + 1].Time : end);
+                    var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
                     replay.Decorations.Add(new CircleDecoration(30, lifespan, Colors.Black, 0.5, connector));
                     replay.Decorations.Add(new DoughnutDecoration(30, 40, lifespan, Colors.RedSkin, 0.8, connector));
                 }
