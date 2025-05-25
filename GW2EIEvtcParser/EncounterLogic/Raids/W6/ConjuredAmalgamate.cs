@@ -383,4 +383,47 @@ internal class ConjuredAmalgamate : MythwrightGambit
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
         return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        (long start, long end) lifespan;
+
+        // Junk Absorption - Collecting Phase
+        var purpleOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorption);
+        var swordOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorptionSword);
+        var shieldOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorptionShield);
+
+        // Purple Orbs
+        EnvironmentDecorations.AddNonHomingMissiles(log, purpleOrbs, Colors.Purple, 0.5, 50);
+
+        // Sword Orbs
+        foreach (MissileEvent missileEvent in swordOrbs)
+        {
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+            {
+                var launch = missileEvent.LaunchEvents[i];
+                lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
+                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
+                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
+                EnvironmentDecorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.White, 0.3, connector));
+            }
+        }
+
+        // Shield Orbs
+        foreach (MissileEvent missileEvent in shieldOrbs)
+        {
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
+            {
+                var launch = missileEvent.LaunchEvents[i];
+                lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
+                var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start),launch.GetFinalPosition(lifespan)],Connector.InterpolationMethod.Linear);
+                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
+                EnvironmentDecorations.Add(new DoughnutDecoration(100, 125, lifespan, Colors.White, 0.3, connector));
+            }
+        }
+    }
 }

@@ -276,5 +276,12 @@ internal class Siax : Nightmare
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
+
+        // Causting Barrage Orbs
+        var causticBarrage = log.CombatData.GetMissileEventsBySkillIDs([CausticBarrage, CausticBarrage2]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, causticBarrage, Colors.Red, 0.3, 50);
+
+        // TODO - Add the remaining ones
+        var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
     }
 }

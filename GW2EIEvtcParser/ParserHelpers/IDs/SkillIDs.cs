@@ -1735,6 +1735,7 @@ public static class SkillIDs
     public const long DistributedMagicGreen = 31750;
     public const long FlameBlast = 31761;
     public const long PlatformQuake = 31763;
+    public const long BulletStorm = 31793;
     public const long GlyphOfEmpowerment = 31803;
     public const long MagicAuraBlueBuff = 31812;
     public const long UnstablePylonGreen = 31828;
@@ -2723,6 +2724,7 @@ public static class SkillIDs
     public const long CallOfTheDemon = 46856;
     public const long CallOfTheDragon = 46857;
     public const long MistlockInstabilityVengeance = 46865;
+    public const long DhuumSpiderOrb = 46889;
     public const long WatchfulEyePvP = 46910;
     public const long CorsairSharpeningStone = 46925;
     public const long IssueChallengeSAK = 46947;
@@ -2766,6 +2768,7 @@ public static class SkillIDs
     public const long ResidualAffliction = 47476;
     public const long PiercingShadow = 47518;
     public const long NumbingBreach = 47531;
+    public const long DhuumCollectableSmallOrb = 47540;
     public const long ConeSlash = 47561;
     public const long SunspearParagonSupportBuff = 47564;
     public const long ShieldOfIce = 47595;
@@ -2798,6 +2801,7 @@ public static class SkillIDs
     public const long AchievementEligibilityStatuesOfLimitation = 48122;
     public const long HatefulEphemera = 48172;
     public const long DeathMark = 48176;
+    public const long DhuumEnforcerOrb = 48189;
     public const long FractalProdigy = 48191;
     public const long Exposed48209 = 48209;
     public const long GreaterDeathMark = 48210;
@@ -2817,6 +2821,7 @@ public static class SkillIDs
     public const long ExilesEmbrace = 48439;
     public const long EmpoweredLightThief = 48477;
     public const long DeathBloom = 48500;
+    public const long DhuumMessengerOrb = 48506;
     public const long RendingSwipe = 48531;
     public const long Fixated1 = 48533;
     public const long SoulDigestion = 48541;
@@ -2852,6 +2857,7 @@ public static class SkillIDs
     public const long EchosPickup = 49125;
     public const long BondOfLifeSkill = 49128;
     public const long BowlOfPoultrySatay = 49296;
+    public const long DhuumCosmeticSmallOrb = 49594;
     public const long PlateOfBeefRendang = 49686;
     public const long Enraged_100_strike = 50070;
     public const long AvocadoSmoothie = 50091;
@@ -2896,6 +2902,7 @@ public static class SkillIDs
     public const long Slash = 51777;
     public const long AchievementEligibilityManipulateTheManipulator = 51867;
     public const long BodyOfFlame = 51879;
+    public const long JunkAbsorptionShield = 51914;
     public const long ShatteredEarth = 51923;
     public const long EnragedQadim = 51933;
     public const long Waterlogged = 51935;
@@ -2912,6 +2919,7 @@ public static class SkillIDs
     public const long AugmentedPower = 52074;
     public const long ResistanceLavaElemental = 52075;
     public const long JunkAbsorption = 52086;
+    public const long JunkAbsorptionSword = 52105;
     public const long JunkFall2 = 52120;
     public const long AquaticVortex = 52130;
     public const long JunkTorrent = 52150;
@@ -4304,6 +4312,7 @@ public static class SkillIDs
     public const long SoulFeastSomethingBuff = 70572; // Applied by Soul Feast to Soul Feast
     public const long PetrifySkill = 70575;
     public const long ChargingConstellation = 70584; // unknown
+    public const long DagdaPurifyingLightProjectileSkill = 70603; // Skill that spawns the orbs on the ground to pick up the SAK
     public const long PurifyingLight = 70607;
     public const long RelicOfTheSunless = 70617;
     public const long EmpoweredMaliceEmbodiment = 70621;

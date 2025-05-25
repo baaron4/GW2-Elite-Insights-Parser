@@ -1,5 +1,7 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
@@ -77,5 +79,81 @@ internal class IcebroodConstruct : IcebroodSagaStrike
             phase.AddTarget(mainTarget, log);
         }
         return phases;
+    }
+
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        base.ComputeNPCCombatReplayActors(target, log, replay);
+
+        (long start, long end) lifespan;
+        long duration = 0;
+
+        // TODO finish the replay
+
+        switch (target.ID)
+        {
+            case (int)TargetID.IcebroodConstruct:
+                var casts = target.GetAnimatedCastEvents(log, target.FirstAware, target.LastAware);
+                foreach (AnimatedCastEvent cast in casts)
+                {
+                    switch (cast.SkillId)
+                    {
+                        case IceArmSwing:
+                            if (!log.CombatData.HasEffectData)
+                            {
+                                duration = 2250;
+                                lifespan = (cast.Time, cast.Time + duration);
+                                if (target.TryGetCurrentFacingDirection(log, cast.Time + 500, out Vector3 facing))
+                                {
+                                    // TODO rotate this
+                                    // var cone = new PieDecoration(1600, 195, lifespan, Colors.Orange, 0.2, new AgentConnector(target.AgentItem)).UsingRotationConnector(new AngleConnector(facing));
+                                    // replay.Decorations.Add(cone);
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        (long start, long end) lifespan;
+        long duration = 0;
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.IcebroodConstructIceShockWave1, out var iceShockWave))
+        {
+            foreach (EffectEvent effect in iceShockWave)
+            {
+                int pulseCycle = 1000;
+                lifespan = effect.ComputeLifespan(log, 3000);
+
+                var connector = new PositionConnector(effect.Position);
+                var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, connector);
+                EnvironmentDecorations.Add(circle);
+                EnvironmentDecorations.AddShockwave(connector, (lifespan.end, lifespan.end + 2000), Colors.Blue, 0.3, 1200);
+
+                (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
+                for (int i = 0; i < 3; i++)
+                {
+                    EnvironmentDecorations.AddShockwave(connector, pulse, Colors.LightOrange, 0.2, 500);
+                    pulse = (pulse.end, pulse.end + pulseCycle);
+                }
+            }
+        }
+
+        // TODO - These don't work correctly
+        //var spinningIce = log.CombatData.GetMissileEventsBySkillIDs([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4]);
+        //EnvironmentDecorations.AddNonHomingMissiles(log, spinningIce, Colors.White, 0.4, 50);
+
+        var iceShatter = log.CombatData.GetMissileEventsBySkillID(IceShatter);
+        EnvironmentDecorations.AddNonHomingMissiles(log, iceShatter, Colors.Ice, 0.5, 25);
     }
 }
