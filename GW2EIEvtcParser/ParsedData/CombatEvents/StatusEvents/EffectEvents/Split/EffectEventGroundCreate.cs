@@ -27,7 +27,7 @@ public class EffectEventGroundCreate : SplitEffectEvent
                 Orientation = new(
                         vectorShorts[3] * OrientationAndScaleConvertConstant,
                         vectorShorts[4] * OrientationAndScaleConvertConstant,
-                        vectorShorts[5] * OrientationAndScaleConvertConstant
+                        -vectorShorts[5] * OrientationAndScaleConvertConstant
                     );
             }
         }
