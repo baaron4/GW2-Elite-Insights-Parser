@@ -282,6 +282,6 @@ internal class Siax : Nightmare
         EnvironmentDecorations.AddNonHomingMissiles(log, causticBarrage, Colors.Red, 0.3, 50);
 
         // TODO - Add the remaining ones
-        var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
+        //var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
     }
 }
