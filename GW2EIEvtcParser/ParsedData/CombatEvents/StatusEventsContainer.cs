@@ -33,6 +33,8 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsByDst = [];
     public readonly Dictionary<long, List<EffectEvent>> EffectEventsByEffectID = [];
     public readonly Dictionary<long, List<EffectEvent>> EffectEventsByTrackingID = [];
+    public readonly Dictionary<long, List<EffectEventAgentCreate>> AgentEffectEventsByTrackingID = [];
+    public readonly Dictionary<long, List<EffectEventGroundCreate>> GroundEffectEventsByTrackingID = [];
 
     public readonly List<MarkerEvent> MarkerEvents = [];
     public readonly Dictionary<AgentItem, List<MarkerEvent>> MarkerEventsBySrc = [];

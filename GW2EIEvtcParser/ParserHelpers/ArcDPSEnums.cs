@@ -246,6 +246,10 @@ public static class ArcDPSEnums
         MissileCreate = 57,
         MissileLaunch = 58,
         MissileRemove = 59,
+        EffectGroundCreate = 60,
+        EffectGroundRemove = 61,
+        EffectAgentCreate = 62,
+        EffectAgentRemove = 63,
         Unknown
     };
 
