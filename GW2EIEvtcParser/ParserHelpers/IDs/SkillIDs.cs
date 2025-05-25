@@ -4312,6 +4312,7 @@ public static class SkillIDs
     public const long SoulFeastSomethingBuff = 70572; // Applied by Soul Feast to Soul Feast
     public const long PetrifySkill = 70575;
     public const long ChargingConstellation = 70584; // unknown
+    public const long DagdaPurifyingLightProjectileSkill = 70603; // Skill that spawns the orbs on the ground to pick up the SAK
     public const long PurifyingLight = 70607;
     public const long RelicOfTheSunless = 70617;
     public const long EmpoweredMaliceEmbodiment = 70621;

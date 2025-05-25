@@ -443,12 +443,13 @@ public static class EffectGUIDs
     #endregion
       
     #region Fractals
-    // Nightmare Fractal
     public static readonly GUID SmallFluxBomb = new("B9CB27D38747A94F817208835C41BB35");
     public static readonly GUID ToxicSicknessIndicator = new("3C98B00B9E795F4B8744E186EEEA7DF7");
     public static readonly GUID ToxicSicknessOldIndicator = new("B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C");
     public static readonly GUID ToxicSicknessNewIndicator = new("71469269D3A1F9469D74CC96153264C0");
     public static readonly GUID ToxicSicknessPuke = new("E09CD66E417B59409401192201CE4B6E");
+    // Nightmare Fractal
+    public static readonly GUID MAMAShootGreenOrbField = new("19A6B6A8140B8745A267AF6F281E7514");
     public static readonly GUID MAMAGrenadeBarrageIndicator = new("8DDED161CE26964FA5952D821AD852F7");
     public static readonly GUID NightmareMiasmaIndicator = new("41883B3BD532124DACF93F7C2584E63C");
     public static readonly GUID NightmareMiasmaDamage = new("8A882A495793044D8C4A9AD9080283A7");
@@ -752,6 +753,9 @@ public static class EffectGUIDs
     public static readonly GUID FreezieFrozenPatch = new("2CE301ED692ACA4E964BFDFEED9D055E"); // 30000 duration
     public static readonly GUID FreezieOrangeAoE120 = new("0760BCD6779C0248B480E59D41E785B4"); // Has multiple durations
     public static readonly GUID FreezieDoughnutRing = new("3627917E07E3344EB97B795BE437DDF0"); // 10000 duration
+    // Icebrood Construct
+    public static readonly GUID IcebroodConstructIceShockWave1 = new("0D594F550B0BF043B0B299FC26A8463B"); // Duration 3000 - Src Construct - Circle Indicator or Wave warning
+    public static readonly GUID IcebroodConstructIceShockWave2 = new("6294A148220A6A4EB83CE19A63F716E7"); // Duration 3000 - Src Construct - Circle Indicator or Wave warning
     // Boneskinner
     public static readonly GUID GraspAoeIndicator = new("B9B32815D670DC4E8B8CF71E92A9FFD5"); // Orange aoe indicator
     public static readonly GUID GraspClaws1 = new("75B096EF78F3AB4CB1D05BAE9CA3235C"); // One is the claw, the other the red aoe indicator

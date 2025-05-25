@@ -534,6 +534,10 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 EnvironmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
             }
         }
+
+        // Toxic Orb
+        var toxicOrbs = log.CombatData.GetMissileEventsBySkillID(ToxicOrb);
+        EnvironmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
     }
 
     private SingleActor? GetEchoOfScarletBriar(FightData fightData)
