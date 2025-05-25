@@ -74,7 +74,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         var speedBytes = new ByteBuffer(stackalloc byte[sizeof(short)]);
         speedBytes.PushNative(evtcItem.IsShields);
         speedBytes.PushNative(evtcItem.IsOffcycle);
-        Speed = BitConverter.ToUInt16(speedBytes) / 1000.0f;
+        Speed = BitConverter.ToInt16(speedBytes) / 1000.0f;
 
         var flagsBytes = new ByteBuffer(stackalloc byte[sizeof(uint)]);
         // 0.25 
