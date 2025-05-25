@@ -35,25 +35,16 @@ public class EffectEventGroundCreate : SplitEffectEvent
         var scaleBytes = new ByteBuffer(stackalloc byte[sizeof(ushort)]);
         scaleBytes.PushNative(evtcItem.IsShields);
         scaleBytes.PushNative(evtcItem.IsOffcycle);
-        unsafe
-        {
-            fixed (byte* ptr = scaleBytes.Span)
-            {
-                var scaleShorts = (short*)ptr;
-                Scale = scaleShorts[0] * OrientationAndScaleConvertConstant;
-            }
-        }
+        Scale = BitConverter.ToUInt16(scaleBytes) * OrientationAndScaleConvertConstant;
         // ScaleSomething
         var scaleSomethingBytes = new ByteBuffer(stackalloc byte[sizeof(ushort)]);
         scaleSomethingBytes.PushNative(evtcItem.IsFifty);
         scaleSomethingBytes.PushNative(evtcItem.IsMoving);
-        unsafe
+        ScaleSomething = BitConverter.ToUInt16(scaleSomethingBytes) * OrientationAndScaleConvertConstant;
+        // Default to 1 if 0
+        if (ScaleSomething == 0)
         {
-            fixed (byte* ptr = scaleSomethingBytes.Span)
-            {
-                var scaleSomethingShorts = (short*)ptr;
-                ScaleSomething = scaleSomethingShorts[0] * OrientationAndScaleConvertConstant;
-            }
+            ScaleSomething = 1.0f;
         }
         //
         Flags = evtcItem.IsBuffRemoveByte;
