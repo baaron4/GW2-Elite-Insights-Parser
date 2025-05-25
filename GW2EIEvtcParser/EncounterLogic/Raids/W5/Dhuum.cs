@@ -562,7 +562,7 @@ internal class Dhuum : HallOfChains
                     default:
                         break;
                 }
-                replay.Decorations.AddHomingMissile(log, orb, color, 0.5, radius);
+                replay.Decorations.AddNonHomingMissile(log, orb, color, 0.5, radius);
             }
             break;
             case (int)TargetID.DhuumDesmina:
