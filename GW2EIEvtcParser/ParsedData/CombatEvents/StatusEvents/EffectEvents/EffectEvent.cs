@@ -1,10 +1,47 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using static GW2EIEvtcParser.EIData.Trigonometry;
+using static GW2EIEvtcParser.ParserHelper;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class EffectEvent : AbstractEffectEvent
+public abstract class EffectEvent : StatusEvent
 {
 
+    /// <summary>
+    /// The effect's rotation around each axis in <b>radians</b>.
+    /// Use <see cref="Rotation"/> for degrees.
+    /// </summary>
+    public Vector3 Orientation { get; protected set; }
+
+    /// <summary>
+    /// The effect's rotation around each axis in <b>degrees</b>.
+    /// Like <see cref="Orientation"/> but using degrees.
+    /// </summary>
+    public Vector3 Rotation => new(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
+
+    /// <summary>
+    /// The effect's position in the game's coordinate system, if <see cref="IsAroundDst"/> is <c>false</c>.
+    /// </summary>
+    public Vector3 Position { get; protected set; } = new(0, 0, 0);
+
+    /// <summary>
+    /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
+    /// </summary>
+    public bool IsAroundDst => _dst != null;
+    /// <summary>
+    /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
+    /// </summary>
+    protected AgentItem? _dst { get; set; } = null;
+    /// <summary>
+    /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
+    /// </summary>
+    public AgentItem Dst => _dst ?? _unknownAgent;
+
+    /// <summary>
+    /// Unique id for tracking a created effect.
+    /// </summary>
+    protected long TrackingID;
     /// <summary>
     /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
     /// </summary>
@@ -31,6 +68,18 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// If true, effect is on a moving platform
     /// </summary>
     public bool OnNonStaticPlatform { get; protected set; }
+    /// <summary>
+    /// Scale of the effect
+    /// </summary>
+    public float Scale { get; protected set; } = -1.0f;
+    /// <summary>
+    /// Scale something of the effect
+    /// </summary>
+    public float ScaleSomething { get; protected set; } = 1.0f;
+    /// <summary>
+    /// Flags of the effect
+    /// </summary>
+    public byte Flags { get; protected set; } = 0;
 
     internal EffectEvent(CombatItem evtcItem, AgentData agentData, IReadOnlyDictionary<long, EffectGUIDEvent> effectGUIDs) : base(evtcItem, agentData)
     {
@@ -53,6 +102,14 @@ public abstract class EffectEvent : AbstractEffectEvent
         {
             DynamicEndTime = endEvent.Time;
         }
+    }
+
+    public double GetSize(double defaultSize)
+    {
+        if (Scale != -1.0f) { 
+            return Scale;
+        }
+        return defaultSize;
     }
 
     /// <summary>
