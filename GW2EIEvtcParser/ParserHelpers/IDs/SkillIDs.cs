@@ -2177,6 +2177,7 @@ public static class SkillIDs
     public const long ExplosiveLaunch = 37121;
     public const long EnsolyssNightmareBullet4 = 37141;
     public const long NigthmareMiasmaEnsolyss3 = 37151;
+    public const long ToxicBlast = 37153;
     public const long LungeEnsolyss = 37154;
     public const long EnsolyssNightmareRespite3 = 37159;
     public const long GrenadeBarrage2 = 37172;
@@ -2188,6 +2189,7 @@ public static class SkillIDs
     public const long EnsolyssNightmareBullet5 = 37187;
     public const long EnsolyssNightmareBullet6 = 37199;
     public const long NightmareMiasmaMAMA = 37217;
+    public const long NightmareBlast = 37223;
     public const long EnsolyssNightmareBullet7 = 37245;
     public const long UpswingEnsolyss = 37278;
     public const long HomingGrenades2 = 37269;
@@ -2228,6 +2230,7 @@ public static class SkillIDs
     public const long DeterminationEnsolyss = 37498;
     public const long EnsolyssNightmareBomb9 = 37510;
     public const long EnsolyssNightmareRespite7 = 37516;
+    public const long DireTorment = 37522;
     public const long NightmareDevastation1 = 37523;
     public const long EnsolyssNightmareBullet14 = 37539;
     public const long SteakWithWinterberrySauce = 37540;
