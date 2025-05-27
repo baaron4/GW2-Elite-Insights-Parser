@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class SplitEffectEvent : EffectEvent
 {
-    protected static float OrientationAndScaleConvertConstant = 1f / 1000.0f;
-    protected static float PositionConvertConstant = 10.0f;
+    protected const float OrientationAndScaleConvertConstant = 1f / 1000.0f;
+    protected const float PositionConvertConstant = 10.0f;
     private static uint ReadDuration(CombatItem evtcItem)
     {
         var durationBytes = new byte[sizeof(uint)];

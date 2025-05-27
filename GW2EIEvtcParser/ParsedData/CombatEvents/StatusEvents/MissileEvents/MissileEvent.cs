@@ -5,8 +5,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class MissileEvent : StatusEvent
 {
-    internal static float MissileSpeedConvertConstant = 1f / 1000.0f;
-    internal static float MissilePositionConvertConstant = 10.0f;
+    internal const float MissileSpeedConvertConstant = 1f / 1000.0f;
+    internal const float MissilePositionConvertConstant = 10.0f;
     /*
         ev->src_agent = (uintptr_t)src_ag;
         int16_t* i16 = (int16_t*)&ev->value;
