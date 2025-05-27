@@ -315,6 +315,10 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         // Spinning Nebula - Projectiles
         var spinningNebula = log.CombatData.GetMissileEventsBySkillIDs([SpinningNebulaCentral, SpinningNebulaWithTeleport]);
         EnvironmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.MidTeal, 0.4, 20);
+
+        // Charging Constellation - Numbers Projectiles
+        var chargingConstellation = log.CombatData.GetMissileEventsBySkillID(ChargingConstellationDamage);
+        EnvironmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

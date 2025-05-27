@@ -522,28 +522,35 @@ internal class Ensolyss : Nightmare
         }
 
         // Tail Lash - Circle AoEs
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssTailLashSmallCircleAoE, out var tailLashSmallCircle))
+        if (log.CombatData.TryGetEffectEventsByGUIDs(
+            [EffectGUIDs.EnsolyssTailLashSmallCircleAoE,
+            EffectGUIDs.EnsolyssTailLashMediumCircleAoE,
+            EffectGUIDs.EnsolyssTailLashBigCircleAoE], out var tailLashCircles))
         {
-            foreach (EffectEvent effect in tailLashSmallCircle)
+            foreach (EffectEvent effect in tailLashCircles)
             {
-                lifespan = effect.ComputeLifespan(log, 1850);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
-            }
-        }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssTailLashMediumCircleAoE, out var tailLashMediumCircle))
-        {
-            foreach (EffectEvent effect in tailLashMediumCircle)
-            {
-                lifespan = effect.ComputeLifespan(log, 800);
-                EnvironmentDecorations.Add(new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
-            }
-        }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssTailLashBigCircleAoE, out var tailLashBigCircle))
-        {
-            foreach (EffectEvent effect in tailLashBigCircle)
-            {
-                lifespan = effect.ComputeLifespan(log, 800);
-                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                lifespan = (effect.Time, effect.Time + effect.Duration);
+                uint radius = 0;
+
+                switch (effect.GUIDEvent.ContentGUID)
+                {
+                    case var small when small == EffectGUIDs.EnsolyssTailLashSmallCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 1850);
+                        radius = 100;
+                        break;
+                    case var medium when medium == EffectGUIDs.EnsolyssTailLashMediumCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 800);
+                        radius = 200;
+                        break;
+                    case var big when big == EffectGUIDs.EnsolyssTailLashBigCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 800);
+                        radius = 400;
+                        break;
+                    default:
+                        break;
+                }
+
+                EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
