@@ -28,7 +28,7 @@ internal abstract class SkillMechanic : IDBasedMechanic<HealthDamageEvent>
     protected AgentItem GetCreditedAgentItem(HealthDamageEvent ahde)
     {
         AgentItem agentItem = GetAgentItem(ahde);
-        if (Minions && agentItem != null)
+        if (Minions)
         {
             agentItem = agentItem.GetFinalMaster();
         }

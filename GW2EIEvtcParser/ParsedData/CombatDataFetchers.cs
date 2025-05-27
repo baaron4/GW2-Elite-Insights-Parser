@@ -816,11 +816,6 @@ partial class CombatData
         }
         return events;
     }
-
-    public IReadOnlyList<MissileEvent> GetMissileEventsByMissileID(long missileID)
-    {
-        return _statusEvents.MissileEventsByMissileID.GetValueOrEmpty(missileID);
-    }
     public IReadOnlyList<MissileLaunchEvent> GetMissileLaunchEventsByDst(AgentItem dst)
     {
         return _statusEvents.MissileLaunchEventsByDst.GetValueOrEmpty(dst);
