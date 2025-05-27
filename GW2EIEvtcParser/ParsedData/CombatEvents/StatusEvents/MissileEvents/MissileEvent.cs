@@ -31,6 +31,9 @@ public class MissileEvent : StatusEvent
     private readonly List<MissileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
     public MissileRemoveEvent? RemoveEvent { get; private set; }
+
+    public bool MaybeReflected => LaunchEvents.Any(x => x.MaybeReflected);
+
     internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);

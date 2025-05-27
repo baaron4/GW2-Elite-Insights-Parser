@@ -40,6 +40,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly bool IsFirstLaunch;
     public readonly byte LaunchType;
     public readonly uint LaunchFlags;
+    public bool MaybeReflected => Missile.Src == TargetedAgent && !IsFirstLaunch;
     public MissileEvent Missile { get; internal set; }
     internal MissileLaunchEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem.Time)
     {
@@ -95,7 +96,12 @@ public class MissileLaunchEvent : TimeCombatEvent
         LaunchFlags = BitConverter.ToUInt32(flagsBytes);
         LaunchType = evtcItem.IFFByte;
     }
-
+    /// <summary>
+    /// Assumes that the missile goes from LaunchPosition to TargetPosition
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public ParametricPoint3D GetFinalPosition(long start, long end)
     {
         var velocity = Speed;
@@ -103,12 +109,20 @@ public class MissileLaunchEvent : TimeCombatEvent
         direction /= Math.Max(direction.Length(), 1e-6f);
         return new ParametricPoint3D(LaunchPosition + (velocity * direction) * (end - start), end);
     }
-
+    /// <summary>
+    /// Assumes that the missile goes from LaunchPosition to TargetPosition
+    /// </summary>
+    /// <param name="lifespan"></param>
+    /// <returns></returns>
     public ParametricPoint3D GetFinalPosition((long start, long end) lifespan)
     {
         return GetFinalPosition(lifespan.start, lifespan.end);
     }
-
+    /// <summary>
+    /// Assumes that the missile goes from LaunchPosition to TargetPosition
+    /// </summary>
+    /// <param name="lifespan"></param>
+    /// <returns></returns>
     public ParametricPoint3D GetFinalPosition(Segment lifespan)
     {
         return GetFinalPosition(lifespan.Start, lifespan.End);

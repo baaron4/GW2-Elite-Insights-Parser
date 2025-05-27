@@ -22,6 +22,17 @@ internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunch
         Minions = withMinions;
         return this;
     }
+    public DstMissileLaunchMechanic UsingReflected()
+    {
+        UsingChecker((x, log) => x.MaybeReflected);
+        return this;
+    }
+
+    public DstMissileLaunchMechanic UsingNotReflected()
+    {
+        UsingChecker((x, log) => !x.MaybeReflected);
+        return this;
+    }
     protected static AgentItem GetAgentItem(MissileLaunchEvent missileLaunchEvent)
     {
         return missileLaunchEvent.TargetedAgent;
@@ -46,7 +57,7 @@ internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunch
             {
                 foreach (MissileLaunchEvent missileLaunchEvent in missileEvent.LaunchEvents)
                 {
-                    if (TryGetActor(log, GetCreditedAgentItem(missileLaunchEvent), regroupedMobs, out var amp) && Keep(missileLaunchEvent, log))
+                    if (missileLaunchEvent.LaunchedTowardsAgent && TryGetActor(log, GetCreditedAgentItem(missileLaunchEvent), regroupedMobs, out var amp) && Keep(missileLaunchEvent, log))
                     {
                         InsertMechanic(log, mechanicLogs, missileLaunchEvent.Time, amp);
                     }

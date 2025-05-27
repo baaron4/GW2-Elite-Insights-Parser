@@ -22,6 +22,19 @@ internal abstract class SrcMissileMechanic : IDBasedMechanic<MissileEvent>
         Minions = withMinions;
         return this;
     }
+
+    public SrcMissileMechanic UsingReflected()
+    {
+        UsingChecker((x, log) => x.MaybeReflected);
+        return this;
+    }
+
+    public SrcMissileMechanic UsingNotReflected()
+    {
+        UsingChecker((x, log) => !x.MaybeReflected);
+        return this;
+    }
+
     protected static AgentItem GetAgentItem(MissileEvent missileEvent)
     {
         return missileEvent.Src;
