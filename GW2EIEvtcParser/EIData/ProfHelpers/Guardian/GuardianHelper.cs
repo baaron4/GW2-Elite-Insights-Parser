@@ -30,10 +30,10 @@ internal static class GuardianHelper
             .UsingDisableWithEffectData(),
         new BuffGainCastFinder(JudgesIntervention, MercifulAndJudgesInterventionSelfBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffectDst(EffectGUIDs.GuardianGenericTeleport2, evt.To, evt.Time + 120))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new BuffGainCastFinder(MercifulInterventionSkill, MercifulAndJudgesInterventionSelfBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffectDst(EffectGUIDs.GuardianMercifulIntervention, evt.To, evt.Time + 200))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(ContemplationOfPurity, EffectGUIDs.GuardianContemplationOfPurity1)
             .UsingDstBaseSpecChecker(Spec.Guardian),
         new DamageCastFinder(SmiteCondition, SmiteCondition),
@@ -52,7 +52,7 @@ internal static class GuardianHelper
                 return CombatData.FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
                     .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
             }) // identify advance by self-applied 20s to 40s aegis
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
             .UsingDstBaseSpecChecker(Spec.Guardian)
             .UsingChecker((evt, combatData, agentData, skillData) =>
@@ -60,7 +60,7 @@ internal static class GuardianHelper
                 return 5 <= CombatData.FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
                     .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
             }) // identify stand your ground by self-applied 5+ stacks of stability
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         // hold the line boons may overlap with save yourselves/pure of voice
 
         // Signets

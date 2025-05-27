@@ -294,7 +294,8 @@ internal static class RangerHelper
             .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
-            .UsingICD(1100).UsingNotAccurate(true),
+            .UsingICD(1100)
+            .UsingNotAccurate(),
         new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
             .UsingSrcBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr)
@@ -304,7 +305,7 @@ internal static class RangerHelper
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
             .UsingDstBaseSpecChecker(Spec.Ranger),
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
     ];
 
     private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)

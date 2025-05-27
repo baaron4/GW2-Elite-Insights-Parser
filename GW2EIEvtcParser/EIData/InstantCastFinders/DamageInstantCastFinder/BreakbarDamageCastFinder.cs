@@ -8,7 +8,7 @@ internal class BreakbarDamageCastFinder : CheckedCastFinder<BreakbarDamageEvent>
 
     public BreakbarDamageCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
-        UsingNotAccurate(true);
+        UsingNotAccurate();
         _damageSkillID = damageSkillID;
     }
 

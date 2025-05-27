@@ -9,7 +9,7 @@ internal class EXTBarrierCastFinder : CheckedCastFinder<EXTBarrierEvent>
     private readonly long _damageSkillID;
     public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
-        UsingNotAccurate(true);
+        UsingNotAccurate();
         UsingEnable((combatData) => combatData.HasEXTBarrier);
         _damageSkillID = damageSkillID;
     }

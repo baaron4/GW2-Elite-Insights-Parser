@@ -18,7 +18,7 @@ internal static class MechanistHelper
             .UsingSrcSpecChecker(Spec.Mechanist),
         new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon)
             .UsingDisableWithEffectData()
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet)
             .UsingDstSpecChecker(Spec.Mechanist),
 
@@ -36,7 +36,7 @@ internal static class MechanistHelper
                 }
                 return false;
             }) // intersect first position after spawn with delayed effect
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new MinionCastCastFinder(RoilingSmash, RoilingSmash),
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),

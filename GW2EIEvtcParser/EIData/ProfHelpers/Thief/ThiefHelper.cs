@@ -28,13 +28,13 @@ internal static class ThiefHelper
         new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomBuff),
         new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).
             UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant)
-            .UsingNotAccurate(true), // same id as leeching venom trait?
+            .UsingNotAccurate(), // same id as leeching venom trait?
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedBuff)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),
         new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedBuff),

@@ -65,9 +65,9 @@ internal abstract class InstantCastFinder : IVersionable
         return this;
     }
 
-    internal InstantCastFinder UsingNotAccurate(bool notAccurate)
+    internal InstantCastFinder UsingNotAccurate()
     {
-        NotAccurate = notAccurate;
+        NotAccurate = true;
         return this;
     }
 
@@ -86,6 +86,11 @@ internal abstract class InstantCastFinder : IVersionable
     internal InstantCastFinder UsingDisableWithEffectData()
     {
         return UsingEnable(combatData => !combatData.HasEffectData);
+    }
+
+    internal InstantCastFinder UsingDisableWithMissileData()
+    {
+        return UsingEnable(combatData => !combatData.HasMissileData);
     }
 
     internal virtual InstantCastFinder UsingTimeOffset(long timeOffset)

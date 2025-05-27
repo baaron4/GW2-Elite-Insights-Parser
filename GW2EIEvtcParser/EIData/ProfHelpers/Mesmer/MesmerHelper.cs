@@ -21,7 +21,7 @@ internal static class MesmerHelper
             .UsingChecker((brae, combatData, agentData, skillData) => {
                  return combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To);
             })
-            .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
+            .UsingNotAccurate() // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
             .UsingDisableWithEffectData(),
         new EffectCastFinderByDst(SignetOfMidnightSkill, EffectGUIDs.MesmerSignetOfMidnight)
             .UsingDstBaseSpecChecker(Spec.Mesmer),
@@ -37,17 +37,17 @@ internal static class MesmerHelper
         new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
             .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
             .UsingChecker((evt, combatData, agentData, skillData) => agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
             .UsingDstBaseSpecChecker(Spec.Mesmer)
             .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
             .UsingChecker((evt, combatData, agentData, skillData) => !agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         // Shatters
         new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack)
             .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer])
