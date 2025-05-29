@@ -309,6 +309,8 @@ internal static class SkillImages
     public const string FriendlyFire = "https://render.guildwars2.com/file/BAAD0DF6B8C4AAF520B82BE3CEA7931BC2F52DCF/3256358.png";
     public const string PhantasmalSharpshooter = "https://render.guildwars2.com/file/3499040CA6182B68293313C1000C470828CE1532/3256362.png";
     public const string PhantasmalLancher = "https://render.guildwars2.com/file/5E6C98FA3B942EE76808530B016FF5621A25764F/3379157.png";
+    public const string JabMesmerSpear = "https://render.guildwars2.com/file/BBEF48C50DEB9CD79747FD515958A6FC1129EE7D/103778.png";
+    public const string StabMesmerSpear = "https://render.guildwars2.com/file/42066E7EE4A3770FE5D4550BD8EDA8237A0DB769/103777.png";
     #endregion Mesmer
     #region Necromancer
     // Shrouds
@@ -353,6 +355,9 @@ internal static class SkillImages
     public const string SoulSpiral = "https://render.guildwars2.com/file/4BFAEBD27404BDCB3A0255F1441560D3772F0CF5/1012937.png";
     public const string TrailofAnguish = "https://render.guildwars2.com/file/707877465DF8AD08E7E7F30EC908CAA4684D203B/1770544.png";
     public const string DesertSandstormShroud = "https://i.imgur.com/e0IXt8w.png";
+    public const string PutridExplosionBoneMinion = "https://render.guildwars2.com/file/E65DF0D89D5FF85CD772F8542A070737EAE457A1/102782.png";
+    public const string SlashShadowFiend = "https://wiki.guildwars2.com/images/3/3f/Slash_%28Shadow_Fiend%29.png";
+    public const string BoneShardBoneFiend = "https://wiki.guildwars2.com/images/c/cb/Bone_Shard_%28skill%29.png";
     #endregion Necromancer
     #region Ranger
     // Signets
@@ -471,6 +476,10 @@ internal static class SkillImages
     public const string VenoumousOutburst = "https://render.guildwars2.com/file/DE977DE6D693A71B24AFCC01E6EBF8F30DD4669E/2503725.png";
     public const string BlackHole = "https://wiki.guildwars2.com/images/9/9d/Black_Hole.png";
     public const string SerpentsStrike = "https://render.guildwars2.com/file/26B3CC91C193FDC30873937B2FB735E1B7C6A83A/103126.png";
+    public const string SpitGoopSkyChak = "https://wiki.guildwars2.com/images/d/dc/Spit_Goop.png";
+    public const string UnleashEnergySkyChak = "https://wiki.guildwars2.com/images/2/26/Unleash_Energy.png";
+    public const string ChargingBiteShark = "https://wiki.guildwars2.com/images/d/d8/Charging_Bite.png";
+    public const string StaringVoidSpinegazer = "https://wiki.guildwars2.com/images/9/9e/Staring_Void.png";
     #endregion Ranger
     #region Revenant
     // Facets

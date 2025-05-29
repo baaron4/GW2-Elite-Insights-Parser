@@ -159,8 +159,13 @@ public static class SkillIDs
     public const long CrashingWaves = 2654;
     public const long Freeze2 = 3138;
     public const long FiendLeechWvW = 3632;
+    public const long BoneShardBoneFiend1 = 3633;
+    public const long PutridExplosionBoneMinion = 3635;
+    public const long BoneSlashBoneMinion = 3636;
+    public const long SlashShadowFiend = 3642;
+    public const long BoneShardBoneFiend2 = 3644;
     public const long ChargeWarhornWvW = 3647;
-    public const long BoneSlash = 3652;
+    public const long BoneSlashJaggedHorror = 3652;
     public const long TwistingFangThiefMinion1 = 3661;
     public const long TwistingFangThiefMinion2 = 3662;
     public const long TwistingFangThiefMinion3 = 3663;
@@ -774,6 +779,8 @@ public static class SkillIDs
     public const long MindStabSwordClone = 10299;
     public const long Feedback = 10302;
     public const long PhaseRetreat = 10310;
+    public const long StabSpearClone = 10319;
+    public const long JabSpearClone = 10320;
     public const long PhantasmalWhalersVolley = 10330;
     public const long ChaosAura = 10332;
     public const long Blur = 10335;
@@ -920,6 +927,7 @@ public static class SkillIDs
     public const long MaulPorcine = 12734;
     public const long JabPorcine = 12735;
     public const long BrutalChargePorcine = 12738;
+    public const long ChargingBiteShark = 12739;
     public const long PoisonLeapCombo = 12810;
     public const long PoisonBlastCombo = 12812;
     public const long LightningLeapCombo = 12815;
@@ -4375,7 +4383,9 @@ public static class SkillIDs
     public const long PlanetaryWeight = 71373;
     public const long RelicOfNayosHealing = 71382;
     public const long NouryssHungerDamageBuff = 71431;
-    public const long EletroctuteJuvenileSkyChak = 71501;
+    public const long EletroctuteSkyChak = 71501;
+    public const long UnleashEnergySkyChak = 71510;
+    public const long SpitGoopSkyChak = 71532;
     public const long NouryssHungerStacksBuff = 71711;
     public const long NouryssHungerStartGainingStacksBuff = 71723;
     public const long DimensionalApertureSkill = 71792;
@@ -4469,6 +4479,7 @@ public static class SkillIDs
     public const long TormentingVisionsMergedSoulbeast = 72636;
     public const long SpikeOfMaliceHit = 72641;
     public const long CerussFocus = 72647;
+    public const long StaringVoidSpinegazer = 72652;
     public const long DespairAttunement = 72658;
     public const long RegretEmpowerment = 72699;
     public const long RelicOfTheTwinGenerals = 72707;
