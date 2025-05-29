@@ -17,9 +17,9 @@ internal abstract class SkillMechanic : IDBasedMechanic<HealthDamageEvent>
     {
     }
 
-    public SkillMechanic WithMinions(bool withMinions)
+    public SkillMechanic WithMinions()
     {
-        Minions = withMinions;
+        Minions = true;
         return this;
     }
 

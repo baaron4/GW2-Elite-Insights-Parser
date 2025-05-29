@@ -24,10 +24,13 @@ internal class Matthias : SalvationPass
             new MechanicGroup([
                 new PlayerDstHitMechanic([BloodShardsHuman, BloodShardsAbomination], new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Magenta), "Shoot Shards", "Blood Shard projectiles during bubble","Rapid Fire", 0),
                 new PlayerSrcHitMechanic([BloodShardsHuman, BloodShardsAbomination], new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Green), "Refl.Shards", "Blood Shard projectiles reflected during bubble","Reflected Rapid Fire", 0),
+                new EnemySrcMissileMechanic([BloodShardsHuman, BloodShardsAbomination], new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Red), "N.Refl.Shards", "Blood Shard projectiles not reflected during bubble","Not reflected Rapid Fire", 0)
+                    .UsingNotReflected(),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([ShardsOfRageHuman, ShardsOfRageAbomination], new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Jump Shards", "Shards of Rage (Jump)","Jump Shards", 1000),
-                new PlayerSrcHitMechanic([ShardsOfRageHuman, ShardsOfRageAbomination], new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Red), "Refl.Jump Shards", "Rflected Shards of Rage (Jump)","Reflected Jump Shards", 1000),
+                new PlayerSrcHitMechanic([ShardsOfRageHuman, ShardsOfRageAbomination], new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Red), "Refl.Jump Shards", "Reflected Shards of Rage (Jump)","Reflected Jump Shards", 0)
+                    .WithMinions(),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),

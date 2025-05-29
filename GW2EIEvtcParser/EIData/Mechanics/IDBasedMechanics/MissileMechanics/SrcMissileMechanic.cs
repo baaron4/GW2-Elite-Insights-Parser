@@ -17,9 +17,9 @@ internal abstract class SrcMissileMechanic : IDBasedMechanic<MissileEvent>
     {
     }
 
-    public SrcMissileMechanic WithMinions(bool withMinions)
+    public SrcMissileMechanic WithMinions()
     {
-        Minions = withMinions;
+        Minions = true;
         return this;
     }
 
