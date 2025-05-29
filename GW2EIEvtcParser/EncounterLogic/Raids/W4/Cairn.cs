@@ -25,9 +25,8 @@ internal class Cairn : BastionOfThePenitent
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB", "Knockback Crystals","KB Crystal", 1000),
-                new PlayerSrcSkillMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal",1000)
-                    .WithMinions(true)
-                    .UsingChecker((evt, log) => evt.ToFriendly),
+                new EnemySrcMissileMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal", 0)
+                    .UsingReflected(),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(SharedAgony, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony", "Shared Agony Debuff Application","Shared Agony", 0),//could flip
@@ -35,8 +34,6 @@ internal class Cairn : BastionOfThePenitent
                 new PlayerDstBuffApplyMechanic(SharedAgony50, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50", "Shared Agony Damage (50% Player's HP)","SA dmg 50%", 0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
                 new PlayerDstBuffApplyMechanic(SharedAgony75, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75", "Shared Agony Damage (75% Player's HP)","SA dmg 75%", 0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
             ]),
-            // new Mechanic(SharedAgony2, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "Agony Damage",0), from old raidheroes logs? Small damage packets. Is also named "Shared Agony" in the evtc. Doesn't seem to occur anymore.
-            // new Mechanic(SharedAgony3, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, new MechanicPlotlySetting(Symbols.CircleOpen,Color.Red), "SA.dmg","Shared Agony Damage dealt", "Shared Agony dmg",0), //could flip. HP% attack, thus only shows on down/absorb hits.
             new PlayerDstHitMechanic(EnergySurge, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap", "Jump between green fields","Leap", 100),
             new PlayerDstHitMechanic(OrbitalSweep, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep", "Sword Spin (Knockback)","Sweep", 100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
             new PlayerDstHitMechanic(GravityWave, new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut", "Expanding Crystal Donut Wave (Knockback)","Crystal Donut", 0)
