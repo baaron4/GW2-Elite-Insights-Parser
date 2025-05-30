@@ -310,7 +310,7 @@ internal class Ensolyss : Nightmare
                             if (target.TryGetCurrentFacingDirection(log, cast.Time + castDuration, out var facing))
                             {
                                 var rotation = new AngleConnector(facing);
-                                var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
+                                var cone = (PieDecoration)new PieDecoration(530, 160, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
                                 replay.Decorations.AddWithGrowing(cone, growing);
                             }
                             break;
@@ -479,12 +479,14 @@ internal class Ensolyss : Nightmare
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
+        (long start, long end) lifespan;
+
         // Nightmare Altar Orb AoE 1
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarOrangeAoE, out var indicators1))
         {
             foreach (EffectEvent effect in indicators1)
             {
-                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                lifespan = (effect.Time, effect.Time + effect.Duration);
                 EnvironmentDecorations.Add(new CircleDecoration(120, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
             }
         }
@@ -494,7 +496,7 @@ internal class Ensolyss : Nightmare
         {
             foreach (EffectEvent effect in indicators2)
             {
-                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                lifespan = (effect.Time, effect.Time + effect.Duration);
                 EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
@@ -504,8 +506,51 @@ internal class Ensolyss : Nightmare
         {
             foreach (EffectEvent effect in waveEffects)
             {
-                (long start, long end) lifespan = (effect.Time, effect.Time + 2000);
+                lifespan = (effect.Time, effect.Time + 2000);
                 EnvironmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+            }
+        }
+
+        // Nightmare Blast
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareBlastIndicator, out var nightmareBlastIndicators))
+        {
+            foreach (EffectEvent effect in nightmareBlastIndicators)
+            {
+                lifespan = (effect.Time, effect.Time + effect.Duration);
+                EnvironmentDecorations.Add(new CircleDecoration(185, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+            }
+        }
+
+        // Tail Lash - Circle AoEs
+        if (log.CombatData.TryGetEffectEventsByGUIDs(
+            [EffectGUIDs.EnsolyssTailLashSmallCircleAoE,
+            EffectGUIDs.EnsolyssTailLashMediumCircleAoE,
+            EffectGUIDs.EnsolyssTailLashBigCircleAoE], out var tailLashCircles))
+        {
+            foreach (EffectEvent effect in tailLashCircles)
+            {
+                lifespan = (effect.Time, effect.Time + effect.Duration);
+                uint radius = 0;
+
+                switch (effect.GUIDEvent.ContentGUID)
+                {
+                    case var small when small == EffectGUIDs.EnsolyssTailLashSmallCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 1850);
+                        radius = 100;
+                        break;
+                    case var medium when medium == EffectGUIDs.EnsolyssTailLashMediumCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 800);
+                        radius = 200;
+                        break;
+                    case var big when big == EffectGUIDs.EnsolyssTailLashBigCircleAoE:
+                        lifespan = effect.ComputeLifespan(log, 800);
+                        radius = 400;
+                        break;
+                    default:
+                        break;
+                }
+
+                EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -526,7 +571,7 @@ internal class Ensolyss : Nightmare
         var healingOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsHealingOrbs);
         EnvironmentDecorations.AddNonHomingMissiles(log, healingOrbs, Colors.Blue, 0.5, 10);
 
-        // Nightmare Bomb & Nightmare Bullet
+        // Nightmare Bomb, Nightmare Bullet & Nightmare Blast
         long[] idsRedOrbs =
             [
                 EnsolyssNightmareBomb1,
@@ -549,6 +594,7 @@ internal class Ensolyss : Nightmare
                 EnsolyssNightmareBullet13,
                 EnsolyssNightmareBullet14,
                 EnsolyssNightmareBullet15,
+                NightmareBlast,
             ];
         var redOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsRedOrbs);
         EnvironmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.5, 20);

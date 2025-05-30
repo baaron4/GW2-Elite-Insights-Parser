@@ -566,6 +566,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 bool hasUltimatumIndicators = false;
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone], out var ultimatumIndicators))
                 {
+                    ultimatumIndicators = ultimatumIndicators.OrderBy(x => x.Time).ToList();
                     hasUltimatumIndicators = true;
                     foreach (EffectEvent effect in ultimatumIndicators)
                     {
@@ -708,6 +709,11 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 EnvironmentDecorations.Add(circle);
             }
         }
+
+        var noxiousVaporBlade = log.CombatData.GetMissileEventsBySkillIDs([NoxiousVaporBlade, NoxiousVaporBladeCM]);
+        var noxiousReturn = log.CombatData.GetMissileEventsBySkillIDs([NoxiousReturn, NoxiousReturnCM]);
+        EnvironmentDecorations.AddHomingMissiles(log, noxiousVaporBlade, Colors.DarkGreen, 0.5, 25);
+        EnvironmentDecorations.AddNonHomingMissiles(log, noxiousReturn, Colors.DarkGreen, 0.5, 25);
     }
 
     /// <summary>

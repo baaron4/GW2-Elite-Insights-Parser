@@ -63,7 +63,7 @@ internal class Cairn : BastionOfThePenitent
     {
         return
         [
-            new DamageCastFinder(CosmicAura, CosmicAura), // Cosmic Aura
+            new DamageCastFinder(CosmicAura, CosmicAura),
         ];
     }
 
@@ -129,6 +129,10 @@ internal class Cairn : BastionOfThePenitent
                 EnvironmentDecorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
             }
         }
+
+        // Meteor Swarm
+        var meteorSwarm = log.CombatData.GetMissileEventsBySkillID(MeteorSwarm);
+        EnvironmentDecorations.AddNonHomingMissiles(log, meteorSwarm, Colors.DarkPurple, 0.3, 100);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
