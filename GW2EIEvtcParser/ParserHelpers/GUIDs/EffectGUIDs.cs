@@ -458,6 +458,7 @@ public static class EffectGUIDs
     public static readonly GUID SiaxNightmareHallucinationsSpawnIndicator = new("0C284B1C201D1846B4D9F249AD01A5C6"); // siax src
     public static readonly GUID SiaxVileSpitIndicator = new("BC17A48E8DD2FF44864AA48A732BDC36");
     public static readonly GUID SiaxVileSpitPoison = new("6589BB8F4EE227428CC3DDDE84A67015");
+    public static readonly GUID SiaxToxicBlastIndicator = new("FA097ABEFB8CEF4B89EB12825EEE1FB9");
     public static readonly GUID CausticBarrageIndicator = new("C910F1B11A21014AA99F24DBDFBF13FB");
     public static readonly GUID CausticBarrageHitEffect = new("CAF4E62C2C5CC04499657C2A6A78087B"); // 1000 duration - green explosion effect when orb lands - conflicts with player effects
     public static readonly GUID VolatileExpulsionIndicator = new("DCA047DBD6E90A41B46CDDCE5405E4BC"); // 300 - 400 duration
@@ -475,6 +476,10 @@ public static class EffectGUIDs
     public static readonly GUID EnsolyssNightmareAltarLightOrangeAoE = new("66C6DEE334653342BDC578817254F7C8");
     public static readonly GUID EnsolyssNightmareAltarOrangeAoE = new("FA097ABEFB8CEF4B89EB12825EEE1FB9"); // same effect as Skorvald's Solar Bolt
     public static readonly GUID EnsolyssArrow = new("3D85505CEBCF0E4D8993625957405977");
+    public static readonly GUID EnsolyssNightmareBlastIndicator = new("2F2408B883889C4789E5DEEDF5A109B4");
+    public static readonly GUID EnsolyssTailLashSmallCircleAoE = new("8DDED161CE26964FA5952D821AD852F7"); // Duration 1850
+    public static readonly GUID EnsolyssTailLashMediumCircleAoE = new("BC17A48E8DD2FF44864AA48A732BDC36"); // Duration 800
+    public static readonly GUID EnsolyssTailLashBigCircleAoE = new("168CFE6E37D8B24D82F55F107D3B8019"); // Duration 800
     // Shattered Observatory Fractal
     public static readonly GUID SolarBoltIndicators = new("FA097ABEFB8CEF4B89EB12825EEE1FB9");
     public static readonly GUID SkorvaldSolarBoltDamage = new("49813989C508464B81FC45E6D24EA8C3");

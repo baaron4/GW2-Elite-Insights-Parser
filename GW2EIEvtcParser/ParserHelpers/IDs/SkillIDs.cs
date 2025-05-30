@@ -2185,6 +2185,7 @@ public static class SkillIDs
     public const long ExplosiveLaunch = 37121;
     public const long EnsolyssNightmareBullet4 = 37141;
     public const long NigthmareMiasmaEnsolyss3 = 37151;
+    public const long ToxicBlast = 37153;
     public const long LungeEnsolyss = 37154;
     public const long EnsolyssNightmareRespite3 = 37159;
     public const long GrenadeBarrage2 = 37172;
@@ -2196,6 +2197,7 @@ public static class SkillIDs
     public const long EnsolyssNightmareBullet5 = 37187;
     public const long EnsolyssNightmareBullet6 = 37199;
     public const long NightmareMiasmaMAMA = 37217;
+    public const long NightmareBlast = 37223;
     public const long EnsolyssNightmareBullet7 = 37245;
     public const long UpswingEnsolyss = 37278;
     public const long HomingGrenades2 = 37269;
@@ -2236,6 +2238,7 @@ public static class SkillIDs
     public const long DeterminationEnsolyss = 37498;
     public const long EnsolyssNightmareBomb9 = 37510;
     public const long EnsolyssNightmareRespite7 = 37516;
+    public const long DireTorment = 37522;
     public const long NightmareDevastation1 = 37523;
     public const long EnsolyssNightmareBullet14 = 37539;
     public const long SteakWithWinterberrySauce = 37540;
@@ -3732,6 +3735,7 @@ public static class SkillIDs
     public const long AerialDefense = 63605;
     public const long Stormfall = 63607;
     public const long EnergyTransfer = 63621;
+    public const long JadeRicochetCM1 = 63654;
     public const long NightmareEpochDamage = 63691;
     public const long Slash2 = 63701;
     public const long RainOfBlades = 63739;
@@ -3758,7 +3762,7 @@ public static class SkillIDs
     public const long VoidPurge = 64064;
     public const long ZhaitansReachThrashHT1 = 64124;
     public const long TormentOfTheVoid = 64150;
-    public const long JadeRicochet2 = 64153;
+    public const long JadeRicochetCM2 = 64153;
     public const long GraspOfTheVoid = 64161;
     public const long Hallucinations = 64179;
     public const long EmbalmingBarrage = 64236;
@@ -3821,7 +3825,7 @@ public static class SkillIDs
     public const long TargetOrder4 = 64999;
     public const long Drown1 = 65004;
     public const long BrandingBeam = 65017;
-    public const long BoomingCommandSelf = 65023;
+    public const long BoomingCommandDamageNM = 65023;
     public const long ClawSlapOW = 65024;
     public const long TormentingWaveNM = 65031;
     public const long JadeCannonTurtle = 65032;
@@ -3841,7 +3845,7 @@ public static class SkillIDs
     public const long IceSpike = 65230;
     public const long MaiTrinSomething = 65238;
     public const long ShatterEarth2 = 65241;
-    public const long BoomingCommandOverlap = 65243;
+    public const long BoomingCommandSkillNM = 65243;
     public const long JadeLob2 = 65249;
     public const long DestructiveAuraBuff = 65250;
     public const long HydroBurst = 65252;
@@ -3893,7 +3897,7 @@ public static class SkillIDs
     public const long SharedDestructionMaiTrinNM = 65900;
     public const long VoidObliteratorClaw = 65903;
     public const long BlockOfTofu = 65937;
-    public const long BoomingCommand2 = 65949;
+    public const long BoomingCommandSkillCM = 65949;
     public const long FlameBreath = 65959;
     public const long ThroatSlash = 65980;
     public const long AchievementEligibilityTrueEnding = 65990;
@@ -3903,7 +3907,7 @@ public static class SkillIDs
     public const long GiantSmash = 66013;
     public const long Blast = 66014;
     public const long EnhancedDestructiveAuraBuff = 66019;
-    public const long BoomingCommand1 = 66021;
+    public const long BoomingCommandDamageCM = 66021;
     public const long HarvestTempleTargetedExpulsionNM = 66025;
     public const long NightmareEpochSkill = 66059;
     public const long AnkkaLichHallucinationFixation = 66075;
@@ -3983,7 +3987,7 @@ public static class SkillIDs
     public const long EmbalmingShot = 67443;
     public const long WispForm = 67446;
     public const long NecroticRitual = 67447;
-    public const long JadeLaserShot1 = 67480;
+    public const long JadeLaserShotNM = 67480;
     public const long CripplingStrike = 67500;
     public const long StormOfSwords7 = 67541;
     public const long DragonsEndContributor7 = 67549;
@@ -3991,14 +3995,14 @@ public static class SkillIDs
     public const long VolatileBurst1 = 67566;
     public const long ChaosAndDestructionDamageNM = 67605;
     public const long BreathOfJormag3 = 67607;
-    public const long JadeRicochet1 = 67611;
+    public const long JadeRicochetNM = 67611;
     public const long Whip = 67617;
     public const long VampiricCloud = 67644;
     public const long RollingFlame = 67646;
     public const long SwarmOfMordremoth = 67688;
     public const long SwarmOfMordremoth_CorruptedWaters = 67703;
     public const long FlightOfSushi = 67705;
-    public const long JadeLaserShot2 = 67691;
+    public const long JadeLaserShotCM = 67691;
     public const long VoidPoolSooWon = 67739;
     public const long DevouringVoid = 67751;
     public const long OldExposed = 67763;
@@ -4044,8 +4048,10 @@ public static class SkillIDs
     public const long Debilitated = 67972;
     public const long TargetedExpulsionCM = 67982;
     public const long VolatileExpulsion4 = 67999;
+    public const long JadeMineProjectileThirdSetCM = 68002;
     public const long POV_SharedDestructionLiCM = 68004;
     public const long ElectricRainCM = 68006;
+    public const long JadeMineProjectileSecondSetCM = 68013;
     public const long FallOfTheAxeSmallConeCM = 68015;
     public const long StormOfSwords6 = 68016;
     public const long SharedDestruction3 = 68018;
@@ -4057,6 +4063,7 @@ public static class SkillIDs
     public const long VolatileExpulsion2 = 68041;
     public const long StormOfSwords8 = 68042;
     public const long StormOfSwords9 = 68045;
+    public const long JadeMineProjectileFirstSetCM = 68048;
     public const long StormOfSwords10 = 68055;
     public const long PurifyingEssenceHeal = 68063;
     public const long Tranquil = 68065;

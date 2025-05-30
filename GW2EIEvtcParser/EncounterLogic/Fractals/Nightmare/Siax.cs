@@ -233,13 +233,15 @@ internal class Siax : Nightmare
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
+        (long start, long end) lifespan;
+
         // Vile Spit - Indicators
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitIndicator, out var vileSpitIndicators))
         {
             foreach (EffectEvent effect in vileSpitIndicators)
             {
                 // Indicator effect has variable duration
-                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                lifespan = (effect.Time, effect.Time + effect.Duration);
                 EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
@@ -249,7 +251,7 @@ internal class Siax : Nightmare
         {
             foreach (EffectEvent effect in vileSpitPoisons)
             {
-                (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 15600);
+                lifespan = effect.ComputeDynamicLifespan(log, 15600);
                 EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.GreenishYellow, 0.2, new PositionConnector(effect.Position)));
             }
         }
@@ -260,9 +262,27 @@ internal class Siax : Nightmare
             int duration = 3000;
             foreach (EffectEvent effect in spawnEffects)
             {
-                var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(effect.Time + duration));
+                lifespan = (effect.Time, effect.Time + duration);
+                var circle = new CircleDecoration(360, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+            }
+        }
+
+        // Toxic Blast - Indicator
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxToxicBlastIndicator, out var toxicBlastIndicators))
+        {
+            foreach (EffectEvent effect in toxicBlastIndicators)
+            {
+                lifespan = (effect.Time, effect.Time + effect.Duration);
+                var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                if (!log.CombatData.HasMissileData)
+                {
+                    EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                }
+                else
+                {
+                    EnvironmentDecorations.Add(circle);
+                }
             }
         }
 
@@ -277,11 +297,12 @@ internal class Siax : Nightmare
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
         AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
 
-        // Causting Barrage Orbs
-        var causticBarrage = log.CombatData.GetMissileEventsBySkillIDs([CausticBarrage, CausticBarrage2]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, causticBarrage, Colors.Red, 0.3, 50);
+        // Causting Barrage, Toxic Blast & Dire Torment - Orbs
+        var redOrbs = log.CombatData.GetMissileEventsBySkillIDs([CausticBarrage, CausticBarrage2, ToxicBlast, DireTorment]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.3, 50);
 
-        // TODO - Add the remaining ones
-        //var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
+        // Vile Spit
+        var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
+        EnvironmentDecorations.AddNonHomingMissiles(log, vileSpit, Colors.DarkGreen, 0.3, 50);
     }
 }
