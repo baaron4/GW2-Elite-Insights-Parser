@@ -110,6 +110,25 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID.MinisterLi, 0 },
+            {TargetID.MinisterLiCM, 0 },
+            {TargetID.TheEnforcer, 1 },
+            {TargetID.TheEnforcerCM, 1 },
+            {TargetID.TheMindblade, 2 },
+            {TargetID.TheMindbladeCM, 2 },
+            {TargetID.TheRitualist, 3 },
+            {TargetID.TheRitualistCM, 3 },
+            {TargetID.TheSniper, 4 },
+            {TargetID.TheSniperCM, 4 },
+            {TargetID.TheMechRider, 5 },
+            {TargetID.TheMechRiderCM, 5 },
+        };
+    }
+
     protected override List<TargetID> GetSuccessCheckIDs()
     {
         return
@@ -356,6 +375,15 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
+    private static void HideAfterDetermined(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        var determined762Apply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, target.AgentItem).FirstOrDefault();
+        if (determined762Apply != null)
+        {
+            replay.Trim(replay.TimeOffsets.start, determined762Apply.Time);
+        }
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         long castDuration;
@@ -394,6 +422,10 @@ internal class KainengOverlook : EndOfDragonsStrike
                         }
                     }
                 }
+                break;
+            case (int)TargetID.TheSniper:
+            case (int)TargetID.TheSniperCM:
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMechRider:
             case (int)TargetID.TheMechRiderCM:
@@ -442,21 +474,25 @@ internal class KainengOverlook : EndOfDragonsStrike
                         replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                     }
                 }
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheEnforcer:
             case (int)TargetID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
                 var enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMindblade:
             case (int)TargetID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
                 var mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheRitualist:
             case (int)TargetID.TheRitualistCM:
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.SpiritOfPain:
                 // Volatile Expulsion - Orange AoE around the spirit
