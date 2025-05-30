@@ -709,6 +709,11 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 EnvironmentDecorations.Add(circle);
             }
         }
+
+        var noxiousVaporBlade = log.CombatData.GetMissileEventsBySkillIDs([NoxiousVaporBlade, NoxiousVaporBladeCM]);
+        var noxiousReturn = log.CombatData.GetMissileEventsBySkillIDs([NoxiousReturn, NoxiousReturnCM]);
+        EnvironmentDecorations.AddHomingMissiles(log, noxiousVaporBlade, Colors.DarkGreen, 0.5, 25);
+        EnvironmentDecorations.AddNonHomingMissiles(log, noxiousReturn, Colors.DarkGreen, 0.5, 25);
     }
 
     /// <summary>
