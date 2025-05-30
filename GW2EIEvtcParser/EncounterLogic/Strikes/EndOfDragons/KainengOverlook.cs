@@ -390,9 +390,6 @@ internal class KainengOverlook : EndOfDragonsStrike
         long castDuration;
         (long start, long end) lifespan;
 
-        // TODO - Hide the npcs from the platform when minister li is not invulnerable.
-        // The last aware of the adds can last minutes longer than their death, or the entire fight.
-
         switch (target.ID)
         {
             case (int)TargetID.MinisterLi:
