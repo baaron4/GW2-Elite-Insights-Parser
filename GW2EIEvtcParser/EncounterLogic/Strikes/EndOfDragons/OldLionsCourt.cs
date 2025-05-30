@@ -566,6 +566,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 bool hasUltimatumIndicators = false;
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone], out var ultimatumIndicators))
                 {
+                    ultimatumIndicators = ultimatumIndicators.OrderBy(x => x.Time).ToList();
                     hasUltimatumIndicators = true;
                     foreach (EffectEvent effect in ultimatumIndicators)
                     {
