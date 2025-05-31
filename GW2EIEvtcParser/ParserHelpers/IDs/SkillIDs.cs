@@ -3565,7 +3565,6 @@ public static class SkillIDs
     public const long RushingJusticeSkill = 62668;
     public const long DeathlyHaste = 62671;
     public const long FriedBananaChips = 62677;
-    public const long ShatteringIce = 62686;
     public const long UrnOfSaintViktorSkill = 62687;
     public const long SaintsShieldSkill = 62689;
     public const long DeathDropSkill = 62693;
@@ -3573,6 +3572,7 @@ public static class SkillIDs
     public const long CrescentWindBuff = 62707;
     public const long PhantomsOnslaughtDamage = 62713;
     public const long DeployJadeSphereWater = 62723;
+    public const long ShatteringIce = 62724;
     public const long InvigoratingAirBuff = 62726;
     public const long DeathDropDodge = 62730;
     public const long ArtillerySlash = 62732;
