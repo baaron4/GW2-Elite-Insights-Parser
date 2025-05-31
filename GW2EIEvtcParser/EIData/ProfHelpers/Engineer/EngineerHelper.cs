@@ -103,15 +103,24 @@ internal static class EngineerHelper
                 // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
                 return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ]);
             }),
-         new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
+        new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
                 return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ]);
             }),
-         new DamageCastFinder(FocusedDevastation, FocusedDevastation)
+        new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
+        new MissileCastFinder(AimAssistedRocket, AimAssistedRocket)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new DamageCastFinder(OrbitalCommandStrike, OrbitalCommandStrike)
+            .UsingTimeOffset(-2000) // Effect has duration 3000ms but the damage happens after 2000ms
+            .UsingDisableWithEffectData()
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EffectCastFinder(OrbitalCommandStrike, EffectGUIDs.EngineerOrbitalCommandStrike)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new MissileCastFinder(SurpriseShot, SurpriseShot),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

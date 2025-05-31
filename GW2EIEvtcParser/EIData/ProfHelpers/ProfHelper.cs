@@ -31,6 +31,7 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new DamageCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
             .UsingICD(500)
+            .UsingDisableWithMissileData()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new DamageCastFinder(FrostBurst_MinorSigilOfHydromancy, FrostBurst_MinorSigilOfHydromancy)
             .UsingICD(500)
@@ -83,6 +84,9 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(SuperiorSigilOfBlood, SuperiorSigilOfBlood)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new MissileCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
+            .UsingICD(500)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         // Runes
         new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
@@ -118,6 +122,9 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(MabonsStrength, MabonsStrength)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
+            .UsingDisableWithMissileData()
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
         //{
         //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
@@ -134,6 +141,7 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce)
             .UsingICD(1000)
+            .UsingDisableWithMissileData()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -141,6 +149,7 @@ internal static class ProfHelper
             .UsingOverridenDurationChecker(0)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
+            .UsingDisableWithMissileData()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
         //{
@@ -204,6 +213,13 @@ internal static class ProfHelper
         new MinionSpawnCastFinder(RelicPrivateerSpawn, (int)MinionID.TropicalBird)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
             .WithBuilds(GW2Builds.November2024MountBalriorRelease),
+        new MissileCastFinder(RelicOfTheIce, RelicOfTheIce)
+            .UsingICD(1000)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new MissileCastFinder(RelicOfPeithaBlade, RelicOfPeithaBlade)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new MissileCastFinder(RelicOfDagdaHit, RelicOfDagdaHit)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         // Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
