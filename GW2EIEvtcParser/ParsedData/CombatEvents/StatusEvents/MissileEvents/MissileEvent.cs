@@ -24,6 +24,8 @@ public class MissileEvent : StatusEvent
     public readonly SkillItem Skill;
     public long SkillID => Skill.ID;
 
+    public readonly byte Flag0;
+    public readonly byte Flag1;
     public readonly float SomethingRange;
 
     private readonly List<MissileLaunchEvent> _launchEvents = [];
@@ -52,6 +54,8 @@ public class MissileEvent : StatusEvent
             }
         }
         Skill = skillData.Get(evtcItem.SkillID);
+        Flag0 = evtcItem.IsShields;
+        Flag1 = evtcItem.IsOffcycle;
         var somethingRangeBytes = new ByteBuffer(stackalloc byte[sizeof(float)]);
         // 0.25
         somethingRangeBytes.PushNative(evtcItem.IFFByte);
