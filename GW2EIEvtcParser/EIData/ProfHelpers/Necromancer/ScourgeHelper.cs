@@ -106,11 +106,12 @@ internal static class ScourgeHelper
 
         }
         // Shade
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade, out var scourgeShades))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [EffectGUIDs.ScourgeShade, EffectGUIDs.ScourgeShadeSandSavant], out var scourgeShades))
         {
             var skill = new SkillModeDescriptor(player, Spec.Scourge, ManifestSandShadeSkill);
             foreach (EffectEvent effect in scourgeShades)
             {
+                uint radius = (uint)(effect.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? 300 : 180);
                 long duration;
                 if (log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP)
                 {
@@ -121,7 +122,7 @@ internal static class ScourgeHelper
                     duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
                 }
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectShade);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectShade);
             }
         }
     }

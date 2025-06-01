@@ -154,6 +154,7 @@ public static class EffectGUIDs
     public static readonly GUID ReaperYouAreAllWeaklings3 = new("ED6A8440CB49B248A352B2073FAF1F5F");
     public static readonly GUID ScourgeTrailOfAnguish = new("1DAE3CAEF2228845867AAF419BF31E8C");
     public static readonly GUID ScourgeShade = new("78408C6DA08C2746BEABEB995187271A");
+    public static readonly GUID ScourgeShadeSandSavant = new("63F69C50B031A2469C5971744A9E003A");
     public static readonly GUID ScourgeShadeStrike = new("C8B109540159AA429E83D0AA98EF3E90");
     public static readonly GUID ScourgeSandSwellPortal = new("086CF7823EB13047B2187E7933639703");
     public static readonly GUID HarbingerCascadingCorruption = new("EEDCAB61CD35E840909B03D398878B1C");
