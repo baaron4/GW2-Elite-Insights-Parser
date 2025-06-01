@@ -52,7 +52,7 @@ internal static class ScourgeHelper
     private static bool ShadeCheck(DamageEvent x, ParsedEvtcLog log)
     {
         // Checking when the damage reduction has become non conditional on the shades amount
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(x.To, EffectGUIDs.ScourgeShade, out var shades))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(x.To, [EffectGUIDs.ScourgeShade, EffectGUIDs.ScourgeShadeSandSavant], out var shades))
         {
             foreach (EffectEvent effect in shades)
             {
