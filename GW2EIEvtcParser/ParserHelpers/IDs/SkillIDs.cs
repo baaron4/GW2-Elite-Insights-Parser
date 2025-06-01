@@ -67,6 +67,8 @@ public static class SkillIDs
     public const long RelicGolemancerSpawn = -48;
     public const long RelicPrivateerSpawn = -49;
     public const long RelicOfTheSteamshrieker = -50;
+    public const long SandShadeBuff = -51;
+    public const long SandSavantSandShadeBuff = -52;
     #endregion
     #region ArcDPS Hardcoded
     internal const long ArcDPSDodge = 65001;

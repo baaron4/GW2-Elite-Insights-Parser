@@ -262,7 +262,7 @@ internal static class NecromancerHelper
                 // The effect doesn't clear up correctly making the effect last 12000ms, only the ring of the AoE disappears.
                 // Duration in PvP is 6000, otherwise 8000.
                 long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.sPvP ? 6000 : 8000;
-                (long, long) lifespan = (effect.Time, effect.Time + duration);
+                (long, long) lifespan = effect.ComputeLifespanWithMaxedToDuration(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectCorrosivePoisonCloud);
             }
         }

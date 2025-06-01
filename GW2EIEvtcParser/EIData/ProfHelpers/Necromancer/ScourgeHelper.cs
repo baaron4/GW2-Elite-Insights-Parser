@@ -45,26 +45,37 @@ internal static class ScourgeHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
         // Blood as Sand
-        new DamageLogDamageModifier(Mod_BloodAsSand, "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, TraitImages.BloodAsSand, ShadeCheck, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_BloodAsSand, [SandShadeBuff, SandSavantSandShadeBuff], "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BloodAsSand, DamageModifierMode.All)
+            .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];
 
-    private static bool ShadeCheck(DamageEvent x, ParsedEvtcLog log)
+    public static List<BuffEvent> AddShadeBuffsFromEffects(IReadOnlyList<EffectEvent> shadeEffects, FightData fightData, SkillData skillData, GW2BuildEvent gw2Build, EvtcVersionEvent evtcVersion)
     {
-        // Checking when the damage reduction has become non conditional on the shades amount
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(x.To, [EffectGUIDs.ScourgeShade, EffectGUIDs.ScourgeShadeSandSavant], out var shades))
+        var res = new List<BuffEvent>();
+        uint buffInstance = 0;
+        foreach (EffectEvent shade in shadeEffects)
         {
-            foreach (EffectEvent effect in shades)
+            if (shade is EffectEventCBTS45)
             {
-                long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP ? 15000 : 8000;
-                (long start, long end) = effect.ComputeLifespan(log, duration);
-                if (x.Time >= start && x.Time <= end)
-                {
-                    return true;
-                }
+                // unreliable for early ends
+                continue;
             }
+            SkillItem skill = shade.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
+            int expectedDuration;
+            if (fightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || fightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP)
+            {
+                expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+            }
+            else
+            {
+                expectedDuration = gw2Build.Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+            }
+            int duration = shade.HasDynamicEndTime ? Math.Min((int)(shade.DynamicEndTime - shade.Time), expectedDuration) : expectedDuration;
+            res.Add(new BuffApplyEvent(shade.Src, shade.Src, shade.Time, duration, skill, IFF.Friend, buffInstance, true));
+            res.Add(new BuffRemoveSingleEvent(shade.Src, shade.Src, shade.Time + duration, Math.Max(expectedDuration - duration, 0), skill, IFF.Friend, buffInstance++));
         }
-        return false;
+        return res;
     }
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -73,6 +84,8 @@ internal static class ScourgeHelper
         new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SandSwell),
         new Buff("Trail of Anguish", TrailOfAnguishBuff, Source.Scourge, BuffClassification.Other, SkillImages.TrailofAnguish),
         new Buff("Desert / Sandstorm Shroud", DesertShroudBuff, Source.Scourge, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.DesertSandstormShroud),
+        new Buff("Sand Shade", SandShadeBuff, Source.Scourge, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.ManifestSandShade),
+        new Buff("Sand Shade (Sand Savant)", SandSavantSandShadeBuff, Source.Scourge, BuffClassification.Other, SkillImages.ManifestSandShade),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
@@ -121,7 +134,7 @@ internal static class ScourgeHelper
                 {
                     duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
                 }
-                (long, long) lifespan = effect.ComputeLifespan(log, duration);
+                (long, long) lifespan = effect.ComputeLifespanWithMaxedToDuration(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectShade);
             }
         }
