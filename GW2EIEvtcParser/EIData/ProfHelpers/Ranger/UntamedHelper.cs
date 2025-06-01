@@ -24,11 +24,11 @@ internal static class UntamedHelper
 
         // Pet
         new EffectCastFinder(VenomousOutburst, EffectGUIDs.UntamedVenomousOutburst)
-            .WithMinions(true),
+            .WithMinions(),
         new EffectCastFinder(RendingVines, EffectGUIDs.UntamedRendingVines)
-            .WithMinions(true),
+            .WithMinions(),
         new EffectCastFinder(EnvelopingHaze, EffectGUIDs.UntamedEnvelopingHaze)
-            .WithMinions(true),
+            .WithMinions(),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

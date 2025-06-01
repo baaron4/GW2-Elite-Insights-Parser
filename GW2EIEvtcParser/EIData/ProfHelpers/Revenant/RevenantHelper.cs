@@ -42,25 +42,25 @@ internal static class RevenantHelper
         new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal)
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
         new EffectCastFinderByDst(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
         new EffectCastFinderByDst(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds( GW2Builds.June2022Balance),
         new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
             .UsingSrcBaseSpecChecker(Spec.Revenant)
             .WithBuilds(GW2Builds.June2022Balance),
         new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)

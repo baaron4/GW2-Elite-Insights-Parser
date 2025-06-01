@@ -267,9 +267,9 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)

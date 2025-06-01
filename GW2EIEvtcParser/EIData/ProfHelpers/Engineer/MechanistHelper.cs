@@ -41,9 +41,9 @@ internal static class MechanistHelper
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),
         new BuffGainCastFinder(DischargeArray, DischargeArrayBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
-            .WithMinions(true)
+            .WithMinions()
             .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
             .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
         new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class SrcMissileMechanic : IDBasedMechanic<MissileEvent>
 {
 
-    protected bool Minions { get; private set; } = false;
+    private bool _withMinions { get; set; } = false;
 
     public SrcMissileMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -19,7 +19,7 @@ internal abstract class SrcMissileMechanic : IDBasedMechanic<MissileEvent>
 
     public SrcMissileMechanic WithMinions()
     {
-        Minions = true;
+        _withMinions = true;
         return this;
     }
 
@@ -43,7 +43,7 @@ internal abstract class SrcMissileMechanic : IDBasedMechanic<MissileEvent>
     protected AgentItem GetCreditedAgentItem(MissileEvent missileEvent)
     {
         AgentItem agentItem = GetAgentItem(missileEvent);
-        if (Minions)
+        if (_withMinions)
         {
             agentItem = agentItem.GetFinalMaster();
         }

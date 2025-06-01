@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunchEvent>
 {
 
-    protected bool Minions { get; private set; } = false;
+    private bool _withMinions { get; set; } = false;
 
     public DstMissileLaunchMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -17,9 +17,9 @@ internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunch
     {
     }
 
-    public DstMissileLaunchMechanic WithMinions(bool withMinions)
+    public DstMissileLaunchMechanic WithMinions()
     {
-        Minions = withMinions;
+        _withMinions = true;
         return this;
     }
     public DstMissileLaunchMechanic UsingReflected()
@@ -41,7 +41,7 @@ internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunch
     protected AgentItem GetCreditedAgentItem(MissileLaunchEvent missileLaunchEvent)
     {
         AgentItem? agentItem = GetAgentItem(missileLaunchEvent);
-        if (Minions)
+        if (_withMinions)
         {
             agentItem = agentItem.GetFinalMaster();
         }

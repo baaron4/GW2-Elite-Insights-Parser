@@ -9,9 +9,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     private readonly GUID _effectGUID;
     private int _speciesId = 0;
 
-    public EffectCastFinder WithMinions(bool minions)
+    public EffectCastFinder WithMinions()
     {
-        Minions = minions;
+        Minions = true;
         return this;
     }
 
@@ -189,7 +189,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                             caster = agent;
                         }
                     }
-                    res.Add(new InstantCastEvent(GetTime(effectEvent, caster!, combatData), skillData.Get(SkillID), caster!));
+                    res.Add(new InstantCastEvent(GetTime(effectEvent, caster, combatData), skillData.Get(SkillID), caster));
                 }
             }
         }

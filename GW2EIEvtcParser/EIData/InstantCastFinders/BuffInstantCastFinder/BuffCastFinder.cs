@@ -18,9 +18,9 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
 
     protected abstract AgentItem GetKeyAgent(Event evt);
 
-    public virtual BuffCastFinder<Event> WithMinions(bool minions)
+    public virtual BuffCastFinder<Event> WithMinions()
     {
-        Minions = minions;
+        Minions = true;
         return this;
     }
 
