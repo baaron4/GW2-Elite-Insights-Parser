@@ -3668,6 +3668,7 @@ public static class SkillIDs
     public const long MechCoreBarrierEngine = 63173;
     public const long TwilightComboSecondProjectile = 63181;
     public const long DoubleBolt = 63182;
+    public const long RocketPunchMech = 63185;
     public const long SparkRevolver = 63188;
     public const long FerociousSymbiosis = 63191;
     public const long UnnaturalTraversal = 63195;

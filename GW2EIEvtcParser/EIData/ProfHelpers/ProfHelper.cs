@@ -123,7 +123,6 @@ internal static class ProfHelper
         new BuffGainCastFinder(MabonsStrength, MabonsStrength)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
-            .UsingDisableWithMissileData()
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
         //{
@@ -217,8 +216,6 @@ internal static class ProfHelper
             .UsingICD(1000)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new MissileCastFinder(RelicOfPeithaBlade, RelicOfPeithaBlade)
-            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        new MissileCastFinder(RelicOfDagdaHit, RelicOfDagdaHit)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         // Mounts
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
