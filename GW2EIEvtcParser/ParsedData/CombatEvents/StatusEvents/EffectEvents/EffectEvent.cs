@@ -72,6 +72,9 @@ public abstract class EffectEvent : StatusEvent
     /// Scale of the effect
     /// </summary>
     public float Scale { get; protected set; } = -1.0f;
+
+    public bool IsScaled => Scale >= 0.0f;
+
     /// <summary>
     /// Scale something of the effect
     /// </summary>
@@ -102,14 +105,6 @@ public abstract class EffectEvent : StatusEvent
         {
             DynamicEndTime = endEvent.Time;
         }
-    }
-
-    public double GetSize(double defaultSize)
-    {
-        if (Scale != -1.0f) { 
-            return Scale;
-        }
-        return defaultSize;
     }
 
     /// <summary>
