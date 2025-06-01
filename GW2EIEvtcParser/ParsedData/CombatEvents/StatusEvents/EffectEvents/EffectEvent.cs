@@ -153,6 +153,19 @@ public abstract class EffectEvent : StatusEvent
     /// <summary>
     /// Computes the lifespan of an effect.
     /// Will use default duration if all other methods fail
+    /// Clamped to given default duration
+    /// See <see cref="ComputeEndTime"/> for information about computed end times.
+    /// </summary>
+    public (long start, long end) ComputeLifespanWithMaxedToDuration(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
+    {
+        long start = Time;
+        long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
+        return (start, Math.Min(end, start + defaultDuration));
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.
+    /// Will use default duration if all other methods fail
     /// defaultDuration is ignored for <see cref="EffectEventCBTS45"/> and considered as 0.
     /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
     /// See <see cref="ComputeEndTime"/> for information about computed end times.
