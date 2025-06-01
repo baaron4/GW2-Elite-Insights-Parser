@@ -6,7 +6,6 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
 {
     protected bool Minions = false;
     private readonly long _missileSkillID;
-    private int _speciesId = 0;
     public MissileCastFinder(long skillID, long missileSkillID) : base(skillID)
     {
         _missileSkillID = missileSkillID;
@@ -41,15 +40,7 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
                     }
                     lastTime = missileEvent.Time;
                     var caster = group.Key;
-                    if (_speciesId > 0 && caster.IsUnamedSpecies())
-                    {
-                        AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= missileEvent.Time && x.FirstAware <= missileEvent.Time);
-                        if (agent != null)
-                        {
-                            caster = agent;
-                        }
-                    }
-                    res.Add(new InstantCastEvent(GetTime(missileEvent, caster!, combatData), skillData.Get(SkillID), caster!));
+                    res.Add(new InstantCastEvent(GetTime(missileEvent, missileEvent.Src!, combatData), skillData.Get(SkillID), caster!));
                 }
             }
         }
