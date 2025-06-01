@@ -11,9 +11,9 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
         _missileSkillID = missileSkillID;
     }
 
-    public MissileCastFinder WithMinions(bool minions)
+    public MissileCastFinder WithMinions()
     {
-        Minions = minions;
+        Minions = true;
         return this;
     }
 

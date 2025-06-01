@@ -55,9 +55,9 @@ internal static class MechanistHelper
         new MinionCastCastFinder(SkyCircus, SkyCircus),
         // Mech Passives
         new MissileCastFinder(RocketPunchMech, RocketPunchMech)
-            .WithMinions(true),
+            .WithMinions(),
         new BuffGainCastFinder(ExigencyProtocol, ExigencyProtocol)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((buffApply, combatData, agentData, skillData) => buffApply.To.IsSpecies(MinionID.JadeMech)),
     ];
 
