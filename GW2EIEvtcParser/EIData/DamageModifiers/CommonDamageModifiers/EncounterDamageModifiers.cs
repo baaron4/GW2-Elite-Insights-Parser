@@ -134,7 +134,7 @@ internal static class EncounterDamageModifiers
             {
                 return VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
             }),
-        new CounterOnFoeDamageModifier(Mod_RisingPressureInvul, RisingPressure, "Rising Pressure (invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
+        new CounterOnFoeDamageModifier(Mod_RisingPressureInvul, RisingPressure, "Rising Pressure (invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.RisingPressure, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
                 return !VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
