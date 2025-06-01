@@ -55,6 +55,29 @@ internal class Slothasor : SalvationPass
                         (2688, 11906, 3712, 14210)*/);
     }
 
+    internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+    {
+        base.UpdatePlayersSpecAndGroup(players, combatData, fightData);
+        var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).Where(x => x.Time <= fightData.FightStart + 5000).FirstOrDefault();
+        if (slubTransformApplyAtStart != null)
+        {
+            var transformedPlayer = players.FirstOrDefault(x => x.AgentItem == slubTransformApplyAtStart.To);
+            if (transformedPlayer != null)
+            {
+                var transfoExit = combatData.GetBuffRemoveAllData(MagicTransformation, transformedPlayer.AgentItem).FirstOrDefault(x => x.Time >= slubTransformApplyAtStart.Time);
+                if (transfoExit != null)
+                {
+                    var enterCombat = combatData.GetEnterCombatEvents(transformedPlayer.AgentItem).Where(x => x.Time <= transfoExit.Time + 1000).LastOrDefault();
+                    if (enterCombat != null && enterCombat.Spec != Spec.Unknown && enterCombat.Subgroup != 0)
+                    {
+                        transformedPlayer.AgentItem.OverrideSpec(enterCombat.Spec);
+                        transformedPlayer.OverrideGroup(enterCombat.Subgroup);
+                    }
+                }
+            }
+        }
+    }
+
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
