@@ -40,7 +40,6 @@ internal static class ElementalistHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(EarthenBlast, EarthenBlast)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new DamageCastFinder(LightningStrike, LightningStrike),
         new DamageCastFinder(LightningRod, LightningRod)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LightningFlash, LightningFlash),
@@ -75,6 +74,10 @@ internal static class ElementalistHelper
             .UsingToNotSpecChecker(Spec.Weaver)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
+        // Scepter
+        new DamageCastFinder(LightningStrike, LightningStrike),
+        new MissileCastFinder(Hurl, Hurl)
+            .UsingICD(900), // Projectiles shoot in 800ms
         // Spear
         new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
     ];

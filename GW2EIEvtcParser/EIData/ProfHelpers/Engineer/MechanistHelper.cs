@@ -37,9 +37,11 @@ internal static class MechanistHelper
                 return false;
             }) // intersect first position after spawn with delayed effect
             .UsingNotAccurate(),
+        // Mech F1
         new MinionCastCastFinder(RoilingSmash, RoilingSmash),
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),
+        // Mech F2
         new BuffGainCastFinder(DischargeArray, DischargeArrayBuff)
             .WithMinions(),
         new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
@@ -47,9 +49,16 @@ internal static class MechanistHelper
             .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
             .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
         new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),
+        // Mech F3
         new MinionCastCastFinder(JadeMortar, JadeMortar),
         new MinionCastCastFinder(BarrierBurst, BarrierBurst),
         new MinionCastCastFinder(SkyCircus, SkyCircus),
+        // Mech Passives
+        new MissileCastFinder(RocketPunchMech, RocketPunchMech)
+            .WithMinions(true),
+        new BuffGainCastFinder(ExigencyProtocol, ExigencyProtocol)
+            .WithMinions(true)
+            .UsingChecker((buffApply, combatData, agentData, skillData) => buffApply.To.IsSpecies(MinionID.JadeMech)),
     ];
 
     private static bool WithMechChecker(DamageEvent x, ParsedEvtcLog log)

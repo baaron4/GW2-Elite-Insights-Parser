@@ -78,6 +78,7 @@ internal class UraTheSteamshrieker : MountBalrior
             new MechanicGroup([
                 new PlayerDstHitMechanic(PressureRelease, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "PresRel.H", "Hit by Pressure Release (Ventshot Jump AoE)", "Pressure Release Hit", 0),
                 new PlayerDstHitMechanic(ForcedEruption, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "ForcErup.H", "Hit by Forced Eruption (Ventshot Homing Orb)", "Forced Eruption Hit", 0),
+                new PlayerDstHitMechanic(SearingSnipe, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.LightBlue), "SearSnipe.H", "Hit by Searing Snipe (Ventshot Projectile)", "Searing Snipe Hit", 0),
                 new PlayerDstHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", 0)
                     .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
             ]),
