@@ -148,6 +148,8 @@ public class CombatItem
             || IsStateChange == StateChange.InstanceStart
             || IsStateChange == StateChange.SquadCombatStart
             || IsStateChange == StateChange.SquadCombatEnd
+            || IsStateChange == StateChange.EffectAgentRemove
+            || IsStateChange == StateChange.EffectGroundRemove
             ;
     }
 
