@@ -407,7 +407,7 @@ internal static class CombatEventFactory
                     if (startEvent != null)
                     {
                         startEvent.AddLaunchEvent(missileLaunchEvent);
-                        if (missileLaunchEvent.LaunchedTowardsAgent)
+                        if (missileLaunchEvent.HasTargetAgent)
                         {
                             Add(statusEvents.MissileLaunchEventsByDst, missileLaunchEvent.TargetedAgent, missileLaunchEvent);
                         }

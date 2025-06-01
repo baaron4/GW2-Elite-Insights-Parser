@@ -27,7 +27,7 @@ public class MissileLaunchEvent : TimeCombatEvent
         *(uint16_t*)&ev->is_shields = float_to_int16_nonprecise(speed, 1.0f);
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
-    public bool LaunchedTowardsAgent => _targetedAgent != null && !_targetedAgent.IsNonIdentifiedSpecies();
+    public bool HasTargetAgent => _targetedAgent != null && !_targetedAgent.IsNonIdentifiedSpecies();
     private readonly AgentItem? _targetedAgent = null;
     public AgentItem TargetedAgent => _targetedAgent ?? _unknownAgent;
 

@@ -57,7 +57,7 @@ internal abstract class DstMissileLaunchMechanic : IDBasedMechanic<MissileLaunch
             {
                 foreach (MissileLaunchEvent missileLaunchEvent in missileEvent.LaunchEvents)
                 {
-                    if (missileLaunchEvent.LaunchedTowardsAgent && TryGetActor(log, GetCreditedAgentItem(missileLaunchEvent), regroupedMobs, out var amp) && Keep(missileLaunchEvent, log))
+                    if (missileLaunchEvent.HasTargetAgent && TryGetActor(log, GetCreditedAgentItem(missileLaunchEvent), regroupedMobs, out var amp) && Keep(missileLaunchEvent, log))
                     {
                         InsertMechanic(log, mechanicLogs, missileLaunchEvent.Time, amp);
                     }
