@@ -14,10 +14,10 @@ public class MissileEvent : StatusEvent
         i16[1] = float_to_int16_nonprecise(xyz_origin[1], 10.0f);
         i16[2] = float_to_int16_nonprecise(xyz_origin[2], 10.0f);
         ev->skillid = skillid;
-        *(float*)&ev->iff = something_range; // removed?
+        *(float*)&ev->iff = something_range;
         ev->is_statechange = CBTS_MISSILECREATE;
-        ev->is_shields = flags0; // removed
-        ev->is_offcycle = flags1; // removed
+        ev->is_shields = flags0; 
+        ev->is_offcycle = flags1;
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
     public readonly Vector3 Origin;
