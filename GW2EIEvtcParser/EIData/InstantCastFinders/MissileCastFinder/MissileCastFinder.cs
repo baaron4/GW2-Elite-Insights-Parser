@@ -40,7 +40,7 @@ internal class MissileCastFinder : CheckedCastFinder<MissileEvent>
                     }
                     lastTime = missileEvent.Time;
                     var caster = group.Key;
-                    res.Add(new InstantCastEvent(GetTime(missileEvent, missileEvent.Src!, combatData), skillData.Get(SkillID), caster!));
+                    res.Add(new InstantCastEvent(GetTime(missileEvent, missileEvent.Src, combatData), skillData.Get(SkillID), caster));
                 }
             }
         }
