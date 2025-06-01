@@ -252,6 +252,7 @@ public static class SkillIDs
     public const long ElectrifiedTornado = 5749;
     public const long RenewalOfFire = 5764;
     public const long ConeOfColdHealing = 5767;
+    public const long Hurl = 5780;
     public const long MedKitSkill = 5802;
     public const long BombKit = 5812;
     public const long RifleTurretCast = 5818;
@@ -301,6 +302,7 @@ public static class SkillIDs
     public const long MineField = 6164;
     public const long POV_MineFieldBuff = 6165;
     public const long DetonateMineField = 6166;
+    public const long SurpriseShot = 6178;
     public const long SupplyCrateUW = 6183;
     public const long HaresSpeedSkill = 6221;
     public const long WvWSpendingSupplies = 6852;
@@ -1435,6 +1437,7 @@ public static class SkillIDs
     public const long EarthElementalStomp = 25498;
     public const long FireElementalFlameBarrage = 25499;
     public const long POV_BurningRetreatEvadeBuff = 25502;
+    public const long PhantasmalBlade = 25513;
     public const long LightAura = 25518;
     public const long SuperiorSigilOfCruelty = 25526;
     public const long SiegeGolemMasteryRank4Omega = 25589;
@@ -1582,6 +1585,7 @@ public static class SkillIDs
     public const long FlashFreezeDelayed = 29844;
     public const long WellOfRecall_Senility = 29856;
     public const long VigorousRecovery_LiveVicariously = 29863; // The game maps this name incorrectly to "Vigorous Recovery"
+    public const long AimAssistedRocket = 29889;
     public const long LifeFromDeath = 29901;
     public const long ShieldOfCourageActive = 29906;
     public const long WeakeningCharge = 29911;
@@ -2504,6 +2508,7 @@ public static class SkillIDs
     public const long TomeOfResolveOpen = 41493;
     public const long AntiairBallistaBoltDamage2 = 41540;
     public const long POV_BrutalMomentumCritChance = 41557;
+    public const long OrbitalCommandStrike = 41612;
     public const long AirMajorAttunement = 41692;
     public const long MantraOfSolace = 41714;
     public const long Ferocious = 41720;
@@ -2527,6 +2532,7 @@ public static class SkillIDs
     public const long PrimordialStanceBuff = 42086;
     public const long RaptorTailSpin = 42133;
     public const long OneWolfPackDamage = 42145;
+    public const long BladeBurst = 42163;
     public const long POV_StealPrecisionBuff = 42194;
     public const long Afterburner = 42210;
     public const long ManifestSandShadeSkill = 42297;
@@ -2691,6 +2697,7 @@ public static class SkillIDs
     public const long WovenEarth = 45662;
     public const long BreakrazorsBastionSkill = 45686;
     public const long OneWolfPackSkill = 45717;
+    public const long ParticleAccelerator = 45732;
     public const long ChargeGazelleMergeSkill = 45743; // travel damage, impact is different cast
     public const long SoulcleaveSummitSkill = 45773;
     public const long KineticCharge = 45781;
@@ -3661,6 +3668,7 @@ public static class SkillIDs
     public const long MechCoreBarrierEngine = 63173;
     public const long TwilightComboSecondProjectile = 63181;
     public const long DoubleBolt = 63182;
+    public const long RocketPunchMech = 63185;
     public const long SparkRevolver = 63188;
     public const long FerociousSymbiosis = 63191;
     public const long UnnaturalTraversal = 63195;

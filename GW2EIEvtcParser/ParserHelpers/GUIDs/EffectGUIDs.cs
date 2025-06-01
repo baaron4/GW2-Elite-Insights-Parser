@@ -340,6 +340,7 @@ public static class EffectGUIDs
     #region Engineer
     public static readonly GUID EngineerHealingMist = new("B02D3D0FF0A4FC47B23B1478D8E770AE"); // used with healing mist, soothing detonation
     public static readonly GUID EngineerMagneticInversion = new("F8BD502E5B0D9444AA6DC5B5918801EE");
+    public static readonly GUID EngineerOrbitalCommandStrike = new("0D388D23FF313F489794881A540E5A24"); // 3000 duration - damage happens after 2000
     public static readonly GUID EngineerThrowMineInactive1 = new("2EE26B8656BD424B9BF9A7EA4CB0AA06"); // infinite duration
     public static readonly GUID EngineerThrowMineInactive2 = new("67649A4CB18C5C4A8D48ACFCF50B21CE"); // 0 duration
     public static readonly GUID EngineerMineField = new("997750CA2636154E9FFBFEE4AA51A970"); // 0 duration and infinite duration, both logged at the same time
