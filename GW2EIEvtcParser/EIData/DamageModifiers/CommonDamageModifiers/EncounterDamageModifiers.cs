@@ -89,13 +89,13 @@ internal static class EncounterDamageModifiers
             }),
         new BuffOnActorDamageModifier(Mod_EmpoweredStatueOfDeath, EmpoweredStatueOfDeath, "Empowered (Statue of Death)", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.EmpoweredEater, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ViolentCurrents, ViolentCurrents, "Violent Currents", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ViolentCurrents, DamageModifierMode.PvE),
-        new BuffOnFoeDamageModifier(Mod_BloodShield, [BloodShield, BloodShieldAbo], "Blood Shield", "-90% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.NoPets, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodShield, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_BloodShield, [BloodShield, BloodShieldAbo], "Blood Shield", "-90% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -90.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodShield, DamageModifierMode.PvE)
             .UsingGainAdjuster(VulnerabilityAdjuster)
             .UsingChecker((ahde, log) =>
             {
                 return VulnerabilityAdditiveChecker(ahde, log, BloodShield, 90) || VulnerabilityAdditiveChecker(ahde, log, BloodShieldAbo, 90);
             }),
-        new CounterOnFoeDamageModifier(Mod_BloodShieldInvul, [BloodShield, BloodShieldAbo], "Blood Shield (invul)", "-90% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
+        new CounterOnFoeDamageModifier(Mod_BloodShieldInvul, [BloodShield, BloodShieldAbo], "Blood Shield (invul)", "-90% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
                 return !(VulnerabilityAdditiveChecker(ahde, log, BloodShield, 90) || VulnerabilityAdditiveChecker(ahde, log, BloodShieldAbo, 90));
@@ -134,7 +134,7 @@ internal static class EncounterDamageModifiers
             {
                 return VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
             }),
-        new CounterOnFoeDamageModifier(Mod_RisingPressureInvul, RisingPressure, "Rising Pressure (invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
+        new CounterOnFoeDamageModifier(Mod_RisingPressureInvul, RisingPressure, "Rising Pressure (invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
                 return !VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
