@@ -64,7 +64,7 @@ internal static class ThiefHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
         new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0 && x.HasCrit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
-            .UsingApproximate(true),
+            .UsingApproximate(),
         // - Ferocious Strikes
         new DamageLogDamageModifier(Mod_FerociousStrikes, "Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
         
@@ -87,7 +87,7 @@ internal static class ThiefHelper
     [
         // Marauder's Resilience
         new DamageLogDamageModifier(Mod_MaraudersResilience, "Marauder's Resilience", "-10% from foes within 360 range", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Thief, TraitImages.MaraudersResilience, (x, log) => !TargetWithinRangeChecker(x, log, 360, false), DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.April2019Balance)
     ];
 

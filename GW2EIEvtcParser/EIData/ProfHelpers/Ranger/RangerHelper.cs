@@ -349,39 +349,39 @@ internal static class RangerHelper
         // Marksmanship
         // - Farsighted (<= 600)
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvP)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvEWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025BalancePatch),
         // - Farsighted (> 600)
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvP)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025BalancePatch),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvEWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025BalancePatch),
         // - Predator's Onslaught
         new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
-            .UsingApproximate(true),
+            .UsingApproximate(),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025BalancePatch),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
@@ -408,7 +408,7 @@ internal static class RangerHelper
         // - Survival Instincts
         new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
-            .UsingApproximate(true),
+            .UsingApproximate(),
 
         // Beastmastery
         // - Beastly Warden

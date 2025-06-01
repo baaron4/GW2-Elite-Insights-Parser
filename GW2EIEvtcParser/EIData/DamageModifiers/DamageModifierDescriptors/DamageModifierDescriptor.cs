@@ -141,9 +141,9 @@ internal abstract class DamageModifierDescriptor : IVersionable
 
     protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffGraph> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain);
 
-    internal DamageModifierDescriptor UsingApproximate(bool approximate)
+    internal DamageModifierDescriptor UsingApproximate()
     {
-        Approximate = approximate;
+        Approximate = true;
         return this;
     }
     internal abstract List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier);

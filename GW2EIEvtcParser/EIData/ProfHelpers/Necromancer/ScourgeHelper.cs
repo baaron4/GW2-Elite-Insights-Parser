@@ -46,7 +46,7 @@ internal static class ScourgeHelper
     [
         // Blood as Sand
         new BuffOnActorDamageModifier(Mod_BloodAsSand, [SandShadeBuff, SandSavantSandShadeBuff], "Blood As Sand", "-15% while shade is active", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, TraitImages.BloodAsSand, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];
 

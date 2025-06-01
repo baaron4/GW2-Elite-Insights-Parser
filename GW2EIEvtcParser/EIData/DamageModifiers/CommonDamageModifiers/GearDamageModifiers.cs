@@ -46,19 +46,19 @@ internal static class GearDamageModifiers
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfTheDragonhunterTargetBuff, x.Time);
-        }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
+        }).UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(Mod_RelicOfIsgarren, RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfIsgarren, DamageModifierMode.All).UsingChecker((x, log) =>
         {
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfIsgarrenTargetBuff, x.Time);
-        }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
+        }).UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(Mod_RelicOfPeitha, RelicOfPeithaTargetBuff, "Relic of Peitha", "10% after blade hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfPeitha, DamageModifierMode.All).UsingChecker((x, log) =>
         {
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfPeithaTargetBuff, x.Time);
-        }).WithBuilds(GW2Builds.November2023Balance).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
+        }).WithBuilds(GW2Builds.November2023Balance).UsingApproximate(), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnActorDamageModifier(Mod_RelicOfTheThief, RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, ItemImages.RelicOfTheThief, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RelicOfFireworks, RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfFireworks, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Mod_RelicOfFireworks, RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfFireworks, DamageModifierMode.sPvP).WithBuilds(GW2Builds.September2023Balance),

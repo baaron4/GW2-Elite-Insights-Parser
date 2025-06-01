@@ -30,54 +30,54 @@ internal static class WillbenderHelper
         // Lethal Tempo PVE
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.All)
             .UsingChecker( (x, log) => LethalTempoChecker(x, log, 6000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "1% per stack", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 6000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 6000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.November2022Balance),
         // Tyrant's Lethal Tempo PVE
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.All)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.April2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempoStrike, LethalTempo, "Tyrant's Lethal Tempo (Strike)", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.April2025BalancePatch),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempoCondition, LethalTempo, "Tyrant's Lethal Tempo (Condition)", "4% per stack", DamageSource.NoPets, 4.0, DamageType.Condition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.April2025BalancePatch),
         // Lethal Tempo Competitive modes
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 6000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
         new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.LethalTempo, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 6000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.March2022Balance2),
         // Tyrant's Lethal Tempo Competitive modes
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "4% per stack", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
         new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, TraitImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => LethalTempoChecker(x, log, 4000))
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.March2022Balance2),
         // Rushing Justice
         new CounterOnActorDamageModifier(Mod_RushingJustice, RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, SkillImages.RushingJustice, DamageModifierMode.All)
