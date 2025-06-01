@@ -146,6 +146,11 @@ static class Vector
 
     public static float GetRoundedZRotationDeg(this in Vector3 facing)
     {
-        return (float)Math.Round(RadianToDegree(Math.Atan2(facing.Y, facing.X)), CombatReplayDataDigit);
+        return (float)Math.Round(RadianToDegree(GetZRotationRadians(facing)), CombatReplayDataDigit);
+    }
+
+    public static float GetZRotationRadians(this in Vector3 facing)
+    {
+        return (float)Math.Atan2(facing.Y, facing.X);
     }
 }
