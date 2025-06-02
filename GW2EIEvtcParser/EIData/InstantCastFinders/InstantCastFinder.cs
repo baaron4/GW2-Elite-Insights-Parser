@@ -99,16 +99,16 @@ internal abstract class InstantCastFinder : IVersionable
         return this;
     }
 
-    internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
+    internal virtual InstantCastFinder UsingBeforeWeaponSwap()
     {
-        BeforeWeaponSwap = beforeWeaponSwap;
+        BeforeWeaponSwap = true;
         AfterWeaponSwap = false;
         return this;
     }
 
-    internal virtual InstantCastFinder UsingAfterWeaponSwap(bool afterWeaponSwap)
+    internal virtual InstantCastFinder UsingAfterWeaponSwap()
     {
-        AfterWeaponSwap = afterWeaponSwap;
+        AfterWeaponSwap = true;
         BeforeWeaponSwap = false;
         return this;
     }

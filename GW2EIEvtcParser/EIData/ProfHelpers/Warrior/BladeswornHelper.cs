@@ -16,10 +16,10 @@ internal static class BladeswornHelper
     [
         new BuffLossCastFinder(GunsaberSheath, GunsaberMode)
             .WithBuilds(GW2Builds.EODBeta2)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(Gunsaber, GunsaberMode)
             .WithBuilds(GW2Builds.EODBeta2)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new DamageCastFinder(UnseenSword, UnseenSword)
             .WithBuilds(GW2Builds.EODBeta2)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),

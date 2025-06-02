@@ -81,7 +81,7 @@ internal class Qadim : MythwrightGambit
                 new PlayerDstBuffApplyMechanic(PowerOfTheLamp, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple,10), "Lamp", "Power of the Lamp (Returned from the Lamp)","Lamp Return", 0),
                 new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie, Colors.Black), "Taking Turns", "Achievement Eligibility: Taking Turns", "Taking Turns", 0, (log, a) => log.CombatData.GetDeadEvents(a))
                     .UsingEnable((log) => CustomCheckTakingTurns(log))
-                    .UsingAchievementEligibility(true),
+                    .UsingAchievementEligibility(),
                 new PlayerDstHitMechanic(Claw, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkTeal,10), "Claw", "Claw (Reaper of Flesh attack)","Reaper Claw", 0),
             ]),
             new MechanicGroup([

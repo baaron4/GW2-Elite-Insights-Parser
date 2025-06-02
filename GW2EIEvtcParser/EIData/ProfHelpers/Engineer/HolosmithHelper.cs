@@ -13,11 +13,11 @@ internal static class HolosmithHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterPhotonForge, PhotonForge)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitPhotonForge, PhotonForge)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(OverheatSkill, OverheatBuff)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff),
         new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),

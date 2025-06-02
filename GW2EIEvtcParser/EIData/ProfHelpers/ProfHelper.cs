@@ -111,7 +111,7 @@ internal static class ProfHelper
         // Misc
         new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
         new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BreakbarDamageCastFinder(Technobabble, Technobabble),
         // Relics
         new BuffGainCastFinder(RelicOfVass, RelicOfVass)
@@ -221,7 +221,7 @@ internal static class ProfHelper
         new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
         new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(StealthMountSkill, StealthMountBuff),
         // Skyscale
         new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),

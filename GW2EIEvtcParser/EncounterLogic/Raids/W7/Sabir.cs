@@ -36,7 +36,7 @@ internal class Sabir : TheKeyOfAhdashim
             new MechanicGroup([
                 new PlayerDstHitMechanic(Electrospark, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Orange), "Electrospark", "Hit by Electrospark", "Electrospark", 0),
                 new PlayerDstHitMechanic(Electrospark, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Orange), "Charged Winds", "Achievement Elegibility: Charged Winds", "Charged Winds", 0)
-                    .UsingAchievementEligibility(true),
+                    .UsingAchievementEligibility(),
             ]),
             new MechanicGroup([
                 new MechanicGroup([

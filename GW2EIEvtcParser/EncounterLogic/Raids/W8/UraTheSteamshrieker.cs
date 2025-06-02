@@ -29,7 +29,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
                 new PlayerDstHitMechanic([EruptionVent, SulfuricEruption], new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
-                    .UsingEnable(log => log.FightData.IsCM || log.FightData.IsLegendaryCM).UsingAchievementEligibility(true),
+                    .UsingEnable(log => log.FightData.IsCM || log.FightData.IsLegendaryCM).UsingAchievementEligibility(),
             ]),
             // Titanspawn Geysers
             new MechanicGroup([

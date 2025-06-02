@@ -17,9 +17,9 @@ internal static class HarbingerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterHarbingerShroud, HarbingerShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitHarbingerShroud, HarbingerShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new DamageCastFinder(CascadingCorruption, CascadingCorruption)
             .UsingDisableWithEffectData()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),

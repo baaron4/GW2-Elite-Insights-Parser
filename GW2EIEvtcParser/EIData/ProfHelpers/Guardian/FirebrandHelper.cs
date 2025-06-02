@@ -82,24 +82,24 @@ internal static class FirebrandHelper
         // Tomes - Opening
         new BuffGainCastFinder(TomeOfJusticeSkill, TomeOfJusticeOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(TomeOfResolveSkill, TomeOfResolveOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(TomeOfCourageSkill, TomeOfCourageOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
 
         // Tomes - Closing
         new BuffLossCastFinder(StowTome, TomeOfJusticeOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(StowTome, TomeOfResolveOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(StowTome, TomeOfCourageOpen)
             .WithBuilds(GW2Builds.November2022Balance)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
     ];
 
     private static readonly HashSet<long> _firebrandTomes =

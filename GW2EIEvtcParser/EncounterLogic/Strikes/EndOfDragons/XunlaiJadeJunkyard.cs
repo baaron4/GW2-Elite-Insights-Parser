@@ -49,7 +49,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 ]),
                 new PlayerDstHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
-                    .UsingAchievementEligibility(true),
+                    .UsingAchievementEligibility(),
                 // Reaches
                 new MechanicGroup([
                     new PlayerDstHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
@@ -69,7 +69,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
-                    .UsingAchievementEligibility(true).UsingEnable(x => x.FightData.IsCM),
+                    .UsingAchievementEligibility().UsingEnable(x => x.FightData.IsCM),
             ]),
         ])
         );

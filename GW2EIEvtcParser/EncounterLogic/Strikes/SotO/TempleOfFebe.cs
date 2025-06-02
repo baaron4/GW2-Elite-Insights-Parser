@@ -111,7 +111,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     return eligibilityRemovedEvents;
                 })
                 .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)
-                .UsingAchievementEligibility(true),
+                .UsingAchievementEligibility(),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),

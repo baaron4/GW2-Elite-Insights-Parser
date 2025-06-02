@@ -24,7 +24,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new PlayerDstHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
                 new PlayerDstHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
                 new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
-                    .UsingAchievementEligibility(true)
+                    .UsingAchievementEligibility()
                     .UsingEnable((log) => log.FightData.IsCM),
             ]),
             new MechanicGroup([             
@@ -64,7 +64,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
                 new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new PlayerDstNoSkillMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
-                    .UsingAchievementEligibility(true)
+                    .UsingAchievementEligibility()
                     .UsingEnable(x => x.FightData.IsCM),
             ]),
             new PlayerDstSkillMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),

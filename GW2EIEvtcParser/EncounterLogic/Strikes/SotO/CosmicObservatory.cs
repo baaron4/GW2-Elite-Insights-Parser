@@ -21,7 +21,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             new MechanicGroup([
                 new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
                     .UsingEnable(x => x.FightData.IsCM)
-                    .UsingAchievementEligibility(true),
+                    .UsingAchievementEligibility(),
                 new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
                 new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
             ]),

@@ -18,9 +18,9 @@ internal static class NecromancerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterDeathShroud, DeathShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitDeathShroud, DeathShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new DamageCastFinder(LesserEnfeeble, LesserEnfeeble)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers)

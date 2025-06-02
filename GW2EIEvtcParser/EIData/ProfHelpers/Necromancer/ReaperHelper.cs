@@ -14,9 +14,9 @@ internal static class ReaperHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterReaperShroud, ReapersShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitReaperShroud, ReapersShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorBuff),
         new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings)
             .UsingDisableWithEffectData(),

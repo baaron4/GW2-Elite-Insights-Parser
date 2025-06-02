@@ -16,9 +16,9 @@ internal static class DruidHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterCelestialAvatar, CelestialAvatar)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitCelestialAvatar, CelestialAvatar)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new EffectCastFinder(SeedOfLife, EffectGUIDs.DruidSeedOfLife)
             .UsingSrcSpecChecker(Spec.Druid)
             .WithBuilds(GW2Builds.October2022Balance),

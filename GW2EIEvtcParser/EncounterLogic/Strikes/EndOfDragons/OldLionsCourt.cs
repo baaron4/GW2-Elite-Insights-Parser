@@ -68,7 +68,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     .UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
             ]),
             new PlayerDstHitMechanic([BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150)
-                .UsingAchievementEligibility(true),
+                .UsingAchievementEligibility(),
             new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
             new EnemyDstBuffApplyMechanic(PowerTransfer, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
             new EnemyDstBuffApplyMechanic(LeyWovenShielding, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),

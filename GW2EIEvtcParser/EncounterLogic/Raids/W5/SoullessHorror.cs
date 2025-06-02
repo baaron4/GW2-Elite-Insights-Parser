@@ -24,7 +24,7 @@ internal class SoullessHorror : HallOfChains
                 new PlayerDstHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", 0),
                 new PlayerDstHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", 0),
                 new PlayerDstHitMechanic([ InnerVortexSlash, OuterVortexSlash ], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "NecDancer.Achiv", "Achievement Eligibility: Necro Dancer", "Necro Dancer", 0)
-                    .UsingAchievementEligibility(true),
+                    .UsingAchievementEligibility(),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic(QuadSlashFirstSet, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1", "Quad Slash (4 Slices, First hit)","4 Slices 1", 0),

@@ -277,7 +277,7 @@ internal static class RangerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
         new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
         new BuffGainCastFinder(QuickDraw, QuickDraw)
-            .UsingAfterWeaponSwap(true)
+            .UsingAfterWeaponSwap()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
