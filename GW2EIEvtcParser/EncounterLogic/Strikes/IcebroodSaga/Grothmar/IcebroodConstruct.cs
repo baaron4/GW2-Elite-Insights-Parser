@@ -150,31 +150,9 @@ internal class IcebroodConstruct : IcebroodSagaStrike
                 }
             }
         }
-        /*
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.IcebroodConstruct)) ?? throw new MissingKeyActorsException("Icebrood Construct not found");
-        // TODO - missing radius + create utilities for this, could also be move to NPC replay as it requires the construct
+
         var spinningIce = log.CombatData.GetMissileEventsBySkillIDs([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4]);
-        foreach (MissileEvent missileEvent in spinningIce)
-        {
-            long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
-            for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
-            {
-                var launch = missileEvent.LaunchEvents[i];
-                (long start, long end) trajectoryLifeSpan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : end);
-                long duration = trajectoryLifeSpan.end - trajectoryLifeSpan.start;
-                var orientation = (launch.LaunchFlags & (1 << 16)) > 0 ? -1 : 1;
-                if (mainTarget.TryGetCurrentFacingDirection(log, launch.Time, out var facing)) {
-                    EnvironmentDecorations.Add(
-                        new CircleDecoration(50, trajectoryLifeSpan, Colors.White, 0.4, 
-                                new AgentConnector(mainTarget).WithOffset(facing.GetZRotationRadians() + (float)(Math.PI/2.0), 500, true)
-                        ).UsingRotationConnector(new SpinningConnector(0, RadianToDegreeF(orientation* duration * launch.Speed / 500)))
-                        
-                    );
-                }
-            }
-        }
-        */
-        //EnvironmentDecorations.AddNonHomingMissiles(log, spinningIce, Colors.White, 0.4, 50);
+        EnvironmentDecorations.AddRotatingAroundTargetMissiles(log, spinningIce, Colors.White, 0.4, 50, (float)(Math.PI / 2.0), true);
 
         var iceShatter = log.CombatData.GetMissileEventsBySkillID(IceShatter);
         EnvironmentDecorations.AddNonHomingMissiles(log, iceShatter, Colors.Ice, 0.5, 25);
