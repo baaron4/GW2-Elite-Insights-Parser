@@ -327,6 +327,10 @@ internal class Matthias : SalvationPass
                 var oppressiveGaze = log.CombatData.GetMissileEventsBySkillIDs([OppressiveGazeHuman, OppressiveGazeAbomination]);
                 replay.Decorations.AddNonHomingMissiles(log, oppressiveGaze, Colors.Red, 0.7, 65);
 
+
+                var bloodShards = log.CombatData.GetMissileEventsBySkillIDs([BloodShardsHuman, BloodShardsAbomination]);
+                replay.Decorations.AddNonHomingMissiles(log, bloodShards, Colors.Red, 0.7, 20);
+
                 // Blood Shield - Invulnerability Bubble
                 AddMatthiasBubbles(BloodShield, target, log, replay);
                 AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
