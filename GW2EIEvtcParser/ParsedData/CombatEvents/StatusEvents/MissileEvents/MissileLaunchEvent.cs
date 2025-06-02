@@ -37,7 +37,7 @@ public class MissileLaunchEvent : TimeCombatEvent
     public readonly float Speed;
     public readonly float MotionRadius;
 
-    public readonly bool IsFirstLaunch;
+    public bool IsFirstLaunch { get; private set; }
     public readonly byte LaunchType;
     public readonly uint LaunchFlags;
     public bool MaybeReflected => Missile.Src == TargetedAgent && !IsFirstLaunch;
@@ -96,6 +96,12 @@ public class MissileLaunchEvent : TimeCombatEvent
         LaunchFlags = BitConverter.ToUInt32(flagsBytes);
         LaunchType = evtcItem.IFFByte;
     }
+
+    internal void ForceNotFirstLaunch()
+    {
+        IsFirstLaunch = false;
+    }
+
     /// <summary>
     /// Assumes that the missile goes from LaunchPosition to TargetPosition
     /// </summary>

@@ -71,6 +71,10 @@ public class MissileEvent : StatusEvent
     internal void AddLaunchEvent(MissileLaunchEvent launchEvent)
     {
         _launchEvents.Add(launchEvent);
+        if (_launchEvents.Count > 1 && launchEvent.IsFirstLaunch)
+        {
+            launchEvent.ForceNotFirstLaunch();
+        }
         launchEvent.Missile = this;
     }
 
