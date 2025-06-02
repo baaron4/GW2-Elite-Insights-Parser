@@ -275,7 +275,7 @@ internal class Matthias : SalvationPass
         var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in shields)
         {
-            replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.5, new AgentConnector(target)));
+            replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.3, new AgentConnector(target)));
         }
     }
 
