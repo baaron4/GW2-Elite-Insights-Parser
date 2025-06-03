@@ -42,7 +42,7 @@ public abstract partial class SingleActor : Actor
 
     internal abstract void OverrideName(string name);
 
-    public abstract string GetIcon();
+    public abstract string GetIcon(bool forceLowResolutionIfApplicable = false);
 
     #region STATUS
 
