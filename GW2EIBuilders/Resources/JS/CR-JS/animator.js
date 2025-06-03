@@ -12,18 +12,22 @@ function compileCRTemplates() {
 const noUpdateTime = -1;
 const updateText = -2;
 const deadIcon = new Image();
+deadIcon.crossOrigin = "Anonymous";
 deadIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
 const downEnemyIcon = new Image();
+downEnemyIcon.crossOrigin = "Anonymous";
 downEnemyIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
 const downAllyIcon = new Image();
+downAllyIcon.crossOrigin = "Anonymous";
 downAllyIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
 const dcIcon = new Image();
+dcIcon.crossOrigin = "Anonymous";
 dcIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
@@ -261,9 +265,11 @@ class Animator {
         const start = logData.phases[0].start * 1000;
         const end = logData.phases[0].end * 1000;
         this.targetData = new MappedRenderablesRoot(start, end);
+        this.targetPlayerData = new MappedRenderablesRoot(start, end);
         this.playerData = new MappedRenderablesRoot(start, end);
         this.trashMobData = new MappedRenderablesRoot(start, end);
         this.friendlyMobData = new MappedRenderablesRoot(start, end);
+        this.friendlyPlayerData = new MappedRenderablesRoot(start, end);
         this.decorationMetadata = new Map();
         this.overheadActorData = new RenderablesRoot(start, end);
         this.squadMarkerData = new RenderablesRoot(start, end);
@@ -418,7 +424,7 @@ class Animator {
             let mapToFill;
             switch (actor.type) {
                 case Types.Player:
-                    ActorClass = SquadIconDrawable;
+                    ActorClass = PlayerIconDrawable;
                     actorSize = 22;
                     mapToFill = this.playerData;
                     if (this.times.length === 0) {
@@ -429,21 +435,29 @@ class Animator {
                     }
                     break;
                 case Types.Target:
-                case Types.TargetPlayer:
-                    ActorClass = NonSquadIconDrawable;
+                    ActorClass = NPCIconDrawable;
                     actorSize = 30;
                     mapToFill = this.targetData;
                     break;
+                case Types.TargetPlayer:
+                    ActorClass = EnemyPlayerDrawable;
+                    actorSize = 22;
+                    mapToFill = this.targetPlayerData;
+                    break;
                 case Types.Mob:
-                    ActorClass = NonSquadIconDrawable;
+                    ActorClass = NPCIconDrawable;
                     actorSize = 25;
                     mapToFill = this.trashMobData;
                     break;
-                case Types.FriendlyPlayer:
                 case Types.Friendly:
-                    ActorClass = NonSquadIconDrawable;
+                    ActorClass = NPCIconDrawable;
                     actorSize = 20;
                     mapToFill = this.friendlyMobData;
+                    break;
+                case Types.FriendlyPlayer:
+                    ActorClass = FriendlyPlayerDrawable;
+                    actorSize = 22;
+                    mapToFill = this.friendlyPlayerData;
                     break;
                 default:
                     throw "Unknown decoration type " + actor.type;
@@ -613,7 +627,9 @@ class Animator {
     }
 
     getSelectableActorData(actorId) {
-        return animator.targetData.get(actorId) || animator.playerData.get(actorId) || animator.friendlyMobData.get(actorId);
+        return animator.targetData.get(actorId) || animator.playerData.get(actorId) || 
+                animator.friendlyMobData.get(actorId) || animator.friendlyPlayerData.get(actorId) || 
+                animator.targetPlayerData.get(actorId);
     }
 
     getActorData(actorId) {
@@ -1010,6 +1026,7 @@ class Animator {
             ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
 
             this.friendlyMobData.draw(selectablePickingDraw);
+            this.friendlyPlayerData.draw(selectablePickingDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
                 this.playerData.draw(selectablePickingDraw);
@@ -1020,6 +1037,7 @@ class Animator {
             }
 
             this.targetData.draw(selectablePickingDraw);
+            this.targetPlayerData.draw(selectablePickingDraw);
             if (this.displaySettings.useActorHitboxWidth) {
                 this.playerData.draw(selectablePickingDraw);
             }
@@ -1063,6 +1081,7 @@ class Animator {
             }
 
             this.friendlyMobData.draw(selectableDraw);
+            this.friendlyPlayerData.draw(selectableDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
                 this.playerData.draw(selectableDraw);
@@ -1073,6 +1092,7 @@ class Animator {
             }
 
             this.targetData.draw(selectableDraw);
+            this.targetPlayerData.draw(selectableDraw);
             if (this.displaySettings.useActorHitboxWidth) {
                 this.playerData.draw(selectableDraw);
             }

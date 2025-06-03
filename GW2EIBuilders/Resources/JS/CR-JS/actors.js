@@ -76,12 +76,16 @@ class IconDrawable {
         return IsPresentInArray(this.breakbarActive);
     }
 
+    _isFriendly() {
+        return animator.playerData.has(this.id) || animator.friendlyMobData.has(this.id) || animator.friendlyPlayerData.has(this.id);
+    }
+
     getIcon() {
         if (this.died()) {
             return deadIcon;
         }
         if (this.downed()) {
-            return animator.playerData.has(this.id) || animator.friendlyMobData.has(this.id) ? downAllyIcon : downEnemyIcon;
+            return this._isFriendly() ? downAllyIcon : downEnemyIcon;
         }
         if (this.disconnected()) {
             return dcIcon;
@@ -252,10 +256,11 @@ class IconDrawable {
     }
 }
 
-class SquadIconDrawable extends IconDrawable {
+class PlayerIconDrawable extends IconDrawable {
     constructor(params, pixelSize) {
         super(params, pixelSize);
         this.group = params.group;
+        this.img.crossOrigin = "Anonymous";
     }
 
     inSelectedGroup() {
@@ -282,5 +287,119 @@ class NonSquadIconDrawable extends IconDrawable {
             return (this.master.isSelected() || this.isSelected()) && animator.displaySettings.displaySelectedMinions;
         }
         return true;
+    }
+}
+
+class NPCIconDrawable extends NonSquadIconDrawable {
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+    }
+}
+
+let adjustedEnemyDeadIcon = null;
+let adjustedFriendlyDeadIcon = null;
+let adjustedFriendlyDownIcon = null;
+
+function adjustImageColor(image, colorAdjuster) {
+
+    const imageWidth = image.width;
+    const imageHeight = image.height;
+    const offscreen = new OffscreenCanvas(imageWidth, imageHeight);
+    const ctx = offscreen.getContext("2d");
+    ctx.drawImage(image, 0, 0);
+    const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        let color = colorAdjuster(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
+        imageData.data[i + 0] = color.r;
+        imageData.data[i + 1] = color.g;
+        imageData.data[i + 2] = color.b;
+    }
+    ctx.putImageData(imageData, 0, 0);
+    offscreen.complete = true;
+    offscreen.naturalWidth = imageWidth;
+    offscreen.naturalHeight = imageHeight;
+    return offscreen;
+}
+
+class NonSquadPlayerDrawable extends NonSquadIconDrawable {  
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+        this.img.crossOrigin = "Anonymous";
+        this.adjustedImg = null;
+        this.colorAdjuster = null;
+    }
+
+    _getDownIcon() {
+        return null;
+    }
+
+    _getDeadIcon() {
+        return null;
+    }
+
+    getIcon() {
+        if (this.died()) {
+            return this._getDeadIcon();
+        }
+        if (this.downed()) {   
+            return this._getDownIcon();
+        }
+        if (this.disconnected()) {
+            return dcIcon;
+        }
+        if (!this.adjustedImg && this.img.complete) {
+            this.adjustedImg = adjustImageColor(this.img, this.colorAdjuster)
+        }
+        return this.adjustedImg;
+    }
+}
+
+class EnemyPlayerDrawable extends NonSquadPlayerDrawable {
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+        this.colorAdjuster = (r, g, b) => {
+            let grayScale = 0.299 * r + 0.587 * g + 0.114*b;
+            return {
+                r: grayScale,
+                g: 0.3 * grayScale,
+                b: 0.3 * grayScale
+            };
+        }
+    }
+    _getDownIcon() {
+        return downEnemyIcon;
+    }
+
+    _getDeadIcon() {
+        if (!adjustedEnemyDeadIcon && deadIcon.complete) {
+            adjustedEnemyDeadIcon = adjustImageColor(deadIcon, this.colorAdjuster);
+        }
+        return adjustedEnemyDeadIcon;
+    }
+}
+
+class FriendlyPlayerDrawable extends NonSquadPlayerDrawable {
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+        this.colorAdjuster = (r, g, b) => {
+            let grayScale = 0.299 * r + 0.587 * g + 0.114*b;
+            return {
+                r: 0.3 * grayScale,
+                g: grayScale,
+                b: 0.3 * grayScale
+            };
+        }
+    }
+    _getDownIcon() {
+        if (!adjustedFriendlyDownIcon && downAllyIcon.complete) {
+            adjustedFriendlyDownIcon = adjustImageColor(downAllyIcon, this.colorAdjuster);
+        }
+        return adjustedFriendlyDownIcon;
+    }
+    _getDeadIcon() {
+        if (!adjustedFriendlyDeadIcon && deadIcon.complete) {
+            adjustedFriendlyDeadIcon = adjustImageColor(deadIcon, this.colorAdjuster);
+        }
+        return adjustedFriendlyDeadIcon;
     }
 }
