@@ -547,6 +547,9 @@ public class SkillItem
         { RelicGolemancerSpawn, ItemImages.RelicOfTheGolemancer },
         { RelicPrivateerSpawn, ItemImages.RelicOfThePrivateer },
         { RelicOfTheSteamshrieker, ItemImages.RelicOfTheSteamshrieker },
+        { SoulOfTheTitan, BuffImages.SoulOfTheTitan },
+        { BloodstoneFervor, ItemImages.RelicOfBloodstone },
+        { BloodstoneExplosion, ItemImages.RelicOfBloodstone },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, SkillImages.FireAttunement },

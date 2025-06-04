@@ -211,6 +211,16 @@ internal static class CommonBuffs
         new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheClaw),
         new Buff("Relic of Mount Balrior", RelicOfMountBalrior, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfMountBalrior),
         new Buff("Relic of Thorns", RelicOfThorns, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfThorns),
+        new Buff("Legs of the Titan", LegsOfTheTitan, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Lungs  of the Titan", LungsOfTheTitan, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Arms of the Titan", ArmsOfTheTitan, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Heart of the Titan", HeartOfTheTitan, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Head of the Titan", HeadOfTheTitan, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Soul  of the Titan", SoulOfTheTitan, Source.Gear, BuffClassification.Gear, BuffImages.SoulOfTheTitan),
+        new Buff("Titanic Potential", TitanicPotential, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Gear, ItemImages.RelicOfTheLivingCity),
+        new Buff("Bloodstone Volatility", BloodstoneVolatility, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, ItemImages.RelicOfBloodstone),
+        new Buff("Bloodstone Fervor", BloodstoneFervor, Source.Gear, BuffStackType.Stacking, 3, BuffClassification.Gear, ItemImages.RelicOfBloodstone),
+        new Buff("Agony of the choir", AgonyOfTheChoir, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
     ];
 
 }

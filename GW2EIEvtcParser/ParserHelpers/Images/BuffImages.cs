@@ -60,6 +60,7 @@ public static class BuffImages
     public const string CooldownNegative = "https://wiki.guildwars2.com/images/c/c3/Aquatic_Ruins_Chest_Disabled.png";
     public const string Crazed = "https://wiki.guildwars2.com/images/4/41/Crazed.png";
     public const string Critical = "https://wiki.guildwars2.com/images/d/df/Critical_%28effect%29.png";
+    public const string SoulOfTheTitan = "https://wiki.guildwars2.com/images/8/89/Soul_of_the_Titan.png";
     // Auras
     public const string ChaosAura = "https://render.guildwars2.com/file/FEF378D8A91D0523A04A380ED0547F0BF944A967/2261518.png";
     public const string FireAura = "https://render.guildwars2.com/file/2E7050E44690AFE0A396FA0DAD526699392743F3/2261521.png";

@@ -122,6 +122,10 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGainCastFinder(MabonsStrength, MabonsStrength)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(BloodstoneFervor, BloodstoneFervor)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGainCastFinder(SoulOfTheTitan, SoulOfTheTitan)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
@@ -187,6 +191,8 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfTheHolosmith, EffectGUIDs.RelicOfTheHolosmith)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheSteamshrieker, EffectGUIDs.RelicOfTheSteamshrieker)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(BloodstoneExplosion, EffectGUIDs.RelicOfBloodstone)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),

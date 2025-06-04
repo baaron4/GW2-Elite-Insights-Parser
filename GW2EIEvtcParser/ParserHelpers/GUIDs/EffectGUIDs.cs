@@ -55,6 +55,7 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfMountBalrior2 = new("1558621A51FE5F4B848A8B252AFE616C"); // Duration infinite, Player Src, ground effect with effect end
     public static readonly GUID RelicOfTheHolosmith = new("DF03FACC6BA66F4BA89BA27636FB39EB"); // Duration 5224, Has end event
     public static readonly GUID RelicOfTheSteamshrieker = new("C0B2EC5CAE1FF3468FD5D62157625E77"); // Effect Event duration 0, default duration 2000
+    public static readonly GUID RelicOfBloodstone = new("AA9A51B997476A4BB803B1252B782420"); // Explosion
     #endregion
 
     #region Mesmer
