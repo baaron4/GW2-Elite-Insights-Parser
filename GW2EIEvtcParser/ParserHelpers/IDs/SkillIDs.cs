@@ -4928,16 +4928,16 @@ public static class SkillIDs
     public const long ForeshockCM4 = 76048;
     public const long IllusionaryMembrane = 76074;
     public const long BloodstoneVolatility = 76128;
-    public const long LegsOfTheTitan = 76184;
-    public const long LungsOfTheTitan = 76221;
+    public const long POV_LegsOfTheTitan = 76184;
+    public const long POV_LungsOfTheTitan = 76221;
     public const long BloodstoneExplosion = 76315;
     public const long AgonyOfTheChoir = 76319;
     public const long BloodstoneFervor = 76326;
     public const long SoulOfTheTitan = 76351;
     public const long TitanicPotential = 76372;
-    public const long ArmsOfTheTitan = 76390;
-    public const long HeartOfTheTitan = 76448;
-    public const long HeadOfTheTitan = 76455;
+    public const long POV_ArmsOfTheTitan = 76390;
+    public const long POV_HeartOfTheTitan = 76448;
+    public const long POV_HeadOfTheTitan = 76455;
     //
     #endregion
 }
