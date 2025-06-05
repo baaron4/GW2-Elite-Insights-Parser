@@ -29,7 +29,7 @@ internal static class EngineerHelper
                 var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
                 return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
             });
-            UsingNotAccurate(true);
+            UsingNotAccurate();
         }
     }
 
@@ -103,16 +103,25 @@ internal static class EngineerHelper
                 // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
                 return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ]);
             }),
-         new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
+        new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
                 return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ]);
             }),
-         new DamageCastFinder(FocusedDevastation, FocusedDevastation)
+        new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
         //TODO: Magnet bomb
+        new MissileCastFinder(AimAssistedRocket, AimAssistedRocket)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new DamageCastFinder(OrbitalCommandStrike, OrbitalCommandStrike)
+            .UsingTimeOffset(-2000) // Effect has duration 3000ms but the damage happens after 2000ms
+            .UsingDisableWithEffectData()
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new EffectCastFinder(OrbitalCommandStrike, EffectGUIDs.EngineerOrbitalCommandStrike)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new MissileCastFinder(SurpriseShot, SurpriseShot),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
@@ -120,13 +129,13 @@ internal static class EngineerHelper
         // Explosives
         // - Glass Cannon
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance),
         // - Shaped Charge
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
@@ -135,13 +144,13 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.October2019Balance),
         // - Big Boomer
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.All )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.sPvPWvW )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.August2022Balance),
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, SelfHigherHPChecker, DamageModifierMode.PvE )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.August2022Balance),
         
         // Firearms

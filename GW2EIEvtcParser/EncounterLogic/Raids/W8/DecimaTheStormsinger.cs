@@ -126,7 +126,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 return false;
             })
                 .UsingEnable(log => log.FightData.IsCM)
-                .UsingAchievementEligibility(true),
+                .UsingAchievementEligibility(),
             new EnemyDstBuffApplyMechanic(ChargeDecima, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
         ]));

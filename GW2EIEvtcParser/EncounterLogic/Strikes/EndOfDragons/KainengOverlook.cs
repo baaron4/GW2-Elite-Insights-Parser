@@ -24,7 +24,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new PlayerDstHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
                 new PlayerDstHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
                 new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
-                    .UsingAchievementEligibility(true)
+                    .UsingAchievementEligibility()
                     .UsingEnable((log) => log.FightData.IsCM),
             ]),
             new MechanicGroup([             
@@ -40,7 +40,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     new PlayerDstHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheEnforcer, TargetID.TheEnforcerCM })),
-                    new PlayerDstHitMechanic(BoomingCommandOverlap, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
+                    new PlayerDstHitMechanic(BoomingCommandSkillNM, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
                 ]),
                 // Ritualist
                 new MechanicGroup([
@@ -64,7 +64,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
                 new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new PlayerDstNoSkillMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
-                    .UsingAchievementEligibility(true)
+                    .UsingAchievementEligibility()
                     .UsingEnable(x => x.FightData.IsCM),
             ]),
             new PlayerDstSkillMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
@@ -108,6 +108,25 @@ internal class KainengOverlook : EndOfDragonsStrike
             TargetID.TheRitualistCM,
             TargetID.TheSniperCM,
         ];
+    }
+
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID.MinisterLi, 0 },
+            {TargetID.MinisterLiCM, 0 },
+            {TargetID.TheEnforcer, 1 },
+            {TargetID.TheEnforcerCM, 1 },
+            {TargetID.TheMindblade, 2 },
+            {TargetID.TheMindbladeCM, 2 },
+            {TargetID.TheRitualist, 3 },
+            {TargetID.TheRitualistCM, 3 },
+            {TargetID.TheSniper, 4 },
+            {TargetID.TheSniperCM, 4 },
+            {TargetID.TheMechRider, 5 },
+            {TargetID.TheMechRiderCM, 5 },
+        };
     }
 
     protected override List<TargetID> GetSuccessCheckIDs()
@@ -295,6 +314,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             }
         }
 
+        // TODO Check this again and rework it - not consistent enough
         // Sniper Ricochet Tether & AoE - CM
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out var sniperBeamsCM))
         {
@@ -356,6 +376,15 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
+    private static void HideAfterDetermined(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        var determined762Apply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, target.AgentItem).FirstOrDefault();
+        if (determined762Apply != null)
+        {
+            replay.Trim(replay.TimeOffsets.start, determined762Apply.Time);
+        }
+    }
+
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         long castDuration;
@@ -394,6 +423,10 @@ internal class KainengOverlook : EndOfDragonsStrike
                         }
                     }
                 }
+                break;
+            case (int)TargetID.TheSniper:
+            case (int)TargetID.TheSniperCM:
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMechRider:
             case (int)TargetID.TheMechRiderCM:
@@ -442,21 +475,25 @@ internal class KainengOverlook : EndOfDragonsStrike
                         replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                     }
                 }
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheEnforcer:
             case (int)TargetID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
                 var enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMindblade:
             case (int)TargetID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
                 var mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheRitualist:
             case (int)TargetID.TheRitualistCM:
+                HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.SpiritOfPain:
                 // Volatile Expulsion - Orange AoE around the spirit
@@ -503,8 +540,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int damageDelay = 1610;
                 long warningEnd = lifespan.start + damageDelay;
                 var circle = new CircleDecoration(80, (lifespan.start, warningEnd), Colors.Red, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(warningEnd));
+                EnvironmentDecorations.AddWithGrowing(circle, warningEnd);
                 EnvironmentDecorations.Add(new CircleDecoration(80, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
             }
         }
@@ -528,8 +564,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 2400);
                 var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -540,21 +575,20 @@ internal class KainengOverlook : EndOfDragonsStrike
             foreach (EffectEvent effect in jadeLob)
             {
                 lifespan = effect.ComputeLifespan(log, 1500);
-                var circle = new CircleDecoration(100, lifespan, "rgba(0, 200, 0, 0.2)", new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                var circle = new CircleDecoration(100, lifespan, Colors.SligthlyDarkGreen, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
         // Enforcer Orbs AoE
+        // TODO - This doesn't work in normal mode
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerOrbsAoE, out var enforcerOrbsAoEs))
         {
             foreach (EffectEvent effect in enforcerOrbsAoEs)
             {
                 lifespan = effect.ComputeLifespan(log, 2708);
-                var circle = new CircleDecoration(100, lifespan, "rgba(0, 0, 200, 0.2)", new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                var circle = new CircleDecoration(100, lifespan, Colors.SlightlyDarkBlue, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
@@ -568,9 +602,8 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int damageDelay = 2000;
                 long warningEnd = lifespan.start + damageDelay;
                 var circle = new CircleDecoration(240, (lifespan.start, warningEnd), Colors.Red, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
+                EnvironmentDecorations.AddWithGrowing(circle, warningEnd);
                 EnvironmentDecorations.Add(circle.GetBorderDecoration());
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(warningEnd));
                 EnvironmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
             }
         }
@@ -592,8 +625,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 2000);
                 var circle = new CircleDecoration(90, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -605,18 +637,32 @@ internal class KainengOverlook : EndOfDragonsStrike
                 (long start, long end) lifespanIndicator = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 var indicatorCircle = new CircleDecoration(200, lifespanIndicator, Colors.Orange, 0.2, connector);
-                EnvironmentDecorations.Add(indicatorCircle);
-                EnvironmentDecorations.Add(indicatorCircle.UsingGrowingEnd(lifespanIndicator.end));
+                EnvironmentDecorations.AddWithGrowing(indicatorCircle, lifespanIndicator.end);
                 var initialPosition = new ParametricPoint3D(effect.Position, lifespanIndicator.end);
                 int velocity = 85; // Approximation
                 int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
                 (long, long) lifespanAnimation = (lifespanIndicator.end, lifespanIndicator.end + stormDuration);
                 var finalPosition = new ParametricPoint3D(initialPosition.XYZ + (velocity * stormDuration / 1000.0f) * new Vector3((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2), 0), lifespanIndicator.end + stormDuration);
-                var animatedCircle = new CircleDecoration(200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector([initialPosition, finalPosition]));
-                EnvironmentDecorations.Add(animatedCircle);
-                EnvironmentDecorations.Add(animatedCircle.GetBorderDecoration(Colors.Red, 0.2));
+                var animatedCircle = new CircleDecoration(200, lifespanAnimation, Colors.DesaturatedPink, 0.2, new InterpolationConnector([initialPosition, finalPosition]));
+                EnvironmentDecorations.AddWithBorder(animatedCircle, Colors.Red, 0.2);
             }
         }
+
+        var dragonSlash = log.CombatData.GetMissileEventsBySkillIDs([DragonSlashBurstNM, DragonSlashBurstCM]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, dragonSlash, Colors.Orange, 0.3, 25);
+
+        var ricochet = log.CombatData.GetMissileEventsBySkillIDs([JadeRicochetNM, JadeRicochetCM1, JadeRicochetCM2]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, ricochet, Colors.Orange, 0.3, 20);
+
+        var lasershot = log.CombatData.GetMissileEventsBySkillIDs([JadeLaserShotNM, JadeLaserShotCM]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, lasershot, Colors.Red, 0.3, 20);
+
+        var boomingCommand = log.CombatData.GetMissileEventsBySkillIDs([BoomingCommandDamageNM, BoomingCommandDamageCM]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, boomingCommand, Colors.SlightlyDarkBlue, 0.2, 20);
+
+        // TODO - Check if this works in normal mode - No log to test
+        var jadeMine = log.CombatData.GetMissileEventsBySkillIDs([JadeMineProjectileFirstSetCM, JadeMineProjectileSecondSetCM, JadeMineProjectileThirdSetCM]);
+        EnvironmentDecorations.AddNonHomingMissiles(log, jadeMine, Colors.Red, 0.3, 80);
     }
 
     internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long start, long end) lifespan, long duration, int angle)

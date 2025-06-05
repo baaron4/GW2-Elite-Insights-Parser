@@ -267,9 +267,9 @@ internal static class RangerHelper
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new BuffGainCastFinder(SicEmSkill, SicEmPvPBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new BuffGainCastFinder(SignetOfStone, SignetOfStoneActive)
             .UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant), // Signet of Stone
         new BuffGainCastFinder(LesserSignetOfStone, SignetOfStoneActive)
@@ -277,7 +277,7 @@ internal static class RangerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait), // Lesser Signet of Stone
         new BuffGainCastFinder(SharpeningStonesSkill, SharpeningStonesBuff),
         new BuffGainCastFinder(QuickDraw, QuickDraw)
-            .UsingAfterWeaponSwap(true)
+            .UsingAfterWeaponSwap()
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(AttackOfOpportunity, AttackOfOpportunity)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -294,7 +294,8 @@ internal static class RangerHelper
             .UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGiveCastFinder(SearchAndRescueSkill, SearchAndRescueBuff)
-            .UsingICD(1100).UsingNotAccurate(true),
+            .UsingICD(1100)
+            .UsingNotAccurate(),
         new EffectCastFinder(LightningReflexes, EffectGUIDs.RangerLightningReflexes)
             .UsingSrcBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr)
@@ -304,7 +305,7 @@ internal static class RangerHelper
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt)
             .UsingDstBaseSpecChecker(Spec.Ranger),
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs)
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
     ];
 
     private static bool SicEmFromDst(DamageEvent x, ParsedEvtcLog log)
@@ -348,39 +349,39 @@ internal static class RangerHelper
         // Marksmanship
         // - Farsighted (<= 600)
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.sPvP)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetBelow600Range, DamageModifierMode.PvEWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance),
         // - Farsighted (> 600)
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.sPvP)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance),
         new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SteadyFocus, TargetAbove600Range, DamageModifierMode.PvEWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance),
         // - Predator's Onslaught
         new BuffOnFoeDamageModifier(Mod_PredatorsOnslaught, [Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.PredatorsOnslaught, DamageModifierMode.All)
-            .UsingApproximate(true),
+            .UsingApproximate(),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnFoeDamageModifier(Mod_Wolfsong, Vulnerability, "Wolfsong", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, TraitImages.Wolfsong, DamageModifierMode.sPvPWvW)
@@ -407,7 +408,7 @@ internal static class RangerHelper
         // - Survival Instincts
         new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, TraitImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
-            .UsingApproximate(true),
+            .UsingApproximate(),
 
         // Beastmastery
         // - Beastly Warden

@@ -9,7 +9,7 @@ internal class EXTHealingCastFinder : CheckedCastFinder<EXTHealingEvent>
     private readonly long _damageSkillID;
     public EXTHealingCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
-        UsingNotAccurate(true);
+        UsingNotAccurate();
         UsingEnable((combatData) => combatData.HasEXTHealing);
         _damageSkillID = damageSkillID;
     }

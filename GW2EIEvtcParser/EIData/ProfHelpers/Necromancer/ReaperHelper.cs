@@ -14,9 +14,9 @@ internal static class ReaperHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterReaperShroud, ReapersShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitReaperShroud, ReapersShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(InfusingTerrorSkill, InfusingTerrorBuff),
         new DamageCastFinder(YouAreAllWeaklings, YouAreAllWeaklings)
             .UsingDisableWithEffectData(),
@@ -45,7 +45,7 @@ internal static class ReaperHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
         // Soul Eater
         new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, TraitImages.SoulEater, (x, log) => TargetWithinRangeChecker(x, log, 300, false), DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.July2019Balance),
     ];
 

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
@@ -7,6 +8,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.EIData.Trigonometry;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -149,9 +151,8 @@ internal class IcebroodConstruct : IcebroodSagaStrike
             }
         }
 
-        // TODO - These don't work correctly
-        //var spinningIce = log.CombatData.GetMissileEventsBySkillIDs([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4]);
-        //EnvironmentDecorations.AddNonHomingMissiles(log, spinningIce, Colors.White, 0.4, 50);
+        var spinningIce = log.CombatData.GetMissileEventsBySkillIDs([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4]);
+        EnvironmentDecorations.AddRotatingAroundTargetMissiles(log, spinningIce, Colors.White, 0.4, 50, (float)(Math.PI / 2.0), true);
 
         var iceShatter = log.CombatData.GetMissileEventsBySkillID(IceShatter);
         EnvironmentDecorations.AddNonHomingMissiles(log, iceShatter, Colors.Ice, 0.5, 25);

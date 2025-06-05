@@ -166,7 +166,7 @@ public sealed class ProgramHelper : IDisposable
         if (pov != null)
         {
             SingleActor povActor = log.FindActor(pov);
-            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
+            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon(true));
         }
         builder.WithColor(log.FightData.Success ? Discord.Color.Green : Discord.Color.Red);
         if (dpsReportPermalink.Length > 0)

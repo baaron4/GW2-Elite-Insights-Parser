@@ -105,16 +105,25 @@ internal static class CatalystHelper
 
     internal static void AddJadeSphereDecoration(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)
     {
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effect, out var events))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effect, out var sphereEffects))
         {
             var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
-            foreach (EffectEvent @event in events)
+            var skillQuickness = new SkillModeDescriptor(player, Spec.Catalyst, skillId, SkillModeDescriptor.SkillModeCategory.ImportantBuffs);
+            foreach (EffectEvent sphereEffect in sphereEffects)
             {
-                (long, long) lifespan = @event.ComputeLifespan(log, 5000);
-                var connector = new PositionConnector(@event.Position);
-                replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                (long, long) lifespan = sphereEffect.ComputeLifespan(log, 5000);
+                var connector = new PositionConnector(sphereEffect.Position);
+                var skillMode = sphereEffect.Scale > 1.0f ? skillQuickness : skill;
+                if (sphereEffect.IsScaled)
+                {
+                    replay.Decorations.Add(new CircleDecoration((uint)(240 * sphereEffect.Scale), lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skillMode));
+                } 
+                else
+                {
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skillMode));
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skillMode));
+                }
+                replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skillMode));
             }
         }
     }

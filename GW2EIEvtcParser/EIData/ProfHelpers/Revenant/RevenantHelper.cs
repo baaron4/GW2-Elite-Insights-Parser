@@ -42,25 +42,25 @@ internal static class RevenantHelper
         new EffectCastFinder(ProjectTranquility, EffectGUIDs.RevenantTabletAutoHeal)
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet)),
         new EffectCastFinderByDst(VentarisWill, EffectGUIDs.RevenantTabletVentarisWill)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet)),
         new EffectCastFinderByDst(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(NaturalHarmony, EffectGUIDs.RevenantNaturalHarmony)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds( GW2Builds.June2022Balance),
         new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(PurifyingEssence, EffectGUIDs.RevenantPurifyingEssence)
             .UsingSrcBaseSpecChecker(Spec.Revenant)
             .WithBuilds(GW2Builds.June2022Balance),
         new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
-            .WithMinions(true)
+            .WithMinions()
             .UsingChecker((evt, combatData, agentData, skillData) => evt.Src.IsSpecies(MinionID.VentariTablet))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
         new EffectCastFinder(EnergyExpulsion, EffectGUIDs.RevenantEnergyExpulsion)
@@ -107,7 +107,7 @@ internal static class RevenantHelper
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
         new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.November2022Balance),
         
         // Devastation
@@ -118,13 +118,13 @@ internal static class RevenantHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         // - Unsuspecting Strikes
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) => x.To.GetCurrentHealthPercent(log, x.Time) > 80, DamageModifierMode.PvE )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) => x.To.GetCurrentHealthPercent(log, x.Time) > 80, DamageModifierMode.PvE )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.ViciousLacerations, (x,log) => x.To.GetCurrentHealthPercent(log, x.Time) > 80, DamageModifierMode.sPvPWvW )
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2020Balance),
         // - Targeted Destruction
         new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, TraitImages.TargetedDestruction, DamageModifierMode.All)
@@ -164,7 +164,7 @@ internal static class RevenantHelper
         // Retribution
         // - Close Quarters
         new DamageLogDamageModifier(Mod_CloseQuarters, "Close Quarters", "-10% from foes beyond 360 range", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.CloseQuarters, (x, log) => !TargetWithinRangeChecker(x, log, 360, false), DamageModifierMode.All)
-            .UsingApproximate(true),
+            .UsingApproximate(),
         // - Determined Resolution
         new BuffOnActorDamageModifier(Mod_DeterminedResolution, Stability, "Determined Resolution", "-15% under stability", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.DeterminedResolution, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),

@@ -18,9 +18,9 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
 
     protected abstract AgentItem GetKeyAgent(Event evt);
 
-    public virtual BuffCastFinder<Event> WithMinions(bool minions)
+    public virtual BuffCastFinder<Event> WithMinions()
     {
-        Minions = minions;
+        Minions = true;
         return this;
     }
 
@@ -100,7 +100,7 @@ internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where E
                         continue;
                     }
                     lastTime = evt.Time;
-                    res.Add(new InstantCastEvent(GetTime(evt, group.Key, combatData), skillData.Get(SkillID), group.Key));
+                    res.Add(new InstantCastEvent(GetTime(evt, GetKeyAgent(evt), combatData), skillData.Get(SkillID), group.Key));
                 }
             }
         }

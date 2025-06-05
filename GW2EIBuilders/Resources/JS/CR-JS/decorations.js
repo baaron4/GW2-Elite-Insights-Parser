@@ -344,7 +344,7 @@ function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
 
 function spinningAngleFetcher(connection, master, dstMaster, start, end) {
     const time = animator.reactiveDataStatus.time;
-    const factor = Math.min((time - start) / (end - start), 0.0);
+    const factor = Math.max((time - start) / (end - start), 0.0);
     return connection.angle + factor * connection.spinAngle;
 }
 

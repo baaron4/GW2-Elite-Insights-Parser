@@ -63,7 +63,7 @@ internal static class SoulbeastHelper
             .WithBuilds(GW2Builds.May2018Balance),
         // Oppressive Superiority
         new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.OppressiveSuperiority, SelfHigherHPChecker, DamageModifierMode.All)
-            .UsingApproximate(true),
+            .UsingApproximate(),
         // One Wolf Pack
         new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.OneWolfPack, DamageModifierMode.All),
     ];

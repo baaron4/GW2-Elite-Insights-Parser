@@ -73,6 +73,10 @@ public partial class CombatData
             {
                 toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p), p, skillData, evtcVersion));
             }
+            if (p.Spec == Spec.Scourge && TryGetEffectEventsBySrcWithGUIDs(p, [EffectGUIDs.ScourgeShadeSandSavant, EffectGUIDs.ScourgeShade], out var shades))
+            {
+                toAdd.AddRange(ScourgeHelper.AddShadeBuffsFromEffects(shades, fightData, skillData, GetGW2BuildEvent(), evtcVersion));
+            }
             if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
             {
                 ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p), _buffData, skillData);

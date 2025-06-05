@@ -14,9 +14,9 @@ internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic<BuffRemove
     {
     }
 
-    public PlayerDstBuffRemoveMechanic WithMinions(bool withMinions)
+    public PlayerDstBuffRemoveMechanic WithMinions()
     {
-        _withMinions = withMinions;
+        _withMinions = true;
         return this;
     }
 
@@ -35,7 +35,7 @@ internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic<BuffRemove
         {
             Checkers.Remove(OnlyMinionsChecker);
         }
-        return WithMinions(onlyMinions);
+        return WithMinions();
     }
 
     protected override AgentItem GetAgentItem(BuffRemoveAllEvent rae)

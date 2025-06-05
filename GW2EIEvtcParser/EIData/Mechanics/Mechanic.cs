@@ -94,19 +94,15 @@ public abstract class Mechanic : MechanicContainer
     /// <summary>
     /// Eligibility mechanics will only be computed in successful logs
     /// </summary>
-    /// <param name="isAchievementEligibility"></param>
     /// <returns></returns>
-    internal Mechanic UsingAchievementEligibility(bool isAchievementEligibility)
+    internal Mechanic UsingAchievementEligibility()
     {
-        IsAchievementEligibility = isAchievementEligibility;
-        if (isAchievementEligibility)
+        if (IsAchievementEligibility)
         {
-            _enableConditions.Add(EligibilityKeeper);
+            return this;
         }
-        else
-        {
-            _enableConditions.Remove(EligibilityKeeper);
-        }
+        IsAchievementEligibility = true;
+        _enableConditions.Add(EligibilityKeeper);
         return this;
     }
 

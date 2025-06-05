@@ -18,9 +18,9 @@ internal static class SpecterHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterShadowShroud, ShadowShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitShadowShroud, ShadowShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
     ];
 
     private static readonly HashSet<long> _shroudTransform =

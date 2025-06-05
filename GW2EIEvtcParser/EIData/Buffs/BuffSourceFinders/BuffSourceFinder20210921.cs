@@ -10,7 +10,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
         ImperialImpactExtension = 2000;
     }
 
-    protected override IEnumerable<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
+    protected override IEnumerable<AgentItem> GetImperialImpactAgents(long buffID, long time, long extension, ParsedEvtcLog log)
     {
         if (extension > ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {

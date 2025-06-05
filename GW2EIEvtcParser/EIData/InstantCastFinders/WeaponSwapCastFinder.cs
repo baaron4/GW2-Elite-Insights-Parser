@@ -10,7 +10,7 @@ internal class WeaponSwapCastFinder : CheckedCastFinder<WeaponSwapEvent>
         BeforeWeaponSwap = true;
     }
 
-    internal override InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
+    internal override InstantCastFinder UsingBeforeWeaponSwap()
     {
         throw new InvalidOperationException("Invalid WeaponSwapCastFinder usage, always before swap");
     }

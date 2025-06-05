@@ -7,7 +7,7 @@ internal class DamageCastFinder : CheckedCastFinder<HealthDamageEvent>
     private readonly long _damageSkillID;
     public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
-        UsingNotAccurate(true);
+        UsingNotAccurate();
         _damageSkillID = damageSkillID;
     }
 

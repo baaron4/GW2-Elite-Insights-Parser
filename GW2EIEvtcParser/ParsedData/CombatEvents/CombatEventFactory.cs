@@ -407,7 +407,7 @@ internal static class CombatEventFactory
                     if (startEvent != null)
                     {
                         startEvent.AddLaunchEvent(missileLaunchEvent);
-                        if (missileLaunchEvent.LaunchedTowardsAgent)
+                        if (missileLaunchEvent.HasTargetAgent)
                         {
                             Add(statusEvents.MissileLaunchEventsByDst, missileLaunchEvent.TargetedAgent, missileLaunchEvent);
                         }
@@ -429,6 +429,37 @@ internal static class CombatEventFactory
                         }
                     }
                 }
+                break;
+            case StateChange.EffectGroundCreate:
+                var effectGroundEvt = new EffectEventGroundCreate(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID, statusEvents.GroundEffectEventsByTrackingID);
+#if !DEBUG
+                if (effectGroundEvt.OnNonStaticPlatform)
+                {
+                    break;
+                }
+#endif
+                statusEvents.EffectEvents.Add(effectGroundEvt);
+                Add(statusEvents.EffectEventsBySrc, effectGroundEvt.Src, effectGroundEvt);
+                Add(statusEvents.EffectEventsByEffectID, effectGroundEvt.EffectID, effectGroundEvt);
+                break;
+            case StateChange.EffectGroundRemove:
+                _ = new EffectEventGroundRemove(stateChangeEvent, agentData, statusEvents.GroundEffectEventsByTrackingID);
+                break;
+            case StateChange.EffectAgentCreate:
+                var effectAgentEvt = new EffectEventAgentCreate(stateChangeEvent, agentData, metaDataEvents.EffectGUIDEventsByEffectID, statusEvents.AgentEffectEventsByTrackingID);
+#if !DEBUG
+                if (effectAgentEvt.OnNonStaticPlatform)
+                {
+                    break;
+                }
+#endif
+                statusEvents.EffectEvents.Add(effectAgentEvt);
+                Add(statusEvents.EffectEventsBySrc, effectAgentEvt.Src, effectAgentEvt);
+                Add(statusEvents.EffectEventsByDst, effectAgentEvt.Dst, effectAgentEvt);
+                Add(statusEvents.EffectEventsByEffectID, effectAgentEvt.EffectID, effectAgentEvt);
+                break;
+            case StateChange.EffectAgentRemove:
+                _ = new EffectEventAgentRemove(stateChangeEvent, agentData, statusEvents.AgentEffectEventsByTrackingID);
                 break;
             default:
                 break;

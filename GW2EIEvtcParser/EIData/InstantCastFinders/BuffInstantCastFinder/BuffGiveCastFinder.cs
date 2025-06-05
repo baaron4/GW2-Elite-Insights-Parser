@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class BuffGiveCastFinder : BuffCastFinder<BuffApplyEvent>
 {
-    public override BuffCastFinder<BuffApplyEvent> WithMinions(bool minions)
+    public override BuffCastFinder<BuffApplyEvent> WithMinions()
     {
         throw new InvalidOperationException("BuffGiveCastFinder is always with minions");
     }

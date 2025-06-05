@@ -33,6 +33,8 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsByDst = [];
     public readonly Dictionary<long, List<EffectEvent>> EffectEventsByEffectID = [];
     public readonly Dictionary<long, List<EffectEvent>> EffectEventsByTrackingID = [];
+    public readonly Dictionary<long, List<EffectEventAgentCreate>> AgentEffectEventsByTrackingID = [];
+    public readonly Dictionary<long, List<EffectEventGroundCreate>> GroundEffectEventsByTrackingID = [];
 
     public readonly List<MarkerEvent> MarkerEvents = [];
     public readonly Dictionary<AgentItem, List<MarkerEvent>> MarkerEventsBySrc = [];
@@ -52,7 +54,6 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<MissileEvent>> MissileEventsBySrc = [];
     public readonly Dictionary<AgentItem, List<MissileLaunchEvent>> MissileLaunchEventsByDst = [];
     public readonly Dictionary<AgentItem, List<MissileEvent>> MissileDamagingEventsBySrc = [];
-    public readonly Dictionary<long, List<MissileEvent>> MissileEventsByMissileID = [];
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsBySkillID = [];
     public readonly Dictionary<long, List<MissileEvent>> MissileEventsByTrackingID = [];
 

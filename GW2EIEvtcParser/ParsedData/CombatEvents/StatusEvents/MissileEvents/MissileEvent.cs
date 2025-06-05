@@ -5,6 +5,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class MissileEvent : StatusEvent
 {
+    internal const float MissileSpeedConvertConstant = 1f / 1000.0f;
+    internal const float MissilePositionConvertConstant = 10.0f;
     /*
         ev->src_agent = (uintptr_t)src_ag;
         int16_t* i16 = (int16_t*)&ev->value;
@@ -14,7 +16,7 @@ public class MissileEvent : StatusEvent
         ev->skillid = skillid;
         *(float*)&ev->iff = something_range;
         ev->is_statechange = CBTS_MISSILECREATE;
-        ev->is_shields = flags0;
+        ev->is_shields = flags0; 
         ev->is_offcycle = flags1;
         *(uint32_t*)&ev->pad61 = trackable_id;
     */
@@ -29,6 +31,9 @@ public class MissileEvent : StatusEvent
     private readonly List<MissileLaunchEvent> _launchEvents = [];
     public IReadOnlyList<MissileLaunchEvent> LaunchEvents => _launchEvents;
     public MissileRemoveEvent? RemoveEvent { get; private set; }
+
+    public bool MaybeReflected => LaunchEvents.Any(x => x.MaybeReflected);
+
     internal MissileEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData)
     {
         var originBytes = new ByteBuffer(stackalloc byte[4 * sizeof(short)]);
@@ -42,9 +47,9 @@ public class MissileEvent : StatusEvent
             {
                 var originShorts = (short*)ptr;
                 Origin = new(
-                        originShorts[0] * 10,
-                        originShorts[1] * 10,
-                        originShorts[2] * 10
+                        originShorts[0] * MissilePositionConvertConstant,
+                        originShorts[1] * MissilePositionConvertConstant,
+                        originShorts[2] * MissilePositionConvertConstant
                     );
             }
         }
@@ -66,6 +71,10 @@ public class MissileEvent : StatusEvent
     internal void AddLaunchEvent(MissileLaunchEvent launchEvent)
     {
         _launchEvents.Add(launchEvent);
+        if (_launchEvents.Count > 1 && launchEvent.IsFirstLaunch)
+        {
+            launchEvent.ForceNotFirstLaunch();
+        }
         launchEvent.Missile = this;
     }
 

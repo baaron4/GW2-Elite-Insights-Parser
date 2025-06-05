@@ -39,9 +39,9 @@ public class PlayerActor : SingleActor
         return -1;
     }
 
-    public override string GetIcon()
+    public override string GetIcon(bool forceLowResolutionIfApplicable = false)
     {
-        return !IsFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
+        return !IsFriendlyPlayer && !forceLowResolutionIfApplicable ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
     }
 
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)

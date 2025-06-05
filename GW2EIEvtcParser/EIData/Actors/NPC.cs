@@ -73,7 +73,7 @@ public class NPC : SingleActor
         return (int)Math.Round(currentMaxHealth.MaxHealth * currentBarrierPercent / 100.0, 0);
     }
 
-    public override string GetIcon()
+    public override string GetIcon(bool forceLowResolutionIfApplicable = false)
     {
         return AgentItem.Type == AgentItem.AgentType.Gadget ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
     }

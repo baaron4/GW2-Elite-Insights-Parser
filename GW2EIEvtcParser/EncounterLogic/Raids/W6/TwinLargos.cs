@@ -395,6 +395,15 @@ internal class TwinLargos : MythwrightGambit
         }
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // Aquatic Barrage - CC Projectiles - Rendering affected by player distance.
+        var aquaticBarrage = log.CombatData.GetMissileEventsBySkillID(AquaticBarrage);
+        EnvironmentDecorations.AddNonHomingMissiles(log, aquaticBarrage, Colors.White, 0.3, 15);
+    }
+
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Twin Largos";

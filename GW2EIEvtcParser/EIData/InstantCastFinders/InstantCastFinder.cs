@@ -65,9 +65,9 @@ internal abstract class InstantCastFinder : IVersionable
         return this;
     }
 
-    internal InstantCastFinder UsingNotAccurate(bool notAccurate)
+    internal InstantCastFinder UsingNotAccurate()
     {
-        NotAccurate = notAccurate;
+        NotAccurate = true;
         return this;
     }
 
@@ -88,22 +88,27 @@ internal abstract class InstantCastFinder : IVersionable
         return UsingEnable(combatData => !combatData.HasEffectData);
     }
 
+    internal InstantCastFinder UsingDisableWithMissileData()
+    {
+        return UsingEnable(combatData => !combatData.HasMissileData);
+    }
+
     internal virtual InstantCastFinder UsingTimeOffset(long timeOffset)
     {
         TimeOffset = timeOffset;
         return this;
     }
 
-    internal virtual InstantCastFinder UsingBeforeWeaponSwap(bool beforeWeaponSwap)
+    internal virtual InstantCastFinder UsingBeforeWeaponSwap()
     {
-        BeforeWeaponSwap = beforeWeaponSwap;
+        BeforeWeaponSwap = true;
         AfterWeaponSwap = false;
         return this;
     }
 
-    internal virtual InstantCastFinder UsingAfterWeaponSwap(bool afterWeaponSwap)
+    internal virtual InstantCastFinder UsingAfterWeaponSwap()
     {
-        AfterWeaponSwap = afterWeaponSwap;
+        AfterWeaponSwap = true;
         BeforeWeaponSwap = false;
         return this;
     }

@@ -18,7 +18,7 @@ internal static class MechanistHelper
             .UsingSrcSpecChecker(Spec.Mechanist),
         new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon)
             .UsingDisableWithEffectData()
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
         new EffectCastFinderByDst(OverclockSignetSkill, EffectGUIDs.MechanistOverclockSignet)
             .UsingDstSpecChecker(Spec.Mechanist),
 
@@ -36,20 +36,29 @@ internal static class MechanistHelper
                 }
                 return false;
             }) // intersect first position after spawn with delayed effect
-            .UsingNotAccurate(true),
+            .UsingNotAccurate(),
+        // Mech F1
         new MinionCastCastFinder(RoilingSmash, RoilingSmash),
         new MinionCastCastFinder(ExplosiveKnuckle, ExplosiveKnuckle),
         new MinionCastCastFinder(SparkRevolver, SparkRevolver),
+        // Mech F2
         new BuffGainCastFinder(DischargeArray, DischargeArrayBuff)
-            .WithMinions(true),
+            .WithMinions(),
         new EffectCastFinderByDst(CrisisZone, EffectGUIDs.MechanistCrisisZone)
-            .WithMinions(true)
+            .WithMinions()
             .UsingSecondaryEffectChecker(EffectGUIDs.MechanistMechEyeGlow)
             .UsingChecker((effect, combatData, agentData, skillData) => effect.Dst.IsSpecies(MinionID.JadeMech)),
         new MinionCastCastFinder(CoreReactorShot, CoreReactorShot),
+        // Mech F3
         new MinionCastCastFinder(JadeMortar, JadeMortar),
         new MinionCastCastFinder(BarrierBurst, BarrierBurst),
         new MinionCastCastFinder(SkyCircus, SkyCircus),
+        // Mech Passives
+        new MissileCastFinder(RocketPunchMech, RocketPunchMech)
+            .WithMinions(),
+        new BuffGainCastFinder(ExigencyProtocol, ExigencyProtocol)
+            .WithMinions()
+            .UsingChecker((buffApply, combatData, agentData, skillData) => buffApply.To.IsSpecies(MinionID.JadeMech)),
     ];
 
     private static bool WithMechChecker(DamageEvent x, ParsedEvtcLog log)

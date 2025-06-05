@@ -13,6 +13,13 @@ internal abstract class BuffSourceFinder
     protected long ImbuedMelodies = int.MinValue;
     protected long ImperialImpactExtension = int.MinValue;
 
+    protected enum Certainty
+    {
+        NotApplicable,
+        Uncertain,
+        Certain,
+    }
+
     protected BuffSourceFinder(HashSet<long> boonIds)
     {
         _boonIds = boonIds;
@@ -32,28 +39,25 @@ internal abstract class BuffSourceFinder
     }
     // Spec specific checks
 
-    protected virtual int CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
+    protected virtual Certainty CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
     {
         if (dst.Spec == ParserHelper.Spec.Soulbeast && Math.Abs(extension - EssenceOfSpeed) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
             if (GetIDs(log, buffID, extension).Count != 0)
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
             if (ImbuedMelodies == EssenceOfSpeed && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
             if (EssenceOfSpeed == ImperialImpactExtension && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
-            return 1;
+            return Certainty.Certain;
         }
-        return -1;
+        return Certainty.NotApplicable;
     }
 
     protected virtual bool CouldBeImbuedMelodies(AgentItem agent, long buffID, long time, long extension, ParsedEvtcLog log)
@@ -72,7 +76,7 @@ internal abstract class BuffSourceFinder
         return false;
     }
 
-    protected virtual IEnumerable<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
+    protected virtual IEnumerable<AgentItem> GetImperialImpactAgents(long buffID, long time, long extension, ParsedEvtcLog log)
     {
         return [];
     }
@@ -91,7 +95,7 @@ internal abstract class BuffSourceFinder
         return res;
     }
 
-    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, int essenceOfSpeedCheck, IEnumerable<AgentItem> imperialImpactCheck)
+    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, Certainty essenceOfSpeedCheck, IEnumerable<AgentItem> impertialImpactAgents)
     {
         // If uncertainty due to imbued melodies, return unknown
         if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
@@ -99,16 +103,16 @@ internal abstract class BuffSourceFinder
             return ParserHelper._unknownAgent;
         }
         // uncertainty due to essence of speed but not due to imperial impact
-        if (essenceOfSpeedCheck == 0 && !imperialImpactCheck.Any())
+        if (essenceOfSpeedCheck == Certainty.Uncertain && !impertialImpactAgents.Any())
         {
             // the soulbeast
             return dst;
         }
         // uncertainty due to imperial impact but not due to essence of speed
-        if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count() == 1)
+        if (essenceOfSpeedCheck == Certainty.NotApplicable && impertialImpactAgents.Count() == 1)
         {
             // the vindicator
-            return imperialImpactCheck.First();
+            return impertialImpactAgents.First();
         }
         return ParserHelper._unknownAgent;
     }
@@ -129,16 +133,16 @@ internal abstract class BuffSourceFinder
             }
             return ParserHelper._unknownAgent;
         }
-        var imperialImpactCheck = CouldBeImperialImpact(buffID, time, extension, log);
-        var impImpactCount = imperialImpactCheck.Count();
+        var imperialImpactAgents = GetImperialImpactAgents(buffID, time, extension, log);
+        var impImpactCount = imperialImpactAgents.Count();
         // Multiple imperial impact at the same time
         if (impImpactCount > 1)
         {
             return ParserHelper._unknownAgent;
         }
-        int essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
+        var essenceOfSpeedCheck = CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
         // can only be the soulbeast
-        if (essenceOfSpeedCheck == 1)
+        if (essenceOfSpeedCheck == Certainty.Certain)
         {
             return dst;
         }
@@ -156,7 +160,7 @@ internal abstract class BuffSourceFinder
             {
                 CastEvent item = cls.First();
                 // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
-                if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || impImpactCount != 0)
+                if (essenceOfSpeedCheck == Certainty.Uncertain || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || impImpactCount != 0)
                 {
                     return ParserHelper._unknownAgent;
                 }
@@ -166,11 +170,11 @@ internal abstract class BuffSourceFinder
             // If no cast item 
             else
             {
-                return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactCheck);
+                return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactAgents);
             }
         }
         // No known cast skill ID for given extension, same as no cast being present
-        return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactCheck);
+        return NoCastSrcFinder(dst, time, extension, log, buffID, essenceOfSpeedCheck, imperialImpactAgents);
     }
 
 }

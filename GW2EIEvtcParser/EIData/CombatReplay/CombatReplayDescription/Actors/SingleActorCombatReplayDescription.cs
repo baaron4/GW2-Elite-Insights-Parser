@@ -50,7 +50,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
     {
         Start = replay.TimeOffsets.start;
         End = replay.TimeOffsets.end;
-        Img = actor.GetIcon();
+        Img = actor.GetIcon(true);
         ID = actor.UniqueID;
         Type = GetActorType(actor, log);
         HitboxWidth = actor.AgentItem.HitboxWidth;

@@ -51,40 +51,40 @@ internal static class DragonhunterHelper
             .UsingChecker((x, log) => CheckTether(log, x.From, x.To, x.Time)),
         // Heavy Light (Disabled)
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.All)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Disabled)", "20% to disabled foes", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt, Exposed31589], "Heavy Light (Disabled)", "15% to disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDisabled, [Stun, Daze, Knockdown, Fear, Taunt, Exposed31589], "Heavy Light (Disabled)", "20% to disabled foes", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByPresence, TraitImages.HeavyLight, DamageModifierMode.PvE)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2025Balance),
         // Heavy Light (Defiant)
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.All)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.February2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt], "Heavy Light (Defiant)", "15% to defiant non disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.PvE)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt, Exposed31589], "Heavy Light (Defiant)", "10% to defiant non disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnFoeDamageModifier(Mod_HeavyLightDefiant, [Stun, Daze, Knockdown, Fear, Taunt, Exposed31589], "Heavy Light (Defiant)", "15% to defiant non disabled foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.Strike, Source.Dragonhunter, ByAbsence, TraitImages.HeavyLight, DamageModifierMode.PvE)
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None)
-            .UsingApproximate(true)
+            .UsingApproximate()
             .WithBuilds(GW2Builds.June2025Balance),
         // Pure of Sight unclear. Max is very likely to be 1200, as it is the maximum tooltip range for a DH but what is the distance at witch the minimum is reached? Is the scaling linear?
     ];

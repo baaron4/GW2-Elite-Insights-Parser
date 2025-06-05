@@ -18,9 +18,9 @@ internal static class NecromancerHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterDeathShroud, DeathShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitDeathShroud, DeathShroud)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new DamageCastFinder(LesserEnfeeble, LesserEnfeeble)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers)
@@ -259,7 +259,10 @@ internal static class NecromancerHelper
             var skill = new SkillModeDescriptor(player, Spec.Necromancer, CorrosivePoisonCloud, SkillModeCategory.ProjectileManagement);
             foreach (EffectEvent effect in poisonClouds)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 8000);
+                // The effect doesn't clear up correctly making the effect last 12000ms, only the ring of the AoE disappears.
+                // Duration in PvP is 6000, otherwise 8000.
+                long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.sPvP ? 6000 : 8000;
+                (long, long) lifespan = effect.ComputeLifespanWithMaxedToDuration(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectCorrosivePoisonCloud);
             }
         }

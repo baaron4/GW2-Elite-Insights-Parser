@@ -13,11 +13,11 @@ internal static class HolosmithHelper
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new BuffGainCastFinder(EnterPhotonForge, PhotonForge)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitPhotonForge, PhotonForge)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(OverheatSkill, OverheatBuff)
-            .UsingBeforeWeaponSwap(true),
+            .UsingBeforeWeaponSwap(),
         new BuffGainCastFinder(SpectrumShieldSkill, SpectrumShieldBuff),
         new DamageCastFinder(ThermalReleaseValve, ThermalReleaseValve)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -25,7 +25,10 @@ internal static class HolosmithHelper
             .UsingDstSpecChecker(Spec.Holosmith),
         new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1)
             .UsingDstSpecChecker(Spec.Holosmith)
-            .UsingSecondaryEffectChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2),
+            .UsingSecondaryEffectChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2)
+            .UsingDisableWithMissileData(),
+        new MissileCastFinder(BladeBurst, BladeBurst),
+        new MissileCastFinder(ParticleAccelerator, ParticleAccelerator),
     ];
 
     private static readonly HashSet<long> _photonForgeCast =

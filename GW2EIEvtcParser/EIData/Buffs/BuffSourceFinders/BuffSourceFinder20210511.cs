@@ -9,7 +9,7 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
     }
 
     // Spec specific checks
-    protected override int CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
+    protected override Certainty CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
     {
         var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
@@ -20,22 +20,19 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
         {
             if (GetIDs(log, buffID, extension).Count != 0)
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
             if (extension <= ImbuedMelodies + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Tempest))
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
             if (extension <= ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant && log.FriendliesListBySpec.ContainsKey(ParserHelper.Spec.Vindicator))
             {
-                // uncertain, needs to check more
-                return 0;
+                return Certainty.Uncertain;
             }
-            return 1;
+            return Certainty.Certain;
         }
-        return -1;
+        return Certainty.NotApplicable;
     }
 
     protected override HashSet<long> GetIDs(ParsedEvtcLog log, long buffID, long extension)

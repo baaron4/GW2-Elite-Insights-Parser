@@ -709,6 +709,8 @@ public class SkillItem
             { FriendlyFireIllu, SkillImages.FriendlyFire },
             { PhantasmalSharpshooterAttack,SkillImages.PhantasmalSharpshooter },
             { PhantasmalLancerDamage, SkillImages.PhantasmalLancher },
+            { JabSpearClone, SkillImages.JabMesmerSpear },
+            { StabSpearClone, SkillImages.StabMesmerSpear },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -740,7 +742,7 @@ public class SkillItem
             { VampiricStrikes, TraitImages.VampiricPresence },
             { LifeBlast, SkillImages.LifeBlast },
             { FiendLeechWvW, SkillImages.SummonBloodFiend },
-            { BoneSlash, SkillImages.BoneSlash },
+            { BoneSlashJaggedHorror, SkillImages.BoneSlash },
             { NecroticBite1, SkillImages.NecroticBite },
             { NecroticBite2, SkillImages.NecroticBite },
             { UnholyFeastSomething, SkillImages.UnholyFeast },
@@ -752,6 +754,11 @@ public class SkillItem
             { SoulSpiralHeal, SkillImages.SoulSpiral },
             { SpitefulRenewal, TraitImages.SpirefulRenewal },
             { ImplacableFoe, TraitImages.ImplacableFoe },
+            { BoneSlashBoneMinion, SkillImages.BoneSlash },
+            { PutridExplosionBoneMinion, SkillImages.PutridExplosionBoneMinion },
+            { SlashShadowFiend, SkillImages.SlashShadowFiend },
+            { BoneShardBoneFiend1, SkillImages.BoneShardBoneFiend },
+            { BoneShardBoneFiend2, SkillImages.BoneShardBoneFiend },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -854,10 +861,14 @@ public class SkillItem
             { EvilEye, SkillImages.EvilEyeDemon },
             { TormentingVisionSpinegazer, SkillImages.TormentingVisionSpinegazer },
             { WolfsOnslaughtFollowUp, SkillImages.WolfsOnslaught },
-            { EletroctuteJuvenileSkyChak, SkillImages.EletroctuteJuvenileSkyChak },
+            { EletroctuteSkyChak, SkillImages.EletroctuteJuvenileSkyChak },
             { EvasivePurity, TraitImages.EvasivePurity },
             { AttackOfOpportunity, TraitImages.MomentOfClarity },
             { RestorativeStrikes, TraitImages.RestorativeStrikes },
+            { SpitGoopSkyChak, SkillImages.SpitGoopSkyChak },
+            { UnleashEnergySkyChak, SkillImages.UnleashEnergySkyChak },
+            { ChargingBiteShark, SkillImages.ChargingBiteShark },
+            { StaringVoidSpinegazer, SkillImages.StaringVoidSpinegazer },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
