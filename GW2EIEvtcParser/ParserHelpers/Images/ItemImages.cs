@@ -144,6 +144,8 @@ internal static class ItemImages
     public const string RelicOfTheGolemancer = "https://render.guildwars2.com/file/13412697BB6AD89F2E6ED97A750873C0BB35AA9A/3592835.png";
     public const string RelicOfThePrivateer = "https://render.guildwars2.com/file/9CE01CF33B943BCC3FABD8491073DE0AD63F340C/3592839.png";
     public const string RelicOfTheSteamshrieker = "https://render.guildwars2.com/file/23B0F0A5BF05E05C9F527BF7EB4962C9F49C6F42/3441975.png";
+    public const string RelicOfTheLivingCity = "https://render.guildwars2.com/file/6CAF0358FBD9DDD84AB3302E2D67329A3AA83DEC/3629398.png";
+    public const string RelicOfBloodstone = "https://render.guildwars2.com/file/A7327A7EDB4705EA05261110526D72AFEAF7DAB4/3629397.png";
     #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";

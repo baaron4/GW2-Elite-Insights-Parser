@@ -4472,7 +4472,7 @@ public static class SkillIDs
     public const long RazorclawsRageSkillEnhanced = 72363;
     public const long BreakrazorsBastionSkillMinionReworked = 72365;
     public const long DarkrazorsDaringSkillEnhanced = 72366;
-    public const long AllForOne = 73157;
+    public const long PlagueSignetBuffNew = 72368;
     public const long RazorclawsRageSkillMinionReworked = 72370;
     public const long SoulcleavesSummitHitReworked = 72376;
     public const long RazorclawsRageHitReworked = 72388;
@@ -4654,13 +4654,14 @@ public static class SkillIDs
     public const long SeetheSkill = 73137;
     public const long AbyssalStrike_SecondHit = 73139;
     public const long Jokulhlaup = 73140;
-    public const long ElectricArtillery = 72902;
+    public const long ElectricArtillery = 73143;
     public const long BarbedSpearMelee = 73145;
     public const long Undertow = 73148;
     public const long BlitzMines = 73149;
     public const long PredatorsAmbush = 73150;
     public const long ImaginaryInversion = 73152;
     public const long Psycut = 73154;
+    public const long AllForOne = 73157;
     public const long GreersVirulence = 73181;
     public const long SolarStormIlluminatedHealing = 73199;
     public const long RelicOfTheStormsingerBuff = 73455;
@@ -4927,6 +4928,17 @@ public static class SkillIDs
     public const long AchievementEligibilityThisBugCanDance = 76042;
     public const long ForeshockCM4 = 76048;
     public const long IllusionaryMembrane = 76074;
+    public const long BloodstoneVolatility = 76128;
+    public const long POV_LegsOfTheTitan = 76184;
+    public const long POV_LungsOfTheTitan = 76221;
+    public const long BloodstoneExplosion = 76315;
+    public const long AgonyOfTheChoir = 76319;
+    public const long BloodstoneFervor = 76326;
+    public const long SoulOfTheTitan = 76351;
+    public const long TitanicPotential = 76372;
+    public const long POV_ArmsOfTheTitan = 76390;
+    public const long POV_HeartOfTheTitan = 76448;
+    public const long POV_HeadOfTheTitan = 76455;
     //
     #endregion
 }
