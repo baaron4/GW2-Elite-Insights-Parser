@@ -310,7 +310,7 @@ public abstract class FightLogic
         EncounterID = EncounterIDs.EncounterMasks.Unsupported;
     }
 
-    internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+    internal virtual List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
         if (!requirePhases)
         {

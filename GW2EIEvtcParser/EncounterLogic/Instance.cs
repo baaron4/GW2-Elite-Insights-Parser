@@ -331,4 +331,9 @@ internal class Instance : FightLogic
     {
         return [];
     }
+
+    internal override List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        return [];
+    }
 }
