@@ -559,7 +559,7 @@ internal static class EncounterBuffs
             new Buff("Determined (Kryptis Rift)", DeterminedKryptisRift, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             // Kinfall - Whispering Shadow
             new Buff("Life-Fire", LifeFire, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
-            new Buff("Deathly Grime", DeathlyGrime, Source.FightSpecific, BuffClassification.Debuff, BuffImages.FrozenBurst),
+            new Buff("Deathly Grime", DeathlyGrime, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.FrozenBurst),
             new Buff("Inevitable Darkness", InevitableDarkness, Source.FightSpecific, BuffStackType.Stacking, 2, BuffClassification.Other, BuffImages.DarkAura),
             new Buff("Inevitable Darkness (Player)", InevitableDarknessPlayer, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SpiritsConsumed),
             new Buff("Gorefrost Target", GorefrostTarget, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
