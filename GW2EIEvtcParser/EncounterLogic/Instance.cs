@@ -130,16 +130,19 @@ internal class Instance : FightLogic
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Generic name override
-        var speciesCount = new Dictionary<long, int>();
-        foreach (SingleActor target in Targets)
+        if (!Targetless)
         {
-            if (!speciesCount.TryGetValue(target.ID, out var species))
+            var speciesCount = new Dictionary<long, int>();
+            foreach (SingleActor target in Targets)
             {
-                species = 1;
-                speciesCount[target.ID] = species;
+                if (!speciesCount.TryGetValue(target.ID, out var species))
+                {
+                    species = 1;
+                    speciesCount[target.ID] = species;
+                }
+                target.OverrideName(target.Character + " " + species);
+                speciesCount[target.ID] = species++;
             }
-            target.OverrideName(target.Character + " " + species);
-            speciesCount[target.ID] = species++;
         }
     }
 
