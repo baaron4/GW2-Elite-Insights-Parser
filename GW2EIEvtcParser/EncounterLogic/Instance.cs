@@ -146,9 +146,18 @@ internal class Instance : FightLogic
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
-
-        FinalizeComputeFightTargets();
+        // Generic name override
+        var speciesCount = new Dictionary<long, int>();
+        foreach (SingleActor target in Targets)
+        {
+            if (!speciesCount.TryGetValue(target.ID, out var species))
+            {
+                species = 1;
+                speciesCount[target.ID] = species;
+    }
+            target.OverrideName(target.Character + " " + species);
+            speciesCount[target.ID] = species++;
+        }
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
