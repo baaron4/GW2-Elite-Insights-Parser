@@ -105,7 +105,7 @@ internal class Instance : FightLogic
         if (_targetIDs.Count == 0)
         {
             phases = base.GetPhases(log, requirePhases);
-            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
+            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
             {
                 var fightPhases = GetPhasesBySquadCombatStartEnd(log);
                 fightPhases.ForEach(x =>
@@ -140,7 +140,7 @@ internal class Instance : FightLogic
             _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
         }
         _targets.RemoveAll(x => x.IsSpecies(TargetID.DummyTarget));
-        Targetless = _targets.Count == 0;
+        Targetless = _targets.Count == 0 && _targetIDs.Count == 0;
         if (Targetless)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
@@ -282,7 +282,7 @@ internal class Instance : FightLogic
         foreach (FightLogic logic in _subLogics)
         {
             res.AddRange(logic.SpecialBuffEventProcess(combatData, skillData));
-        }
+        }   
         return res;
     }
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
@@ -311,6 +311,8 @@ internal class Instance : FightLogic
         }
     }
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    {
+        return _subLogics.Count == 0 && _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
     }
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
