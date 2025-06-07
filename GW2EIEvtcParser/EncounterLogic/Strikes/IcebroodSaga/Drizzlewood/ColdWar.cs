@@ -53,7 +53,7 @@ internal class ColdWar : IcebroodSagaStrike
     }
 
     // TODO - complete IDs
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

@@ -163,7 +163,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         (-2088, -6124, 2086, -1950));
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

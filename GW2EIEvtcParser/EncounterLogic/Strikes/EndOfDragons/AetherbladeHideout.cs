@@ -86,7 +86,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return "Aetherblade Hideout";
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -111,7 +111,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -122,7 +122,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [

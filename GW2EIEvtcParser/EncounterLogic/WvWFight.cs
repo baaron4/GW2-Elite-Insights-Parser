@@ -48,7 +48,7 @@ internal class WvWFight : FightLogic
         ]));
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return [];
     }
@@ -334,7 +334,7 @@ internal class WvWFight : FightLogic
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { TargetID.WorldVersusWorld };
     }

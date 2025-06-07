@@ -258,7 +258,7 @@ internal class Dhuum : HallOfChains
         return phases;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -269,7 +269,7 @@ internal class Dhuum : HallOfChains
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

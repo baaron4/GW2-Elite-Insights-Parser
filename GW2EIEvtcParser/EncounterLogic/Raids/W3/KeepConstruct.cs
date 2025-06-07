@@ -217,7 +217,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -248,7 +248,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         };
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

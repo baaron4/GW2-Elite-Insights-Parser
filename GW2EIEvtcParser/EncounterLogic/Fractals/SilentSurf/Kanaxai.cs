@@ -89,7 +89,7 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -97,7 +97,7 @@ internal class Kanaxai : SilentSurf
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

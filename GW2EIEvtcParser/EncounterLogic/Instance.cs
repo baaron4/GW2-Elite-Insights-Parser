@@ -148,7 +148,7 @@ internal class Instance : FightLogic
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
 
-        TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
+        FinalizeComputeFightTargets();
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -266,7 +266,8 @@ internal class Instance : FightLogic
     }
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
     {
-        return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
+        return base.GetCustomWarningMessages(fightData, evtcVersion);
+         //return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
     }
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -309,19 +310,22 @@ internal class Instance : FightLogic
             logic.ComputeNPCCombatReplayActors(target, log, replay);
         }
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
-    {
-        return [TargetID.Instance];
+    protected override IReadOnlyList<TargetID> GetTargetsIDs()
     }
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [];
     }
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return [];
     }
-    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    {
+        return [];
+    }
+
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return [];
     }

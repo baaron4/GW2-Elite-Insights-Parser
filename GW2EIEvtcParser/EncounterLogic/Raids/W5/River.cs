@@ -47,7 +47,7 @@ internal class River : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -60,7 +60,7 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -68,7 +68,7 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [

@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -55,22 +56,22 @@ internal class UnknownFightLogic : FightLogic
         FinalizeComputeFightTargets();
     }
 
-    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
     {
         throw new InvalidOperationException("UniqueNPCIDs not valid for Unknown");
     }
 
-    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         throw new InvalidOperationException("GetTargetIDs not valid for Unknown");
     }
 
-    protected override ReadOnlySpan<SpeciesIDs.TargetID> GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         throw new InvalidOperationException("GetFriendlyNPCIDs not valid for Unknown");
     }
 
-    protected override List<SpeciesIDs.TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
     }

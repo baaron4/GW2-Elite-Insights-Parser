@@ -76,7 +76,7 @@ internal class SoullessHorror : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -85,7 +85,7 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

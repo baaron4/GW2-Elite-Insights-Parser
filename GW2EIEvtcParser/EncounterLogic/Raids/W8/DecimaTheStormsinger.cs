@@ -143,7 +143,7 @@ internal class DecimaTheStormsinger : MountBalrior
                         (-13068, 10300, -7141, 16227));
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -153,7 +153,7 @@ internal class DecimaTheStormsinger : MountBalrior
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

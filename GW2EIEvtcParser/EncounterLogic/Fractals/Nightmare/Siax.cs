@@ -50,14 +50,15 @@ internal class Siax : Nightmare
                         (11804, 4414, 12444, 5054)*/);
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = base.GetTrashMobsIDs();
+        var trashIDs = new List<TargetID>(2 + base.GetTrashMobsIDs().Count);
+        trashIDs.AddRange(base.GetTrashMobsIDs());
         trashIDs.Add(TargetID.VolatileHallucinationSiax);
         trashIDs.Add(TargetID.NightmareHallucinationSiax);
         return trashIDs;
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

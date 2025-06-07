@@ -239,7 +239,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -247,7 +247,7 @@ internal class Escort : StrongholdOfTheFaithful
             TargetID.Glenna
         ];
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -259,7 +259,7 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [
             TargetID.MushroomCharger,
@@ -279,7 +279,7 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [

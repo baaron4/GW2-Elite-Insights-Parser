@@ -141,7 +141,7 @@ internal class FraenirOfJormag : Bjora
         return phases;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -150,7 +150,7 @@ internal class FraenirOfJormag : Bjora
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

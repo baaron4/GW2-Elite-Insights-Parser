@@ -44,12 +44,12 @@ internal class Artsariiv : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return [];
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -58,11 +58,10 @@ internal class Artsariiv : ShatteredObservatory
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.ReserveAdditional(5);
-
+        var trashIDs = new List<TargetID>(5 + base.GetTrashMobsIDs().Count);
+        trashIDs.AddRange(base.GetTrashMobsIDs());
         trashIDs.Add(TargetID.TemporalAnomalyArtsariiv);
         trashIDs.Add(TargetID.Spark);
         trashIDs.Add(TargetID.SmallArtsariiv);

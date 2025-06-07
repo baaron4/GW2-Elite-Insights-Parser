@@ -72,7 +72,7 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -152,7 +152,7 @@ internal class ValeGuardian : SpiritVale
         }
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
