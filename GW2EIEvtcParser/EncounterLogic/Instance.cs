@@ -15,7 +15,6 @@ internal class Instance : FightLogic
 {
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
-    private readonly List<FightLogic> _subLogics = [];
     private readonly List<TargetID> _targetIDs = [];
     public Instance(int id) : base(id)
     {
@@ -27,7 +26,7 @@ internal class Instance : FightLogic
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
-    private void FillSubLogics(AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    private void FindGenericTargetIDs(AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var allTargetIDs = Enum.GetValues(typeof(TargetID));
         var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
@@ -51,14 +50,6 @@ internal class Instance : FightLogic
                     continue;
                 }
                 _targetIDs.Add(targetID);
-                /*switch (targetID)
-                {
-                    case (int)TargetID.AiKeeperOfThePeak:
-                        //_subLogics.Add(new AiKeeperOfThePeak(targetID));
-                        break;
-                    default:
-                        break;
-                }*/
             }
         }
     }
@@ -131,16 +122,8 @@ internal class Instance : FightLogic
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FillSubLogics(agentData, combatData);
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            _targets.AddRange(logic.Targets);
-            _trashMobs.AddRange(logic.TrashMobs);
-            _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
-        }
-        _targets.RemoveAll(x => x.IsSpecies(TargetID.DummyTarget));
-        Targetless = _targets.Count == 0 && _targetIDs.Count == 0;
+        FindGenericTargetIDs(agentData, combatData);
+        Targetless = _targetIDs.Count == 0;
         if (Targetless)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
@@ -154,7 +137,7 @@ internal class Instance : FightLogic
             {
                 species = 1;
                 speciesCount[target.ID] = species;
-    }
+            }
             target.OverrideName(target.Character + " " + species);
             speciesCount[target.ID] = species++;
         }
@@ -266,62 +249,33 @@ internal class Instance : FightLogic
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        var res = new List<InstantCastFinder>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.GetInstantCastFinders());
-        }
-        return res;
+        return [];
     }
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
     {
         return base.GetCustomWarningMessages(fightData, evtcVersion);
-         //return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
     }
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.ComputePlayerCombatReplayActors(p, log, replay);
-        }
-    }
-    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<BuffEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialBuffEventProcess(combatData, skillData));
-        }   
-        return res;
-    }
-    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<CastEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialCastEventProcess(combatData, skillData));
-        }
-        return res;
-    }
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<HealthDamageEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialDamageEventProcess(combatData, skillData));
-        }
-        return res;
     }
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.ComputeNPCCombatReplayActors(target, log, replay);
-        }
+    }
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return [];
+    }
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return [];
+    }
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return [];
     }
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
-        return _subLogics.Count == 0 && _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
+        return _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
     }
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
