@@ -4928,18 +4928,38 @@ public static class SkillIDs
     public const long AchievementEligibilityThisBugCanDance = 76042;
     public const long ForeshockCM4 = 76048;
     public const long IllusionaryMembrane = 76074;
+    public const long GlacialMidnight = 76101;
+    public const long FreezingFan = 76110;
+    public const long WhisperingShadowDying = 76118;
+    public const long GorefrostTarget = 76119;
     public const long BloodstoneVolatility = 76128;
+    public const long VitreousSpikeHit1 = 76137;
+    public const long FallingIce = 76163;
+    public const long LifeFire = 76164;
+    public const long FreezingFan2 = 76182;
     public const long POV_LegsOfTheTitan = 76184;
+    public const long AchievementEligibilityShatterstep = 76189;
     public const long POV_LungsOfTheTitan = 76221;
+    public const long Gorefrost = 76292;
+    public const long CryoflashWindup = 76297;
+    public const long FrozenTeeth = 76332;
     public const long BloodstoneExplosion = 76315;
     public const long AgonyOfTheChoir = 76319;
     public const long BloodstoneFervor = 76326;
+    public const long VitreousSpikeHit2 = 76343;
+    public const long InevitableDarkness = 76350;
     public const long SoulOfTheTitan = 76351;
     public const long TitanicPotential = 76372;
+    public const long VitreousSpikeCast = 76393;
+    public const long GutteringLight = 76397;
     public const long POV_ArmsOfTheTitan = 76390;
+    public const long LoftedCryoflash = 76402;
+    public const long InevitableDarknessPlayer = 76412;
+    public const long TerrestialCryoflash = 76420;
     public const long POV_HeartOfTheTitan = 76448;
+    public const long FreezingVortex = 76444;
+    public const long DeathlyGrime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
     //
     #endregion
 }
-

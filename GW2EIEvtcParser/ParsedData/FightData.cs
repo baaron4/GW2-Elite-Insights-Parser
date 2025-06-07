@@ -24,7 +24,7 @@ public class FightData
     public long LogStart { get; private set; }
     public long LogEnd { get; private set; }
     public long LogOffset { get; private set; }
-    public string EvtcRecordingDuration {  get; private set; }
+    public string EvtcRecordingDuration { get; private set; }
     public long FightStartOffset => -LogStart;
     public string DurationString
     {
@@ -237,6 +237,8 @@ public class FightData
                         return new CerusAndDeimos(id);
                     case TargetID.EparchLonelyTower:
                         return new Eparch(id);
+                    case TargetID.WhisperingShadow:
+                        return new WhisperingShadow(id);
                     // Golems
                     case TargetID.MassiveGolem10M:
                     case TargetID.MassiveGolem4M:

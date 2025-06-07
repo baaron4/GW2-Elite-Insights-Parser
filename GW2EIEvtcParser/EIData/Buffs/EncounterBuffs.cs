@@ -97,7 +97,7 @@ internal static class EncounterBuffs
             new Buff("Power of Valor Tier 2", PowerOfValorTier2, Source.FightSpecific, BuffClassification.Other, BuffImages.PowerOfValor),
             new Buff("Power of Valor Tier 3", PowerOfValorTier3, Source.FightSpecific, BuffClassification.Other, BuffImages.PowerOfValor),
             new Buff("Power of Valor Tier 4", PowerOfValorTier4, Source.FightSpecific, BuffClassification.Other, BuffImages.PowerOfValor),
-            // Unknown Fixation            
+            // Unknown Fixation
             new Buff("Fixated 1(???)", Fixated1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated 2(???)", Fixated2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             //////////////////////////////////////////////
@@ -136,7 +136,7 @@ internal static class EncounterBuffs
             new Buff("Ghastly Prison", GhastlyPrison, Source.FightSpecific, BuffClassification.Debuff, BuffImages.GhastlyPrison),
             new Buff("Vivid Echo", VividEcho, Source.FightSpecific, BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.VividEcho),
             new Buff("Spectral Darkness", SpectralDarkness, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.SpectralDarkness),
-            // Sabetha    
+            // Sabetha
             new Buff("Shell-Shocked", ShellShocked, Source.FightSpecific, BuffClassification.Other, BuffImages.ShellShocked),
             new Buff("Sapper Bomb", SapperBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
             new Buff("Sapper Bomb Damage", SapperBombDamageBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.SapperBomb),
@@ -174,7 +174,7 @@ internal static class EncounterBuffs
             new Buff("Snowstorm (Matthias)", SnowstormMatthias, Source.FightSpecific, BuffClassification.Other, BuffImages.Snowstorm),
             new Buff("Heat Wave (Matthias)", HeatWaveMatthias, Source.FightSpecific, BuffClassification.Other, BuffImages.HeatWave),
             new Buff("Downpour (Matthias)", DownpourMatthias, Source.FightSpecific, BuffClassification.Other, BuffImages.Downpour),
-            new Buff("Unstable", Unstable, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),      
+            new Buff("Unstable", Unstable, Source.FightSpecific, BuffClassification.Other, BuffImages.Unstable),
             //////////////////////////////////////////////
             // Escort
             new Buff("Toxic Spores (Escort)", EscortToxicSpores, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ToxicSpores),
@@ -209,7 +209,7 @@ internal static class EncounterBuffs
             new Buff("Creeping Pursuit", CreepingPursuit, Source.FightSpecific, BuffClassification.Other, BuffImages.CreepingPursuit),
             new Buff("Achievement Eligibility: Evasive Maneuver", AchievementEligibilityEvasiveManeuver, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Mildly Insane", AchievementEligibilityMildlyInsane, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Xera      
+            // Xera
             new Buff("Derangement", Derangement, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Debuff, BuffImages.Derangement),
             new Buff("Bending Chaos", BendingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.Target2),
             new Buff("Shifting Chaos", ShiftingChaos, Source.FightSpecific, BuffStackType.Stacking, 11, BuffClassification.Other, BuffImages.ShiftingChaos),
@@ -272,11 +272,11 @@ internal static class EncounterBuffs
             new Buff("Spirit Form", SpiritForm, Source.FightSpecific, BuffClassification.Other, BuffImages.SpiritForm),
             new Buff("Mortal Coil (River)", MortalCoilRiver, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.InternalCoil),
             new Buff("Energy Threshold (River)", EnergyThresholdRiver, Source.FightSpecific, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SpiritForm),
-            // Broken King          
+            // Broken King
             new Buff("Frozen Wind", FrozenWind, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.FrozenWind),
             new Buff("Shield of Ice", ShieldOfIce, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 99, BuffClassification.Other, BuffImages.ShieldOfIce),
             new Buff("Glaciate", Glaciate, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Glaciate),
-            // Eater of Soul         
+            // Eater of Soul
             new Buff("Soul Digestion", SoulDigestion, Source.FightSpecific, BuffClassification.Other, BuffImages.SoulDigestion),
             new Buff("Reclaimed Energy", ReclaimedEnergyBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.ReclaimedEnergy),
             new Buff("Mortal Coil (Statue of Death)", MortalCoilStatueOfDeath, Source.FightSpecific, BuffStackType.Stacking, 30, BuffClassification.Other, BuffImages.MortalCoil),
@@ -455,7 +455,7 @@ internal static class EncounterBuffs
             new Buff("Toxic Buildup", ToxicBuildup, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Acid Rain", AcidRain, Source.FightSpecific, BuffClassification.Other, BuffImages.ScaldingWater),
             //////////////////////////////////////////////
-            // Fractals 
+            // Fractals
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
             new Buff("Fractal Savant", FractalSavant, Source.Common, BuffClassification.Offensive, BuffImages.Malign9Infusion),
             new Buff("Fractal Prodigy", FractalProdigy, Source.Common, BuffClassification.Offensive, BuffImages.Mighty9Infusion),
@@ -468,9 +468,9 @@ internal static class EncounterBuffs
             new Buff("Sticking Together", StickingTogetherBuff, Source.FightSpecific, BuffClassification.Offensive, BuffImages.ActivateGreen),
             new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             new Buff("Social Awkwardness Immunity", SocialAwkwardnessImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.ActivateYellow),
-            // Siax 
+            // Siax
             new Buff("Fixated (Nightmare)", FixatedNightmare, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
-            // Ensolyss 
+            // Ensolyss
             new Buff("Determination (Ensolyss)", DeterminationEnsolyss, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
             // Shattered Observatory
             new Buff("Achievement Eligibility: Be Dynamic", AchievementEligibilityBeDynamic, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
@@ -483,7 +483,7 @@ internal static class EncounterBuffs
             new Buff("Blinding Radiance", BlindingRadiance, Source.FightSpecific, BuffClassification.Other, SkillImages.MonsterSkill),
             new Buff("Determination (Viirastra)", DeterminationViirastra, Source.FightSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
             new Buff("Nova Launch", NovaLaunchBuff, Source.FightSpecific, BuffClassification.Other, SkillImages.CelestialDash),
-            // Arkk 
+            // Arkk
             new Buff("Fixated (Bloom 3)", FixatedBloom3, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Bloom 2)", FixatedBloom2, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Bloom 1)", FixatedBloom1, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
@@ -557,6 +557,13 @@ internal static class EncounterBuffs
             new Buff("Fear of the King", FearOfTheKing, Source.FightSpecific, BuffClassification.Other, BuffImages.Crazed),
             new Buff("Achievement Eligibility: Fissure Walker", AchievementEligibilityFissureWalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Determined (Kryptis Rift)", DeterminedKryptisRift, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            // Kinfall - Whispering Shadow
+            new Buff("Life-Fire", LifeFire, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
+            new Buff("Deathly Grime", DeathlyGrime, Source.FightSpecific, BuffClassification.Debuff, BuffImages.FrozenBurst),
+            new Buff("Inevitable Darkness", InevitableDarkness, Source.FightSpecific, BuffStackType.Stacking, 2, BuffClassification.Other, BuffImages.DarkAura),
+            new Buff("Inevitable Darkness (Player)", InevitableDarknessPlayer, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SpiritsConsumed),
+            new Buff("Gorefrost Target", GorefrostTarget, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
+            new Buff("Achievement Eligibility: Shatterstep", AchievementEligibilityShatterstep, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood
@@ -635,7 +642,7 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: Clarity", AchievementEligibilityClarity, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Gaze into the Void", AchievementEligibilityGazeIntoTheVoid, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Undevoured", AchievementEligibilityUndevoured, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Minister Li   
+            // Minister Li
             new Buff("Target Order: 1", TargetOrder1, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder1),
             new Buff("Target Order: 2", TargetOrder2, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder2),
             new Buff("Target Order: 3", TargetOrder3, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder3),
@@ -686,7 +693,7 @@ internal static class EncounterBuffs
             new Buff("Achievement Eligibility: Aether Aversion", AchievementEligibilityAetherAversion, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Fear Not This Knight", AchievementEligibilityFearNotThisKnight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Static-Dynamic Synergy", AchievementEligibilityStaticDynamicSynergy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Cosmic Observatory       
+            // Cosmic Observatory
             new Buff("Residual Anxiety", ResidualAnxiety, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, SkillImages.ThrowCursedArtifact),
             new Buff("Beam of Light Duration", BeamOfLightDuration, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Dagda Phasing", DagdaDuringPhase75_50_25, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
