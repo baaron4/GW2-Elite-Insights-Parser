@@ -16,6 +16,7 @@ internal class Instance : FightLogic
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
     private readonly List<TargetID> _targetIDs = [];
+    private readonly List<TargetID> _trashIDs = [];
     public Instance(int id) : base(id)
     {
         Extension = "instance";
@@ -45,11 +46,17 @@ internal class Instance : FightLogic
             //TODO(Rennorb) @perf: invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
             if (agentData.GetNPCsByID(targetID).Any())
             {
-                if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 500000))
+                if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 5e5))
                 {
                     continue;
                 }
-                _targetIDs.Add(targetID);
+                if (maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 1e6))
+                {
+                    _targetIDs.Add(targetID);
+                } else
+                {
+                    _trashIDs.Add(targetID);
+                }
             }
         }
     }
@@ -90,15 +97,14 @@ internal class Instance : FightLogic
         // Nothing to do
     }
 
-    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IReadOnlyList<SingleActor> targets)
+    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
     {
         phases[0].AddTargets(targets, log);
-        int phaseCount = 0;
         foreach (SingleActor target in targets)
         {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), target.Character);
             phase.AddTarget(target, log);
-            phases[0].AddParentPhase(phase);
+            phase.AddParentPhase(phases[0]);
             phases.Add(phase);
         }
     }
@@ -122,7 +128,7 @@ internal class Instance : FightLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        AddPhasesPerTarget(log, phases, Targets);
+        AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration));
         return phases;
     }
 
@@ -147,7 +153,7 @@ internal class Instance : FightLogic
         fightData.SetSuccess(true, fightData.FightEnd);
     }
 
-    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = ParserHelper.MinimumInCombatDuration)
+    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = 10000)
     {
         InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
         if (evt == null)
@@ -283,7 +289,7 @@ internal class Instance : FightLogic
     }
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return [];
+        return _trashIDs;
     }
     protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
