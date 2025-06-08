@@ -522,4 +522,12 @@ public abstract class FightLogic
         }
         return null;
     }
+
+    /// <summary>
+    /// Determinate the privaty state of an instance.
+    /// </summary>
+    internal virtual FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.InstancePrivacyMode.NotApplicable;
+    }
 }

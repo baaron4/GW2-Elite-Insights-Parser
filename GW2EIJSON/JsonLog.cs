@@ -307,6 +307,11 @@ public class JsonLog
     public string? InstanceIP;
 
     /// <summary>
+    /// Type of instance privacy
+    /// </summary>
+    public string InstancePrivacy;
+
+    /// <summary>
     /// The success status of the fight
     /// </summary>
     public bool Success;

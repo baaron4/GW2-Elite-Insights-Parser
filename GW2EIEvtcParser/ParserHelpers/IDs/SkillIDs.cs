@@ -4502,6 +4502,7 @@ public static class SkillIDs
     public const long RelicOfTheTwinGenerals = 72707;
     public const long RegretSkillEparch = 72719;
     public const long DespairEmpowerment = 72726;
+    public const long UnstableAttunementSotO = 72730;
     public const long KryptisRiftIncarnationTether = 72740;
     public const long AchievementEligibilityFissureWalker = 72742;
     public const long DevourLonelyTower = 72754;
@@ -4721,6 +4722,7 @@ public static class SkillIDs
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
     public const long EnfeeblingMiasma = 74851;
+    public const long UnstableAttunementJW = 74860;
     public const long BlastBack = 74863;
     public const long WaveOfCorruption = 74867;
     public const long SeismicCrashHitboxDamage = 74870;

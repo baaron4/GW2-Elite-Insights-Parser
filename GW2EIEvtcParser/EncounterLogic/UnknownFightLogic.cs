@@ -75,4 +75,9 @@ internal class UnknownFightLogic : FightLogic
     {
         throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
     }
+
+    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.InstancePrivacyMode.Unknown;
+    }
 }

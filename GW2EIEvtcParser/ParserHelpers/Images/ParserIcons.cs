@@ -1218,6 +1218,11 @@ internal static class ParserIcons
         { TargetID.Cannon, TrashCannon },
         { TargetID.HeavyBomb, TrashFerrousBomb }, // Using Aetherblade Hideout image for better visual
         { TargetID.ProtoGreerling, TrashProtoGreerling },
+        { TargetID.DecimaTheStormsingerConv, TargetDecima },
+        { TargetID.GreerTheBlightbringerConv, TargetGreer },
+        { TargetID.GreeTheBingerConv, TrashGree },
+        { TargetID.ReegTheBlighterConv, TrashReeg },
+        { TargetID.UraTheSteamshriekerConv, TargetUra },
     };
 
     /// <summary>

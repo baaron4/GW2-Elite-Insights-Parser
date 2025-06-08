@@ -15,6 +15,7 @@ internal static class EncounterIDs
         public const long StoryInstanceMask = 0x060000;
         public const long WvWMask = 0x070000;
         public const long GolemMask = 0x080000;
+        public const long ConvergenceMask = 0x090000;
     }
 
     public static class RaidWingMasks
@@ -36,6 +37,8 @@ internal static class EncounterIDs
         public const long SunquaPeakMask = 0x000300;
         public const long SilentSurfMask = 0x000400;
         public const long LonelyTowerMask = 0x000500;
+        public const long CaptainMaiTrinBossMask = 0x000700;
+        public const long DeepstoneMask = 0x000700;
     }
 
     public static class StrikeMasks
@@ -62,4 +65,9 @@ internal static class EncounterIDs
         public const long IsleOfReflectionMask = 0x000B00;
     }
 
+    public static class ConvergenceMasks
+    {
+        public const long OuterNayosMask = 0x000100;
+        public const long MountBalriorMask = 0x000200;
+    }
 }

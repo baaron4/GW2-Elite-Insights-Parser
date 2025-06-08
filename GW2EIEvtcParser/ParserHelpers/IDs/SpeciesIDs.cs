@@ -696,6 +696,19 @@ public static class SpeciesIDs
         DummyTarget = SpeciesIDs.DummyTarget,
         Environment = SpeciesIDs.Environment,
         Unknown = int.MaxValue,
+        // Convergences
+        // - Outer Nayos
+        DemonKnight = 26142,
+        Sorrow = 26126,
+        Dreadwing = 26106,
+        HellSister = 26146,
+        UmbrielHalberdOfHouseAurkus = 26681,
+        // - Mount Balrior
+        GreerTheBlightbringerConv = 26889,
+        GreeTheBingerConv = 26881,
+        ReegTheBlighterConv = 26842,
+        DecimaTheStormsingerConv = 26720,
+        UraTheSteamshriekerConv = 27017,
     };
 
     public enum MinionID : int

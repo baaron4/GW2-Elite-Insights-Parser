@@ -12,7 +12,8 @@ public class EncounterCategory
         Story,
         OpenWorld,
         UnknownEncounter,
-        Unknown
+        Unknown,
+        Convergence,
     };
 
     internal enum SubFightCategory
@@ -55,6 +56,9 @@ public class EncounterCategory
         Story,
         //
         OpenWorld,
+        //
+        OuterNayosConvergence,
+        MountBalriorConvergence,
         //
         UnknownEncounter,
         Unknown
