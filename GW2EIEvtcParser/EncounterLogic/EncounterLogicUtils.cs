@@ -197,8 +197,8 @@ internal static class EncounterLogicUtils
                 species = 1;
                 speciesCount[target.ID] = species;
             }
-            target.OverrideName(target.Character + " " + species);
-            speciesCount[target.ID] = species++;
+            target.OverrideName(target.Character + " " + species++);
+            speciesCount[target.ID] = species;
         }
     }
 
