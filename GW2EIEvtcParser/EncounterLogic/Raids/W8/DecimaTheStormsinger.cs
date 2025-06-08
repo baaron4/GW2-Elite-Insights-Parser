@@ -248,14 +248,7 @@ internal class DecimaTheStormsinger : MountBalrior
             conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int cur = 1;
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.TranscendentBoulder))
-            {
-                target.OverrideName(target.Character + " " + cur++);
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder)));
     }
 
     private static PhaseData GetBoulderPhase(ParsedEvtcLog log, IEnumerable<SingleActor> boulders, string name, SingleActor decima)

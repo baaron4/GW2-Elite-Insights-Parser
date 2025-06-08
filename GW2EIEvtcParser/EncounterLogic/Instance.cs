@@ -90,6 +90,19 @@ internal class Instance : FightLogic
         // Nothing to do
     }
 
+    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IReadOnlyList<SingleActor> targets)
+    {
+        phases[0].AddTargets(targets, log);
+        int phaseCount = 0;
+        foreach (SingleActor target in targets)
+        {
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
+            phase.AddTarget(target, log);
+            phases[0].AddParentPhase(phase);
+            phases.Add(phase);
+        }
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases;
@@ -109,14 +122,7 @@ internal class Instance : FightLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets, log);
-        int phaseCount = 0;
-        foreach (SingleActor target in Targets)
-        {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
-            phase.AddTarget(target, log);
-            phases.Add(phase);
-        }
+        AddPhasesPerTarget(log, phases, Targets);
         return phases;
     }
 
@@ -132,17 +138,7 @@ internal class Instance : FightLogic
         // Generic name override
         if (!Targetless)
         {
-            var speciesCount = new Dictionary<long, int>();
-            foreach (SingleActor target in Targets)
-            {
-                if (!speciesCount.TryGetValue(target.ID, out var species))
-                {
-                    species = 1;
-                    speciesCount[target.ID] = species;
-                }
-                target.OverrideName(target.Character + " " + species);
-                speciesCount[target.ID] = species++;
-            }
+            EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
     }
 
@@ -151,7 +147,7 @@ internal class Instance : FightLogic
         fightData.SetSuccess(true, fightData.FightEnd);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = ParserHelper.MinimumInCombatDuration)
     {
         InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
         if (evt == null)
@@ -160,8 +156,13 @@ internal class Instance : FightLogic
         }
         else
         {
-            return evt.TimeOffsetFromInstanceCreation > ParserHelper.MinimumInCombatDuration ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+            return evt.TimeOffsetFromInstanceCreation > threshold ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
         }
+    }
+
+    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return GetInstanceStartStatus(combatData);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

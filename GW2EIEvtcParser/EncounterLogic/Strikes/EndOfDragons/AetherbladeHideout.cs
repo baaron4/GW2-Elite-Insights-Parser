@@ -712,26 +712,17 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
             }
         }
-        int curHP = 1;
-        int curCC = 1;
-        int curBomb = 1;
-        int curBeam = 1;
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBreakbar, TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.FerrousBomb, TargetID.ScarletPhantomBeamNM])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)TargetID.ScarletPhantomBreakbar:
-                    target.OverrideName("Elite " + target.Character + " CC " + curCC++);
+                    target.OverrideName("Elite " + target.Character + " CC");
                     break;
                 case (int)TargetID.ScarletPhantomHP:
                 case (int)TargetID.ScarletPhantomHPCM:
-                    target.OverrideName("Elite " + target.Character + " HP " + curHP++);
-                    break;
-                case (int)TargetID.FerrousBomb:
-                    target.OverrideName("Ferrous Bomb " + curBomb++);
-                    break;
-                case (int)TargetID.ScarletPhantomBeamNM:
-                    target.OverrideName("Scarlet Phantom " + curBeam++);
+                    target.OverrideName("Elite " + target.Character + " HP");
                     break;
                 default:
                     break;

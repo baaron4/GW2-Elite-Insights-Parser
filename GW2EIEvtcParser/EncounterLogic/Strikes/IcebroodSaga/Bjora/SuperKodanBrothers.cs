@@ -77,14 +77,7 @@ internal class SuperKodanBrothers : Bjora
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int voiceAndClawCount = 1;
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.VoiceAndClaw))
-            {
-                target.OverrideName(target.Character + " " + voiceAndClawCount++);
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

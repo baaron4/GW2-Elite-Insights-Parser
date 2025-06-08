@@ -265,7 +265,6 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var countDict = new Dictionary<int, int>();
         var bigPhantasmIDs = new HashSet<TargetID>
         {
             TargetID.Jessica,
@@ -277,22 +276,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim,
         };
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsAnySpecies(bigPhantasmIDs))
-            {
-                if (countDict.TryGetValue(target.ID, out int count))
-                {
-                    target.OverrideName(target.Character + " " + (++count));
-                }
-                else
-                {
-                    count = 1;
-                    target.OverrideName(target.Character + " " + count);
-                }
-                countDict[target.ID] = count;
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies(bigPhantasmIDs)));
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

@@ -131,29 +131,7 @@ internal class Kanaxai : SilentSurf
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var aspectCounts = new Dictionary<int, int>();
-        foreach (SingleActor actor in Targets)
-        {
-            switch (actor.ID)
-            {
-                case (int)TargetID.AspectOfTorment:
-                case (int)TargetID.AspectOfLethargy:
-                case (int)TargetID.AspectOfExposure:
-                case (int)TargetID.AspectOfDeath:
-                case (int)TargetID.AspectOfFear:
-                    if (aspectCounts.TryGetValue(actor.ID, out int count))
-                    {
-                        actor.OverrideName(actor.Character + " " + count);
-                        aspectCounts[actor.ID] = count + 1;
-                    }
-                    else
-                    {
-                        actor.OverrideName(actor.Character + " 1");
-                        aspectCounts[actor.ID] = 2;
-                    }
-                    break;
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.AspectOfTorment, TargetID.AspectOfLethargy, TargetID.AspectOfExposure, TargetID.AspectOfDeath, TargetID.AspectOfFear])));
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)

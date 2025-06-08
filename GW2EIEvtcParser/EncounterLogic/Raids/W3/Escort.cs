@@ -163,22 +163,16 @@ internal class Escort : StrongholdOfTheFaithful
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int curCrimson = 1;
-        int curRadiant = 1;
-        int curWarg = 1;
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.WargBloodhound, TargetID.CrimsonMcLeod, TargetID.RadiantMcLeod])));
         foreach (SingleActor target in Targets)
         {
-            if (target.IsSpecies(TargetID.WargBloodhound))
-            {
-                target.OverrideName(target.Character + " " + curWarg++);
-            }
             if (target.IsSpecies(TargetID.CrimsonMcLeod))
             {
-                target.OverrideName("Crimson " + target.Character + " " + curCrimson++);
+                target.OverrideName("Crimson " + target.Character);
             }
             if (target.IsSpecies(TargetID.RadiantMcLeod))
             {
-                target.OverrideName("Radiant " + target.Character + " " + curRadiant++);
+                target.OverrideName("Radiant " + target.Character);
             }
         }
     }

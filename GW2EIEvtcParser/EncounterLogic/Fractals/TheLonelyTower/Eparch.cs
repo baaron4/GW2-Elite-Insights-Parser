@@ -109,25 +109,7 @@ internal class Eparch : LonelyTower
         //
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int[] miniBossCount = [1, 1, 1, 1];
-        foreach (SingleActor target in Targets)
-        {
-            switch (target.ID)
-            {
-                case (int)TargetID.KryptisRift:
-                    target.OverrideName(target.Character + " " + miniBossCount[0]++);
-                    break;
-                case (int)TargetID.IncarnationOfCruelty:
-                    target.OverrideName(target.Character + " " + miniBossCount[1]++);
-                    break;
-                case (int)TargetID.IncarnationOfJudgement:
-                    target.OverrideName(target.Character + " " + miniBossCount[2]++);
-                    break;
-                case (int)TargetID.AvatarOfSpite:
-                    target.OverrideName(target.Character + " " + miniBossCount[3]++);
-                    break;
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.KryptisRift, TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement, TargetID.AvatarOfSpite])));
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
