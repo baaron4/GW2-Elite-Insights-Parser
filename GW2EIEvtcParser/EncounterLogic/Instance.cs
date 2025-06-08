@@ -195,10 +195,6 @@ internal class Instance : FightLogic
         }
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
-    {
-        return base.GetLogicName(combatData, agentData);
-    }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return [];

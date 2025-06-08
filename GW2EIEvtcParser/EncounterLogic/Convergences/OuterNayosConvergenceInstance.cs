@@ -139,26 +139,13 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         phase2.AddTarget(target, log);
         phase3.AddTarget(target, log);
         phase4.AddTarget(target, log);
-        phase1.CanBeASubPhaseOf(fullPhase);
-        phase2.CanBeASubPhaseOf(fullPhase);
-        phase3.CanBeASubPhaseOf(fullPhase);
-        phase4.CanBeASubPhaseOf(fullPhase);
+        phase1.AddParentPhase(fullPhase);
+        phase2.AddParentPhase(fullPhase);
+        phase3.AddParentPhase(fullPhase);
+        phase4.AddParentPhase(fullPhase);
 
         phases.AddRange([phase1, phase2, phase3, phase4]);
 
         return phases;
-    }
-
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x =>
-            x.RewardType == RewardTypes.ConvergenceReward1 ||
-            x.RewardType == RewardTypes.ConvergenceReward2);
-        if (reward != null)
-        {
-            fightData.SetSuccess(true, reward.Time);
-        }
     }
 }

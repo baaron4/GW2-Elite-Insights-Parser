@@ -134,37 +134,24 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         warclaw1.AddTarget(target, log);
         warclaw2.AddTarget(target, log);
         warclaw3.AddTarget(target, log);
-        phase1.CanBeASubPhaseOf(fullPhase);
-        phase2.CanBeASubPhaseOf(fullPhase);
-        phase3.CanBeASubPhaseOf(fullPhase);
-        phase4.CanBeASubPhaseOf(fullPhase);
-        warclaw1.CanBeASubPhaseOf(fullPhase);
-        warclaw2.CanBeASubPhaseOf(fullPhase);
-        warclaw3.CanBeASubPhaseOf(fullPhase);
+        phase1.AddParentPhase(fullPhase);
+        phase2.AddParentPhase(fullPhase);
+        phase3.AddParentPhase(fullPhase);
+        phase4.AddParentPhase(fullPhase);
+        warclaw1.AddParentPhase(fullPhase);
+        warclaw2.AddParentPhase(fullPhase);
+        warclaw3.AddParentPhase(fullPhase);
 
         phases.AddRange([phase1, phase2, phase3, phase4, warclaw1, warclaw2, warclaw3]);
 
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => 
-            x.RewardType == RewardTypes.ConvergenceReward1 ||
-            x.RewardType == RewardTypes.ConvergenceReward2);
-        if (reward != null)
-        {
-            fightData.SetSuccess(true, reward.Time);
-        }
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AgentItem? ura = agentData.GetNPCsByID(TargetID.UraTheSteamshriekerConv).FirstOrDefault();
-        ura?.OverrideName("Ura, the Steamshrieker");
-
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+
+        SingleActor? ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.UraTheSteamshriekerConv));
+        ura?.OverrideName("Ura, the Steamshrieker");
     }
 }

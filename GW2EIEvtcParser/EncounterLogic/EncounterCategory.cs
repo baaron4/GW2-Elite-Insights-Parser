@@ -11,9 +11,9 @@ public class EncounterCategory
         Golem,
         Story,
         OpenWorld,
+        Convergence,
         UnknownEncounter,
         Unknown,
-        Convergence,
     };
 
     internal enum SubFightCategory

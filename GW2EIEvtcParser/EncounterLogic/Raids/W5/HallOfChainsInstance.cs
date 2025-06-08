@@ -27,7 +27,6 @@ internal class HallOfChainsInstance : HallOfChains
         return
         [
             TargetID.SoullessHorror,
-            TargetID.RiverOfSouls,
             TargetID.BrokenKing,
             TargetID.EaterOfSouls,
             TargetID.EyeOfFate,

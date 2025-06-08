@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -23,8 +19,16 @@ internal abstract class ConvergenceLogic : FightLogic
         EncounterID |= EncounterIDs.EncounterMasks.ConvergenceMask;
     }
 
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        return new[] { GetTargetID(GenericTriggerID) };
+        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x =>
+            x.RewardType == RewardTypes.ConvergenceReward1 ||
+            x.RewardType == RewardTypes.ConvergenceReward2);
+        if (reward != null)
+        {
+            fightData.SetSuccess(true, reward.Time);
+        }
     }
 }

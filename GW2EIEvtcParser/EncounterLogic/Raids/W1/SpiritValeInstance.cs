@@ -27,7 +27,7 @@ internal class SpiritValeInstance : SpiritVale
         return
         [
             TargetID.ValeGuardian,
-            TargetID.EtherealBarrier,
+            //TargetID.EtherealBarrier,
             TargetID.Gorseval,
             TargetID.Sabetha,
         ];
