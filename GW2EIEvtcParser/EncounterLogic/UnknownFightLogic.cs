@@ -35,6 +35,17 @@ internal class UnknownFightLogic : FightLogic
         return GetGenericFightOffset(fightData);
     }
 
+    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    {
+        CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
+        // Handle potentially wrongly associated logs
+        if (mapIDEvent != null && MapIDEvent.GetMapID(mapIDEvent) == GenericTriggerID && !agentData.GetNPCsByID(GenericTriggerID).Any() && !agentData.GetGadgetsByID(GenericTriggerID).Any())
+        {
+            return new Instance((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
+        }
+        return base.AdjustLogic(agentData, combatData, parserSettings);
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;
