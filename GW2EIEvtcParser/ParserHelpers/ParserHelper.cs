@@ -274,11 +274,11 @@ public static class ParserHelper
                 }
                 if (srcMatchesAgent)
                 {
-                    evt.OverrideSrcAgent(to.Agent);
+                    evt.OverrideSrcAgent(to);
                 }
                 if (dstMatchesAgent)
                 {
-                    evt.OverrideDstAgent(to.Agent);
+                    evt.OverrideDstAgent(to);
                 }
             }
         }
@@ -292,7 +292,7 @@ public static class ParserHelper
         {
             var cExtra = new CombatItem(c);
             cExtra.OverrideTime(to.FirstAware - 1); // To make sure they are put before all actual agent events
-            cExtra.OverrideDstAgent(to.Agent);
+            cExtra.OverrideDstAgent(to);
             combatData.Add(cExtra);
             copied.Add(cExtra);
             AgentItem at = agentData.GetAgent(c.SrcAgent, c.Time);
@@ -353,7 +353,7 @@ public static class ParserHelper
             {
                 var cExtra = new CombatItem(c);
                 cExtra.OverrideTime(to.FirstAware-1); // To make sure they are put before all actual agent events
-                cExtra.OverrideSrcAgent(to.Agent);
+                cExtra.OverrideSrcAgent(to);
                 combatData.Add(cExtra);
                 copied.Add(cExtra);
             }
@@ -410,11 +410,11 @@ public static class ParserHelper
             }
             if (srcMatchesAgent)
             {
-                evt.OverrideSrcAgent(to.Agent);
+                evt.OverrideSrcAgent(to);
             }
             if (dstMatchesAgent)
             {
-                evt.OverrideDstAgent(to.Agent);
+                evt.OverrideDstAgent(to);
             }
         }
         agentData.SwapMasters(redirectFrom, to);

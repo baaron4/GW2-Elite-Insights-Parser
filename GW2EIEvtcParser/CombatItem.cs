@@ -14,8 +14,8 @@ public class CombatItem
     public readonly int BuffDmg;
     public readonly uint OverstackValue;
     public uint SkillID { get; private set; }
-    public readonly ushort SrcInstid;
-    public readonly ushort DstInstid;
+    public ushort SrcInstid { get; private set; }
+    public ushort DstInstid { get; private set; }
     public readonly ushort SrcMasterInstid;
     public readonly ushort DstMasterInstid;
     public readonly byte IFFByte;
@@ -372,6 +372,18 @@ public class CombatItem
     internal void OverrideDstAgent(ulong agent)
     {
         DstAgent = agent;
+    }
+
+    internal void OverrideSrcAgent(AgentItem agent)
+    {
+        SrcAgent = agent.Agent;
+        SrcInstid = agent.InstID;
+    }
+
+    internal void OverrideDstAgent(AgentItem agent)
+    {
+        DstAgent = agent.Agent;
+        DstInstid = agent.InstID;
     }
 
     internal void OverrideValue(int value)

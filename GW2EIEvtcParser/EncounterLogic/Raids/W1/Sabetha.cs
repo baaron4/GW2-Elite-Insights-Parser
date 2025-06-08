@@ -351,17 +351,6 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Sabetha,
-            TargetID.Kernan,
-            TargetID.Karde,
-            TargetID.Knuckles,
-        ];
-    }
-
     private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
     {
         { (int)TargetID.Kernan, "Kernan" },

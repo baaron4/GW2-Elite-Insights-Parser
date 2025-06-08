@@ -60,22 +60,6 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Desmina
-        ];
-    }
-
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
-    {
-        return
-        [
-            TargetID.Desmina
-        ];
-    }
-
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);

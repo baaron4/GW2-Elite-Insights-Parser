@@ -67,11 +67,6 @@ internal class UnknownFightLogic : FightLogic
         FinalizeComputeFightTargets();
     }
 
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
-    {
-        throw new InvalidOperationException("UniqueNPCIDs not valid for Unknown");
-    }
-
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         throw new InvalidOperationException("GetTargetIDs not valid for Unknown");

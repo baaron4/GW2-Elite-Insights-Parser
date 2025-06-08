@@ -291,10 +291,6 @@ internal class Instance : FightLogic
     {
         return _trashIDs;
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return [];
-    }
     protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return [];

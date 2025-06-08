@@ -98,7 +98,7 @@ internal class Golem : FightLogic
             // redirect all attacks to the main golem
             if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsDamage(extensions))
             {
-                c.OverrideDstAgent(target.Agent);
+                c.OverrideDstAgent(target);
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
@@ -209,11 +209,6 @@ internal class Golem : FightLogic
     }
 
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
-    {
-        return new[] { GetTargetID(GenericTriggerID) };
-    }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }

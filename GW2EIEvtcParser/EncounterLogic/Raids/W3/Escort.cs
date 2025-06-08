@@ -232,15 +232,6 @@ internal class Escort : StrongholdOfTheFaithful
             return FightData.EncounterStartStatus.Normal;
         }
     }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.McLeodTheSilent,
-            TargetID.Glenna
-        ];
-    }
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

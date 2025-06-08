@@ -99,17 +99,6 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Greer,
-            TargetID.Gree,
-            TargetID.Reeg,
-            TargetID.Ereg,
-        ];
-    }
-
     protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()

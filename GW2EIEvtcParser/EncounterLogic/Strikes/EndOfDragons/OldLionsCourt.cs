@@ -169,19 +169,6 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return "Old Lion's Court";
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.PrototypeVermilion,
-            TargetID.PrototypeIndigo,
-            TargetID.PrototypeArsenite,
-            TargetID.PrototypeVermilionCM,
-            TargetID.PrototypeIndigoCM,
-            TargetID.PrototypeArseniteCM,
-        ];
-    }
-
     private SingleActor? Vermilion()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilion));

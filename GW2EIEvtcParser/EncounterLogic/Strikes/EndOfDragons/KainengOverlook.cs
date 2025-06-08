@@ -152,25 +152,6 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.MinisterLi,
-            TargetID.MinisterLiCM,
-            TargetID.TheEnforcer,
-            TargetID.TheMindblade,
-            TargetID.TheMechRider,
-            TargetID.TheRitualist,
-            TargetID.TheSniper,
-            TargetID.TheEnforcerCM,
-            TargetID.TheMindbladeCM,
-            TargetID.TheMechRiderCM,
-            TargetID.TheRitualistCM,
-            TargetID.TheSniperCM,
-        ];
-    }
-
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return

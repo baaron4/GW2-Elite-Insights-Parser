@@ -123,18 +123,6 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-           TargetID.Qadim,
-           TargetID.AncientInvokedHydra,
-           TargetID.ApocalypseBringer,
-           TargetID.WyvernMatriarch,
-           TargetID.WyvernPatriarch
-        ];
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var maxHPUpdates = combatData

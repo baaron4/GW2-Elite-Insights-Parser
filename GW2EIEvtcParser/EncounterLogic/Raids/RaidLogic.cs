@@ -54,9 +54,4 @@ internal abstract class RaidLogic : FightLogic
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return new [] { GetTargetID(GenericTriggerID) };
-    }
 }

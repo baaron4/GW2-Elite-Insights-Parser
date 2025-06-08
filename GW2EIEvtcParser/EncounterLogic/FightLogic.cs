@@ -203,20 +203,18 @@ public abstract class FightLogic
         return target.Character;
     }
 
-    protected abstract IReadOnlyList<TargetID>  GetUniqueNPCIDs();
-
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        RegroupSameInstidNPCsByID(GetUniqueNPCIDs(), agentData, combatItems, extensions);
-
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();
+        RegroupSameInstidNPCsByID(targetIDs, agentData, combatItems, extensions);
         var trashIDs = GetTrashMobsIDs();
+        RegroupSameInstidNPCsByID(targetIDs, agentData, combatItems, extensions);
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
 
-// Build targets
+        // Build targets
 #if !DEBUG2
         foreach (TargetID id in targetIDs)
         {

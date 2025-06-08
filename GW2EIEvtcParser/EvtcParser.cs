@@ -863,12 +863,12 @@ public class EvtcParser
                     if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out var nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer, _enabledExtensions))
                     {
                         AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideSrcAgent(mainPlayer.Agent);
+                        c.OverrideSrcAgent(mainPlayer);
                     }
                     if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer, _enabledExtensions))
                     {
                         AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideDstAgent(mainPlayer.Agent);
+                        c.OverrideDstAgent(mainPlayer);
                     }
                 }
                 foreach (KeyValuePair<AgentItem, AgentItem> pair in playersToMerge)

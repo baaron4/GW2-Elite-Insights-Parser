@@ -35,9 +35,4 @@ internal abstract class StrikeMissionLogic : FightLogic
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return new[] { GetTargetID(GenericTriggerID) };
-    }
 }

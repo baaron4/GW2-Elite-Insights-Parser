@@ -48,11 +48,6 @@ internal class WvWFight : FightLogic
         ]));
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return [];
-    }
-
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -293,7 +288,7 @@ internal class WvWFight : FightLogic
                         {
                             if (c.SrcMatchesAgent(src, extensions))
                             {
-                                c.OverrideSrcAgent(dummyAgent.Agent);
+                                c.OverrideSrcAgent(dummyAgent);
                                 break;
                             }
                         }
@@ -304,7 +299,7 @@ internal class WvWFight : FightLogic
                         {
                             if (c.DstMatchesAgent(dst, extensions))
                             {
-                                c.OverrideDstAgent(dummyAgent.Agent);
+                                c.OverrideDstAgent(dummyAgent);
                                 break;
                             }
                         }

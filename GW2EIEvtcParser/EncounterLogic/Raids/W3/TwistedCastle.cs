@@ -93,10 +93,6 @@ internal class TwistedCastle : StrongholdOfTheFaithful
            //ParseEnum.TrashIDS.CastleFountain
         ];
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return [];
-    }
 
     internal override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)
     {

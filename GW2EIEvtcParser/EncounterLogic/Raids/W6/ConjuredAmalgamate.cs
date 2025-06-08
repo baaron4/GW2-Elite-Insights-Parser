@@ -165,7 +165,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
             {
-                c.OverrideSrcAgent(sword.Agent);
+                c.OverrideSrcAgent(sword);
             }
         }
     }
@@ -178,16 +178,6 @@ internal class ConjuredAmalgamate : MythwrightGambit
         AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
         return res;
     }*/
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.ConjuredAmalgamate,
-            TargetID.CALeftArm,
-            TargetID.CARightArm
-        ];
-    }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {

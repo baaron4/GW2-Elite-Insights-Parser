@@ -177,14 +177,6 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Ankka,
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
