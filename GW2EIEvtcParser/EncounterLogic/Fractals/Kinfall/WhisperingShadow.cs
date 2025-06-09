@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -39,7 +40,7 @@ internal class WhisperingShadow : Kinfall
         EncounterID |= 0x000001;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return [
             TargetID.WhisperingShadow,
@@ -62,7 +63,6 @@ internal class WhisperingShadow : Kinfall
         }
 
         // breakbars queue up at 80%, 50%, 20%
-        // frozen teeth & gorefrost become more powerful below these thresholds
         var (_, breakbarActives, _, _) = shadow.GetBreakbarStatus(log);
         if (breakbarActives.Count > 0)
         {
@@ -87,8 +87,96 @@ internal class WhisperingShadow : Kinfall
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
+        // life-fire (protective circle)
+        var lifefires = player.GetBuffStatus(log, LifeFire, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        foreach (var lifefire in lifefires)
+        {
+            replay.Decorations.Add(new CircleDecoration(380, lifefire, Colors.Ice, 0.1, new AgentConnector(player.AgentItem)));
+        }
+
         // gorefrost (arrow) target
-        IEnumerable<Segment> gorefrost = player.GetBuffStatus(log, GorefrostTarget, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.Decorations.AddOverheadIcons(gorefrost, player, ParserIcons.TargetOverhead);
+        var gorefrosts = player.GetBuffStatus(log, GorefrostTarget, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        replay.Decorations.AddOverheadIcons(gorefrosts, player, ParserIcons.TargetOverhead);
+
+        // inevitable darkness (tether) target
+        var inevitableDarkness = player.GetBuffStatus(log, InevitableDarknessPlayer, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var inevitableDarknessEvents = GetFilteredList(log.CombatData, InevitableDarknessPlayer, player, true, false);
+        replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
+        replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // vitreous spike
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpike, out var spikes))
+        {
+            foreach (var effect in spikes)
+            {
+                var lifespan = effect.ComputeLifespan(log, 1500);
+                var decoration = new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                EnvironmentDecorations.AddWithGrowing(decoration, lifespan.end);
+            }
+        }
+
+        // frozen teeth (fissures)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFrozenTeethArrows, out var fissureArrows))
+        {
+            foreach (var effect in fissureArrows)
+            {
+                // TODO: support arrow decorations
+                const uint length = 1000;
+                var lifespan = effect.ComputeLifespan(log, 10000);
+                var position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f, 0.0f), true);
+                var rotation = new AngleConnector(effect.Rotation.Z);
+                var decoration = new RectangleDecoration(100, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                EnvironmentDecorations.Add(decoration);
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFrozenTeethFissure, out var fissures))
+        {
+            foreach (var effect in fissures)
+            {
+                var lifespan = effect.ComputeLifespan(log, 6333);
+                var position = new PositionConnector(effect.Position);
+                var rotation = new AngleConnector(effect.Rotation.Z);
+                var decoration = new RectangleDecoration(100, 360, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation);
+                EnvironmentDecorations.Add(decoration);
+            }
+        }
+
+        // cryoflash (shockwave)
+        // we use the shared shockwave effect and check effect height to distinguish
+        // high is at z -3760, low at z -3460
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowCryoflashShockwave, out var cryoflashs))
+        {
+            foreach (var effect in cryoflashs)
+            {
+                var color = Colors.LightBlue;
+                var height = effect.Position.Z;
+                if (height < -3600.0f)
+                {
+                    color = Colors.Ice;
+                }
+                var lifespan = effect.ComputeLifespan(log, 3033);
+                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, color, 0.5, 5000);
+            }
+        }
+
+        // gorefrost (arrow)
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowGorefrost, out var gorefrosts))
+        {
+            foreach (var effect in gorefrosts)
+            {
+                // TODO: support arrow decorations
+                const uint length = 1000;
+                var lifespan = effect.ComputeLifespan(log, 1500);
+                var position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f, 0.0f), true); ;
+                var rotation = new AngleConnector(effect.Rotation.Z);
+                var decoration = new RectangleDecoration(40, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                EnvironmentDecorations.Add(decoration);
+            }
+        }
     }
 }
