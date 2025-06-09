@@ -116,6 +116,7 @@ public static class BuffImages
     public const string GuildHallWvWMode = "https://wiki.guildwars2.com/images/7/70/3240359.png";
     public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
     public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
+    public const string NoDownedState = "https://wiki.guildwars2.com/images/4/48/No_Downed_State.png";
     #endregion Commons
     #region Fight Specific
     // Generic
@@ -403,6 +404,11 @@ public static class BuffImages
     public const string OverchargedGateGolem = "https://wiki.guildwars2.com/images/2/23/Overcharged_%28Gate_Golem%29.png";
     public const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
     public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
+    // Convergence
+    public const string WizardsBlessing = "https://wiki.guildwars2.com/images/d/d8/Wizard%27s_Blessing_%28effect%29.png";
+    public const string KryptisEssence = "https://wiki.guildwars2.com/images/3/37/Kryptis_Essence.png";
+    public const string WeighedDownByDebirs = "https://wiki.guildwars2.com/images/c/c5/Weighed_Down_by_Debris.png";
+    public const string ForgedBinding = "https://wiki.guildwars2.com/images/a/a4/Forged_Binding.png";
     // Open World
     public const string JadeTechOffensive = "https://wiki.guildwars2.com/images/d/d2/Jade_Tech_Offensive_Overcharge.png";
     public const string JadeTechDefensive = "https://wiki.guildwars2.com/images/4/4e/Jade_Tech_Defensive_Overcharge.png";

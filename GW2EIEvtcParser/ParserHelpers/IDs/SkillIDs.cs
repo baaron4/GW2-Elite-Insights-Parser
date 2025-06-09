@@ -2886,6 +2886,7 @@ public static class SkillIDs
     public const long HolographicSuperApple = 50307;
     public const long HolographicSuperCheese = 50320;
     public const long HolographicSuperCake = 50335;
+    public const long NoDownedState = 50371;
     public const long StormSpiritBuff = 50381;
     public const long WaterSpiritBuff = 50386;
     public const long MedKitBonus = 50393;
@@ -4403,6 +4404,12 @@ public static class SkillIDs
     public const long EletroctuteSkyChak = 71501;
     public const long UnleashEnergySkyChak = 71510;
     public const long SpitGoopSkyChak = 71532;
+    public const long KryptisEssence = 71559;
+    public const long WizardsBlessingSotO = 71587;
+    public const long WispFormSotO = 71608;
+    public const long WatchfulSpirit = 71632;
+    public const long HealingRainConvergence = 71645;
+    public const long EtherealHealing = 71659;
     public const long NouryssHungerStacksBuff = 71711;
     public const long NouryssHungerStartGainingStacksBuff = 71723;
     public const long DimensionalApertureSkill = 71792;
@@ -4682,6 +4689,7 @@ public static class SkillIDs
     public const long GalvanicSensitivity = 74659;
     public const long FluxlanceFusillade = 74660;
     public const long Propel = 74669;
+    public const long CalibratedEssence = 74674;
     public const long RainOfSpores2 = 74679;
     public const long StoneSlamConeKnockback = 74683;
     public const long FulgentAuraTier1 = 74686;
@@ -4704,6 +4712,8 @@ public static class SkillIDs
     public const long FluxlanceSalvo3 = 74742;
     public const long PressureBlastBubbleBuff = 74754;
     public const long DecimaConduitWallWarningBuff = 74761;
+    public const long WispFormJW = 74763;
+    public const long WizardsBlessingJW = 74767;
     public const long CageOfDecay = 74773;
     public const long FluxlanceTargetBuff1 = 74774;
     public const long Ejects = 74775;
@@ -4740,15 +4750,17 @@ public static class SkillIDs
     public const long DecimaBeamTargeting = 74922;
     public const long SulfuricFroth = 74931;
     public const long SulfuricAcid = 74933;
-    public const long FluxlanceSalvo4 = 74973;
+    public const long RopeTension = 74955;
     public const long Return = 74961;
     public const long DecimaConduitWallBuff = 74962;
     public const long Slam = 74965;
     public const long PressureRelease = 74966;
+    public const long FluxlanceSalvo4 = 74973;
     public const long EruptionOfRot = 74976;
     public const long ThrummingPresenceBuff = 74982;
     public const long RelicOfTheBeehive = 74988;
     public const long FullSteam = 74994;
+    public const long FrozenSoil = 74999;
     public const long DecimaSpawnsConduitsP2 = 75015;
     public const long EnlightenedConduitGadgetChargeTier3Buff = 75017;
     public const long DeployCatapult_InfiniteCatapult = 75021;
@@ -4787,6 +4799,7 @@ public static class SkillIDs
     public const long EmpoweringBlast2 = 75154;
     public const long Fluxlance = 75155;
     public const long DeployFlameRam_InfiniteFlameRam = 75158;
+    public const long AttachedSupplies = 75162;
     public const long ChargeDecima = 75175;
     public const long EruptionOfRot3 = 75182;
     public const long RakeTheRot2 = 75195;

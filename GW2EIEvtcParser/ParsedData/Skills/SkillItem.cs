@@ -1108,6 +1108,14 @@ public class SkillItem
             // - Ura
             { ThrummingPresenceDamage, BuffImages.ConjuredBarrier },
             { ThrummingPresenceBuff, BuffImages.ConjuredBarrier },
+            // Convergences
+            { WizardsBlessingSotO, BuffImages.WizardsBlessing },
+            { WizardsBlessingJW, BuffImages.WizardsBlessing },
+            { KryptisEssence, BuffImages.KryptisEssence },
+            { CalibratedEssence, BuffImages.KryptisEssence },
+        { EtherealHealing, SkillImages.EtherealHealing },
+        { HealingRainConvergence, SkillImages.PacifiedMagicalStorm },
+        { WatchfulSpirit, SkillImages.WatchfulSpirit },
         #endregion  EncounterIcons
         #region Misc
         { WhirlingAssault, SkillImages.WhirlingAssault },

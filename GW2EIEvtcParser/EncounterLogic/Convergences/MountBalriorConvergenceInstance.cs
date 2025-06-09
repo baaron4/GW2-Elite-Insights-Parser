@@ -105,7 +105,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
                 phaseName = "Full Ura";
                 break;
         }
-        var fullPhase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
+        var fullPhase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
 
@@ -119,13 +119,13 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         Segment final = hpUpdates.FirstOrDefault(x => x.Value < 25.0 && x.Start > end25.End);
 
         // 100-75, Warclaw, 75-50, Warclaw, 50-25, Warclaw, 25-0
-        PhaseData phase1 = new(start.Start, Math.Min(end75.Start, log.FightData.FightEnd), "Phase 1");
-        PhaseData phase2 = new(start75.Start, Math.Min(end50.Start, log.FightData.FightEnd), "Phase 2");
-        PhaseData phase3 = new(start50.Start, Math.Min(end25.Start, log.FightData.FightEnd), "Phase 3");
-        PhaseData phase4 = new(final.Start, Math.Min(target.AgentItem.LastAware, log.FightData.FightEnd), "Phase 4");
-        PhaseData warclaw1 = new(end75.Start, Math.Min(start75.Start, log.FightData.FightEnd), "Warclaw 1");
-        PhaseData warclaw2 = new(end50.Start, Math.Min(start50.Start, log.FightData.FightEnd), "Warclaw 2");
-        PhaseData warclaw3 = new(end25.Start, Math.Min(final.Start, log.FightData.FightEnd), "Warclaw 3");
+        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.FightData.FightEnd), "Phase 1").WithParentPhase(fullPhase);
+        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.FightData.FightEnd), "Phase 2").WithParentPhase(fullPhase);
+        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.FightData.FightEnd), "Phase 3").WithParentPhase(fullPhase);
+        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.FightData.FightEnd), "Phase 4").WithParentPhase(fullPhase);
+        var warclaw1 = new PhaseData(end75.Start, Math.Min(start75.Start, log.FightData.FightEnd), "Warclaw 1").WithParentPhase(fullPhase);
+        var warclaw2 = new PhaseData(end50.Start, Math.Min(start50.Start, log.FightData.FightEnd), "Warclaw 2").WithParentPhase(fullPhase);
+        var warclaw3 = new PhaseData(end25.Start, Math.Min(final.Start, log.FightData.FightEnd), "Warclaw 3").WithParentPhase(fullPhase);
 
         phase1.AddTarget(target, log);
         phase2.AddTarget(target, log);
@@ -134,13 +134,6 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         warclaw1.AddTarget(target, log);
         warclaw2.AddTarget(target, log);
         warclaw3.AddTarget(target, log);
-        phase1.AddParentPhase(fullPhase);
-        phase2.AddParentPhase(fullPhase);
-        phase3.AddParentPhase(fullPhase);
-        phase4.AddParentPhase(fullPhase);
-        warclaw1.AddParentPhase(fullPhase);
-        warclaw2.AddParentPhase(fullPhase);
-        warclaw3.AddParentPhase(fullPhase);
 
         phases.AddRange([phase1, phase2, phase3, phase4, warclaw1, warclaw2, warclaw3]);
 
