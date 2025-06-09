@@ -11,13 +11,13 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-internal class Instance : UnknownFightLogic
+internal class UnknownInstanceLogic : UnknownFightLogic
 {
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
     private readonly List<TargetID> _targetIDs = [];
     private readonly List<TargetID> _trashIDs = [];
-    public Instance(int id) : base(id)
+    public UnknownInstanceLogic(int id) : base(id)
     {
         Extension = "instance";
         SkillMode = SkillModeEnum.PvE;

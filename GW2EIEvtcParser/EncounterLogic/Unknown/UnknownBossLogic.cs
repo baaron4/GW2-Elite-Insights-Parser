@@ -33,7 +33,7 @@ internal class UnknownBossLogic : UnknownFightLogic
         // Handle potentially wrongly associated logs
         if (mapIDEvent != null && MapIDEvent.GetMapID(mapIDEvent) == GenericTriggerID && !agentData.GetNPCsByID(GenericTriggerID).Any() && !agentData.GetGadgetsByID(GenericTriggerID).Any())
         {
-            return new Instance((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
+            return new UnknownInstanceLogic((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
         }
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
