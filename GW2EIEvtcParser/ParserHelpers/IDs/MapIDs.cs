@@ -7,6 +7,7 @@ public static class MapIDs
     public const int GreenAlpineBorderland = 95;
     public const int BlueAlpineBorderland = 96;
     public const int RedDesertBorderland = 1099;
+    public const int ObsidianSanctum = 899;
     public const int EdgeOfTheMists = 968;
     public const int ArmisticeBastion = 1315;
     #endregion
@@ -78,6 +79,28 @@ public static class MapIDs
     #region Story
     public const int HeartsAndMinds = 1040; // Mordremoth
     public const int Empty = 1434; // Ankka
+    #endregion
+    #region Guild Hall
+    public const int GildedHollow1 = 1068;
+    public const int GildedHollow2 = 1101;
+    public const int GildedHollow3 = 1107;
+    public const int GildedHollow4 = 1108;
+    public const int GildedHollow5 = 1121;
+    public const int LostPrecipice1 = 1069;
+    public const int LostPrecipice2 = 1071;
+    public const int LostPrecipice3 = 1076;
+    public const int LostPrecipice4 = 1104;
+    public const int LostPrecipice5 = 1124;
+    public const int WindsweptHaven1 = 1214;
+    public const int WindsweptHaven2 = 1215;
+    public const int WindsweptHaven3 = 1224;
+    public const int WindsweptHaven4 = 1232;
+    public const int WindsweptHaven5 = 1243;
+    public const int IsleOfReflection1 = 1419;
+    public const int IsleOfReflection2 = 1426;
+    public const int IsleOfReflection3 = 1435;
+    public const int IsleOfReflection4 = 1444;
+    public const int IsleOfReflection5 = 1462;
     #endregion
     #region Others
     public const int ForgingSteelPublic = 1362;

@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.MapIDs;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -116,15 +117,11 @@ internal class WvWFight : FightLogic
         }
         return mapID.MapID switch
         {
-            // EB
-            38 => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250)),
-            // Green Alpine
-            95 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
-            // Blue Alpine
-            96 => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
-            // Red Desert
-            1099 => new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)),
-            968 => new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)),
+            EternalBattleground => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250)),
+            GreenAlpineBorderland => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
+            BlueAlpineBorderland => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
+            RedDesertBorderland => new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)),
+            EdgeOfTheMists => new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)),
             _ => base.GetCombatMapInternal(log),
         };
     }
@@ -137,45 +134,45 @@ internal class WvWFight : FightLogic
         }
         switch (mapID.MapID)
         {
-            case 38:
+            case EternalBattleground:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.EternalBattlegrounds;
                 EncounterID |= EncounterIDs.WvWMasks.EternalBattlegroundsMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Eternal Battlegrounds";
-            case 95:
+            case GreenAlpineBorderland:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.GreenAlpineBorderlands;
                 EncounterID |= EncounterIDs.WvWMasks.GreenAlpineBorderlandsMask;
                 Icon = InstanceIconGreenBorderlands;
                 return _defaultName + " - Green Alpine Borderlands";
-            case 96:
+            case BlueAlpineBorderland:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.BlueAlpineBorderlands;
                 EncounterID |= EncounterIDs.WvWMasks.BlueAlpineBorderlandsMask;
                 Icon = InstanceIconBlueBorderlands;
                 return _defaultName + " - Blue Alpine Borderlands";
-            case 1099:
+            case RedDesertBorderland:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.RedDesertBorderlands;
                 EncounterID |= EncounterIDs.WvWMasks.RedDesertBorderlandsMask;
                 Icon = InstanceIconRedBorderlands;
                 return _defaultName + " - Red Desert Borderlands";
-            case 899:
+            case ObsidianSanctum:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.ObsidianSanctum;
                 EncounterID |= EncounterIDs.WvWMasks.ObsidianSanctumMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Obsidian Sanctum";
-            case 968:
+            case EdgeOfTheMists:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
                 EncounterID |= EncounterIDs.WvWMasks.EdgeOfTheMistsMask;
                 return _defaultName + " - Edge of the Mists";
-            case 1315:
+            case ArmisticeBastion:
                 EncounterCategoryInformation.SubCategory = SubFightCategory.ArmisticeBastion;
                 EncounterID |= EncounterIDs.WvWMasks.ArmisticeBastionMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Armistice Bastion";
-            case 1068:
-            case 1101:
-            case 1107:
-            case 1108:
-            case 1121:
+            case GildedHollow1:
+            case GildedHollow2:
+            case GildedHollow3:
+            case GildedHollow4:
+            case GildedHollow5:
                 _isGuildHall = true;
                 EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                 EncounterID |= EncounterIDs.WvWMasks.GildedHollowMask;
@@ -186,11 +183,11 @@ internal class WvWFight : FightLogic
                 }
                 //Icon = InstanceIconEternalBattlegrounds;
                 return (_detailed ? "Detailed " : "") + "Gilded Hollow";
-            case 1069:
-            case 1071:
-            case 1076:
-            case 1104:
-            case 1124:
+            case LostPrecipice1:
+            case LostPrecipice2:
+            case LostPrecipice3:
+            case LostPrecipice4:
+            case LostPrecipice5:
                 _isGuildHall = true;
                 EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                 EncounterID |= EncounterIDs.WvWMasks.LostPrecipiceMask;
@@ -201,11 +198,11 @@ internal class WvWFight : FightLogic
                 }
                 //Icon = InstanceIconEternalBattlegrounds;
                 return (_detailed ? "Detailed " : "") + "Lost Precipice";
-            case 1214:
-            case 1215:
-            case 1224:
-            case 1232:
-            case 1243:
+            case WindsweptHaven1:
+            case WindsweptHaven2:
+            case WindsweptHaven3:
+            case WindsweptHaven4:
+            case WindsweptHaven5:
                 _isGuildHall = true;
                 EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                 EncounterID |= EncounterIDs.WvWMasks.WindsweptHavenMask;
@@ -216,11 +213,11 @@ internal class WvWFight : FightLogic
                 }
                 //Icon = InstanceIconEternalBattlegrounds;
                 return (_detailed ? "Detailed " : "") + "Windswept Haven";
-            case 1419:
-            case 1426:
-            case 1435:
-            case 1444:
-            case 1462:
+            case IsleOfReflection1:
+            case IsleOfReflection2:
+            case IsleOfReflection3:
+            case IsleOfReflection4:
+            case IsleOfReflection5:
                 _isGuildHall = true;
                 EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
                 EncounterID |= EncounterIDs.WvWMasks.IsleOfReflectionMask;
