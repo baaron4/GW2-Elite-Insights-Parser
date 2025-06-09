@@ -7,6 +7,6 @@ internal abstract class CaptainMaiTrinBoss : FractalLogic
     public CaptainMaiTrinBoss(int triggerID) : base(triggerID)
     {
         EncounterCategoryInformation.SubCategory = SubFightCategory.CaptainMaiTrinBossFractal;
-        EncounterID |= 0;
+        EncounterID = 0;
     }
 }

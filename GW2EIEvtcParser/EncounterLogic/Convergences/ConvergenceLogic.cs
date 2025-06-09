@@ -9,7 +9,7 @@ internal abstract class ConvergenceLogic : FightLogic
 {
     protected ConvergenceLogic(int triggerID) : base(triggerID)
     {
-        ParseMode = ParseModeEnum.FullInstance;
+        ParseMode = ParseModeEnum.Instanced50;
         SkillMode = SkillModeEnum.PvE;
         MechanicList.Add(new MechanicGroup(
         [

@@ -15,7 +15,6 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
 {
     public OuterNayosConvergenceInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
         EncounterCategoryInformation.SubCategory = SubFightCategory.OuterNayosConvergence;
         EncounterID |= EncounterIDs.ConvergenceMasks.OuterNayosMask;
         Icon = InstanceIconOuterNayos;

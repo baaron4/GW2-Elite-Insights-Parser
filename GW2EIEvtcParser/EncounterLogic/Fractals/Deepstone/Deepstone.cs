@@ -7,6 +7,6 @@ internal abstract class Deepstone : FractalLogic
     public Deepstone(int triggerID) : base(triggerID)
     {
         EncounterCategoryInformation.SubCategory = SubFightCategory.Deepstone;
-        EncounterID |= 0;
+        EncounterID = 0;
     }
 }

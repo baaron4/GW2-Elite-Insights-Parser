@@ -16,7 +16,6 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
 {
     public MountBalriorConvergenceInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
         EncounterCategoryInformation.SubCategory = SubFightCategory.MountBalriorConvergence;
         EncounterID |= EncounterIDs.ConvergenceMasks.MountBalriorMask;
         Icon = InstanceIconMountBalrior;
