@@ -20,6 +20,29 @@ public static class MapIDs
     public const int TheKeyOfAhdashimRaid = 1323;
     public const int MountBalriorRaid = 1564;
     #endregion
+    #region Strikes
+    public const int SecretLairOfTheSnowmenPrivateStrikeMission = 1306;
+    public const int SecretLairOfTheSnowmenPublicStrikeMission = 1352;
+    public const int ShiverpeaksPassPrivateStrikeMission = 1332;
+    public const int ShiverpeaksPassPublicStrikeMission = 1331;
+    public const int VoiceAndClawPrivateStrikeMission = 1346;
+    public const int VoiceAndClawPublicStrikeMission = 1340;
+    public const int FraenirOfJormagPrivateStrikeMission = 1341;
+    public const int FraenirOfJormagPublicStrikeMission = 1344;
+    public const int BoneskinnerPrivateStrikeMission = 1339;
+    public const int BoneskinnerPublicStrikeMission = 1339;
+    public const int WhisperOfJormagPrivateStrikeMission = 1359;
+    public const int WhisperOfJormagPublicStrikeMission = 1357;
+    public const int ColdWarPrivateStrikeMission = 1374;
+    public const int ColdWarPublicStrikeMission = 1376;
+    public const int AetherbladeHideoutStrikeMission = 1432;
+    public const int HarvestTempleStrikeMission = 1437;
+    public const int XunlaiJadeJunkyardStrikeMission = 1450;
+    public const int KainengOverlookStrikeMission = 1451;
+    public const int OldLionsCourtStrikeMission = 1485;
+    public const int CosmicObservatoryStrikeMission = 1515;
+    public const int TempleOfFebeStrikeMission = 1520;
+    #endregion
     #region Fractals
     public const int AetherbladeFractal = 956;
     public const int AquaticRuinsFractal = 951;
@@ -51,5 +74,15 @@ public static class MapIDs
     public const int OuterNayosPrivateConvergence = 1527;
     public const int MountBalriorPublicConvergence = 1571;
     public const int MountBalriorPrivateConvergence = 1562;
+    #endregion
+    #region Others
+    public const int ForgingSteelPublic = 1362;
+    public const int ForgingSteelPrivate = 1368;
+    public const int DragonstormPrivate = 1409;
+    public const int DragonstormPublic = 1411;
+    public const int TheTwisterMarionettePublic = 1413;
+    public const int TheTwisterMarionettePrivate = 1414;
+    public const int TheBattleForLionsArchPrivate = 1478;
+    public const int TheBattleForLionsArchPublic = 1482;
     #endregion
 }
