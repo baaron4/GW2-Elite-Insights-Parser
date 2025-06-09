@@ -88,7 +88,7 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

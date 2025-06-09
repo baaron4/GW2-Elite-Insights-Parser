@@ -258,7 +258,7 @@ internal class Dhuum : HallOfChains
         return phases;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -269,7 +269,7 @@ internal class Dhuum : HallOfChains
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -327,12 +327,7 @@ internal class Dhuum : HallOfChains
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Adding counting number to the Enforcers
-        int i = 1;
-        foreach (var enforcer in Targets.Where(x => x.IsSpecies(TargetID.Enforcer)))
-        {
-            enforcer.OverrideName(enforcer.Character + " " + i);
-            i++;
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.Enforcer)));
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

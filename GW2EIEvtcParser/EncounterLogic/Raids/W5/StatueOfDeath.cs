@@ -45,7 +45,7 @@ internal class StatueOfDeath : HallOfChains
             new DamageCastFinder(HungeringAura , HungeringAura ),
         ];
     }
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

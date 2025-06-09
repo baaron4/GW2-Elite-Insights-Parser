@@ -150,7 +150,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return res;
     }*/
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -160,11 +160,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = base.GetTrashMobsIDs();
-        trashIDs.ReserveAdditional(9);
-
+        var trashIDs = new List<TargetID>(9 + base.GetTrashMobsIDs().Count);
+        trashIDs.AddRange(base.GetTrashMobsIDs());
         trashIDs.Add(TargetID.FearDemon);
         trashIDs.Add(TargetID.GuiltDemon);
         trashIDs.Add(TargetID.AiDoubtDemon);
@@ -179,7 +178,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return trashIDs;
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -228,14 +227,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         eleAi?.OverrideName("Elemental Ai");
         if (_hasDarkMode)
         {
-            int sorrowCount = 0;
-            foreach (SingleActor target in Targets)
-            {
-                if (target.IsSpecies(TargetID.CCSorrowDemon))
-                {
-                    target.OverrideName(target.Character + " " + (++sorrowCount));
-                }
-            }
+            NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.CCSorrowDemon)));
         }
     }
 

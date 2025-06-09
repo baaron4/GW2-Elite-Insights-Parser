@@ -22,7 +22,7 @@ internal abstract class StoryInstance : FightLogic
     {
         return GetGenericFightOffset(fightData);
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }

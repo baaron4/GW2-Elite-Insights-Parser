@@ -218,7 +218,7 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -254,9 +254,10 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        var trashIDs = base.GetTrashMobsIDs();
+        var trashIDs = new List<TargetID>(1 + base.GetTrashMobsIDs().Count);
+        trashIDs.AddRange(base.GetTrashMobsIDs());
         trashIDs.Add(TargetID.SolarBloom);
         return trashIDs;
     }
