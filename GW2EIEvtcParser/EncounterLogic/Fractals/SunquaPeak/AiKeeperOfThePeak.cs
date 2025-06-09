@@ -227,14 +227,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         eleAi?.OverrideName("Elemental Ai");
         if (_hasDarkMode)
         {
-            int sorrowCount = 0;
-            foreach (SingleActor target in Targets)
-            {
-                if (target.IsSpecies(TargetID.CCSorrowDemon))
-                {
-                    target.OverrideName(target.Character + " " + (++sorrowCount));
-                }
-            }
+            NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.CCSorrowDemon)));
         }
     }
 

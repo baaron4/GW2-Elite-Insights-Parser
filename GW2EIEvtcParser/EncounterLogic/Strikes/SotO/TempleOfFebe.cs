@@ -340,7 +340,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] curEmbodiments = [1, 1, 1, 1, 1, 1];
-        int curShadow = 1;
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.MaliciousShadow, TargetID.MaliciousShadowCM])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
@@ -392,10 +392,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     {
                         target.OverrideName("Empowered " + target.Character);
                     }
-                    break;
-                case (int)TargetID.MaliciousShadow:
-                case (int)TargetID.MaliciousShadowCM:
-                    target.OverrideName(target.Character + " " + (curShadow++));
                     break;
                 case (int)TargetID.PermanentEmbodimentOfDespair:
                 case (int)TargetID.PermanentEmbodimentOfEnvy:

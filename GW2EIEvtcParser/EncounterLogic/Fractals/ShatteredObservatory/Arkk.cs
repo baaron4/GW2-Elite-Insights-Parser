@@ -119,11 +119,8 @@ internal class Arkk : ShatteredObservatory
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Add number to the spawned anomalies
-        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk)).ToList();
-        for (int i = 0; i < anomalies.Count; i++)
-        {
-            anomalies[i].OverrideName(anomalies[i].Character + " " + (i + 1));
-        }
+        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
+        NumericallyRenameSpecies(anomalies);
     }
 
     private void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)

@@ -132,24 +132,7 @@ internal class ValeGuardian : SpiritVale
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int curRed = 1;
-        int curBlue = 1;
-        int curGreen = 1;
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.RedGuardian))
-            {
-                target.OverrideName(target.Character + " " + curRed++);
-            }
-            if (target.IsSpecies(TargetID.BlueGuardian))
-            {
-                target.OverrideName(target.Character + " " + curBlue++);
-            }
-            if (target.IsSpecies(TargetID.GreenGuardian))
-            {
-                target.OverrideName(target.Character + " " + curGreen++);
-            }
-        }
+        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])));
     }
 
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()

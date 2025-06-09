@@ -156,19 +156,7 @@ internal class Samarog : BastionOfThePenitent
         }
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int curGuldhem = 1;
-        int curRigom = 1;
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.Guldhem))
-            {
-                target.OverrideName(target.Character + " " + curGuldhem++);
-            }
-            if (target.IsSpecies(TargetID.Rigom))
-            {
-                target.OverrideName(target.Character + " " + curRigom++);
-            }
-        }
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])));
     }
 
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
