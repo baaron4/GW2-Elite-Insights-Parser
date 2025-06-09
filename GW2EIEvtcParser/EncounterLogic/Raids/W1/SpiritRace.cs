@@ -34,7 +34,7 @@ internal class SpiritRace : SpiritVale
                         (-15360, -36864, 15360, 39936),
                         (3456, 11012, 4736, 14212)*/);
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -43,7 +43,7 @@ internal class SpiritRace : SpiritVale
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -61,7 +61,7 @@ internal class SpiritRace : SpiritVale
         return (int)TargetID.WallOfGhosts;
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return [];
     }

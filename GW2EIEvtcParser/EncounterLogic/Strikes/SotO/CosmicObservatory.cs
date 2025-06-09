@@ -454,22 +454,19 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int[] curTormenteds = [1, 1, 1, 1];
+        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.TheTormented, TargetID.VeteranTheTormented, TargetID.EliteTheTormented, TargetID.ChampionTheTormented])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
-                case (int)TargetID.TheTormented:
-                    target.OverrideName(target.Character + " " + curTormenteds[0]++);
-                    break;
                 case (int)TargetID.VeteranTheTormented:
-                    target.OverrideName("Veteran " + target.Character + " " + curTormenteds[1]++);
+                    target.OverrideName("Veteran " + target.Character);
                     break;
                 case (int)TargetID.EliteTheTormented:
-                    target.OverrideName("Elite " + target.Character + " " + curTormenteds[2]++);
+                    target.OverrideName("Elite " + target.Character);
                     break;
                 case (int)TargetID.ChampionTheTormented:
-                    target.OverrideName("Champion " + target.Character + " " + curTormenteds[3]++);
+                    target.OverrideName("Champion " + target.Character);
                     break;
                 default:
                     break;
@@ -484,7 +481,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -504,7 +501,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

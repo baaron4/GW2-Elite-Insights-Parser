@@ -56,7 +56,7 @@ internal class Sabir : TheKeyOfAhdashim
         EncounterID |= 0x000002;
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

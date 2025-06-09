@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupSameInstidNPCsByID(ReadOnlySpan<TargetID> ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RegroupSameInstidNPCsByID(IReadOnlyList<TargetID>  ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var toRemove = new List<AgentItem>(10);
         var toAdd = new List<AgentItem>(3);
@@ -185,6 +185,21 @@ internal static class EncounterLogicUtils
             return false;
         }
         return true;
+    }
+
+    internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets)
+    {
+        var speciesCount = new Dictionary<long, int>();
+        foreach (SingleActor target in targets)
+        {
+            if (!speciesCount.TryGetValue(target.ID, out var species))
+            {
+                species = 1;
+                speciesCount[target.ID] = species;
+            }
+            target.OverrideName(target.Character + " " + species++);
+            speciesCount[target.ID] = species;
+        }
     }
 
 

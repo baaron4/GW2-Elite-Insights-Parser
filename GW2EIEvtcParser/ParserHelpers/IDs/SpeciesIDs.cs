@@ -536,7 +536,7 @@ public static class SpeciesIDs
         TheVoice = 20497,
         // - MAMA
         MAMA = 17021,
-        Arkk2 = 16902,
+        //Arkk2 = 16902,
         GreenKnight = 16906,
         RedKnight = 16974,
         BlueKnight = 16899,

@@ -165,8 +165,7 @@ public abstract class FightLogic
         return GenericTriggerID;
     }
 
-    /// <remarks>Do _NOT_ modify Instance._targetIDs while iterating the result of this function. Appending is allowed.</remarks>
-    protected abstract ReadOnlySpan<TargetID> GetTargetsIDs();
+    protected abstract IReadOnlyList<TargetID> GetTargetsIDs();
 
     protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
@@ -176,33 +175,20 @@ public abstract class FightLogic
     protected virtual Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
-        var res = new Dictionary<TargetID, int>(targetsIds.Length);
-        for (int i = 0; i < targetsIds.Length; i++)
+        var res = new Dictionary<TargetID, int>(targetsIds.Count);
+        for (int i = 0; i < targetsIds.Count; i++)
         {
             res.Add(targetsIds[i], i);
         }
         return res;
     }
 
-    //TODO(Rennorb) @cleanup: use readonlyspan? 
-    //NOTE(Rennorb): I purposefully did not change this to a span or array for now, because there are quite a few overrides that take the shape of
-    /*
-    protected virtual List<TargetID> GetTrashMobsIDs()
-    {
-        var trash = new List<>() {A, B};
-        trash.AddRange(base.GetTrashMobsIDs);
-        return trash;
-    }
-    */
-    // changing the return type to a span is still possible, but initialization requires them to be rewritten with manual array indices and sizes.
-    // This is likely to cause issues in the future, because someone _will_ miss updating the indices correctly is something gets added.
-    // On the other hand i don't know how often the lists even change, i would imagine this to not happen very frequently - so it still might be a thing we could do.
-    protected virtual List<TargetID> GetTrashMobsIDs()
+    protected virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [ ];
     }
 
-    protected virtual ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
+    protected virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return [ ];
     }
@@ -217,7 +203,7 @@ public abstract class FightLogic
         return target.Character;
     }
 
-    protected abstract ReadOnlySpan<TargetID> GetUniqueNPCIDs();
+    protected abstract IReadOnlyList<TargetID>  GetUniqueNPCIDs();
 
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
@@ -225,7 +211,7 @@ public abstract class FightLogic
 
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
-        var targetIDs = GetTargetsIDs().ToArray();
+        var targetIDs = GetTargetsIDs();
         var trashIDs = GetTrashMobsIDs();
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
@@ -311,8 +297,7 @@ public abstract class FightLogic
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
         NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
         TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
-        _hostiles.AddRange(_targets);
-        _hostiles.AddRange(_trashMobs);
+        _hostiles = [.. _targets, .. _trashMobs];
     }
 
     internal virtual List<InstantCastFinder> GetInstantCastFinders()
@@ -325,7 +310,7 @@ public abstract class FightLogic
         EncounterID = EncounterIDs.EncounterMasks.Unsupported;
     }
 
-    internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+    internal virtual List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
         if (!requirePhases)
         {

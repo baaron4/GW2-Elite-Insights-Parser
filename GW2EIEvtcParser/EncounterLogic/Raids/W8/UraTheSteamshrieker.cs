@@ -102,7 +102,7 @@ internal class UraTheSteamshrieker : MountBalrior
     }
 
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -123,7 +123,7 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return 
         [
@@ -259,20 +259,19 @@ internal class UraTheSteamshrieker : MountBalrior
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        int[] cur = [1, 1, 1];
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.EliteFumaroller, TargetID.ChampionFumaroller, TargetID.LegendaryVentshot])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)TargetID.EliteFumaroller:
-                    target.OverrideName("Elite " + target.Character + " " + cur[0]++);
+                    target.OverrideName("Elite " + target.Character);
                     break;
                 case (int)TargetID.ChampionFumaroller:
-                    target.OverrideName("Champion " + target.Character + " " + cur[1]++);
+                    target.OverrideName("Champion " + target.Character);
                     break;
                 case (int)TargetID.LegendaryVentshot:
-                    target.OverrideName("Legendary " + target.Character + " " + cur[2]++);
+                    target.OverrideName("Legendary " + target.Character);
                     break;
                 default:
                     break;

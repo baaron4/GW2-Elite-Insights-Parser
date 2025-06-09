@@ -131,7 +131,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -140,7 +140,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -149,7 +149,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

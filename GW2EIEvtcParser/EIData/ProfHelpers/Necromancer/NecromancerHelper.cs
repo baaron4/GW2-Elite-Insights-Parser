@@ -124,7 +124,10 @@ internal static class NecromancerHelper
         new Buff("Signet of Vampirism", SignetOfVampirism, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfVampirism),
         new Buff("Vampiric Mark", VampiricMark, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SignetOfVampirism),
         new Buff("Signet of Vampirism (Shroud)", SignetOfVampirismShroud, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfVampirism),
-        new Buff("Plague Signet", PlagueSignetBuff, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet),
+        new Buff("Plague Signet", PlagueSignetBuff, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
+         new Buff("Plague Signet", PlagueSignetBuffNew, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet)
+            .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new Buff("Plague Signet (Shroud)", PlagueSignetShroud, Source.Necromancer, BuffClassification.Other, SkillImages.PlagueSignet),
         new Buff("Signet of Spite", SignetOfSpite, Source.Necromancer, BuffClassification.Other, SkillImages.SignetOfSpite),
         new Buff("Signet of Spite (Shroud)", SignetOfSpiteShroud, Source.Necromancer, BuffClassification.Other,SkillImages.SignetOfSpite),

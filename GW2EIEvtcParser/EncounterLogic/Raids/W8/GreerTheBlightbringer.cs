@@ -87,7 +87,7 @@ internal class GreerTheBlightbringer : MountBalrior
                         (11300, -10621, 18374, -3794));
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -99,7 +99,7 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [
@@ -122,7 +122,7 @@ internal class GreerTheBlightbringer : MountBalrior
         };
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -146,12 +146,12 @@ internal class GreerTheBlightbringer : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Enumerating Proto-Greerlings
-        int cur = 1;
+        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling)));
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.ProtoGreerling))
             {
-                target.OverrideName("Champion " + target.Character + " " + cur++);
+                target.OverrideName("Champion " + target.Character);
             }
         }
     }

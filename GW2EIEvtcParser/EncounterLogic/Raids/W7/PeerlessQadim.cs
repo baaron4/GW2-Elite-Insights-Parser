@@ -60,7 +60,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         EncounterID |= 0x000003;
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -70,7 +70,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         ];
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

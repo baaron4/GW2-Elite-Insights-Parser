@@ -50,7 +50,7 @@ internal class StatueOfDarkness : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -60,7 +60,7 @@ internal class StatueOfDarkness : HallOfChains
     }
 
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -78,7 +78,7 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [

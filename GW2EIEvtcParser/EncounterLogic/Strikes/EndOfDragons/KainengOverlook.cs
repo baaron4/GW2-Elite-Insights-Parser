@@ -91,7 +91,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (3456, 11012, 4736, 14212)*/);
     }
 
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
+    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -143,7 +143,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         return "Kaineng Overlook";
     }
 
-    protected override List<TargetID> GetTrashMobsIDs()
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -152,7 +152,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
     {
         return
         [

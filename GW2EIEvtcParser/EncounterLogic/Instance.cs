@@ -15,8 +15,8 @@ internal class Instance : FightLogic
 {
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
-    private readonly List<FightLogic> _subLogics = [];
     private readonly List<TargetID> _targetIDs = [];
+    private readonly List<TargetID> _trashIDs = [];
     public Instance(int id) : base(id)
     {
         Extension = "instance";
@@ -27,7 +27,7 @@ internal class Instance : FightLogic
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
-    private void FillSubLogics(AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    private void FindGenericTargetIDs(AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var allTargetIDs = Enum.GetValues(typeof(TargetID));
         var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
@@ -46,19 +46,17 @@ internal class Instance : FightLogic
             //TODO(Rennorb) @perf: invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
             if (agentData.GetNPCsByID(targetID).Any())
             {
-                if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 500000))
+                if (blackList.Contains(targetID) || !maxHPUpdates.TryGetValue((int)targetID, out var maxHPs) || !maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 5e5))
                 {
                     continue;
                 }
-                _targetIDs.Add(targetID);
-                /*switch (targetID)
+                if (maxHPs.Any(x => MaxHealthUpdateEvent.GetMaxHealth(x) > 1e6))
                 {
-                    case (int)TargetID.AiKeeperOfThePeak:
-                        //_subLogics.Add(new AiKeeperOfThePeak(targetID));
-                        break;
-                    default:
-                        break;
-                }*/
+                    _targetIDs.Add(targetID);
+                } else
+                {
+                    _trashIDs.Add(targetID);
+                }
             }
         }
     }
@@ -99,13 +97,25 @@ internal class Instance : FightLogic
         // Nothing to do
     }
 
+    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    {
+        phases[0].AddTargets(targets, log);
+        foreach (SingleActor target in targets)
+        {
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), target.Character);
+            phase.AddTarget(target, log);
+            phase.AddParentPhase(phases[0]);
+            phases.Add(phase);
+        }
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases;
         if (_targetIDs.Count == 0)
         {
             phases = base.GetPhases(log, requirePhases);
-            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSEnums.ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
+            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
             {
                 var fightPhases = GetPhasesBySquadCombatStartEnd(log);
                 fightPhases.ForEach(x =>
@@ -118,37 +128,24 @@ internal class Instance : FightLogic
             return phases;
         }
         phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets, log);
-        int phaseCount = 0;
-        foreach (SingleActor target in Targets)
-        {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
-            phase.AddTarget(target, log);
-            phases.Add(phase);
-        }
+        AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > ParserHelper.MinimumInCombatDuration));
         return phases;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FillSubLogics(agentData, combatData);
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            _targets.AddRange(logic.Targets);
-            _trashMobs.AddRange(logic.TrashMobs);
-            _nonPlayerFriendlies.AddRange(logic.NonPlayerFriendlies);
-        }
-        _targets.RemoveAll(x => x.IsSpecies(TargetID.DummyTarget));
-        Targetless = _targets.Count == 0;
+        FindGenericTargetIDs(agentData, combatData);
+        Targetless = _targetIDs.Count == 0;
         if (Targetless)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
-
-        TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
+        // Generic name override
+        if (!Targetless)
+        {
+            EncounterLogicUtils.NumericallyRenameSpecies(Targets);
+        }
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -156,7 +153,7 @@ internal class Instance : FightLogic
         fightData.SetSuccess(true, fightData.FightEnd);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = 10000)
     {
         InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
         if (evt == null)
@@ -165,8 +162,13 @@ internal class Instance : FightLogic
         }
         else
         {
-            return evt.TimeOffsetFromInstanceCreation > ParserHelper.MinimumInCombatDuration ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+            return evt.TimeOffsetFromInstanceCreation > threshold ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
         }
+    }
+
+    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return GetInstanceStartStatus(combatData);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -257,71 +259,53 @@ internal class Instance : FightLogic
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        var res = new List<InstantCastFinder>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.GetInstantCastFinders());
-        }
-        return res;
+        return [];
     }
     internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
     {
-        return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
+        return base.GetCustomWarningMessages(fightData, evtcVersion);
     }
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.ComputePlayerCombatReplayActors(p, log, replay);
-        }
-    }
-    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<BuffEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialBuffEventProcess(combatData, skillData));
-        }
-        return res;
-    }
-    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<CastEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialCastEventProcess(combatData, skillData));
-        }
-        return res;
-    }
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
-    {
-        var res = new List<HealthDamageEvent>();
-        foreach (FightLogic logic in _subLogics)
-        {
-            res.AddRange(logic.SpecialDamageEventProcess(combatData, skillData));
-        }
-        return res;
     }
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        foreach (FightLogic logic in _subLogics)
-        {
-            logic.ComputeNPCCombatReplayActors(target, log, replay);
-        }
     }
-    protected override ReadOnlySpan<TargetID> GetTargetsIDs()
-    {
-        return [TargetID.Instance];
-    }
-    protected override List<TargetID> GetTrashMobsIDs()
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
         return [];
     }
-    protected override ReadOnlySpan<TargetID> GetUniqueNPCIDs()
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
         return [];
     }
-    protected override ReadOnlySpan<TargetID> GetFriendlyNPCIDs()
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return [];
+    }
+    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    {
+        return _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
+    }
+    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        return _trashIDs;
+    }
+    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
+    {
+        return [];
+    }
+    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    {
+        return [];
+    }
+
+    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return [];
+    }
+
+    internal override List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
         return [];
     }
