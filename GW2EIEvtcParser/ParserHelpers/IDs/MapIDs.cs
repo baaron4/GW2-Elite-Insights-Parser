@@ -75,6 +75,10 @@ public static class MapIDs
     public const int MountBalriorPublicConvergence = 1571;
     public const int MountBalriorPrivateConvergence = 1562;
     #endregion
+    #region Story
+    public const int HeartsAndMinds = 1040; // Mordremoth
+    public const int Empty = 1434; // Ankka
+    #endregion
     #region Others
     public const int ForgingSteelPublic = 1362;
     public const int ForgingSteelPrivate = 1368;
