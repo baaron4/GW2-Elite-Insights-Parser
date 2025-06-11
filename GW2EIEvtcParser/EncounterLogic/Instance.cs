@@ -132,10 +132,6 @@ internal class Instance : FightLogic
             phases.Add(phase);
         }
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        fightData.SetSuccess(true, fightData.FightEnd);
-    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -242,11 +238,6 @@ internal class Instance : FightLogic
     }
 
     protected override Dictionary<TargetID, int> GetTargetsSortIDs()
-    {
-        return [];
-    }
-
-    internal override List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
         return [];
     }
