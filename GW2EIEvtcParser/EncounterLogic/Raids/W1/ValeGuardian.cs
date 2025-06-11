@@ -72,7 +72,7 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -135,7 +135,7 @@ internal class ValeGuardian : SpiritVale
         EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])));
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

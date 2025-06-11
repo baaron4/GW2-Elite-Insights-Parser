@@ -22,7 +22,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         return "Shattered Observatory";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -22,7 +22,7 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
         return "Captain Mai Trin Boss Fractal"; ;
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -481,7 +481,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -501,7 +501,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

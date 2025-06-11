@@ -22,7 +22,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         return "The Key Of Ahdashim";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

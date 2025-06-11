@@ -141,7 +141,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

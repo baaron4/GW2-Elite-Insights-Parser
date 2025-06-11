@@ -22,7 +22,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return "Bastion Of The Penitent";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -131,7 +131,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -140,7 +140,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

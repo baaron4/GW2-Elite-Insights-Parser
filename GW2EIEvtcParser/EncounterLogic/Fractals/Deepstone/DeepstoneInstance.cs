@@ -22,7 +22,7 @@ internal class DeepstoneInstance : FractalLogic
         return "Deepstone";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

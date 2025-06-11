@@ -22,7 +22,7 @@ internal class NightmareInstance : Nightmare
         return "Nightmare";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

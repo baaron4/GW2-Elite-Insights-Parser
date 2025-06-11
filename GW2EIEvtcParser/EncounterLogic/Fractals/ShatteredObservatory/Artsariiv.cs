@@ -44,7 +44,7 @@ internal class Artsariiv : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -53,7 +53,7 @@ internal class Artsariiv : ShatteredObservatory
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = new List<TargetID>(5 + base.GetTrashMobsIDs().Count);
         trashIDs.AddRange(base.GetTrashMobsIDs());

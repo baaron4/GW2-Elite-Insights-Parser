@@ -91,7 +91,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (3456, 11012, 4736, 14212)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -143,7 +143,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         return "Kaineng Overlook";
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

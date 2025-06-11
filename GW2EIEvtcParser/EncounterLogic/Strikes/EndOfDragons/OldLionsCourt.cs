@@ -88,7 +88,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
     }
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -101,7 +101,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [ TargetID.Tribocharge ];
     }

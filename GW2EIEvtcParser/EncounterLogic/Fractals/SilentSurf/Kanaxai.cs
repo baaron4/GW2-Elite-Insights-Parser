@@ -89,7 +89,7 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

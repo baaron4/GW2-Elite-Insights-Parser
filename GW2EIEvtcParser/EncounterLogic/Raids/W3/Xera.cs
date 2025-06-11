@@ -312,7 +312,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return [
             TargetID.Xera,
@@ -324,7 +324,7 @@ internal class Xera : StrongholdOfTheFaithful
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

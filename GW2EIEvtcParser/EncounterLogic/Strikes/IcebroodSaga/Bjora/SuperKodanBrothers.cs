@@ -219,7 +219,7 @@ internal class SuperKodanBrothers : Bjora
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

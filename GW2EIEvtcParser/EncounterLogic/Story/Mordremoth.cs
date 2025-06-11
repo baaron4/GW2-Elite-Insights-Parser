@@ -18,7 +18,7 @@ internal class Mordremoth : StoryInstance
         EncounterID |= 0x000201;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -54,7 +54,7 @@ internal class Mordremoth : StoryInstance
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -89,7 +89,7 @@ internal class Mordremoth : StoryInstance
         return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
     }
 
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [

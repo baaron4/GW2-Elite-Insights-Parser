@@ -102,7 +102,7 @@ internal class UraTheSteamshrieker : MountBalrior
     }
 
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -123,7 +123,7 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return 
         [

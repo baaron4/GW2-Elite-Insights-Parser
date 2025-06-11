@@ -325,7 +325,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         return startToUse;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -365,7 +365,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

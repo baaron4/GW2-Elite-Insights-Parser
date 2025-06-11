@@ -22,7 +22,7 @@ internal class HallOfChainsInstance : HallOfChains
         return "Hall Of Chains";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

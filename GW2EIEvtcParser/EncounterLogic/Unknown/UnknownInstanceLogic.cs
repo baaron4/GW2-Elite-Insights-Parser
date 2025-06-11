@@ -156,11 +156,11 @@ internal class UnknownInstanceLogic : UnknownFightLogic
             EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
     }
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
     }
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return _trashIDs;
     }

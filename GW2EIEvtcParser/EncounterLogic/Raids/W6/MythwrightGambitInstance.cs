@@ -22,7 +22,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return "Mythwright Gambit";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

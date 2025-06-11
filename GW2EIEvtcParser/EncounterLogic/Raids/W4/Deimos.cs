@@ -99,7 +99,7 @@ internal class Deimos : BastionOfThePenitent
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [
@@ -494,7 +494,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -507,7 +507,7 @@ internal class Deimos : BastionOfThePenitent
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

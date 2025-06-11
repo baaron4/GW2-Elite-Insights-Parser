@@ -87,7 +87,7 @@ internal class GreerTheBlightbringer : MountBalrior
                         (11300, -10621, 18374, -3794));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -111,7 +111,7 @@ internal class GreerTheBlightbringer : MountBalrior
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

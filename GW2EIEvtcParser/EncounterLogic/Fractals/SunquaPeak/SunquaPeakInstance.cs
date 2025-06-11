@@ -21,7 +21,7 @@ internal class SunquaPeakInstance : SunquaPeak
         return "Sunqua Peak";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

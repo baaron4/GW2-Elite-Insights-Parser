@@ -22,7 +22,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return "Stronghold Of The Faithful";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

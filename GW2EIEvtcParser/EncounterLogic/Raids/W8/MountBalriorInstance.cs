@@ -22,7 +22,7 @@ internal class MountBalriorInstance : MountBalrior
         return "Mount Balrior";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

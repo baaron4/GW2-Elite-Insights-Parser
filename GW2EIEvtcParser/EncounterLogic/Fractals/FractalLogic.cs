@@ -72,7 +72,7 @@ internal abstract class FractalLogic : FightLogic
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

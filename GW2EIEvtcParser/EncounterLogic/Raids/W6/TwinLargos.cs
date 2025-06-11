@@ -54,7 +54,7 @@ internal class TwinLargos : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

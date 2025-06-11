@@ -177,7 +177,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -197,7 +197,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

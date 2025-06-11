@@ -52,7 +52,7 @@ internal class MursaatOverseer : BastionOfThePenitent
                         (11774, 4480, 14078, 5376)*/);
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

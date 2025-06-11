@@ -82,7 +82,7 @@ internal class Arkk : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = new List<TargetID>(9 + base.GetTrashMobsIDs().Count);
         trashIDs.AddRange(base.GetTrashMobsIDs());
@@ -103,7 +103,7 @@ internal class Arkk : ShatteredObservatory
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [

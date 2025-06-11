@@ -110,7 +110,7 @@ internal class Qadim : MythwrightGambit
     }
 
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -358,7 +358,7 @@ internal class Qadim : MythwrightGambit
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

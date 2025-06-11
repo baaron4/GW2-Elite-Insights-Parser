@@ -22,7 +22,7 @@ internal class SpiritValeInstance : SpiritVale
         return "Spirit Vale";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

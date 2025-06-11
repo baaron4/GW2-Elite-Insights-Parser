@@ -159,7 +159,7 @@ internal class Samarog : BastionOfThePenitent
         NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -178,7 +178,7 @@ internal class Samarog : BastionOfThePenitent
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [
             TargetID.SpearAggressionRevulsion

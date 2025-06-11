@@ -135,21 +135,24 @@ public abstract class FightLogic
                 InstanceBuffs.Add((fractalInstability, 1));
             }
         }
-        long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
-        int emboldenedStacks = (int)log.PlayerList.Select(x =>
+        if (!IsInstance)
         {
-            if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
+            long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
+            int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
-                return graph.Values.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
-            }
-            else
+                if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
+                {
+                    return graph.Values.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
+                }
+                else
+                {
+                    return 0;
+                }
+            }).Max();
+            if (emboldenedStacks > 0)
             {
-                return 0;
+                InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
             }
-        }).Max();
-        if (emboldenedStacks > 0)
-        {
-            InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
         }
     }
 
@@ -167,7 +170,7 @@ public abstract class FightLogic
         return GenericTriggerID;
     }
 
-    protected abstract IReadOnlyList<TargetID> GetTargetsIDs();
+    internal abstract IReadOnlyList<TargetID> GetTargetsIDs();
 
     protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
@@ -185,12 +188,12 @@ public abstract class FightLogic
         return res;
     }
 
-    protected virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [ ];
     }
 
-    protected virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return [ ];
     }
@@ -524,6 +527,10 @@ public abstract class FightLogic
     internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ComputeFightTargets(agentData, combatData, extensions);
+        if (IsInstance)
+        {
+            NumericallyRenameSpecies(Targets);
+        }
     }
 
     /// <summary>

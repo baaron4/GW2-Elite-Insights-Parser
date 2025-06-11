@@ -118,7 +118,7 @@ internal class WhisperOfJormag : Bjora
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

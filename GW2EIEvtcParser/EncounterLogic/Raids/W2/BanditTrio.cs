@@ -59,7 +59,7 @@ internal class BanditTrio : SalvationPass
         return [ TargetID.Narella ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -69,7 +69,7 @@ internal class BanditTrio : SalvationPass
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return [ TargetID.Cage ];
     }
@@ -227,7 +227,7 @@ internal class BanditTrio : SalvationPass
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

@@ -22,7 +22,7 @@ internal class SalvationPassInstance : SalvationPass
         return "Salvation Pass";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
