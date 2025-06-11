@@ -17,7 +17,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class BanditTrio : SalvationPass
 {
-    private static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
     public BanditTrio(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([

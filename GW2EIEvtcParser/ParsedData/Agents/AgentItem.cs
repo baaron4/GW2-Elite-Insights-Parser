@@ -265,11 +265,6 @@ public class AgentItem
         status.AddRange(spawnEvents);
         status.AddRange(despawnEvents);
         AddSegment(dc, long.MinValue, FirstAware);
-        // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
-        if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
-        {
-            return;
-        }
 
         if (status.Count == 0)
         {

@@ -17,7 +17,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
-    private static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
     private bool _hasPreEvent = false;
     public Escort(int triggerID) : base(triggerID)
     {

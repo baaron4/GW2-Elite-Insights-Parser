@@ -155,6 +155,10 @@ internal abstract class FractalLogic : FightLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+        }
         if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;

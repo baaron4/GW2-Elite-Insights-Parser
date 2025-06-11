@@ -17,7 +17,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class ConjuredAmalgamate : MythwrightGambit
 {
     private readonly bool _cn;
-    private static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
     public ConjuredAmalgamate(int triggerID) : base((int)TargetID.ConjuredAmalgamate)
     {
         MechanicList.Add(new MechanicGroup([

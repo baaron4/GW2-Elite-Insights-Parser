@@ -14,8 +14,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Instance : FightLogic
 {
-    public bool StartedLate { get; private set; }
-    public bool EndedBeforeExpectedEnd { get; private set; }
     private readonly List<TargetID> _targetIDs = [];
     private readonly List<TargetID> _trashIDs = [];
     public Instance(int id) : base(id)
@@ -118,11 +116,6 @@ internal class Instance : FightLogic
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
-    {
-        return GetGenericFightOffset(fightData);
-    }
-
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
         // Nothing to do
@@ -138,6 +131,10 @@ internal class Instance : FightLogic
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
         }
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

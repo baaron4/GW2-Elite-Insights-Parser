@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser;
+﻿using System.Numerics;
+
+namespace GW2EIEvtcParser;
 
 /// <summary>
 /// NPC and Gadget IDs.<br></br>
@@ -968,6 +970,13 @@ public static class SpeciesIDs
         // General
         Unknown,
     }
+
+    internal static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
+    internal static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
+    internal static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
+    internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
+    internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
+    internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
     public enum ChestID : int
     {
