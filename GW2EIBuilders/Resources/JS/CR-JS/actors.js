@@ -309,10 +309,11 @@ function adjustImageColor(image, colorAdjuster) {
     ctx.drawImage(image, 0, 0);
     const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
     for (let i = 0; i < imageData.data.length; i += 4) {
-        let color = colorAdjuster(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
+        let color = colorAdjuster(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]);
         imageData.data[i + 0] = color.r;
         imageData.data[i + 1] = color.g;
         imageData.data[i + 2] = color.b;
+        imageData.data[i + 3] = color.a;
     }
     ctx.putImageData(imageData, 0, 0);
     offscreen.complete = true;
@@ -357,12 +358,13 @@ class NonSquadPlayerDrawable extends NonSquadIconDrawable {
 class EnemyPlayerDrawable extends NonSquadPlayerDrawable {
     constructor(params, pixelSize) {
         super(params, pixelSize);
-        this.colorAdjuster = (r, g, b) => {
+        this.colorAdjuster = (r, g, b, a) => {
             let grayScale = 0.299 * r + 0.587 * g + 0.114*b;
             return {
                 r: grayScale,
                 g: 0.3 * grayScale,
-                b: 0.3 * grayScale
+                b: 0.3 * grayScale,
+                a: a
             };
         }
     }
@@ -381,12 +383,13 @@ class EnemyPlayerDrawable extends NonSquadPlayerDrawable {
 class FriendlyPlayerDrawable extends NonSquadPlayerDrawable {
     constructor(params, pixelSize) {
         super(params, pixelSize);
-        this.colorAdjuster = (r, g, b) => {
+        this.colorAdjuster = (r, g, b, abs) => {
             let grayScale = 0.299 * r + 0.587 * g + 0.114*b;
             return {
                 r: 0.3 * grayScale,
                 g: grayScale,
-                b: 0.3 * grayScale
+                b: 0.3 * grayScale,
+                a: a
             };
         }
     }
