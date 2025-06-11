@@ -58,11 +58,6 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
-    {
-        return GetGenericFightOffset(fightData);
-    }
-
     internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.OuterNayosPublicConvergence) ? FightData.InstancePrivacyMode.Public : FightData.InstancePrivacyMode.Private;
@@ -70,24 +65,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        List<PhaseData> phases;
-        if (Targets.Count == 0)
-        {
-            phases = base.GetPhases(log, requirePhases);
-            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
-            {
-                var fightPhases = GetPhasesBySquadCombatStartEnd(log);
-                fightPhases.ForEach(x =>
-                {
-                    x.AddTargets(phases[0].Targets.Keys, log);
-                    x.AddParentPhase(phases[0]);
-                });
-                phases.AddRange(fightPhases);
-            }
-            return phases;
-        }
-
-        phases = GetInitialPhase(log);
+        var phases = GetInitialPhase(log);
         phases[0].AddTargets(Targets, log);
         SingleActor target = Targets.FirstOrDefault(x => x.IsAnySpecies([
             TargetID.DemonKnight,

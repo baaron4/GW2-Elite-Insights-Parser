@@ -31,39 +31,4 @@ internal class NightmareInstance : Nightmare
             TargetID.Ensolyss,
         ];
     }
-
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
-    {
-        return GetGenericFightOffset(fightData);
-    }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
-    {
-        List<PhaseData> phases;
-        if (Targets.Count == 0)
-        {
-            phases = base.GetPhases(log, requirePhases);
-            if (log.CombatData.GetEvtcVersionEvent().Build >= ArcDPSBuilds.LogStartLogEndPerCombatSequenceOnInstanceLogs)
-            {
-                var fightPhases = GetPhasesBySquadCombatStartEnd(log);
-                fightPhases.ForEach(x =>
-                {
-                    x.AddTargets(phases[0].Targets.Keys, log);
-                    x.AddParentPhase(phases[0]);
-                });
-                phases.AddRange(fightPhases);
-            }
-            return phases;
-        }
-        phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets, log);
-        int phaseCount = 0;
-        foreach (SingleActor target in Targets)
-        {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), "Phase " + (++phaseCount));
-            phase.AddTarget(target, log);
-            phases.Add(phase);
-        }
-        return phases;
-    }
 }

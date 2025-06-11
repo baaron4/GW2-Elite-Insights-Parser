@@ -50,7 +50,7 @@ public abstract class FightLogic
     protected List<SingleActor> _targets { get; private set; } = [];
     protected List<SingleActor> _hostiles { get; private set; } = [];
 
-    protected bool IsInstance => GenericTriggerID == (int)TargetID.Instance;
+    internal bool IsInstance => GenericTriggerID == (int)TargetID.Instance;
 
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
@@ -352,8 +352,15 @@ public abstract class FightLogic
     internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        phases[0].AddTarget(mainTarget, log);
+        if (IsInstance)
+        {
+            AddPhasesPerTarget(log, phases, Targets.Where(x => x.LastAware - x.FirstAware > MinimumInCombatDuration));
+        } 
+        else
+        {
+            SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
+            phases[0].AddTarget(mainTarget, log);
+        }
         return phases;
     }
 

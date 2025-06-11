@@ -51,6 +51,10 @@ internal abstract class FractalLogic : FightLogic
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
+        if (IsInstance)
+        {
+            return base.GetPhases(log, requirePhases);
+        }
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");

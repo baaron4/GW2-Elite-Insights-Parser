@@ -113,18 +113,6 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
-    {
-        phases[0].AddTargets(targets, log);
-        foreach (SingleActor target in targets)
-        {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), target.Character);
-            phase.AddTarget(target, log);
-            phase.AddParentPhase(phases[0]);
-            phases.Add(phase);
-        }
-    }
-
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         fightData.SetSuccess(true, fightData.FightEnd);
