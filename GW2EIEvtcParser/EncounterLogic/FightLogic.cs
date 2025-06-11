@@ -472,11 +472,6 @@ public abstract class FightLogic
 
     internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (IsInstance)
-        {
-            fightData.SetSuccess(true, fightData.FightEnd);
-            return;
-        }
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
     }
 
