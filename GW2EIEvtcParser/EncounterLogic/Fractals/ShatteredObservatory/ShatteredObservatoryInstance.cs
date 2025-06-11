@@ -12,7 +12,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
 {
     public ShatteredObservatoryInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconShatteredObservatory;
         Extension = "shatrdobs";
     }

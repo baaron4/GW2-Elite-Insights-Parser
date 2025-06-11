@@ -12,7 +12,7 @@ internal class SpiritValeInstance : SpiritVale
 {
     public SpiritValeInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconSpiritVale;
         Extension = "sprtvale";
     }

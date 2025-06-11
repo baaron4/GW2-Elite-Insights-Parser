@@ -12,7 +12,7 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
 {
     public CaptainMaiTrinBossInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconCaptainMaiTrin;
         Extension = "captnmai";
     }

@@ -416,6 +416,7 @@ public static class SpeciesIDs
         // - End of Dragons
         // - Aetherblade Hideout
         MaiTrinStrike = 24033,
+        MaiTrinStrikeFake = SpeciesIDs.MaiTrinStrikeFake,
         EchoOfScarletBriarNM = 24768,
         EchoOfScarletBriarCM = 25247,
         MaiTrinStrikeDuringEcho = 23826,
@@ -1069,7 +1070,7 @@ public static class SpeciesIDs
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
-    // -64 removed
+    private const int MaiTrinStrikeFake = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
     private const int BigEnlightenedConduitGadget = -67;

@@ -12,7 +12,7 @@ internal class NightmareInstance : Nightmare
 {
     public NightmareInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconNightmare;
         Extension = "nightmare";
     }

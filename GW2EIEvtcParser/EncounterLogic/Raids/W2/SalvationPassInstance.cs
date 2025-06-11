@@ -12,7 +12,7 @@ internal class SalvationPassInstance : SalvationPass
 {
     public SalvationPassInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconSalvationPass;
         Extension = "salvpass";
     }

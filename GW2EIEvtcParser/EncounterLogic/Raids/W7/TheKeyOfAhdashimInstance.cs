@@ -12,7 +12,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 {
     public TheKeyOfAhdashimInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconTheKeyOfAhdashim;
         Extension = "keyadash";
     }

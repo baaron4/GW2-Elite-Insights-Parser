@@ -12,7 +12,7 @@ internal class HallOfChainsInstance : HallOfChains
 {
     public HallOfChainsInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconHallOfChains;
         Extension = "hallchains";
     }

@@ -12,7 +12,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
 {
     public MythwrightGambitInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconMythwrightGambit;
         Extension = "mythgamb";
     }

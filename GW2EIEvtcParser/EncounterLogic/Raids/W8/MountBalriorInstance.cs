@@ -12,7 +12,7 @@ internal class MountBalriorInstance : MountBalrior
 {
     public MountBalriorInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconMountBalrior;
         Extension = "mntbalr";
     }

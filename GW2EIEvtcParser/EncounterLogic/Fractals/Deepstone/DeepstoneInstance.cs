@@ -12,7 +12,7 @@ internal class DeepstoneInstance : FractalLogic
 {
     public DeepstoneInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconDeepstone;
         Extension = "deepstone";
     }
