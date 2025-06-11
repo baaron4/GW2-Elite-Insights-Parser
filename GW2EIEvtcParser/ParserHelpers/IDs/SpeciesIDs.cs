@@ -703,6 +703,8 @@ public static class SpeciesIDs
         Dreadwing = 26106,
         HellSister = 26146,
         UmbrielHalberdOfHouseAurkus = 26681,
+        ZojjaNayos = 25874,
+        ZojjasAstralProjection = 26112,
         // - Mount Balrior
         GreerTheBlightbringerConv = 26889,
         GreeTheBingerConv = 26881,

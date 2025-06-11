@@ -191,6 +191,12 @@ internal static class ParserIcons
     private const string TargetDecima = "https://i.imgur.com/MPcVY47.png";
     private const string TargetGreer = "https://i.imgur.com/iuhDVaM.png";
     private const string TargetUra = "https://i.imgur.com/LxO1u5r.png";
+    private const string DemonKnight = "https://i.imgur.com/BhoyT2P.png";
+    private const string SorrowConvergence = "https://i.imgur.com/pIDNTAQ.png";
+    private const string Dreadwing = "https://i.imgur.com/27tktFX.png";
+    private const string HellSister = "https://i.imgur.com/5d9i7Eq.png";
+    private const string Umbriel = "https://i.imgur.com/lE2Dg5a.png";
+    private const string Zojja = "https://i.imgur.com/9iSzaTe.png";
     #endregion
 
     #region Trash
@@ -1223,6 +1229,12 @@ internal static class ParserIcons
         { TargetID.GreeTheBingerConv, TrashGree },
         { TargetID.ReegTheBlighterConv, TrashReeg },
         { TargetID.UraTheSteamshriekerConv, TargetUra },
+        { TargetID.DemonKnight, DemonKnight },
+        { TargetID.Sorrow, SorrowConvergence },
+        { TargetID.Dreadwing, Dreadwing },
+        { TargetID.HellSister, HellSister },
+        { TargetID.UmbrielHalberdOfHouseAurkus, Umbriel },
+        { TargetID.ZojjaNayos, Zojja },
     };
 
     /// <summary>

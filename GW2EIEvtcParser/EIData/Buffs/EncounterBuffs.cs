@@ -738,6 +738,11 @@ internal static class EncounterBuffs
             new Buff("Frozen Soil", FrozenSoil, Source.FightSpecific, BuffClassification.Other, BuffImages.NoDownedState),
             new Buff("Attached Supplies", AttachedSupplies, Source.FightSpecific, BuffClassification.Other, BuffImages.WeighedDownByDebirs),
             new Buff("Rope Tension", RopeTension, Source.FightSpecific, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.ForgedBinding),
+            new Buff("Aetheric Adrenaline (10%)", AethericAdrenaline10, Source.FightSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
+            new Buff("Aetheric Adrenaline (20%)", AethericAdrenaline20, Source.FightSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
+            new Buff("Aetheric Adrenaline (30%)", AethericAdrenaline30, Source.FightSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
+            new Buff("Aetheric Adrenaline (40%)", AethericAdrenaline40, Source.FightSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
+            new Buff("Aetheric Adrenaline (50%)", AethericAdrenaline50, Source.FightSpecific, BuffClassification.Other, BuffImages.TemporalMastery),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),

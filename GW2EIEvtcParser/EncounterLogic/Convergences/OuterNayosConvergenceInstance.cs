@@ -38,6 +38,14 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         ];
     }
 
+    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
+    {
+        return
+        [
+            TargetID.ZojjaNayos,
+        ];
+    }
+
     protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
     {
         return

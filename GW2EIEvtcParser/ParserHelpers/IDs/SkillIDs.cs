@@ -4401,6 +4401,7 @@ public static class SkillIDs
     public const long PlanetaryWeight = 71373;
     public const long RelicOfNayosHealing = 71382;
     public const long NouryssHungerDamageBuff = 71431;
+    public const long RideTheLeyLine = 71444;
     public const long EletroctuteSkyChak = 71501;
     public const long UnleashEnergySkyChak = 71510;
     public const long SpitGoopSkyChak = 71532;
@@ -4672,17 +4673,23 @@ public static class SkillIDs
     public const long AllForOne = 73157;
     public const long GreersVirulence = 73181;
     public const long SolarStormIlluminatedHealing = 73199;
+    public const long WarclawBattleMaulPvE3 = 73397;
     public const long RelicOfTheStormsingerBuff = 73455;
     public const long NoxiousBlight = 73496;
     public const long HuntersProwess = 73541;
+    public const long WarclawDashWildClaws = 73653;
     public const long NoxiousBlight2 = 73663;
-    public const long LowlandExpertise = 73663;
+    public const long LowlandExpertise = 73677;
     public const long RelicOfSorrowHeal = 73714;
+    public const long WarclawBattleMaulPvE1 = 73766;
     public const long RelicOfTheBlightbringer = 73794;
     public const long RelicOfTheStormsingerChain = 73851;
     public const long RelicOfTheClaw = 73955;
+    public const long WarclawChainPullPvE = 73984;
     public const long SpearmarshalsSupportBombard = 74290;
+    public const long WarclawLancePvE = 74331;
     public const long RelicOfSorrowBuff = 74410;
+    public const long WarclawBattleMaulPvE2 = 74560;
     public const long PhantasmalLancerDamage = 74619;
     public const long ResoluteEvasion = 74632;
     public const long SeismicCrashDamage = 74653;
@@ -4727,6 +4734,7 @@ public static class SkillIDs
     public const long DecimaSpawnsConduitsP3 = 74805;
     public const long SparkingAuraTier2 = 74827;
     public const long NoxiousBlightCM = 74829;
+    public const long AethericAdrenaline30 = 74838;
     public const long FracturedArmor = 74840;
     public const long DeployShieldGenerator_InfiniteShieldGenerator = 74844;
     public const long FluxlanceRedArrowTargetBuff = 74845;
@@ -4744,6 +4752,7 @@ public static class SkillIDs
     public const long InfectiousRotBuff = 74900;
     public const long FractureArmor = 74903;
     public const long HarmonicSensitivity = 74904;
+    public const long AethericAdrenaline20 = 74906;
     public const long AuraOfCorruptionDamage_ReegGreeEreg = 74915;
     public const long CageOfDecay2 = 74917;
     public const long DeployArrowCart_InfiniteArrowCart = 74921;
@@ -4802,6 +4811,7 @@ public static class SkillIDs
     public const long AttachedSupplies = 75162;
     public const long ChargeDecima = 75175;
     public const long EruptionOfRot3 = 75182;
+    public const long AethericAdrenaline40 = 75193;
     public const long RakeTheRot2 = 75195;
     public const long Earthrend = 75197;
     public const long DecimaBeamLoading = 75198;
@@ -4825,6 +4835,7 @@ public static class SkillIDs
     public const long SparkingAuraTier3 = 75270;
     public const long DeployTrebuchet_InfiniteTrebuchet = 75271;
     public const long DeployBallista_InfiniteBallista = 75278;
+    public const long AethericAdrenaline50 = 75285;
     public const long RakeTheRot3 = 75286;
     public const long RotTheWorld = 75287;
     public const long EnfeeblingMiasma2 = 75288;
@@ -4838,6 +4849,7 @@ public static class SkillIDs
     public const long ScatteringSporeblast = 75330;
     public const long RipplesOfRot2 = 75332;
     public const long ReverberatingImpact = 75334;
+    public const long AethericAdrenaline10 = 75335;
     public const long SeedsOfDecay3 = 75343;
     public const long FluxlanceSalvo5 = 75348;
     public const long EruptionOfRotBuff = 75355; // Stacking buff when standing in a green

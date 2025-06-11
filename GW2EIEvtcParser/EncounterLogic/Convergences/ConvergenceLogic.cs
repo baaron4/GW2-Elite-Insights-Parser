@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -13,7 +14,7 @@ internal abstract class ConvergenceLogic : FightLogic
         SkillMode = SkillModeEnum.PvE;
         MechanicList.Add(new MechanicGroup(
         [
-            
+            new PlayerDstBuffApplyMechanic([KryptisEssence, CalibratedEssence], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightBlue), "Essence", "Collected Essence", "Essence Gain", 0),
         ]));
         EncounterCategoryInformation.Category = FightCategory.Convergence;
         EncounterID |= EncounterIDs.EncounterMasks.ConvergenceMask;
