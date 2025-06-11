@@ -89,11 +89,6 @@ internal abstract class FractalLogic : FightLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (IsInstance)
-        {
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-            return;
-        }
         // check reward
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
         RewardEvent? reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
