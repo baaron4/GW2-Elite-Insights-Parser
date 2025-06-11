@@ -18,7 +18,7 @@ internal class WvWFight : FightLogic
     private readonly bool _detailed;
     private bool _foundSkillMode;
     private bool _isGuildHall;
-    private bool _isFromInstance;
+    private readonly bool _isFromInstance;
     public WvWFight(int triggerID, bool detailed, bool full = false) : base(triggerID)
     {
         ParseMode = ParseModeEnum.WvW;
@@ -35,6 +35,10 @@ internal class WvWFight : FightLogic
         _isFromInstance = full;
         EncounterCategoryInformation.Category = FightCategory.WvW;
         EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
+        if (_isFromInstance)
+        {
+            EncounterID |= EncounterIDs.WvWMasks.FullInstanceMask;
+        }
         MechanicList.Add(new MechanicGroup([
             new PlayerDamageMechanic(new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
                 if (a.Type != AgentItem.AgentType.Player)
@@ -60,7 +64,7 @@ internal class WvWFight : FightLogic
         }
         if (_detailed)
         {
-            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, "Detailed Full Fight");
+            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, _isFromInstance ? "Detailed Full Instance" : "Detailed Full Fight");
             detailedPhase.AddTargets(Targets, log);
             if (detailedPhase.Targets.Any())
             {
