@@ -77,6 +77,7 @@ internal class LogDataDto
     public string EncounterEnd;
     public string? InstanceStart;
     public string? InstanceIP;
+    public string InstancePrivacy;
     public string ArcVersion;
     public long EvtcBuild;
     public ulong Gw2Build;
@@ -170,6 +171,18 @@ internal class LogDataDto
                 FightStartStatus = "No Pre-Event";
                 break;
             default:
+                break;
+        }
+        switch (log.FightData.InstancePrivacy)
+        {
+            case FightData.InstancePrivacyMode.Public:
+                InstancePrivacy = "Public Instance";
+                break;
+            case FightData.InstancePrivacyMode.Private:
+                InstancePrivacy = "Private Instance";
+                break;
+            case FightData.InstancePrivacyMode.NotApplicable:
+            case FightData.InstancePrivacyMode.Unknown:
                 break;
         }
         LightTheme = light;

@@ -307,6 +307,12 @@ public class JsonLog
     public string? InstanceIP;
 
     /// <summary>
+    /// Type of instance privacy \n
+    /// Possible values are "Unknown", "Not Applicable", "Public Instance" and "Private Instance"
+    /// </summary>
+    public string InstancePrivacy;
+
+    /// <summary>
     /// The success status of the fight
     /// </summary>
     public bool Success;

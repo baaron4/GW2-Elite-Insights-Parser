@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.MapIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -28,7 +29,7 @@ internal class Instance : FightLogic
     private void FindGenericTargetIDs(AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var allTargetIDs = Enum.GetValues(typeof(TargetID));
-        var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && agentData.GetAgent(x.SrcAgent, x.Time).Type == AgentItem.AgentType.NPC && MaxHealthUpdateEvent.GetMaxHealth(x) > 0).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time).ID).ToDictionary(x => x.Key, x => x.ToList());
         var blackList = new HashSet<TargetID>()
         {
             TargetID.Environment,
@@ -67,19 +68,49 @@ internal class Instance : FightLogic
         {
             switch (MapIDEvent.GetMapID(mapIDEvent))
             {
-                // EB
-                case 38:
-                // Green Alpine
-                case 95:
-                // Blue Alpine
-                case 96:
-                // Red Desert
-                case 1099: 
-                // EoM
-                case 968:
-                // Bastion
-                case 1315:
+                // Fractals
+                case NightmareFractal:
+                    return new NightmareInstance(GenericTriggerID);
+                case ShatteredObservatoryFractal:
+                    return new ShatteredObservatoryInstance(GenericTriggerID);
+                case SunquaPeakFractal:
+                    return new SunquaPeakInstance(GenericTriggerID);
+                case CaptainMaiTrinBossFractal:
+                    return new CaptainMaiTrinBossInstance(GenericTriggerID);
+                case DeepstoneFractal:
+                    return new DeepstoneInstance(GenericTriggerID);
+                // Raids
+                case SpiritValeRaid:
+                    return new SpiritValeInstance(GenericTriggerID);
+                case SalvationPassRaid:
+                    return new SalvationPassInstance(GenericTriggerID);
+                case StrongholdOfTheFaithfulRaid:
+                    return new StrongholdOfTheFaithfulInstance(GenericTriggerID);
+                case BastionOfThePenitentRaid:
+                    return new BastionOfThePenitentInstance(GenericTriggerID);
+                case HallOfChainsRaid:
+                    return new HallOfChainsInstance(GenericTriggerID);
+                case MythwrightGambitRaid:
+                    return new MythwrightGambitInstance(GenericTriggerID);
+                case TheKeyOfAhdashimRaid:
+                    return new TheKeyOfAhdashimInstance(GenericTriggerID);
+                case MountBalriorRaid:
+                    return new MountBalriorInstance(GenericTriggerID);
+                // WvW
+                case EternalBattleground:
+                case GreenAlpineBorderland:
+                case BlueAlpineBorderland:
+                case RedDesertBorderland:
+                case EdgeOfTheMists:
+                case ArmisticeBastion:
                     return new WvWFight(GenericTriggerID, parserSettings.DetailedWvWParse, true);
+                // Convergences
+                case OuterNayosPublicConvergence:
+                case OuterNayosPrivateConvergence:
+                    return new OuterNayosConvergenceInstance(GenericTriggerID);
+                case MountBalriorPublicConvergence:
+                case MountBalriorPrivateConvergence:
+                    return new MountBalriorConvergenceInstance(GenericTriggerID);
             }
         }
         return base.AdjustLogic(agentData, combatData, parserSettings);
@@ -101,6 +132,7 @@ internal class Instance : FightLogic
             phases.Add(phase);
         }
     }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         fightData.SetSuccess(true, fightData.FightEnd);
@@ -144,93 +176,6 @@ internal class Instance : FightLogic
             EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
     }
-
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
-    {
-        MapIDEvent? mapID = combatData.GetMapIDEvents().LastOrDefault();
-        if (mapID == null)
-        {
-            return base.GetLogicName(combatData, agentData);
-        }
-        switch (mapID.MapID)
-        {
-            // Raids
-            case 1062:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.SpiritVale;
-                Icon = InstanceIconSpiritVale;
-                Extension = "sprtvale";
-                return "Spirit Vale";
-            case 1149:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.SalvationPass;
-                Icon = InstanceIconSalvationPass;
-                Extension = "salvpass";
-                return "Salvation Pass";
-            case 1156:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
-                Icon = InstanceIconStrongholdOfTheFaithful;
-                Extension = "strgldfaith";
-                return "Stronghold Of The Faithful";
-            case 1188:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.BastionOfThePenitent;
-                Icon = InstanceIconBastionOfThePenitent;
-                Extension = "bstpen";
-                return "Bastion Of The Penitent";
-            case 1264:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.HallOfChains;
-                Icon = InstanceIconHallOfChains;
-                Extension = "hallchains";
-                return "Hall Of Chains";
-            case 1303:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.MythwrightGambit;
-                Icon = InstanceIconMythwrightGambit;
-                Extension = "mythgamb";
-                return "Mythwright Gambit";
-            case 1323:
-                EncounterCategoryInformation.Category = FightCategory.Raid;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
-                Icon = InstanceIconTheKeyOfAhdashim;
-                Extension = "keyadash";
-                return "The Key Of Ahdashim";
-            // Fractals
-            case 960:
-                EncounterCategoryInformation.Category = FightCategory.Fractal;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.CaptainMaiTrinBossFractal;
-                Icon = InstanceIconCaptainMaiTrin;
-                Extension = "captnmai";
-                return "Captain Mai Trin Boss Fractal";
-            case 1177:
-                EncounterCategoryInformation.Category = FightCategory.Fractal;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
-                Icon = InstanceIconNightmare;
-                Extension = "nightmare";
-                return "Nightmare";
-            case 1205:
-                EncounterCategoryInformation.Category = FightCategory.Fractal;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
-                Icon = InstanceIconShatteredObservatory;
-                Extension = "shatrdobs";
-                return "Shattered Observatory";
-            case 1290:
-                EncounterCategoryInformation.Category = FightCategory.Fractal;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.Deepstone;
-                Icon = InstanceIconDeepstone;
-                Extension = "deepstone";
-                return "Deepstone";
-            case 1384:
-                EncounterCategoryInformation.Category = FightCategory.Fractal;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.SunquaPeak;
-                Icon = InstanceIconSunquaPeak;
-                Extension = "snqpeak";
-                return "Sunqua Peak";
-        }
-        return base.GetLogicName(combatData, agentData);
-    }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return [];
@@ -265,11 +210,11 @@ internal class Instance : FightLogic
     {
         return _trashIDs;
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return [];
     }
@@ -277,5 +222,10 @@ internal class Instance : FightLogic
     protected override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return [];
+    }
+
+    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.InstancePrivacyMode.Unknown;
     }
 }

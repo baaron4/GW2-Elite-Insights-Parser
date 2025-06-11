@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 public abstract class FightLogic
 {
 
-    public enum ParseModeEnum { FullInstance, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
+    public enum ParseModeEnum { FullInstance, Instanced50, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
     public enum SkillModeEnum { PvE, WvW, sPvP };
 
     [Flags]
@@ -539,5 +539,13 @@ public abstract class FightLogic
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// Determinate the privaty state of an instance.
+    /// </summary>
+    internal virtual FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.InstancePrivacyMode.NotApplicable;
     }
 }

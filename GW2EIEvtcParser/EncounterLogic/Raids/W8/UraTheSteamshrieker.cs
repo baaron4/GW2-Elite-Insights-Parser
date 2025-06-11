@@ -664,7 +664,7 @@ internal class UraTheSteamshrieker : MountBalrior
             target.OverrideName("Godscream Ura");
             return uraHP > 100e6 ? FightData.EncounterMode.LegendaryCM : FightData.EncounterMode.CMNoName;
         }
-        target.OverrideName("Ura, the Streamshrieker");
+        target.OverrideName("Ura, the Steamshrieker");
         return FightData.EncounterMode.Normal;
     }
 

@@ -11,8 +11,9 @@ public class EncounterCategory
         Golem,
         Story,
         OpenWorld,
+        Convergence,
         UnknownEncounter,
-        Unknown
+        Unknown,
     };
 
     internal enum SubFightCategory
@@ -55,6 +56,9 @@ public class EncounterCategory
         Story,
         //
         OpenWorld,
+        //
+        OuterNayosConvergence,
+        MountBalriorConvergence,
         //
         UnknownEncounter,
         Unknown
