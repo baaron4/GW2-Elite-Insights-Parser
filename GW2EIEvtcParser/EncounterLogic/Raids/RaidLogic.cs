@@ -20,6 +20,11 @@ internal abstract class RaidLogic : FightLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        if (IsInstance)
+        {
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            return;
+        }
         var raidRewardsTypes = new HashSet<int>();
         if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
         {
@@ -43,6 +48,10 @@ internal abstract class RaidLogic : FightLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+        }
         if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;
