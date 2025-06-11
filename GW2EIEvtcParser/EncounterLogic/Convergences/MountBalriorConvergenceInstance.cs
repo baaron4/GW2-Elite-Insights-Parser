@@ -27,6 +27,13 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         return "Convergence: Mount Balrior";
     }
 
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayMountBalrior, 
+            (1280, 1280),
+            (-21504, -21504, 24576, 24576)); // TODO Fix values
+    }
+
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return

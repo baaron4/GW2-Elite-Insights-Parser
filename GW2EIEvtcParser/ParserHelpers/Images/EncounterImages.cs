@@ -226,6 +226,10 @@ internal static class EncounterImages
     #region CONVERGENCES
     // Instance Icons
     internal const string InstanceIconOuterNayos = "https://i.imgur.com/CRqdnan.png";
+
+    // Combat Replay Maps
+    internal const string CombatReplayOuterNayos = "https://i.imgur.com/UFueycy.jpeg";
+    internal const string CombatReplayMountBalrior = "https://i.imgur.com/H8QFXbC.jpeg";
     #endregion
 }
 

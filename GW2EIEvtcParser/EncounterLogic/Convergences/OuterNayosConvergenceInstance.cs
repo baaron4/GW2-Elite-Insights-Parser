@@ -26,6 +26,13 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         return "Convergence: Outer Nayos";
     }
 
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayOuterNayos,
+            (1800, 2000),
+             (-15360, -15360, 15360, 15360)); // TODO Fix values
+    }
+
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
