@@ -669,7 +669,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+
+    internal static void PreHandleAgents(AgentData agentData, List<CombatItem> combatData)
     {
         // Ferrous Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -678,32 +679,21 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
             bomb.OverrideID(TargetID.FerrousBomb, agentData);
         }
-        // We remove extra Mai trins if present
+        // We remove useless Mai trins if present
         IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(TargetID.MaiTrinStrike);
-        if (maiTrins.Count > 1)
+        IReadOnlyList<AgentItem> echoes = agentData.GetNPCsByIDs([TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM]);
+        foreach (AgentItem maiTrin in maiTrins)
         {
-            for (int i = 1; i < maiTrins.Count; i++)
+            if (echoes.Any(x => x.FirstAware <= maiTrin.FirstAware && x.LastAware >= maiTrin.FirstAware))
             {
-                maiTrins[i].OverrideID(IgnoredSpecies, agentData);
+                maiTrin.OverrideID(TargetID.MaiTrinStrikeFake, agentData);
             }
         }
-        if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
-        {
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
-        }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
-        foreach (SingleActor echoOfScarlet in echoesOfScarlet)
-        {
-            var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-            if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
-            {
-                hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
-            }
-        }
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBreakbar, TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.FerrousBomb, TargetID.ScarletPhantomBeamNM])));
-        foreach (SingleActor target in Targets)
+    }
+
+    internal static void HandleCustomRenaming(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
             switch (target.ID)
             {
@@ -718,6 +708,33 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     break;
             }
         }
+    }
+
+    internal static void PostProcessEvtcEvents(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        var echoesOfScarlet = targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
+        foreach (SingleActor echoOfScarlet in echoesOfScarlet)
+        {
+            var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
+            if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
+            {
+                hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
+            }
+        }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        PreHandleAgents(agentData, combatData);
+        if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
+        {
+            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
+            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
+        }
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        PostProcessEvtcEvents(Targets, combatData);
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBreakbar, TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.FerrousBomb, TargetID.ScarletPhantomBeamNM])));
+        HandleCustomRenaming(Targets);
     }
 
     /// <summary>
