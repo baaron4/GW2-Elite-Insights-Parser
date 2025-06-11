@@ -497,9 +497,15 @@ public class SkillItem
         // Warclaw
         { WarclawBattleMaulSkill, SkillImages.WarclawBattleMaul },
         { WarclawBattleMaulDamage, SkillImages.WarclawBattleMaul },
+        { WarclawBattleMaulPvE1, SkillImages.WarclawBattleMaul },
+        { WarclawBattleMaulPvE2, SkillImages.WarclawBattleMaul },
+        { WarclawBattleMaulPvE3, SkillImages.WarclawBattleMaul },
         { WarclawLance, SkillImages.WarclawLance },
+        { WarclawLancePvE, SkillImages.WarclawLance },
         { WarclawChainPull1, SkillImages.WarclawChainPull },
         { WarclawChainPull2, SkillImages.WarclawChainPull },
+        { WarclawChainPullPvE, SkillImages.WarclawChainPull },
+        { WarclawDashWildClaws, SkillImages.WarclawDash },
         #endregion MountIcons
         #region RelicIcons
         // Relics
@@ -1108,6 +1114,15 @@ public class SkillItem
             // - Ura
             { ThrummingPresenceDamage, BuffImages.ConjuredBarrier },
             { ThrummingPresenceBuff, BuffImages.ConjuredBarrier },
+            // Convergences
+            { WizardsBlessingSotO, BuffImages.WizardsBlessing },
+            { WizardsBlessingJW, BuffImages.WizardsBlessing },
+            { KryptisEssence, BuffImages.KryptisEssence },
+            { CalibratedEssence, BuffImages.KryptisEssence },
+        { EtherealHealing, SkillImages.EtherealHealing },
+        { HealingRainConvergence, SkillImages.PacifiedMagicalStorm },
+        { WatchfulSpirit, SkillImages.WatchfulSpirit },
+        { RideTheLeyLine, SkillImages.RideTheLeyLine },
         #endregion  EncounterIcons
         #region Misc
         { WhirlingAssault, SkillImages.WhirlingAssault },

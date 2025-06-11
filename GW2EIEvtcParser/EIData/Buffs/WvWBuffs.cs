@@ -92,5 +92,7 @@ internal static class WvWBuffs
         new Buff("Guild Hall - PvE", GuildHallPvEMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallPvEMode),
         new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallsPvPMode),
         new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallWvWMode),
+        // Events
+        new Buff("No Downed State", NoDownedState, Source.Common, BuffClassification.Other, BuffImages.NoDownedState),
     ];
 }

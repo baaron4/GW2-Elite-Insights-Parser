@@ -113,6 +113,21 @@ internal static class JsonLogBuilder
             jsonLog.InstanceTimeStartStd = null;
             jsonLog.InstanceIP = null;
         }
+        switch (log.FightData.InstancePrivacy)
+        {
+            case FightData.InstancePrivacyMode.Public:
+                jsonLog.InstancePrivacy = "Public Instance";
+                break;
+            case FightData.InstancePrivacyMode.Private:
+                jsonLog.InstancePrivacy = "Private Instance";
+                break;
+            case FightData.InstancePrivacyMode.NotApplicable:
+                jsonLog.InstancePrivacy = "Not Applicable";
+                break;
+            case FightData.InstancePrivacyMode.Unknown:
+                jsonLog.InstancePrivacy = "Unknown";
+                break;
+        }
         jsonLog.Success = log.FightData.Success;
         jsonLog.GW2Build = log.LogData.GW2Build;
         jsonLog.UploadLinks = uploadLinks;
