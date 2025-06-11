@@ -98,17 +98,6 @@ internal class Deimos : BastionOfThePenitent
             new DamageCastFinder(DemonicAura, DemonicAura),
         ];
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Deimos,
-            TargetID.Saul,
-            TargetID.Thief,
-            TargetID.Drunkard,
-            TargetID.Gambler,
-        ];
-    }
 
     protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {

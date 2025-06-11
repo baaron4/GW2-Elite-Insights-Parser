@@ -214,7 +214,7 @@ internal class Matthias : SalvationPass
                         // only redirect incoming damage
                         if (cbt.DstMatchesAgent(sacrifice, extensions))
                         {
-                            cbt.OverrideDstAgent(sacrificeCrystal.Agent);
+                            cbt.OverrideDstAgent(sacrificeCrystal);
                         }
                     }
                     // copy the rest
@@ -223,11 +223,11 @@ internal class Matthias : SalvationPass
                         var copy = new CombatItem(cbt);
                         if (copy.DstMatchesAgent(sacrifice, extensions))
                         {
-                            copy.OverrideDstAgent(sacrificeCrystal.Agent);
+                            copy.OverrideDstAgent(sacrificeCrystal);
                         }
                         if (copy.SrcMatchesAgent(sacrifice, extensions))
                         {
-                            copy.OverrideSrcAgent(sacrificeCrystal.Agent);
+                            copy.OverrideSrcAgent(sacrificeCrystal);
                         }
                         copies.Add(copy);
                     }

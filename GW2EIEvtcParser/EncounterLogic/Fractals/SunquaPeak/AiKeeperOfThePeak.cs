@@ -178,15 +178,6 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return trashIDs;
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.AiKeeperOfThePeak,
-            TargetID.AiKeeperOfThePeak2,
-        ];
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.AiKeeperOfThePeak, out var aiAgent))

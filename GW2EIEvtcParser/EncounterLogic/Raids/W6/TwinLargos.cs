@@ -130,15 +130,6 @@ internal class TwinLargos : MythwrightGambit
         return targetPhases;
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Kenut,
-            TargetID.Nikare
-        ];
-    }
-
     private static void FallBackPhases(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
     {
         IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;

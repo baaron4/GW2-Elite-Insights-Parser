@@ -12,18 +12,15 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-internal class Instance : FightLogic
+internal class UnknownInstanceLogic : UnknownFightLogic
 {
     private readonly List<TargetID> _targetIDs = [];
     private readonly List<TargetID> _trashIDs = [];
-    public Instance(int id) : base(id)
+    public UnknownInstanceLogic(int id) : base(id)
     {
         Extension = "instance";
-        ParseMode = ParseModeEnum.FullInstance;
         SkillMode = SkillModeEnum.PvE;
         Icon = InstanceIconGeneric;
-        EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
-        EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
     private void FindGenericTargetIDs(AgentData agentData, IReadOnlyList<CombatItem> combatData)
@@ -116,11 +113,6 @@ internal class Instance : FightLogic
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
-    {
-        // Nothing to do
-    }
-
     internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
     {
         phases[0].AddTargets(targets, log);
@@ -176,32 +168,6 @@ internal class Instance : FightLogic
             EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
     }
-    internal override List<InstantCastFinder> GetInstantCastFinders()
-    {
-        return [];
-    }
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
-    {
-        return base.GetCustomWarningMessages(fightData, evtcVersion);
-    }
-    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
-    {
-    }
-    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
-    {
-    }
-    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
-    {
-        return [];
-    }
-    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
-    {
-        return [];
-    }
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
-    {
-        return [];
-    }
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return _targetIDs.Count > 0 ? _targetIDs : [TargetID.Instance];
@@ -209,19 +175,6 @@ internal class Instance : FightLogic
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return _trashIDs;
-    }
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
-    {
-        return [];
-    }
-    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
-    {
-        return [];
-    }
-
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
-    {
-        return [];
     }
 
     internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -247,20 +247,6 @@ internal class SooWon : OpenWorldLogic
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.SooWonOW,
-            TargetID.SooWonTail,
-            TargetID.VoidGiant2,
-            TargetID.VoidTimeCaster2,
-            TargetID.VoidBrandstalker,
-            TargetID.VoidColdsteel2,
-            TargetID.VoidObliterator2,
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

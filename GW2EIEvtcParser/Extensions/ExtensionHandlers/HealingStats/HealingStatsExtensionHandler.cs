@@ -253,9 +253,9 @@ public class HealingStatsExtensionHandler : ExtensionHandler
         }
         // Prefer instid fetch for healing events
         AgentItem src = agentData.GetAgentByInstID(combatItem.SrcInstid, combatItem.Time);
-        combatItem.OverrideSrcAgent(src.Agent);
+        combatItem.OverrideSrcAgent(src);
         AgentItem dst = agentData.GetAgentByInstID(combatItem.DstInstid, combatItem.Time);
-        combatItem.OverrideDstAgent(dst.Agent);
+        combatItem.OverrideDstAgent(dst);
     }
 
     internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)

@@ -209,16 +209,6 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Berg,
-            TargetID.Zane,
-            TargetID.Narella
-        ];
-    }
-
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);

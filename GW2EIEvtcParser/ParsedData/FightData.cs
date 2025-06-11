@@ -98,7 +98,7 @@ public class FightData
                     return new WvWFight(id, parserSettings.DetailedWvWParse);
                 }
             case TargetID.Instance:
-                return new Instance(id);
+                return new UnknownInstanceLogic(id);
         }
         var target = agentData.GetNPCsByID(id).FirstOrDefault() ?? agentData.GetGadgetsByID(id).FirstOrDefault();
         switch (target?.Type)
@@ -302,7 +302,7 @@ public class FightData
                 }
                 break;
         }
-        return new UnknownFightLogic(id);
+        return new UnknownBossLogic(id);
     }
 
     internal void CompleteFightName(CombatData combatData, AgentData agentData)

@@ -131,15 +131,6 @@ internal class Freezie : FestivalStrikeMissionLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Freezie,
-            TargetID.FreeziesFrozenHeart
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
