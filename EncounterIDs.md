@@ -9,6 +9,8 @@ Unsupported: 0x010000
 *Unsupported encounters are safe to ignore.*
 ## Raids
 ### Wing 1
+Spirit Vale Full Instance: 0x020100
+
 Vale Guardian: 0x020101
 
 Gorseval: 0x020102
@@ -18,6 +20,8 @@ Sabetha: 0x020103
 SpiritRace: 0x020104
 
 ### Wing 2
+Salvation Pass Full Instance: 0x020200
+
 Slothasor: 0x020201
 
 Bandit Trio: 0x020202
@@ -25,6 +29,8 @@ Bandit Trio: 0x020202
 Matthias: 0x020203
 
 ### Wing 3
+Stronghold of the Faithful Full Instance: 0x020300
+
 Escort: 0x020301
 
 Keep Construct: 0x020302
@@ -34,6 +40,8 @@ Twisted Castle: 0x020303
 Xera: 0x020304
 
 ### Wing 4
+Bastion of the Penitent Full Instance: 0x020400
+
 Cairn: 0x020401
 
 Mursaat Overseer: 0x020402
@@ -43,6 +51,8 @@ Samarog: 0x020403
 Deimos: 0x020404
 
 ### Wing 5
+Hall of Chains Full Instance: 0x020500
+
 Soulless Horror: 0x020501
 
 River of Souls: 0x020502
@@ -56,6 +66,8 @@ Eye of Judgement/Eye of Fate: 0x020505
 Dhuum: 0x020506
 
 ### Wing 6
+Mythwright Gambit Full Instance: 0x020600
+
 Conjured Amalgamate: 0x020601
 
 Twin Largos: 0x020602
@@ -63,6 +75,8 @@ Twin Largos: 0x020602
 Qadim: 0x020603
 
 ### Wing 7
+The Key of Ahdashim Full Instance: 0x020700
+
 Adina: 0x020701
 
 Sabir: 0x020702
@@ -70,6 +84,8 @@ Sabir: 0x020702
 Qadim the Peerless: 0x020703
 
 ### Wing 8
+Mount Balrior Full Instance: 0x020800
+
 Greer, the Blightbringer: 0x020801
 
 Decima, the Stormsinger: 0x020802
@@ -78,6 +94,8 @@ Ura, the Steamshrieker: 0x020803
 
 ## Fractals
 ### Nightmare
+Nightmare Full Instance: 0x030100
+
 MAMA: 0x030101
 
 Siax: 0x030102
@@ -85,6 +103,8 @@ Siax: 0x030102
 Ensolyss: 0x030103
 
 ### Shattered Observatory
+Shattered Observatory Full Instance: 0x030200
+
 Skorvald: 0x030201
 
 Artsariiv: 0x030202
@@ -92,6 +112,8 @@ Artsariiv: 0x030202
 Arkk: 0x030203
 
 ### Sunqua Peak
+Sunqua Peak Full Instance: 0x030300
+
 Ai, Elemental and Dark: 0x030301
 
 Ai, Elemental Only: 0x030302
@@ -99,6 +121,8 @@ Ai, Elemental Only: 0x030302
 Ai, Dark Only: 0x030303
 
 ### Silent Surf
+Slient Surf Full Instance: 0x030400
+
 Kanaxai, Scythe of House Aurkus: 0x030401
 
 ## Strikes
@@ -118,6 +142,8 @@ Whisper of Jormag: 0x040205
 
 Varinia Stormsounder: 0x040206
 
+0xXXXX1X indicates a full instance log.
+
 ### End of Dragons
 Aetherblade Hideout: 0x040301
 
@@ -129,10 +155,14 @@ Harvest Temple: 0x040304
 
 Old Lion's Court: 0x040305
 
+0xXXXX1X indicates a full instance log.
+
 ### Secret of the Obscure
 Cosmic Observatory: 0x040501
 
 Temple of Febe: 0x040502
+
+0xXXXX1X indicates a full instance log.
 
 ## Open World
 Soo-Won: 0x050401
@@ -163,6 +193,8 @@ Windswept Haven: 0x070A00
 
 Isle of Reflection: 0x070B00
 
+0xXXXX01 indicates a full instance log.
+
 ## Golem
 Massive Golem 10M: 0x080101
 
@@ -183,3 +215,5 @@ Power Golem: 0x080108
 Large Golem: 0x080109
 
 Medium Golem: 0x08010A
+
+0xXXX2XX indicates a full instance log.
