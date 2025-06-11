@@ -383,7 +383,7 @@ class EnemyPlayerDrawable extends NonSquadPlayerDrawable {
 class FriendlyPlayerDrawable extends NonSquadPlayerDrawable {
     constructor(params, pixelSize) {
         super(params, pixelSize);
-        this.colorAdjuster = (r, g, b, abs) => {
+        this.colorAdjuster = (r, g, b, a) => {
             let grayScale = 0.299 * r + 0.587 * g + 0.114*b;
             return {
                 r: 0.3 * grayScale,
