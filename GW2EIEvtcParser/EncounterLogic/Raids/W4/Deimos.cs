@@ -98,17 +98,6 @@ internal class Deimos : BastionOfThePenitent
             new DamageCastFinder(DemonicAura, DemonicAura),
         ];
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Deimos,
-            TargetID.Saul,
-            TargetID.Thief,
-            TargetID.Drunkard,
-            TargetID.Gambler,
-        ];
-    }
 
     protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
@@ -454,15 +443,6 @@ internal class Deimos : BastionOfThePenitent
             if (invulDei != null)
             {
                 npcDeimosEnd = invulDei.Time;
-            }
-            else if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).Any())
-            {
-                HealthUpdateEvent? prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
-                if (prevHPUpdate != null)
-                {
-                    mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HealthPercent)}%";
-                    npcDeimosEnd = prevHPUpdate.Time;
-                }
             }
             phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(mainTarget, log);

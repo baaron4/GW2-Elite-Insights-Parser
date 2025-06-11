@@ -12,7 +12,7 @@ public class MechanicData
     private CachingCollection<HashSet<Mechanic>>? _presentMechanics;
     private CachingCollection<List<SingleActor>>? _enemyList;
 
-    internal MechanicData(List<Mechanic> fightMechanics)
+    internal MechanicData(List<Mechanic> fightMechanics, bool allowSameGraphConfig)
     {
         _mechanicLogs = new(fightMechanics.Count);
 
@@ -22,7 +22,7 @@ public class MechanicData
         var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(fightMechanics.Count);
         foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
         {
-            {
+            if (!allowSameGraphConfig) {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                 {
                     //TODO(Rennorb) @perf

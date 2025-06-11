@@ -177,14 +177,6 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Ankka,
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
@@ -226,7 +218,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
-        if (map != null && map.MapID == 1434)
+        if (map != null && map.MapID == MapIDs.Empty)
         {
             return FightData.EncounterMode.Story;
         }

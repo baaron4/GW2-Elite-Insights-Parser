@@ -1,0 +1,35 @@
+﻿using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.SpeciesIDs;
+
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal class MountBalriorInstance : MountBalrior
+{
+    public MountBalriorInstance(int triggerID) : base(triggerID)
+    {
+        EncounterID = 0;
+        Icon = InstanceIconMountBalrior;
+        Extension = "mntbalr";
+    }
+
+    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    {
+        return "Mount Balrior";
+    }
+
+    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    {
+        return
+        [
+            TargetID.Greer,
+            TargetID.Decima,
+            TargetID.DecimaCM,
+            TargetID.Ura,
+        ];
+    }
+}

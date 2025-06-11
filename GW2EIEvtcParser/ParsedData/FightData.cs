@@ -60,6 +60,15 @@ public class FightData
     public bool IsLateStart => FightStartStatus == EncounterStartStatus.Late || MissingPreEvent;
     public bool MissingPreEvent => FightStartStatus == EncounterStartStatus.NoPreEvent;
 
+    public enum InstancePrivacyMode
+    {
+        Public,
+        Private,
+        NotApplicable,
+        Unknown,
+    }
+    public InstancePrivacyMode InstancePrivacy {  get; private set; } = InstancePrivacyMode.NotApplicable;
+
     // Constructors
     internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)
     {
@@ -89,7 +98,7 @@ public class FightData
                     return new WvWFight(id, parserSettings.DetailedWvWParse);
                 }
             case TargetID.Instance:
-                return new Instance(id);
+                return new UnknownInstanceLogic(id);
         }
         var target = agentData.GetNPCsByID(id).FirstOrDefault() ?? agentData.GetGadgetsByID(id).FirstOrDefault();
         switch (target?.Type)
@@ -293,7 +302,7 @@ public class FightData
                 }
                 break;
         }
-        return new UnknownFightLogic(id);
+        return new UnknownBossLogic(id);
     }
 
     internal void CompleteFightName(CombatData combatData, AgentData agentData)
@@ -361,6 +370,7 @@ public class FightData
                 Logic.InvalidateEncounterID();
             }
             FightStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
+            InstancePrivacy = Logic.GetInstancePrivacyMode(combatData, agentData, this);
         }
     }
 

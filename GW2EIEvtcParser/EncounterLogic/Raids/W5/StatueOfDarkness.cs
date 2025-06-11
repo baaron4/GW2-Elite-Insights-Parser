@@ -78,15 +78,6 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.EyeOfFate,
-            TargetID.EyeOfJudgement
-        ];
-    }
-
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
         if (TargetHPPercentUnderThreshold(TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||

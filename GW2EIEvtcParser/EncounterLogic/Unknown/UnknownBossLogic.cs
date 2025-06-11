@@ -2,26 +2,18 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-internal class UnknownFightLogic : FightLogic
+internal class UnknownBossLogic : UnknownFightLogic
 {
-    public UnknownFightLogic(int triggerID) : base(triggerID)
+    public UnknownBossLogic(int triggerID) : base(triggerID)
     {
         Extension = "boss";
         Icon = EncounterIconGeneric;
-        EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
-        EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
-    }
-
-    internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
-    {
-        // We don't know how an unknown fight could operate.
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -41,7 +33,7 @@ internal class UnknownFightLogic : FightLogic
         // Handle potentially wrongly associated logs
         if (mapIDEvent != null && MapIDEvent.GetMapID(mapIDEvent) == GenericTriggerID && !agentData.GetNPCsByID(GenericTriggerID).Any() && !agentData.GetGadgetsByID(GenericTriggerID).Any())
         {
-            return new Instance((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
+            return new UnknownInstanceLogic((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
         }
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
@@ -67,11 +59,6 @@ internal class UnknownFightLogic : FightLogic
         FinalizeComputeFightTargets();
     }
 
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
-    {
-        throw new InvalidOperationException("UniqueNPCIDs not valid for Unknown");
-    }
-
     protected override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         throw new InvalidOperationException("GetTargetIDs not valid for Unknown");
@@ -85,5 +72,10 @@ internal class UnknownFightLogic : FightLogic
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
+    }
+
+    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.InstancePrivacyMode.Unknown;
     }
 }

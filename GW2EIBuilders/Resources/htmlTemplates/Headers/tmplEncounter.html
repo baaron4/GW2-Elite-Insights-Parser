@@ -1,7 +1,7 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
-        <h7 class="card-header-fightMode text-center" :class="fightModeColorClass">{{ encounter.mode }}</h7>
+        <h7 class="card-header-fightMode text-center" v-if="!wvw" :class="fightModeColorClass">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
@@ -29,6 +29,7 @@
                     </div>
                     <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
+                    <div class="mb-2" v-if="!!instancePrivacy">{{ instancePrivacy }}</div>
                     <div class="mb-2 text-warning" v-if="encounter.start"> {{ encounter.start }}</div>
                     <div v-if="!wvw" class="text" :class="resultStatus.class">
                         Result: {{resultStatus.text}}
@@ -120,6 +121,9 @@
             },
             fractalScale: function () {
                 return logData.fractalScale;
+            },
+            instancePrivacy: function () {
+                return logData.instancePrivacy;
             },
             resultStatus: function () {
                 return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };

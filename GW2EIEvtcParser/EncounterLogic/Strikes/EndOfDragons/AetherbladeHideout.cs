@@ -122,16 +122,6 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.MaiTrinStrike,
-            TargetID.EchoOfScarletBriarNM,
-            TargetID.EchoOfScarletBriarCM,
-        ];
-    }
-
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return

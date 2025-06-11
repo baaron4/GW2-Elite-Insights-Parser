@@ -6,7 +6,17 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicPhaseUtils
 {
-
+    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    {
+        phases[0].AddTargets(targets, log);
+        foreach (SingleActor target in targets)
+        {
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), target.Character);
+            phase.AddTarget(target, log);
+            phase.AddParentPhase(phases[0]);
+            phases.Add(phase);
+        }
+    }
     internal static List<PhaseData> GetPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
@@ -162,6 +172,13 @@ internal static class EncounterLogicPhaseUtils
 
     internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
     {
+        if (log.FightData.Logic.IsInstance)
+        {
+            return
+        [
+            new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance")
+        ];
+        }
         return
         [
             new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")

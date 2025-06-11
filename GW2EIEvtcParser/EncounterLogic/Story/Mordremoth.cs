@@ -98,26 +98,4 @@ internal class Mordremoth : StoryInstance
             TargetID.Caithe,
         ];
     }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.Mordremoth,
-            TargetID.Canach,
-            TargetID.Braham,
-            TargetID.Caithe,
-            TargetID.BlightedRytlock,
-            //TargetID.BlightedCanach,
-            TargetID.BlightedBraham,
-            TargetID.BlightedMarjory,
-            TargetID.BlightedCaithe,
-            TargetID.BlightedForgal,
-            TargetID.BlightedSieran,
-            //TargetID.BlightedTybalt,
-            //TargetID.BlightedPaleTree,
-            //TargetID.BlightedTrahearne,
-            //TargetID.BlightedEir,           
-        ];
-    }
 }

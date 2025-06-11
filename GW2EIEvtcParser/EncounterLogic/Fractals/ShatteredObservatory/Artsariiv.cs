@@ -44,11 +44,6 @@ internal class Artsariiv : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return [];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

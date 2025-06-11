@@ -16,7 +16,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class SoullessHorror : HallOfChains
 {
-    private static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     public SoullessHorror(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([

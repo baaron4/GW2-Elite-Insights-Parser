@@ -86,6 +86,7 @@ internal static class EncounterImages
     internal const string InstanceIconHallOfChains = "https://i.imgur.com/GjUeL1x.png";
     internal const string InstanceIconMythwrightGambit = "https://i.imgur.com/1dSCf2T.png";
     internal const string InstanceIconTheKeyOfAhdashim = "https://i.imgur.com/3YGv1wH.png";
+    internal const string InstanceIconMountBalrior = "https://i.imgur.com/kBVYPEV.png";
 
     // Combat Replay Maps
     internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
@@ -221,6 +222,15 @@ internal static class EncounterImages
     internal const string CombatReplayArmisticeBastion = "";
 
     #endregion WVW
+
+    #region CONVERGENCES
+    // Instance Icons
+    internal const string InstanceIconOuterNayos = "https://i.imgur.com/CRqdnan.png";
+
+    // Combat Replay Maps
+    internal const string CombatReplayOuterNayos = "https://i.imgur.com/UFueycy.jpeg";
+    internal const string CombatReplayMountBalrior = "https://i.imgur.com/H8QFXbC.jpeg";
+    #endregion
 }
 
 #pragma warning restore CA1823 // Unused field

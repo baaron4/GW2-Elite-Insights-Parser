@@ -16,7 +16,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class HarvestTemple : EndOfDragonsStrike
 {
 
-    private static readonly Vector3 GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
     private IEnumerable<SingleActor> FirstAwareSortedTargets = [];
     public HarvestTemple(int triggerID) : base(triggerID)
     {
@@ -366,11 +365,6 @@ internal class HarvestTemple : EndOfDragonsStrike
         };
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return [];
-    }
-
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
@@ -450,7 +444,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
+        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
         var maxHPEvents = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -711,27 +705,27 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                     if (jormag != null && jormagDamagingAgents.Any(x => cbt.SrcAgent == x && jormag.FirstAware <= cbt.Time && cbt.Time <= jormag.LastAware))
                     {
-                        cbt.OverrideSrcAgent(jormag.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(jormag.AgentItem);
                     }
                     else if (primordus != null && primordusDamagingAgents.Any(x => cbt.SrcAgent == x && primordus.FirstAware <= cbt.Time && cbt.Time <= primordus.LastAware))
                     {
-                        cbt.OverrideSrcAgent(primordus.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(primordus.AgentItem);
                     }
                     else if (kralk != null && kralkDamagingAgents.Any(x => cbt.SrcAgent == x && kralk.FirstAware <= cbt.Time && cbt.Time <= kralk.LastAware))
                     {
-                        cbt.OverrideSrcAgent(kralk.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(kralk.AgentItem);
                     }
                     else if (mord != null && mordDamagingAgents.Any(x => cbt.SrcAgent == x && mord.FirstAware <= cbt.Time && cbt.Time <= mord.LastAware))
                     {
-                        cbt.OverrideSrcAgent(mord.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(mord.AgentItem);
                     }
                     else if (zhaitan != null && zhaitanDamagingAgents.Any(x => cbt.SrcAgent == x && zhaitan.FirstAware <= cbt.Time && cbt.Time <= zhaitan.LastAware))
                     {
-                        cbt.OverrideSrcAgent(zhaitan.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(zhaitan.AgentItem);
                     }
                     else if (soowon != null && soowonDamagingAgents.Any(x => cbt.SrcAgent == x && soowon.FirstAware <= cbt.Time && cbt.Time <= soowon.LastAware))
                     {
-                        cbt.OverrideSrcAgent(soowon.AgentItem.Agent);
+                        cbt.OverrideSrcAgent(soowon.AgentItem);
                     }
                 }
             }

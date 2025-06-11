@@ -219,15 +219,6 @@ internal class SuperKodanBrothers : Bjora
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.ClawOfTheFallen,
-            TargetID.VoiceOfTheFallen,
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

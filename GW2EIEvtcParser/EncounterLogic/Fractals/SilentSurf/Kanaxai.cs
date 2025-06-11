@@ -89,14 +89,6 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.KanaxaiScytheOfHouseAurkusCM,
-        ];
-    }
-
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

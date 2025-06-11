@@ -20,6 +20,12 @@ internal abstract class RaidLogic : FightLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        if (IsInstance)
+        {
+            // Raid instances remember last status, killing last boss is not an indication of a successful instance
+            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            return;
+        }
         var raidRewardsTypes = new HashSet<int>();
         if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
         {
@@ -43,6 +49,10 @@ internal abstract class RaidLogic : FightLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+        }
         if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
         {
             return FightData.EncounterStartStatus.Late;
@@ -53,10 +63,5 @@ internal abstract class RaidLogic : FightLogic
     protected override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
-    }
-
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
-    {
-        return new [] { GetTargetID(GenericTriggerID) };
     }
 }
