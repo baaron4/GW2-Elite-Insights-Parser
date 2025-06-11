@@ -104,7 +104,7 @@ public abstract class FightLogic
         {
             allMechs.AddRange(mechGroup.GetMechanics());
         }
-        return new MechanicData(allMechs);
+        return new MechanicData(allMechs, GenericTriggerID == (int)TargetID.Instance);
     }
 
     protected virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

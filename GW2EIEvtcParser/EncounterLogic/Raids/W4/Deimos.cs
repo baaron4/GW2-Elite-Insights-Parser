@@ -444,15 +444,6 @@ internal class Deimos : BastionOfThePenitent
             {
                 npcDeimosEnd = invulDei.Time;
             }
-            else if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).Any())
-            {
-                HealthUpdateEvent? prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
-                if (prevHPUpdate != null)
-                {
-                    mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HealthPercent)}%";
-                    npcDeimosEnd = prevHPUpdate.Time;
-                }
-            }
             phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(mainTarget, log);
             phase100to10.AddParentPhase(mainFightPhase);
