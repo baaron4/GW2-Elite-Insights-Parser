@@ -182,10 +182,7 @@ internal class LogDataDto
                 InstancePrivacy = "Private Instance";
                 break;
             case FightData.InstancePrivacyMode.NotApplicable:
-                InstancePrivacy = "Not Applicable";
-                break;
             case FightData.InstancePrivacyMode.Unknown:
-                InstancePrivacy = "Unknown";
                 break;
         }
         LightTheme = light;

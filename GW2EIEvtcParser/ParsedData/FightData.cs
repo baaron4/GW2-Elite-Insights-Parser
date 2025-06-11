@@ -67,7 +67,7 @@ public class FightData
         NotApplicable,
         Unknown,
     }
-    public InstancePrivacyMode InstancePrivacy {  get; private set; } = InstancePrivacyMode.Private;
+    public InstancePrivacyMode InstancePrivacy {  get; private set; } = InstancePrivacyMode.NotApplicable;
 
     // Constructors
     internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)

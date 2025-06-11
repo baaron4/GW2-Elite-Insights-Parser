@@ -307,7 +307,8 @@ public class JsonLog
     public string? InstanceIP;
 
     /// <summary>
-    /// Type of instance privacy
+    /// Type of instance privacy \n
+    /// Default NotApplicable, other values can be Public, Private or Unknown
     /// </summary>
     public string InstancePrivacy;
 

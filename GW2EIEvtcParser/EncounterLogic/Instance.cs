@@ -133,6 +133,11 @@ internal class Instance : FightLogic
         }
     }
 
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases;
@@ -171,29 +176,6 @@ internal class Instance : FightLogic
             EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
     }
-
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        fightData.SetSuccess(true, fightData.FightEnd);
-    }
-
-    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = 10000)
-    {
-        InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
-        if (evt == null)
-        {
-            return FightData.EncounterStartStatus.Normal;
-        }
-        else
-        {
-            return evt.TimeOffsetFromInstanceCreation > threshold ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
-        }
-    }
-
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
-    {
-        return GetInstanceStartStatus(combatData);
-    }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return [];
@@ -228,11 +210,11 @@ internal class Instance : FightLogic
     {
         return _trashIDs;
     }
-    protected override IReadOnlyList<TargetID>  GetUniqueNPCIDs()
+    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
     {
         return [];
     }
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return [];
     }
