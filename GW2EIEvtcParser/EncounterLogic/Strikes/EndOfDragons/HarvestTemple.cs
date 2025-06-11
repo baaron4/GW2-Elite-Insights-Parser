@@ -16,7 +16,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class HarvestTemple : EndOfDragonsStrike
 {
 
-    private static readonly Vector3 GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
     private IEnumerable<SingleActor> FirstAwareSortedTargets = [];
     public HarvestTemple(int triggerID) : base(triggerID)
     {
@@ -445,7 +444,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
+        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
         var maxHPEvents = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))

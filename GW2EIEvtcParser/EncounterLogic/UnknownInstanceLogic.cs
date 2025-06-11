@@ -13,8 +13,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class UnknownInstanceLogic : UnknownFightLogic
 {
-    public bool StartedLate { get; private set; }
-    public bool EndedBeforeExpectedEnd { get; private set; }
     private readonly List<TargetID> _targetIDs = [];
     private readonly List<TargetID> _trashIDs = [];
     public UnknownInstanceLogic(int id) : base(id)
@@ -84,11 +82,6 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
-    {
-        return GetGenericFightOffset(fightData);
-    }
-
     internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
     {
         phases[0].AddTargets(targets, log);
@@ -99,6 +92,10 @@ internal class UnknownInstanceLogic : UnknownFightLogic
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
         }
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -138,29 +135,6 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         {
             EncounterLogicUtils.NumericallyRenameSpecies(Targets);
         }
-    }
-
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        fightData.SetSuccess(true, fightData.FightEnd);
-    }
-
-    internal static FightData.EncounterStartStatus GetInstanceStartStatus(CombatData combatData, long threshold = 10000)
-    {
-        InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
-        if (evt == null)
-        {
-            return FightData.EncounterStartStatus.Normal;
-        }
-        else
-        {
-            return evt.TimeOffsetFromInstanceCreation > threshold ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
-        }
-    }
-
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
-    {
-        return GetInstanceStartStatus(combatData);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -256,10 +230,5 @@ internal class UnknownInstanceLogic : UnknownFightLogic
     protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return _trashIDs;
-    }
-
-    internal override List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
-    {
-        return [];
     }
 }

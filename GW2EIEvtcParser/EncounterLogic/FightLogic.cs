@@ -50,6 +50,8 @@ public abstract class FightLogic
     protected List<SingleActor> _targets { get; private set; } = [];
     protected List<SingleActor> _hostiles { get; private set; } = [];
 
+    protected bool IsInstance => GenericTriggerID == (int)TargetID.Instance;
+
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
     internal CombatReplayDecorationContainer EnvironmentDecorations;
@@ -308,9 +310,9 @@ public abstract class FightLogic
         EncounterID = EncounterIDs.EncounterMasks.Unsupported;
     }
 
-    internal virtual List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
+    internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        if (!requirePhases)
+        if (!requirePhases || IsInstance)
         {
             return [ ];
         }
@@ -446,6 +448,18 @@ public abstract class FightLogic
 
     internal virtual FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
+            if (evt == null)
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
+            else
+            {
+                return evt.TimeOffsetFromInstanceCreation > 10000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+            }
+        }
         return FightData.EncounterStartStatus.Normal;
     }
 
@@ -483,6 +497,10 @@ public abstract class FightLogic
     internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
+        if  (IsInstance)
+        {
+            return startToUse;
+        }
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
