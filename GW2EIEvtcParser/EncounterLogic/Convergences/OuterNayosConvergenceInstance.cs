@@ -53,18 +53,6 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.DemonKnight,
-            TargetID.Sorrow,
-            TargetID.Dreadwing,
-            TargetID.HellSister,
-            TargetID.UmbrielHalberdOfHouseAurkus,
-        ];
-    }
-
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;

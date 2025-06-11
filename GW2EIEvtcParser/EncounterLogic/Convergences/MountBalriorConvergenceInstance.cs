@@ -46,18 +46,6 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetUniqueNPCIDs()
-    {
-        return
-        [
-            TargetID.GreerTheBlightbringerConv,
-            TargetID.GreeTheBingerConv,
-            TargetID.ReegTheBlighterConv,
-            TargetID.DecimaTheStormsingerConv,
-            TargetID.UraTheSteamshriekerConv,
-        ];
-    }
-
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         return combatData.GetBuffApplyData(UnstableAttunementJW).Any(x => x.To.IsPlayer) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
