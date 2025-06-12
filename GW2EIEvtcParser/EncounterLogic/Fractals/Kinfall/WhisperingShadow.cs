@@ -17,7 +17,8 @@ internal class WhisperingShadow : Kinfall
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DeathlyGrime, new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "DeathGr.A", "Gained Deathly Grime", "Deathly Grime Application", 0),
-                new PlayerDstBuffRemoveMechanic(LifeFire, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire (Protective Circle)", "Life-Fire Remove", 0),
+                new PlayerDstBuffApplyMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4], new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightBlue), "LifeFire.A", "Gained Life-Fire Circle", "Life-Fire Circle Apply", 0),
+                new PlayerDstBuffRemoveMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire Circle", "Life-Fire Circle Remove", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
@@ -88,11 +89,11 @@ internal class WhisperingShadow : Kinfall
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
         // life-fire (protective circle)
-        var lifefires = player.GetBuffStatus(log, LifeFire, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        foreach (var lifefire in lifefires)
-        {
-            replay.Decorations.Add(new CircleDecoration(380, lifefire, Colors.Ice, 0.1, new AgentConnector(player.AgentItem)));
-        }
+        // buff & radius are different per tier
+        AddLifeFireCircle(player, log, replay, LifeFireCircleT1, 400);
+        AddLifeFireCircle(player, log, replay, LifeFireCircleT2, 350);
+        AddLifeFireCircle(player, log, replay, LifeFireCircleT3, 325);
+        AddLifeFireCircle(player, log, replay, LifeFireCircleT4, 300);
 
         // gorefrost (arrow) target
         var gorefrosts = player.GetBuffStatus(log, GorefrostTarget, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -103,6 +104,30 @@ internal class WhisperingShadow : Kinfall
         var inevitableDarknessEvents = GetFilteredList(log.CombatData, InevitableDarknessPlayer, player, true, false);
         replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
         replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
+    }
+
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        base.ComputeNPCCombatReplayActors(target, log, replay);
+
+        if (target.IsSpecies(TargetID.WhisperingShadow))
+        {
+            // freezing fan (frontal)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.WhisperingShadowFreezingFan, out var freezingFans))
+            {
+                foreach (var effect in freezingFans)
+                {
+                    var lifespan = effect.ComputeLifespan(log, 1500);
+                    if (target.TryGetCurrentFacingDirection(log, effect.Time, out var facing, 300))
+                    {
+                        var position = new PositionConnector(effect.Position);
+                        var rotation = new AngleConnector(facing);
+                        var decoration = (FormDecoration)new PieDecoration(1200, 190f, lifespan, Colors.LightOrange, 0.2, position).UsingRotationConnector(rotation);
+                        replay.Decorations.AddWithGrowing(decoration, lifespan.end);
+                    }
+                }
+            }
+        }
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -126,11 +151,11 @@ internal class WhisperingShadow : Kinfall
             foreach (var effect in fissureArrows)
             {
                 // TODO: support arrow decorations
-                const uint length = 1000;
+                const uint length = 1100;
                 var lifespan = effect.ComputeLifespan(log, 10000);
-                var position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f, 0.0f), true);
+                var position = new PositionConnector(effect.Position).WithOffset(new(0f, length / 2f, 0f), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                var decoration = new RectangleDecoration(100, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                var decoration = new RectangleDecoration(150, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
                 EnvironmentDecorations.Add(decoration);
             }
         }
@@ -141,7 +166,7 @@ internal class WhisperingShadow : Kinfall
                 var lifespan = effect.ComputeLifespan(log, 6333);
                 var position = new PositionConnector(effect.Position);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                var decoration = new RectangleDecoration(100, 360, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation);
+                var decoration = new RectangleDecoration(150, 380, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation);
                 EnvironmentDecorations.Add(decoration);
             }
         }
@@ -165,18 +190,27 @@ internal class WhisperingShadow : Kinfall
         }
 
         // gorefrost (arrow)
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowGorefrost, out var gorefrosts))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowGorefrost1, out var gorefrosts))
         {
             foreach (var effect in gorefrosts)
             {
                 // TODO: support arrow decorations
-                const uint length = 1000;
+                const uint length = 1050;
                 var lifespan = effect.ComputeLifespan(log, 1500);
-                var position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f, 0.0f), true); ;
+                var position = new PositionConnector(effect.Position).WithOffset(new(0f, length / 2f, 0f), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                var decoration = new RectangleDecoration(40, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
+                var decoration = new RectangleDecoration(50, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
                 EnvironmentDecorations.Add(decoration);
             }
+        }
+    }
+
+    protected static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
+    {
+        var lifefires = player.GetBuffStatus(log, buff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        foreach (var lifefire in lifefires)
+        {
+            replay.Decorations.Add(new CircleDecoration(radius, lifefire, Colors.Ice, 0.1, new AgentConnector(player.AgentItem)));
         }
     }
 }

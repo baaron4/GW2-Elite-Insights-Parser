@@ -4940,6 +4940,8 @@ public static class SkillIDs
     public const long POV_LegsOfTheTitan = 76184;
     public const long AchievementEligibilityShatterstep = 76189;
     public const long POV_LungsOfTheTitan = 76221;
+    public const long LifeFireCircleT2 = 76252;
+    public const long LifeFireCircleT4 = 76268;
     public const long Gorefrost = 76292;
     public const long CryoflashWindup = 76297;
     public const long FrozenTeeth = 76332;
@@ -4949,6 +4951,7 @@ public static class SkillIDs
     public const long VitreousSpikeHit2 = 76343;
     public const long InevitableDarkness = 76350;
     public const long SoulOfTheTitan = 76351;
+    public const long LifeFireCircleT1 = 76362;
     public const long TitanicPotential = 76372;
     public const long VitreousSpikeCast = 76393;
     public const long GutteringLight = 76397;
@@ -4960,6 +4963,7 @@ public static class SkillIDs
     public const long FreezingVortex = 76444;
     public const long DeathlyGrime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
+    public const long LifeFireCircleT3 = 76464;
     //
     #endregion
 }

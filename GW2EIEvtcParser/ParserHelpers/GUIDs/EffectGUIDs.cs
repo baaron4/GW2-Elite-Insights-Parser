@@ -571,7 +571,10 @@ public static class EffectGUIDs
     public static readonly GUID WhisperingShadowCryoflashShockwave = new("B329CFB6B354C148A537E114DC14CED6"); // owned by shadow, default duration 3033ms, used by both
     public static readonly GUID WhisperingShadowLoftedCryoflash = new("CB6863BE0D1270458E9593393A5A1B4D"); // owned by shadow, default duration 3033ms
     public static readonly GUID WhisperingShadowTerrestrialCryoflash = new("35678BCDC29F4F42BB66AE744DE79A58"); // owned by shadow, default duration 4333ms
-    public static readonly GUID WhisperingShadowGorefrost = new("4B5E508C2C272B44B20F7C0AAB9EB77F"); // owned by shadow, 1.5s duration
+    public static readonly GUID WhisperingShadowGorefrost1 = new("4B5E508C2C272B44B20F7C0AAB9EB77F"); // owned by shadow, 1.5s duration
+    public static readonly GUID WhisperingShadowGorefrost2 = new("C94E3EB279F7EE4D957CBB5FC29427B9"); // owned by shadow, 1s duration
+    public static readonly GUID WhisperingShadowGorefrostLaunch = new("0D3866B45C47A34D8C6767BD023A60CC"); // owned by shadow, default duration 3366ms, small shockwave from launched gorefrost
+    public static readonly GUID WhisperingShadowFreezingFan = new("B1EBFFDA5D58FD40AF96FF7689C43175"); // owned by shadow, 1.5s duration
     #endregion
 
     #region Raids
