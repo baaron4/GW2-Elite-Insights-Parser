@@ -289,12 +289,14 @@ internal class Deimos : BastionOfThePenitent
     {
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
         var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
+        bool hasBonds = false;
         foreach (AgentItem demonicBond in demonicBonds)
         {
+            hasBonds = true;
             demonicBond.OverrideID(TargetID.DemonicBond, agentData);
             demonicBond.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
-        return demonicBonds.Any();
+        return hasBonds;
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -421,7 +423,12 @@ internal class Deimos : BastionOfThePenitent
                 phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(fullFight);
                 phase100to0.AddTarget(mainTarget, log);
+                phase100to0.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(phase100to0);
+            } 
+            else
+            {
+                phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
             }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
             AddAddPhases(phases, log, mainTarget, [phase100to10]);
