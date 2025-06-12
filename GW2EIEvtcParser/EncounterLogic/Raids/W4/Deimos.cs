@@ -407,6 +407,7 @@ internal class Deimos : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         phases[0].AddTarget(mainTarget, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
 
         if (requirePhases)
         {
@@ -426,10 +427,6 @@ internal class Deimos : BastionOfThePenitent
                 phase100to0.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(phase100to0);
             } 
-            else
-            {
-                phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
-            }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
             AddAddPhases(phases, log, mainTarget, [phase100to10]);
             AddBurstPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
@@ -508,8 +505,8 @@ internal class Deimos : BastionOfThePenitent
             TargetID.Deimos,
             TargetID.DummyTarget,
             TargetID.Thief,
-            TargetID.Drunkard,
             TargetID.Gambler,
+            TargetID.Drunkard,
             TargetID.DemonicBond
         ];
     }
