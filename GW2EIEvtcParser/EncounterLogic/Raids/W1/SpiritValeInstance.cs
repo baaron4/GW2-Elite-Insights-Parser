@@ -139,7 +139,7 @@ internal class SpiritValeInstance : SpiritVale
         ];
         return finders;
     }
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)TargetID.ChargedSoul

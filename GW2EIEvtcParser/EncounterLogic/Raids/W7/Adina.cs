@@ -64,7 +64,7 @@ internal class Adina : TheKeyOfAhdashim
         ("SW", new(14316.6f, -2080.17f)), // eruption
         ("SE", new(15478.0f, -2156.67f)), // erosion
     ];
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)TargetID.HandOfErosion,

@@ -111,7 +111,7 @@ internal class Artsariiv : ShatteredObservatory
         ("S" , new(10_388.698f, 390.419f)),
         ("W" , new(9295.668f, 1450.060f)),
     ];
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)TargetID.CloneArtsariiv

@@ -207,14 +207,14 @@ public abstract class FightLogic
         return target.Character;
     }
 
-    protected virtual HashSet<int> CustomRenamedSpecies()
+    protected virtual HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [];
     }
 
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var ignoredSpeciesForRenaming = CustomRenamedSpecies();
+        var ignoredSpeciesForRenaming = IgnoreForAutoNumericalRenaming();
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();

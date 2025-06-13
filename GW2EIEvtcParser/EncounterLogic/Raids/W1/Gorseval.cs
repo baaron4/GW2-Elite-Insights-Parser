@@ -99,7 +99,7 @@ internal class Gorseval : SpiritVale
         ("SE", new(2470.5596f, -5194.389f)),
     ];
 
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)ChargedSoul

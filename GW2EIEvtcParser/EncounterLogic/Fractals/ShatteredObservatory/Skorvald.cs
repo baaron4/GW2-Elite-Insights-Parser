@@ -100,7 +100,7 @@ internal class Skorvald : ShatteredObservatory
         return phases;
     }
 
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)TargetID.FluxAnomaly1,

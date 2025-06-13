@@ -442,7 +442,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
-    protected override HashSet<int> CustomRenamedSpecies()
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
             (int)TargetID.KillableVoidAmalgamate,
