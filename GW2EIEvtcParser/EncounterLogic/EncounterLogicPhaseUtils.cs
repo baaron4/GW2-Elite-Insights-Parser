@@ -197,6 +197,10 @@ internal static class EncounterLogicPhaseUtils
             foreach (var target in targets)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+                if (enterCombat == null && !log.CombatData.GetDamageTakenData(target.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
+                {
+                    continue;
+                }
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
                 bool success = target == lastTarget && chest != null;
                 long end = success ? chest!.FirstAware : target.LastAware;

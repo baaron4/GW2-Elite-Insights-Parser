@@ -17,9 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class BanditTrio : SalvationPass
 {
-    public BanditTrio(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
             new PlayerDstBuffApplyMechanic(SlowBurn, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
             new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Cage)),
@@ -45,7 +43,10 @@ internal class BanditTrio : SalvationPass
                 new PlayerDstHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
                 new PlayerDstHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
             ]),
-        ]));
+        ]);
+    public BanditTrio(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "trio";
         ChestID = ChestID.ChestOfPrisonCamp;
         Icon = EncounterIconBanditTrio;
@@ -126,9 +127,9 @@ internal class BanditTrio : SalvationPass
                 TargetID.BanditBombardier,
                 TargetID.BanditSniper,
             };
-            var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
+            var banditPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
                 .Select(x => new PositionEvent(x, agentData));
-            var banditsInBox = banditSniperPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
+            var banditsInBox = banditPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
                 .Select(x => x.Src)
                 .ToHashSet();
             if (banditsInBox.Count > 0)
@@ -139,12 +140,10 @@ internal class BanditTrio : SalvationPass
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindCageAndBombs(AgentData agentData, List<CombatItem> combatData)
     {
         // Cage
         AgentItem? cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
-        // Reward Chest
-        FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         if (cage != null)
         {
             cage.OverrideType(AgentItem.AgentType.NPC, agentData);
@@ -157,6 +156,11 @@ internal class BanditTrio : SalvationPass
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
             bomb.OverrideID(TargetID.Bombs, agentData);
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindCageAndBombs(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 

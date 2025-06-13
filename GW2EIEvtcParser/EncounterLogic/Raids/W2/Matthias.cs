@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Matthias : SalvationPass
 {
-    public Matthias(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
 
 
             new PlayerDstHitMechanic([OppressiveGazeHuman, OppressiveGazeAbomination], new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken", "Oppressive Gaze (Hadouken projectile)","Hadouken", 0),
@@ -65,11 +63,15 @@ internal class Matthias : SalvationPass
                 new PlayerSrcBuffRemoveSingleFromMechanic([BloodShield, BloodShieldAbo], new MechanicPlotlySetting(Symbols.Octagon,Colors.Blue), "Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"),
             ]),
             new PlayerDstBuffApplyMechanic(ZealousBenediction, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bombs", "Zealous Benediction (Expanding bombs)","Bomb",0),
-        ]));
+        ]);
+    public Matthias(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "matt";
         Icon = EncounterIconMatthias;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
+        ChestID = ChestID.MatthiasChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -176,7 +178,7 @@ internal class Matthias : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindSacrifices(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // has breakbar state into
         if (combatData.Any(x => x.IsStateChange == StateChange.BreakbarState))
@@ -239,14 +241,24 @@ internal class Matthias : SalvationPass
                 combatData.SortByTime();
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+    }
+
+    internal static void ForceSacrificeHealth(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.MatthiasSacrificeCrystal))
             {
                 target.SetManualHealth(100000);
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindSacrifices(fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        ForceSacrificeHealth(Targets);
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

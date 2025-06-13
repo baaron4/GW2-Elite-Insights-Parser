@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Slothasor : SalvationPass
 {
-    public Slothasor(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([  
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(TantrumDamage, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum", "Tantrum (Triple Circles after Ground slamming)","Tantrum", 5000),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(VolatilePoisonBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison", "Volatile Poison Application (Special Action Key)","Poison (Action Key)", 0),
@@ -39,11 +37,15 @@ internal class Slothasor : SalvationPass
                     .UsingChecker( (br,log) => br.RemovedDuration <= 120000),
             ]),
             new PlayerDstBuffApplyMechanic(SlipperySlubling, new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb", "Slippery Slubling","Slippery Slubling", 0),
-        ]));
+        ]);
+    public Slothasor(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sloth";
         Icon = EncounterIconSlothasor;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
+        ChestID = ChestID.SlothasorChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -137,9 +139,8 @@ internal class Slothasor : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindMushrooms(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // Mushrooms
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
@@ -176,6 +177,11 @@ internal class Slothasor : SalvationPass
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindMushrooms(fightData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
