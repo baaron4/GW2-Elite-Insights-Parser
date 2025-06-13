@@ -26,7 +26,6 @@ public abstract class FightLogic
         None = 0,
         Death = 1 << 0,
         CombatExit = 1 << 1,
-        ChestGadget = 1 << 2
     }
 
 
@@ -500,7 +499,7 @@ public abstract class FightLogic
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.ChestGadget) > 0)
+        if (!fightData.Success && ChestID != ChestID.None)
         {
             SetSuccessByChestGadget(ChestID, agentData, fightData);
         }

@@ -28,7 +28,6 @@ internal class River : HallOfChains
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
         ])
         );
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         ChestID = ChestID.ChestOfSouls;
         Extension = "river";
         Targetless = true;

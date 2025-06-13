@@ -49,7 +49,6 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ]));
         _cn = triggerID != (int)TargetID.ConjuredAmalgamate;
         Extension = "ca";
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         Icon = EncounterIconConjuredAmalgamate;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;

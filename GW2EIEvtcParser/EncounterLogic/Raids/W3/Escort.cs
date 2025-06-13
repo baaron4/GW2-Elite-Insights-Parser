@@ -37,7 +37,6 @@ internal class Escort : StrongholdOfTheFaithful
         Extension = "escort";
         Icon = EncounterIconEscort;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         EncounterID |= 0x000001;
     }
 
