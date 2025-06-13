@@ -536,9 +536,6 @@ public abstract class FightLogic
     internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ComputeFightTargets(agentData, combatData, extensions);
-        if (IsInstance)
-        {
-        }
     }
 
     /// <summary>
