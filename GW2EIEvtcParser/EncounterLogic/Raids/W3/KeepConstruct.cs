@@ -23,33 +23,13 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", 0),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%", "Magic Blast (Orbs eaten by KC) at 33%","Magic Blast 33%", 0)
-                    .UsingChecker( (de, log) => {
-                        var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
-                        if (phases.Count < 2)
-                        {
-                            // no 33% magic blast
-                            return false;
-                        }
-                        return de.Time >= phases[1].End;
-                    }
-                ),
+                    .UsingChecker( (de, log) => de.To.GetCurrentHealthPercent(log, de.Time) <= 40),
                 new EnemyDstBuffApplyMechanic(MagicBlast, new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%", "Magic Blast (Orbs eaten by KC) at 66%","Magic Blast 66%", 0)
-                    .UsingChecker((de, log) => {
-                        var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
-                        if (phases.Count < 1)
-                        {
-                            // no 66% magic blast
-                            return false;
+                    .UsingChecker( (de, log) => {
+                            var curHP = de.To.GetCurrentHealthPercent(log, de.Time);
+                            return curHP <= 70 &&  curHP >= 60;
                         }
-                        bool condition = de.Time >= phases[0].End;
-                        if (phases.Count > 1)
-                        {
-                            // must be before 66%-33% phase if it exists
-                            condition = condition && de.Time <= phases[1].Start;
-                        }
-                        return condition;
-                    }
-                ),
+                    ),
             ]),
             new SpawnMechanic((int) TargetID.InsidiousProjection, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge", "Insidious Projection spawn (2 Statue merge)","Merged Statues", 0),
             new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza", "Phantasmal Blades (rotating Attack)","Phantasmal Blades", 0),

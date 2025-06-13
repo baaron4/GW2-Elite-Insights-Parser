@@ -206,7 +206,7 @@ internal class Qadim : MythwrightGambit
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.PyreGuardian, TargetID.PyreGuardianProtect, TargetID.PyreGuardianRetal, TargetID.PyreGuardianResolution, TargetID.PyreGuardianStab])));
-        foreach (NPC target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.PyreGuardianProtect))
             {
