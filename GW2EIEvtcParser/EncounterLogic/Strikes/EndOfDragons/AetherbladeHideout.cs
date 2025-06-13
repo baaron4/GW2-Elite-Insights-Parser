@@ -17,9 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class AetherbladeHideout : EndOfDragonsStrike
 {
-    public AetherbladeHideout(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
             [
                 // NOTE: Kaleidoscopic Chaos deals HP % damage - Normal Mode: 20% if hit once, 60% if hit twice - Challenge Mode: 33% if hit once, 200% if hit twice.
                 new MechanicGroup([
@@ -65,7 +63,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetBlue, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Blue), "BombBlue.A", "Received Blue Bomb Target", "Blue Bomb Target", 0),
                 ]),
             ]
-        ));
+        );
+
+    public AetherbladeHideout(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide";
         EncounterCategoryInformation.InSubCategoryOrder = 0;

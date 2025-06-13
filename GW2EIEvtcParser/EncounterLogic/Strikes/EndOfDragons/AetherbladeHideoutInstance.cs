@@ -19,6 +19,7 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         Extension = "aetherhide_map";
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         _subLogic = new AetherbladeHideout(NonIdentifiedSpecies);
+        MechanicList.Add(_subLogic.Mechanics);
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
