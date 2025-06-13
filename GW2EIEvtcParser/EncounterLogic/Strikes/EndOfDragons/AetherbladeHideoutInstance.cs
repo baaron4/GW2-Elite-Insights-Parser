@@ -34,10 +34,10 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AetherbladeHideout.PreHandleAgents(agentData, combatData);
+        AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        AetherbladeHideout.PostProcessEvtcEvents(Targets, combatData);
-        AetherbladeHideout.HandleCustomRenaming(Targets);
+        AetherbladeHideout.SanitizeLastHealthUpdateEvents(Targets, combatData);
+        AetherbladeHideout.RenameScarletPhantoms(Targets);
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
