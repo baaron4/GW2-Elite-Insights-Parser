@@ -40,7 +40,10 @@ internal class SpiritRace : SpiritVale
         return
         [
             TargetID.DummyTarget,
-            TargetID.EtherealBarrier,
+            TargetID._EtherealBarrier1,
+            TargetID._EtherealBarrier2,
+            TargetID._EtherealBarrier3,
+            TargetID._EtherealBarrier4,
         ];
     }
 
@@ -157,10 +160,10 @@ internal class SpiritRace : SpiritVale
                 candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
-        return needsDummy;
+        return !needsDummy;
     }
 
-    internal static void RenameEtherealBarriers(IReadOnlyList<SingleActor> targets, AgentData agentData)
+    internal static void RenameEtherealBarriersAndOverrideID(IReadOnlyList<SingleActor> targets, AgentData agentData)
     {
         foreach (SingleActor target in targets)
         {
@@ -196,7 +199,7 @@ internal class SpiritRace : SpiritVale
             Targetless = true;
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        RenameEtherealBarriers(Targets, agentData);
+        RenameEtherealBarriersAndOverrideID(Targets, agentData);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

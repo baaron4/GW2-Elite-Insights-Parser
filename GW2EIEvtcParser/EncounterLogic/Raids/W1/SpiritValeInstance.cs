@@ -184,7 +184,7 @@ internal class SpiritValeInstance : SpiritVale
         SpiritRace.FindEtherealBarriers(agentData, combatData);
         Sabetha.FindCannonsAndHeavyBombs(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        SpiritRace.RenameEtherealBarriers(Targets, agentData);
+        SpiritRace.RenameEtherealBarriersAndOverrideID(Targets, agentData);
         Gorseval.RenameChargedSouls(Targets, combatData);
     }
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
