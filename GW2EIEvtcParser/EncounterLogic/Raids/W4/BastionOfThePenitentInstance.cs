@@ -32,4 +32,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             //TargetID.Deimos,
         ];
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
+    }
 }

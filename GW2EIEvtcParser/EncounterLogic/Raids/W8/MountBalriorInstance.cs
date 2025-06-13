@@ -32,4 +32,8 @@ internal class MountBalriorInstance : MountBalrior
             TargetID.Ura,
         ];
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
+    }
 }

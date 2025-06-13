@@ -32,6 +32,10 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         return "Aetherblade Hideout (Map)";
     }
 
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
