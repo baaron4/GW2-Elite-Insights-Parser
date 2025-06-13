@@ -116,11 +116,12 @@ internal class Eparch : LonelyTower
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        if ((fightData.IsCM || IsFakeCM(agentData)) && determinedApplies.Count >= 3)
+        var cmCheck = fightData.IsCM || IsFakeCM(agentData);
+        if (cmCheck && determinedApplies.Count >= 3)
         {
             fightData.SetSuccess(true, determinedApplies[2].Time);
         }
-        else if (!fightData.IsCM && determinedApplies.Count >= 1)
+        else if (!cmCheck && determinedApplies.Count >= 1)
         {
             fightData.SetSuccess(true, determinedApplies[0].Time);
         }
