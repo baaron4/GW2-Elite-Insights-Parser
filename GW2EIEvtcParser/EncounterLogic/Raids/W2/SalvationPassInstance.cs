@@ -117,7 +117,7 @@ internal class SalvationPassInstance : SalvationPass
                 success = true;
                 end = chest.FirstAware;
             }
-            var phase = new PhaseData(start, end, "Prison Camp");
+            var phase = new PhaseData(start, end, "Bandit Trio");
             phases.Add(phase);
             if (hasMultiple)
             {
