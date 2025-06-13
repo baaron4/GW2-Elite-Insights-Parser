@@ -189,16 +189,17 @@ internal static class EncounterLogicUtils
 
     internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets)
     {
-        var speciesCount = new Dictionary<long, int>();
-        foreach (SingleActor target in targets)
+        var targetsByID = targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        foreach (var pair in targetsByID)
         {
-            if (!speciesCount.TryGetValue(target.ID, out var species))
+            if (pair.Value.Count > 1)
             {
-                species = 1;
-                speciesCount[target.ID] = species;
+                var count = 1;
+                foreach (var target in pair.Value)
+                {
+                    target.OverrideName(target.Character + " " + count++);
+                }
             }
-            target.OverrideName(target.Character + " " + species++);
-            speciesCount[target.ID] = species;
         }
     }
 
