@@ -471,9 +471,9 @@ internal class Matthias : SalvationPass
         replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -484,7 +484,7 @@ internal class Matthias : SalvationPass
             {
                 lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(120, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position)).UsingFilled(false);
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -495,7 +495,7 @@ internal class Matthias : SalvationPass
             {
                 lifespan = effect.ComputeLifespan(log, 90000);
                 var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
     }

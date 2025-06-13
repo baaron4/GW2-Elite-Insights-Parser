@@ -113,9 +113,9 @@ internal class StatueOfIce : HallOfChains
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Numbing Breach - Cracks - White smoke indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachIndicator, out var cracksIndicators))
@@ -125,7 +125,7 @@ internal class StatueOfIce : HallOfChains
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(115, lifespan, "rgba(219, 233, 244, 0.2)", connector);
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -138,7 +138,7 @@ internal class StatueOfIce : HallOfChains
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(40, 230, lifespan, "rgba(66, 130, 253, 0.2)", connector).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle);
             }
         }
 
@@ -161,8 +161,8 @@ internal class StatueOfIce : HallOfChains
 
                 (long, long) lifespan = green.ComputeLifespan(log, 15000);
                 var circle = new CircleDecoration(120, lifespan, color, 0.4, new PositionConnector(green.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
             }
         }
     }

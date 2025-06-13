@@ -178,9 +178,9 @@ internal class Freezie : FestivalStrikeMissionLogic
         replay.Decorations.AddOverheadIcons(fixated, p, ParserIcons.FixationYellowOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Frost Patch
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieFrozenPatch, out var frozenPatches))
@@ -190,7 +190,7 @@ internal class Freezie : FestivalStrikeMissionLogic
                 (long, long) lifespan = effect.ComputeLifespan(log, 30000);
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                EnvironmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, Colors.White, 0.4, connector).UsingRotationConnector(rotationConnector));
+                environmentDecorations.Add(new RectangleDecoration(50, 190, lifespan, Colors.White, 0.4, connector).UsingRotationConnector(rotationConnector));
             }
         }
 
@@ -203,8 +203,8 @@ internal class Freezie : FestivalStrikeMissionLogic
                 (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -215,10 +215,10 @@ internal class Freezie : FestivalStrikeMissionLogic
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 10000);
                 var connector = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, Colors.Orange, 0.2, connector));
+                environmentDecorations.Add(new DoughnutDecoration(760, 1000, lifespan, Colors.Orange, 0.2, connector));
                 // Thicker Borders
-                EnvironmentDecorations.Add(new DoughnutDecoration(760, 780, lifespan, Colors.Orange, 0.2, connector));
-                EnvironmentDecorations.Add(new DoughnutDecoration(980, 1000, lifespan, Colors.Orange, 0.2, connector));
+                environmentDecorations.Add(new DoughnutDecoration(760, 780, lifespan, Colors.Orange, 0.2, connector));
+                environmentDecorations.Add(new DoughnutDecoration(980, 1000, lifespan, Colors.Orange, 0.2, connector));
             }
         }
     }

@@ -65,8 +65,8 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         _subLogic.ComputePlayerCombatReplayActors(player, log, replay);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        _subLogic.ComputeEnvironmentCombatReplayDecorations(log);
+        _subLogic.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 }

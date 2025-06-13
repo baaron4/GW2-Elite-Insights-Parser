@@ -246,9 +246,9 @@ internal class MAMA : Nightmare
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -260,7 +260,7 @@ internal class MAMA : Nightmare
                 // Effect duration is slightly too long, reducing it from 3300 to 3000
                 lifespan = (effect.Time, effect.Time + 3000);
                 var circle = new CircleDecoration(540, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -270,7 +270,7 @@ internal class MAMA : Nightmare
             foreach (EffectEvent effect in miasmaDamage)
             {
                 lifespan = effect.ComputeLifespan(log, 76800);
-                EnvironmentDecorations.Add(new CircleDecoration(540, lifespan, Colors.Chocolate, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(540, lifespan, Colors.Chocolate, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -284,8 +284,8 @@ internal class MAMA : Nightmare
                 var positionConnector = new PositionConnector(effect.Position);
                 var arkkShield = new CircleDecoration(300, lifespan, Colors.Blue, 0.4, positionConnector);
                 var doughnutHit = (DoughnutDecoration)new DoughnutDecoration(300, 5000, lifespan, Colors.Red, 0.2, positionConnector).UsingGrowingEnd(lifespan.end, true);
-                EnvironmentDecorations.Add(arkkShield);
-                EnvironmentDecorations.Add(doughnutHit);
+                environmentDecorations.Add(arkkShield);
+                environmentDecorations.Add(doughnutHit);
             }
         }
 
@@ -299,12 +299,12 @@ internal class MAMA : Nightmare
                 if (!log.CombatData.HasMissileData)
                 {
                     var circle = new CircleDecoration(140, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                    EnvironmentDecorations.AddWithFilledWithGrowing(circle, false, lifespan.end);
+                    environmentDecorations.AddWithFilledWithGrowing(circle, false, lifespan.end);
                 }
                 else
                 {
                     var circle = new CircleDecoration(140, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                    EnvironmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle);
                 }
             }
         }
@@ -315,26 +315,26 @@ internal class MAMA : Nightmare
             foreach (EffectEvent effect in shootField)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 12000);
-                EnvironmentDecorations.Add(new CircleDecoration(160, lifespan, Colors.DarkGreen, 0.3, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(160, lifespan, Colors.DarkGreen, 0.3, new PositionConnector(effect.Position)));
             }
         }
 
         // Cascade Of Torment
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
 
         // Grenade Barrage Orbs
         var grenadeBarrage = log.CombatData.GetMissileEventsBySkillIDs([GrenadeBarrage, GrenadeBarrage2]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, grenadeBarrage, Colors.Red, 0.4, 50);
+        environmentDecorations.AddNonHomingMissiles(log, grenadeBarrage, Colors.Red, 0.4, 50);
 
         // Shoot Orbs
         var shootRedOrbs = log.CombatData.GetMissileEventsBySkillIDs([ShootRedBalls, ShootRedBalls2]);
         var shootGreenOrbs = log.CombatData.GetMissileEventsBySkillID(ShootGreenBalls);
-        EnvironmentDecorations.AddNonHomingMissiles(log, shootRedOrbs, Colors.Red, 0.4, 50);
-        EnvironmentDecorations.AddNonHomingMissiles(log, shootGreenOrbs, Colors.DarkGreen, 0.4, 50);
+        environmentDecorations.AddNonHomingMissiles(log, shootRedOrbs, Colors.Red, 0.4, 50);
+        environmentDecorations.AddNonHomingMissiles(log, shootGreenOrbs, Colors.DarkGreen, 0.4, 50);
     }
 }

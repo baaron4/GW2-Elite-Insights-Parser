@@ -446,15 +446,15 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Crimson Energy (red) and Radiant Energy (white) orbs
         var radiantOrbs = log.CombatData.GetMissileEventsBySkillID(RadiantEnergyWhiteOrb);
         var crimsonOrbs = log.CombatData.GetMissileEventsBySkillID(CrimsonEnergyRedOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, radiantOrbs, Colors.White, 0.4, 25);
-        EnvironmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
+        environmentDecorations.AddNonHomingMissiles(log, radiantOrbs, Colors.White, 0.4, 25);
+        environmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

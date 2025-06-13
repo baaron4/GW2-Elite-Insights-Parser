@@ -237,9 +237,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Demonic Blast - 8 Slices
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CosmicObservatoryDemonicBlastSliceIndicator, out var demonicBlasts))
@@ -252,8 +252,8 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 // Correcting life span for the hit time, 4000 is the entire animation, 2000 looks to be correct
                 lifespan.Item2 -= 2000;
                 var slice = new PieDecoration(1500, 30, lifespan, Colors.Red, 0.2, connector);
-                EnvironmentDecorations.Add(slice.UsingRotationConnector(rotation));
-                EnvironmentDecorations.Add(slice.Copy().UsingGrowingEnd(lifespan.Item2).UsingRotationConnector(rotation));
+                environmentDecorations.Add(slice.UsingRotationConnector(rotation));
+                environmentDecorations.Add(slice.Copy().UsingGrowingEnd(lifespan.Item2).UsingRotationConnector(rotation));
             }
         }
 
@@ -265,8 +265,8 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -278,7 +278,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 20000);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -291,7 +291,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 var connector = new PositionConnector(effect.Position);
                 var rotation = new AngleConnector(effect.Rotation.Z + 90);
                 var semicircle = new PieDecoration(1400, 180, lifespan, Colors.Red, 0.4, connector);
-                EnvironmentDecorations.Add(semicircle.UsingRotationConnector(rotation));
+                environmentDecorations.Add(semicircle.UsingRotationConnector(rotation));
             }
         }
 
@@ -303,22 +303,22 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 666);
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(1500, lifespan, Colors.Orange, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
         // Purifying Light - SAK projectile from Dagda
         // TODO - Find out if the ground effect is now logged
         var purifyingLight = log.CombatData.GetMissileEventsBySkillID(DagdaPurifyingLightProjectileSkill);
-        EnvironmentDecorations.AddNonHomingMissiles(log, purifyingLight, Colors.White, 0.5, 50);
+        environmentDecorations.AddNonHomingMissiles(log, purifyingLight, Colors.White, 0.5, 50);
 
         // Spinning Nebula - Projectiles
         var spinningNebula = log.CombatData.GetMissileEventsBySkillIDs([SpinningNebulaCentral, SpinningNebulaWithTeleport]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.MidTeal, 0.4, 20);
+        environmentDecorations.AddNonHomingMissiles(log, spinningNebula, Colors.MidTeal, 0.4, 20);
 
         // Charging Constellation - Numbers Projectiles
         var chargingConstellation = log.CombatData.GetMissileEventsBySkillID(ChargingConstellationDamage);
-        EnvironmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
+        environmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

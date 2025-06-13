@@ -246,11 +246,11 @@ internal class Artsariiv : ShatteredObservatory
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        AddCorporealReassignmentDecorations(log);
+        AddCorporealReassignmentDecorations(log, environmentDecorations);
 
         // Beaming Smile
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmileIndicator, out var beamIndicators))
@@ -259,7 +259,7 @@ internal class Artsariiv : ShatteredObservatory
             {
                 int start = (int)effect.Time;
                 int end = start + 2640;
-                AddBeamingSmileDecoration(effect, (start, end), Colors.Orange, 0.2);
+                AddBeamingSmileDecoration(effect, (start, end), Colors.Orange, 0.2, environmentDecorations);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmile, out var beams))
@@ -268,19 +268,19 @@ internal class Artsariiv : ShatteredObservatory
             {
                 int start = (int)effect.Time;
                 int end = start + 300;
-                AddBeamingSmileDecoration(effect, (start, end), Colors.Red, 0.2);
+                AddBeamingSmileDecoration(effect, (start, end), Colors.Red, 0.2, environmentDecorations);
             }
         }
     }
 
-    private void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, Color color, double opacity)
+    private static void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, Color color, double opacity, CombatReplayDecorationContainer environmentDecorations)
     {
         const int length = 2500;
         const int hitbox = 360;
         const int offset = 60;
         var rotation = new AngleConnector(effect.Rotation.Z);
         GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f + offset, 0), true);
-        EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
+        environmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
     }
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)

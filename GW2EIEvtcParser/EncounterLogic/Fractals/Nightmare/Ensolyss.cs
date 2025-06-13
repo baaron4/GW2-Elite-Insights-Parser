@@ -476,9 +476,9 @@ internal class Ensolyss : Nightmare
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -488,7 +488,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in indicators1)
             {
                 lifespan = (effect.Time, effect.Time + effect.Duration);
-                EnvironmentDecorations.Add(new CircleDecoration(120, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(120, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
             }
         }
 
@@ -498,7 +498,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in indicators2)
             {
                 lifespan = (effect.Time, effect.Time + effect.Duration);
-                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -508,7 +508,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in waveEffects)
             {
                 lifespan = (effect.Time, effect.Time + 2000);
-                EnvironmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
             }
         }
 
@@ -518,7 +518,7 @@ internal class Ensolyss : Nightmare
             foreach (EffectEvent effect in nightmareBlastIndicators)
             {
                 lifespan = (effect.Time, effect.Time + effect.Duration);
-                EnvironmentDecorations.Add(new CircleDecoration(185, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(185, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -551,12 +551,12 @@ internal class Ensolyss : Nightmare
                         break;
                 }
 
-                EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
         // Caustic Barrage
-        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
+        AddDistanceCorrectedOrbAoEDecorations(log, environmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
 
         // Nightmare Respite
         long[] idsHealingOrbs =
@@ -570,7 +570,7 @@ internal class Ensolyss : Nightmare
                 EnsolyssNightmareRespite7,
             ];
         var healingOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsHealingOrbs);
-        EnvironmentDecorations.AddNonHomingMissiles(log, healingOrbs, Colors.Blue, 0.5, 10);
+        environmentDecorations.AddNonHomingMissiles(log, healingOrbs, Colors.Blue, 0.5, 10);
 
         // Nightmare Bomb, Nightmare Bullet & Nightmare Blast
         long[] idsRedOrbs =
@@ -598,6 +598,6 @@ internal class Ensolyss : Nightmare
                 NightmareBlast,
             ];
         var redOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsRedOrbs);
-        EnvironmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.5, 20);
+        environmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.5, 20);
     }
 }

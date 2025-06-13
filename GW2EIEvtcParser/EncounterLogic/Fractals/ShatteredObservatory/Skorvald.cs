@@ -493,9 +493,9 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Mist Bomb - Both for Skorvald and Flux Anomalies
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out var mistBombs))
@@ -503,12 +503,12 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in mistBombs)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
-                EnvironmentDecorations.Add(new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
         // Solar Bolt - Indicator
-        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
+        AddDistanceCorrectedOrbAoEDecorations(log, environmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
 
         // Solar Bolt - Damage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out var solarBolts))
@@ -516,7 +516,7 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in solarBolts)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 12000);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -526,13 +526,13 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in kickEffects)
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 300);
-                EnvironmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
+                environmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
             }
         }
 
         // Solar Bolt Orbs
         var solarBolt = log.CombatData.GetMissileEventsBySkillID(SolarBoltCM);
-        EnvironmentDecorations.AddNonHomingMissiles(log, solarBolt, Colors.Red, 0.2, 50);
+        environmentDecorations.AddNonHomingMissiles(log, solarBolt, Colors.Red, 0.2, 50);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

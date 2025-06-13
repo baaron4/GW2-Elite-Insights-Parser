@@ -686,9 +686,9 @@ internal class Deimos : BastionOfThePenitent
         replay.Decorations.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Rapid Decay - Orange Indicator - Oil
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosRapidDecayIndicator, out var rapidDecayIndicator))
@@ -697,20 +697,20 @@ internal class Deimos : BastionOfThePenitent
             {
                 // Logged duration is 3500, replacing to 3000 for better visual with the Oil.
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
-                EnvironmentDecorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
+                environmentDecorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
             }
         }
 
         // Rapid Decay - Black Indicator - Oil
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay200Radius, 200);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay300Radius, 300);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay400Radius, 400);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay500Radius, 500);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay600Radius, 600);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay700Radius, 700);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay800Radius, 800);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay900Radius, 900);
-        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay1000Radius, 1000);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay200Radius, 200, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay300Radius, 300, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay400Radius, 400, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay500Radius, 500, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay600Radius, 600, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay700Radius, 700, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay800Radius, 800, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay900Radius, 900, environmentDecorations);
+        AddRapidDecayDecoration(log, EffectGUIDs.DeimosRapidDecay1000Radius, 1000, environmentDecorations);
 
         // This causes a discreet rendering + ghosting effect when Deimos pulls them in
         // Soul Feast - Hands
@@ -719,7 +719,7 @@ internal class Deimos : BastionOfThePenitent
             foreach (EffectEvent effect in soulFeasts)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
-                EnvironmentDecorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(90, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
         */
@@ -765,7 +765,7 @@ internal class Deimos : BastionOfThePenitent
     /// <param name="log">The log.</param>
     /// <param name="guid">Effect GUID of the different oil sizes.</param>
     /// <param name="radius">Radius of the oil, 200 to 1000.</param>
-    private void AddRapidDecayDecoration(ParsedEvtcLog log, GUID guid, uint radius)
+    private static void AddRapidDecayDecoration(ParsedEvtcLog log, GUID guid, uint radius, CombatReplayDecorationContainer environmentDecorations)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rapidDecay))
         {
@@ -791,7 +791,7 @@ internal class Deimos : BastionOfThePenitent
                         [effect.Position.Y] = lifespan
                     };
                 }
-                EnvironmentDecorations.AddWithBorder(new CircleDecoration(radius, lifespan, Colors.Black, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(new CircleDecoration(radius, lifespan, Colors.Black, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }
     }

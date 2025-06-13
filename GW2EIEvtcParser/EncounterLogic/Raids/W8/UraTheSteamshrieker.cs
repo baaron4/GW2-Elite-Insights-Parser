@@ -639,9 +639,9 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Bloodstone Radiation - AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.UraBloodstoneRadiationPulse, out var bloodstoneRadiation))
@@ -650,7 +650,7 @@ internal class UraTheSteamshrieker : MountBalrior
             {
                 // Radius is indicative only, matching the in game size. Damage is incremental hp% per pulse to everyone in the arena.
                 (long start, long end) lifespan = (effect.Time, effect.Time + 500);
-                EnvironmentDecorations.AddWithBorder(new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position)), Colors.Red, 0.4);
+                environmentDecorations.AddWithBorder(new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position)), Colors.Red, 0.4);
             }
         }
     }

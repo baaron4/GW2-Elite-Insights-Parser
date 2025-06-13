@@ -388,9 +388,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Ley Breach - Red Puddles Indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutLeyBreachIndicator1, out var leyBreachIndicators))
@@ -403,8 +403,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 long growing = effect.Time + duration;
                 var baseCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 var growingCircle = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing);
-                EnvironmentDecorations.Add(baseCircle);
-                EnvironmentDecorations.Add(growingCircle);
+                environmentDecorations.Add(baseCircle);
+                environmentDecorations.Add(growingCircle);
             }
         }
 
@@ -416,7 +416,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 long duration = log.FightData.IsCM ? 30000 : 15000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -433,8 +433,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
-                EnvironmentDecorations.Add(rectangle.GetBorderDecoration(Colors.LightOrange, 0.2));
+                environmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle.GetBorderDecoration(Colors.LightOrange, 0.2));
             }
         }
 
@@ -447,7 +447,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 (long start, long end) lifespanX = (effect.Time, effect.Time + 250);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z + 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespanX, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle);
             }
         }
 
@@ -499,7 +499,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                                 thirdRotationConnector,
                             };
 
-                        AddRotatingCirclesDecorations(EnvironmentDecorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
+                        AddRotatingCirclesDecorations(environmentDecorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
                     }
                 }
             }
@@ -512,7 +512,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 500);
                 var doughnut = new DoughnutDecoration(160, 480, lifespan, Colors.LightGrey, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(doughnut);
+                environmentDecorations.Add(doughnut);
             }
         }
 
@@ -523,13 +523,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             {
                 long duration = 8000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                EnvironmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
+                environmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
             }
         }
 
         // Toxic Orb
         var toxicOrbs = log.CombatData.GetMissileEventsBySkillID(ToxicOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
+        environmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
     }
 
     private SingleActor? GetEchoOfScarletBriar(FightData fightData)

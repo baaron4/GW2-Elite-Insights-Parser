@@ -54,7 +54,7 @@ public abstract class FightLogic
 
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
-    internal CombatReplayDecorationContainer EnvironmentDecorations;
+    private CombatReplayDecorationContainer EnvironmentDecorations;
 
     protected ChestID ChestID = ChestID.None;
 
@@ -416,7 +416,7 @@ public abstract class FightLogic
     {
     }
 
-    internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         IEnumerable<SquadMarkerIndex> squadMarkers = [
             SquadMarkerIndex.Arrow,
@@ -434,7 +434,7 @@ public abstract class FightLogic
             {
                 if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
-                    EnvironmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
+                    environmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
                 }
             }
         }
@@ -446,7 +446,7 @@ public abstract class FightLogic
         {
             //TODO(Rennorb) @perf: capacity
             EnvironmentDecorations = new(DecorationCache);
-            ComputeEnvironmentCombatReplayDecorations(log);
+            ComputeEnvironmentCombatReplayDecorations(log, EnvironmentDecorations);
         }
         return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }

@@ -183,9 +183,9 @@ internal class Boneskinner : Bjora
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -196,7 +196,7 @@ internal class Boneskinner : Bjora
             {
                 lifespan = effect.ComputeLifespan(log, 1800);
                 var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
         // Grasp Claws Effect / Dark Red AoE
@@ -206,8 +206,8 @@ internal class Boneskinner : Bjora
             {
                 lifespan = effect.ComputeLifespan(log, 30000);
                 var circle = new CircleDecoration(100, lifespan, Colors.RedBrownish, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
         }
     }

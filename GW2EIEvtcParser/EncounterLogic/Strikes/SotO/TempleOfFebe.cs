@@ -562,9 +562,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         replay.Decorations.AddTether(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Crushing Regret (Green) End
         var crushingRegretEnds = new List<(GUID GUID, Color Color)>()
@@ -588,7 +588,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     // Show the state for 500 ms, 250 ms before so that failures are actually visible
                     (long start, long end) lifespan = (effect.Time - 250, effect.Time + 250);
                     var circle = new CircleDecoration(radius, lifespan, color, 0.2, new PositionConnector(effect.Position));
-                    EnvironmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle);
                 }
             }
         }
@@ -601,8 +601,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 int duration = log.FightData.IsCM || log.FightData.IsLegendaryCM ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
         }
 
@@ -613,8 +613,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 999000);
                 var circle = new CircleDecoration(240, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
         }
     }

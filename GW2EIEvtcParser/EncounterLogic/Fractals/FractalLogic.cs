@@ -165,9 +165,9 @@ internal abstract class FractalLogic : FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Flux bomb on the ground
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out var fluxBombs))
@@ -176,15 +176,15 @@ internal abstract class FractalLogic : FightLogic
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 5000);
                 var circle = new CircleDecoration(120, lifespan, Colors.Blue, 0.1, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
 
                 int pulseDuration = 1000;
                 long pulse = lifespan.start + pulseDuration;
                 long previousPulse = lifespan.start;
                 for (int pulses = 0; pulses < 5; pulses++)
                 {
-                    EnvironmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), Colors.Blue, 0.1, new PositionConnector(effect.Position)).UsingGrowingEnd(pulse));
+                    environmentDecorations.Add(new CircleDecoration(120, (previousPulse, pulse), Colors.Blue, 0.1, new PositionConnector(effect.Position)).UsingGrowingEnd(pulse));
                     previousPulse = pulse;
                     pulse += pulseDuration;
                 }

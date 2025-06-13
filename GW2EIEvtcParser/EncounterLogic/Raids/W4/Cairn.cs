@@ -99,17 +99,17 @@ internal class Cairn : BastionOfThePenitent
         return phases;
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out var displacementEffects))
         {
             foreach (EffectEvent displacement in displacementEffects)
             {
                 var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
             }
         }
 
@@ -125,14 +125,14 @@ internal class Cairn : BastionOfThePenitent
                 {
                     dashGreenEnd = endEvent.Time + 3300; // from skill def
                 }
-                EnvironmentDecorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
-                EnvironmentDecorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                environmentDecorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                environmentDecorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
             }
         }
 
         // Meteor Swarm
         var meteorSwarm = log.CombatData.GetMissileEventsBySkillID(MeteorSwarm);
-        EnvironmentDecorations.AddNonHomingMissiles(log, meteorSwarm, Colors.DarkPurple, 0.3, 100);
+        environmentDecorations.AddNonHomingMissiles(log, meteorSwarm, Colors.DarkPurple, 0.3, 100);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

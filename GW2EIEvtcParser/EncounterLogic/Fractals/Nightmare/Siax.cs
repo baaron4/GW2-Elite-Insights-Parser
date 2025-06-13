@@ -230,9 +230,9 @@ internal class Siax : Nightmare
         replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -243,7 +243,7 @@ internal class Siax : Nightmare
             {
                 // Indicator effect has variable duration
                 lifespan = (effect.Time, effect.Time + effect.Duration);
-                EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -253,7 +253,7 @@ internal class Siax : Nightmare
             foreach (EffectEvent effect in vileSpitPoisons)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 15600);
-                EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.GreenishYellow, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.GreenishYellow, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -265,7 +265,7 @@ internal class Siax : Nightmare
             {
                 lifespan = (effect.Time, effect.Time + duration);
                 var circle = new CircleDecoration(360, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -278,32 +278,32 @@ internal class Siax : Nightmare
                 var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 if (!log.CombatData.HasMissileData)
                 {
-                    EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                    environmentDecorations.AddWithGrowing(circle, lifespan.end);
                 }
                 else
                 {
-                    EnvironmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle);
                 }
             }
         }
 
         // Caustic Barrage
-        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
+        AddDistanceCorrectedOrbAoEDecorations(log, environmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
 
         // Cascade Of Torment
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
-        AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
+        AddCascadeOfTormentDecoration(log, environmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
 
         // Causting Barrage, Toxic Blast & Dire Torment - Orbs
         var redOrbs = log.CombatData.GetMissileEventsBySkillIDs([CausticBarrage, CausticBarrage2, ToxicBlast, DireTorment]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.3, 50);
+        environmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.3, 50);
 
         // Vile Spit
         var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
-        EnvironmentDecorations.AddNonHomingMissiles(log, vileSpit, Colors.DarkGreen, 0.3, 50);
+        environmentDecorations.AddNonHomingMissiles(log, vileSpit, Colors.DarkGreen, 0.3, 50);
     }
 }

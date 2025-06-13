@@ -403,9 +403,9 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Intervention Bubble
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var intervention))
@@ -415,8 +415,8 @@ internal class Xera : StrongholdOfTheFaithful
                 // Effect has duration of 4294967295 but the skill lasts only 6000
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
                 var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
             }
         }
 
@@ -453,7 +453,7 @@ internal class Xera : StrongholdOfTheFaithful
                     angle = -210 - (cur++) * 90;
                 }
                 var angleConnector = new AngleConnector(angle);
-                EnvironmentDecorations.AddWithFilledWithGrowing(
+                environmentDecorations.AddWithFilledWithGrowing(
                         (PieDecoration)new PieDecoration(1150, 180, lifespan, Colors.Purple, 0.15, pos)
                             .UsingRotationConnector(angleConnector),
                         true,
@@ -461,7 +461,7 @@ internal class Xera : StrongholdOfTheFaithful
                 );
                 if (hasFired)
                 {
-                    EnvironmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
+                    environmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
                             .UsingRotationConnector(angleConnector));
                 }
             }
@@ -469,7 +469,7 @@ internal class Xera : StrongholdOfTheFaithful
 
         // Temporal Shred Projectiles
         var temporalShred = log.CombatData.GetMissileEventsBySkillID(TemporalShredOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, temporalShred, Colors.Red, 0.3, 25);
+        environmentDecorations.AddNonHomingMissiles(log, temporalShred, Colors.Red, 0.3, 25);
 
         // Temporal Shred AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraTemporalShredAoE, out var temporalShredAoEs))
@@ -477,7 +477,7 @@ internal class Xera : StrongholdOfTheFaithful
             foreach (EffectEvent effect in temporalShredAoEs)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1500);
-                EnvironmentDecorations.AddWithBorder(new CircleDecoration(120, lifespan, Colors.LightPurple, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(new CircleDecoration(120, lifespan, Colors.LightPurple, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }
     }

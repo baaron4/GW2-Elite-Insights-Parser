@@ -635,9 +635,9 @@ internal class OldLionsCourt : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Exhaust Plume - Knight Fall AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtExhaustPlumeAoE, out var exhaustPlume))
@@ -646,8 +646,8 @@ internal class OldLionsCourt : EndOfDragonsStrike
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingFilled(true).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingFilled(true).UsingGrowingEnd(lifespan.end));
             }
         }
 
@@ -676,8 +676,8 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     var border = (CircleDecoration)new CircleDecoration(currentRadius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
                     currentRadius += radiusIncreasePerInterval;
                     lifespan = (lifespan.end, lifespan.end + timeInterval);
-                    EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(border);
+                    environmentDecorations.Add(circle);
+                    environmentDecorations.Add(border);
                 }
             }
         }
@@ -693,14 +693,14 @@ internal class OldLionsCourt : EndOfDragonsStrike
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 590000);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
         var noxiousVaporBlade = log.CombatData.GetMissileEventsBySkillIDs([NoxiousVaporBlade, NoxiousVaporBladeCM]);
         var noxiousReturn = log.CombatData.GetMissileEventsBySkillIDs([NoxiousReturn, NoxiousReturnCM]);
-        EnvironmentDecorations.AddHomingMissiles(log, noxiousVaporBlade, Colors.DarkGreen, 0.5, 25);
-        EnvironmentDecorations.AddNonHomingMissiles(log, noxiousReturn, Colors.DarkGreen, 0.5, 25);
+        environmentDecorations.AddHomingMissiles(log, noxiousVaporBlade, Colors.DarkGreen, 0.5, 25);
+        environmentDecorations.AddNonHomingMissiles(log, noxiousReturn, Colors.DarkGreen, 0.5, 25);
     }
 
     /// <summary>

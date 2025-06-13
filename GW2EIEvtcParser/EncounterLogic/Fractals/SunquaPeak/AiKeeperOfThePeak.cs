@@ -540,7 +540,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         // arrow indicators
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out var arrows))
@@ -552,7 +552,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 (long, long) lifespan = effect.ComputeLifespan(log, 1800);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0f, 0.5f * length, 0), true);
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
             }
         }
 
@@ -564,7 +564,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 5000;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.3, position).UsingFilled(false));
+                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.3, position).UsingFilled(false));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiDarkOrbFloat, out var darkOrbs))
@@ -574,7 +574,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 5000;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Purple, 0.3, position).UsingFilled(false));
+                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Purple, 0.3, position).UsingFilled(false));
             }
         }
 
@@ -591,15 +591,15 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + duration;
                 var position = new AgentConnector(effect.Dst);
-                EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.3, position).UsingFilled(false));
-                EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
+                environmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.3, position).UsingFilled(false));
+                environmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
                 if (hasDetonates)
                 {
                     effect.Dst.TryGetCurrentPosition(log, end, out var endPos);
                     EffectEvent? detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && (x.Position - endPos).XY().Length() < maxDist);
                     if (detonate != null)
                     {
-                        EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
+                        environmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
                     }
                 }
             }
@@ -614,8 +614,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long end = start + 2000;
                 var position = new PositionConnector(effect.Position);
                 var rotation = new AgentFacingConnector(effect.Src);
-                EnvironmentDecorations.Add(new PieDecoration(240, 170f, (start, end), Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
-                EnvironmentDecorations.Add(new PieDecoration(240, 170f, (end, end + 300), Colors.Red, 0.15, position).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new PieDecoration(240, 170f, (start, end), Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new PieDecoration(240, 170f, (end, end + 300), Colors.Red, 0.15, position).UsingRotationConnector(rotation));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAoEAroundIndicator, out var around))
@@ -625,8 +625,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 2100;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
-                EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedPointblankIndicator, out var aroundRed))
@@ -636,14 +636,14 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 4000;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
             }
         }
 
         // scaled circles
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate], out var circleDetonate))
         {
-            AddScalingCircleDecorations(log, circleDetonate, 300);
+            AddScalingCircleDecorations(log, circleDetonate, 300, environmentDecorations);
         }
         // we need to filter water & dark detonates due to reuse
         var detonateReusedGUIDs = new[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
@@ -659,12 +659,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
                         return timeDifference > 0 && timeDifference < 4000 && (detonate.Position - indicator.Position).LengthSquared() < 1.0f;
                     });
                 });
-                AddScalingCircleDecorations(log, filteredCircles, 300);
+                AddScalingCircleDecorations(log, filteredCircles, 300, environmentDecorations);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing], out var circlePulsing))
         {
-            AddScalingCircleDecorations(log, circlePulsing, 8000);
+            AddScalingCircleDecorations(log, circlePulsing, 8000, environmentDecorations);
         }
 
         // air intermission lightning strikes
@@ -675,7 +675,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 1500;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirLightningStrike, out var lightningStrikes))
@@ -685,12 +685,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 300;
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
             }
         }
 
         // fire intermission meteors
-        AddMeteorDecorations(log);
+        AddMeteorDecorations(log, environmentDecorations);
 
         // water intermission greens
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiGreenCircleIndicator, out var greens))
@@ -700,8 +700,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 6250;
                 var position = new AgentConnector(effect.Dst);
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
+                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
+                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
             }
         }
 
@@ -716,13 +716,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 var position = new PositionConnector(effect.Position);
                 GeographicalConnector offset = new PositionConnector(effect.Position).WithOffset(new(0f, 0.5f * directionLength, 0), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.15, position));
-                EnvironmentDecorations.Add(new RectangleDecoration(80, directionLength, (start, end), Colors.Orange, 0.15, offset).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.15, position));
+                environmentDecorations.Add(new RectangleDecoration(80, directionLength, (start, end), Colors.Orange, 0.15, offset).UsingRotationConnector(rotation));
             }
         }
     }
 
-    private void AddScalingCircleDecorations(ParsedEvtcLog log, IEnumerable<EffectEvent> effects, long damageDuration)
+    private void AddScalingCircleDecorations(ParsedEvtcLog log, IEnumerable<EffectEvent> effects, long damageDuration, CombatReplayDecorationContainer environmentDecorations)
     {
         foreach (EffectEvent effect in effects)
         {
@@ -757,8 +757,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     radius = 100;
                 }
                 var position = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
-                EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
+                environmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
             }
         }
     }
@@ -768,7 +768,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
     private const uint MeteorCircleDist = 95;
     private const uint MeteorFullRadius = MeteorInnerSize + 7 * MeteorCircleDist;
 
-    private void AddMeteorDecorations(ParsedEvtcLog log)
+    private static void AddMeteorDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorIndicatorGround, out var groundIndicators))
         {
@@ -776,8 +776,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 (long, long) lifespan = (effect.Time, effect.Time + 6000);
                 GeographicalConnector position = effect.IsAroundDst ? new AgentConnector(effect.Dst) : (GeographicalConnector)new PositionConnector(effect.Position);
-                AddMeteorIndicatorDecoration(lifespan, position, Colors.Orange);
-                EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));
+                AddMeteorIndicatorDecoration(lifespan, position, Colors.Orange, environmentDecorations);
+                environmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorImpact, out var impacts))
@@ -786,19 +786,19 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 (long, long) lifespan = (effect.Time, effect.Time + 300);
                 var position = new PositionConnector(effect.Position);
-                AddMeteorIndicatorDecoration(lifespan, position, Colors.Red);
-                EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Red, 0.15, position));
+                AddMeteorIndicatorDecoration(lifespan, position, Colors.Red, environmentDecorations);
+                environmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Red, 0.15, position));
             }
         }
     }
 
-    private void AddMeteorIndicatorDecoration((long, long) lifespan, GeographicalConnector connector, Color color)
+    private static void AddMeteorIndicatorDecoration((long, long) lifespan, GeographicalConnector connector, Color color, CombatReplayDecorationContainer environmentDecorations)
     {
-        EnvironmentDecorations.Add(new CircleDecoration(MeteorInnerSize, lifespan, color, 0.3, connector));
+        environmentDecorations.Add(new CircleDecoration(MeteorInnerSize, lifespan, color, 0.3, connector));
         for (uint i = 1; i <= 7; i++)
         {
             uint radius = MeteorInnerSize + i * MeteorCircleDist;
-            EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingFilled(false));
+            environmentDecorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingFilled(false));
         }
     }
 }

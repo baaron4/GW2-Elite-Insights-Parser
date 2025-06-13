@@ -346,9 +346,9 @@ internal class SoullessHorror : HallOfChains
         replay.Decorations.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -358,7 +358,7 @@ internal class SoullessHorror : HallOfChains
             foreach (EffectEvent effect in soulRifts)
             {
                 lifespan = effect.ComputeLifespan(log, 57000);
-                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)));
             }
         }
     }

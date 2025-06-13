@@ -505,9 +505,9 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -521,8 +521,8 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int damageDelay = 1610;
                 long warningEnd = lifespan.start + damageDelay;
                 var circle = new CircleDecoration(80, (lifespan.start, warningEnd), Colors.Red, 0.2, connector);
-                EnvironmentDecorations.AddWithGrowing(circle, warningEnd);
-                EnvironmentDecorations.Add(new CircleDecoration(80, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
+                environmentDecorations.AddWithGrowing(circle, warningEnd);
+                environmentDecorations.Add(new CircleDecoration(80, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
             }
         }
 
@@ -532,7 +532,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             foreach (EffectEvent effect in mines)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
-                EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(80, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position)));
             }
         }
 
@@ -545,7 +545,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 2400);
                 var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -557,7 +557,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 1500);
                 var circle = new CircleDecoration(100, lifespan, Colors.SligthlyDarkGreen, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
@@ -569,7 +569,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 2708);
                 var circle = new CircleDecoration(100, lifespan, Colors.SlightlyDarkBlue, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
@@ -583,9 +583,9 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int damageDelay = 2000;
                 long warningEnd = lifespan.start + damageDelay;
                 var circle = new CircleDecoration(240, (lifespan.start, warningEnd), Colors.Red, 0.2, connector);
-                EnvironmentDecorations.AddWithGrowing(circle, warningEnd);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration());
-                EnvironmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
+                environmentDecorations.AddWithGrowing(circle, warningEnd);
+                environmentDecorations.Add(circle.GetBorderDecoration());
+                environmentDecorations.Add(new CircleDecoration(240, (warningEnd, lifespan.end), Colors.Red, 0.4, connector));
             }
         }
 
@@ -595,7 +595,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             foreach (EffectEvent effect in rushingJustice)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
-                EnvironmentDecorations.Add(new RectangleDecoration(50, 145, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z)));
+                environmentDecorations.Add(new RectangleDecoration(50, 145, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z)));
             }
         }
 
@@ -606,7 +606,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 lifespan = effect.ComputeLifespan(log, 2000);
                 var circle = new CircleDecoration(90, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -618,32 +618,32 @@ internal class KainengOverlook : EndOfDragonsStrike
                 (long start, long end) lifespanIndicator = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 var indicatorCircle = new CircleDecoration(200, lifespanIndicator, Colors.Orange, 0.2, connector);
-                EnvironmentDecorations.AddWithGrowing(indicatorCircle, lifespanIndicator.end);
+                environmentDecorations.AddWithGrowing(indicatorCircle, lifespanIndicator.end);
                 var initialPosition = new ParametricPoint3D(effect.Position, lifespanIndicator.end);
                 int velocity = 85; // Approximation
                 int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
                 (long, long) lifespanAnimation = (lifespanIndicator.end, lifespanIndicator.end + stormDuration);
                 var finalPosition = new ParametricPoint3D(initialPosition.XYZ + (velocity * stormDuration / 1000.0f) * new Vector3((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2), 0), lifespanIndicator.end + stormDuration);
                 var animatedCircle = new CircleDecoration(200, lifespanAnimation, Colors.DesaturatedPink, 0.2, new InterpolationConnector([initialPosition, finalPosition]));
-                EnvironmentDecorations.AddWithBorder(animatedCircle, Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(animatedCircle, Colors.Red, 0.2);
             }
         }
 
         var dragonSlash = log.CombatData.GetMissileEventsBySkillIDs([DragonSlashBurstNM, DragonSlashBurstCM]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, dragonSlash, Colors.Orange, 0.3, 25);
+        environmentDecorations.AddNonHomingMissiles(log, dragonSlash, Colors.Orange, 0.3, 25);
 
         var ricochet = log.CombatData.GetMissileEventsBySkillIDs([JadeRicochetNM, JadeRicochetCM1, JadeRicochetCM2]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, ricochet, Colors.Orange, 0.3, 20);
+        environmentDecorations.AddNonHomingMissiles(log, ricochet, Colors.Orange, 0.3, 20);
 
         var lasershot = log.CombatData.GetMissileEventsBySkillIDs([JadeLaserShotNM, JadeLaserShotCM]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, lasershot, Colors.Red, 0.3, 20);
+        environmentDecorations.AddNonHomingMissiles(log, lasershot, Colors.Red, 0.3, 20);
 
         var boomingCommand = log.CombatData.GetMissileEventsBySkillIDs([BoomingCommandDamageNM, BoomingCommandDamageCM]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, boomingCommand, Colors.SlightlyDarkBlue, 0.2, 20);
+        environmentDecorations.AddNonHomingMissiles(log, boomingCommand, Colors.SlightlyDarkBlue, 0.2, 20);
 
         // TODO - Check if this works in normal mode - No log to test
         var jadeMine = log.CombatData.GetMissileEventsBySkillIDs([JadeMineProjectileFirstSetCM, JadeMineProjectileSecondSetCM, JadeMineProjectileThirdSetCM]);
-        EnvironmentDecorations.AddNonHomingMissiles(log, jadeMine, Colors.Red, 0.3, 80);
+        environmentDecorations.AddNonHomingMissiles(log, jadeMine, Colors.Red, 0.3, 80);
     }
 
     internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long start, long end) lifespan, long duration, int angle)

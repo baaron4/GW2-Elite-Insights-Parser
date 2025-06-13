@@ -245,9 +245,9 @@ internal class River : HallOfChains
 
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Soulless Torrent - Player Bomb AoE - Ground Circle & Damage effect
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.RiverSoullessTorrentLightningStrikeDamage, out var soullessTorrentLightnings))
@@ -256,8 +256,8 @@ internal class River : HallOfChains
             {
                 (long start, long end) lifespanLightning = effect.ComputeLifespan(log, 1000);
                 (long start, long end) lifespanIndicator = (lifespanLightning.start - 1000, lifespanLightning.start);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespanLightning, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespanLightning, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)));
             }
         }
     }

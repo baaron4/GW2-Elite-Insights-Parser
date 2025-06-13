@@ -745,9 +745,9 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Death Mark - First Warning (2 seconds)
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out var deathMarkFirstIndicators))
@@ -758,8 +758,8 @@ internal class Dhuum : HallOfChains
                 var connector = new PositionConnector(effect.Position);
                 var circleOrange = new CircleDecoration(450, lifespan, Colors.Orange, 0.2, connector);
                 var circleRed = new CircleDecoration(450, lifespan, Colors.Red, 0.4, connector);
-                EnvironmentDecorations.Add(circleOrange);
-                EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(circleOrange);
+                environmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -778,11 +778,11 @@ internal class Dhuum : HallOfChains
 
                 // Green indicator for the safe zone - Activation
                 var greenCircle = new CircleDecoration(radius, lifespanActivation, "rgba(200, 255, 100, 0.5)", connector);
-                EnvironmentDecorations.Add(greenCircle);
-                EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
+                environmentDecorations.Add(greenCircle);
+                environmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespanActivation.Item2));
                 // Damage zone
                 var redCircle = new CircleDecoration(radius, lifespanDeadly, Colors.Red, 0.4, connector);
-                EnvironmentDecorations.Add(redCircle);
+                environmentDecorations.Add(redCircle);
             }
         }
 
@@ -795,8 +795,8 @@ internal class Dhuum : HallOfChains
                 (long, long) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DhuumCullCracksIndicator);
                 var connector = new PositionConnector(effect.Position);
                 var greenCircle = new CircleDecoration(300, lifespan, Colors.Orange, 0.2, connector);
-                EnvironmentDecorations.Add(greenCircle);
-                EnvironmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(greenCircle);
+                environmentDecorations.Add(greenCircle.Copy().UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -809,7 +809,7 @@ internal class Dhuum : HallOfChains
                 var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(230 / 2, 0, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, Colors.Black, 0.3, connector).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle);
             }
         }
 
@@ -823,8 +823,8 @@ internal class Dhuum : HallOfChains
                 var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(230 / 2, 0, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(173, 255, 225, 0.4)", connector).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
-                EnvironmentDecorations.Add(rectangle.Copy().UsingGrowingEnd(effect.Time));
+                environmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle.Copy().UsingGrowingEnd(effect.Time));
             }
         }
 
@@ -837,8 +837,8 @@ internal class Dhuum : HallOfChains
                 var position = new PositionConnector(effect.Position);
                 var circle = (CircleDecoration)new CircleDecoration(50, lifespan, Colors.White, 0.5, position).UsingFilled(false);
                 var centralDot = new CircleDecoration(20, lifespan, "rgba(203, 195, 227, 0.5)", position);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(centralDot);
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(centralDot);
             }
         }
     }

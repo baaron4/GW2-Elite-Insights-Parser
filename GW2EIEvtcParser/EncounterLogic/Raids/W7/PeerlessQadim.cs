@@ -476,9 +476,9 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Rain of Chaos
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessRainOfChaos, out var rainOfChaos))
@@ -495,8 +495,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -507,8 +507,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                 var circle = new CircleDecoration(75, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.Red, 0.4));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.Red, 0.4));
             }
         }
 
@@ -520,7 +520,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 // Each shark effect appears every 120 ms
                 // The logged duration is 0, we set it at 120 to give it the impression of a single effect moving around
                 (long, long) lifespan = effect.ComputeLifespan(log, 120);
-                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.BlueishGrey, 0.4, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.BlueishGrey, 0.4, new PositionConnector(effect.Position)));
             }
         }
 
@@ -531,7 +531,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             {
                 // The actual effect duration is 0
                 (long, long) lifespan = effect.ComputeLifespan(log, 1500);
-                EnvironmentDecorations.Add(new CircleDecoration(150, lifespan, Colors.BlueishGrey, 0.1, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(150, lifespan, Colors.BlueishGrey, 0.1, new PositionConnector(effect.Position)));
             }
         }
 
@@ -555,9 +555,9 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 }
                 // Main circle
                 var circle = new CircleDecoration(190, lifespan, color, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.White, 0.5));
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().GetBorderDecoration(Colors.White, 0.5));
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
             }
         }
 
@@ -569,8 +569,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 // The actual effect duration is 4294967295
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 0);
                 var connector = new PositionConnector(effect.Position);
-                EnvironmentDecorations.Add(new CircleDecoration(60, lifespan, Colors.White, 0.5, connector).UsingFilled(false));
-                EnvironmentDecorations.Add(new CircleDecoration(30, lifespan, Colors.Yellow, 0.4, connector));
+                environmentDecorations.Add(new CircleDecoration(60, lifespan, Colors.White, 0.5, connector).UsingFilled(false));
+                environmentDecorations.Add(new CircleDecoration(30, lifespan, Colors.Yellow, 0.4, connector));
             }
         }
 
@@ -581,8 +581,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(220, lifespan, Colors.Orange, 0.1, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
             }
         }
 
@@ -613,8 +613,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     var connector = new PositionConnector(effect.Position);
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
                     var circle = new CircleDecoration(420, lifespan, magmaColor, 0.2, connector);
-                    EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
+                    environmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                 }
             }
         }
@@ -645,7 +645,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     var connector = new PositionConnector(effect.Position);
                     (long, long) lifespan = effect.ComputeLifespan(log, 600000);
                     var circle = new CircleDecoration(420, lifespan, magmaColor, 0.5, connector);
-                    EnvironmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle);
                 }
             }
         }
