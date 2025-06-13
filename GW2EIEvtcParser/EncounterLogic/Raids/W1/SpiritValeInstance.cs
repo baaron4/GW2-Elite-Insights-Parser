@@ -25,10 +25,10 @@ internal class SpiritValeInstance : SpiritVale
         Icon = InstanceIconSpiritVale;
         Extension = "sprtvale";
 
-        _valeGuardian = new ValeGuardian(NonIdentifiedSpecies);
-        _spiritRace = new SpiritRace(NonIdentifiedSpecies);
-        _gorseval = new Gorseval(NonIdentifiedSpecies);
-        _sabetha = new Sabetha(NonIdentifiedSpecies);
+        _valeGuardian = new ValeGuardian((int)TargetID.ValeGuardian);
+        _spiritRace = new SpiritRace((int)TargetID.EtherealBarrier);
+        _gorseval = new Gorseval((int)TargetID.Gorseval);
+        _sabetha = new Sabetha((int)TargetID.Sabetha);
         _subLogics = [_valeGuardian, _spiritRace, _gorseval, _sabetha];
 
         MechanicList.Add(_valeGuardian.Mechanics);
