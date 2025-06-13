@@ -385,4 +385,14 @@ internal static class EncounterLogicUtils
 
         return filteredPairings;
     }
+    internal static int AddSortIDWithOffset(Dictionary<TargetID, int> toFill, IReadOnlyDictionary<TargetID, int> toFillFrom, int inputOffset)
+    {
+        int offset = 0;
+        foreach (var pair in toFillFrom)
+        {
+            toFill[pair.Key] = pair.Value + inputOffset;
+            offset = pair.Value + inputOffset;
+        }
+        return offset;
+    }
 }

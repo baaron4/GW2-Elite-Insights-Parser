@@ -14,9 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Gorseval : SpiritVale
 {
-    public Gorseval(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([    
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", 4000)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstBuffApplyMechanic(GhastlyPrison, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", 500),
@@ -33,11 +31,15 @@ internal class Gorseval : SpiritVale
                 new EnemyCastEndMechanic(GhastlyRampage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Ghastly Rampage (Breakbar broken)","CCed", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration <= 21985),
             ]),
-        ]));
+        ]);
+    public Gorseval(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "gors";
         Icon = EncounterIconGorseval;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000002;
+        ChestID = ChestID.GorsevalChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -97,11 +99,17 @@ internal class Gorseval : SpiritVale
         ("SE", new(2470.5596f, -5194.389f)),
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    protected override HashSet<int> CustomRenamedSpecies()
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
-        foreach (SingleActor target in Targets)
+        return [
+            (int)ChargedSoul
+        ];
+    }
+
+    internal static void RenameChargedSouls(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        var nameCount = new Dictionary<string, int> { { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.ChargedSoul))
             {
@@ -114,6 +122,12 @@ internal class Gorseval : SpiritVale
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameChargedSouls(Targets, combatData);
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -318,9 +332,9 @@ internal class Gorseval : SpiritVale
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GorsevalGhastlyPrison, out var ghstlyPrison))
         {
@@ -328,7 +342,7 @@ internal class Gorseval : SpiritVale
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
                 var circle = new CircleDecoration(80, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }

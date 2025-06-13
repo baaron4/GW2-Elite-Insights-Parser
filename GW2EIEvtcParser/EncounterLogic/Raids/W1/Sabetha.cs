@@ -13,9 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Sabetha : SpiritVale
 {
-    public Sabetha(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
        
             // NOTE: Time Bomb damage is registered only for the user that has the bomb, damage to others is not logged.
             new PlayerDstBuffApplyMechanic(ShellShocked, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (launched up to cannons)","Shell-Shocked", 0),
@@ -43,11 +41,15 @@ internal class Sabetha : SpiritVale
                 new EnemyCastEndMechanic(PlatformQuake, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Platform Quake (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker( (ce,log) =>  ce.ActualDuration > 4400),
             ]),
-        ]));
+        ]);
+    public Sabetha(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sab";
         Icon = EncounterIconSabetha;
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000003;
+        ChestID = ChestID.SabethaChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -59,7 +61,7 @@ internal class Sabetha : SpiritVale
                         (3456, 11012, 4736, 14212)*/);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindCannonsAndHeavyBombs(AgentData agentData, List<CombatItem> combatData)
     {
         // Cannons
         var cannons = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 74700 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -76,7 +78,11 @@ internal class Sabetha : SpiritVale
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
             bomb.OverrideID(TargetID.HeavyBomb, agentData);
         }
+    }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindCannonsAndHeavyBombs(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
@@ -144,7 +150,7 @@ internal class Sabetha : SpiritVale
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -302,9 +308,9 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Cannon Barrage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaCannonBarrage, out var cannonBarrage))
@@ -313,7 +319,7 @@ internal class Sabetha : SpiritVale
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 3500);
                 var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.1, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -324,7 +330,7 @@ internal class Sabetha : SpiritVale
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
                 var circle = new CircleDecoration(80, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -335,7 +341,7 @@ internal class Sabetha : SpiritVale
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 25000);
                 var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)); // 100 radius aprox.
-                EnvironmentDecorations.AddWithFilled(circle, false);
+                environmentDecorations.AddWithFilled(circle, false);
             }
         }
 
@@ -346,7 +352,7 @@ internal class Sabetha : SpiritVale
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
                 var circle = new CircleDecoration(180, lifespan, Colors.Lime, 0.5, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
     }

@@ -13,12 +13,13 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class SpiritRace : SpiritVale
 {
-    public SpiritRace(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([        
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
             new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(),
-        ]));
+        ]);
+    public SpiritRace(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sprtrace";
         Icon = EncounterIconSpiritRace;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
@@ -61,9 +62,14 @@ internal class SpiritRace : SpiritVale
         return (int)TargetID.WallOfGhosts;
     }
 
+    internal static RewardEvent? GetRewardEvent(CombatData combatData, long start, long end)
+    {
+        return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = GetRewardEvent(combatData, fightData.FightStart, fightData.LogEnd);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -104,12 +110,12 @@ internal class SpiritRace : SpiritVale
         AgentItem? wallOfGhosts = agentData.GetNPCsByID(TargetID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
-            foreach(var @event in combatData.Where(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
+            foreach(var velocityEvent in combatData.Where(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
             {
-                if(MovementEvent.GetPointXY(@event) != default)
+                if(MovementEvent.GetPointXY(velocityEvent) != default)
                 {
                     //first velocity
-                    return @event.Time;
+                    return velocityEvent.Time;
                 }
 
             }
@@ -117,62 +123,96 @@ internal class SpiritRace : SpiritVale
         return EncounterLogicTimeUtils.GetGenericFightOffset(fightData);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static bool FindEtherealBarriers(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPs = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000);
         bool needsDummy = true;
+        var position1 = new Vector2(-7607.929f, -12493.7051f/*, -1112.468f*/);
+        var position2 = new Vector2(-8423.886f, -9858.193f/*, -1335.1134f*/);
+        var position3 = new Vector2(-9104.786f, -6910.657f/*, -2405.52222f*/);
+        var position4 = new Vector2(-8552.994f, -863.6334f/*, -1416.31714f*/);
         foreach (CombatItem maxHP in maxHPs)
         {
             AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
             if (candidate.Type == AgentItem.AgentType.Gadget)
             {
                 needsDummy = false;
-                candidate.OverrideID(TargetID.EtherealBarrier, agentData);
+                var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(candidate)).Select(MovementEvent.GetPointXY);
+                if (positions.Any(x => (x - position1).Length() < 10))
+                {
+                    candidate.OverrideID(TargetID._EtherealBarrier1, agentData);
+                }
+                else if (positions.Any(x => (x - position2).Length() < 10))
+                {
+                    candidate.OverrideID(TargetID._EtherealBarrier2, agentData);
+                }
+                else if (positions.Any(x => (x - position3).Length() < 10))
+                {
+                    candidate.OverrideID(TargetID._EtherealBarrier3, agentData);
+                }
+                else if (positions.Any(x => (x - position4).Length() < 10))
+                {
+                    candidate.OverrideID(TargetID._EtherealBarrier4, agentData);
+                }
                 candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
-        if (needsDummy)
-        {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Spirit Race", Spec.NPC, TargetID.DummyTarget, true);
-            Targetless = true;
-        }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var position1 = new Vector2(-7607.929f, -12493.7051f/*, -1112.468f*/);
-        var position2 = new Vector2(-8423.886f, -9858.193f/*, -1335.1134f*/);
-        var position3 = new Vector2(-9104.786f, -6910.657f/*, -2405.52222f*/);
-        var position4 = new Vector2(-8552.994f, -863.6334f/*, -1416.31714f*/);
-        foreach (SingleActor target in Targets)
+        return needsDummy;
+    }
+
+    internal static void RenameEtherealBarriers(IReadOnlyList<SingleActor> targets, AgentData agentData)
+    {
+        foreach (SingleActor target in targets)
         {
             switch (target.ID)
             {
-                case (int)TargetID.EtherealBarrier:
-                    var positions = combatData.Where(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
-                    if (positions.Any(x => (x - position1).Length() < 10)) {
-                        target.OverrideName(target.Character + " 1" );
-                    } 
-                    else if (positions.Any(x => (x - position2).Length() < 10))
-                    {
-                        target.OverrideName(target.Character + " 2");
-                    } 
-                    else if (positions.Any(x => (x - position3).Length() < 10))
-                    {
-                        target.OverrideName(target.Character + " 3");
-                    } 
-                    else if (positions.Any(x => (x - position4).Length() < 10))
-                    {
-                        target.OverrideName(target.Character + " 4");
-                    }
+                case (int)TargetID._EtherealBarrier1:
+                    target.OverrideName("First " + target.Character);
+                    target.AgentItem.OverrideID(TargetID.EtherealBarrier, agentData);
+                    break;
+                case (int)TargetID._EtherealBarrier2:
+                    target.OverrideName("Second " + target.Character);
+                    target.AgentItem.OverrideID(TargetID.EtherealBarrier, agentData);
+                    break;
+                case (int)TargetID._EtherealBarrier3:
+                    target.OverrideName("Third " + target.Character);
+                    target.AgentItem.OverrideID(TargetID.EtherealBarrier, agentData);
+                    break;
+                case (int)TargetID._EtherealBarrier4:
+                    target.OverrideName("Fourth " + target.Character);
+                    target.AgentItem.OverrideID(TargetID.EtherealBarrier, agentData);
                     break;
                 default:
                     break;
             }
         }
-        _targets.Sort((x, y) => string.Compare(x.Character, y.Character, StringComparison.Ordinal));
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        if (!FindEtherealBarriers(agentData, combatData))
+        {
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Spirit Race", Spec.NPC, TargetID.DummyTarget, true);
+            Targetless = true;
+        }
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameEtherealBarriers(Targets, agentData);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Spirit Race";
+    }
+
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID._EtherealBarrier1, 0 },
+            {TargetID._EtherealBarrier2, 1 },
+            {TargetID._EtherealBarrier3, 2 },
+            {TargetID._EtherealBarrier4, 3 },
+        };
     }
 
 

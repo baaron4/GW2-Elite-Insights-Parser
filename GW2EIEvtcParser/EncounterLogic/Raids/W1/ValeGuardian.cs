@@ -13,9 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class ValeGuardian : SpiritVale
 {
-    public ValeGuardian(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([     
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP", "Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
                 new PlayerDstHitMechanic(UnstableMagicSpike, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP", "Unstable Magic Spike (Boss Teleport)","Boss TP", 500),
@@ -46,11 +44,16 @@ internal class ValeGuardian : SpiritVale
                 new EnemyCastEndMechanic(MagicStorm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Magic Storm (Breakbar failed) ","CC Fail", 0)
                     .UsingChecker((c, log) => c.ActualDuration > 8544),
             ]),
-        ]));
+        ]);
+
+    public ValeGuardian(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "vg";
         Icon = EncounterIconValeGuardian;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
+        ChestID = ChestID.GuardianChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -82,7 +85,7 @@ internal class ValeGuardian : SpiritVale
             TargetID.GreenGuardian
         ];
     }
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -129,12 +132,6 @@ internal class ValeGuardian : SpiritVale
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])));
-    }
-
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
@@ -143,9 +140,9 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out var distributedMagicEvents))
         {
@@ -155,7 +152,7 @@ internal class ValeGuardian : SpiritVale
                 (long start, long end) lifespan = distributedMagic.ComputeLifespan(log, 6000);
                 lifespan.end = Math.Min(lifespan.end + 700, distributedMagic.Src.LastAware);
                 var circle = new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.2, new PositionConnector(distributedMagic.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -165,12 +162,12 @@ internal class ValeGuardian : SpiritVale
             {
                 (long start, long end) lifespan = magicSpike.ComputeLifespan(log, 2000);
                 var circle = new CircleDecoration(90, lifespan, Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
         var bulletStorm = log.CombatData.GetMissileEventsBySkillID(BulletStorm);
-        EnvironmentDecorations.AddNonHomingMissiles(log, bulletStorm, Colors.White, 0.2, 40);
+        environmentDecorations.AddNonHomingMissiles(log, bulletStorm, Colors.White, 0.2, 40);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

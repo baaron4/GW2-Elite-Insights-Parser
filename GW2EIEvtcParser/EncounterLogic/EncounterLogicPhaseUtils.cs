@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -183,5 +184,40 @@ internal static class EncounterLogicPhaseUtils
         [
             new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
         ];
+    }
+
+    internal static void ProcessGenericCombatPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName)
+    {
+        if (targetsByIDs.TryGetValue((int)targetID, out var targets))
+        {
+            bool hasMultiple = targets.Count > 1;
+            int encounterCount = 1;
+            var lastTarget = targets.Last();
+            var chest = log.AgentData.GetGadgetsByID(chestID).FirstOrDefault();
+            foreach (var target in targets)
+            {
+                var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+                long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
+                bool success = target == lastTarget && chest != null;
+                long end = success ? chest!.FirstAware : target.LastAware;
+                var phase = new PhaseData(start, end, phaseName);
+                phases.Add(phase);
+                if (hasMultiple)
+                {
+                    phase.Name += " " + (encounterCount++);
+                }
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phase.AddParentPhase(phases[0]);
+                phase.AddTarget(target, log);
+                phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
+            }
+        }
     }
 }
