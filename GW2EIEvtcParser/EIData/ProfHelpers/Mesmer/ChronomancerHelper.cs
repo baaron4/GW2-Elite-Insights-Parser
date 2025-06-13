@@ -37,10 +37,11 @@ internal static class ChronomancerHelper
         new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
             .WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
+        // TODO: add new danger time
         // Improved Alacrity
         new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All)
             .UsingChecker((x, log) => x.HasCrit)
-            .WithBuilds(GW2Builds.August2022BalanceHotFix),
+            .WithBuilds(GW2Builds.August2022BalanceHotFix, GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
