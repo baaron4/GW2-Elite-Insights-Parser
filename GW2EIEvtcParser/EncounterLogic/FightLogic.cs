@@ -283,9 +283,24 @@ public abstract class FightLogic
 
     internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
+        if (IsInstance || ParseMode == ParseModeEnum.WvW)
+        {
+            foreach (Player p in players)
+            {
+                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+            return;
+        }
+        //
+        long threshold = fightData.FightStart + 5000;
         foreach (Player p in players)
         {
-            long threshold = fightData.FightStart + 5000;
             EnterCombatEvent? enterCombat = null;
             if (p.FirstAware > threshold)
             {
