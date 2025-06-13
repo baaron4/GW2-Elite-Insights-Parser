@@ -272,7 +272,9 @@ public abstract class FightLogic
         _trashMobs.SortByFirstAware();
         NumericallyRenameSpecies(TrashMobs, ignoredSpeciesForRenaming);
 
-        foreach (TargetID id in GetFriendlyNPCIDs())
+        var friendlyIDs = GetFriendlyNPCIDs();
+        RegroupSameInstidNPCsByID(friendlyIDs, agentData, combatItems, extensions);
+        foreach (TargetID id in friendlyIDs)
         {
             _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }

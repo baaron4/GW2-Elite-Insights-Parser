@@ -120,6 +120,11 @@ internal class Qadim : MythwrightGambit
            TargetID.WyvernMatriarch,
            TargetID.WyvernPatriarch,
            TargetID.QadimLamp,
+           TargetID.PyreGuardian,
+           TargetID.PyreGuardianProtect,
+           TargetID.PyreGuardianRetal,
+           TargetID.PyreGuardianResolution,
+           TargetID.PyreGuardianStab,
         ];
     }
 
@@ -144,13 +149,35 @@ internal class Qadim : MythwrightGambit
         }
         IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
         // Lamps
-        if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
+        var qadimLampMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (qadimLampMarkerGUID != null)
         {
-            var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
-            foreach (AgentItem lamp in lampAgents)
+            var lamps = combatData
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var lamp in lamps)
             {
+                lamp.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
                 lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-                lamp.OverrideID(TargetID.QadimLamp, agentData);
+            }
+        } 
+        else
+        {
+            if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
+            {
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
+                foreach (AgentItem lamp in lampAgents)
+                {
+                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    lamp.OverrideID(TargetID.QadimLamp, agentData);
+                }
             }
         }
         // Pyres
@@ -178,7 +205,8 @@ internal class Qadim : MythwrightGambit
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (NPC target in TrashMobs)
+        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.PyreGuardian, TargetID.PyreGuardianProtect, TargetID.PyreGuardianRetal, TargetID.PyreGuardianResolution, TargetID.PyreGuardianStab])));
+        foreach (NPC target in Targets)
         {
             if (target.IsSpecies(TargetID.PyreGuardianProtect))
             {
@@ -320,6 +348,7 @@ internal class Qadim : MythwrightGambit
                     phase.OverrideStart(pyresFirstAware.Max());
                 }
                 phase.AddTarget(qadim, log);
+                phase.AddTargets(Targets.Where(x => x.IsAnySpecies(pyres)), log, PhaseData.TargetPriority.NonBlocking); 
             }
             else
             {
@@ -370,11 +399,6 @@ internal class Qadim : MythwrightGambit
             TargetID.GreaterMagmaElemental2,
             TargetID.FireElemental,
             TargetID.FireImp,
-            TargetID.PyreGuardian,
-            TargetID.PyreGuardianProtect,
-            TargetID.PyreGuardianRetal,
-            TargetID.PyreGuardianResolution,
-            TargetID.PyreGuardianStab,
             TargetID.ReaperOfFlesh,
             TargetID.DestroyerTroll,
             TargetID.IceElemental,
