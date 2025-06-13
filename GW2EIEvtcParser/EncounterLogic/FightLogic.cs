@@ -357,6 +357,7 @@ public abstract class FightLogic
         List<PhaseData> phases = GetInitialPhase(log);
         if (IsInstance)
         {
+            phases[0].AddTargets(Targets, log);
             AddPhasesPerTarget(log, phases, Targets.Where(x => x.LastAware - x.FirstAware > MinimumInCombatDuration));
         } 
         else
