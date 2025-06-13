@@ -48,15 +48,26 @@ internal class WhisperingShadow : Kinfall
         ];
     }
 
+    protected SingleActor GetWhisperingShadow()
+    {
+        return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
+    }
+
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        const uint healthT4 = 19_082_024;
+        var shadow = GetWhisperingShadow();
+        if (shadow.GetHealth(combatData) > healthT4 + 100_000)
+        {
+            return FightData.EncounterMode.CM;
+        }
         return FightData.EncounterMode.Normal;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor shadow = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
+        var phases = GetInitialPhase(log);
+        var shadow = GetWhisperingShadow();
         phases[0].AddTarget(shadow, log);
         if (!requirePhases)
         {
