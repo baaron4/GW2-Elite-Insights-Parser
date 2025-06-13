@@ -31,8 +31,4 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             TargetID.PeerlessQadim,
         ];
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        fightData.SetSuccess(true, fightData.FightEnd);
-    }
 }
