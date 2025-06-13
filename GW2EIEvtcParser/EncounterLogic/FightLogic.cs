@@ -176,7 +176,7 @@ public abstract class FightLogic
         return [];
     }
 
-    protected virtual Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal virtual Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
         var res = new Dictionary<TargetID, int>(targetsIds.Count);
