@@ -100,6 +100,20 @@ internal class Skorvald : ShatteredObservatory
         return phases;
     }
 
+    protected override HashSet<int> CustomRenamedSpecies()
+    {
+        return [
+            (int)TargetID.FluxAnomaly1,
+            (int)TargetID.FluxAnomaly2,
+            (int)TargetID.FluxAnomaly3,
+            (int)TargetID.FluxAnomaly4,
+            (int)TargetID.FluxAnomalyCM1,
+            (int)TargetID.FluxAnomalyCM2,
+            (int)TargetID.FluxAnomalyCM3,
+            (int)TargetID.FluxAnomalyCM4,
+        ];
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var manualFractalScaleSet = false;

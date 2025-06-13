@@ -262,23 +262,6 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var bigPhantasmIDs = new HashSet<TargetID>
-        {
-            TargetID.Jessica,
-            TargetID.Olson,
-            TargetID.Engul,
-            TargetID.Faerla,
-            TargetID.Caulle,
-            TargetID.Henley,
-            TargetID.Galletta,
-            TargetID.Ianim,
-        };
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies(bigPhantasmIDs)));
-    }
-
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         long start = replay.TimeOffsets.start;

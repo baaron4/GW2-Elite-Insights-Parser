@@ -216,10 +216,6 @@ internal class AiKeeperOfThePeak : SunquaPeak
         SingleActor? darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
         darkAi?.OverrideName("Dark Ai");
         eleAi?.OverrideName("Elemental Ai");
-        if (_hasDarkMode)
-        {
-            NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.CCSorrowDemon)));
-        }
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)

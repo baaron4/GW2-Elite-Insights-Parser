@@ -114,15 +114,6 @@ internal class Arkk : ShatteredObservatory
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Add number to the spawned anomalies
-        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
-        NumericallyRenameSpecies(anomalies);
-    }
-
     private void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
     {
         SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(targetID));

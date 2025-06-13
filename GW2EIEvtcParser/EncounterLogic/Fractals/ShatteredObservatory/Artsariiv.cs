@@ -111,7 +111,12 @@ internal class Artsariiv : ShatteredObservatory
         ("S" , new(10_388.698f, 390.419f)),
         ("W" , new(9295.668f, 1450.060f)),
     ];
-
+    protected override HashSet<int> CustomRenamedSpecies()
+    {
+        return [
+            (int)TargetID.CloneArtsariiv
+        ];
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var targetArtsariiv = FindTargetArtsariiv(agentData);

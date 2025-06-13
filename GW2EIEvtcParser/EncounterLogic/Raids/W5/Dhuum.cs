@@ -325,9 +325,6 @@ internal class Dhuum : HallOfChains
         }
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Adding counting number to the Enforcers
-        NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.Enforcer)));
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

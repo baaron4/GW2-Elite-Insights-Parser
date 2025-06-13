@@ -64,7 +64,13 @@ internal class Adina : TheKeyOfAhdashim
         ("SW", new(14316.6f, -2080.17f)), // eruption
         ("SE", new(15478.0f, -2156.67f)), // erosion
     ];
-
+    protected override HashSet<int> CustomRenamedSpecies()
+    {
+        return [
+            (int)TargetID.HandOfErosion,
+            (int)TargetID.HandOfEruption,
+        ];
+    }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var attackTargetEvents = combatData

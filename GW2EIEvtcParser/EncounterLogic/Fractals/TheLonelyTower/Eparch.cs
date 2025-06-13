@@ -109,7 +109,6 @@ internal class Eparch : LonelyTower
         //
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.KryptisRift, TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement, TargetID.AvatarOfSpite])));
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

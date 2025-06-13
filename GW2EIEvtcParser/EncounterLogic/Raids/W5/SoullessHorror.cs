@@ -130,10 +130,6 @@ internal class SoullessHorror : HallOfChains
                 combatEvent.OverrideSrcAgent(0);
             }
         }
-
-        // Add number to the spawned Tormented Deads
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        NumericallyRenameSpecies(tormentedDeads);
     }
 
     /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)

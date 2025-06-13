@@ -150,11 +150,6 @@ internal class UnknownInstanceLogic : UnknownFightLogic
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, TargetID.Instance, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        // Generic name override
-        if (!Targetless)
-        {
-            EncounterLogicUtils.NumericallyRenameSpecies(Targets);
-        }
     }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {

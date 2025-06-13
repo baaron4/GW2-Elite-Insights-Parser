@@ -442,6 +442,14 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
+    protected override HashSet<int> CustomRenamedSpecies()
+    {
+        return [
+            (int)TargetID.KillableVoidAmalgamate,
+            (int)TargetID.PushableVoidAmalgamate,
+        ];
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));

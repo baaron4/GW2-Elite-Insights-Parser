@@ -259,7 +259,6 @@ internal class UraTheSteamshrieker : MountBalrior
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.EliteFumaroller, TargetID.ChampionFumaroller, TargetID.LegendaryVentshot])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)

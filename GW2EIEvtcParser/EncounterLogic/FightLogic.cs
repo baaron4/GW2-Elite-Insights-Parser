@@ -208,8 +208,14 @@ public abstract class FightLogic
         return target.Character;
     }
 
+    protected virtual HashSet<int> CustomRenamedSpecies()
+    {
+        return [];
+    }
+
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        var ignoredSpeciesForRenaming = CustomRenamedSpecies();
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();
@@ -245,6 +251,7 @@ public abstract class FightLogic
             }
             return int.MaxValue;
         }).ToList();
+        NumericallyRenameSpecies(Targets, ignoredSpeciesForRenaming);
         // Build trash mobs
         foreach (var trash in trashIDs)
         {
@@ -264,12 +271,14 @@ public abstract class FightLogic
         }
 #endif
         _trashMobs.SortByFirstAware();
+        NumericallyRenameSpecies(TrashMobs, ignoredSpeciesForRenaming);
 
         foreach (TargetID id in GetFriendlyNPCIDs())
         {
             _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }
         _nonPlayerFriendlies.SortByFirstAware();
+        NumericallyRenameSpecies(NonPlayerFriendlies, ignoredSpeciesForRenaming);
         FinalizeComputeFightTargets();
     }
 
@@ -530,7 +539,6 @@ public abstract class FightLogic
         ComputeFightTargets(agentData, combatData, extensions);
         if (IsInstance)
         {
-            NumericallyRenameSpecies(Targets);
         }
     }
 

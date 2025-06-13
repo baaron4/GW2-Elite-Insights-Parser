@@ -135,7 +135,6 @@ internal class GreerTheBlightbringer : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Enumerating Proto-Greerlings
-        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling)));
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.ProtoGreerling))

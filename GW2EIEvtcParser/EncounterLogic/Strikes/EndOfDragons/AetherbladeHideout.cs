@@ -700,11 +700,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             switch (target.ID)
             {
                 case (int)TargetID.ScarletPhantomBreakbar:
-                    target.OverrideName("Elite " + target.Character + " CC");
+                    target.OverrideName("Elite CC " + target.Character);
                     break;
                 case (int)TargetID.ScarletPhantomHP:
                 case (int)TargetID.ScarletPhantomHPCM:
-                    target.OverrideName("Elite " + target.Character + " HP");
+                    target.OverrideName("Elite HP " + target.Character);
                     break;
                 default:
                     break;
@@ -735,7 +735,6 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         SanitizeLastHealthUpdateEvents(Targets, combatData);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBreakbar, TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.FerrousBomb, TargetID.ScarletPhantomBeamNM])));
         RenameScarletPhantoms(Targets);
     }
 

@@ -454,7 +454,6 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.TheTormented, TargetID.VeteranTheTormented, TargetID.EliteTheTormented, TargetID.ChampionTheTormented])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)

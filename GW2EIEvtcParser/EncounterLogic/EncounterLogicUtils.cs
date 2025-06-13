@@ -187,11 +187,15 @@ internal static class EncounterLogicUtils
         return true;
     }
 
-    internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets)
+    internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets, HashSet<int> ignoredSpecies)
     {
         var targetsByID = targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in targetsByID)
         {
+            if (ignoredSpecies.Contains(pair.Key))
+            {
+                continue;
+            }
             if (pair.Value.Count > 1)
             {
                 var count = 1;

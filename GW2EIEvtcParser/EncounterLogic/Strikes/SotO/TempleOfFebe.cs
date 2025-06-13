@@ -340,14 +340,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] curEmbodiments = [1, 1, 1, 1, 1, 1];
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.MaliciousShadow, TargetID.MaliciousShadowCM])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)TargetID.EmbodimentOfDespair:
                     CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[0]++ + ")");
                     if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -355,7 +353,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfEnvy:
                     CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[1]++ + ")");
                     if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -363,7 +360,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfGluttony:
                     CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[2]++ + ")");
                     if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -371,7 +367,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfMalice:
                     CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[3]++ + ")");
                     if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -379,7 +374,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfRage:
                     CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[4]++ + ")");
                     if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -387,7 +381,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfRegret:
                     CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[5]++ + ")");
                     if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);

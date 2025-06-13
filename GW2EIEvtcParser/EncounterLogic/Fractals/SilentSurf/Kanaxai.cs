@@ -120,12 +120,6 @@ internal class Kanaxai : SilentSurf
         return FightData.EncounterMode.CMNoName;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.AspectOfTorment, TargetID.AspectOfLethargy, TargetID.AspectOfExposure, TargetID.AspectOfDeath, TargetID.AspectOfFear])));
-    }
-
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // kanaxai spawns with invulnerability
