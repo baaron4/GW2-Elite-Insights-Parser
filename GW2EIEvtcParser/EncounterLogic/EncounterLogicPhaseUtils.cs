@@ -11,7 +11,23 @@ internal static class EncounterLogicPhaseUtils
         phases[0].AddTargets(targets, log);
         foreach (SingleActor target in targets)
         {
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), target.Character);
+            long start = target.FirstAware;
+            long end = target.LastAware;
+            var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+            if (enterCombat != null)
+            {
+                var exitCombat = log.CombatData.GetExitCombatEvents(target.AgentItem).FirstOrDefault(x => x.Time < enterCombat.Time);
+                if (exitCombat == null)
+                {
+                    start = enterCombat.Time;
+                }
+            }
+            var dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+            if (dead != null)
+            {
+                end = dead.Time;
+            }
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
@@ -175,9 +191,9 @@ internal static class EncounterLogicPhaseUtils
         if (log.FightData.Logic.IsInstance)
         {
             return
-        [
-            new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance")
-        ];
+            [
+                new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance")
+            ];
         }
         return
         [
