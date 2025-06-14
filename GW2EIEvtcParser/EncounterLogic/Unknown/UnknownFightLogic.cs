@@ -9,7 +9,7 @@ internal abstract class UnknownFightLogic : FightLogic
 {
     public UnknownFightLogic(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         SkillMode = SkillModeEnum.PvE;
         EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;

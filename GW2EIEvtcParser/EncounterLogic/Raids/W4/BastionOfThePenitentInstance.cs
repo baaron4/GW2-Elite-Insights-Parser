@@ -12,7 +12,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 {
     public BastionOfThePenitentInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconBastionOfThePenitent;
         Extension = "bstpen";
     }

@@ -11,7 +11,7 @@ internal class SunquaPeakInstance : SunquaPeak
 {
     public SunquaPeakInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconSunquaPeak;
         Extension = "snqpeak";
     }
