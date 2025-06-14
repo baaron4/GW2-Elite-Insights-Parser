@@ -33,6 +33,9 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstHitMechanic(Gorefrost, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "Arrow.H", "Hit by Gorefrost (Arrows)", "Gorefrost Hit", 0),
             ]),
             new MechanicGroup([
+                new PlayerDstHitMechanic([FreezingFan, FreezingFan2], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Orange), "Frontal.H", "Hit by Freezing Fan (Frontal)", "Freezing Fan Hit", 0),
+            ]),
+            new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             ]),
         ]));
@@ -201,9 +204,9 @@ internal class WhisperingShadow : Kinfall
         }
 
         // gorefrost (arrow)
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowGorefrost1, out var gorefrosts))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowGorefrost1, out var gorefrostArrows))
         {
-            foreach (var effect in gorefrosts)
+            foreach (var effect in gorefrostArrows)
             {
                 // TODO: support arrow decorations
                 const uint length = 1050;
@@ -214,6 +217,12 @@ internal class WhisperingShadow : Kinfall
                 EnvironmentDecorations.Add(decoration);
             }
         }
+        var gorefrostMissiles = log.CombatData.GetMissileEventsBySkillID(Gorefrost);
+        EnvironmentDecorations.AddNonHomingMissiles(log, gorefrostMissiles, Colors.SkyBlue, 0.2, 50);
+
+        // freezing vortex (rotating aoes)
+        var freezingVortexMissiles = log.CombatData.GetMissileEventsBySkillID(FreezingVortex);
+        EnvironmentDecorations.AddNonHomingMissiles(log, freezingVortexMissiles, Colors.Red, 0.1, 200);
     }
 
     protected static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
