@@ -32,4 +32,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             //TargetID.Deimos,
         ];
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 }

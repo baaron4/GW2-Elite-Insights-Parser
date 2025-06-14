@@ -33,4 +33,8 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Xera2,
         ];
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 }

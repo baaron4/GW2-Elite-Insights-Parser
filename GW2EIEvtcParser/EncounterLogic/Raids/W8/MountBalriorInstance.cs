@@ -32,4 +32,8 @@ internal class MountBalriorInstance : MountBalrior
             TargetID.Ura,
         ];
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 }

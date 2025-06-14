@@ -34,4 +34,8 @@ internal class HallOfChainsInstance : HallOfChains
             TargetID.Dhuum,
         ];
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 }

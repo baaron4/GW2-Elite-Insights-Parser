@@ -234,4 +234,8 @@ internal class SalvationPassInstance : SalvationPass
         }
         return sortIDs;
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 }
