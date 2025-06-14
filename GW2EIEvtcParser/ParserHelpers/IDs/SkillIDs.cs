@@ -896,7 +896,7 @@ public static class SkillIDs
     public const long CallLightning_Player = 12594;
     public const long Quicksand_Player = 12595;
     public const long NaturesRenewal_Player = 12596;
-    public const long SolarFlare_SunSpiritNPC = 12597;
+    public const long SolarFlare_SunSpiritNPC1 = 12597;
     public const long CallLightning_StormSpiritNPC = 12598;
     public const long Quicksand_StoneSpiritNPC = 12599;
     public const long ColdSnap_FrostSpiritNPC = 12600;
@@ -4217,6 +4217,7 @@ public static class SkillIDs
     public const long POV_DreadVisageBuff = 69343;
     public const long DissectingDance2 = 69345;
     public const long KanaxaiSpreadOrangeAoEBuff = 69346;
+    public const long SolarFlare_SunSpiritNPC2 = 69348;
     public const long KanaxaiUnknownBuff1 = 69350; // related to teleportation?
     public const long HarrowshotExposure = 69353;
     public const long ScouringBlade = 69354;
