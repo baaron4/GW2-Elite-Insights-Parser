@@ -230,7 +230,7 @@ internal class WhisperingShadow : Kinfall
         var lifefires = player.GetBuffStatus(log, buff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (var lifefire in lifefires)
         {
-            replay.Decorations.Add(new CircleDecoration(radius, lifefire, Colors.Ice, 0.1, new AgentConnector(player.AgentItem)));
+            replay.Decorations.Add(new CircleDecoration(radius, lifefire, Colors.Ice, 0.07, new AgentConnector(player.AgentItem)));
         }
     }
 }
