@@ -9,6 +9,7 @@ internal abstract class UnknownFightLogic : FightLogic
 {
     public UnknownFightLogic(int triggerID) : base(triggerID)
     {
+        EncounterID = EncounterIDs.Unknown;
         SkillMode = SkillModeEnum.PvE;
         EncounterCategoryInformation.Category = FightCategory.UnknownEncounter;
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
@@ -17,6 +18,11 @@ internal abstract class UnknownFightLogic : FightLogic
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
         // We don't know how an unknown fight could operate.
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.Unknown;
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {

@@ -42,7 +42,9 @@ public class FightData
         Normal,
         LegendaryCM,
         CM,
-        CMNoName
+        CMNoName,
+        NotApplicable,
+        Unknown,
     }
 
     public EncounterMode FightMode { get; private set; } = EncounterMode.NotSet;

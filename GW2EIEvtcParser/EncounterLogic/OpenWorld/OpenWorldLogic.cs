@@ -1,4 +1,5 @@
-﻿using static GW2EIEvtcParser.SpeciesIDs;
+﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -15,5 +16,9 @@ internal abstract class OpenWorldLogic : FightLogic
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
+    }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
     }
 }

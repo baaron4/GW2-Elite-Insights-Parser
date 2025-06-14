@@ -66,7 +66,7 @@ internal class LogDataDto
     public string FightNameNoMode;
     public string FightName;
     public string FightIcon;
-    public string FightMode;
+    public string? FightMode;
     public string FightStartStatus;
     public bool LightTheme;
     public bool NoMechanics;
@@ -142,6 +142,9 @@ internal class LogDataDto
         FightIcon = log.FightData.Logic.Icon;
         switch (log.FightData.FightMode)
         {
+            case FightData.EncounterMode.Unknown:
+                FightMode = "Unknown";
+                break;
             case FightData.EncounterMode.Story:
                 FightMode = "Story Mode";
                 break;
