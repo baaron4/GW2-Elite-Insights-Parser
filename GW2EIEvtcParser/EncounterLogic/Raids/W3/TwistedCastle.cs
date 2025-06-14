@@ -85,7 +85,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

@@ -33,7 +33,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
              (-15360, -15360, 15360, 15360)); // TODO Fix values
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -45,7 +45,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return
         [

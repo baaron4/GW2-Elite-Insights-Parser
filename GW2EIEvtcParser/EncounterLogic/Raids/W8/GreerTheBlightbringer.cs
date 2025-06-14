@@ -87,7 +87,7 @@ internal class GreerTheBlightbringer : MountBalrior
                         (11300, -10621, 18374, -3794));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -99,7 +99,7 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -111,7 +111,7 @@ internal class GreerTheBlightbringer : MountBalrior
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -135,7 +135,6 @@ internal class GreerTheBlightbringer : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         // Enumerating Proto-Greerlings
-        EncounterLogicUtils.NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling)));
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.ProtoGreerling))
@@ -455,9 +454,9 @@ internal class GreerTheBlightbringer : MountBalrior
 
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Wave of Corruption
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GreerWaveOfCorruption1, out var shockwaves))
@@ -465,7 +464,7 @@ internal class GreerTheBlightbringer : MountBalrior
             foreach (EffectEvent effect in shockwaves)
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 3000);
-                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Purple, 0.2, 1500);
+                environmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Purple, 0.2, 1500);
             }
         }
     }

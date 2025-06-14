@@ -12,7 +12,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
 {
     public ShatteredObservatoryInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconShatteredObservatory;
         Extension = "shatrdobs";
     }
@@ -22,7 +22,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         return "Shattered Observatory";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -30,5 +30,9 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
             //TargetID.Artsariiv,
             TargetID.Arkk,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

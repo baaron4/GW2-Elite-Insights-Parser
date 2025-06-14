@@ -12,7 +12,7 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
 {
     public CaptainMaiTrinBossInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconCaptainMaiTrin;
         Extension = "captnmai";
     }
@@ -22,11 +22,15 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
         return "Captain Mai Trin Boss Fractal"; ;
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
             TargetID.MaiTrinFract,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

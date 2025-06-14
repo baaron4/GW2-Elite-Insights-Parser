@@ -12,7 +12,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 {
     public BastionOfThePenitentInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconBastionOfThePenitent;
         Extension = "bstpen";
     }
@@ -22,7 +22,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return "Bastion Of The Penitent";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -31,5 +31,9 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             TargetID.Samarog,
             //TargetID.Deimos,
         ];
+    }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
     }
 }

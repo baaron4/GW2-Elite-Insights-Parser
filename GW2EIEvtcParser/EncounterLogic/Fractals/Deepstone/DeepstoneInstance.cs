@@ -12,7 +12,7 @@ internal class DeepstoneInstance : FractalLogic
 {
     public DeepstoneInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconDeepstone;
         Extension = "deepstone";
     }
@@ -22,11 +22,15 @@ internal class DeepstoneInstance : FractalLogic
         return "Deepstone";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
             TargetID.TheVoice,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

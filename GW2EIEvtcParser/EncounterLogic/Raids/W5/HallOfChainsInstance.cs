@@ -12,7 +12,7 @@ internal class HallOfChainsInstance : HallOfChains
 {
     public HallOfChainsInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconHallOfChains;
         Extension = "hallchains";
     }
@@ -22,7 +22,7 @@ internal class HallOfChainsInstance : HallOfChains
         return "Hall Of Chains";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -33,5 +33,9 @@ internal class HallOfChainsInstance : HallOfChains
             TargetID.EyeOfJudgement,
             TargetID.Dhuum,
         ];
+    }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
     }
 }

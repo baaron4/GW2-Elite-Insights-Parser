@@ -188,10 +188,6 @@ internal static class EncounterLogicTimeUtils
 
     internal static void SetSuccessByChestGadget(ChestID chestID, AgentData agentData, FightData fightData)
     {
-        if (chestID == ChestID.None)
-        {
-            return;
-        }
         AgentItem? chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
         if (chest != null)
         {

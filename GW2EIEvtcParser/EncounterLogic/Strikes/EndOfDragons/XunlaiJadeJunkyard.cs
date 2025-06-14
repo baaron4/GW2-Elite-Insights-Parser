@@ -177,7 +177,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -187,7 +187,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -197,7 +197,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [

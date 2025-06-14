@@ -12,7 +12,7 @@ internal class NightmareInstance : Nightmare
 {
     public NightmareInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconNightmare;
         Extension = "nightmare";
     }
@@ -22,7 +22,7 @@ internal class NightmareInstance : Nightmare
         return "Nightmare";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -30,5 +30,9 @@ internal class NightmareInstance : Nightmare
             TargetID.Siax,
             TargetID.Ensolyss,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

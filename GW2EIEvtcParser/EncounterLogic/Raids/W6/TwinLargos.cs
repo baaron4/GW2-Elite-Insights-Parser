@@ -54,7 +54,7 @@ internal class TwinLargos : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -386,13 +386,13 @@ internal class TwinLargos : MythwrightGambit
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Aquatic Barrage - CC Projectiles - Rendering affected by player distance.
         var aquaticBarrage = log.CombatData.GetMissileEventsBySkillID(AquaticBarrage);
-        EnvironmentDecorations.AddNonHomingMissiles(log, aquaticBarrage, Colors.White, 0.3, 15);
+        environmentDecorations.AddNonHomingMissiles(log, aquaticBarrage, Colors.White, 0.3, 15);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

@@ -82,7 +82,7 @@ internal class Arkk : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = new List<TargetID>(9 + base.GetTrashMobsIDs().Count);
         trashIDs.AddRange(base.GetTrashMobsIDs());
@@ -103,7 +103,7 @@ internal class Arkk : ShatteredObservatory
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -112,15 +112,6 @@ internal class Arkk : ShatteredObservatory
             TargetID.EliteBrazenGladiator,
             TargetID.TemporalAnomalyArkk,
         ];
-    }
-
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Add number to the spawned anomalies
-        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
-        NumericallyRenameSpecies(anomalies);
     }
 
     private void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
@@ -365,11 +356,11 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        AddCorporealReassignmentDecorations(log);
+        AddCorporealReassignmentDecorations(log, environmentDecorations);
 
         // Horizon Strike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out var strikes))
@@ -379,8 +370,8 @@ internal class Arkk : ShatteredObservatory
                 int start = (int)effect.Time;
                 int end = start + 2600; // effect has 3833ms duration for some reason
                 var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
-                EnvironmentDecorations.Add(new PieDecoration(1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new PieDecoration(1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
             }
         }
     }

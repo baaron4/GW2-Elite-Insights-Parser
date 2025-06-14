@@ -49,7 +49,6 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ]));
         _cn = triggerID != (int)TargetID.ConjuredAmalgamate;
         Extension = "ca";
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         Icon = EncounterIconConjuredAmalgamate;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
@@ -105,7 +104,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -115,7 +114,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -124,7 +123,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [
@@ -373,9 +372,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -385,7 +384,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         var shieldOrbs = log.CombatData.GetMissileEventsBySkillID(JunkAbsorptionShield);
 
         // Purple Orbs
-        EnvironmentDecorations.AddNonHomingMissiles(log, purpleOrbs, Colors.Purple, 0.5, 50);
+        environmentDecorations.AddNonHomingMissiles(log, purpleOrbs, Colors.Purple, 0.5, 50);
 
         // Sword Orbs
         foreach (MissileEvent missileEvent in swordOrbs)
@@ -396,8 +395,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 var launch = missileEvent.LaunchEvents[i];
                 lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
                 var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start), launch.GetFinalPosition(lifespan)], Connector.InterpolationMethod.Linear);
-                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
-                EnvironmentDecorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.White, 0.3, connector));
+                environmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
+                environmentDecorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.White, 0.3, connector));
             }
         }
 
@@ -410,8 +409,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 var launch = missileEvent.LaunchEvents[i];
                 lifespan = (launch.Time, i != missileEvent.LaunchEvents.Count - 1 ? missileEvent.LaunchEvents[i + 1].Time : lifespan.end);
                 var connector = new InterpolationConnector([new ParametricPoint3D(launch.LaunchPosition, lifespan.start),launch.GetFinalPosition(lifespan)],Connector.InterpolationMethod.Linear);
-                EnvironmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
-                EnvironmentDecorations.Add(new DoughnutDecoration(100, 125, lifespan, Colors.White, 0.3, connector));
+                environmentDecorations.Add(new CircleDecoration(50, lifespan, Colors.Emerald, 0.5, connector));
+                environmentDecorations.Add(new DoughnutDecoration(100, 125, lifespan, Colors.White, 0.3, connector));
             }
         }
     }

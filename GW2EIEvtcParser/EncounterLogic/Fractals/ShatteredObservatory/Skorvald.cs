@@ -100,6 +100,20 @@ internal class Skorvald : ShatteredObservatory
         return phases;
     }
 
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.FluxAnomaly1,
+            (int)TargetID.FluxAnomaly2,
+            (int)TargetID.FluxAnomaly3,
+            (int)TargetID.FluxAnomaly4,
+            (int)TargetID.FluxAnomalyCM1,
+            (int)TargetID.FluxAnomalyCM2,
+            (int)TargetID.FluxAnomalyCM3,
+            (int)TargetID.FluxAnomalyCM4,
+        ];
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var manualFractalScaleSet = false;
@@ -218,7 +232,7 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -254,7 +268,7 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         var trashIDs = new List<TargetID>(1 + base.GetTrashMobsIDs().Count);
         trashIDs.AddRange(base.GetTrashMobsIDs());
@@ -493,9 +507,9 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Mist Bomb - Both for Skorvald and Flux Anomalies
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out var mistBombs))
@@ -503,12 +517,12 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in mistBombs)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
-                EnvironmentDecorations.Add(new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
         // Solar Bolt - Indicator
-        AddDistanceCorrectedOrbAoEDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
+        AddDistanceCorrectedOrbAoEDecorations(log, environmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
 
         // Solar Bolt - Damage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out var solarBolts))
@@ -516,7 +530,7 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in solarBolts)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 12000);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -526,13 +540,13 @@ internal class Skorvald : ShatteredObservatory
             foreach (EffectEvent effect in kickEffects)
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 300);
-                EnvironmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
+                environmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
             }
         }
 
         // Solar Bolt Orbs
         var solarBolt = log.CombatData.GetMissileEventsBySkillID(SolarBoltCM);
-        EnvironmentDecorations.AddNonHomingMissiles(log, solarBolt, Colors.Red, 0.2, 50);
+        environmentDecorations.AddNonHomingMissiles(log, solarBolt, Colors.Red, 0.2, 50);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

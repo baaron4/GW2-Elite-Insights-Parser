@@ -110,7 +110,7 @@ internal class Qadim : MythwrightGambit
     }
 
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -387,7 +387,7 @@ internal class Qadim : MythwrightGambit
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -449,13 +449,13 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         if (_manualPlatforms)
         {
-            AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
+            AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, environmentDecorations);
         }
 
         // Incineration Orbs - CM
@@ -474,8 +474,8 @@ internal class Qadim : MythwrightGambit
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 2600);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                         var circle2 = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
-                        EnvironmentDecorations.Add(circle);
-                        EnvironmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
+                        environmentDecorations.Add(circle);
+                        environmentDecorations.Add(circle2.UsingGrowingEnd(lifespan.end));
                     }
                 }
             }
@@ -490,8 +490,8 @@ internal class Qadim : MythwrightGambit
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                 var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
             }
         }
 
@@ -502,7 +502,7 @@ internal class Qadim : MythwrightGambit
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
                 var circle = new CircleDecoration(100, lifespan, Colors.Blue, 0.5, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -516,8 +516,8 @@ internal class Qadim : MythwrightGambit
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
                 var circleRed = new CircleDecoration(radius, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
             }
         }*/
     }

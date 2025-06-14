@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Slothasor : SalvationPass
 {
-    public Slothasor(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([  
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(TantrumDamage, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tantrum", "Tantrum (Triple Circles after Ground slamming)","Tantrum", 5000),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(VolatilePoisonBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Poison", "Volatile Poison Application (Special Action Key)","Poison (Action Key)", 0),
@@ -39,11 +37,15 @@ internal class Slothasor : SalvationPass
                     .UsingChecker( (br,log) => br.RemovedDuration <= 120000),
             ]),
             new PlayerDstBuffApplyMechanic(SlipperySlubling, new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "Slppr.Slb", "Slippery Slubling","Slippery Slubling", 0),
-        ]));
+        ]);
+    public Slothasor(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sloth";
         Icon = EncounterIconSlothasor;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
+        ChestID = ChestID.SlothasorChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -88,7 +90,7 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -137,9 +139,8 @@ internal class Slothasor : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindMushrooms(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // Mushrooms
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
@@ -176,6 +177,11 @@ internal class Slothasor : SalvationPass
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindMushrooms(fightData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
@@ -301,9 +307,9 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorGrowingVolatilePoison, out var growingVolatilePoisons))
         {
             foreach (var growingVolatilePoison in growingVolatilePoisons)
@@ -312,7 +318,7 @@ internal class Slothasor : SalvationPass
                 if (volatilePoisonApply != null)
                 {
                     // Compute life span not reliable, has a dynamic end, which cuts the AoE short when encounter ends, use the expected durations
-                    EnvironmentDecorations.Add(new CircleDecoration(900, 180, (growingVolatilePoison.Time, volatilePoisonApply.Time + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(growingVolatilePoison.Time + 82000));
+                    environmentDecorations.Add(new CircleDecoration(900, 180, (growingVolatilePoison.Time, volatilePoisonApply.Time + 90000), Colors.GreenishYellow, 0.3, new PositionConnector(growingVolatilePoison.Position)).UsingGrowingEnd(growingVolatilePoison.Time + 82000));
                 }
                 
             }       

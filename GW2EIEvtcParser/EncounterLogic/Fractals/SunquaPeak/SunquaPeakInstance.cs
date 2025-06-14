@@ -11,7 +11,7 @@ internal class SunquaPeakInstance : SunquaPeak
 {
     public SunquaPeakInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconSunquaPeak;
         Extension = "snqpeak";
     }
@@ -21,12 +21,16 @@ internal class SunquaPeakInstance : SunquaPeak
         return "Sunqua Peak";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
             TargetID.AiKeeperOfThePeak,
             TargetID.AiKeeperOfThePeak2,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

@@ -37,7 +37,6 @@ internal class Escort : StrongholdOfTheFaithful
         Extension = "escort";
         Icon = EncounterIconEscort;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         EncounterID |= 0x000001;
     }
 
@@ -162,7 +161,6 @@ internal class Escort : StrongholdOfTheFaithful
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.WargBloodhound, TargetID.CrimsonMcLeod, TargetID.RadiantMcLeod])));
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.CrimsonMcLeod))
@@ -231,7 +229,7 @@ internal class Escort : StrongholdOfTheFaithful
             return FightData.EncounterStartStatus.Normal;
         }
     }
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -243,7 +241,7 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [
             TargetID.MushroomCharger,
@@ -263,7 +261,7 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return
         [
