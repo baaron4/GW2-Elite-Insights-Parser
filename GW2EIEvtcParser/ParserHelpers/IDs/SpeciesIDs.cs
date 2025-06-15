@@ -21,6 +21,10 @@ public static class SpeciesIDs
         GreenGuardian = 15420,
         // - Spirit Race
         EtherealBarrier = SpeciesIDs.EtherealBarrier,
+        _EtherealBarrier1 = SpeciesIDs.EtherealBarrier1,
+        _EtherealBarrier2 = SpeciesIDs.EtherealBarrier2,
+        _EtherealBarrier3 = SpeciesIDs.EtherealBarrier3,
+        _EtherealBarrier4 = SpeciesIDs.EtherealBarrier4,
         EtherealBarrierGadget = 47188, // Gadget
         WallOfGhosts = 15415,
         AngeredSpiritSR = 15389,
@@ -416,6 +420,7 @@ public static class SpeciesIDs
         // - End of Dragons
         // - Aetherblade Hideout
         MaiTrinStrike = 24033,
+        MaiTrinStrikeFake = SpeciesIDs.MaiTrinStrikeFake,
         EchoOfScarletBriarNM = 24768,
         EchoOfScarletBriarCM = 25247,
         MaiTrinStrikeDuringEcho = 23826,
@@ -971,7 +976,12 @@ public static class SpeciesIDs
         Unknown,
     }
 
+    internal static readonly Vector3 GuardianChestPosition = new( -4770.21f, -20629.2f, -2401.27f );
+    internal static readonly Vector3 GorsevalChestPosition = new(1626.19f, -4467.53f, -1904.65f);
+    internal static readonly Vector3 SabethaChestPosition = new(-4903.99f, 3431.57f, -2461.83f);
+    internal static readonly Vector3 SlothasorChestPosition = new(7690.45f, -496.617f, -25.7641f);
     internal static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
+    internal static readonly Vector3 MatthiasChestPosition = new(-5896.35f, 5454.3f, -5182.15f);
     internal static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     internal static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
     internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
@@ -980,7 +990,12 @@ public static class SpeciesIDs
 
     public enum ChestID : int
     {
+        GuardianChest = SpeciesIDs.GuardianChest,
+        GorsevalChest = SpeciesIDs.GorsevalChest,
+        SabethaChest = SpeciesIDs.SabethaChest,
+        SlothasorChest = SpeciesIDs.SlothasorChest,
         ChestOfPrisonCamp = SpeciesIDs.ChestOfPrisonCamp,
+        MatthiasChest = SpeciesIDs.MatthiasChest,
         ChestOfDesmina = SpeciesIDs.ChestOfDesmina,
         ChestOfSouls = SpeciesIDs.ChestOfSouls,
         SiegeChest = SpeciesIDs.SiegeChest,
@@ -1069,10 +1084,19 @@ public static class SpeciesIDs
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
-    // -64 removed
+    private const int MaiTrinStrikeFake = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
     private const int BigEnlightenedConduitGadget = -67;
+    private const int EtherealBarrier1 = -68;
+    private const int EtherealBarrier2 = -69;
+    private const int EtherealBarrier3 = -70;
+    private const int EtherealBarrier4 = -71;
+    private const int GuardianChest = -72;
+    private const int GorsevalChest = -73;
+    private const int SabethaChest = -74;
+    private const int SlothasorChest = -75;
+    private const int MatthiasChest = -76;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

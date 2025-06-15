@@ -17,9 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class AetherbladeHideout : EndOfDragonsStrike
 {
-    public AetherbladeHideout(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
             [
                 // NOTE: Kaleidoscopic Chaos deals HP % damage - Normal Mode: 20% if hit once, 60% if hit twice - Challenge Mode: 33% if hit once, 200% if hit twice.
                 new MechanicGroup([
@@ -65,7 +63,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetBlue, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Blue), "BombBlue.A", "Received Blue Bomb Target", "Blue Bomb Target", 0),
                 ]),
             ]
-        ));
+        );
+
+    public AetherbladeHideout(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide";
         EncounterCategoryInformation.InSubCategoryOrder = 0;
@@ -86,7 +88,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return "Aetherblade Hideout";
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -111,7 +113,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -386,9 +388,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Ley Breach - Red Puddles Indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutLeyBreachIndicator1, out var leyBreachIndicators))
@@ -401,8 +403,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 long growing = effect.Time + duration;
                 var baseCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 var growingCircle = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing);
-                EnvironmentDecorations.Add(baseCircle);
-                EnvironmentDecorations.Add(growingCircle);
+                environmentDecorations.Add(baseCircle);
+                environmentDecorations.Add(growingCircle);
             }
         }
 
@@ -414,7 +416,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 long duration = log.FightData.IsCM ? 30000 : 15000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -431,8 +433,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
-                EnvironmentDecorations.Add(rectangle.GetBorderDecoration(Colors.LightOrange, 0.2));
+                environmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle.GetBorderDecoration(Colors.LightOrange, 0.2));
             }
         }
 
@@ -445,7 +447,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 (long start, long end) lifespanX = (effect.Time, effect.Time + 250);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z + 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(600, 150, lifespanX, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotationConnector);
-                EnvironmentDecorations.Add(rectangle);
+                environmentDecorations.Add(rectangle);
             }
         }
 
@@ -497,7 +499,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                                 thirdRotationConnector,
                             };
 
-                        AddRotatingCirclesDecorations(EnvironmentDecorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
+                        AddRotatingCirclesDecorations(environmentDecorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
                     }
                 }
             }
@@ -510,7 +512,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 500);
                 var doughnut = new DoughnutDecoration(160, 480, lifespan, Colors.LightGrey, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(doughnut);
+                environmentDecorations.Add(doughnut);
             }
         }
 
@@ -521,13 +523,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             {
                 long duration = 8000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                EnvironmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
+                environmentDecorations.AddWithGrowing(new CircleDecoration(1000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), effect.Time + duration);
             }
         }
 
         // Toxic Orb
         var toxicOrbs = log.CombatData.GetMissileEventsBySkillID(ToxicOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
+        environmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
     }
 
     private SingleActor? GetEchoOfScarletBriar(FightData fightData)
@@ -669,7 +671,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+
+    internal static void FindFerrousBombsAndCleanMaiTrins(AgentData agentData, List<CombatItem> combatData)
     {
         // Ferrous Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -678,22 +681,40 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
             bomb.OverrideID(TargetID.FerrousBomb, agentData);
         }
-        // We remove extra Mai trins if present
+        // We remove useless Mai trins if present
         IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(TargetID.MaiTrinStrike);
-        if (maiTrins.Count > 1)
+        IReadOnlyList<AgentItem> echoes = agentData.GetNPCsByIDs([TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM]);
+        foreach (AgentItem maiTrin in maiTrins)
         {
-            for (int i = 1; i < maiTrins.Count; i++)
+            if (echoes.Any(x => x.FirstAware <= maiTrin.FirstAware && x.LastAware >= maiTrin.FirstAware))
             {
-                maiTrins[i].OverrideID(IgnoredSpecies, agentData);
+                maiTrin.OverrideID(TargetID.MaiTrinStrikeFake, agentData);
             }
         }
-        if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
+    }
+
+    internal static void RenameScarletPhantoms(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
+            switch (target.ID)
+            {
+                case (int)TargetID.ScarletPhantomBreakbar:
+                    target.OverrideName("Elite CC " + target.Character);
+                    break;
+                case (int)TargetID.ScarletPhantomHP:
+                case (int)TargetID.ScarletPhantomHPCM:
+                    target.OverrideName("Elite HP " + target.Character);
+                    break;
+                default:
+                    break;
+            }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
+    }
+
+    internal static void SanitizeLastHealthUpdateEvents(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        var echoesOfScarlet = targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
         foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {
             var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
@@ -702,22 +723,19 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
             }
         }
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBreakbar, TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.FerrousBomb, TargetID.ScarletPhantomBeamNM])));
-        foreach (SingleActor target in Targets)
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
+        if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
         {
-            switch (target.ID)
-            {
-                case (int)TargetID.ScarletPhantomBreakbar:
-                    target.OverrideName("Elite " + target.Character + " CC");
-                    break;
-                case (int)TargetID.ScarletPhantomHP:
-                case (int)TargetID.ScarletPhantomHPCM:
-                    target.OverrideName("Elite " + target.Character + " HP");
-                    break;
-                default:
-                    break;
-            }
+            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
+            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        SanitizeLastHealthUpdateEvents(Targets, combatData);
+        RenameScarletPhantoms(Targets);
     }
 
     /// <summary>

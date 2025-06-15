@@ -143,7 +143,7 @@ internal class DecimaTheStormsinger : MountBalrior
                         (-13068, 10300, -7141, 16227));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -153,7 +153,7 @@ internal class DecimaTheStormsinger : MountBalrior
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -248,7 +248,6 @@ internal class DecimaTheStormsinger : MountBalrior
             conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder)));
     }
 
     private static PhaseData GetBoulderPhase(ParsedEvtcLog log, IEnumerable<SingleActor> boulders, string name, SingleActor decima)

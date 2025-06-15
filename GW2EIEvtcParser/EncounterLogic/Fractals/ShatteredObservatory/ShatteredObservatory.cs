@@ -61,14 +61,14 @@ internal abstract class ShatteredObservatory : FractalLogic
         return true;
     }
 
-    protected void AddCorporealReassignmentDecorations(ParsedEvtcLog log)
+    protected static void AddCorporealReassignmentDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         // Corporeal Reassignment domes & explosions
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out var domes))
         {
             foreach (EffectEvent effect in domes)
             {
-                EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
+                environmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out var domeExplosions))
@@ -76,7 +76,7 @@ internal abstract class ShatteredObservatory : FractalLogic
             foreach (EffectEvent effect in domeExplosions)
             {
                 (long start, long end) lifespan = (effect.Time - 500, effect.Time);
-                EnvironmentDecorations.Add(new CircleDecoration(220, lifespan, Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(new CircleDecoration(220, lifespan, Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out var explosions))
@@ -84,7 +84,7 @@ internal abstract class ShatteredObservatory : FractalLogic
             foreach (EffectEvent effect in explosions)
             {
                 (long start, long end) lifespan = (effect.Time, effect.Time + 500);
-                EnvironmentDecorations.Add(new CircleDecoration(2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(new CircleDecoration(2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
             }
         }
     }

@@ -124,9 +124,9 @@ internal class IcebroodConstruct : IcebroodSagaStrike
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -139,22 +139,22 @@ internal class IcebroodConstruct : IcebroodSagaStrike
 
                 var connector = new PositionConnector(effect.Position);
                 var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, connector);
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.AddShockwave(connector, (lifespan.end, lifespan.end + 2000), Colors.Blue, 0.3, 1200);
+                environmentDecorations.Add(circle);
+                environmentDecorations.AddShockwave(connector, (lifespan.end, lifespan.end + 2000), Colors.Blue, 0.3, 1200);
 
                 (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
                 for (int i = 0; i < 3; i++)
                 {
-                    EnvironmentDecorations.AddShockwave(connector, pulse, Colors.LightOrange, 0.2, 500);
+                    environmentDecorations.AddShockwave(connector, pulse, Colors.LightOrange, 0.2, 500);
                     pulse = (pulse.end, pulse.end + pulseCycle);
                 }
             }
         }
 
         var spinningIce = log.CombatData.GetMissileEventsBySkillIDs([SpinningIce1, SpinningIce2, SpinningIce3, SpinningIce4]);
-        EnvironmentDecorations.AddRotatingAroundTargetMissiles(log, spinningIce, Colors.White, 0.4, 50, (float)(Math.PI / 2.0), true);
+        environmentDecorations.AddRotatingAroundTargetMissiles(log, spinningIce, Colors.White, 0.4, 50, (float)(Math.PI / 2.0), true);
 
         var iceShatter = log.CombatData.GetMissileEventsBySkillID(IceShatter);
-        EnvironmentDecorations.AddNonHomingMissiles(log, iceShatter, Colors.Ice, 0.5, 25);
+        environmentDecorations.AddNonHomingMissiles(log, iceShatter, Colors.Ice, 0.5, 25);
     }
 }

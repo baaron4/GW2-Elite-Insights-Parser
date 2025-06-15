@@ -163,7 +163,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                         (-2088, -6124, 2086, -1950));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -185,7 +185,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -340,14 +340,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] curEmbodiments = [1, 1, 1, 1, 1, 1];
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.MaliciousShadow, TargetID.MaliciousShadowCM])));
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)TargetID.EmbodimentOfDespair:
                     CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[0]++ + ")");
                     if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -355,7 +353,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfEnvy:
                     CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[1]++ + ")");
                     if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -363,7 +360,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfGluttony:
                     CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[2]++ + ")");
                     if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -371,7 +367,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfMalice:
                     CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[3]++ + ")");
                     if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -379,7 +374,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfRage:
                     CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[4]++ + ")");
                     if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -387,7 +381,6 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     break;
                 case (int)TargetID.EmbodimentOfRegret:
                     CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                    target.OverrideName(target.Character + " (P" + curEmbodiments[5]++ + ")");
                     if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                     {
                         target.OverrideName("Empowered " + target.Character);
@@ -562,9 +555,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         replay.Decorations.AddTether(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Crushing Regret (Green) End
         var crushingRegretEnds = new List<(GUID GUID, Color Color)>()
@@ -588,7 +581,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     // Show the state for 500 ms, 250 ms before so that failures are actually visible
                     (long start, long end) lifespan = (effect.Time - 250, effect.Time + 250);
                     var circle = new CircleDecoration(radius, lifespan, color, 0.2, new PositionConnector(effect.Position));
-                    EnvironmentDecorations.Add(circle);
+                    environmentDecorations.Add(circle);
                 }
             }
         }
@@ -601,8 +594,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 int duration = log.FightData.IsCM || log.FightData.IsLegendaryCM ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
         }
 
@@ -613,8 +606,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             {
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 999000);
                 var circle = new CircleDecoration(240, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
             }
         }
     }

@@ -50,7 +50,6 @@ internal class SoullessHorror : HallOfChains
             ]),
         ]));
         Extension = "sh";
-        GenericFallBackMethod = FallBackMethod.ChestGadget;
         ChestID = ChestID.ChestOfDesmina;
         Icon = EncounterIconSoullessHorror;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
@@ -75,7 +74,7 @@ internal class SoullessHorror : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -84,7 +83,7 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -130,10 +129,6 @@ internal class SoullessHorror : HallOfChains
                 combatEvent.OverrideSrcAgent(0);
             }
         }
-
-        // Add number to the spawned Tormented Deads
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        NumericallyRenameSpecies(tormentedDeads);
     }
 
     /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
@@ -346,9 +341,9 @@ internal class SoullessHorror : HallOfChains
         replay.Decorations.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -358,7 +353,7 @@ internal class SoullessHorror : HallOfChains
             foreach (EffectEvent effect in soulRifts)
             {
                 lifespan = effect.ComputeLifespan(log, 57000);
-                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.5, new PositionConnector(effect.Position)));
             }
         }
     }

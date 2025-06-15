@@ -197,7 +197,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -212,7 +212,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             TargetID.Ianim,
         ];
     }
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -228,7 +228,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -240,23 +240,6 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             TargetID.CrimsonPhantasm,
             TargetID.RetrieverProjection
         ];
-    }
-
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var bigPhantasmIDs = new HashSet<TargetID>
-        {
-            TargetID.Jessica,
-            TargetID.Olson,
-            TargetID.Engul,
-            TargetID.Faerla,
-            TargetID.Caulle,
-            TargetID.Henley,
-            TargetID.Galletta,
-            TargetID.Ianim,
-        };
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies(bigPhantasmIDs)));
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -426,15 +409,15 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Crimson Energy (red) and Radiant Energy (white) orbs
         var radiantOrbs = log.CombatData.GetMissileEventsBySkillID(RadiantEnergyWhiteOrb);
         var crimsonOrbs = log.CombatData.GetMissileEventsBySkillID(CrimsonEnergyRedOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, radiantOrbs, Colors.White, 0.4, 25);
-        EnvironmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
+        environmentDecorations.AddNonHomingMissiles(log, radiantOrbs, Colors.White, 0.4, 25);
+        environmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

@@ -24,7 +24,7 @@ internal abstract class UnknownFightLogic : FightLogic
     {
         return FightData.EncounterMode.Unknown;
     }
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return [];
     }

@@ -109,7 +109,6 @@ internal class Eparch : LonelyTower
         //
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.KryptisRift, TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement, TargetID.AvatarOfSpite])));
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -167,7 +166,7 @@ internal class Eparch : LonelyTower
         return phases;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -179,7 +178,7 @@ internal class Eparch : LonelyTower
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -191,7 +190,7 @@ internal class Eparch : LonelyTower
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -297,13 +296,13 @@ internal class Eparch : LonelyTower
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
-        AddGlobuleDecorations(log);
+        AddGlobuleDecorations(log, environmentDecorations);
 
         // Rain of Despair - Pools
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchDespairPool, out var pools))
@@ -312,7 +311,7 @@ internal class Eparch : LonelyTower
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 15000);
                 var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(circle, Colors.Red, 0.2);
             }
         }
 
@@ -325,7 +324,7 @@ internal class Eparch : LonelyTower
             foreach (EffectEvent effect in rageWaves)
             {
                 lifespan = (effect.Time, effect.Time + duration);
-                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Orange, 0.3, maxRange);
+                environmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Orange, 0.3, maxRange);
             }
         }
 
@@ -338,7 +337,7 @@ internal class Eparch : LonelyTower
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 24000);
                 GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(new AngleConnector(effect.Rotation.Z)));
+                environmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(new AngleConnector(effect.Rotation.Z)));
             }
         }
 
@@ -352,10 +351,10 @@ internal class Eparch : LonelyTower
                 lifespan = effect.ComputeLifespan(log, 1500);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
-                EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
+                environmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
                 if (effect.Src.IsSpecies(TargetID.EparchLonelyTower))
                 {
-                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, (lifespan.end, lifespan.end + 300), Colors.DarkGreen, 0.2, position).UsingRotationConnector(rotation));
+                    environmentDecorations.Add(new RectangleDecoration(width, length, (lifespan.end, lifespan.end + 300), Colors.DarkGreen, 0.2, position).UsingRotationConnector(rotation));
                 }
             }
         }
@@ -366,7 +365,7 @@ internal class Eparch : LonelyTower
             foreach (EffectEvent effect in inhales)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 5000);
-                EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -377,7 +376,7 @@ internal class Eparch : LonelyTower
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 1000);
                 var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
-                EnvironmentDecorations.AddWithGrowing(circle, lifespan.end);
+                environmentDecorations.AddWithGrowing(circle, lifespan.end);
             }
         }
 
@@ -387,7 +386,7 @@ internal class Eparch : LonelyTower
             foreach (EffectEvent effect in spikes)
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 300);
-                EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
@@ -398,7 +397,7 @@ internal class Eparch : LonelyTower
             {
                 lifespan = effect.ComputeDynamicLifespan(log, 22000);
                 var wall = (RectangleDecoration)new RectangleDecoration(200, 100, lifespan, Colors.Grey, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
-                EnvironmentDecorations.AddWithBorder(wall, Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(wall, Colors.Red, 0.2);
             }
         }
 
@@ -409,12 +408,12 @@ internal class Eparch : LonelyTower
             {
                 lifespan = (effect.Time, effect.Time + 300);
                 var circle = new CircleDecoration(80, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
     }
 
-    private void AddGlobuleDecorations(ParsedEvtcLog log)
+    private void AddGlobuleDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         SingleActor eparch = GetEparchActor();
         IReadOnlyList<AnimatedCastEvent> eparchCasts = log.CombatData.GetAnimatedCastData(eparch.AgentItem);
@@ -447,7 +446,7 @@ internal class Eparch : LonelyTower
                         if (gadget.TryGetCurrentPosition(log, gadget.LastAware, out var position))
                         {
                             (long, long) lifespan = (spawn.Time, despawn.Time);
-                            EnvironmentDecorations.Add(new CircleDecoration(globuleWidth, lifespan, color, 0.7, new PositionConnector(position)));
+                            environmentDecorations.Add(new CircleDecoration(globuleWidth, lifespan, color, 0.7, new PositionConnector(position)));
                         }
                     }
                 }

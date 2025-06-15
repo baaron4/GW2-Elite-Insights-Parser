@@ -12,7 +12,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
 {
     public StrongholdOfTheFaithfulInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconStrongholdOfTheFaithful;
         Extension = "strgldfaith";
     }
@@ -22,7 +22,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return "Stronghold Of The Faithful";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -32,5 +32,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Xera,
             TargetID.Xera2,
         ];
+    }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
     }
 }

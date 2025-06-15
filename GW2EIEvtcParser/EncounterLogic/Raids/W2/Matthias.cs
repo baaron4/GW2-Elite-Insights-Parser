@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Matthias : SalvationPass
 {
-    public Matthias(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
 
 
             new PlayerDstHitMechanic([OppressiveGazeHuman, OppressiveGazeAbomination], new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken", "Oppressive Gaze (Hadouken projectile)","Hadouken", 0),
@@ -65,11 +63,15 @@ internal class Matthias : SalvationPass
                 new PlayerSrcBuffRemoveSingleFromMechanic([BloodShield, BloodShieldAbo], new MechanicPlotlySetting(Symbols.Octagon,Colors.Blue), "Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"),
             ]),
             new PlayerDstBuffApplyMechanic(ZealousBenediction, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bombs", "Zealous Benediction (Expanding bombs)","Bomb",0),
-        ]));
+        ]);
+    public Matthias(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "matt";
         Icon = EncounterIconMatthias;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
+        ChestID = ChestID.MatthiasChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -176,7 +178,7 @@ internal class Matthias : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindSacrifices(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // has breakbar state into
         if (combatData.Any(x => x.IsStateChange == StateChange.BreakbarState))
@@ -239,8 +241,11 @@ internal class Matthias : SalvationPass
                 combatData.SortByTime();
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+    }
+
+    internal static void ForceSacrificeHealth(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.MatthiasSacrificeCrystal))
             {
@@ -249,7 +254,14 @@ internal class Matthias : SalvationPass
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindSacrifices(fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        ForceSacrificeHealth(Targets);
+    }
+
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -258,7 +270,7 @@ internal class Matthias : SalvationPass
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -324,11 +336,11 @@ internal class Matthias : SalvationPass
                 }
 
                 // Oppressive Gaze - Orb
-                var oppressiveGaze = log.CombatData.GetMissileEventsBySkillIDs([OppressiveGazeHuman, OppressiveGazeAbomination]);
+                var oppressiveGaze = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [OppressiveGazeHuman, OppressiveGazeAbomination]);
                 replay.Decorations.AddNonHomingMissiles(log, oppressiveGaze, Colors.Red, 0.7, 65);
 
 
-                var bloodShards = log.CombatData.GetMissileEventsBySkillIDs([BloodShardsHuman, BloodShardsAbomination]);
+                var bloodShards = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [BloodShardsHuman, BloodShardsAbomination]);
                 replay.Decorations.AddNonHomingMissiles(log, bloodShards, Colors.Red, 0.7, 20);
 
                 // Blood Shield - Invulnerability Bubble
@@ -471,9 +483,9 @@ internal class Matthias : SalvationPass
         replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         (long start, long end) lifespan;
 
@@ -484,7 +496,7 @@ internal class Matthias : SalvationPass
             {
                 lifespan = effect.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(120, lifespan, Colors.Red, 0.1, new PositionConnector(effect.Position)).UsingFilled(false);
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
 
@@ -495,7 +507,7 @@ internal class Matthias : SalvationPass
             {
                 lifespan = effect.ComputeLifespan(log, 90000);
                 var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.4, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
+                environmentDecorations.Add(circle);
             }
         }
     }

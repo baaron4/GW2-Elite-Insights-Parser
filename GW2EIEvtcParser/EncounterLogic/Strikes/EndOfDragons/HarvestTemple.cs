@@ -325,7 +325,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         return startToUse;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -345,7 +345,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -365,7 +365,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         };
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -440,6 +440,14 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
             }
         }
+    }
+
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.KillableVoidAmalgamate,
+            (int)TargetID.PushableVoidAmalgamate,
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -733,29 +741,29 @@ internal class HarvestTemple : EndOfDragonsStrike
         FirstAwareSortedTargets = Targets.OrderBy(x => x.FirstAware);
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out var greenEffects))
         {
-            AddBaseShareTheVoidDecoration(log, greenEffects);
+            AddBaseShareTheVoidDecoration(log, greenEffects, environmentDecorations);
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSuccessGreen, out var successGreenEffects))
         {
-            AddResultShareTheVoidDecoration(successGreenEffects, true);
+            AddResultShareTheVoidDecoration(successGreenEffects, true, environmentDecorations);
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out var failedGreenEffects))
         {
-            AddResultShareTheVoidDecoration(failedGreenEffects, false);
+            AddResultShareTheVoidDecoration(failedGreenEffects, false, environmentDecorations);
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoECM, out var redPuddleEffectsCM))
         {
-            AddPlacedVoidPoolDecoration(log, redPuddleEffectsCM, 400, 240000);
+            AddPlacedVoidPoolDecoration(log, redPuddleEffectsCM, 400, 240000, environmentDecorations);
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoENM, out var redPuddleEffectsNM))
         {
-            AddPlacedVoidPoolDecoration(log, redPuddleEffectsNM, 300, 24000);
+            AddPlacedVoidPoolDecoration(log, redPuddleEffectsNM, 300, 24000, environmentDecorations);
         }
         // Stormseer Ice Spike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidStormseerIceSpikeIndicator, out var iceSpikes))
@@ -764,8 +772,8 @@ internal class HarvestTemple : EndOfDragonsStrike
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1750);
                 var circle = new CircleDecoration(150, lifespan, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
             }
         }
     }
@@ -1964,7 +1972,7 @@ internal class HarvestTemple : EndOfDragonsStrike
     /// <param name="redPuddleEffects">Effects List.</param>
     /// <param name="radius">Radius of the AoE.</param>
     /// <param name="duration">Duration of the AoE.</param>
-    private void AddPlacedVoidPoolDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> redPuddleEffects, uint radius, int duration)
+    private void AddPlacedVoidPoolDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> redPuddleEffects, uint radius, int duration, CombatReplayDecorationContainer environmentDecorations)
     {
         foreach (EffectEvent effect in redPuddleEffects)
         {
@@ -1977,8 +1985,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                 continue;
             }
             lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-            EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing));
-            EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+            environmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(growing));
+            environmentDecorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
         }
     }
 
@@ -1986,7 +1994,7 @@ internal class HarvestTemple : EndOfDragonsStrike
     /// Share the Void - Greens in CM, area effect.
     /// </summary>
     /// <param name="greenEffects">Effects List.</param>
-    private void AddBaseShareTheVoidDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> greenEffects)
+    private void AddBaseShareTheVoidDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> greenEffects, CombatReplayDecorationContainer environmentDecorations)
     {
         foreach (EffectEvent green in greenEffects)
         {
@@ -1999,8 +2007,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                 continue;
             }
             lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-            EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)));
-            EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(growing));
+            environmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)));
+            environmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(growing));
         }
     }
 
@@ -2009,13 +2017,13 @@ internal class HarvestTemple : EndOfDragonsStrike
     /// </summary>
     /// <param name="greenEffects">Effects List.</param>
     /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
-    private void AddResultShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful)
+    private static void AddResultShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful, CombatReplayDecorationContainer environmentDecorations)
     {
         foreach (EffectEvent green in greenEffects)
         {
             (long start, long end) lifespan = (green.Time - 250, green.Time);
             Color color = isSuccessful ? Colors.DarkGreen : Colors.DarkRed;
-            EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, color, 0.6, new PositionConnector(green.Position)));
+            environmentDecorations.Add(new CircleDecoration(180, lifespan, color, 0.6, new PositionConnector(green.Position)));
         }
     }
 

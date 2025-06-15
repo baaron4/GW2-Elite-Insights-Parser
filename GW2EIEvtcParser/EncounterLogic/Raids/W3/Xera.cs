@@ -19,10 +19,9 @@ internal class Xera : StrongholdOfTheFaithful
 
     private long _xeraSecondPhaseStartTime = long.MaxValue;
     private bool _hasSecondPhase => _xeraSecondPhaseStartTime != long.MaxValue;
-    private long _xeraFirstPhaseEndTime = long.MaxValue;
-    private bool _hasSplitPhase => _xeraFirstPhaseEndTime != long.MaxValue;
-    private bool _hasPreEvent = false;
-    private long _xeraFirstPhaseStart = 0;
+    private long _firstXeraLastAware = long.MaxValue;
+    private long _xeraMainFightStart = 0;
+    private bool _hasPreEvent => _xeraMainFightStart > 0;
 
     public Xera(int triggerID) : base(triggerID)
     {
@@ -82,12 +81,11 @@ internal class Xera : StrongholdOfTheFaithful
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
         SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
-        var res = new List<BuffEvent>();
-        if (_hasSplitPhase)
+        var res = new List<BuffEvent>()
         {
-            res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraFirstPhaseEndTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue));
-            res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraFirstPhaseEndTime, int.MaxValue, skillData.Get(Determined762), IFF.Unknown));
-        }
+            new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _firstXeraLastAware, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
+            new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _firstXeraLastAware, int.MaxValue, skillData.Get(Determined762), IFF.Unknown)
+        };
         return res;
     }
 
@@ -113,14 +111,14 @@ internal class Xera : StrongholdOfTheFaithful
         if (requirePhases)
         {
             PhaseData? phase100to0 = null;
-            if (_xeraFirstPhaseStart > 0)
+            if (_xeraMainFightStart > 0)
             {
-                var phasePreEvent = new PhaseData(0, _xeraFirstPhaseStart, "Pre Event");
+                var phasePreEvent = new PhaseData(0, _xeraMainFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 phases.Add(phasePreEvent);
-                phase100to0 = new PhaseData(_xeraFirstPhaseStart, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(_xeraMainFightStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
                 phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
@@ -129,7 +127,7 @@ internal class Xera : StrongholdOfTheFaithful
             // split happened
             if (invulXera != null)
             {
-                var phase1 = new PhaseData(_xeraFirstPhaseStart, invulXera.Time, "Phase 1");
+                var phase1 = new PhaseData(_xeraMainFightStart, invulXera.Time, "Phase 1");
                 if (phase100to0 != null)
                 {
                     phase1.AddParentPhase(phase100to0);
@@ -156,7 +154,7 @@ internal class Xera : StrongholdOfTheFaithful
 
                 if (_hasSecondPhase)
                 {
-                    var phase2 = new PhaseData(_xeraSecondPhaseStartTime, fightEnd, "Phase 2");
+                    var phase2 = new PhaseData(glidingEndTime, fightEnd, "Phase 2");
                     if (phase100to0 != null)
                     {
                         phase2.AddParentPhase(phase100to0);
@@ -195,7 +193,6 @@ internal class Xera : StrongholdOfTheFaithful
         {
             if (agentData.TryGetFirstAgentItem(TargetID.FakeXera, out var fakeXera))
             {
-                _hasPreEvent = true;
                 long encounterStart = fakeXera.LastAware;
                 CombatItem ?death = combatData.LastOrDefault(x => x.IsStateChange == StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
                 if (death != null)
@@ -210,7 +207,7 @@ internal class Xera : StrongholdOfTheFaithful
                         encounterStart = exitCombat.Time + 1000;
                     }
                 }
-                _xeraFirstPhaseStart = enterCombat.Time - encounterStart;
+                _xeraMainFightStart = enterCombat.Time - encounterStart;
                 return encounterStart;
             }
             return enterCombat.Time;
@@ -226,7 +223,7 @@ internal class Xera : StrongholdOfTheFaithful
         {
             throw new MissingKeyActorsException("Xera not found");
         }
-        _xeraFirstPhaseEndTime = firstXera.LastAware;
+        _firstXeraLastAware = firstXera.LastAware;
         //
         var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
         //
@@ -272,7 +269,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         if (_hasPreEvent && mayRequireDummy)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, _xeraMainFightStart, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         // find split
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
@@ -312,7 +309,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return [
             TargetID.Xera,
@@ -324,7 +321,7 @@ internal class Xera : StrongholdOfTheFaithful
         ];
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return
         [
@@ -356,22 +353,19 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                if (_hasSplitPhase)
+                if (_hasSecondPhase)
                 {
-                    replay.Hidden.Add(new(_xeraFirstPhaseEndTime, _hasSecondPhase ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
+                    replay.Hidden.Add(new(_firstXeraLastAware, _xeraSecondPhaseStartTime - 500));
                 }
                 break;
             case (int)TargetID.ChargedBloodstone:
-                if (_hasSplitPhase)
+                long end = replay.TimeOffsets.end;
+                HealthDamageEvent? lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
+                if (lastDamage != null)
                 {
-                    long end = replay.TimeOffsets.end;
-                    HealthDamageEvent? lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
-                    if (lastDamage != null)
-                    {
-                        end = lastDamage.Time;
-                    }
-                    replay.Trim(_xeraFirstPhaseEndTime + 12000, end);
+                    end = lastDamage.Time;
                 }
+                replay.Trim(_firstXeraLastAware + 12000, end);
                 break;
             case (int)TargetID.BloodstoneFragment:
                 replay.Decorations.Add(new CircleDecoration(760, (replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
@@ -403,9 +397,9 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Intervention Bubble
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var intervention))
@@ -415,8 +409,8 @@ internal class Xera : StrongholdOfTheFaithful
                 // Effect has duration of 4294967295 but the skill lasts only 6000
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
                 var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
             }
         }
 
@@ -434,14 +428,14 @@ internal class Xera : StrongholdOfTheFaithful
                 (long start, long end) lifespan = (halfGravityWell.Time, halfGravityWell.Time + 7500);
                 (long start, long end) lifespanIndicator = (halfGravityWell.Time, halfGravityWell.Time + 7000);
                 bool hasFired = true;
-                if (halfGravityWell.Time < _xeraFirstPhaseEndTime)
+                if (halfGravityWell.Time < _firstXeraLastAware)
                 {
                     angle = -30 + (cur++) * 90;
-                    if (lifespanIndicator.end > _xeraFirstPhaseEndTime)
+                    if (lifespanIndicator.end > _firstXeraLastAware)
                     {
                         hasFired = false;
                     }
-                    lifespan.end = Math.Min(lifespan.end, _xeraFirstPhaseEndTime);
+                    lifespan.end = Math.Min(lifespan.end, _firstXeraLastAware);
                 }
                 else
                 {
@@ -453,7 +447,7 @@ internal class Xera : StrongholdOfTheFaithful
                     angle = -210 - (cur++) * 90;
                 }
                 var angleConnector = new AngleConnector(angle);
-                EnvironmentDecorations.AddWithFilledWithGrowing(
+                environmentDecorations.AddWithFilledWithGrowing(
                         (PieDecoration)new PieDecoration(1150, 180, lifespan, Colors.Purple, 0.15, pos)
                             .UsingRotationConnector(angleConnector),
                         true,
@@ -461,7 +455,7 @@ internal class Xera : StrongholdOfTheFaithful
                 );
                 if (hasFired)
                 {
-                    EnvironmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
+                    environmentDecorations.Add((PieDecoration)new PieDecoration(1150, 180, (lifespanIndicator.end, lifespanIndicator.end + 500), Colors.Purple, 0.2, pos)
                             .UsingRotationConnector(angleConnector));
                 }
             }
@@ -469,7 +463,7 @@ internal class Xera : StrongholdOfTheFaithful
 
         // Temporal Shred Projectiles
         var temporalShred = log.CombatData.GetMissileEventsBySkillID(TemporalShredOrb);
-        EnvironmentDecorations.AddNonHomingMissiles(log, temporalShred, Colors.Red, 0.3, 25);
+        environmentDecorations.AddNonHomingMissiles(log, temporalShred, Colors.Red, 0.3, 25);
 
         // Temporal Shred AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraTemporalShredAoE, out var temporalShredAoEs))
@@ -477,7 +471,7 @@ internal class Xera : StrongholdOfTheFaithful
             foreach (EffectEvent effect in temporalShredAoEs)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 1500);
-                EnvironmentDecorations.AddWithBorder(new CircleDecoration(120, lifespan, Colors.LightPurple, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
+                environmentDecorations.AddWithBorder(new CircleDecoration(120, lifespan, Colors.LightPurple, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.2);
             }
         }
     }

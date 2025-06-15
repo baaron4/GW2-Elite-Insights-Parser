@@ -12,7 +12,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 {
     public TheKeyOfAhdashimInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconTheKeyOfAhdashim;
         Extension = "keyadash";
     }
@@ -22,7 +22,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         return "The Key Of Ahdashim";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -30,5 +30,9 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             TargetID.Sabir,
             TargetID.PeerlessQadim,
         ];
+    }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
     }
 }

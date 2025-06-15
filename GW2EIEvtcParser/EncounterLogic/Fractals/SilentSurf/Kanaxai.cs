@@ -89,7 +89,7 @@ internal class Kanaxai : SilentSurf
                        (-6195, -295, -799, 5685));
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
         [
@@ -102,7 +102,7 @@ internal class Kanaxai : SilentSurf
         ];
     }
 
-    protected override Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
         {
@@ -118,12 +118,6 @@ internal class Kanaxai : SilentSurf
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         return FightData.EncounterMode.CMNoName;
-    }
-
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        NumericallyRenameSpecies(Targets.Where(x => x.IsAnySpecies([TargetID.AspectOfTorment, TargetID.AspectOfLethargy, TargetID.AspectOfExposure, TargetID.AspectOfDeath, TargetID.AspectOfFear])));
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -420,9 +414,9 @@ internal class Kanaxai : SilentSurf
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // Frightening Speed - Red AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out var frighteningSpeedRedAoEs))
@@ -431,8 +425,8 @@ internal class Kanaxai : SilentSurf
             {
                 (long start, long end) lifespan = (aoe.Time, aoe.Time + 1500);
                 var circle = new CircleDecoration(380, lifespan, Colors.Red, 0.2, new PositionConnector(aoe.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingFilled(false));
             }
         }
 
@@ -463,12 +457,12 @@ internal class Kanaxai : SilentSurf
                     if (worldCleaverTime != 0)
                     {
                         var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
-                        AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime, environmentDecorations);
                     }
                     else
                     {
                         var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
-                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd, environmentDecorations);
                     }
                 }
             }
@@ -481,8 +475,8 @@ internal class Kanaxai : SilentSurf
             {
                 (long start, long end) lifespan = harrowshot.ComputeLifespan(log, 3000);
                 var circle = new CircleDecoration(280, lifespan, Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
-                EnvironmentDecorations.Add(circle);
-                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                environmentDecorations.Add(circle);
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
             }
         }
     }
@@ -495,7 +489,7 @@ internal class Kanaxai : SilentSurf
     /// <param name="aoe">Effect of the AoE.</param>
     /// <param name="axeBuffRemoval">Buff removal of the orange AoE.</param>
     /// <param name="time">Last time possible.</param>
-    private void AddAxeAoeDecoration(EffectEvent aoe, BuffEvent? axeBuffRemoval, long time)
+    private static void AddAxeAoeDecoration(EffectEvent aoe, BuffEvent? axeBuffRemoval, long time, CombatReplayDecorationContainer environmentDecorations)
     {
         int duration;
         if (axeBuffRemoval != null)
@@ -509,8 +503,8 @@ internal class Kanaxai : SilentSurf
         int start = (int)aoe.Time;
         int effectEnd = start + duration;
         var circle = new CircleDecoration(180, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
-        EnvironmentDecorations.Add(circle);
-        EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
+        environmentDecorations.Add(circle);
+        environmentDecorations.Add(circle.Copy().UsingFilled(false));
     }
 
     /// <summary>
