@@ -837,6 +837,11 @@ td.approximate::before {
     background-color: #C9A0FF;
 }
 
+.fightModeUnknown-light {
+    background-color: #EE3000;
+}
+
+
 /* Fight Mode Header - Dark Theme */
 .fightModeStory-dark {
     background-color: #515960;
@@ -856,6 +861,10 @@ td.approximate::before {
 
 .fightModeLegendary-dark {
     background-color: #6C4DA3;
+}
+
+.fightModeUnknown-dark {
+    background-color: #990000;
 }
 
 .healthBar {

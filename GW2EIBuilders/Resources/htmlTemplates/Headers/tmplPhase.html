@@ -2,7 +2,7 @@
     <div>
         <ul v-if="showNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
             <li class="nav-item" v-for="(phase, id) in phases" v-show="!getPhaseData(id).breakbarPhase"
-                :data-original-title="getPhaseData(id).durationS + ' seconds <br /> Start: ' + getPhaseData(id).start + '<br /> End: ' + getPhaseData(id).end">
+                :data-original-title="getPhaseTooltip(id)">
                 <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(id).name}}</a>
             </li>
         </ul>
@@ -17,7 +17,7 @@
                 <ul class="nav nav-pills d-flex flex-row flex-nowrap">
                     <li class="nav-item" v-for="(phaseId, id) in data.phaseIds"
                         v-show="getPhaseData(phaseId).breakbarPhase"
-                        :data-original-title="getPhaseData(phaseId).durationS + ' seconds <br /> Start: ' + getPhaseData(phaseId).start + '<br /> End: ' + getPhaseData(phaseId).end">
+                        :data-original-title="getBreakbarPhaseTooltip(phaseId)">
                         <a class="nav-link" @click="select(getReactivePhaseData(phaseId))"
                             :class="{active: getReactivePhaseData(phaseId).active}">{{id + 1}}</a>
                     </li>
@@ -74,6 +74,16 @@
             },
             getTargetData: function (id) {
                 return logData.targets[id];
+            },
+            getPhaseTooltip: function(id) {
+                var phase = this.getPhaseData(id);
+                return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end;
+            },
+            getBreakbarPhaseTooltip: function(id) {
+                var phase = this.getPhaseData(id);
+                var target = this.getTargetData(phase.targets[0]);
+                var breakbarTaken = target.details.dmgDistributionsTaken[id].contributedBreakbarDamage;
+                return this.getPhaseTooltip(id) + '<br /> Breakbar Damage: ' + breakbarTaken;
             }
         }
     });

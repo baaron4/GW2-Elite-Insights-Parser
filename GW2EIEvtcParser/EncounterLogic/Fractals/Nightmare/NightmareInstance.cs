@@ -12,7 +12,7 @@ internal class NightmareInstance : Nightmare
 {
     public NightmareInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconNightmare;
         Extension = "nightmare";
     }
@@ -30,5 +30,9 @@ internal class NightmareInstance : Nightmare
             TargetID.Siax,
             TargetID.Ensolyss,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

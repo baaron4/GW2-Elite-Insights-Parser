@@ -12,7 +12,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
 {
     public StrongholdOfTheFaithfulInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconStrongholdOfTheFaithful;
         Extension = "strgldfaith";
     }

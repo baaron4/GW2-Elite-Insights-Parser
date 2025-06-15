@@ -12,7 +12,7 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
 {
     public CaptainMaiTrinBossInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconCaptainMaiTrin;
         Extension = "captnmai";
     }
@@ -28,5 +28,9 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
         [
             TargetID.MaiTrinFract,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

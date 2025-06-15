@@ -79,4 +79,5 @@ public static class MarkerGUIDs
     // Ura
     internal static readonly GUID UraTitanspawnGeyserMarker = new("2818A92C67388940B74D627979000D39");
     internal static readonly GUID UraBloodstoneShardMarker = new("27BBF2F636CEE64683A0AF5BEB7A9E54");
+    internal static readonly GUID QadimLampMarker = new("0D2F04BB061CC5478C3126CBF9061F06");
 }

@@ -12,7 +12,7 @@ internal class DeepstoneInstance : FractalLogic
 {
     public DeepstoneInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = 0;
+        EncounterID = EncounterIDs.Unknown;
         Icon = InstanceIconDeepstone;
         Extension = "deepstone";
     }
@@ -28,5 +28,9 @@ internal class DeepstoneInstance : FractalLogic
         [
             TargetID.TheVoice,
         ];
+    }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        fightData.SetSuccess(true, fightData.FightEnd);
     }
 }

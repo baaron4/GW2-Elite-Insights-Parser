@@ -116,14 +116,20 @@ internal class Eparch : LonelyTower
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        if (fightData.IsCM && determinedApplies.Count >= 3)
+        var cmCheck = fightData.IsCM || IsFakeCM(agentData);
+        if (cmCheck && determinedApplies.Count >= 3)
         {
             fightData.SetSuccess(true, determinedApplies[2].Time);
         }
-        else if (!fightData.IsCM && determinedApplies.Count >= 1)
+        else if (!cmCheck && determinedApplies.Count >= 1)
         {
             fightData.SetSuccess(true, determinedApplies[0].Time);
         }
+    }
+
+    private static bool IsFakeCM(AgentData agentData)
+    {
+        return agentData.GetNPCsByIDs([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement]).Count > 0;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -131,8 +137,8 @@ internal class Eparch : LonelyTower
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.IncarnationOfCruelty) || x.IsSpecies(TargetID.IncarnationOfJudgement)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases || !log.FightData.IsCM)
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement])), log, PhaseData.TargetPriority.Blocking);
+        if (!requirePhases || (!log.FightData.IsCM && !IsFakeCM(log.AgentData)))
         {
             return phases;
         }

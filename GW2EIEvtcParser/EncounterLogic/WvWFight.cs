@@ -102,6 +102,10 @@ internal class WvWFight : FightLogic
     {
         return GetGenericFightOffset(fightData);
     }
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        return FightData.EncounterMode.NotApplicable;
+    }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
