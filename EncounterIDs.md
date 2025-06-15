@@ -125,6 +125,14 @@ Slient Surf Full Instance: 0x030400
 
 Kanaxai, Scythe of House Aurkus: 0x030401
 
+### Lonely Tower
+Cerus and Deimos: 0x030501
+
+Eparch: 0x030502
+
+### Kinfall
+Whispering Shadow: 0x030601
+
 ## Strikes
 ### Festivals
 Freezie: 0x040101
