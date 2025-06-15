@@ -4,12 +4,12 @@
         <div class="d-flex mb-1 mt-1">
             <combat-replay-target-status-component :time="time" :targetindex="targetindex"/>
             <combat-replay-actor-rotation-component :time="time" :actorindex="targetindex" :enemy="true"/>
-        </div> 
-        <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">         
+        </div>
+        <div v-if="hasBreakbarPercent" class="cr-breakbar-phase-display mb-1">
             <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-center">
                 <li class="nav-item" v-for="(phase, id) in breakbarPhases"
                     @click="updatePhaseTime(phase.start * 1000, phase.end * 1000, phase.name)"
-                    :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
+                    :data-original-title="getTooltip(phase)">
                     <a class="nav-link">{{id + 1}} </a>
                 </li>
             </ul>
@@ -21,15 +21,21 @@
     Vue.component("combat-replay-target-stats-component", {
         props: ["targetindex", "time", "buffstoshow"],
         template: `${template}`,
-        methods: {       
+        methods: {
             updatePhaseTime: function (min, max, name) {
                 animator.updateTime(min);
                 sliderDelimiter.min = min;
                 sliderDelimiter.max = max;
                 sliderDelimiter.name = name;
             },
+            getTooltip: function(phase) {
+                var target = logData.targets[this.targetindex];
+                var phaseId = logData.phases.indexOf(phase);
+                var breakbarTaken = target.details.dmgDistributionsTaken[phaseId].contributedBreakbarDamage;
+                return phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end + '<br /> Breakbar Damage: ' + breakbarTaken;
+            },
         },
-        computed: {           
+        computed: {
             breakbarPhases: function () {
                 if (!this.hasBreakbarPercent) {
                     return [];
