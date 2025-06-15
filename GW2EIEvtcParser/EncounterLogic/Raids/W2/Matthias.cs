@@ -336,11 +336,11 @@ internal class Matthias : SalvationPass
                 }
 
                 // Oppressive Gaze - Orb
-                var oppressiveGaze = log.CombatData.GetMissileEventsBySkillIDs([OppressiveGazeHuman, OppressiveGazeAbomination]);
+                var oppressiveGaze = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [OppressiveGazeHuman, OppressiveGazeAbomination]);
                 replay.Decorations.AddNonHomingMissiles(log, oppressiveGaze, Colors.Red, 0.7, 65);
 
 
-                var bloodShards = log.CombatData.GetMissileEventsBySkillIDs([BloodShardsHuman, BloodShardsAbomination]);
+                var bloodShards = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [BloodShardsHuman, BloodShardsAbomination]);
                 replay.Decorations.AddNonHomingMissiles(log, bloodShards, Colors.Red, 0.7, 20);
 
                 // Blood Shield - Invulnerability Bubble
