@@ -8,6 +8,21 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class AgentItem
 {
+    public struct MergeData
+    {
+        internal MergeData(AgentItem merged, long start, long end)
+        {
+            Merged = merged;
+            MergeStart = start;
+            MergeEnd = end;
+        }
+        public readonly AgentItem Merged;
+        public readonly long MergeStart;
+        public readonly long MergeEnd;
+    }
+
+    private List<MergeData>? _merges;
+    public IReadOnlyList<MergeData> Merges => _merges ?? [];
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
@@ -582,6 +597,14 @@ public class AgentItem
     public bool IsAnySpecies(IEnumerable<ChestID> ids)
     {
         return ids.Any(IsSpecies);
+    }
+    internal void AddMerge(AgentItem other, long start, long end)
+    {
+        if (_merges == null)
+        {
+            _merges = new List<MergeData>();
+        }
+        _merges.Add(new MergeData(other, start, end));
     }
 }
 
