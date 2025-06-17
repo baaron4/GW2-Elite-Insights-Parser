@@ -57,7 +57,7 @@ internal class River : HallOfChains
             TargetID.SpiritHorde3
         ];
     }
-    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         return
         [
