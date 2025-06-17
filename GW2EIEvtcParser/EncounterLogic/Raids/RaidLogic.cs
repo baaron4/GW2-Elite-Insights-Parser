@@ -23,7 +23,7 @@ internal abstract class RaidLogic : FightLogic
         if (IsInstance)
         {
             // Raid instances remember last status, killing last boss is not an indication of a successful instance
-            base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+            fightData.SetSuccess(true, fightData.FightEnd);
             return;
         }
         var raidRewardsTypes = new HashSet<int>();

@@ -57,6 +57,13 @@ internal class River : HallOfChains
             TargetID.SpiritHorde3
         ];
     }
+    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
+    {
+        return
+        [
+            TargetID.Desmina
+        ];
+    }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
