@@ -119,7 +119,10 @@ internal class Xera : StrongholdOfTheFaithful
                 var phasePreEvent = new PhaseData(0, _xeraMainFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
-                phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
+                if (phasePreEvent.Targets.Count == 0)
+                {
+                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
+                }
                 phases.Add(phasePreEvent);
                 phase100to0 = new PhaseData(_xeraMainFightStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
@@ -178,10 +181,15 @@ internal class Xera : StrongholdOfTheFaithful
 
     private SingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Xera)) ?? throw new MissingKeyActorsException("Xera not found");
 
-    private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
+    internal static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, AgentItem xera)
     {
-        BuffEvent? determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera).FirstOrDefault(x => x is BuffApplyEvent);
         return determined;
+    }
+
+    internal static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
+    {
+        return GetInvulXeraEvent(log, xera.AgentItem);
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -218,15 +226,8 @@ internal class Xera : StrongholdOfTheFaithful
         return GetGenericFightOffset(fightData);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindBloodstones(AgentData agentData, List<CombatItem> combatData)
     {
-        bool mayRequireDummy = true;
-        // find target
-        if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var firstXera))
-        {
-            throw new MissingKeyActorsException("Xera not found");
-        }
-        _firstXeraLastAware = firstXera.LastAware;
         //
         var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
         //
@@ -249,7 +250,6 @@ internal class Xera : StrongholdOfTheFaithful
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardButton, agentData);
-            mayRequireDummy = false;
         }
         //
         var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -257,10 +257,9 @@ internal class Xera : StrongholdOfTheFaithful
         {
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.BloodstoneShardRift, agentData);
-            mayRequireDummy = false;
         }
         //
-        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware);
+        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in chargedBloodStones)
         {
             if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
@@ -270,7 +269,46 @@ internal class Xera : StrongholdOfTheFaithful
             gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
             gadget.OverrideID(TargetID.ChargedBloodstone, agentData);
         }
-        if (_hasPreEvent && mayRequireDummy)
+    }
+
+    internal static void RenameBloodStones(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (var target in targets)
+        {
+            switch (target.ID)
+            {
+                case (int)TargetID.BloodstoneShardRift:
+                    target.OverrideName("Rift " + target.Character);
+                    break;
+                case (int)TargetID.BloodstoneShardButton:
+                    target.OverrideName("Button " + target.Character);
+                    break;
+                case (int)TargetID.BloodstoneShardMainFight:
+                    target.OverrideName("Phase 2 " + target.Character);
+                    break;
+            }
+        }
+    }
+
+    internal static void SetManualHPForXera(SingleActor Xera)
+    {
+        Xera.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
+        {
+            (22611300, 100),
+            (25560600, 50)
+        });
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        // find target
+        if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var firstXera))
+        {
+            throw new MissingKeyActorsException("Xera not found");
+        }
+        _firstXeraLastAware = firstXera.LastAware;
+        FindBloodstones(agentData, combatData);
+        if (_hasPreEvent)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, _xeraMainFightStart, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
@@ -290,13 +328,9 @@ internal class Xera : StrongholdOfTheFaithful
             RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameBloodStones(Targets);
         // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
-        SingleActor mainTarget = GetMainTarget();
-        mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
-        {
-            (22611300, 100),
-            (25560600, 50)
-        });
+        SetManualHPForXera(GetMainTarget());
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -368,7 +402,16 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     end = lastDamage.Time;
                 }
-                replay.Trim(_firstXeraLastAware + 12000, end);
+                var chargedBloodStoneLifespan = new Segment(target.FirstAware, target.LastAware);
+                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => chargedBloodStoneLifespan.Intersects(x.FirstAware, x.LastAware));
+                if (activeXera != null)
+                {
+                    var xeraInvulApply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, activeXera).FirstOrDefault();
+                    if (xeraInvulApply != null)
+                    {
+                        replay.Trim(xeraInvulApply.Time + 14000, end);
+                    }
+                }
                 break;
             case (int)TargetID.BloodstoneFragment:
                 replay.Decorations.Add(new CircleDecoration(760, (replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
@@ -431,14 +474,21 @@ internal class Xera : StrongholdOfTheFaithful
                 (long start, long end) lifespan = (halfGravityWell.Time, halfGravityWell.Time + 7500);
                 (long start, long end) lifespanIndicator = (halfGravityWell.Time, halfGravityWell.Time + 7000);
                 bool hasFired = true;
-                if (halfGravityWell.Time < _firstXeraLastAware)
+                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => x.FirstAware <= halfGravityWell.Time && x.LastAware >= halfGravityWell.Time);
+                if (activeXera == null)
                 {
+                    continue;
+                }
+                var splitEvent = GetInvulXeraEvent(log, activeXera);
+                if (splitEvent == null || splitEvent.Time > halfGravityWell.Time)
+                {
+                    var timeLimit = splitEvent != null ? splitEvent.Time : int.MaxValue;
                     angle = -30 + (cur++) * 90;
-                    if (lifespanIndicator.end > _firstXeraLastAware)
+                    if (lifespanIndicator.end > timeLimit)
                     {
                         hasFired = false;
                     }
-                    lifespan.end = Math.Min(lifespan.end, _firstXeraLastAware);
+                    lifespan.end = Math.Min(lifespan.end, timeLimit);
                 }
                 else
                 {
@@ -447,7 +497,13 @@ internal class Xera : StrongholdOfTheFaithful
                         cur = 0;
                         resetCurForSecondPhase = false;
                     }
+                    var timeLimit = activeXera.LastAware;
                     angle = -210 - (cur++) * 90;
+                    if (lifespanIndicator.end > timeLimit)
+                    {
+                        hasFired = false;
+                    }
+                    lifespan.end = Math.Min(lifespan.end, timeLimit);
                 }
                 var angleConnector = new AngleConnector(angle);
                 environmentDecorations.AddWithFilledWithGrowing(
