@@ -48,11 +48,11 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         var mcLeods = targets.Where(x => x.IsSpecies(TargetID.McLeodTheSilent));
         var dummy = targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Escort");
         var subMcLeods = targets.Where(x => x.IsAnySpecies([TargetID.CrimsonMcLeod, TargetID.RadiantMcLeod]));
-        var surveilledAppliesPerGlenna = glennas.Select(x => log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, x.AgentItem).FirstOrDefault()).ToList();
+        List<AbstractBuffApplyEvent> surveilledAppliesPerGlenna = glennas.Select(x => log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, x.AgentItem).FirstOrDefault()).Where(x => x != null).ToList()!;
         var hasMultiple = surveilledAppliesPerGlenna.Count > 0;
-        foreach (var glenna in glennas)
+        foreach (var surveilledApply in surveilledAppliesPerGlenna)
         {
-            var surveilledApply = log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, glenna.AgentItem).FirstOrDefault();
+            var glenna = surveilledApply.To;
             var chest = log.AgentData.GetGadgetsByID(ChestID.SiegeChest).FirstOrDefault();
             var encounterCount = 1;
             if (surveilledApply != null)
@@ -60,7 +60,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 long start = surveilledApply.Time;
                 long end = glenna.LastAware;
                 bool success = false;
-                if (chest != null && chest.FirstAware >= glenna.FirstAware && chest.FirstAware <= glenna.LastAware)
+                if (chest != null && chest.FirstAware >= glenna.FirstAware && chest.FirstAware <= glenna.LastAware + 5000)
                 {
                     end = chest!.FirstAware;
                     success = true;
@@ -96,9 +96,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
 
     private static void HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues) && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
+        if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues))
         {
-            var dummy = dummies.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Twisted Castle");
+            var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Twisted Castle");
             var mainPhase = phases[0];
             var packedStatus = new List<List<SingleActor>>();
             var currentPack = new List<SingleActor>();
@@ -162,13 +162,100 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 {
                     phase.Name += " (Failure)";
                 }
-                phase.AddParentPhase(phases[0]);
+                phase.AddParentPhase(mainPhase);
                 phase.AddTarget(dummy, log);
             }
             if (skipped != packedStatus.Count)
             {
                 mainPhase.AddTarget(dummy, log);
             }
+        }
+    }
+    internal void HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var mainPhase = phases[0];
+        var fakeXeras = log.AgentData.GetNPCsByID(TargetID.FakeXera);
+        var xeras = log.AgentData.GetNPCsByID(TargetID.Xera);
+        var chest = log.AgentData.GetGadgetsByID(ChestID.XeraChest).FirstOrDefault();
+        bool hasMultiple = fakeXeras.Count > 0;
+        int encounterCount = 1;
+        for (int i = 0; i < fakeXeras.Count; i++) 
+        {
+            var fakeXera = fakeXeras[i];
+            AgentItem? xera = null;
+            if (i < fakeXeras.Count - 1)
+            {
+                xera = xeras.FirstOrDefault(x => x.FirstAware >= fakeXera.LastAware && x.FirstAware < fakeXeras[i + 1].FirstAware );
+            } 
+            else
+            {
+                xera = xeras.FirstOrDefault(x => x.FirstAware >= fakeXera.LastAware);
+            }
+            long start = fakeXera.LastAware;
+            DeadEvent? death = log.CombatData.GetDeadEvents(fakeXera).LastOrDefault();
+            if (death != null)
+            {
+                start = death.Time + 1000;
+            }
+            else
+            {
+                ExitCombatEvent? exitCombat = log.CombatData.GetExitCombatEvents(fakeXera).LastOrDefault();
+                if (exitCombat != null)
+                {
+                    start = exitCombat.Time + 1000;
+                }
+            }
+            long end;
+            bool success = false;
+            if (xera != null)
+            {
+                end = xera.LastAware;
+                if (chest != null && chest.FirstAware >= xera.FirstAware && chest.FirstAware <= xera.LastAware)
+                {
+                    success = true;
+                    end = chest.FirstAware;
+                }
+            } 
+            else
+            {
+                if (i < fakeXeras.Count - 1)
+                {
+                    end = fakeXeras[i + 1].FirstAware - 500;
+                } 
+                else
+                {
+                    end = log.FightData.FightEnd;
+                }
+            }
+            var phase = new PhaseData(start, end, "Xera");
+            phases.Add(phase);
+            if (hasMultiple)
+            {
+                phase.Name += " " + (encounterCount++);
+            }
+            if (success)
+            {
+                phase.Name += " (Success)";
+            }
+            else
+            {
+                phase.Name += " (Failure)";
+            }
+            phase.AddParentPhase(mainPhase);
+            if (xera != null)
+            {
+                var xeraActor = log.FindActor(xera);
+                phase.AddTarget(xeraActor, log);
+                mainPhase.AddTarget(xeraActor, log);
+            } 
+            else
+            {
+                phase.AddTarget(targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event"), log);
+            }
+        }
+        if (!mainPhase.Targets.Keys.Any(x => x.IsSpecies(TargetID.Xera)))
+        {
+            mainPhase.AddTarget(targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event"), log);
         }
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -234,14 +321,40 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return friendlies.Distinct().ToList();
     }
 
+    private static void MergeXeraAgents(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var xeras = agentData.GetNPCsByID(TargetID.Xera);
+        var xeras2 = agentData.GetNPCsByID(TargetID.Xera2);
+        foreach (var xera2 in xeras2)
+        {
+            var attachedXera = xeras.LastOrDefault(x => x.FirstAware < xera2.FirstAware);
+            if (attachedXera != null)
+            {
+                attachedXera.OverrideAwareTimes(attachedXera.FirstAware, xera2.LastAware);
+                ParserHelper.RedirectAllEvents(combatData, extensions, agentData, xera2, attachedXera);
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Escort.FindMines(agentData, combatData);
         // For encounters before reaching McLeod
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+        Xera.FindBloodstones(agentData, combatData);
+        MergeXeraAgents(agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         Escort.RenameSubMcLeods(Targets);
+        Xera.RenameBloodStones(Targets);
+        foreach (var target in Targets)
+        {
+            if (target.IsSpecies(TargetID.Xera))
+            {
+                Xera.SetManualHPForXera(target);
+            }
+        }
     }
 
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
