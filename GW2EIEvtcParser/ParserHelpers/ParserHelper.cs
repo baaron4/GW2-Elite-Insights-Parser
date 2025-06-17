@@ -382,7 +382,7 @@ public static class ParserHelper
                 ag.SetMaster(to);
             }
         }
-        to.AddMerge(redirectFrom, to.FirstAware, to.LastAware);
+        to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
     /// <summary>
@@ -419,7 +419,7 @@ public static class ParserHelper
             }
         }
         agentData.SwapMasters(redirectFrom, to);
-        to.AddMerge(redirectFrom, redirectFrom.FirstAware, redirectFrom.LastAware);
+        to.AddMergeFrom(redirectFrom, redirectFrom.FirstAware, redirectFrom.LastAware);
     }
 
     /// <summary>
