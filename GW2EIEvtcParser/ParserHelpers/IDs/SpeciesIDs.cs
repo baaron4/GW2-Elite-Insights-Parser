@@ -982,9 +982,10 @@ public static class SpeciesIDs
     internal static readonly Vector3 SlothasorChestPosition = new(7690.45f, -496.617f, -25.7641f);
     internal static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
     internal static readonly Vector3 MatthiasChestPosition = new(-5896.35f, 5454.3f, -5182.15f);
+    internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
+    internal static readonly Vector3 KeepConstructChestPosition = new (-3860.69f, 9389.32f, -5907.59f);
     internal static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     internal static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
-    internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
     internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
@@ -996,9 +997,10 @@ public static class SpeciesIDs
         SlothasorChest = SpeciesIDs.SlothasorChest,
         ChestOfPrisonCamp = SpeciesIDs.ChestOfPrisonCamp,
         MatthiasChest = SpeciesIDs.MatthiasChest,
+        SiegeChest = SpeciesIDs.SiegeChest,
+        KeepConstructChest = SpeciesIDs.KeepConstructChest,
         ChestOfDesmina = SpeciesIDs.ChestOfDesmina,
         ChestOfSouls = SpeciesIDs.ChestOfSouls,
-        SiegeChest = SpeciesIDs.SiegeChest,
         CAChest = SpeciesIDs.CAChest,
         GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
 
@@ -1097,6 +1099,7 @@ public static class SpeciesIDs
     private const int SabethaChest = -74;
     private const int SlothasorChest = -75;
     private const int MatthiasChest = -76;
+    private const int KeepConstructChest = -77;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

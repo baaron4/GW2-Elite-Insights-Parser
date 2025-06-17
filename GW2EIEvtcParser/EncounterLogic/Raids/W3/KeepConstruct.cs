@@ -53,6 +53,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         Icon = EncounterIconKeepConstruct;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
+        ChestID = ChestID.KeepConstructChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
