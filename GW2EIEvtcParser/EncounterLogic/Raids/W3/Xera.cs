@@ -61,6 +61,7 @@ internal class Xera : StrongholdOfTheFaithful
         Icon = EncounterIconXera;
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000004;
+        ChestID = ChestID.XeraChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
