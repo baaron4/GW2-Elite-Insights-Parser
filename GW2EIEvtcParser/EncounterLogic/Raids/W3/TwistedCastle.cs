@@ -46,7 +46,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = GetOldRaidReward2Event(combatData, fightData.FightStart, fightData.LogEnd); ;
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);

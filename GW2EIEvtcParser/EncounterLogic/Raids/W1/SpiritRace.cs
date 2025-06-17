@@ -65,14 +65,9 @@ internal class SpiritRace : SpiritVale
         return (int)TargetID.WallOfGhosts;
     }
 
-    internal static RewardEvent? GetRewardEvent(CombatData combatData, long start, long end)
-    {
-        return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
-    }
-
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = GetRewardEvent(combatData, fightData.FightStart, fightData.LogEnd);
+        RewardEvent? reward = GetOldRaidReward2Event(combatData, fightData.FightStart, fightData.LogEnd);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);

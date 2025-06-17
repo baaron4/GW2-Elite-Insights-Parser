@@ -76,7 +76,7 @@ internal class SpiritValeInstance : SpiritVale
                 long start = minFirstAware;
                 long end = maxLastAware;
 
-                RewardEvent? reward = SpiritRace.GetRewardEvent(log.CombatData, start, end + 5000);
+                RewardEvent? reward = GetOldRaidReward2Event(log.CombatData, start, end + 5000);
 
                 AgentItem? wallOfGhosts = log.AgentData.GetNPCsByID(TargetID.WallOfGhosts).LastOrDefault(x => x.FirstAware <= minFirstAware + 2000 && x.FirstAware <= maxLastAware);
                 if (wallOfGhosts != null)
