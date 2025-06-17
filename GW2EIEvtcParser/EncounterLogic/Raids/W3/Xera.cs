@@ -47,11 +47,7 @@ internal class Xera : StrongholdOfTheFaithful
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
         ]);
 
-    private long _xeraSecondPhaseStartTime = long.MaxValue;
-    private bool _hasSecondPhase => _xeraSecondPhaseStartTime != long.MaxValue;
-    private long _firstXeraLastAware = long.MaxValue;
-    private long _xeraMainFightStart = 0;
-    private bool _hasPreEvent => _xeraMainFightStart > 0;
+    private bool _hasPreEvent = false;
 
     public Xera(int triggerID) : base(triggerID)
     {
@@ -84,22 +80,24 @@ internal class Xera : StrongholdOfTheFaithful
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
         SingleActor mainTarget = GetMainTarget();
+        var invulEnd = mainTarget.AgentItem.Merges.Count > 0 ? mainTarget.AgentItem.Merges[0].MergeStart : mainTarget.LastAware;
         var res = new List<BuffEvent>()
         {
-            new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _firstXeraLastAware, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
-            new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _firstXeraLastAware, int.MaxValue, skillData.Get(Determined762), IFF.Unknown)
+            new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
+            new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown)
         };
         return res;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (!_hasSecondPhase)
+        var xera = GetMainTarget().AgentItem;
+        if (xera.Merges.Count == 0)
         {
             return;
         }
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (fightData.Success && fightData.FightEnd < _xeraSecondPhaseStartTime)
+        if (fightData.Success && fightData.FightEnd < xera.Merges[0].MergeStart)
         {
             fightData.SetSuccess(false, fightData.LogEnd);
         }
@@ -113,10 +111,13 @@ internal class Xera : StrongholdOfTheFaithful
         phases[0].AddTarget(mainTarget, log);
         if (requirePhases)
         {
+            long xeraFightStart = 0;
             PhaseData? phase100to0 = null;
-            if (_xeraMainFightStart > 0)
+            if (_hasPreEvent)
             {
-                var phasePreEvent = new PhaseData(0, _xeraMainFightStart, "Pre Event");
+                EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(mainTarget.AgentItem).First();
+                xeraFightStart = enterCombat.Time;
+                var phasePreEvent = new PhaseData(0, xeraFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
                 if (phasePreEvent.Targets.Count == 0)
@@ -124,7 +125,7 @@ internal class Xera : StrongholdOfTheFaithful
                     phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 }
                 phases.Add(phasePreEvent);
-                phase100to0 = new PhaseData(_xeraMainFightStart, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(xeraFightStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
                 phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
@@ -133,7 +134,7 @@ internal class Xera : StrongholdOfTheFaithful
             // split happened
             if (invulXera != null)
             {
-                var phase1 = new PhaseData(_xeraMainFightStart, invulXera.Time, "Phase 1");
+                var phase1 = new PhaseData(xeraFightStart, invulXera.Time, "Phase 1");
                 if (phase100to0 != null)
                 {
                     phase1.AddParentPhase(phase100to0);
@@ -145,7 +146,33 @@ internal class Xera : StrongholdOfTheFaithful
                 phase1.AddTarget(mainTarget, log);
                 phases.Add(phase1);
 
-                long glidingEndTime = _hasSecondPhase ? _xeraSecondPhaseStartTime : fightEnd;
+                var hasSecondPhase = mainTarget.AgentItem.Merges.Count > 0;
+                long glidingEndTime = fightEnd;
+                if (hasSecondPhase)
+                {
+                    var movement = log.CombatData.GetMovementData(mainTarget.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mainTarget.AgentItem.Merges[0].MergeStart + 500);
+                    if (movement != null)
+                    {
+                        glidingEndTime = movement.Time;
+                    } 
+                    else
+                    {
+                        glidingEndTime = mainTarget.AgentItem.Merges[0].MergeStart;
+                    }
+                    var phase2 = new PhaseData(glidingEndTime, fightEnd, "Phase 2");
+                    if (phase100to0 != null)
+                    {
+                        phase2.AddParentPhase(phase100to0);
+                    }
+                    else
+                    {
+                        phase2.AddParentPhase(phases[0]);
+                    }
+                    phase2.AddTarget(mainTarget, log);
+                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
+                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
+                    phases.Add(phase2);
+                }
                 var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
                 if (phase100to0 != null)
                 {
@@ -157,23 +184,6 @@ internal class Xera : StrongholdOfTheFaithful
                 }
                 glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)), log);
                 phases.Add(glidingPhase);
-
-                if (_hasSecondPhase)
-                {
-                    var phase2 = new PhaseData(glidingEndTime, fightEnd, "Phase 2");
-                    if (phase100to0 != null)
-                    {
-                        phase2.AddParentPhase(phase100to0);
-                    } 
-                    else
-                    {
-                        phase2.AddParentPhase(phases[0]);
-                    }
-                    phase2.AddTarget(mainTarget, log);
-                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
-                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
-                    phases.Add(phase2);
-                }
             }
         }
         return phases;
@@ -218,7 +228,7 @@ internal class Xera : StrongholdOfTheFaithful
                         encounterStart = exitCombat.Time + 1000;
                     }
                 }
-                _xeraMainFightStart = enterCombat.Time - encounterStart;
+                _hasPreEvent = true;
                 return encounterStart;
             }
             return enterCombat.Time;
@@ -306,24 +316,14 @@ internal class Xera : StrongholdOfTheFaithful
         {
             throw new MissingKeyActorsException("Xera not found");
         }
-        _firstXeraLastAware = firstXera.LastAware;
         FindBloodstones(agentData, combatData);
         if (_hasPreEvent)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, _xeraMainFightStart, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         // find split
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
         {
-            CombatItem? move = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
-            if (move != null)
-            {
-                _xeraSecondPhaseStartTime = move.Time;
-            }
-            else
-            {
-                _xeraSecondPhaseStartTime = secondXera.FirstAware;
-            }
             firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
             RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
         }
@@ -390,10 +390,7 @@ internal class Xera : StrongholdOfTheFaithful
                             break;
                     }
                 }
-                if (_hasSecondPhase)
-                {
-                    replay.Hidden.Add(new(_firstXeraLastAware, _xeraSecondPhaseStartTime - 500));
-                }
+                replay.AddHideByBuff(target, log, Determined762);
                 break;
             case (int)TargetID.ChargedBloodstone:
                 long end = replay.TimeOffsets.end;
@@ -482,7 +479,7 @@ internal class Xera : StrongholdOfTheFaithful
                 var splitEvent = GetInvulXeraEvent(log, activeXera);
                 if (splitEvent == null || splitEvent.Time > halfGravityWell.Time)
                 {
-                    var timeLimit = splitEvent != null ? splitEvent.Time : int.MaxValue;
+                    var timeLimit = splitEvent != null ? splitEvent.Time : activeXera.LastAware;
                     angle = -30 + (cur++) * 90;
                     if (lifespanIndicator.end > timeLimit)
                     {
