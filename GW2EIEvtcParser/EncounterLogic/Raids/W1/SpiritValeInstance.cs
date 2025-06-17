@@ -130,7 +130,7 @@ internal class SpiritValeInstance : SpiritVale
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha");
         if (phases[0].Targets.Count == 0)
         {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Dummy Instance"), log);
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
         }
         return phases;
     }
@@ -171,7 +171,7 @@ internal class SpiritValeInstance : SpiritVale
             .. _gorseval.GetTargetsIDs(),
             .. _sabetha.GetTargetsIDs()
         ];
-        targets.Add(TargetID.DummyTarget);
+        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

@@ -554,7 +554,7 @@ public abstract class FightLogic
     {
         if (IsInstance)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.Instance, true);
         }
         ComputeFightTargets(agentData, combatData, extensions);
     }

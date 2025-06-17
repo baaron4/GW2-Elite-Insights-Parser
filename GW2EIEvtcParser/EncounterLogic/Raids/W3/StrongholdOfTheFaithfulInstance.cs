@@ -94,7 +94,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues))
         {
-            var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Twisted Castle");
+            var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Twisted Castle");
             var mainPhase = phases[0];
             var packedStatus = new List<List<SingleActor>>();
             var currentPack = new List<SingleActor>();
@@ -262,7 +262,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
         if (phases[0].Targets.Count == 0)
         {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Dummy Instance"), log);
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
         }
         return phases;
     }
@@ -297,7 +297,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             .. _twistedCastle.GetTargetsIDs(),
             .. _xera.GetTargetsIDs()
         ];
-        targets.Add(TargetID.DummyTarget);
+        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 
