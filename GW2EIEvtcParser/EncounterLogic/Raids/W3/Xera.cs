@@ -82,7 +82,7 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        SingleActor mainTarget = GetMainTarget();
         var res = new List<BuffEvent>()
         {
             new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _firstXeraLastAware, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
@@ -108,7 +108,7 @@ internal class Xera : StrongholdOfTheFaithful
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);
         if (requirePhases)
         {
@@ -175,7 +175,7 @@ internal class Xera : StrongholdOfTheFaithful
         return phases;
     }
 
-    private SingleActor? GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Xera));
+    private SingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Xera)) ?? throw new MissingKeyActorsException("Xera not found");
 
     private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
     {
@@ -290,7 +290,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
-        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        SingleActor mainTarget = GetMainTarget();
         mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
         {
             (22611300, 100),
