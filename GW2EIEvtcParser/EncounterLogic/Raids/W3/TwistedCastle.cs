@@ -13,9 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class TwistedCastle : StrongholdOfTheFaithful
 {
-    public TwistedCastle(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([  
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstBuffApplyMechanic(SpatialDistortion, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "Statue TP", "Teleported by Statue", "Statue Teleport", 500),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(StillWaters, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Still Waters (Immunity)", "Used a fountain for immunity", "Still Waters (Immunity)", 0)
@@ -25,8 +23,10 @@ internal class TwistedCastle : StrongholdOfTheFaithful
             ]),
             new PlayerDstBuffApplyMechanic(Madness, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Madness", "Stacking debuff", "Madness", 0),
             new PlayerDstBuffApplyMechanic(ChaoticHaze, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Chaotic Haze", "Damaging Debuff from bombardement", "Chaotic Haze", 500),
-        ])
-        );
+        ]);
+    public TwistedCastle(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "twstcstl";
         GenericFallBackMethod = FallBackMethod.None;
         Targetless = true;

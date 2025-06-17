@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class KeepConstruct : StrongholdOfTheFaithful
 {
-    public KeepConstruct(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate", "Fixated by Statue","Fixated", 0),
             new PlayerDstHitMechanic(HailOfFury, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris", "Hail of Fury (Falling Debris)","Debris", 0),
             new EnemyDstBuffApplyMechanic(Compromised, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#", "Compromised (Pushed Orb through Rifts)","Compromised", 0),
@@ -47,7 +45,10 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             ]),
             new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen,Colors.LightOrange), "Core Hit","Core was Hit by Player", "Core Hit",1000)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.KeepConstructCore) && de is DirectHealthDamageEvent)
-        ]));
+        ]);
+    public KeepConstruct(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "kc";
         Icon = EncounterIconKeepConstruct;
         EncounterCategoryInformation.InSubCategoryOrder = 1;

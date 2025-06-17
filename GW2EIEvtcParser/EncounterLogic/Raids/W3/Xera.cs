@@ -17,15 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class Xera : StrongholdOfTheFaithful
 {
 
-    private long _xeraSecondPhaseStartTime = long.MaxValue;
-    private bool _hasSecondPhase => _xeraSecondPhaseStartTime != long.MaxValue;
-    private long _firstXeraLastAware = long.MaxValue;
-    private long _xeraMainFightStart = 0;
-    private bool _hasPreEvent => _xeraMainFightStart > 0;
-
-    public Xera(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(TemporalShredOrb, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Orb", "Temporal Shred (Hit by Red Orb)","Red Orb", 0),
                 new PlayerDstHitMechanic(TemporalShredAoE, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Orb Aoe", "Temporal Shred (Stood in Orb Aoe)","Orb AoE", 0),
@@ -53,7 +45,17 @@ internal class Xera : StrongholdOfTheFaithful
             /*new Mechanic(Intervention, "Intervention", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Hourglass,"rgb(128,0,128)"), "Bubble",0),*/
             //new Mechanic(Disruption, "Disruption", ParseEnum.BossIDS.Xera, new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "TP",0), 
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
-        ]));
+        ]);
+
+    private long _xeraSecondPhaseStartTime = long.MaxValue;
+    private bool _hasSecondPhase => _xeraSecondPhaseStartTime != long.MaxValue;
+    private long _firstXeraLastAware = long.MaxValue;
+    private long _xeraMainFightStart = 0;
+    private bool _hasPreEvent => _xeraMainFightStart > 0;
+
+    public Xera(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "xera";
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
         Icon = EncounterIconXera;
