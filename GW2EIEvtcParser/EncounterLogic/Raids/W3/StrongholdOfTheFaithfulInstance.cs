@@ -42,6 +42,153 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         return "Stronghold Of The Faithful";
     }
+    private static void HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var mainPhase = phases[0];
+        var mcLeods = targets.Where(x => x.IsSpecies(TargetID.McLeodTheSilent));
+        var dummy = targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Escort");
+        var subMcLeods = targets.Where(x => x.IsAnySpecies([TargetID.CrimsonMcLeod, TargetID.RadiantMcLeod]));
+        var surveilledAppliesPerGlenna = glennas.Select(x => log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, x.AgentItem).FirstOrDefault()).ToList();
+        var hasMultiple = surveilledAppliesPerGlenna.Count > 0;
+        foreach (var glenna in glennas)
+        {
+            var surveilledApply = log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, glenna.AgentItem).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(ChestID.SiegeChest).FirstOrDefault();
+            var encounterCount = 1;
+            if (surveilledApply != null)
+            {
+                long start = surveilledApply.Time;
+                long end = glenna.LastAware;
+                bool success = false;
+                if (chest != null && chest.FirstAware >= glenna.FirstAware && chest.FirstAware <= glenna.LastAware)
+                {
+                    end = chest!.FirstAware;
+                    success = true;
+                }
+                var phase = new PhaseData(start, end, "Siege the Stronghold");
+                if (hasMultiple)
+                {
+                    phase.Name += " " + (encounterCount++);
+                }
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phase.AddParentPhase(mainPhase);
+                phase.AddTargets(mcLeods, log);
+                if (phase.Targets.Count == 0)
+                {
+                    phase.AddTarget(dummy, log);
+                }
+                phase.AddTargets(subMcLeods, log, PhaseData.TargetPriority.Blocking);
+            }
+        }
+        mainPhase.AddTargets(mcLeods, log);
+        if (!mcLeods.Any())
+        {
+            mainPhase.AddTarget(dummy, log);
+        }
+    }
+
+    private static void HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues) && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
+        {
+            var dummy = dummies.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Twisted Castle");
+            var mainPhase = phases[0];
+            var packedStatus = new List<List<SingleActor>>();
+            var currentPack = new List<SingleActor>();
+            SingleActor? prevStatue = null;
+            foreach (var statue in statues)
+            {
+                if (prevStatue == null)
+                {
+                    currentPack.Add(statue);
+                } 
+                else
+                {
+                    if (statue.FirstAware > prevStatue.LastAware)
+                    {
+                        packedStatus.Add(currentPack);
+                        currentPack = new List<SingleActor>();
+                    }
+                    currentPack.Add(statue);
+                }
+                prevStatue = statue;
+            }
+            packedStatus.Add(currentPack);
+            int skipped = 0;
+            int encounterCount = 1;
+            bool hasMultiple = packedStatus.Count > 0;
+            foreach (var statuePack in packedStatus)
+            {
+                long start = long.MaxValue;
+                foreach (var statue in statuePack)
+                {
+                    EnterCombatEvent? enterCombat = log.CombatData.GetEnterCombatEvents(statue.AgentItem).FirstOrDefault();
+                    if (enterCombat != null)
+                    {
+                        start = Math.Min(start, enterCombat.Time);
+                    }
+                }
+                if (start == long.MaxValue)
+                {
+                    skipped++;
+                    continue;
+                }
+                long end = statuePack.Max(x => x.LastAware);
+                RewardEvent? reward = GetOldRaidReward2Event(log.CombatData, start, end + 5000);
+                var success = false;
+                if (reward != null)
+                {
+                    success = true;
+                    end = reward.Time;
+                }
+                var phase = new PhaseData(start, end, "Twisted Castle");
+                phases.Add(phase);
+                if (hasMultiple)
+                {
+                    phase.Name += " " + (encounterCount++);
+                }
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phase.AddParentPhase(phases[0]);
+                phase.AddTarget(dummy, log);
+            }
+            if (skipped != packedStatus.Count)
+            {
+                mainPhase.AddTarget(dummy, log);
+            }
+        }
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        HandleEscortPhases(Targets, NonPlayerFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
+        HashSet<TargetID> kcStatus = [
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim
+        ];
+        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
+        return phases;
+    }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
@@ -87,6 +234,16 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return friendlies.Distinct().ToList();
     }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        Escort.FindMines(agentData, combatData);
+        // For encounters before reaching McLeod
+        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        Escort.RenameSubMcLeods(Targets);
+    }
+
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -104,15 +261,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         {
             logic.ComputePlayerCombatReplayActors(p, log, replay);
         }
-    }
-
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        Escort.FindMines(agentData, combatData);
-        // For encounters before reaching McLeod
-        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        Escort.RenameSubMcLeods(Targets);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
