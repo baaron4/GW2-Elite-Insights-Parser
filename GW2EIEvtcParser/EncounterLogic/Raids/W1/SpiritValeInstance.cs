@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -127,6 +128,10 @@ internal class SpiritValeInstance : SpiritVale
         //ProcessSpiritRacePhases(targetsByIDs, log, phases);
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval");
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha");
+        if (phases[0].Targets.Count == 0)
+        {
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Dummy Instance"), log);
+        }
         return phases;
     }
 
@@ -166,6 +171,7 @@ internal class SpiritValeInstance : SpiritVale
             .. _gorseval.GetTargetsIDs(),
             .. _sabetha.GetTargetsIDs()
         ];
+        targets.Add(TargetID.DummyTarget);
         return targets.Distinct().ToList();
     }
 

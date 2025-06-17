@@ -552,6 +552,10 @@ public abstract class FightLogic
 
     internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        if (IsInstance)
+        {
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.DummyTarget, true);
+        }
         ComputeFightTargets(agentData, combatData, extensions);
     }
 

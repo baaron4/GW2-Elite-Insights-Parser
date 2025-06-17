@@ -88,10 +88,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             }
         }
         mainPhase.AddTargets(mcLeods, log);
-        if (!mcLeods.Any())
-        {
-            mainPhase.AddTarget(dummy, log);
-        }
     }
 
     private static void HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
@@ -121,7 +117,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 prevStatue = statue;
             }
             packedStatus.Add(currentPack);
-            int skipped = 0;
             int encounterCount = 1;
             bool hasMultiple = packedStatus.Count > 0;
             foreach (var statuePack in packedStatus)
@@ -137,7 +132,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 }
                 if (start == long.MaxValue)
                 {
-                    skipped++;
                     continue;
                 }
                 long end = statuePack.Max(x => x.LastAware);
@@ -164,10 +158,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 }
                 phase.AddParentPhase(mainPhase);
                 phase.AddTarget(dummy, log);
-            }
-            if (skipped != packedStatus.Count)
-            {
-                mainPhase.AddTarget(dummy, log);
             }
         }
     }
@@ -253,10 +243,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 phase.AddTarget(targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event"), log);
             }
         }
-        if (!mainPhase.Targets.Keys.Any(x => x.IsSpecies(TargetID.Xera)))
-        {
-            mainPhase.AddTarget(targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event"), log);
-        }
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -274,6 +260,10 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Ianim
         ];
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
+        if (phases[0].Targets.Count == 0)
+        {
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Dummy Instance"), log);
+        }
         return phases;
     }
 
@@ -307,6 +297,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             .. _twistedCastle.GetTargetsIDs(),
             .. _xera.GetTargetsIDs()
         ];
+        targets.Add(TargetID.DummyTarget);
         return targets.Distinct().ToList();
     }
 
@@ -342,6 +333,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         // For encounters before reaching McLeod
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
+        // For encounters before reaching Xera
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         // TODO: verify charged bloodstones, it is possible there is only a single instance of each in the map and they get hidden/put back to 100% hp as they are present from log start to log end in boss logs
         Xera.FindBloodstones(agentData, combatData);

@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -143,6 +144,10 @@ internal class SalvationPassInstance : SalvationPass
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
         HandleTrioPhases(targetsByIDs, log, phases);
         ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
+        if (phases[0].Targets.Count == 0)
+        {
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Dummy Instance"), log);
+        }
         return phases;
     }
 
@@ -174,6 +179,7 @@ internal class SalvationPassInstance : SalvationPass
             .. _banditTrio.GetTargetsIDs(),
             .. _matthias.GetTargetsIDs()
         ];
+        targets.Add(TargetID.DummyTarget);
         return targets.Distinct().ToList();
     }
 
