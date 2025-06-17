@@ -42,7 +42,7 @@ internal class SpiritValeInstance : SpiritVale
         return "Spirit Vale";
     }
 
-    private void ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private static void ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
         {
