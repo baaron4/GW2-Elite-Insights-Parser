@@ -218,8 +218,13 @@ internal static class EncounterLogicPhaseUtils
                     continue;
                 }
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
-                bool success = target == lastTarget && chest != null;
-                long end = success ? chest!.FirstAware : target.LastAware;
+                bool success = false;
+                long end = target.LastAware;
+                if (target == lastTarget && chest != null)
+                {
+                    end = chest.FirstAware;
+                    success = true;
+                }
                 var phase = new PhaseData(start, end, phaseName);
                 phases.Add(phase);
                 if (hasMultiple)
@@ -237,6 +242,7 @@ internal static class EncounterLogicPhaseUtils
                 phase.AddParentPhase(phases[0]);
                 phase.AddTarget(target, log);
                 phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
+                phases[0].AddTarget(target, log);
             }
         }
     }

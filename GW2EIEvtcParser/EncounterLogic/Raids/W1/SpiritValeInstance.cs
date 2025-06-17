@@ -113,6 +113,7 @@ internal class SpiritValeInstance : SpiritVale
                 phases.Add(phase);
                 phase.AddTargets(etherealBarrierPack, log);
                 phase.AddParentPhase(phases[0]);
+                phases[0].AddTargets(etherealBarrierPack, log);
             }
         }
     }

@@ -132,6 +132,7 @@ internal class SalvationPassInstance : SalvationPass
                 phase.Name += " (Failure)";
             }
             phase.AddTargets(pack, log);
+            phases[0].AddTargets(pack, log);
         }
     }
 
