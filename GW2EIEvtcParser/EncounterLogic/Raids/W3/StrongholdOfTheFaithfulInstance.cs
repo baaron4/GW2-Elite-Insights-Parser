@@ -343,6 +343,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+        // TODO: verify charged bloodstones, it is possible there is only a single instance of each in the map and they get hidden/put back to 100% hp as they are present from log start to log end in boss logs
         Xera.FindBloodstones(agentData, combatData);
         MergeXeraAgents(agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
