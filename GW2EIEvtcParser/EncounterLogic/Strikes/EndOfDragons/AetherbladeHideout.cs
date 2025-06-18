@@ -583,23 +583,52 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 maiTrinPhase.AddParentPhase(phases[0]);
                 maiTrinPhase.AddTarget(maiTrin, log);
                 phases.Add(maiTrinPhase);
+                // Candidate phases
                 List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
+                var candidateMainPhases = new List<PhaseData>();
+                var candidateSplitPhases = new List<PhaseData>();
                 for (int i = 0; i < maiPhases.Count; i++)
                 {
                     PhaseData subPhase = maiPhases[i];
                     subPhase.AddParentPhase(maiTrinPhase);
                     if ((i % 2) == 0)
                     {
-                        subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
+                        candidateMainPhases.Add(subPhase);
                         subPhase.AddTarget(maiTrin, log);
                     }
                     else
                     {
-                        subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
+                        candidateSplitPhases.Add(subPhase);
                         AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar], log);
                     }
                 }
-                phases.AddRange(maiPhases);
+                // Split phases
+                var splitPhaseCount = 1;
+                foreach (var candidateSplitPhase in candidateSplitPhases)
+                {
+                    if (candidateSplitPhase.Targets.Count > 0)
+                    {
+                        candidateSplitPhase.Name = "Mai Trin Split Phase " + (splitPhaseCount++);
+                        phases.Add(candidateSplitPhase);
+                    }
+                }
+                // Main phases, 
+                var mainPhaseCount = 1;
+                PhaseData? prevPhase = null;
+                foreach(var candidateMainPhase in candidateMainPhases)
+                {
+                    if (candidateMainPhase.DurationInMS > MinimumInCombatDuration)
+                    {
+                        candidateMainPhase.Name = "Mai Trin Phase " + (mainPhaseCount++);
+                        phases.Add(candidateMainPhase);
+                        prevPhase = candidateMainPhase;
+                    } 
+                    // Merge small blips of untargetables
+                    else if (prevPhase != null && prevPhase.End + 500 > candidateMainPhase.Start)
+                    {
+                        prevPhase.OverrideEnd(candidateMainPhase.End);
+                    }
+                }
             }
         }
         if (echoOfScarlet != null)
