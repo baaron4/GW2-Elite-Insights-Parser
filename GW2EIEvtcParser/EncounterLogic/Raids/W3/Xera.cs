@@ -393,20 +393,30 @@ internal class Xera : StrongholdOfTheFaithful
                 replay.AddHideByBuff(target, log, Determined762);
                 break;
             case (int)TargetID.ChargedBloodstone:
-                long end = replay.TimeOffsets.end;
-                HealthDamageEvent? lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
-                if (lastDamage != null)
+                var activeXeras = log.AgentData.GetNPCsByID(TargetID.Xera).Where(x => target.AgentItem.InAwareTimes(x)).ToList();
+                long hiddenStart = target.FirstAware;
+                for (int i = 0; i < activeXeras.Count; i++)
                 {
-                    end = lastDamage.Time;
-                }
-                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => target.AgentItem.InAwareTimes(x));
-                if (activeXera != null)
-                {
+                    var activeXera = activeXeras[i];
                     var xeraInvulApply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, activeXera).FirstOrDefault();
                     if (xeraInvulApply != null)
                     {
-                        replay.Trim(xeraInvulApply.Time + 14000, end);
+                        long hiddenEnd = xeraInvulApply.Time + 14000;
+                        replay.Hidden.Add(new Segment(hiddenStart, hiddenEnd));
+                        if (activeXera.Merges.Count > 0)
+                        {
+                            var deadEvent = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent < 1 && x.Time > activeXera.FirstAware && x.Time < activeXera.Merges[0].MergeStart);
+                            hiddenStart = deadEvent != null ? deadEvent.Time : activeXera.Merges[0].MergeStart;
+                        } 
+                        else
+                        {
+                            var nextFakeXera = log.AgentData.GetNPCsByID(TargetID.FakeXera).FirstOrDefault(x => x.FirstAware > hiddenEnd);
+                            long threshold = nextFakeXera != null ? nextFakeXera.FirstAware : target.LastAware;
+                            var deadEvent = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault(x => x.HealthPercent < 1 && x.Time > activeXera.FirstAware && x.Time < threshold);
+                            hiddenStart = deadEvent != null ? deadEvent.Time : threshold;
+                        }
                     }
+                    replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
                 }
                 break;
             case (int)TargetID.BloodstoneFragment:
