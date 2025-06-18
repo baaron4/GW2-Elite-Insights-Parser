@@ -79,18 +79,24 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor mainTarget = GetMainTarget();
-        var mergedXera2 = GetXera2Merge(mainTarget.AgentItem);
-        var invulEnd = mergedXera2 != null ? mergedXera2.FirstAware : mainTarget.LastAware;
-        var res = new List<BuffEvent>()
+        var res = new List<BuffEvent>();
+        foreach (var determinedApply in combatData.GetBuffApplyData(Determined762))
         {
-            new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
-            new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown)
-        };
+            if (determinedApply.To.IsSpecies(TargetID.Xera))
+            {
+                var xera = determinedApply.To;
+                var mergedXera2 = GetXera2Merge(xera);
+                var invulEnd = mergedXera2 != null ? mergedXera2.FirstAware : xera.LastAware;
+                res.AddRange([
+                    new BuffRemoveAllEvent(_unknownAgent, xera, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
+                    new BuffRemoveManualEvent(_unknownAgent, xera, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown)
+                ]);
+            }
+        }
         return res;
     }
 
-    private AgentItem? GetXera2Merge(AgentItem xera)
+    internal static AgentItem? GetXera2Merge(AgentItem xera)
     {
         return xera.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
     }
@@ -214,7 +220,7 @@ internal class Xera : StrongholdOfTheFaithful
         return determined;
     }
 
-    internal static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
+    private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
     {
         return GetInvulXeraEvent(log, xera.AgentItem);
     }

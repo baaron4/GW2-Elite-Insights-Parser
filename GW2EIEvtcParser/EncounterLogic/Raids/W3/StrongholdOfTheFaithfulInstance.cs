@@ -323,7 +323,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             if (attachedXera != null)
             {
                 attachedXera.OverrideAwareTimes(attachedXera.FirstAware, xera2.LastAware);
-                ParserHelper.RedirectAllEvents(combatData, extensions, agentData, xera2, attachedXera);
+                RedirectAllEvents(combatData, extensions, agentData, xera2, attachedXera);
             }
         }
     }
