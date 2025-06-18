@@ -222,16 +222,12 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    private static AgentItem? GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
+    private static AgentItem? GetShackledPrisonerFirstOrDefault(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate);
+        CombatItem? shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate && !agentData.GetAgent(x.SrcAgent, x.Time).IsNonIdentifiedSpecies());
         if (shackledPrisonerMaxHP != null)
         {
-            AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
-            if (shackledPrisoner.ID > 0) // sanity check against unknown
-            {
-                return shackledPrisoner;
-            }
+            return agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
         }
         return null;
     }
@@ -250,7 +246,7 @@ internal class Deimos : BastionOfThePenitent
                 start = Math.Max(start, spawnProtectionRemove.Time);
                 if (start - genericStart > PreEventConsiderationConstant)
                 {
-                    AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+                    AgentItem? shackledPrisoner = GetShackledPrisonerFirstOrDefault(agentData, combatData);
                     if (shackledPrisoner != null)
                     {
                         CombatItem? firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
@@ -278,7 +274,7 @@ internal class Deimos : BastionOfThePenitent
         return res;
     }
 
-    private static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
+    internal static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
         var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -292,19 +288,27 @@ internal class Deimos : BastionOfThePenitent
         return hasBonds;
     }
 
+    internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData)
+    {
+        var shackledPrisonerMaxHPs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate);
+        foreach(var shackledPrisonerMaxHP in shackledPrisonerMaxHPs)
+        {
+            AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
+            if (shackledPrisoner.ID > 0) // sanity check against unknown
+            {
+                shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
+                shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool needsDummy = _hasPreEvent && !HandleDemonicBonds(agentData, combatData);
-        AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
-        AgentItem? saul = agentData.GetNPCsByID(TargetID.Saul).FirstOrDefault();
-        if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
-        {
-            shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
-            shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
-        }
+        HandleShackledPrisoners(agentData, combatData);
         if (_hasPreEvent && needsDummy)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Find target
@@ -529,7 +533,7 @@ internal class Deimos : BastionOfThePenitent
                 // TODO: check if that works in instances
                 AgentItem? deimosBody = target.AgentItem.Merges.Count > 0 ? target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Type == AgentItem.AgentType.Gadget && x.Merged.FirstAware > target.FirstAware + 20000)?.Merged : null;
                 var saulCheckThreshold = deimosBody != null ? (deimosBody.FirstAware - target.FirstAware) / 2 + target.FirstAware : target.LastAware;
-                var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => new Segment(x.FirstAware, x.LastAware).Intersects(target.FirstAware, saulCheckThreshold));
+                var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => x.InAwareTimes(target.AgentItem));
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
@@ -603,68 +607,80 @@ internal class Deimos : BastionOfThePenitent
                 }
                 break;
             case (int)TargetID.ShackledPrisoner:
-                SingleActor? Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.Saul));
-                if (Saul != null)
+                var Sauls = log.AgentData.GetNPCsByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
+                foreach (var Saul in Sauls)
                 {
-                    replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
+                    replay.Hidden.Add(new Segment(Saul.FirstAware, Saul.LastAware));
                 }
                 break;
             case (int)TargetID.DemonicBond:
-                replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
+                var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
+                var arenaCenter = new Vector3(-8411.66f, 3089.07f, -4109.54f);
+                float diffX = 0;
+                float diffY = 0;
+                var pos = replay.PolledPositions[0].XYZ;
+                if (pos.X > demonicCenter.X)
+                {
+                    if (pos.Y > demonicCenter.Y)
+                    {
+                        // top
+                        diffX = 55;
+                        diffY = 1080;
+                    }
+                    else
+                    {
+                        // right
+                        diffX = 1115;
+                        diffY = -35;
+                    }
+                }
+                else
+                {
+                    if (pos.Y > demonicCenter.Y)
+                    {
+                        // left 
+                        diffX = -1100;
+                        diffY = 40;
+                    }
+                    else
+                    {
+                        // bottom
+                        diffX = -38;
+                        diffY = -1130;
+                    }
+                }
+                var arenaPos = arenaCenter + new Vector3(diffX, diffY, 0);
+
                 var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                long hiddenStart = target.FirstAware;
                 if (attackTargetEvent != null)
                 {
                     var attackTarget = attackTargetEvent.AttackTarget;
-                    var lastTargetableState = log.CombatData.GetTargetableEvents(attackTarget).LastOrDefault();
-                    if (lastTargetableState != null && !lastTargetableState.Targetable)
+                    var targetableEvents = log.CombatData.GetTargetableEvents(attackTarget);
+                    long lineStart = 0;
+                    foreach (var targetableEvent in targetableEvents)
                     {
-                        replay.Trim(replay.TimeOffsets.start, lastTargetableState.Time);
-                    }
-                }
-                var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
-                replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
-                SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.ShackledPrisoner));
-                if (shackledPrisoner != null)
-                {
-                    if (shackledPrisoner.TryGetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant, out var shackledPos))
-                    {
-                        float diffX = 0;
-                        float diffY = 0;
-                        var pos = replay.PolledPositions[0].XYZ;
-                        if (pos.X > demonicCenter.X)
+                        if (targetableEvent.Targetable)
                         {
-                            if (pos.Y > demonicCenter.Y)
-                            {
-                                // top
-                                diffX = 55;
-                                diffY = 1080;
-                            }
-                            else
-                            {
-                                // right
-                                diffX = 1115;
-                                diffY = -35;
-                            }
-                        }
+                            replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                            hiddenStart = target.LastAware;
+                            lineStart = targetableEvent.Time;
+                        } 
                         else
                         {
-                            if (pos.Y > demonicCenter.Y)
+                            if (targetableEvent.Time > hiddenStart)
                             {
-                                // left 
-                                diffX = -1100;
-                                diffY = 40;
-                            }
-                            else
+                                replay.Hidden.Add(new Segment(hiddenStart , targetableEvent.Time));
+                            } else
                             {
-                                // bottom
-                                diffX = -38;
-                                diffY = -1130;
+                                replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
+                                replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new PositionConnector(arenaCenter), new PositionConnector(arenaPos)));
                             }
+                            hiddenStart = targetableEvent.Time;
                         }
-                        var finalPos = shackledPos + new Vector3(diffX, diffY, 0);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(finalPos)));
                     }
                 }
+                replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
                 break;
             default:
                 break;
@@ -743,11 +759,6 @@ internal class Deimos : BastionOfThePenitent
         }
         else
         {
-            SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.ShackledPrisoner));
-            if (shackledPrisoner != null)
-            {
-                shackledPrisoner.AgentItem.OverrideAwareTimes(shackledPrisoner.FirstAware, _deimos100PercentTime);
-            }
             target.SetManualHealth(37388210, new List<(long hpValue, double percent)>()
                 {
                     (35981456 , 100),
