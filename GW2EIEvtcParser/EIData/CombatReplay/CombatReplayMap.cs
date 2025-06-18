@@ -20,7 +20,7 @@ public class CombatReplayMap
     //private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="link">Url to the image</param>
     /// <param name="urlPixelSize">Width and Height of the image in pixel</param>
@@ -89,6 +89,24 @@ public class CombatReplayMap
                 _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.XYZ.X)) + 250, _rectInMap.bottomX);
                 _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.XYZ.Y)) + 250, _rectInMap.bottomY);
             }
+            FixAspectRatio();
+        }
+    }
+
+    internal void FixAspectRatio()
+    {
+        var width = _rectInMap.bottomX - _rectInMap.topX;
+        var height = _rectInMap.bottomY - _rectInMap.topY;
+        var pad = Math.Abs(width - height) / 2.0;
+        if (width > height)
+        {
+            _rectInMap.topY -= pad;
+            _rectInMap.bottomY += pad;
+        }
+        else if (height > width)
+        {
+            _rectInMap.topX -= pad;
+            _rectInMap.bottomX += pad;
         }
     }
 
