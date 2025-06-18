@@ -625,6 +625,8 @@ public static class SpeciesIDs
         TheTormentedLonelyTower = 26193,
         TheCravenLonelyTower = 26193,
         KryptisRift = SpeciesIDs.KryptisRift,
+        // - Kinfall
+        WhisperingShadow = 27010,
         // Golems
         MassiveGolem10M = 16169,
         MassiveGolem4M = 16202,

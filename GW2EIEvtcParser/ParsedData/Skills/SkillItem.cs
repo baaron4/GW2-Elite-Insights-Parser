@@ -360,6 +360,9 @@ public class SkillItem
         { DreadVisageAspectSkill, "Dread Visage (Aspect)" },
         { RendingStormSkill, "Rending Storm (Axe)" },
         { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
+        // Whispering Shadow
+        { CryoflashWindup, "Cryoflash (Windup)" },
+        { WhisperingShadowDying, "Dying (Whispering Shadow)" },
         #endregion Fractals
         #region WvW
         // World vs World
@@ -1332,7 +1335,7 @@ public class SkillItem
         { CripplingStrikeCentaurBannerSkill, BuffImages.CripplingStrikeCentaurBanner },
         { KickDustCentaurBannerSkill, BuffImages.KickDustCentaurBanner },
         #endregion WvWIcons
-            #region FinisherIcons         
+            #region FinisherIcons
             { Finisher1, ItemImages.BasicFinisher },
             { Finisher2, ItemImages.BasicFinisher },
             { RabbitRankFinisher, ItemImages.RabbitRankFinisher },
@@ -1431,7 +1434,7 @@ public class SkillItem
     //public int Range { get; private set; } = 0;
     private readonly bool AA;
 
-    public bool IsSwap => ID == WeaponSwap 
+    public bool IsSwap => ID == WeaponSwap
         || ElementalistHelper.IsAttunementSwap(ID)
         || WeaverHelper.IsAttunementSwap(ID)
         || RevenantHelper.IsLegendSwap(ID)
@@ -1442,10 +1445,10 @@ public class SkillItem
         || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
         || IsAnimatedDodge(skillData);
-    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId 
+    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId
         || VindicatorHelper.IsVindicatorDodge(ID);
-    public bool IsAutoAttack(ParsedEvtcLog log) => AA 
-        || FirebrandHelper.IsAutoAttack(log, ID) 
+    public bool IsAutoAttack(ParsedEvtcLog log) => AA
+        || FirebrandHelper.IsAutoAttack(log, ID)
         || BladeswornHelper.IsAutoAttack(log, ID);
     public readonly string Name = "";
     public readonly string Icon = "";
@@ -1489,7 +1492,7 @@ public class SkillItem
             && ApiSkill.WeaponType != "None" && ApiSkill.Professions.Count > 0
             && WeaponDescriptor.IsWeaponSlot(ApiSkill.Slot))
         {
-            // Special handling of specter shroud as it is not done in the same way 
+            // Special handling of specter shroud as it is not done in the same way
             var isSpecterShroud = ApiSkill.Professions.Contains("Thief") && ApiSkill.Facts.Any(x => x.Text != null && x.Text.Contains("Tethered Ally"));
             if (!isSpecterShroud)
             {

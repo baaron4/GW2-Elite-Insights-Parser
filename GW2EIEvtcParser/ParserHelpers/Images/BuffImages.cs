@@ -330,6 +330,8 @@ public static class BuffImages
     public const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
     public const string Agony = "https://wiki.guildwars2.com/images/b/be/Agony.png";
     public const string Hamstrung = "https://wiki.guildwars2.com/images/b/b9/Unseen_Burden.png";
+    public const string SpiritsConsumed = "https://wiki.guildwars2.com/images/1/16/Spirits_Consumed.png";
+    public const string FrozenBurst = "https://wiki.guildwars2.com/images/0/01/Frozen_Burst.png";
     // Mistlock Singularity
     public const string DesertCarapace = "https://wiki.guildwars2.com/images/6/60/Desert_Carapace.png";
     // Infusions (Fractal Augmentations)
