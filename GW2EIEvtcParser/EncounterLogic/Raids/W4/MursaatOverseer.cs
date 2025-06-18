@@ -12,9 +12,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class MursaatOverseer : BastionOfThePenitent
 {
-    public MursaatOverseer(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(JadeSoldierAura, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade", "Jade Soldier's Aura hit","Jade Aura", 0),
                 new PlayerDstHitMechanic(JadeSoldierExplosion, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl", "Jade Soldier's Death Explosion","Jade Explosion", 0),
@@ -36,11 +34,15 @@ internal class MursaatOverseer : BastionOfThePenitent
                 new EnemyDstBuffRemoveMechanic(MursaatOverseersShield, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Dispel", "Dispelled Jade Soldier Shield","Dispel", 0),
             ]),
             //new Mechanic(EnemyTile, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
-        ]));
+        ]);
+    public MursaatOverseer(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "mo";
         Icon = EncounterIconMursaatOverseer;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
+        ChestID = ChestID.RecreationRoomChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

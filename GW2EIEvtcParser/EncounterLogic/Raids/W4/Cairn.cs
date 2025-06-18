@@ -12,10 +12,8 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Cairn : BastionOfThePenitent
 {
-    public Cairn(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
-        
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+
             new PlayerDstHitMechanic(CairnDisplacement, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port", "Orange Teleport Field","Orange TP", 0),
             new MechanicGroup([
                 new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0)
@@ -43,11 +41,15 @@ internal class Cairn : BastionOfThePenitent
             // 75% - 50%: 38074
             // 50% - 25%: 37673
             // 25% -  0%: 37642
-        ]));
+        ]);
+    public Cairn(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "cairn";
         Icon = EncounterIconCairn;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
+        ChestID = ChestID.CairnChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

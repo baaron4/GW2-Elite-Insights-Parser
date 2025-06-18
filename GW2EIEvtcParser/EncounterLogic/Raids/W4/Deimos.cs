@@ -17,18 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Deimos : BastionOfThePenitent
 {
-
-    private long _deimos10PercentTime = 0;
-
-    private bool _hasPreEvent = false;
-
-    private long _deimos100PercentTime = 0;
-
-    private const long PreEventConsiderationConstant = 5000;
-
-    public Deimos(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
                 new PlayerDstFirstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
@@ -75,12 +64,26 @@ internal class Deimos : BastionOfThePenitent
                 new PlayerDstBuffApplyMechanic(GreenTeleport, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP", "Teleport to/from Demonic Realm","Teleport", 0),
             ]),
             new EnemyDstBuffApplyMechanic(UnnaturalSignet, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff", "Double Damage Debuff on Deimos","+100% Dmg Buff", 0)
-        ]));
+        ]);
+
+    private long _deimos10PercentTime = 0;
+
+    private bool _hasPreEvent = false;
+
+    private long _deimos100PercentTime = 0;
+
+    private const long PreEventConsiderationConstant = 5000;
+
+    public Deimos(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "dei";
         GenericFallBackMethod = FallBackMethod.None;
         Icon = EncounterIconDeimos;
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000004;
+        // TODO: verify this works even in demonic realm
+        ChestID = ChestID.SaulsTreasureChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -153,7 +156,6 @@ internal class Deimos : BastionOfThePenitent
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         var res = new List<BuffEvent>();
         IReadOnlyList<BuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
         foreach (BuffEvent bfe in signets)
@@ -163,16 +165,16 @@ internal class Deimos : BastionOfThePenitent
                 BuffEvent? removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                 if (removal == null)
                 {
-                    res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown, 1, 0));
-                    res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown));
+                    res.Add(new BuffRemoveAllEvent(_unknownAgent, ba.To, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown, 1, 0));
+                    res.Add(new BuffRemoveManualEvent(_unknownAgent, ba.To, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown));
                 }
             }
-            else if (bfe is BuffRemoveAllEvent)
+            else if (bfe is BuffRemoveAllEvent brea)
             {
                 BuffEvent? apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                 if (apply == null)
                 {
-                    res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), IFF.Unknown, uint.MaxValue, true));
+                    res.Add(new BuffApplyEvent(_unknownAgent, brea.To, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), IFF.Unknown, uint.MaxValue, true));
                 }
             }
         }
@@ -533,6 +535,9 @@ internal class Deimos : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Deimos:
+                AgentItem? deimosBody = target.AgentItem.Merges.Count > 0 ? target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Type == AgentItem.AgentType.Gadget && x.Merged.FirstAware > target.FirstAware + 20000)?.Merged : null;
+                var saulCheckThreshold = deimosBody != null ? (deimosBody.FirstAware - target.FirstAware) / 2 + target.FirstAware : target.LastAware;
+                var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => new Segment(x.FirstAware, x.LastAware).Intersects(target.FirstAware, saulCheckThreshold));
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
@@ -543,7 +548,7 @@ internal class Deimos : BastionOfThePenitent
                             lifespan = (cast.Time, cast.Time + castDuration);
                             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new AgentConnector(target))
                                 .UsingRotationConnector(new AngleConnector(180)));
-                            if (!log.FightData.IsCM)
+                            if (hasSaul)
                             {
                                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
                             }
