@@ -53,12 +53,12 @@ internal class SalvationPassInstance : SalvationPass
                     {
                         var pack = new List<SingleActor>();
                         pack.Add(narella);
-                        var curZane = zanes.FirstOrDefault(x => new Segment(x.FirstAware, x.LastAware).Intersects(narella.FirstAware, narella.LastAware));
+                        var curZane = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curZane != null)
                         {
                             pack.Add(curZane);
                         }
-                        var curBerg = zanes.FirstOrDefault(x => new Segment(x.FirstAware, x.LastAware).Intersects(narella.FirstAware, narella.LastAware));
+                        var curBerg = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curBerg != null)
                         {
                             pack.Add(curBerg);
@@ -141,9 +141,9 @@ internal class SalvationPassInstance : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
         HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
@@ -201,6 +201,36 @@ internal class SalvationPassInstance : SalvationPass
         Matthias.FindSacrifices(fightData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         Matthias.ForceSacrificeHealth(Targets);
+    }
+
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<BuffEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialBuffEventProcess(combatData, skillData));
+        }
+        return res;
+    }
+
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<CastEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialCastEventProcess(combatData, skillData));
+        }
+        return res;
+    }
+
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<HealthDamageEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, skillData));
+        }
+        return res;
     }
 
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods

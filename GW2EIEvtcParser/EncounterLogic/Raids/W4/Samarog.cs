@@ -14,9 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Samarog : BastionOfThePenitent
 {
-    public Samarog(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(SamarogShockwave, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv", "Shockwave from Spears","Shockwave", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", 0)
@@ -56,11 +54,15 @@ internal class Samarog : BastionOfThePenitent
             new PlayerDstHitMechanic(AnguishedBolt, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Stun","Anguished Bolt (AoE Stun Circle by Guldhem)","Guldhem's Stun", 0),
         
             //  new Mechanic(SpearImpact, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.StarSquare,Color.Red), "CC Target", casted without dmg odd
-        ]));
+        ]);
+    public Samarog(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sam";
         Icon = EncounterIconSamarog;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
+        ChestID = ChestID.SamarogChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -82,26 +84,29 @@ internal class Samarog : BastionOfThePenitent
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
-        IReadOnlyList<HealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
-        var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
-        var fanaticalResilienceSegments = new List<Segment>();
-        for (int i = 0; i < fanaticalResilienceTimes.Count; i += 2)
+        var fanaticalAppliedAgents = combatData.GetBuffApplyData(FanaticalResilience).Select(x => x.To).Distinct();
+        foreach (var fanaticalAppliedTo in fanaticalAppliedAgents)
         {
-            long start = fanaticalResilienceTimes[i];
-            long end = long.MaxValue;
-            if (i + 1 < fanaticalResilienceTimes.Count)
+            IReadOnlyList<HealthDamageEvent> damageTaken = combatData.GetDamageTakenData(fanaticalAppliedTo);
+            var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, fanaticalAppliedTo, true, false).Select(x => x.Time).ToList();
+            var fanaticalResilienceSegments = new List<Segment>();
+            for (int i = 0; i < fanaticalResilienceTimes.Count; i += 2)
             {
-                end = fanaticalResilienceTimes[i + 1];
+                long start = fanaticalResilienceTimes[i];
+                long end = long.MaxValue;
+                if (i + 1 < fanaticalResilienceTimes.Count)
+                {
+                    end = fanaticalResilienceTimes[i + 1];
+                }
+                fanaticalResilienceSegments.Add(new Segment(start, end, 1));
             }
-            fanaticalResilienceSegments.Add(new Segment(start, end, 1));
-        }
-        foreach (HealthDamageEvent healthDamageEvent in damageTaken)
-        {
-            // Can't have been absorbed if not 0 damages
-            if (healthDamageEvent.HasHit && healthDamageEvent.HealthDamage == 0 && fanaticalResilienceSegments.Any(x => healthDamageEvent.Time >= x.Start && healthDamageEvent.Time <= x.End))
+            foreach (HealthDamageEvent healthDamageEvent in damageTaken)
             {
-                healthDamageEvent.MakeIntoAbsorbed();
+                // Can't have been absorbed if not 0 damages
+                if (healthDamageEvent.HasHit && healthDamageEvent.HealthDamage == 0 && fanaticalResilienceSegments.Any(x => healthDamageEvent.Time >= x.Start && healthDamageEvent.Time <= x.End))
+                {
+                    healthDamageEvent.MakeIntoAbsorbed();
+                }
             }
         }
         return [];
@@ -142,7 +147,7 @@ internal class Samarog : BastionOfThePenitent
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void HandleSpears(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
     {
         // With lingering agents, last aware of the spears are properly set
         if (evtcVersion.Build >= ArcDPSBuilds.LingeringAgents)
@@ -154,7 +159,11 @@ internal class Samarog : BastionOfThePenitent
                 spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
             }
         }
+    }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        HandleSpears(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 

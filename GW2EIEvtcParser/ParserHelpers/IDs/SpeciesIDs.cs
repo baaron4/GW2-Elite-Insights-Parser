@@ -987,6 +987,10 @@ public static class SpeciesIDs
     internal static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
     internal static readonly Vector3 KeepConstructChestPosition = new (-3860.69f, 9389.32f, -5907.59f);
     internal static readonly Vector3 XeraChestPosition = new(-2840.79f, -7552.79f, -9594.75f);
+    internal static readonly Vector3 CairnChestPosition = new(14025.2f, 2211.56f, -1348.89f);
+    internal static readonly Vector3 RecreationRoomChestPosition = new(2647.21f, 3985.09f, -4187.83f);
+    internal static readonly Vector3 SamarogChestPosition = new(-5900.66f, 3007.57f, -5096.52f);
+    internal static readonly Vector3 SaulsTreasureChestPosition = new(-8445.49f, 3033.19f, -4011.12f);
     internal static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     internal static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
     internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
@@ -1003,6 +1007,10 @@ public static class SpeciesIDs
         SiegeChest = SpeciesIDs.SiegeChest,
         KeepConstructChest = SpeciesIDs.KeepConstructChest,
         XeraChest = SpeciesIDs.XeraChest,
+        CairnChest = SpeciesIDs.CairnChest,
+        RecreationRoomChest = SpeciesIDs.RecreationRoomChest,
+        SamarogChest = SpeciesIDs.SamarogChest,
+        SaulsTreasureChest = SpeciesIDs.SaulsTreasureChest,
         ChestOfDesmina = SpeciesIDs.ChestOfDesmina,
         ChestOfSouls = SpeciesIDs.ChestOfSouls,
         CAChest = SpeciesIDs.CAChest,
@@ -1105,6 +1113,10 @@ public static class SpeciesIDs
     private const int MatthiasChest = -76;
     private const int KeepConstructChest = -77;
     private const int XeraChest = -78;
+    private const int CairnChest = -79;
+    private const int RecreationRoomChest = -80;
+    private const int SamarogChest = -81;
+    private const int SaulsTreasureChest = -82;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

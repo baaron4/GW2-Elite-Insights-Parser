@@ -17,18 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Deimos : BastionOfThePenitent
 {
-
-    private long _deimos10PercentTime = 0;
-
-    private bool _hasPreEvent = false;
-
-    private long _deimos100PercentTime = 0;
-
-    private const long PreEventConsiderationConstant = 5000;
-
-    public Deimos(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
                 new PlayerDstFirstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
@@ -75,12 +64,24 @@ internal class Deimos : BastionOfThePenitent
                 new PlayerDstBuffApplyMechanic(GreenTeleport, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "TP", "Teleport to/from Demonic Realm","Teleport", 0),
             ]),
             new EnemyDstBuffApplyMechanic(UnnaturalSignet, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "DMG Debuff", "Double Damage Debuff on Deimos","+100% Dmg Buff", 0)
-        ]));
+        ]);
+
+    private long _deimos10PercentTime = 0;
+
+    private bool _hasPreEvent = false;
+
+    private const long PreEventConsiderationConstant = 5000;
+
+    public Deimos(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "dei";
         GenericFallBackMethod = FallBackMethod.None;
         Icon = EncounterIconDeimos;
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000004;
+        // TODO: verify this works even in demonic realm
+        ChestID = ChestID.SaulsTreasureChest;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -112,23 +113,11 @@ internal class Deimos : BastionOfThePenitent
     {
         foreach (AgentItem gadget in gadgets)
         {
-            RedirectAllEvents(combatData, extensions, agentData, gadget, deimos,
+            RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, gadget, [gadget], deimos, false,
                 (evt, from, to) =>
                 {
                     // Only keep damage events from arms
                     if (from != mainBody && !evt.IsDamage())
-                    {
-                        return false;
-                    }
-                    if (evt.Time < upperTimeThreshold)
-                    {
-                        // skip events before targetable that are not attack target or position related
-                        if (evt.IsStateChange != StateChange.AttackTarget && evt.IsStateChange != StateChange.Targetable && !evt.IsGeographical())
-                        {
-                            return false;
-                        }
-                    }
-                    if (evt.IsStateChange == StateChange.MaxHealthUpdate)
                     {
                         return false;
                     }
@@ -137,15 +126,18 @@ internal class Deimos : BastionOfThePenitent
                     {
                         return false;
                     }
+                    return true;
+                },
+                (evt, from, to) =>
+                {
+                    if (evt.IsStateChange == StateChange.MaxHealthUpdate)
+                    {
+                        evt.OverrideSrcAgent(ParserHelper._unknownAgent);
+                    }
                     if (evt.IsGeographical() && evt.Time < upperTimeThreshold)
                     {
                         evt.OverrideTime(upperTimeThreshold);
                     }
-                    if (evt.Time < to.FirstAware)
-                    {
-                        evt.OverrideTime(to.FirstAware);
-                    }
-                    return true;
                 }
             );
         }
@@ -153,7 +145,6 @@ internal class Deimos : BastionOfThePenitent
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         var res = new List<BuffEvent>();
         IReadOnlyList<BuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
         foreach (BuffEvent bfe in signets)
@@ -163,16 +154,16 @@ internal class Deimos : BastionOfThePenitent
                 BuffEvent? removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                 if (removal == null)
                 {
-                    res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown, 1, 0));
-                    res.Add(new BuffRemoveManualEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown));
+                    res.Add(new BuffRemoveAllEvent(_unknownAgent, ba.To, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown, 1, 0));
+                    res.Add(new BuffRemoveManualEvent(_unknownAgent, ba.To, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), IFF.Unknown));
                 }
             }
-            else if (bfe is BuffRemoveAllEvent)
+            else if (bfe is BuffRemoveAllEvent brea)
             {
                 BuffEvent? apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                 if (apply == null)
                 {
-                    res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), IFF.Unknown, uint.MaxValue, true));
+                    res.Add(new BuffApplyEvent(_unknownAgent, brea.To, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), IFF.Unknown, uint.MaxValue, true));
                 }
             }
         }
@@ -182,7 +173,8 @@ internal class Deimos : BastionOfThePenitent
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success && _deimos10PercentTime > 0)
+        long percent10Start = _deimos10PercentTime;
+        if (!fightData.Success && percent10Start > 0)
         {
             SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
             if (!agentData.TryGetFirstAgentItem(TargetID.Saul, out var saul))
@@ -200,7 +192,7 @@ internal class Deimos : BastionOfThePenitent
             }
             AgentItem attackTarget = attackTargets.Last().AttackTarget;
             // sanity check
-            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
+            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > percent10Start - ServerDelayConstant);
             if (attackableEvent == null)
             {
                 return;
@@ -211,15 +203,15 @@ internal class Deimos : BastionOfThePenitent
                 return;
             }
             // Saul stays around post encounter
-            if (saul.LastAware <= notAttackableEvent.Time || combatData.GetDespawnEvents(saul).Any(x => x.Time <= notAttackableEvent.Time && x.Time >= _deimos10PercentTime))
+            if (saul.LastAware <= notAttackableEvent.Time || combatData.GetDespawnEvents(saul).Any(x => x.Time <= notAttackableEvent.Time && x.Time >= percent10Start))
             {
                 return;
             }
-            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
                 // This means Deimos received damage after becoming non attackable, that means it did not die
-                HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
+                HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && x.Time > lastDamageTaken.Time && x.ToFriendly);
                 if (friendlyDamageToDeimos != null || !AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
                 {
                     return;
@@ -229,16 +221,12 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    private static AgentItem? GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
+    private static AgentItem? GetShackledPrisonerFirstOrDefault(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem? shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate);
+        CombatItem? shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate && !agentData.GetAgent(x.SrcAgent, x.Time).IsNonIdentifiedSpecies());
         if (shackledPrisonerMaxHP != null)
         {
-            AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
-            if (shackledPrisoner.ID > 0) // sanity check against unknown
-            {
-                return shackledPrisoner;
-            }
+            return agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
         }
         return null;
     }
@@ -257,7 +245,7 @@ internal class Deimos : BastionOfThePenitent
                 start = Math.Max(start, spawnProtectionRemove.Time);
                 if (start - genericStart > PreEventConsiderationConstant)
                 {
-                    AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+                    AgentItem? shackledPrisoner = GetShackledPrisonerFirstOrDefault(agentData, combatData);
                     if (shackledPrisoner != null)
                     {
                         CombatItem? firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
@@ -265,11 +253,11 @@ internal class Deimos : BastionOfThePenitent
                         if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                         {
                             _hasPreEvent = true;
-                            _deimos100PercentTime = start - firstHPUpdate.Time;
                             start = firstHPUpdate.Time;
                         }
                     }
                 }
+                break;
             }
         }
         return start >= 0 ? start : genericStart;
@@ -285,7 +273,7 @@ internal class Deimos : BastionOfThePenitent
         return res;
     }
 
-    private static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
+    internal static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
         var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
@@ -299,19 +287,39 @@ internal class Deimos : BastionOfThePenitent
         return hasBonds;
     }
 
+    internal static void HandleShackledPrisoners(AgentData agentData, List<CombatItem> combatData)
+    {
+        var shackledPrisonerMaxHPs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == StateChange.MaxHealthUpdate);
+        foreach(var shackledPrisonerMaxHP in shackledPrisonerMaxHPs)
+        {
+            AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
+            if (shackledPrisoner.ID > 0) // sanity check against unknown
+            {
+                shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
+                shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
+        }
+    }
+
+    internal static void RenameTargetSauls(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
+        {
+            if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
+            {
+                string name = (target.IsSpecies(TargetID.Thief) ? "Thief" : (target.IsSpecies(TargetID.Drunkard) ? "Drunkard" : (target.IsSpecies(TargetID.Gambler) ? "Gambler" : "")));
+                target.OverrideName(name);
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool needsDummy = _hasPreEvent && !HandleDemonicBonds(agentData, combatData);
-        AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
-        AgentItem? saul = agentData.GetNPCsByID(TargetID.Saul).FirstOrDefault();
-        if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
-        {
-            shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
-            shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
-        }
+        HandleShackledPrisoners(agentData, combatData);
         if (_hasPreEvent && needsDummy)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Find target
@@ -369,6 +377,7 @@ internal class Deimos : BastionOfThePenitent
             invulApp.OverrideValue((int)(Math.Min(deimos10PercentTargetable, deimos.LastAware) - invulApp.Time));
         }
         //
+        deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         if (deimosStructBody != null)
         {
             MergeWithGadgets(deimos.AgentItem, _deimos10PercentTime, gadgetAgents, deimosStructBody, combatData, agentData, extensions);
@@ -376,17 +385,8 @@ internal class Deimos : BastionOfThePenitent
             combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             combatData.SortByTime();
         }
-        deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         deimos.OverrideName("Deimos");
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
-            {
-
-                string name = (target.IsSpecies(TargetID.Thief) ? "Thief" : (target.IsSpecies(TargetID.Drunkard) ? "Drunkard" : (target.IsSpecies(TargetID.Gambler) ? "Gambler" : "")));
-                target.OverrideName(name);
-            }
-        }
+        RenameTargetSauls(Targets);
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -402,6 +402,19 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
+    private long GetMainFightStart(ParsedEvtcLog log, AgentItem deimos)
+    {
+        if (_hasPreEvent)
+        {
+            var deimosMainFightStart = log.CombatData.GetBuffRemoveAllData(SkillIDs.SpawnProtection).Where(x => x.To == deimos).FirstOrDefault();
+            if (deimosMainFightStart != null)
+            {
+                return deimosMainFightStart.Time;
+            }
+        }
+        return log.FightData.FightStart;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -413,20 +426,21 @@ internal class Deimos : BastionOfThePenitent
         {
             var fullFight = phases[0];
             var phase100to0 = fullFight;
-            if (_deimos100PercentTime > 0)
+            var deimosMainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
+            if (deimosMainFightStart > log.FightData.FightStart)
             {
-                var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
+                var phasePreEvent = new PhaseData(0, deimosMainFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(fullFight);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.DemonicBond)), log);
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 phases.Add(phasePreEvent);
 
-                phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(deimosMainFightStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(fullFight);
                 phase100to0.AddTarget(mainTarget, log);
                 phase100to0.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(phase100to0);
-            } 
+            }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
             AddAddPhases(phases, log, mainTarget, [phase100to10]);
             AddBurstPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
@@ -440,22 +454,24 @@ internal class Deimos : BastionOfThePenitent
         // Determined + additional data on inst change
         BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         var phase100to10 = mainFightPhase;
-        if (invulDei != null || _deimos10PercentTime > 0)
+        long percent10Start = _deimos10PercentTime;
+        if (invulDei != null || percent10Start > 0)
         {
-            long npcDeimosEnd = _deimos10PercentTime;
+            long npcDeimosEnd = percent10Start;
             var mainDeimosPhaseName = "100% - 10%";
             if (invulDei != null)
             {
                 npcDeimosEnd = invulDei.Time;
             }
-            phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, mainDeimosPhaseName);
+            var mainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
+            phase100to10 = new PhaseData(mainFightStart, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(mainTarget, log);
             phase100to10.AddParentPhase(mainFightPhase);
             phases.Add(phase100to10);
 
-            if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > PhaseTimeLimit)
+            if (percent10Start > 0 && log.FightData.FightEnd - percent10Start > PhaseTimeLimit)
             {
-                var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
+                var phase10to0 = new PhaseData(percent10Start, log.FightData.FightEnd, "10% - 0%");
                 phase10to0.AddTarget(mainTarget, log);
                 phase10to0.AddParentPhase(mainFightPhase);
                 phases.Add(phase10to0);
@@ -533,6 +549,10 @@ internal class Deimos : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Deimos:
+                // TODO: check if that works in instances
+                AgentItem? deimosBody = target.AgentItem.Merges.Count > 0 ? target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Type == AgentItem.AgentType.Gadget && x.Merged.FirstAware > target.FirstAware + 20000)?.Merged : null;
+                var saulCheckThreshold = deimosBody != null ? (deimosBody.FirstAware - target.FirstAware) / 2 + target.FirstAware : target.LastAware;
+                var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => x.InAwareTimes(target.AgentItem));
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
                     switch (cast.SkillId)
@@ -543,7 +563,7 @@ internal class Deimos : BastionOfThePenitent
                             lifespan = (cast.Time, cast.Time + castDuration);
                             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.end, 100)], new AgentConnector(target))
                                 .UsingRotationConnector(new AngleConnector(180)));
-                            if (!log.FightData.IsCM)
+                            if (hasSaul)
                             {
                                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
                             }
@@ -606,68 +626,80 @@ internal class Deimos : BastionOfThePenitent
                 }
                 break;
             case (int)TargetID.ShackledPrisoner:
-                SingleActor? Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.Saul));
-                if (Saul != null)
+                var Sauls = log.AgentData.GetNPCsByID(TargetID.Saul).Where(x => x.InAwareTimes(target.AgentItem));
+                foreach (var Saul in Sauls)
                 {
-                    replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
+                    replay.Hidden.Add(new Segment(Saul.FirstAware, Saul.LastAware));
                 }
                 break;
             case (int)TargetID.DemonicBond:
-                replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
+                var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
+                var arenaCenter = new Vector3(-8411.66f, 3089.07f, -4109.54f);
+                float diffX = 0;
+                float diffY = 0;
+                var pos = replay.PolledPositions[0].XYZ;
+                if (pos.X > demonicCenter.X)
+                {
+                    if (pos.Y > demonicCenter.Y)
+                    {
+                        // top
+                        diffX = 55;
+                        diffY = 1080;
+                    }
+                    else
+                    {
+                        // right
+                        diffX = 1115;
+                        diffY = -35;
+                    }
+                }
+                else
+                {
+                    if (pos.Y > demonicCenter.Y)
+                    {
+                        // left 
+                        diffX = -1100;
+                        diffY = 40;
+                    }
+                    else
+                    {
+                        // bottom
+                        diffX = -38;
+                        diffY = -1130;
+                    }
+                }
+                var arenaPos = arenaCenter + new Vector3(diffX, diffY, 0);
+
                 var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                long hiddenStart = target.FirstAware;
                 if (attackTargetEvent != null)
                 {
                     var attackTarget = attackTargetEvent.AttackTarget;
-                    var lastTargetableState = log.CombatData.GetTargetableEvents(attackTarget).LastOrDefault();
-                    if (lastTargetableState != null && !lastTargetableState.Targetable)
+                    var targetableEvents = log.CombatData.GetTargetableEvents(attackTarget);
+                    long lineStart = 0;
+                    foreach (var targetableEvent in targetableEvents)
                     {
-                        replay.Trim(replay.TimeOffsets.start, lastTargetableState.Time);
-                    }
-                }
-                var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
-                replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
-                SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.ShackledPrisoner));
-                if (shackledPrisoner != null)
-                {
-                    if (shackledPrisoner.TryGetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant, out var shackledPos))
-                    {
-                        float diffX = 0;
-                        float diffY = 0;
-                        var pos = replay.PolledPositions[0].XYZ;
-                        if (pos.X > demonicCenter.X)
+                        if (targetableEvent.Targetable)
                         {
-                            if (pos.Y > demonicCenter.Y)
-                            {
-                                // top
-                                diffX = 55;
-                                diffY = 1080;
-                            }
-                            else
-                            {
-                                // right
-                                diffX = 1115;
-                                diffY = -35;
-                            }
-                        }
+                            replay.Hidden.Add(new Segment(hiddenStart, targetableEvent.Time));
+                            hiddenStart = target.LastAware;
+                            lineStart = targetableEvent.Time;
+                        } 
                         else
                         {
-                            if (pos.Y > demonicCenter.Y)
+                            if (targetableEvent.Time > hiddenStart)
                             {
-                                // left 
-                                diffX = -1100;
-                                diffY = 40;
-                            }
-                            else
+                                replay.Hidden.Add(new Segment(hiddenStart , targetableEvent.Time));
+                            } else
                             {
-                                // bottom
-                                diffX = -38;
-                                diffY = -1130;
+                                replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
+                                replay.Decorations.Add(new LineDecoration((lineStart, targetableEvent.Time), Colors.Teal, 0.4, new PositionConnector(arenaCenter), new PositionConnector(arenaPos)));
                             }
+                            hiddenStart = targetableEvent.Time;
                         }
-                        var finalPos = shackledPos + new Vector3(diffX, diffY, 0);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(finalPos)));
                     }
                 }
+                replay.Hidden.Add(new Segment(hiddenStart, target.LastAware));
                 break;
             default:
                 break;
@@ -746,11 +778,6 @@ internal class Deimos : BastionOfThePenitent
         }
         else
         {
-            SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(TargetID.ShackledPrisoner));
-            if (shackledPrisoner != null)
-            {
-                shackledPrisoner.AgentItem.OverrideAwareTimes(shackledPrisoner.FirstAware, _deimos100PercentTime);
-            }
             target.SetManualHealth(37388210, new List<(long hpValue, double percent)>()
                 {
                     (35981456 , 100),
