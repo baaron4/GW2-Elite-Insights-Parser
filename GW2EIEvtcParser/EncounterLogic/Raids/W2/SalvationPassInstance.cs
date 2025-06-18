@@ -53,12 +53,12 @@ internal class SalvationPassInstance : SalvationPass
                     {
                         var pack = new List<SingleActor>();
                         pack.Add(narella);
-                        var curZane = zanes.FirstOrDefault(x => new Segment(x.FirstAware, x.LastAware).Intersects(narella.FirstAware, narella.LastAware));
+                        var curZane = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curZane != null)
                         {
                             pack.Add(curZane);
                         }
-                        var curBerg = zanes.FirstOrDefault(x => new Segment(x.FirstAware, x.LastAware).Intersects(narella.FirstAware, narella.LastAware));
+                        var curBerg = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curBerg != null)
                         {
                             pack.Add(curBerg);

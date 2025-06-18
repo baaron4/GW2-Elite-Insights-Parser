@@ -399,8 +399,7 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     end = lastDamage.Time;
                 }
-                var chargedBloodStoneLifespan = new Segment(target.FirstAware, target.LastAware);
-                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => chargedBloodStoneLifespan.Intersects(x.FirstAware, x.LastAware));
+                var activeXera = log.AgentData.GetNPCsByID(TargetID.Xera).FirstOrDefault(x => target.AgentItem.InAwareTimes(x));
                 if (activeXera != null)
                 {
                     var xeraInvulApply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, activeXera).FirstOrDefault();
