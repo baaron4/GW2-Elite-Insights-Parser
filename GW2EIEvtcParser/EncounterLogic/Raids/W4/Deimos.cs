@@ -70,8 +70,6 @@ internal class Deimos : BastionOfThePenitent
 
     private bool _hasPreEvent = false;
 
-    private long _deimos100PercentTime = 0;
-
     private const long PreEventConsiderationConstant = 5000;
 
     public Deimos(int triggerID) : base(triggerID)
@@ -175,7 +173,8 @@ internal class Deimos : BastionOfThePenitent
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success && _deimos10PercentTime > 0)
+        long percent10Start = _deimos10PercentTime;
+        if (!fightData.Success && percent10Start > 0)
         {
             SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
             if (!agentData.TryGetFirstAgentItem(TargetID.Saul, out var saul))
@@ -193,7 +192,7 @@ internal class Deimos : BastionOfThePenitent
             }
             AgentItem attackTarget = attackTargets.Last().AttackTarget;
             // sanity check
-            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
+            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > percent10Start - ServerDelayConstant);
             if (attackableEvent == null)
             {
                 return;
@@ -204,15 +203,15 @@ internal class Deimos : BastionOfThePenitent
                 return;
             }
             // Saul stays around post encounter
-            if (saul.LastAware <= notAttackableEvent.Time || combatData.GetDespawnEvents(saul).Any(x => x.Time <= notAttackableEvent.Time && x.Time >= _deimos10PercentTime))
+            if (saul.LastAware <= notAttackableEvent.Time || combatData.GetDespawnEvents(saul).Any(x => x.Time <= notAttackableEvent.Time && x.Time >= percent10Start))
             {
                 return;
             }
-            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
                 // This means Deimos received damage after becoming non attackable, that means it did not die
-                HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
+                HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && x.Time > lastDamageTaken.Time && x.ToFriendly);
                 if (friendlyDamageToDeimos != null || !AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
                 {
                     return;
@@ -254,11 +253,11 @@ internal class Deimos : BastionOfThePenitent
                         if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                         {
                             _hasPreEvent = true;
-                            _deimos100PercentTime = start - firstHPUpdate.Time;
                             start = firstHPUpdate.Time;
                         }
                     }
                 }
+                break;
             }
         }
         return start >= 0 ? start : genericStart;
@@ -298,6 +297,18 @@ internal class Deimos : BastionOfThePenitent
             {
                 shackledPrisoner.OverrideID(TargetID.ShackledPrisoner, agentData);
                 shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
+        }
+    }
+
+    internal static void RenameTargetSauls(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
+        {
+            if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
+            {
+                string name = (target.IsSpecies(TargetID.Thief) ? "Thief" : (target.IsSpecies(TargetID.Drunkard) ? "Drunkard" : (target.IsSpecies(TargetID.Gambler) ? "Gambler" : "")));
+                target.OverrideName(name);
             }
         }
     }
@@ -375,15 +386,7 @@ internal class Deimos : BastionOfThePenitent
             combatData.SortByTime();
         }
         deimos.OverrideName("Deimos");
-        foreach (SingleActor target in Targets)
-        {
-            if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
-            {
-
-                string name = (target.IsSpecies(TargetID.Thief) ? "Thief" : (target.IsSpecies(TargetID.Drunkard) ? "Drunkard" : (target.IsSpecies(TargetID.Gambler) ? "Gambler" : "")));
-                target.OverrideName(name);
-            }
-        }
+        RenameTargetSauls(Targets);
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -399,6 +402,19 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
+    private long GetMainFightStart(ParsedEvtcLog log, AgentItem deimos)
+    {
+        if (_hasPreEvent)
+        {
+            var deimosMainFightStart = log.CombatData.GetBuffRemoveAllData(SkillIDs.SpawnProtection).Where(x => x.To == deimos).FirstOrDefault();
+            if (deimosMainFightStart != null)
+            {
+                return deimosMainFightStart.Time;
+            }
+        }
+        return log.FightData.FightStart;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -410,20 +426,21 @@ internal class Deimos : BastionOfThePenitent
         {
             var fullFight = phases[0];
             var phase100to0 = fullFight;
-            if (_deimos100PercentTime > 0)
+            var deimosMainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
+            if (deimosMainFightStart > log.FightData.FightStart)
             {
-                var phasePreEvent = new PhaseData(0, _deimos100PercentTime, "Pre Event");
+                var phasePreEvent = new PhaseData(0, deimosMainFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(fullFight);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.DemonicBond)), log);
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 phases.Add(phasePreEvent);
 
-                phase100to0 = new PhaseData(_deimos100PercentTime, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(deimosMainFightStart, log.FightData.FightEnd, "Main Fight");
                 phase100to0.AddParentPhase(fullFight);
                 phase100to0.AddTarget(mainTarget, log);
                 phase100to0.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(phase100to0);
-            } 
+            }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
             AddAddPhases(phases, log, mainTarget, [phase100to10]);
             AddBurstPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
@@ -437,22 +454,24 @@ internal class Deimos : BastionOfThePenitent
         // Determined + additional data on inst change
         BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         var phase100to10 = mainFightPhase;
-        if (invulDei != null || _deimos10PercentTime > 0)
+        long percent10Start = _deimos10PercentTime;
+        if (invulDei != null || percent10Start > 0)
         {
-            long npcDeimosEnd = _deimos10PercentTime;
+            long npcDeimosEnd = percent10Start;
             var mainDeimosPhaseName = "100% - 10%";
             if (invulDei != null)
             {
                 npcDeimosEnd = invulDei.Time;
             }
-            phase100to10 = new PhaseData(_deimos100PercentTime, npcDeimosEnd, mainDeimosPhaseName);
+            var mainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
+            phase100to10 = new PhaseData(mainFightStart, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(mainTarget, log);
             phase100to10.AddParentPhase(mainFightPhase);
             phases.Add(phase100to10);
 
-            if (_deimos10PercentTime > 0 && log.FightData.FightEnd - _deimos10PercentTime > PhaseTimeLimit)
+            if (percent10Start > 0 && log.FightData.FightEnd - percent10Start > PhaseTimeLimit)
             {
-                var phase10to0 = new PhaseData(_deimos10PercentTime, log.FightData.FightEnd, "10% - 0%");
+                var phase10to0 = new PhaseData(percent10Start, log.FightData.FightEnd, "10% - 0%");
                 phase10to0.AddTarget(mainTarget, log);
                 phase10to0.AddParentPhase(mainFightPhase);
                 phases.Add(phase10to0);
