@@ -259,7 +259,8 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim
         ];
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware));
+        HandleXeraPhases(targetsByIDs, log, phases);
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
