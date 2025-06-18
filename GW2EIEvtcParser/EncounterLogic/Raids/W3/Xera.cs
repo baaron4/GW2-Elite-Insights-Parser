@@ -80,7 +80,8 @@ internal class Xera : StrongholdOfTheFaithful
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
         SingleActor mainTarget = GetMainTarget();
-        var invulEnd = mainTarget.AgentItem.Merges.Count > 0 ? mainTarget.AgentItem.Merges[0].MergeStart : mainTarget.LastAware;
+        var mergedXera2 = GetXera2Merge(mainTarget.AgentItem);
+        var invulEnd = mergedXera2 != null ? mergedXera2.FirstAware : mainTarget.LastAware;
         var res = new List<BuffEvent>()
         {
             new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, invulEnd, int.MaxValue, skillData.Get(Determined762), IFF.Unknown, 1, int.MaxValue),
@@ -89,18 +90,37 @@ internal class Xera : StrongholdOfTheFaithful
         return res;
     }
 
+    private AgentItem? GetXera2Merge(AgentItem xera)
+    {
+        return xera.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var xera = GetMainTarget().AgentItem;
-        if (xera.Merges.Count == 0)
+        var mergedXera2 = GetXera2Merge(xera);
+        if (mergedXera2 == null)
         {
             return;
         }
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (fightData.Success && fightData.FightEnd < xera.Merges[0].MergeStart)
+        if (fightData.Success && fightData.FightEnd < mergedXera2.FirstAware)
         {
             fightData.SetSuccess(false, fightData.LogEnd);
         }
+    }
+
+    private long GetMainXeraFightStart(ParsedEvtcLog log, AgentItem xera)
+    {
+        if (_hasPreEvent)
+        {
+            var enterCombat = log.CombatData.GetEnterCombatEvents(xera).FirstOrDefault();
+            if (enterCombat != null)
+            {
+                return enterCombat.Time;
+            }
+        }
+        return log.FightData.FightStart;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -111,12 +131,10 @@ internal class Xera : StrongholdOfTheFaithful
         phases[0].AddTarget(mainTarget, log);
         if (requirePhases)
         {
-            long xeraFightStart = 0;
+            long xeraFightStart = GetMainXeraFightStart(log, mainTarget.AgentItem);
             PhaseData? phase100to0 = null;
-            if (_hasPreEvent)
+            if (xeraFightStart > log.FightData.FightStart)
             {
-                EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(mainTarget.AgentItem).First();
-                xeraFightStart = enterCombat.Time;
                 var phasePreEvent = new PhaseData(0, xeraFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
@@ -145,19 +163,18 @@ internal class Xera : StrongholdOfTheFaithful
                 }
                 phase1.AddTarget(mainTarget, log);
                 phases.Add(phase1);
-
-                var hasSecondPhase = mainTarget.AgentItem.Merges.Count > 0;
+                var mergedXera2 = GetXera2Merge(mainTarget.AgentItem);
                 long glidingEndTime = fightEnd;
-                if (hasSecondPhase)
+                if (mergedXera2 != null)
                 {
-                    var movement = log.CombatData.GetMovementData(mainTarget.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mainTarget.AgentItem.Merges[0].MergeStart + 500);
+                    var movement = log.CombatData.GetMovementData(mainTarget.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mergedXera2.FirstAware + 500);
                     if (movement != null)
                     {
                         glidingEndTime = movement.Time;
                     } 
                     else
                     {
-                        glidingEndTime = mainTarget.AgentItem.Merges[0].MergeStart;
+                        glidingEndTime = mergedXera2.FirstAware;
                     }
                     var phase2 = new PhaseData(glidingEndTime, fightEnd, "Phase 2");
                     if (phase100to0 != null)
@@ -403,10 +420,11 @@ internal class Xera : StrongholdOfTheFaithful
                     {
                         long hiddenEnd = xeraInvulApply.Time + 14000;
                         replay.Hidden.Add(new Segment(hiddenStart, hiddenEnd));
-                        if (activeXera.Merges.Count > 0)
+                        var mergedXera2 = GetXera2Merge(activeXera);
+                        if (mergedXera2 != null)
                         {
-                            var deadEvent = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent < 1 && x.Time > activeXera.FirstAware && x.Time < activeXera.Merges[0].MergeStart);
-                            hiddenStart = deadEvent != null ? deadEvent.Time : activeXera.Merges[0].MergeStart;
+                            var deadEvent = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault(x => x.HealthPercent < 1 && x.Time > activeXera.FirstAware && x.Time < mergedXera2.FirstAware);
+                            hiddenStart = deadEvent != null ? deadEvent.Time : mergedXera2.FirstAware;
                         } 
                         else
                         {
