@@ -35,7 +35,8 @@ public class EncounterCategory
         SunquaPeak,
         SilentSurf,
         LonelyTower,
-        // 
+        Kinfall,
+        //
         Grothmar,
         Bjora,
         Drizzlewood,
@@ -118,7 +119,7 @@ public class EncounterCategory
                 return "The Key of Ahdashim";
             case SubFightCategory.MountBalrior:
                 return "Mount Balrior";
-            // 
+            //
             case SubFightCategory.CaptainMaiTrinBossFractal:
                 return "Captain Mai Trin Boss Fractal";
             case SubFightCategory.ShatteredObservatory:
@@ -129,7 +130,7 @@ public class EncounterCategory
                 return "Silent Surf";
             case SubFightCategory.LonelyTower:
                 return "Lonely Tower";
-            // 
+            //
             case SubFightCategory.UnknownEncounter:
                 return "Unknown Encounter";
             //

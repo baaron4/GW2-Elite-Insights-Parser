@@ -75,10 +75,7 @@ internal class Escort : StrongholdOfTheFaithful
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
-                SingleActor? whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.RadiantMcLeod) && x.LastAware > phase.Start);
-                SingleActor? redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CrimsonMcLeod) && x.LastAware > phase.Start);
-                phase.AddTarget(whiteMcLeod, log);
-                phase.AddTarget(redMcLeod, log);
+                phase.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.RadiantMcLeod, TargetID.CrimsonMcLeod])), log);
                 phase.OverrideTimes(log);
             }
             else

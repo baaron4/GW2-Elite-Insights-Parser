@@ -37,6 +37,7 @@ internal static class EncounterIDs
         public const long SunquaPeakMask = 0x000300;
         public const long SilentSurfMask = 0x000400;
         public const long LonelyTowerMask = 0x000500;
+        public const long KinfallMask = 0x000600;
     }
 
     public static class StrikeMasks
