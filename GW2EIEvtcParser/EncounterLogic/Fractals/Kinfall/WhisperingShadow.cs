@@ -44,7 +44,7 @@ internal class WhisperingShadow : Kinfall
         EncounterID |= 0x000001;
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return [
             TargetID.WhisperingShadow,
@@ -144,9 +144,9 @@ internal class WhisperingShadow : Kinfall
         }
     }
 
-    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log);
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
         // vitreous spike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpike, out var spikes))
@@ -155,7 +155,7 @@ internal class WhisperingShadow : Kinfall
             {
                 var lifespan = effect.ComputeLifespan(log, 1500);
                 var decoration = new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
-                EnvironmentDecorations.AddWithGrowing(decoration, lifespan.end);
+                environmentDecorations.AddWithGrowing(decoration, lifespan.end);
             }
         }
 
@@ -170,7 +170,7 @@ internal class WhisperingShadow : Kinfall
                 var position = new PositionConnector(effect.Position).WithOffset(new(0f, length / 2f, 0f), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 var decoration = new RectangleDecoration(150, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
-                EnvironmentDecorations.Add(decoration);
+                environmentDecorations.Add(decoration);
             }
         }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFrozenTeethFissure, out var fissures))
@@ -181,7 +181,7 @@ internal class WhisperingShadow : Kinfall
                 var position = new PositionConnector(effect.Position);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 var decoration = new RectangleDecoration(150, 380, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation);
-                EnvironmentDecorations.Add(decoration);
+                environmentDecorations.Add(decoration);
             }
         }
 
@@ -199,7 +199,7 @@ internal class WhisperingShadow : Kinfall
                     color = Colors.Ice;
                 }
                 var lifespan = effect.ComputeLifespan(log, 3033);
-                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, color, 0.5, 5000);
+                environmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, color, 0.5, 5000);
             }
         }
 
@@ -214,15 +214,15 @@ internal class WhisperingShadow : Kinfall
                 var position = new PositionConnector(effect.Position).WithOffset(new(0f, length / 2f, 0f), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 var decoration = new RectangleDecoration(50, length, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation);
-                EnvironmentDecorations.Add(decoration);
+                environmentDecorations.Add(decoration);
             }
         }
         var gorefrostMissiles = log.CombatData.GetMissileEventsBySkillID(Gorefrost);
-        EnvironmentDecorations.AddNonHomingMissiles(log, gorefrostMissiles, Colors.SkyBlue, 0.2, 50);
+        environmentDecorations.AddNonHomingMissiles(log, gorefrostMissiles, Colors.SkyBlue, 0.2, 50);
 
         // freezing vortex (rotating aoes)
         var freezingVortexMissiles = log.CombatData.GetMissileEventsBySkillID(FreezingVortex);
-        EnvironmentDecorations.AddNonHomingMissiles(log, freezingVortexMissiles, Colors.Red, 0.1, 200);
+        environmentDecorations.AddNonHomingMissiles(log, freezingVortexMissiles, Colors.Red, 0.1, 200);
     }
 
     protected static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
