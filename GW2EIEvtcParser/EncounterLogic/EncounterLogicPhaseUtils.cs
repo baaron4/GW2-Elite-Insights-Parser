@@ -202,7 +202,8 @@ internal static class EncounterLogicPhaseUtils
         ];
     }
 
-    internal static void ProcessGenericCombatPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName)
+    internal delegate bool CMChecker(ParsedEvtcLog log, SingleActor target);
+    internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, CMChecker? cmChecker = null)
     {
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
         {
@@ -227,6 +228,10 @@ internal static class EncounterLogicPhaseUtils
                 }
                 var phase = new PhaseData(start, end, phaseName);
                 phases.Add(phase);
+                if (cmChecker != null && cmChecker(log, target))
+                {
+                    phase.Name += " CM";
+                }
                 if (hasMultiple)
                 {
                     phase.Name += " " + (encounterCount++);

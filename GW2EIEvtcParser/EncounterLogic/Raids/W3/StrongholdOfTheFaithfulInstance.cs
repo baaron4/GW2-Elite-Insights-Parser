@@ -259,7 +259,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim
         ];
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct");
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);

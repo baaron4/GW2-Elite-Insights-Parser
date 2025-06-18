@@ -123,11 +123,11 @@ internal class SpiritValeInstance : SpiritVale
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), ChestID.GuardianChest, "Vale Guardian");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), ChestID.GuardianChest, "Vale Guardian");
         // To be tested, gadgets
         //ProcessSpiritRacePhases(targetsByIDs, log, phases);
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval");
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha");
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);

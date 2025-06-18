@@ -141,9 +141,9 @@ internal class SalvationPassInstance : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
         HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericCombatPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
