@@ -147,7 +147,7 @@ internal class Samarog : BastionOfThePenitent
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void HandleSpears(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
     {
         // With lingering agents, last aware of the spears are properly set
         if (evtcVersion.Build >= ArcDPSBuilds.LingeringAgents)
@@ -159,7 +159,11 @@ internal class Samarog : BastionOfThePenitent
                 spear.OverrideID(TargetID.SpearAggressionRevulsion, agentData);
             }
         }
+    }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        HandleSpears(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
