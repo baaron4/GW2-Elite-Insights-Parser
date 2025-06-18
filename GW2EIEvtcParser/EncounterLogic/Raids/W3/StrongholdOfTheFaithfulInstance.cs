@@ -350,6 +350,36 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
     }
 
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<BuffEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialBuffEventProcess(combatData, skillData));
+        }
+        return res;
+    }
+
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<CastEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialCastEventProcess(combatData, skillData));
+        }
+        return res;
+    }
+
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    {
+        var res = new List<HealthDamageEvent>();
+        foreach (var subLogic in _subLogics)
+        {
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, skillData));
+        }
+        return res;
+    }
+
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
