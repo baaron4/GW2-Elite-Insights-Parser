@@ -248,6 +248,7 @@ public static class ParserHelper
 
 
     internal delegate bool ExtraRedirection(CombatItem evt, AgentItem from, AgentItem to);
+    internal delegate void StateEventProcessing(CombatItem evt, AgentItem from, AgentItem to);
     /// <summary>
     /// Method used to redirect a subset of events from redirectFrom to to
     /// </summary>
@@ -259,7 +260,7 @@ public static class ParserHelper
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null)
+    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null, StateEventProcessing? stateEventProcessing = null)
     {
         // Redirect combat events
         foreach (CombatItem evt in combatData)
@@ -364,24 +365,30 @@ public static class ParserHelper
             foreach (CombatItem c in copied)
             {
                 c.OverrideTime(to.FirstAware);
+                if (stateEventProcessing != null)
+                {
+                    combatData.SortByTime();
+                    stateEventProcessing(c, redirectFrom, to);
+                }
+            }
+            if (stateEventProcessing != null)
+            {
+                combatData.SortByTime();
             }
         }
-        // Redirect NPC masters
-        foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.NPC))
+        // Redirect NPC and Gadget masters
+        IReadOnlyList<AgentItem> masterRedirectionCandidates = [
+             .. agentData.GetAgentByType(AgentItem.AgentType.NPC),
+             .. agentData.GetAgentByType(AgentItem.AgentType.Gadget)
+            ];
+        foreach (AgentItem ag in masterRedirectionCandidates)
         {
             if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
             {
                 ag.SetMaster(to);
             }
         }
-        // Redirect Gadget masters
-        foreach (AgentItem ag in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
-        {
-            if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
-            {
-                ag.SetMaster(to);
-            }
-        }
+
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 

@@ -115,23 +115,11 @@ internal class Deimos : BastionOfThePenitent
     {
         foreach (AgentItem gadget in gadgets)
         {
-            RedirectAllEvents(combatData, extensions, agentData, gadget, deimos,
+            RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, gadget, [gadget], deimos, false,
                 (evt, from, to) =>
                 {
                     // Only keep damage events from arms
                     if (from != mainBody && !evt.IsDamage())
-                    {
-                        return false;
-                    }
-                    if (evt.Time < upperTimeThreshold)
-                    {
-                        // skip events before targetable that are not attack target or position related
-                        if (evt.IsStateChange != StateChange.AttackTarget && evt.IsStateChange != StateChange.Targetable && !evt.IsGeographical())
-                        {
-                            return false;
-                        }
-                    }
-                    if (evt.IsStateChange == StateChange.MaxHealthUpdate)
                     {
                         return false;
                     }
@@ -140,15 +128,18 @@ internal class Deimos : BastionOfThePenitent
                     {
                         return false;
                     }
+                    return true;
+                },
+                (evt, from, to) =>
+                {
+                    if (evt.IsStateChange == StateChange.MaxHealthUpdate)
+                    {
+                        evt.OverrideSrcAgent(ParserHelper._unknownAgent);
+                    }
                     if (evt.IsGeographical() && evt.Time < upperTimeThreshold)
                     {
                         evt.OverrideTime(upperTimeThreshold);
                     }
-                    if (evt.Time < to.FirstAware)
-                    {
-                        evt.OverrideTime(to.FirstAware);
-                    }
-                    return true;
                 }
             );
         }
@@ -371,6 +362,7 @@ internal class Deimos : BastionOfThePenitent
             invulApp.OverrideValue((int)(Math.Min(deimos10PercentTargetable, deimos.LastAware) - invulApp.Time));
         }
         //
+        deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         if (deimosStructBody != null)
         {
             MergeWithGadgets(deimos.AgentItem, _deimos10PercentTime, gadgetAgents, deimosStructBody, combatData, agentData, extensions);
@@ -378,7 +370,6 @@ internal class Deimos : BastionOfThePenitent
             combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             combatData.SortByTime();
         }
-        deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         deimos.OverrideName("Deimos");
         foreach (SingleActor target in Targets)
         {
@@ -535,6 +526,7 @@ internal class Deimos : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Deimos:
+                // TODO: check if that works in instances
                 AgentItem? deimosBody = target.AgentItem.Merges.Count > 0 ? target.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Type == AgentItem.AgentType.Gadget && x.Merged.FirstAware > target.FirstAware + 20000)?.Merged : null;
                 var saulCheckThreshold = deimosBody != null ? (deimosBody.FirstAware - target.FirstAware) / 2 + target.FirstAware : target.LastAware;
                 var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => new Segment(x.FirstAware, x.LastAware).Intersects(target.FirstAware, saulCheckThreshold));
