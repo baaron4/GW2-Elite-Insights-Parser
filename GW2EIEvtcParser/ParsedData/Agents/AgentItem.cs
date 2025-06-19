@@ -376,6 +376,10 @@ public class AgentItem
     {
         return FirstAware <= time && LastAware >= time;
     }
+    public bool InAwareTimes(AgentItem other)
+    {
+        return new Segment(FirstAware, LastAware).Intersects(other.FirstAware, other.LastAware);
+    }
 
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
