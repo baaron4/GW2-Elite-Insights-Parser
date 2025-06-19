@@ -41,10 +41,13 @@ public abstract class CastEvent : TimeCombatEvent
         Skill = skill;
         Caster = caster;
     }
-
-    public virtual long GetInterruptedByStunTime(ParsedEvtcLog log)
+    public virtual long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)
     {
         return EndTime;
+    }
+    public long GetInterruptedByStunTime(ParsedEvtcLog log)
+    {
+        return GetInterruptedByBuffTime(log, SkillIDs.Stun);
     }
 }
 

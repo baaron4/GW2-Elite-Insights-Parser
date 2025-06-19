@@ -136,12 +136,12 @@ public class AnimatedCastEvent : CastEvent
         SavedDuration = 0;
     }
 
-    public override long GetInterruptedByStunTime(ParsedEvtcLog log)
+    public override long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)
     {
-        var stunStatus = log.FindActor(Caster).GetBuffStatus(log, SkillIDs.Stun, Time, ExpectedEndTime).FirstOrNull((in Segment x) => x.Value > 0);
-        if (stunStatus != null)
+        var buffStatus = log.FindActor(Caster).GetBuffStatus(log, buffID, Time, ExpectedEndTime).FirstOrNull((in Segment x) => x.Value > 0);
+        if (buffStatus != null)
         {
-            return stunStatus.Value.Start;
+            return Math.Max(buffStatus.Value.Start, Time);
         }
         return EndTime;
     }
