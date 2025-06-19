@@ -446,7 +446,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                             break;
                         // Petrify - Breakbar 80%, 50%, 10%
                         case PetrifySkill:
-                            lifespan = (cast.Time, cast.EndTime);
+                            lifespan = (cast.Time, cast.GetInterruptedByBuffTime(log, InvulnerabilityCerus));
                             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.Time + 10000, 100)], new AgentConnector(target))
                                 .UsingRotationConnector(new AngleConnector(180)));
                             break;
