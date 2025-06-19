@@ -569,6 +569,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         {
             return phases;
         }
+        var eliteScarletPhantoms = Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar]));
         if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Any())
         {
             HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
@@ -581,12 +582,15 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 {
                     maiTrinStart = buffRemove.Time;
                 }
+                var scarletPhantoms = TrashMobs.Where(x => x.IsSpecies(TargetID.ScarletPhantom) && x.LastAware < maiTrinEnd && !eliteScarletPhantoms.Any(y => y.AgentItem.InAwareTimes(x.AgentItem))).ToList();
+
                 var maiTrinPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
                 maiTrinPhase.AddParentPhase(phases[0]);
                 maiTrinPhase.AddTarget(maiTrin, log);
                 phases.Add(maiTrinPhase);
+
                 // Candidate phases
-                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd, false);
                 var candidateMainPhases = new List<PhaseData>();
                 var candidateSplitPhases = new List<PhaseData>();
                 for (int i = 0; i < maiPhases.Count; i++)
@@ -601,9 +605,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     else
                     {
                         candidateSplitPhases.Add(subPhase);
-                        AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar], log);
+                        subPhase.AddTargets(eliteScarletPhantoms, log);
                     }
                 }
+
+                var randomUntargetableStart = long.MaxValue;
+                var randomUntargetableEnd = long.MinValue;
                 // Split phases
                 var splitPhaseCount = 1;
                 foreach (var candidateSplitPhase in candidateSplitPhases)
@@ -612,24 +619,36 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     {
                         candidateSplitPhase.Name = "Mai Trin Split Phase " + (splitPhaseCount++);
                         phases.Add(candidateSplitPhase);
+                    } 
+                    else if (scarletPhantoms.Any(x => x.FirstAware < candidateSplitPhase.Start) && scarletPhantoms.Any(x => x.LastAware > candidateSplitPhase.End)) 
+                    {
+                        randomUntargetableStart = Math.Min(randomUntargetableStart, candidateSplitPhase.Start);
+                        randomUntargetableEnd = Math.Max(randomUntargetableEnd, candidateSplitPhase.End);
                     }
                 }
-                // Main phases, 
+                // Main phases
                 var mainPhaseCount = 1;
-                PhaseData? prevPhase = null;
                 foreach(var candidateMainPhase in candidateMainPhases)
                 {
-                    if (candidateMainPhase.DurationInMS > MinimumInCombatDuration)
+                    var hasScarletPhantomsAround = scarletPhantoms.Any(x => x.FirstAware < candidateMainPhase.Start) && scarletPhantoms.Any(x => x.LastAware > candidateMainPhase.End);
+                    if (!hasScarletPhantomsAround)
                     {
                         candidateMainPhase.Name = "Mai Trin Phase " + (mainPhaseCount++);
                         phases.Add(candidateMainPhase);
-                        prevPhase = candidateMainPhase;
                     } 
-                    // Merge small blips of untargetables
-                    else if (prevPhase != null && prevPhase.End + 500 > candidateMainPhase.Start)
+                    else
                     {
-                        prevPhase.OverrideEnd(candidateMainPhase.End);
+                        randomUntargetableStart = Math.Min(randomUntargetableStart, candidateMainPhase.Start);
+                        randomUntargetableEnd = Math.Max(randomUntargetableEnd, candidateMainPhase.End);
                     }
+                }
+                //
+                if (randomUntargetableStart != long.MaxValue)
+                {
+                    var scarletPhantomPhase = new PhaseData(randomUntargetableStart, randomUntargetableEnd, "Mai Tri Random Untargetable");
+                    scarletPhantomPhase.AddParentPhase(maiTrinPhase);
+                    scarletPhantomPhase.AddTarget(maiTrin, log);
+                    phases.Add(scarletPhantomPhase);
                 }
             }
         }
@@ -692,7 +711,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 else
                 {
                     subPhase.Name = "Echo Split Phase " + ((i / 2) + 1);
-                    AddTargetsToPhase(subPhase, [TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar], log);
+                    subPhase.AddTargets(eliteScarletPhantoms, log);
                 }
             }
             phases.AddRange(echoPhases);
