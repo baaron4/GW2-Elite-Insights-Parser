@@ -168,6 +168,17 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return friendlies.Distinct().ToList();
     }
 
+    private void HandleDeimosAndItsGadgets(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var targetableEvents = combatData.Where(x => x.IsStateChange == StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => attackTargetEvents.Any(y => y.AttackTarget == x.Src));
+        foreach (var deimos in Targets.Where(x => x.IsSpecies(TargetID.Deimos)))
+        {
+            (AgentItem? deimosStructBody, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, long notTargetable) = Deimos.FindDeimos10PercentBodyStructWithAttackTargets(deimos, fightData, agentData, combatData, attackTargetEvents, targetableEvents);
+            Deimos.HandleDeimosAndItsGadgets(deimos, deimosStructBody, gadgetAgents, agentData, combatData, extensions, deimos10PercentTargetable, notTargetable + 1000);
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Samarog.HandleSpears(evtcVersion, agentData, combatData);
@@ -176,6 +187,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Deimos Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         Deimos.RenameTargetSauls(Targets);
+        HandleDeimosAndItsGadgets(fightData, agentData, combatData, extensions);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
@@ -248,6 +260,10 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     }
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
+       foreach (var deimos in Targets.Where(x => x.IsSpecies(TargetID.Deimos)))
+        {
+            Deimos.AdjustDeimosHP(deimos, deimos.GetHealth(combatData) > 40e6);
+        }
         return FightData.EncounterMode.NotApplicable;
     }
 }
