@@ -41,6 +41,7 @@ internal static class EncounterImages
     internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";
     internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
     internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
+    internal const string CombatReplayEparch = "https://i.imgur.com/begYkfC.png";
 
     #endregion FRACTALS
 
