@@ -93,10 +93,8 @@ internal class Eparch : LonelyTower
     {
         return new CombatReplayMap(CombatReplayEparch,
                         (1035, 934),
-(-950, 1040, 2880, 4496)
-); 
-        //(823, 1000),
-         //               (5411, -95, 8413, 3552));
+                        (-950, 1040, 2880, 4496)); 
+
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
