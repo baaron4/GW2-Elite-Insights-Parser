@@ -253,7 +253,7 @@ internal class Deimos : BastionOfThePenitent
                         if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                         {
                             _hasPreEvent = true;
-                            start = firstHPUpdate.Time;
+                            start = firstGreen.Time - 2000;
                         }
                     }
                 }
