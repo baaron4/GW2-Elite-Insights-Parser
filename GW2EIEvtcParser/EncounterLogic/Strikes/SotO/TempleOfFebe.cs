@@ -309,7 +309,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         {
             foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
             {
-                if (Math.Abs(cerus.FirstAware - embodiment.FirstAware) < ServerDelayConstant)
+                if (Math.Abs(cerus.FirstAware - embodiment.FirstAware) < 100) // 100ms for edge cases of late spawns
                 {
                     switch (embodiment.ID)
                     {
