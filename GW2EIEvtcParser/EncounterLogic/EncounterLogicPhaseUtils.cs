@@ -213,10 +213,10 @@ internal static class EncounterLogicPhaseUtils
     internal delegate bool CMChecker(ParsedEvtcLog log, SingleActor target);
     internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, CMChecker? cmChecker = null)
     {
+        var mainPhase = phases[0];
+        var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
         {
-            bool hasMultiple = targets.Count > 1;
-            int encounterCount = 1;
             var lastTarget = targets.Last();
             var chest = log.AgentData.GetGadgetsByID(chestID).FirstOrDefault();
             foreach (var target in targets)
@@ -236,13 +236,10 @@ internal static class EncounterLogicPhaseUtils
                 }
                 var phase = new PhaseData(start, end, phaseName);
                 phases.Add(phase);
+                encounterPhases.Add(phase);
                 if (cmChecker != null && cmChecker(log, target))
                 {
                     phase.Name += " CM";
-                }
-                if (hasMultiple)
-                {
-                    phase.Name += " " + (encounterCount++);
                 }
                 if (success)
                 {
@@ -252,10 +249,22 @@ internal static class EncounterLogicPhaseUtils
                 {
                     phase.Name += " (Failure)";
                 }
-                phase.AddParentPhase(phases[0]);
+                phase.AddParentPhase(mainPhase);
                 phase.AddTarget(target, log);
                 phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
-                phases[0].AddTarget(target, log);
+                mainPhase.AddTarget(target, log);
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
+
+    internal static void NumericallyRenamePhases(IReadOnlyList<PhaseData> phases)
+    {
+        if (phases.Count > 1)
+        {
+            for (int i = 0; i < phases.Count; i++)
+            {
+                phases[i].Name += " " + (i + 1);
             }
         }
     }
