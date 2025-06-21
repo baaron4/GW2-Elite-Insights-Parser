@@ -12,7 +12,7 @@ internal class NightmareInstance : Nightmare
 {
     public NightmareInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconNightmare;
         Extension = "nightmare";
     }
@@ -22,7 +22,7 @@ internal class NightmareInstance : Nightmare
         return "Nightmare";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

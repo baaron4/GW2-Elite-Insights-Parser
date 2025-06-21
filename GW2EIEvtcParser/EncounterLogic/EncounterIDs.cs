@@ -51,6 +51,7 @@ internal static class EncounterIDs
 
     public static class WvWMasks
     {
+        public const long FullInstanceMask = 0x000001;
         public const long EternalBattlegroundsMask = 0x000100;
         public const long GreenAlpineBorderlandsMask = 0x000200;
         public const long BlueAlpineBorderlandsMask = 0x000300;

@@ -59,17 +59,17 @@ internal class UnknownBossLogic : UnknownFightLogic
         FinalizeComputeFightTargets();
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         throw new InvalidOperationException("GetTargetIDs not valid for Unknown");
     }
 
-    protected override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
+    internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         throw new InvalidOperationException("GetFriendlyNPCIDs not valid for Unknown");
     }
 
-    protected override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
     }

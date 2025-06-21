@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -207,5 +208,64 @@ internal static class EncounterLogicPhaseUtils
         [
             new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
         ];
+    }
+
+    internal delegate bool CMChecker(ParsedEvtcLog log, SingleActor target);
+    internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, CMChecker? cmChecker = null)
+    {
+        var mainPhase = phases[0];
+        var encounterPhases = new List<PhaseData>();
+        if (targetsByIDs.TryGetValue((int)targetID, out var targets))
+        {
+            var lastTarget = targets.Last();
+            var chest = log.AgentData.GetGadgetsByID(chestID).FirstOrDefault();
+            foreach (var target in targets)
+            {
+                var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+                if (enterCombat == null && !log.CombatData.GetDamageTakenData(target.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
+                {
+                    continue;
+                }
+                long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
+                bool success = false;
+                long end = target.LastAware;
+                if (target == lastTarget && chest != null)
+                {
+                    end = chest.FirstAware;
+                    success = true;
+                }
+                var phase = new PhaseData(start, end, phaseName);
+                phases.Add(phase);
+                encounterPhases.Add(phase);
+                if (cmChecker != null && cmChecker(log, target))
+                {
+                    phase.Name += " CM";
+                }
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phase.AddParentPhase(mainPhase);
+                phase.AddTarget(target, log);
+                phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
+                mainPhase.AddTarget(target, log);
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
+
+    internal static void NumericallyRenamePhases(IReadOnlyList<PhaseData> phases)
+    {
+        if (phases.Count > 1)
+        {
+            for (int i = 0; i < phases.Count; i++)
+            {
+                phases[i].Name += " " + (i + 1);
+            }
+        }
     }
 }
