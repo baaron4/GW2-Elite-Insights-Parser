@@ -139,11 +139,11 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             var chest = log.AgentData.GetGadgetsByID(ChestID.SaulsTreasureChest).FirstOrDefault();
             if (deimosDummy != null)
             {
-                long start = 0;
+                long encounterStartThreshold = 0;
                 var greenApplies = log.CombatData.GetBuffApplyData(SkillIDs.GreenTeleport);
                 foreach (AbstractBuffApplyEvent buffApplyEvent in greenApplies)
                 {
-                    if (buffApplyEvent.Time >= start)
+                    if (buffApplyEvent.Time >= encounterStartThreshold)
                     {
                         long encounterStart = long.MaxValue;
                         long encounterEnd = long.MinValue;
@@ -254,6 +254,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         {
                             phase.AddTargets(drunkards, log, PhaseData.TargetPriority.NonBlocking);
                         }
+                        encounterStartThreshold = encounterEnd;
                     }
                 }
             }
