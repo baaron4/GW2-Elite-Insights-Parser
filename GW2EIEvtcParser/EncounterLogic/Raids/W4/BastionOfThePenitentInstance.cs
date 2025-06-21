@@ -264,6 +264,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         {
             Deimos.AdjustDeimosHP(deimos, deimos.GetHealth(combatData) > 40e6);
         }
-        return FightData.EncounterMode.NotApplicable;
+        return base.GetEncounterMode(combatData, agentData, fightData);
     }
 }

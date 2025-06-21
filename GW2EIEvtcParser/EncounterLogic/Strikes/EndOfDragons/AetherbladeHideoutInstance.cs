@@ -1,8 +1,10 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -36,13 +38,6 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
     {
         fightData.SetSuccess(true, fightData.FightEnd);
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        AetherbladeHideout.SanitizeLastHealthUpdateEvents(Targets, combatData);
-        AetherbladeHideout.RenameScarletPhantoms(Targets);
-    }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
@@ -64,6 +59,33 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         return _subLogic.GetInstantCastFinders();
     }
 
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        AetherbladeHideout.SanitizeLastHealthUpdateEvents(Targets, combatData);
+        AetherbladeHideout.RenameScarletPhantoms(Targets);
+    }
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return _subLogic.SpecialBuffEventProcess(combatData, skillData);
+    }
+
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return _subLogic.SpecialCastEventProcess(combatData, skillData);
+    }
+
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    {
+        return _subLogic.SpecialDamageEventProcess(combatData, skillData);
+    }
+
+    // TODO: handle duplicates due multiple base method calls in Combat Replay methods
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        _subLogic.ComputeNPCCombatReplayActors(target, log, replay);
+    }
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         _subLogic.ComputePlayerCombatReplayActors(player, log, replay);
@@ -72,5 +94,11 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         _subLogic.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+    }
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        var sortIDs = new Dictionary<TargetID, int>();
+        AddSortIDWithOffset(sortIDs, _subLogic.GetTargetsSortIDs(), 0);
+        return sortIDs;
     }
 }

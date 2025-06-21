@@ -479,6 +479,10 @@ public abstract class FightLogic
 
     internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            return FightData.EncounterMode.NotApplicable;
+        }
         return FightData.EncounterMode.Normal;
     }
 
