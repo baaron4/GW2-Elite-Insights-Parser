@@ -13,25 +13,25 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class AetherbladeHideoutInstance : EndOfDragonsStrike
 {
-    private readonly AetherbladeHideout _subLogic;
+    private readonly AetherbladeHideout _aetherbladeHideout;
     public AetherbladeHideoutInstance(int triggerID) : base(triggerID)
     {
         EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide_map";
         EncounterCategoryInformation.InSubCategoryOrder = 0;
-        _subLogic = new AetherbladeHideout(NonIdentifiedSpecies);
-        MechanicList.Add(_subLogic.Mechanics);
+        _aetherbladeHideout = new AetherbladeHideout(NonIdentifiedSpecies);
+        MechanicList.Add(_aetherbladeHideout.Mechanics);
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        return _subLogic.GetCombatReplayMap(log);
+        return _aetherbladeHideout.GetCombatReplayMap(log);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        return "Aetherblade Hideout (Map)";
+        return "Strike Mission: Aetherblade Hideout";
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -52,11 +52,11 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
-        return _subLogic.GetTrashMobsIDs();
+        return _aetherbladeHideout.GetTrashMobsIDs();
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return _subLogic.GetInstantCastFinders();
+        return _aetherbladeHideout.GetInstantCastFinders();
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -68,37 +68,37 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
     }
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        return _subLogic.SpecialBuffEventProcess(combatData, skillData);
+        return _aetherbladeHideout.SpecialBuffEventProcess(combatData, skillData);
     }
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        return _subLogic.SpecialCastEventProcess(combatData, skillData);
+        return _aetherbladeHideout.SpecialCastEventProcess(combatData, skillData);
     }
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        return _subLogic.SpecialDamageEventProcess(combatData, skillData);
+        return _aetherbladeHideout.SpecialDamageEventProcess(combatData, skillData);
     }
 
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        _subLogic.ComputeNPCCombatReplayActors(target, log, replay);
+        _aetherbladeHideout.ComputeNPCCombatReplayActors(target, log, replay);
     }
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        _subLogic.ComputePlayerCombatReplayActors(player, log, replay);
+        _aetherbladeHideout.ComputePlayerCombatReplayActors(player, log, replay);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        _subLogic.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        _aetherbladeHideout.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var sortIDs = new Dictionary<TargetID, int>();
-        AddSortIDWithOffset(sortIDs, _subLogic.GetTargetsSortIDs(), 0);
+        AddSortIDWithOffset(sortIDs, _aetherbladeHideout.GetTargetsSortIDs(), 0);
         return sortIDs;
     }
 }

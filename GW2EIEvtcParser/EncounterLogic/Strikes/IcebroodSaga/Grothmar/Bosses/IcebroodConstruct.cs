@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.EIData.Trigonometry;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-internal class IcebroodConstruct : IcebroodSagaStrike
+internal class IcebroodConstruct : Grothmar
 {
     public IcebroodConstruct(int triggerID) : base(triggerID)
     {
@@ -41,7 +41,6 @@ internal class IcebroodConstruct : IcebroodSagaStrike
         );
         Extension = "icebrood";
         Icon = EncounterIconIcebroodConstruct;
-        EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Grothmar;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }

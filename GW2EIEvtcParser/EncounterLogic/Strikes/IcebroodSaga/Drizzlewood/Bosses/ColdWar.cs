@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-internal class ColdWar : IcebroodSagaStrike
+internal class ColdWar : Drizzlewood
 {
     public ColdWar(int triggerID) : base(triggerID)
     {
@@ -22,7 +22,6 @@ internal class ColdWar : IcebroodSagaStrike
         );
         Extension = "coldwar";
         Icon = EncounterIconColdWar;
-        EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Drizzlewood;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000006;
     }
