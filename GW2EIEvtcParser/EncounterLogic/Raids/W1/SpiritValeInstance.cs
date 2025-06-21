@@ -45,10 +45,9 @@ internal class SpiritValeInstance : SpiritVale
 
     private static void ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
+        var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
         {
-            bool hasMultiple = etherealBarriers.Count > 4;
-            int encounterCount = 1;
             var packedEtherealBarriers = new List<List<SingleActor>>(etherealBarriers.Count / 4 + 1);
             var currentPack = new List<SingleActor>();
             packedEtherealBarriers.Add(currentPack);
@@ -99,10 +98,6 @@ internal class SpiritValeInstance : SpiritVale
                     success = true;
                 }
                 var phase = new PhaseData(start, end, "Spirit Race");
-                if (hasMultiple)
-                {
-                    phase.Name += " " + (encounterCount++);
-                }
                 if (success)
                 {
                     phase.Name += " (Success)";
@@ -112,11 +107,13 @@ internal class SpiritValeInstance : SpiritVale
                     phase.Name += " (Failure)";
                 }
                 phases.Add(phase);
+                encounterPhases.Add(phase);
                 phase.AddTargets(etherealBarrierPack, log);
                 phase.AddParentPhase(phases[0]);
                 phases[0].AddTargets(etherealBarrierPack, log);
             }
         }
+        NumericallyRenamePhases(encounterPhases);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

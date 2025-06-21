@@ -68,10 +68,10 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
 
     private static void HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
+        var encounterPhases = new List<PhaseData>();
+        var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            bool hasMultiple = cairns.Count > 1;
-            int encounterCount = 1;
             var lastTarget = cairns.Last();
             var chest = log.AgentData.GetGadgetsByID(ChestID.CairnChest).FirstOrDefault();
             foreach (var cairn in cairns)
@@ -108,13 +108,10 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
                 var phase = new PhaseData(start, end, "Cairn");
                 phases.Add(phase);
+                encounterPhases.Add(phase);
                 if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= cairn.FirstAware && x.Time <= cairn.LastAware))
                 {
                     phase.Name += " CM";
-                }
-                if (hasMultiple)
-                {
-                    phase.Name += " " + (encounterCount++);
                 }
                 if (success)
                 {
@@ -124,11 +121,144 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 {
                     phase.Name += " (Failure)";
                 }
-                phase.AddParentPhase(phases[0]);
+                phase.AddParentPhase(mainPhase);
                 phase.AddTarget(cairn, log);
-                phases[0].AddTarget(cairn, log);
+                mainPhase.AddTarget(cairn, log);
             }
         }
+        NumericallyRenamePhases(encounterPhases);
+    }
+
+    private static void HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var mainPhase = phases[0];
+        var encounterPhases = new List<PhaseData>();
+        if (targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies) && targetsByIDs.TryGetValue((int)TargetID.DemonicBond, out var demonicBonds))
+        {
+            var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
+            var chest = log.AgentData.GetGadgetsByID(ChestID.SaulsTreasureChest).FirstOrDefault();
+            if (deimosDummy != null)
+            {
+                long start = 0;
+                var greenApplies = log.CombatData.GetBuffApplyData(SkillIDs.GreenTeleport);
+                foreach (AbstractBuffApplyEvent buffApplyEvent in greenApplies)
+                {
+                    if (buffApplyEvent.Time >= start)
+                    {
+                        long encounterStart = long.MaxValue;
+                        long encounterEnd = long.MinValue;
+                        // Find encounter start based on demonic bonds being targetable
+                        foreach (var demonicBond in demonicBonds)
+                        {
+                            var attackTargetEvents = log.CombatData.GetAttackTargetEvents(demonicBond.AgentItem);
+                            foreach (var attackTargetEvent in attackTargetEvents)
+                            {
+                                var targetableEvent = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).FirstOrDefault(x => x.Time >= buffApplyEvent.Time - 2000 && x.Time <= buffApplyEvent.Time);
+                                if (targetableEvent != null)
+                                {
+                                    encounterStart = targetableEvent.Time;
+                                    break;
+                                }
+                            }
+                        }
+                        if (encounterStart == long.MaxValue)
+                        {
+                            continue;
+                        }
+                        // Find deimos or remain on dummy
+                        SingleActor target = deimosDummy;
+                        if (targetsByIDs.TryGetValue((int)TargetID.Deimos, out var deimoss))
+                        {
+                            var deimos = deimoss.FirstOrDefault(x => x.FirstAware > encounterStart || x.AgentItem.InAwareTimes(encounterStart));
+                            if (deimos != null)
+                            {
+                                target = deimos;
+                            }
+                        }
+                        // Verify that it is the deimos of current encounter and not a following one
+                        // Check if the following batch of targetable demonic bonds are before its first aware
+                        if (target.IsSpecies(TargetID.Deimos))
+                        {
+                            foreach (var demonicBond in demonicBonds)
+                            {
+                                var attackTargetEvents = log.CombatData.GetAttackTargetEvents(demonicBond.AgentItem);
+                                foreach (var attackTargetEvent in attackTargetEvents)
+                                {
+                                    var targetableEvent = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).FirstOrDefault(x => x.Time >= encounterStart + 5000);
+                                    if (targetableEvent != null)
+                                    {
+                                        if (target.FirstAware > targetableEvent.Time)
+                                        {
+                                            target = deimosDummy;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        // Wiped during pre event
+                        if (!target.IsSpecies(TargetID.Deimos))
+                        {
+                            var prides = log.AgentData.GetNPCsByID(TargetID.Pride);
+                            if (prides.Any())
+                            {
+                                encounterEnd = Math.Max(prides.Max(x => x.LastAware), encounterEnd);
+                            }
+                            var greeds = log.AgentData.GetNPCsByID(TargetID.Greed);
+                            if (greeds.Any())
+                            {
+                                encounterEnd = Math.Max(greeds.Max(x => x.LastAware), encounterEnd);
+                            }
+                        }
+                        if (encounterEnd == long.MinValue)
+                        {
+                            continue;
+                        }
+                        bool success = false;
+                        if (chest != null && chest.InAwareTimes(encounterStart, encounterEnd + 2000))
+                        {
+                            encounterEnd = chest.FirstAware;
+                            success = true;
+                        }
+                        var phase = new PhaseData(encounterStart, encounterEnd, "Deimos");
+                        phases.Add(phase);
+                        encounterPhases.Add(phase);
+                        if (target.IsSpecies(TargetID.Deimos))
+                        {
+                            mainPhase.AddTarget(target, log);
+                            if (target.GetHealth(log.CombatData) > 40e6)
+                            {
+                                phase.Name += " CM";
+                            }
+                        }
+                        if (success)
+                        {
+                            phase.Name += " (Success)";
+                        }
+                        else
+                        {
+                            phase.Name += " (Failure)";
+                        }
+                        phase.AddParentPhase(mainPhase);
+                        phase.AddTarget(target, log);
+                        phase.AddTargets(demonicBonds, log, PhaseData.TargetPriority.Blocking);
+                        if (targetsByIDs.TryGetValue((int)TargetID.Thief, out var thieves))
+                        {
+                            phase.AddTargets(thieves, log, PhaseData.TargetPriority.NonBlocking);
+                        }
+                        if (targetsByIDs.TryGetValue((int)TargetID.Gambler, out var gamblers))
+                        {
+                            phase.AddTargets(gamblers, log, PhaseData.TargetPriority.NonBlocking);
+                        }
+                        if (targetsByIDs.TryGetValue((int)TargetID.Drunkard, out var drunkards))
+                        {
+                            phase.AddTargets(drunkards, log, PhaseData.TargetPriority.NonBlocking);
+                        }
+                    }
+                }
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -138,6 +268,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         HandleCairnPhases(targetsByIDs, log, phases);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], ChestID.RecreationRoomChest, "Mursaat Overseer", (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), ChestID.SamarogChest, "Samarog", (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6);
+        HandleDeimosPhases(targetsByIDs, log, phases);
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
