@@ -12,7 +12,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
 {
     public MythwrightGambitInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconMythwrightGambit;
         Extension = "mythgamb";
     }
@@ -22,7 +22,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return "Mythwright Gambit";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -13,7 +13,7 @@ internal abstract class OpenWorldLogic : FightLogic
         EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.OpenWorld;
         EncounterID |= EncounterIDs.EncounterMasks.OpenWorldMask;
     }
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }

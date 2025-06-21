@@ -18,6 +18,11 @@ internal abstract class RaidLogic : FightLogic
         EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
     }
 
+    internal static RewardEvent? GetOldRaidReward2Event(CombatData combatData, long start, long end)
+    {
+        return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         if (IsInstance)
@@ -60,7 +65,7 @@ internal abstract class RaidLogic : FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return new[] { GetTargetID(GenericTriggerID) };
     }
