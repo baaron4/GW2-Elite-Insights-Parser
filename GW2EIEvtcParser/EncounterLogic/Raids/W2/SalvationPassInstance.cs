@@ -99,8 +99,7 @@ internal class SalvationPassInstance : SalvationPass
         //
         var lastPack = packedTrios.Last();
         var chest = log.AgentData.GetGadgetsByID(ChestID.ChestOfPrisonCamp).FirstOrDefault();
-        var hasMultiple = packedTrios.Count > 1;
-        var encounterCount = 1;
+        var encounterPhases = new List<PhaseData>();
         foreach (var pack in packedTrios)
         {
             long start = pack.Min(x => x.FirstAware);
@@ -120,10 +119,7 @@ internal class SalvationPassInstance : SalvationPass
             }
             var phase = new PhaseData(start, end, "Bandit Trio");
             phases.Add(phase);
-            if (hasMultiple)
-            {
-                phase.Name += " " + (encounterCount++);
-            }
+            encounterPhases.Add(phase);
             if (success)
             {
                 phase.Name += " (Success)";
@@ -135,6 +131,7 @@ internal class SalvationPassInstance : SalvationPass
             phase.AddTargets(pack, log);
             phases[0].AddTargets(pack, log);
         }
+        NumericallyRenamePhases(encounterPhases);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
