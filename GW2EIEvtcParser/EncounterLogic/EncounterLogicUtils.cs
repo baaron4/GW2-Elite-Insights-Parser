@@ -189,7 +189,7 @@ internal static class EncounterLogicUtils
 
     internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets, HashSet<int> ignoredSpecies)
     {
-        var targetsByID = targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        var targetsByID = targets.Where(x => !x.AgentItem.IsPlayer).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in targetsByID)
         {
             if (ignoredSpecies.Contains(pair.Key))
