@@ -155,12 +155,17 @@ internal class SoullessHorror : HallOfChains
         int i = 1;
         foreach (CastEvent c in howling)
         {
-            var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i++);
-            phase.AddTarget(mainTarget, log);
-            phase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
-            phase.AddParentPhase(phases[0]);
+            var preBreakbarPhase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i);
+            preBreakbarPhase.AddTarget(mainTarget, log);
+            preBreakbarPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
+            preBreakbarPhase.AddParentPhase(phases[0]);
+            phases.Add(preBreakbarPhase);
+            var howlingDeathPhase = new PhaseData(Math.Min(c.Time, fightEnd), Math.Min(c.EndTime, fightEnd), "Howling Death " + (i++));
+            howlingDeathPhase.AddTarget(mainTarget, log);
+            howlingDeathPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
+            howlingDeathPhase.AddParentPhase(phases[0]);
+            phases.Add(howlingDeathPhase);
             start = c.EndTime;
-            phases.Add(phase);
         }
         if (fightEnd - start > PhaseTimeLimit)
         {
