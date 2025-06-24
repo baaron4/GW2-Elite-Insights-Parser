@@ -44,28 +44,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return "Bastion Of The Penitent";
     }
 
-    internal override List<InstantCastFinder> GetInstantCastFinders()
-    {
-        List<InstantCastFinder> finders = [
-            .. _cairn.GetInstantCastFinders(),
-            .. _mursaatOverseer.GetInstantCastFinders(),
-            .. _samarog.GetInstantCastFinders(),
-            .. _deimos.GetInstantCastFinders()
-        ];
-        return finders;
-    }
-
-    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
-    {
-        List<TargetID> trashes = [
-            .. _cairn.GetTrashMobsIDs(),
-            .. _mursaatOverseer.GetTrashMobsIDs(),
-            .. _samarog.GetTrashMobsIDs(),
-            .. _deimos.GetTrashMobsIDs()
-        ];
-        return trashes.Distinct().ToList();
-    }
-
     private static void HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
@@ -277,6 +255,27 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return phases;
     }
 
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        List<InstantCastFinder> finders = [
+            .. _cairn.GetInstantCastFinders(),
+            .. _mursaatOverseer.GetInstantCastFinders(),
+            .. _samarog.GetInstantCastFinders(),
+            .. _deimos.GetInstantCastFinders()
+        ];
+        return finders;
+    }
+
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        List<TargetID> trashes = [
+            .. _cairn.GetTrashMobsIDs(),
+            .. _mursaatOverseer.GetTrashMobsIDs(),
+            .. _samarog.GetTrashMobsIDs(),
+            .. _deimos.GetTrashMobsIDs()
+        ];
+        return trashes.Distinct().ToList();
+    }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         List<TargetID> targets = [
