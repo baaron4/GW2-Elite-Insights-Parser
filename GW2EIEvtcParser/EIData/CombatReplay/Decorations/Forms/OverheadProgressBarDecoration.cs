@@ -61,7 +61,31 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
     }
     public OverheadProgressBarDecoration(
         uint pixelWidth,
+        Segment lifespan,
+        string color, string secondaryColor,
+        IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
+        ) : this(pixelWidth, (lifespan.Start, lifespan.End), color, secondaryColor, progress, connectedTo)
+    {
+    }
+    public OverheadProgressBarDecoration(
+        uint pixelWidth,
         (long start, long end) lifespan,
+        Color color, double opacity,
+        Color secondaryColor, double secondaryOpacity,
+        IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
+        ) : this(
+            pixelWidth,
+            lifespan,
+            color.WithAlpha(opacity).ToString(true),
+            secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
+            progress, connectedTo
+            )
+    {
+    }
+
+    public OverheadProgressBarDecoration(
+        uint pixelWidth,
+        Segment lifespan,
         Color color, double opacity,
         Color secondaryColor, double secondaryOpacity,
         IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
