@@ -13,11 +13,8 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class StatueOfDarkness : HallOfChains
 {
-    // TODO - add CR icons and some mechanics
-    public StatueOfDarkness(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
-        
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+
             new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.StarSquare,Colors.Black), "Feared", "Feared by Eye Teleport Skill","Feared", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(LightCarrier, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb", "Light Carrier (picked up a light orb)","Picked up orb", 0),
@@ -33,8 +30,10 @@ internal class StatueOfDarkness : HallOfChains
                     .UsingChecker((ba, log) => ba.To.IsSpecies(TargetID.EyeOfJudgement)),
             ]),
         //47857 <- teleport + fear skill? 
-        ])
-        );
+        ]);
+    public StatueOfDarkness(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "eyes";
         Icon = EncounterIconStatueOfDarkness;
         EncounterCategoryInformation.InSubCategoryOrder = 2;

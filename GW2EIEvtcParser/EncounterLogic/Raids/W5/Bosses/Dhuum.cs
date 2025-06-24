@@ -20,11 +20,7 @@ internal class Dhuum : HallOfChains
     private bool _hasPrevent;
     private int _greenStart;
 
-    public Dhuum(int triggerID) : base(triggerID)
-    {
-        _hasPrevent = true;
-        _greenStart = 0;
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
             new MechanicGroup([
                 new PlayerDstHitMechanic(ArcingAfflictionHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg", "Arcing Affliction (Bomb) hit","Bomb dmg", 0),
@@ -90,7 +86,13 @@ internal class Dhuum : HallOfChains
                     return true;
                 }
             ),
-        ]));
+        ]);
+
+    public Dhuum(int triggerID) : base(triggerID)
+    {
+        _hasPrevent = true;
+        _greenStart = 0;
+        MechanicList.Add(Mechanics);
         Extension = "dhuum";
         Icon = EncounterIconDhuum;
         EncounterCategoryInformation.InSubCategoryOrder = 3;

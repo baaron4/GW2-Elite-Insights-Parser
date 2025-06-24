@@ -16,9 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class SoullessHorror : HallOfChains
 {
-    public SoullessHorror(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", 0),
                 new PlayerDstHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", 0),
@@ -48,7 +46,10 @@ internal class SoullessHorror : HallOfChains
                 new PlayerDstHitMechanic(SoulRift, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem", "Soul Rift (stood in Golem Aoe)","Golem Aoe", 0),
                 new PlayerSrcBuffApplyMechanic(Immobile, new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem", "Immobilized Golem","Immobilized Golem", 50).UsingChecker((ce, log) => ce.To.IsSpecies(TargetID.TormentedDead)),
             ]),
-        ]));
+        ]);
+    public SoullessHorror(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sh";
         ChestID = ChestID.ChestOfDesmina;
         Icon = EncounterIconSoullessHorror;
@@ -117,7 +118,6 @@ internal class SoullessHorror : HallOfChains
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, ChestOfDesminaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // discard hp update events after determined apply
         SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
