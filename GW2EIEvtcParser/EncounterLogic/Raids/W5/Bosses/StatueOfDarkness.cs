@@ -157,6 +157,33 @@ internal class StatueOfDarkness : HallOfChains
         return phases;
     }
 
+    internal static bool HasIntersectingLastGrasps(CombatData combatData, SingleActor eyeFate, SingleActor eyeJudgement, out long intersectTime)
+    {
+        var lastGraspsJudgement = GetFilteredList(combatData, LastGraspJudgment, eyeJudgement, true, true).ToList(); //TODO(Rennorb) @perf
+        var lastGraspsJudgementSegments = new List<Segment>(lastGraspsJudgement.Count / 2);
+        for (int i = 0; i < lastGraspsJudgement.Count; i += 2)
+        {
+            lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
+        }
+        var lastGraspsFate = GetFilteredList(combatData, LastGraspFate, eyeFate, true, true).ToList(); //TODO(Rennorb) @perf
+        var lastGraspsFateSegments = new List<Segment>(lastGraspsFate.Count / 2);
+        for (int i = 0; i < lastGraspsFate.Count; i += 2)
+        {
+            lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
+        }
+        //
+        if (lastGraspsJudgementSegments.LastOrNull() is Segment lastJudge && lastGraspsFateSegments.LastOrNull() is Segment lastFate)
+        {
+            if (lastFate.Intersects(lastJudge))
+            {
+                intersectTime = Math.Max(lastJudge.Start, lastFate.Start);
+                return true;
+            }
+        }
+        intersectTime = -1;
+        return false;
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
@@ -168,28 +195,20 @@ internal class StatueOfDarkness : HallOfChains
             {
                 throw new MissingKeyActorsException("Eyes not found");
             }
-            //
-            var lastGraspsJudgement = GetFilteredList(combatData, LastGraspJudgment, eyeJudgement, true, true).ToList(); //TODO(Rennorb) @perf
-            var lastGraspsJudgementSegments = new List<Segment>(lastGraspsJudgement.Count / 2);
-            for (int i = 0; i < lastGraspsJudgement.Count; i += 2)
+            if (HasIntersectingLastGrasps(combatData, eyeFate, eyeJudgement, out var intersectTime))
             {
-                lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
-            }
-            var lastGraspsFate = GetFilteredList(combatData, LastGraspFate, eyeFate, true, true).ToList(); //TODO(Rennorb) @perf
-            var lastGraspsFateSegments = new List<Segment>(lastGraspsFate.Count / 2);
-            for (int i = 0; i < lastGraspsFate.Count; i += 2)
-            {
-                lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
-            }
-            //
-            if (lastGraspsJudgementSegments.LastOrNull() is Segment lastJudge && lastGraspsFateSegments.LastOrNull() is Segment lastFate)
-            {
-                if (lastFate.Intersects(lastJudge))
-                {
-                    fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
-                }
+                fightData.SetSuccess(true, intersectTime);
             }
         }
+    }
+
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID.EyeOfFate, 0 },
+            {TargetID.EyeOfJudgement, 0 },
+        };
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
