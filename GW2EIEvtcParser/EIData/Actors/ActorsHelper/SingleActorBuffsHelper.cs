@@ -213,6 +213,34 @@ partial class SingleActor
         return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
     }
 
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long time)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log));
+        if (seg.Value > 0)
+        {
+            return new Segment(seg.Start, seg.End, 1);
+        }
+        return seg;
+    }
+
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
+        if (seg.Value > 0)
+        {
+            return new Segment(seg.Start, seg.End, 1);
+        }
+        return seg;
+    }
+
     private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
         return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
@@ -236,6 +264,65 @@ partial class SingleActor
             throw new InvalidOperationException($"Buff id {buffId} must be simulated");
         }
         return GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by));
+    }
+    private static void FuseConsecutiveNonZeroAndSetTo1(List<Segment> segments)
+    {
+        Segment last = segments[0];
+        if (last.Value > 0)
+        {
+            last.Value = 1;
+        }
+        int lastIndex = 0;
+        for (int i = 1; i < segments.Count; i++)
+        {
+            var current = segments[i];
+            if (current.IsEmpty())
+            {
+                continue;
+            }
+            if (current.Value > 0)
+            {
+                current.Value = 1;
+            }
+            if (current.Value != 0 && last.Value != 0)
+            {
+                last.End = current.End;
+                segments[lastIndex] = last;
+            }
+            else
+            {
+                segments[lastIndex] = last;
+                last = current;
+                lastIndex++;
+            }
+        }
+        segments[lastIndex++] = last;
+
+        segments.RemoveRange(lastIndex, segments.Count - lastIndex);
+    }
+
+    /// <exception cref="InvalidOperationException"></exception>
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long start, long end)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var presence = GetBuffStatus(buffId, start, end, GetBuffGraphs(log)).ToList();
+        FuseConsecutiveNonZeroAndSetTo1(presence);
+        return presence;
+    }
+
+    /// <exception cref="InvalidOperationException"></exception>
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var presence = GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by)).ToList();
+        FuseConsecutiveNonZeroAndSetTo1(presence);
+        return presence;
     }
 
     public IReadOnlyDictionary<long, BuffStatistics> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
