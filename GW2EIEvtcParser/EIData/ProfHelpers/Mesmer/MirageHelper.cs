@@ -33,7 +33,7 @@ internal static class MirageHelper
         // Nomad's Endurance
         new BuffOnActorDamageModifier(Mod_NomadsEndurance, Vigor, "Nomad's Endurance", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.NomadsEndurance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2025Balance),
-        // TODO new mirrored axe
+        // TODO Phantom Pain
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
@@ -44,7 +44,7 @@ internal static class MirageHelper
         new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, SkillImages.FalseOasis),
         // Spear
         new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, TraitImages.MirageMantle),
-        // TODO mirrored axe
+        // TODO Phantom Pain
     ];
 
     private static readonly HashSet<int> Minions = [];

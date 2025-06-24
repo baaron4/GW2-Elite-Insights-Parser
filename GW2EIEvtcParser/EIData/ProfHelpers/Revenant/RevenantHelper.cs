@@ -135,7 +135,11 @@ internal static class RevenantHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         // - Swift Termination
         new DamageLogDamageModifier(Mod_SwiftTermination, "Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, TraitImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
-        // TODO brutality
+        // Brutality
+        new BuffOnFoeDamageModifier(Mod_Brutality, [Stability, Protection], "Brutality", "15% against protection and stability", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.Brutality, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new BuffOnFoeDamageModifier(Mod_Brutality, [Stability, Protection], "Brutality", "10% against protection and stability", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, TraitImages.Brutality, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
