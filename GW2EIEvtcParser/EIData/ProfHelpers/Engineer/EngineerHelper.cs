@@ -136,7 +136,6 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
             .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance),
-        //TODO: Grand Entrance
         // - Shaped Charge
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
@@ -207,6 +206,7 @@ internal static class EngineerHelper
         new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, SkillImages.MedKit),
         new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  SkillImages.MedKit),
         new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, TraitImages.CompoundingChemicals),
+        //TODO: Grand Entrance
         /*
         new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
         new Buff("Bomb Kit", POV_BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
