@@ -94,6 +94,7 @@ internal class Dhuum : HallOfChains
         _greenStart = 0;
         MechanicList.Add(Mechanics);
         Extension = "dhuum";
+        ChestID = ChestID.DhuumChest;
         Icon = EncounterIconDhuum;
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000006;
