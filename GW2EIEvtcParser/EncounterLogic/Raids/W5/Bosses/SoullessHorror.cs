@@ -116,11 +116,9 @@ internal class SoullessHorror : HallOfChains
             }
         }
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void HandleSoullessHorrorFinalHPUpdate(List<CombatItem> combatData, SingleActor soullessHorror)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // discard hp update events after determined apply
-        SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
@@ -129,6 +127,12 @@ internal class SoullessHorror : HallOfChains
                 combatEvent.OverrideSrcAgent(0);
             }
         }
+    }
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+        HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
     /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
@@ -215,7 +219,7 @@ internal class SoullessHorror : HallOfChains
                     Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
                     if (hpUpdate != null)
                     {
-                        var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
+                        var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, target.LastAware), Colors.Orange, 0.3, new PositionConnector(center));
                         replay.Decorations.AddWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
                     }
                     else
@@ -363,13 +367,13 @@ internal class SoullessHorror : HallOfChains
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal static bool HasFastNecrosis(CombatData combatData, long start, long end)
     {
         // split necrosis
         var splitNecrosis = new Dictionary<AgentItem, List<BuffEvent>>();
         foreach (BuffEvent c in combatData.GetBuffData(Necrosis))
         {
-            if (c is not BuffApplyEvent)
+            if (c is not BuffApplyEvent || c.Time < start || c.Time > end)
             {
                 continue;
             }
@@ -386,7 +390,7 @@ internal class SoullessHorror : HallOfChains
 
         if (splitNecrosis.Count == 0)
         {
-            return 0;
+            return false;
         }
 
         List<BuffEvent> longestNecrosis = splitNecrosis.Values.OrderByDescending(x => x.Count).First();
@@ -401,6 +405,11 @@ internal class SoullessHorror : HallOfChains
                 minDiff = timeDiff;
             }
         }
-        return (minDiff < 11000) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return minDiff < 11000;
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {       
+        return HasFastNecrosis(combatData, fightData.FightStart, fightData.FightEnd) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }
