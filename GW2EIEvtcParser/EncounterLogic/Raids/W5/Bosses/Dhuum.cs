@@ -18,7 +18,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class Dhuum : HallOfChains
 {
     private bool _hasPrevent;
-    private int _greenStart;
 
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
@@ -91,7 +90,6 @@ internal class Dhuum : HallOfChains
     public Dhuum(int triggerID) : base(triggerID)
     {
         _hasPrevent = true;
-        _greenStart = 0;
         MechanicList.Add(Mechanics);
         Extension = "dhuum";
         ChestID = ChestID.DhuumChest;
@@ -491,7 +489,7 @@ internal class Dhuum : HallOfChains
                 }
                 if (majorSplit != null)
                 {
-                    lifespan = (majorSplit.Time, log.FightData.FightEnd);
+                    lifespan = (majorSplit.Time, target.LastAware);
                     replay.Decorations.Add(new CircleDecoration(320, lifespan, "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                 }
 
@@ -570,78 +568,84 @@ internal class Dhuum : HallOfChains
             case (int)TargetID.Deathling:
                 break;
             case (int)TargetID.UnderworldReaper:
+                ParametricPoint3D pos;
+                if (replay.Positions.Count > 0)
+                {
+                    pos = replay.Positions[0];
+
+                    if (pos.XYZ.X < 14000)
+                    {
+                        // Outside reaper
+                        replay.Trim(target.FirstAware, target.FirstAware + CombatReplayPollingRate);
+                    }
+                    else
+                    {
+                        if (replay.Positions.Count > 1)
+                        {
+                            replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
                 replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180)));
-                if (_hasPrevent)
+                if (log.CombatData.HasEffectData)
                 {
-                    if (_greenStart == 0)
+                    if (log.CombatData.TryGetEffectEventsByDstWithGUID(target.AgentItem, EffectGUIDs.DhuumReaperGreen, out var greens))
                     {
-                        BuffEvent? greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
-                        if (greenTaken != null)
+                        foreach (var green in greens)
                         {
-                            _greenStart = (int)greenTaken.Time - 5000;
-                        }
-                        else
-                        {
-                            _greenStart = 30600;
+                            var greenLifespan = green.ComputeLifespan(log, 5000);
+                            var greenCircle = new CircleDecoration(240, greenLifespan, Colors.DarkGreen, 0.4, new AgentConnector(target));
+                            replay.Decorations.AddWithGrowing(greenCircle, greenLifespan.end);
                         }
                     }
-
-                    ParametricPoint3D pos;
-                    if (replay.Positions.Count > 0)
+                } 
+                else
+                {
+                    BuffEvent? greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                    if (greenTaken != null)
                     {
-                        pos = replay.Positions[0];
+                        var greenStart = (int)greenTaken.Time - 5000;
 
-                        if (pos.XYZ.X < 14000)
+
+                        int reaperIndex = -1;
+                        foreach (var reaper in ReapersToGreen)
                         {
-                            // Outside reaper
-                            replay.Trim(target.FirstAware, target.FirstAware + CombatReplayPollingRate);
-                        }
-                        else
-                        {
-                            if (replay.Positions.Count > 1)
+                            if ((reaper.Position - pos.XYZ).Length() < 10)
                             {
-                                replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                                reaperIndex = reaper.Index;
+                                break;
                             }
                         }
-                    }
-                    else
-                    {
-                        break;
-                    }
 
-                    int reaperIndex = -1;
-                    foreach (var reaper in ReapersToGreen)
-                    {
-                        if ((reaper.Position - pos.XYZ).Length() < 10)
+                        if (reaperIndex == -1)
                         {
-                            reaperIndex = reaper.Index;
                             break;
                         }
-                    }
 
-                    if (reaperIndex == -1)
-                    {
-                        break;
-                    }
-
-                    int multiplier = 210000;
-                    int gStart = _greenStart + reaperIndex * 30000;
-                    var greens = new List<int>() {
+                        int multiplier = 210000;
+                        int gStart = greenStart + reaperIndex * 30000;
+                        var greens = new List<int>() {
                         gStart,
                         gStart + multiplier,
                         gStart + 2 * multiplier
                     };
 
-                    foreach (int gstart in greens)
-                    {
-                        int gend = gstart + 5000;
-                        var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
-                        replay.Decorations.AddWithGrowing(greenCircle, gend);
+                        foreach (int gstart in greens)
+                        {
+                            int gend = gstart + 5000;
+                            var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
+                            replay.Decorations.AddWithGrowing(greenCircle, gend);
+                        }
                     }
                 }
                 break;

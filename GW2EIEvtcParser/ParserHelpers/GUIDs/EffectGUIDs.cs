@@ -658,6 +658,7 @@ public static class EffectGUIDs
     public static readonly GUID DhuumDeathMarkDeathZone = new("B8F90FE6AF4F2A4C84D349861A098392"); // 120000 duration
     public static readonly GUID DhuumSuperspeedOrb = new("8F89945581099142B598977188BAC8E1"); // max duration - has end effect
     public static readonly GUID DhuumConeSlash = new("21BA95CC014CC944A71E2A6FB28D9A86");
+    public static readonly GUID DhuumReaperGreen = new("3901D25DC071A444AFDFF06787C13A3F");
     // CA
     public static readonly GUID CAArmSmash = new("B1AAD873DB07E04E9D69627156CA8918");
     // Qadim
