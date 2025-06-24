@@ -50,7 +50,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            var lastTarget = cairns.Last();
             var chest = log.AgentData.GetGadgetsByID(ChestID.CairnChest).FirstOrDefault();
             foreach (var cairn in cairns)
             {
@@ -79,7 +78,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
                 bool success = false;
                 long end = cairn.LastAware;
-                if (cairn == lastTarget && chest != null)
+                if (chest != null && chest.InAwareTimes(cairn.LastAware + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
