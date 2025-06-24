@@ -18,7 +18,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Qadim : MythwrightGambit
 {
-    private bool _manualPlatforms = true;
     public Qadim(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([
@@ -128,6 +127,11 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
+    private static bool HasPlateformAgents(AgentData agentData)
+    {
+        return agentData.GetNPCsByID(TargetID.QadimPlatform).GroupBy(x => x.Name).Count() == 12;
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var maxHPUpdates = combatData
@@ -224,32 +228,6 @@ internal class Qadim : MythwrightGambit
                 target.OverrideName("Stab " + target.Character);
             }
         }
-        var platformNames = new List<string>()
-        {
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "00",
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-        };
-        _manualPlatforms = TrashMobs.Count(x => platformNames.Contains(x.Character)) != 12;
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -452,7 +430,7 @@ internal class Qadim : MythwrightGambit
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        if (_manualPlatforms)
+        if (!HasPlateformAgents(log.AgentData))
         {
             AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, environmentDecorations);
         }
@@ -789,7 +767,7 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.QadimPlatform:
-                if (_manualPlatforms)
+                if (!HasPlateformAgents(log.AgentData))
                 {
                     return;
                 }
