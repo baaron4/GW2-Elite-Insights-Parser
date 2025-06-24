@@ -1,8 +1,12 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
@@ -213,19 +217,17 @@ internal class StatueOfDeath : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent);
-        foreach (BuffEvent c in spiritTransform)
+        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilStatueOfDeath, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        foreach (var c in spiritTransform)
         {
             int duration = 30000;
-            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilStatueOfDeath).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
-            int start = (int)c.Time;
-            int end = start + duration;
-            if (removedBuff != null)
-            {
-                end = (int)removedBuff.Time;
-            }
-            var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddWithGrowing(circle, start + duration);
+            // Progress Bar
+            replay.Decorations.Add(new OverheadProgressBarDecoration(
+                CombatReplayOverheadProgressBarMinorSizeInPixel, c, Colors.CobaltBlue, 0.6,
+                Colors.Black, 0.2, [(c.Start, 0), (c.Start + duration, 100)], new AgentConnector(p))
+                .UsingRotationConnector(new AngleConnector(130)));
+            // Overhead Icon
+            replay.Decorations.AddRotatedOverheadIcon(c, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
     }
 

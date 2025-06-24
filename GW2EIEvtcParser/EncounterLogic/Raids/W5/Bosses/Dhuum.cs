@@ -682,30 +682,22 @@ internal class Dhuum : HallOfChains
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
-        (long start, long end) lifespan;
-
         // spirit transform
-        var spiritTransform = log.CombatData.GetBuffApplyDataByIDByDst(FracturedSpirit, p.AgentItem);
-        foreach (BuffEvent c in spiritTransform)
+        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilDhuum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        foreach (var c in spiritTransform)
         {
             int duration = 15000;
-            if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ServerDelayConstant))
+            if (p.HasBuff(log, SourcePureOblivionBuff, c.Start + ServerDelayConstant))
             {
                 duration = 30000;
             }
-            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
-            lifespan = (c.Time, c.Time + duration);
-            if (removedBuff != null)
-            {
-                lifespan.end = removedBuff.Time;
-            }
-
             // Progress Bar
-            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.start + duration, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(
+                CombatReplayOverheadProgressBarMinorSizeInPixel, c, Colors.CobaltBlue, 0.6, 
+                Colors.Black, 0.2, [(c.Start, 0), (c.Start + duration, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(130)));
-
             // Overhead Icon
-            replay.Decorations.AddRotatedOverheadIcon(new Segment(lifespan, 1), p, ParserIcons.GenericGreenArrowUp, 40f);
+            replay.Decorations.AddRotatedOverheadIcon(c, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
