@@ -60,7 +60,7 @@ internal static class WarriorHelper
         // - Stalwart Strength
         new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2022Balance, GW2Builds.June2025Balance),
-        new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "15%", DamageSource.NoPets, 15, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "12.5%", DamageSource.NoPets, 12.5, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2025Balance),
