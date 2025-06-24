@@ -17,8 +17,8 @@ internal class WhisperingShadow : Kinfall
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DeathlyGrime, new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "DeathGr.A", "Gained Deathly Grime", "Deathly Grime Application", 0),
-                new PlayerDstBuffApplyMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4], new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightBlue), "LifeFire.A", "Gained Life-Fire Circle", "Life-Fire Circle Apply", 0),
-                new PlayerDstBuffRemoveMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire Circle", "Life-Fire Circle Remove", 0),
+                new PlayerDstBuffApplyMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightBlue), "LifeFire.A", "Gained Life-Fire Circle", "Life-Fire Circle Apply", 0),
+                new PlayerDstBuffRemoveMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire Circle", "Life-Fire Circle Remove", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
@@ -37,6 +37,9 @@ internal class WhisperingShadow : Kinfall
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
+            ]),
+            new MechanicGroup([
+                new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "Green.T", "Targeted by Wintry Orb (Green)", "Wintry Orb Target", 500),
             ]),
         ]));
         Extension = "whispshadow";
@@ -58,9 +61,7 @@ internal class WhisperingShadow : Kinfall
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        const uint healthT4 = 19_082_024;
-        var shadow = GetWhisperingShadow();
-        if (shadow.GetHealth(combatData) > healthT4 + 100_000)
+        if (combatData.GetBuffApplyData(LifeFireCircleCM).Any())
         {
             return FightData.EncounterMode.CM;
         }
@@ -108,6 +109,7 @@ internal class WhisperingShadow : Kinfall
         AddLifeFireCircle(player, log, replay, LifeFireCircleT2, 350);
         AddLifeFireCircle(player, log, replay, LifeFireCircleT3, 325);
         AddLifeFireCircle(player, log, replay, LifeFireCircleT4, 300);
+        AddLifeFireCircle(player, log, replay, LifeFireCircleCM, 250);
 
         // gorefrost (arrow) target
         var gorefrosts = player.GetBuffStatus(log, GorefrostTarget, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -118,6 +120,13 @@ internal class WhisperingShadow : Kinfall
         var inevitableDarknessEvents = GetFilteredList(log.CombatData, InevitableDarknessPlayer, player, true, false);
         replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
         replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
+
+        // wintry orb (green)
+        var wintryOrbs = player.GetBuffStatus(log, LethalCoalescenceBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        foreach (var segment in wintryOrbs)
+        {
+            replay.Decorations.Add(new CircleDecoration(250, segment.TimeSpan, Colors.Green, 0.2, new AgentConnector(player.AgentItem)));
+        }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -158,6 +167,15 @@ internal class WhisperingShadow : Kinfall
                 environmentDecorations.AddWithGrowing(decoration, lifespan.end);
             }
         }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpikeDanger, out var spikesDanger))
+        {
+            foreach (var effect in spikesDanger)
+            {
+                var lifespan = effect.ComputeLifespan(log, 2000);
+                var decoration = new CircleDecoration(130, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.AddWithGrowing(decoration, lifespan.end);
+            }
+        }
 
         // frozen teeth (fissures)
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFrozenTeethArrows, out var fissureArrows))
@@ -180,7 +198,7 @@ internal class WhisperingShadow : Kinfall
                 var lifespan = effect.ComputeLifespan(log, 6333);
                 var position = new PositionConnector(effect.Position);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                var decoration = new RectangleDecoration(150, 380, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation);
+                var decoration = new RectangleDecoration(150, 380, lifespan, Colors.LightBlue, 0.2, position).UsingRotationConnector(rotation);
                 environmentDecorations.Add(decoration);
             }
         }
