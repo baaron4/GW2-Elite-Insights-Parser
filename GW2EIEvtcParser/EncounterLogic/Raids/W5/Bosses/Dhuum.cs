@@ -297,14 +297,8 @@ internal class Dhuum : HallOfChains
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void HandleYourSouls(AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
-        {
-            throw new MissingKeyActorsException("Dhuum not found");
-        }
-        _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
-
         // Player Souls - Filter out souls without master
         var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
@@ -326,6 +320,16 @@ internal class Dhuum : HallOfChains
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
+        {
+            throw new MissingKeyActorsException("Dhuum not found");
+        }
+        _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
+        HandleYourSouls(agentData, combatData);
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
@@ -528,37 +532,6 @@ internal class Dhuum : HallOfChains
                     }
                 }
             }
-
-            // Collection Orbs
-            var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
-            foreach (MissileEvent orb in orbs)
-            {
-                uint radius = 0;
-                Color color = Colors.Grey;
-
-                switch (orb.SkillID)
-                {
-                    case DhuumEnforcerOrb:
-                        radius = 50;
-                        color = Colors.LightRed;
-                        break;
-                    case DhuumMessengerOrb:
-                        radius = 35;
-                        color = Colors.Purple;
-                        break;
-                    case DhuumSpiderOrb:
-                        radius = 20;
-                        color = Colors.Pink;
-                        break;
-                    case DhuumCollectableSmallOrb:
-                        radius = 10;
-                        color = Colors.Grey;
-                        break;
-                    default:
-                        break;
-                }
-                replay.Decorations.AddNonHomingMissile(log, orb, color, 0.5, radius);
-            }
             break;
             case (int)TargetID.DhuumDesmina:
                 break;
@@ -740,6 +713,37 @@ internal class Dhuum : HallOfChains
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+
+        // Collection Orbs
+        var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
+        foreach (MissileEvent orb in orbs)
+        {
+            uint radius = 0;
+            Color color = Colors.Grey;
+
+            switch (orb.SkillID)
+            {
+                case DhuumEnforcerOrb:
+                    radius = 50;
+                    color = Colors.LightRed;
+                    break;
+                case DhuumMessengerOrb:
+                    radius = 35;
+                    color = Colors.Purple;
+                    break;
+                case DhuumSpiderOrb:
+                    radius = 20;
+                    color = Colors.Pink;
+                    break;
+                case DhuumCollectableSmallOrb:
+                    radius = 10;
+                    color = Colors.Grey;
+                    break;
+                default:
+                    break;
+            }
+            environmentDecorations.AddNonHomingMissile(log, orb, color, 0.5, radius);
+        }
 
         // Death Mark - First Warning (2 seconds)
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out var deathMarkFirstIndicators))
