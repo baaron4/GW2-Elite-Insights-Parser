@@ -120,6 +120,14 @@ public abstract class Actor
     {
         return AgentItem.IsAnySpecies(ids);
     }
+    public bool InAwareTimes(Actor other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
+    public bool InAwareTimes(AgentItem other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
 
     // Getters
     // Damage logs
