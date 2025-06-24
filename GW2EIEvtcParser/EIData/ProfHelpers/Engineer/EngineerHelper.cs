@@ -112,7 +112,6 @@ internal static class EngineerHelper
             }),
         new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
-        //TODO: Magnet bomb
         new MissileCastFinder(AimAssistedRocket, AimAssistedRocket)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(OrbitalCommandStrike, OrbitalCommandStrike)
@@ -137,6 +136,7 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
             .UsingApproximate()
             .WithBuilds(GW2Builds.May2021Balance),
+        //TODO: Grand Entrance
         // - Shaped Charge
         new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
