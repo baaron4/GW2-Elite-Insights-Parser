@@ -183,7 +183,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             case (int)TargetID.ConjuredAmalgamate:
                 var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                uint CAShieldRadius = 500;
+                uint CAShieldRadius = 800;
                 foreach (Segment seg in shieldCA)
                 {
                     replay.Decorations.Add(new CircleDecoration(CAShieldRadius, seg, "rgba(0, 150, 255, 0.3)", new AgentConnector(target)));
@@ -259,7 +259,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             return [];
         }
-        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem);
+        var attackTargetsAgents = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem);
         var attackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
         {

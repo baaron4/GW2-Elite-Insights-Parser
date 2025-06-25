@@ -127,7 +127,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         // Find encounter start based on demonic bonds being targetable
                         foreach (var demonicBond in demonicBonds)
                         {
-                            var attackTargetEvents = log.CombatData.GetAttackTargetEvents(demonicBond.AgentItem);
+                            var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(demonicBond.AgentItem);
                             foreach (var attackTargetEvent in attackTargetEvents)
                             {
                                 var targetableEvent = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).FirstOrDefault(x => x.Time >= buffApplyEvent.Time - 2000 && x.Time <= buffApplyEvent.Time);
@@ -158,7 +158,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         {
                             foreach (var demonicBond in demonicBonds)
                             {
-                                var attackTargetEvents = log.CombatData.GetAttackTargetEvents(demonicBond.AgentItem);
+                                var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(demonicBond.AgentItem);
                                 foreach (var attackTargetEvent in attackTargetEvents)
                                 {
                                     var targetableEvent = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).FirstOrDefault(x => x.Time >= encounterStart + 5000);

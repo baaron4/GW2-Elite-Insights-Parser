@@ -48,9 +48,13 @@ partial class CombatData
     }
     #endregion STATUS
     #region ATTACKTARGETS
-    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents(AgentItem targetedAgent)
+    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvent()
     {
-        return _statusEvents.AttackTargetEvents.GetValueOrEmpty(targetedAgent);
+        return _statusEvents.AttackTargetEvents;
+    }
+    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsBySrc(AgentItem targetedAgent)
+    {
+        return _statusEvents.AttackTargetEventsBySrc.GetValueOrEmpty(targetedAgent);
     }
 
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)

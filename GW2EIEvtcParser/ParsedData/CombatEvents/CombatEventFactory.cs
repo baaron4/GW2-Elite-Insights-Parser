@@ -110,7 +110,8 @@ internal static class CombatEventFactory
                 break;
             case StateChange.AttackTarget:
                 var aTEvt = new AttackTargetEvent(stateChangeEvent, agentData);
-                Add(statusEvents.AttackTargetEvents, aTEvt.Src, aTEvt);
+                statusEvents.AttackTargetEvents.Add(aTEvt);
+                Add(statusEvents.AttackTargetEventsBySrc, aTEvt.Src, aTEvt);
                 Add(statusEvents.AttackTargetEventsByAttackTarget, aTEvt.AttackTarget, aTEvt);
                 break;
             case StateChange.Targetable:

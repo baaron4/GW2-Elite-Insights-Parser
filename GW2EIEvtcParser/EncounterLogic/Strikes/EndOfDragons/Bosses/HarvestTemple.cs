@@ -198,7 +198,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
-                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
                         var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware);
@@ -402,7 +402,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
         if (soowon != null)
         {
-            AttackTargetEvent? attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+            AttackTargetEvent? attackTargetEvent = combatData.GetAttackTargetEventsBySrc(soowon.AgentItem).FirstOrDefault();
             if (attackTargetEvent == null)
             {
                 return;

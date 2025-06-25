@@ -185,7 +185,7 @@ internal class Deimos : BastionOfThePenitent
             {
                 return;
             }
-            IReadOnlyList<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(deimos.AgentItem);
+            IReadOnlyList<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEventsBySrc(deimos.AgentItem);
             if (attackTargets.Count == 0)
             {
                 return;
@@ -671,7 +671,7 @@ internal class Deimos : BastionOfThePenitent
                 }
                 var arenaPos = arenaCenter + new Vector3(diffX, diffY, 0);
 
-                var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                var attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault();
                 long hiddenStart = target.FirstAware;
                 if (attackTargetEvent != null)
                 {
