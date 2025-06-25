@@ -315,35 +315,50 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             phase.Name = name;
         }
-        int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
         if (leftArm != null || rightArm != null)
         {
-            List<long> targetablesL = GetTargetableTimes(log, leftArm);
-            List<long> targetablesR = GetTargetableTimes(log, rightArm);
+            int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
+            var targetablesL = GetTargetableTimes(log, leftArm);
+            var targetablesR = GetTargetableTimes(log, rightArm);
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (!phase.Name.Contains("Arm"))
-                {
-                    continue;
-                }
                 var leftExists = targetablesL.Exists(x => phase.InInterval(x));
                 var rightExists = targetablesR.Exists(x => phase.InInterval(x));
-                if (leftExists && rightExists)
+                if (phase.Name.Contains("Arm"))
                 {
-                    phase.Name = "Both Arms Phase " + (++bothArmPhase);
-                    phase.AddTarget(leftArm, log);
-                    phase.AddTarget(rightArm, log);
-                }
-                else if (leftExists)
+                    if (leftExists && rightExists)
+                    {
+                        phase.Name = "Both Arms Phase " + (++bothArmPhase);
+                        phase.AddTarget(leftArm, log);
+                        phase.AddTarget(rightArm, log);
+                    }
+                    else if (leftExists)
+                    {
+                        phase.Name = "Left Arm Phase " + (++leftArmPhase);
+                        phase.AddTarget(leftArm, log);
+                    }
+                    else if (rightExists)
+                    {
+                        phase.Name = "Right Arm Phase " + (++rightArmPhase);
+                        phase.AddTarget(rightArm, log);
+                    }
+                } 
+                else
                 {
-                    phase.Name = "Left Arm Phase " + (++leftArmPhase);
-                    phase.AddTarget(leftArm, log);
-                }
-                else if (rightExists)
-                {
-                    phase.Name = "Right Arm Phase " + (++rightArmPhase);
-                    phase.AddTarget(rightArm, log);
+                    if (leftExists && rightExists)
+                    {
+                        phase.AddTarget(leftArm, log, PhaseData.TargetPriority.NonBlocking);
+                        phase.AddTarget(rightArm, log, PhaseData.TargetPriority.NonBlocking);
+                    }
+                    else if (leftExists)
+                    {
+                        phase.AddTarget(leftArm, log, PhaseData.TargetPriority.NonBlocking);
+                    }
+                    else if (rightExists)
+                    {
+                        phase.AddTarget(rightArm, log, PhaseData.TargetPriority.NonBlocking);
+                    }
                 }
             }
         }
