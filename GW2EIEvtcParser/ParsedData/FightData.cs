@@ -381,7 +381,7 @@ public class FightData
     internal void SetSuccess(bool success, long fightEnd)
     {
         Success = success;
-        FightEnd = fightEnd;
+        FightEnd = Success ? fightEnd + ParserHelper.ServerDelayConstant : fightEnd;
     }
 
     internal void ApplyOffset(long offset)

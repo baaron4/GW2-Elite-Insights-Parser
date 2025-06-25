@@ -8,6 +8,21 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class AgentItem
 {
+    public struct MergedAgentItem
+    {
+        internal MergedAgentItem(AgentItem merged, long start, long end)
+        {
+            Merged = merged;
+            MergeStart = start;
+            MergeEnd = end;
+        }
+        public readonly AgentItem Merged;
+        public readonly long MergeStart;
+        public readonly long MergeEnd;
+    }
+
+    private List<MergedAgentItem>? _merges;
+    public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
@@ -376,6 +391,14 @@ public class AgentItem
     {
         return FirstAware <= time && LastAware >= time;
     }
+    public bool InAwareTimes(long start, long end)
+    {
+        return new Segment(FirstAware, LastAware).Intersects(start, end);
+    }
+    public bool InAwareTimes(AgentItem other)
+    {
+        return InAwareTimes(other.FirstAware, other.LastAware);
+    }
 
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
@@ -582,6 +605,14 @@ public class AgentItem
     public bool IsAnySpecies(IEnumerable<ChestID> ids)
     {
         return ids.Any(IsSpecies);
+    }
+    internal void AddMergeFrom(AgentItem mergedFrom, long start, long end)
+    {
+        if (_merges == null)
+        {
+            _merges = new List<MergedAgentItem>();
+        }
+        _merges.Add(new MergedAgentItem(mergedFrom, start, end));
     }
 }
 

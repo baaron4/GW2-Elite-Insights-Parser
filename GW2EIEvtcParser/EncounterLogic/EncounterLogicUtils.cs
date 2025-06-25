@@ -187,18 +187,23 @@ internal static class EncounterLogicUtils
         return true;
     }
 
-    internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets)
+    internal static void NumericallyRenameSpecies(IEnumerable<SingleActor> targets, HashSet<int> ignoredSpecies)
     {
-        var speciesCount = new Dictionary<long, int>();
-        foreach (SingleActor target in targets)
+        var targetsByID = targets.Where(x => !x.AgentItem.IsPlayer).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        foreach (var pair in targetsByID)
         {
-            if (!speciesCount.TryGetValue(target.ID, out var species))
+            if (ignoredSpecies.Contains(pair.Key))
             {
-                species = 1;
-                speciesCount[target.ID] = species;
+                continue;
             }
-            target.OverrideName(target.Character + " " + species++);
-            speciesCount[target.ID] = species;
+            if (pair.Value.Count > 1)
+            {
+                var count = 1;
+                foreach (var target in pair.Value)
+                {
+                    target.OverrideName(target.Character + " " + count++);
+                }
+            }
         }
     }
 
@@ -379,5 +384,15 @@ internal static class EncounterLogicUtils
             .ToList();
 
         return filteredPairings;
+    }
+    internal static int AddSortIDWithOffset(Dictionary<TargetID, int> toFill, IReadOnlyDictionary<TargetID, int> toFillFrom, int inputOffset)
+    {
+        int offset = 0;
+        foreach (var pair in toFillFrom)
+        {
+            toFill[pair.Key] = pair.Value + inputOffset;
+            offset = pair.Value + inputOffset;
+        }
+        return offset;
     }
 }

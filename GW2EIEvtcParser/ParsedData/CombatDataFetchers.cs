@@ -1,6 +1,6 @@
-﻿using GW2EIEvtcParser.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using System.Diagnostics.CodeAnalysis;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -48,18 +48,26 @@ partial class CombatData
     }
     #endregion STATUS
     #region ATTACKTARGETS
-    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents(AgentItem targetedAgent)
+    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents()
     {
-        return _statusEvents.AttackTargetEvents.GetValueOrEmpty(targetedAgent);
+        return _statusEvents.AttackTargetEvents;
+    }
+    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsBySrc(AgentItem targetedAgent)
+    {
+        return _statusEvents.AttackTargetEventsBySrc.GetValueOrEmpty(targetedAgent);
     }
 
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)
     {
         return _statusEvents.AttackTargetEventsByAttackTarget.GetValueOrEmpty(attackTarget);
     }
-    public IReadOnlyList<TargetableEvent> GetTargetableEvents(AgentItem attackTarget)
+    public IReadOnlyList<TargetableEvent> GetTargetableEvents()
     {
-        return _statusEvents.TargetableEvents.GetValueOrEmpty(attackTarget);
+        return _statusEvents.TargetableEvents;
+    }
+    public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
+    {
+        return _statusEvents.TargetableEventsBySrc.GetValueOrEmpty(attackTarget);
     }
     #endregion ATTACKTARGETS
     #region DATE

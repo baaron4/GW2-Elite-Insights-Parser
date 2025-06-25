@@ -34,7 +34,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
             (-21504, -21504, 24576, 24576)); // TODO Fix values
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -12,7 +12,7 @@ internal class MountBalriorInstance : MountBalrior
 {
     public MountBalriorInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.Unknown;
+        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
         Icon = InstanceIconMountBalrior;
         Extension = "mntbalr";
     }
@@ -22,7 +22,7 @@ internal class MountBalriorInstance : MountBalrior
         return "Mount Balrior";
     }
 
-    protected override IReadOnlyList<TargetID> GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

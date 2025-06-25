@@ -26,7 +26,6 @@ public abstract class FightLogic
         None = 0,
         Death = 1 << 0,
         CombatExit = 1 << 1,
-        ChestGadget = 1 << 2
     }
 
 
@@ -54,7 +53,7 @@ public abstract class FightLogic
 
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
-    internal CombatReplayDecorationContainer EnvironmentDecorations;
+    private CombatReplayDecorationContainer EnvironmentDecorations;
 
     protected ChestID ChestID = ChestID.None;
 
@@ -170,14 +169,14 @@ public abstract class FightLogic
         return GenericTriggerID;
     }
 
-    protected abstract IReadOnlyList<TargetID> GetTargetsIDs();
+    internal abstract IReadOnlyList<TargetID> GetTargetsIDs();
 
     protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return [];
     }
 
-    protected virtual Dictionary<TargetID, int> GetTargetsSortIDs()
+    internal virtual Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
         var res = new Dictionary<TargetID, int>(targetsIds.Count);
@@ -188,12 +187,12 @@ public abstract class FightLogic
         return res;
     }
 
-    protected virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
+    internal virtual IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [ ];
     }
 
-    protected virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
+    internal virtual IReadOnlyList<TargetID>  GetFriendlyNPCIDs()
     {
         return [ ];
     }
@@ -208,8 +207,14 @@ public abstract class FightLogic
         return target.Character;
     }
 
+    protected virtual HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [];
+    }
+
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        var ignoredSpeciesForRenaming = IgnoreForAutoNumericalRenaming();
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();
@@ -245,6 +250,7 @@ public abstract class FightLogic
             }
             return int.MaxValue;
         }).ToList();
+        NumericallyRenameSpecies(Targets, ignoredSpeciesForRenaming);
         // Build trash mobs
         foreach (var trash in trashIDs)
         {
@@ -264,6 +270,7 @@ public abstract class FightLogic
         }
 #endif
         _trashMobs.SortByFirstAware();
+        NumericallyRenameSpecies(TrashMobs, ignoredSpeciesForRenaming);
 
         var friendlyIDs = GetFriendlyNPCIDs();
         RegroupSameInstidNPCsByID(friendlyIDs, agentData, combatItems, extensions);
@@ -272,14 +279,30 @@ public abstract class FightLogic
             _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }
         _nonPlayerFriendlies.SortByFirstAware();
+        NumericallyRenameSpecies(NonPlayerFriendlies, ignoredSpeciesForRenaming);
         FinalizeComputeFightTargets();
     }
 
     internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
+        if (IsInstance || ParseMode == ParseModeEnum.WvW)
+        {
+            foreach (Player p in players)
+            {
+                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+            return;
+        }
+        //
+        long threshold = fightData.FightStart + 5000;
         foreach (Player p in players)
         {
-            long threshold = fightData.FightStart + 5000;
             EnterCombatEvent? enterCombat = null;
             if (p.FirstAware > threshold)
             {
@@ -359,6 +382,7 @@ public abstract class FightLogic
         List<PhaseData> phases = GetInitialPhase(log);
         if (IsInstance)
         {
+            phases[0].AddTargets(Targets, log);
             AddPhasesPerTarget(log, phases, Targets.Where(x => x.LastAware - x.FirstAware > MinimumInCombatDuration));
         } 
         else
@@ -418,7 +442,7 @@ public abstract class FightLogic
     {
     }
 
-    internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         IEnumerable<SquadMarkerIndex> squadMarkers = [
             SquadMarkerIndex.Arrow,
@@ -436,7 +460,7 @@ public abstract class FightLogic
             {
                 if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
-                    EnvironmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
+                    environmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
                 }
             }
         }
@@ -448,13 +472,17 @@ public abstract class FightLogic
         {
             //TODO(Rennorb) @perf: capacity
             EnvironmentDecorations = new(DecorationCache);
-            ComputeEnvironmentCombatReplayDecorations(log);
+            ComputeEnvironmentCombatReplayDecorations(log, EnvironmentDecorations);
         }
         return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
     internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
+        if (IsInstance)
+        {
+            return FightData.EncounterMode.NotApplicable;
+        }
         return FightData.EncounterMode.Normal;
     }
 
@@ -492,7 +520,7 @@ public abstract class FightLogic
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.ChestGadget) > 0)
+        if (!fightData.Success && ChestID != ChestID.None)
         {
             SetSuccessByChestGadget(ChestID, agentData, fightData);
         }
@@ -528,11 +556,11 @@ public abstract class FightLogic
 
     internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        ComputeFightTargets(agentData, combatData, extensions);
         if (IsInstance)
         {
-            NumericallyRenameSpecies(Targets);
+            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.Instance, true);
         }
+        ComputeFightTargets(agentData, combatData, extensions);
     }
 
     /// <summary>
