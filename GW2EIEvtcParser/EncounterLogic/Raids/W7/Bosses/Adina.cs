@@ -76,11 +76,11 @@ internal class Adina : TheKeyOfAhdashim
         var attackTargetEvents = combatData
             .Where(x => x.IsStateChange == StateChange.AttackTarget)
             .Select(x => new AttackTargetEvent(x, agentData));
-        var targetableEvents = combatData
-            .Where(x => x.IsStateChange == StateChange.Targetable)
-            .Select(x => new TargetableEvent(x, agentData))
-            .Where(x => x.Src.Type == AgentItem.AgentType.Gadget)
-            .GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
+        foreach (var attackTarget in attackTargetEvents)
+        {
+            targetableEvents[attackTarget.AttackTarget] = attackTarget.GetTargetableEvents(combatData, agentData);
+        }
         attackTargetEvents = attackTargetEvents.Where(x =>
         {
             AgentItem atAgent = x.AttackTarget;

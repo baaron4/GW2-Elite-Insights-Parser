@@ -77,6 +77,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         ])
         );
         Icon = EncounterIconOldLionsCourt;
+        GenericFallBackMethod = FallBackMethod.None;
         Extension = "lioncourt";
         EncounterCategoryInformation.InSubCategoryOrder = 4;
         EncounterID |= 0x000005;
@@ -104,11 +105,6 @@ internal class OldLionsCourt : EndOfDragonsStrike
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {
         return [ TargetID.Tribocharge ];
-    }
-
-    protected override List<TargetID> GetSuccessCheckIDs()
-    {
-        return [ ];
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

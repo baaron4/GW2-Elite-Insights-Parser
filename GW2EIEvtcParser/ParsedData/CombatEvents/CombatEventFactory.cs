@@ -116,7 +116,8 @@ internal static class CombatEventFactory
                 break;
             case StateChange.Targetable:
                 var tarEvt = new TargetableEvent(stateChangeEvent, agentData);
-                Add(statusEvents.TargetableEvents, tarEvt.Src, tarEvt);
+                statusEvents.TargetableEvents.Add(tarEvt);
+                Add(statusEvents.TargetableEventsBySrc, tarEvt.Src, tarEvt);
                 break;
             case StateChange.MapID:
                 metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));

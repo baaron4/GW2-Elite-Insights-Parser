@@ -70,6 +70,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         MechanicList.Add(Mechanics);
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide";
+        GenericFallBackMethod = FallBackMethod.None;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }
@@ -100,16 +101,6 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             TargetID.ScarletPhantomHPCM,
             TargetID.ScarletPhantomBeamNM,
             TargetID.FerrousBomb,
-        ];
-    }
-
-    protected override List<TargetID> GetSuccessCheckIDs()
-    {
-        return
-        [
-            TargetID.MaiTrinStrike,
-            TargetID.EchoOfScarletBriarNM,
-            TargetID.EchoOfScarletBriarCM,
         ];
     }
 
