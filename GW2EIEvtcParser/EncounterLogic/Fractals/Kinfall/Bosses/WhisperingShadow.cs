@@ -43,7 +43,7 @@ internal class WhisperingShadow : Kinfall
             ]),
         ]));
         Extension = "whispshadow";
-        Icon = EncounterIconGeneric;
+        Icon = EncounterIconWhisperingShadow;
         EncounterID |= 0x000001;
     }
 

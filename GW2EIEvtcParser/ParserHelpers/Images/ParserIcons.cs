@@ -197,6 +197,7 @@ internal static class ParserIcons
     private const string HellSister = "https://i.imgur.com/5d9i7Eq.png";
     private const string Umbriel = "https://i.imgur.com/lE2Dg5a.png";
     private const string Zojja = "https://i.imgur.com/9iSzaTe.png";
+    private const string WhisperingShadow = "https://i.imgur.com/ncmbsdG.png";
     #endregion
 
     #region Trash
@@ -1235,6 +1236,7 @@ internal static class ParserIcons
         { TargetID.HellSister, HellSister },
         { TargetID.UmbrielHalberdOfHouseAurkus, Umbriel },
         { TargetID.ZojjaNayos, Zojja },
+        { TargetID.WhisperingShadow, WhisperingShadow },
     };
 
     /// <summary>
