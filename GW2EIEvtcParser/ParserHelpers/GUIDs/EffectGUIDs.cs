@@ -578,6 +578,8 @@ public static class EffectGUIDs
     public static readonly GUID WhisperingShadowFreezingFan = new("B1EBFFDA5D58FD40AF96FF7689C43175"); // owned by shadow, 1.5s duration
     public static readonly GUID WhisperingShadowWintryOrb1 = new("A4F200408147504E901F4FFD821F4393"); // no owner, default duration 7667ms
     public static readonly GUID WhisperingShadowWintryOrb2 = new("795EC8C08BDB514794900B1107C07EC5"); // no owner, default duration 1167ms
+    public static readonly GUID WhisperingShadowHailstorm1 = new("C127DECDC53F13428FF21CF0C236C25D"); // no owner, default duration 6667ms
+    public static readonly GUID WhisperingShadowHailstorm2 = new("66046924ADCA9E4F831A44E2B4ACA40C"); // no owner, default duration 1167ms
     #endregion
 
     #region Raids

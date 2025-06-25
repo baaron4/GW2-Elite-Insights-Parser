@@ -4976,6 +4976,7 @@ public static class SkillIDs
     public const long BloodstoneExplosion = 76315;
     public const long AgonyOfTheChoir = 76319;
     public const long BloodstoneFervor = 76326;
+    public const long FrozenTeethCM = 76332;
     public const long LifeFireCircleCM = 76339;
     public const long VitreousSpikeHit2 = 76343;
     public const long InevitableDarkness = 76350;
@@ -4985,9 +4986,10 @@ public static class SkillIDs
     public const long VitreousSpikeCast = 76393;
     public const long GutteringLight = 76397;
     public const long POV_ArmsOfTheTitan = 76390;
+    public const long VitreosSpikeHit3 = 76393;
     public const long LoftedCryoflash = 76402;
     public const long InevitableDarknessPlayer = 76412;
-    public const long FallingIceCM = 76420;
+    public const long FallingIceCM = 76417;
     public const long TerrestialCryoflash = 76420;
     public const long POV_HeartOfTheTitan = 76448;
     public const long FreezingVortex = 76444;

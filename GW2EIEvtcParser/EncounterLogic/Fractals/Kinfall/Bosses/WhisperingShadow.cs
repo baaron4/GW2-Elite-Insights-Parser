@@ -21,10 +21,11 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstBuffRemoveMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire Circle", "Life-Fire Circle Remove", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
+                new PlayerDstHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2, VitreosSpikeHit3], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
+                new PlayerDstHitMechanic([FallingIce, FallingIceCM], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightBlue), "Fall.H", "Hit by Falling Ice", "Falling Ice Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(FrozenTeeth, new MechanicPlotlySetting(Symbols.XThinOpen, Colors.SkyBlue), "Fissure.H", "Hit by Frozen Teeth (Fissures)", "Frozen Teeth Hit", 0),
+                new PlayerDstHitMechanic([FrozenTeeth, FrozenTeethCM], new MechanicPlotlySetting(Symbols.XThinOpen, Colors.SkyBlue), "Fissure.H", "Hit by Frozen Teeth (Fissures)", "Frozen Teeth Hit", 0),
                 new PlayerDstHitMechanic(LoftedCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Red), "HighCryo.H", "Hit by Lofted Cryoflash (High Shockwave)", "Lofted Cryoflash Hit", 0),
                 new PlayerDstHitMechanic(TerrestialCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "LowCryo.H", "Hit by Terrestrial Cryoflash (Low Shockwave)", "Terrestrial Cryoflash Hit", 0),
             ]),
@@ -36,10 +37,11 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstHitMechanic([FreezingFan, FreezingFan2], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Orange), "Frontal.H", "Hit by Freezing Fan (Frontal)", "Freezing Fan Hit", 0),
             ]),
             new MechanicGroup([
-                new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
+                new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "Green.T", "Targeted by Wintry Orb (Green)", "Wintry Orb Target", 500),
+                new PlayerDstHitMechanic(HailstormWhisperingShadow, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Spread.H", "Hit by Hailstorm (Spread)", "Hailstorm Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "Green.T", "Targeted by Wintry Orb (Green)", "Wintry Orb Target", 500),
+                new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             ]),
         ]));
         Extension = "whispshadow";
@@ -126,6 +128,17 @@ internal class WhisperingShadow : Kinfall
         foreach (var segment in wintryOrbs)
         {
             replay.Decorations.Add(new CircleDecoration(250, segment.TimeSpan, Colors.Green, 0.2, new AgentConnector(player.AgentItem)));
+        }
+
+        // hailstorm (spread)
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.WhisperingShadowHailstorm1, out var hailstorms))
+        {
+            foreach (var effect in hailstorms)
+            {
+                var lifespan = effect.ComputeLifespan(log, 6667);
+                var decoration = new CircleDecoration(250, lifespan, Colors.Orange, 0.2, new AgentConnector(player.AgentItem));
+                replay.Decorations.AddWithGrowing(decoration, lifespan.end);
+            }
         }
     }
 
@@ -248,7 +261,8 @@ internal class WhisperingShadow : Kinfall
         var lifefires = player.GetBuffStatus(log, buff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (var lifefire in lifefires)
         {
-            replay.Decorations.Add(new CircleDecoration(radius, lifefire, Colors.Ice, 0.07, new AgentConnector(player.AgentItem)));
+            var decoration = new CircleDecoration(radius, lifefire, Colors.Ice, 0.05, new AgentConnector(player.AgentItem));
+            replay.Decorations.AddWithBorder(decoration);
         }
     }
 }
