@@ -16,10 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class ConjuredAmalgamate : MythwrightGambit
 {
-    private readonly bool _cn;
-    public ConjuredAmalgamate(int triggerID) : base((int)TargetID.ConjuredAmalgamate)
-    {
-        MechanicList.Add(new MechanicGroup([
+
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam", "Pulverize (Arm Slam)","Arm Slam", 0)
                     .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
@@ -46,8 +44,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 new EnemyDstBuffApplyMechanic(AugmentedPower, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power", "Augmented Power","Augmented Power", 50),
                 new EnemyDstBuffApplyMechanic(ShieldedCA, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Green), "Shielded", "Shielded","Shielded", 50),
             ]),
-        ]));
-        _cn = triggerID != (int)TargetID.ConjuredAmalgamate;
+        ]);
+    public ConjuredAmalgamate(int triggerID) : base((int)TargetID.ConjuredAmalgamate)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "ca";
         Icon = EncounterIconConjuredAmalgamate;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
@@ -64,8 +64,37 @@ internal class ConjuredAmalgamate : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
+    internal static void HandleCAAgents(AgentData agentData, List<CombatItem> combatData)
+    {
+        var chinese = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && LanguageEvent.GetLanguage(x) == LanguageEvent.LanguageEnum.Chinese) != null;
+        // make those into npcs
+        IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(chinese ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate);
+        if (!cas.Any())
+        {
+            throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        }
+        IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(chinese ? TargetID.CALeftArm_CHINA : TargetID.CALeftArm);
+        IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(chinese ? TargetID.CARightArm_CHINA : TargetID.CARightArm);
+        foreach (AgentItem ca in cas)
+        {
+            ca.OverrideType(AgentItem.AgentType.NPC, agentData);
+            ca.OverrideID(TargetID.ConjuredAmalgamate, agentData);
+        }
+        foreach (AgentItem leftArm in leftArms)
+        {
+            leftArm.OverrideType(AgentItem.AgentType.NPC, agentData);
+            leftArm.OverrideID(TargetID.CALeftArm, agentData);
+        }
+        foreach (AgentItem rightArm in rightArms)
+        {
+            rightArm.OverrideType(AgentItem.AgentType.NPC, agentData);
+            rightArm.OverrideID(TargetID.CARightArm, agentData);
+        }
+    }
+
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
+        HandleCAAgents(agentData, combatData);
         // time starts at first smash
         var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
         if (effectIDToGUIDs.Any())
@@ -80,7 +109,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     if (logStartNPCUpdate != null)
                     {
                         // we couldn't have hit CA before the initial smash
-                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetNPCsByID(TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                     }
                     else
                     {
@@ -131,34 +160,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static AgentItem CreateCustomSwordAgent(FightData fightData, AgentData agentData)
+    {    
+        return agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
+    }
+
+    internal static void RedirectSwordDamageToSwordAgent(AgentItem sword, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // make those into npcs
-        IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate);
-        if (!cas.Any())
-        {
-            throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        }
-        IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(_cn ? TargetID.CALeftArm_CHINA : TargetID.CALeftArm);
-        IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? TargetID.CARightArm_CHINA : TargetID.CARightArm);
-        foreach (AgentItem ca in cas)
-        {
-            ca.OverrideType(AgentItem.AgentType.NPC, agentData);
-            ca.OverrideID(TargetID.ConjuredAmalgamate, agentData);
-        }
-        foreach (AgentItem leftArm in leftArms)
-        {
-            leftArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            leftArm.OverrideID(TargetID.CALeftArm, agentData);
-        }
-        foreach (AgentItem rightArm in rightArms)
-        {
-            rightArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            rightArm.OverrideID(TargetID.CARightArm, agentData);
-        }
-        FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (CombatItem c in combatData)
         {
             if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)
@@ -167,15 +175,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
         }
     }
-    /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var res = new List<AbstractBuffEvent>();
-        // Greatsword Power
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 52667);
-        // Conjured Shield
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
-        return res;
-    }*/
+        var sword = CreateCustomSwordAgent(fightData, agentData);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
+    }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {

@@ -14,9 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class TwinLargos : MythwrightGambit
 {
-    public TwinLargos(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new EnemyCastStartMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC", "Breakbar","Breakbar", 0),
                 new EnemyCastEndMechanic(AquaticBarrage, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", 0),
@@ -38,7 +36,10 @@ internal class TwinLargos : MythwrightGambit
             ]),
             new PlayerDstHitMechanic(Geyser, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch", "Geyser (Launching Aoes)","Launch Field", 0),
             new EnemyDstBuffApplyMechanic(EnragedTwinLargos, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage", "Enraged","Enrage", 0),
-        ]));
+        ]);
+    public TwinLargos(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "twinlargos";
         Icon = EncounterIconTwinLargos;
         EncounterCategoryInformation.InSubCategoryOrder = 1;

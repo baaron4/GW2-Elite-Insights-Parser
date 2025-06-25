@@ -18,9 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Qadim : MythwrightGambit
 {
-    public Qadim(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new EnemyCastStartMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC", "Qadim CC","Qadim CC", 0),
                 new EnemyCastEndMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed", "Qadim Breakbar broken","Qadim CCed", 0)
@@ -91,7 +89,10 @@ internal class Qadim : MythwrightGambit
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             ]),
-        ]));
+        ]);
+    public Qadim(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "qadim";
         Icon = EncounterIconQadim;
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
