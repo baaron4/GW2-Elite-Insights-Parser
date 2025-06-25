@@ -185,19 +185,19 @@ internal class Deimos : BastionOfThePenitent
             {
                 return;
             }
-            IReadOnlyList<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEvents(deimos.AgentItem);
+            IReadOnlyList<AttackTargetEvent> attackTargets = combatData.GetAttackTargetEventsBySrc(deimos.AgentItem);
             if (attackTargets.Count == 0)
             {
                 return;
             }
-            AgentItem attackTarget = attackTargets.Last().AttackTarget;
+            AttackTargetEvent attackTargetEvent = attackTargets.Last();
             // sanity check
-            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > percent10Start - ServerDelayConstant);
+            TargetableEvent? attackableEvent = attackTargetEvent.GetTargetableEvents(combatData).LastOrDefault(x => x.Targetable && x.Time > percent10Start - ServerDelayConstant);
             if (attackableEvent == null)
             {
                 return;
             }
-            TargetableEvent? notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
+            TargetableEvent? notAttackableEvent = attackTargetEvent.GetTargetableEvents(combatData).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
             if (notAttackableEvent == null)
             {
                 return;
@@ -365,7 +365,12 @@ internal class Deimos : BastionOfThePenitent
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
-        var targetableEvents = combatData.Where(x => x.IsStateChange == StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => attackTargetEvents.Any(y => y.AttackTarget == x.Src));
+        var targetableEvents = new List<TargetableEvent>();
+        foreach (var attackTarget in attackTargetEvents)
+        {
+            targetableEvents.AddRange(attackTarget.GetTargetableEvents(combatData, agentData));
+        }
+        targetableEvents.SortByTime();
         (AgentItem? deimosStructBody, HashSet<AgentItem> gadgetAgents, long deimos10PercentTargetable, _) = FindDeimos10PercentBodyStructWithAttackTargets(deimos, fightData, agentData, combatData, attackTargetEvents, targetableEvents);
         if (deimosStructBody != null)
         {
@@ -671,12 +676,12 @@ internal class Deimos : BastionOfThePenitent
                 }
                 var arenaPos = arenaCenter + new Vector3(diffX, diffY, 0);
 
-                var attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                var attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault();
                 long hiddenStart = target.FirstAware;
                 if (attackTargetEvent != null)
                 {
                     var attackTarget = attackTargetEvent.AttackTarget;
-                    var targetableEvents = log.CombatData.GetTargetableEvents(attackTarget);
+                    var targetableEvents = attackTargetEvent.GetTargetableEvents(log.CombatData);
                     long lineStart = 0;
                     foreach (var targetableEvent in targetableEvents)
                     {

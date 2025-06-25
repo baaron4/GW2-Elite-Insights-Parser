@@ -199,10 +199,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                 case (int)TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target, log);
                     subPhasesData.Add((phaseStart, phaseEnd, "Soo-Won", target, "Full Fight"));
-                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).Where(x => x.GetTargetableEvents(log).Any(y => y.Targetable && y.Time >= target.FirstAware)).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
-                        var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware);
+                        var targetables = attackTargetEvent.GetTargetableEvents(log).Where(x => x.Time >= target.FirstAware);
                         var targetOns = targetables.Where(x => x.Targetable);
                         var targetOffs = targetables.Where(x => !x.Targetable);
                         int id = 0;
@@ -401,7 +401,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
             if (soowon != null)
             {
-                var targetOffs = combatData.GetAttackTargetEvents(soowon.AgentItem).Select(x => combatData.GetTargetableEvents(x.AttackTarget).Where(x => x.Time >= soowon.FirstAware && !x.Targetable)).FirstOrDefault(x => x.Any());
+                var targetOffs = combatData.GetAttackTargetEventsBySrc(soowon.AgentItem).Select(x => x.GetTargetableEvents(combatData).Where(x => x.Time >= soowon.FirstAware && !x.Targetable)).FirstOrDefault(x => x.Any());
                 if (targetOffs == null)
                 {
                     return;
@@ -478,7 +478,11 @@ internal class HarvestTemple : EndOfDragonsStrike
             TargetID.TheDragonVoidSooWon,
         };
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
-        var targetableEvents = combatData.Where(y => y.IsStateChange == StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+        var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
+        foreach (var attackTarget in attackTargetEvents)
+        {
+            targetableEvents[attackTarget.AttackTarget] = attackTarget.GetTargetableEvents(combatData, agentData);
+        }
         attackTargetEvents = attackTargetEvents.Where(x =>
         {
             AgentItem atAgent = x.AttackTarget;
@@ -498,7 +502,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 continue;
             }
             var targetOns = targetables.Where(x => x.Targetable);
-            if (targetOns.Count() == 0)
+            if (!targetOns.Any())
             {
                 attackTargetSortID[atAgent] = long.MaxValue;
                 continue;

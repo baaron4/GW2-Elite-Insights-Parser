@@ -259,20 +259,20 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             return [];
         }
-        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem);
-        var attackTargets = new HashSet<AgentItem>();
-        foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
+        var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem);
+        var attackTargetEventsToUse = new HashSet<AttackTargetEvent>();
+        foreach (AttackTargetEvent c in attackTargetEvents) // 3rd one is weird
         {
-            attackTargets.Add(c.AttackTarget);
-            if (attackTargets.Count == 2)
+            attackTargetEventsToUse.Add(c);
+            if (attackTargetEventsToUse.Count == 2)
             {
                 break;
             }
         }
         var targetables = new List<long>();
-        foreach (AgentItem attackTarget in attackTargets)
+        foreach (AttackTargetEvent attackTargetEvent in attackTargetEventsToUse)
         {
-            IReadOnlyList<TargetableEvent> aux = log.CombatData.GetTargetableEvents(attackTarget);
+            IReadOnlyList<TargetableEvent> aux = attackTargetEvent.GetTargetableEvents(log);
             targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
         }
         return targetables;
