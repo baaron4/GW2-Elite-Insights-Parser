@@ -138,6 +138,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         ]));
         Icon = EncounterIconHarvestTemple;
         ChestID = ChestID.GrandStrikeChest;
+        GenericFallBackMethod = FallBackMethod.None;
         Extension = "harvsttmpl";
         EncounterCategoryInformation.InSubCategoryOrder = 3;
         EncounterID |= 0x000004;
@@ -299,11 +300,6 @@ internal class HarvestTemple : EndOfDragonsStrike
         return phases;
     }
 
-    protected override List<TargetID> GetSuccessCheckIDs()
-    {
-        return [];
-    }
-
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
         // To investigate
@@ -398,44 +394,46 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        // no bouny chest detection, the reward is delayed
-        SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
-        if (soowon != null)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        if (!fightData.Success)
         {
-            AttackTargetEvent? attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
-            if (attackTargetEvent == null)
+            // no bouny chest detection, the reward is delayed
+            SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
+            if (soowon != null)
             {
-                return;
-            }
-            var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware);
-            var targetOffs = targetables.Where(x => !x.Targetable).ToList();
-            if (targetOffs.Count == 2)
-            {
-                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
-                if (lastDamageTaken != null)
+                var targetOffs = combatData.GetAttackTargetEvents(soowon.AgentItem).Select(x => combatData.GetTargetableEvents(x.AttackTarget).Where(x => x.Time >= soowon.FirstAware && !x.Targetable)).FirstOrDefault(x => x.Any());
+                if (targetOffs == null)
                 {
-                    bool isSuccess = false;
-                    if (agentData.GetGadgetsByID(ChestID).Any())
+                    return;
+                }
+                if (targetOffs.Count() == 2)
+                {
+                    HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                    if (lastDamageTaken != null)
                     {
-                        isSuccess = true;
-                    }
-                    else
-                    {
-                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
-                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
-                        foreach (AnimatedCastEvent liffOff in liftOffs)
+                        bool isSuccess = false;
+                        if (agentData.GetGadgetsByID(ChestID).Any())
                         {
                             isSuccess = true;
-                            if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                        }
+                        else
+                        {
+                            var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
+                            IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                            foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
-                                isSuccess = false;
-                                break;
+                                isSuccess = true;
+                                if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                                {
+                                    isSuccess = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (isSuccess)
-                    {
-                        fightData.SetSuccess(true, targetOffs[1].Time);
+                        if (isSuccess)
+                        {
+                            fightData.SetSuccess(true, targetOffs.Last().Time);
+                        }
                     }
                 }
             }
@@ -490,6 +488,24 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
             return false;
         }).ToList();
+        var attackTargetSortID = new Dictionary<AgentItem, long>();
+        foreach (var attackTargetEvent in attackTargetEvents)
+        {
+            AgentItem atAgent = attackTargetEvent.AttackTarget;
+            if (!targetableEvents.TryGetValue(atAgent, out var targetables))
+            {
+                attackTargetSortID[atAgent] = long.MaxValue;
+                continue;
+            }
+            var targetOns = targetables.Where(x => x.Targetable);
+            if (targetOns.Count() == 0)
+            {
+                attackTargetSortID[atAgent] = long.MaxValue;
+                continue;
+            }
+            attackTargetSortID[atAgent] = targetOns.Min(x => x.Time);
+        }
+        attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
         int index = 0;
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
