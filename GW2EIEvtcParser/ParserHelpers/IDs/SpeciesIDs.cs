@@ -996,6 +996,8 @@ public static class SpeciesIDs
     internal static readonly Vector3 GrenthChestPosition = new(7825.54f, 177.448f, -5750.63f);
     internal static readonly Vector3 DhuumChestPosition = new(16877.2f, 644.802f, -6223.94f);
     internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
+    internal static readonly Vector3 TwinLargosChestPosition = new(15262.2f, 6799.07f, -1497.76f);
+    internal static readonly Vector3 QadimsChestPosition = new(-8291.92f, 12078.5f, -5008.73f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
     public enum ChestID : int
@@ -1018,6 +1020,8 @@ public static class SpeciesIDs
         GrenthChest = SpeciesIDs.GrenthChest,
         DhuumChest = SpeciesIDs.DhuumChest,
         CAChest = SpeciesIDs.CAChest,
+        TwinLargosChest = SpeciesIDs.TwinLargosChest,
+        QadimsChest = SpeciesIDs.QadimsChest,
         GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
 
         None = int.MaxValue,
@@ -1123,6 +1127,8 @@ public static class SpeciesIDs
     private const int SaulsTreasureChest = -82;
     private const int GrenthChest = -83;
     private const int DhuumChest = -84;
+    private const int TwinLargosChest = -85;
+    private const int QadimsChest = -86;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

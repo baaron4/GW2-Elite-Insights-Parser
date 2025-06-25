@@ -42,6 +42,7 @@ internal class TwinLargos : MythwrightGambit
         MechanicList.Add(Mechanics);
         Extension = "twinlargos";
         Icon = EncounterIconTwinLargos;
+        ChestID = ChestID.TwinLargosChest;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
     }

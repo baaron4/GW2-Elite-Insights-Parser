@@ -96,6 +96,7 @@ internal class Qadim : MythwrightGambit
         Extension = "qadim";
         Icon = EncounterIconQadim;
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
+        ChestID = ChestID.QadimsChest;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
     }
