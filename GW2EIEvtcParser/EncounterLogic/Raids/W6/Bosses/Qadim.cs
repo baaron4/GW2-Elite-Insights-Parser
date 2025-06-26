@@ -164,8 +164,8 @@ internal class Qadim : MythwrightGambit
                 .Distinct();
             foreach (var lamp in lamps)
             {
-                lamp.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
                 lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                lamp.OverrideID(TargetID.QadimLamp, agentData);
             }
         } 
         else
