@@ -64,31 +64,52 @@ internal class ConjuredAmalgamate : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
+    private static readonly Vector3 BodyAttackTargetPos = new(-3325f, -12925f, -2451.05f);
+    private static readonly Vector3 LeftArmAttackTargetPosForDamage = new(-4239.84f, -13354f, -2061.94f);
+    private static readonly Vector3 LeftArmAttackTargetPosNoDamage = new(-2844.18f, -13942.6f, -2316.01f);
+    private static readonly Vector3 RightArmAttackTargetPosForDamage = new (-4321.68f, -12616.5f, -2061.94f);
+    private static readonly Vector3 RightArmAttackTargetPosNoDamage = new(-2900.12f, -11787.7f, -2391.01f);
+
     internal static void HandleCAAgents(AgentData agentData, List<CombatItem> combatData)
     {
-        var chinese = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && LanguageEvent.GetLanguage(x) == LanguageEvent.LanguageEnum.Chinese) != null;
-        // make those into npcs
-        IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(chinese ? TargetID.ConjuredAmalgamate_CHINA : TargetID.ConjuredAmalgamate);
-        if (!cas.Any())
+        var attackTargetEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.AttackTarget)
+            .Select(x => new AttackTargetEvent(x, agentData))
+            .ToList();
+        var tst = attackTargetEvents.Select(x => x.GetTargetableEvents(combatData, agentData)).ToList();
+        var attackTargetPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && attackTargetEvents.Any(y => x.SrcMatchesAgent(y.AttackTarget))).Select(x => new PositionEvent(x, agentData)).ToList();
+        foreach (var position in attackTargetPositions)
         {
-            throw new MissingKeyActorsException("Conjured Amalgamate not found");
+            var agent = attackTargetEvents.First(x => position.Src == x.AttackTarget).Src;
+            var atPos = position.GetPoint3D();
+            if ((atPos - BodyAttackTargetPos).Length() < 5)
+            {
+                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                agent.OverrideID(TargetID.ConjuredAmalgamate, agentData);
+            }
+            else if ((atPos - LeftArmAttackTargetPosNoDamage).Length() < 5)
+            {
+                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                agent.OverrideID(TargetID.CALeftArm, agentData);
+            }
+            else if ((atPos - RightArmAttackTargetPosNoDamage).Length() < 5)
+            {
+                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                agent.OverrideID(TargetID.CARightArm, agentData);
+            }
         }
-        IReadOnlyList<AgentItem> leftArms = agentData.GetGadgetsByID(chinese ? TargetID.CALeftArm_CHINA : TargetID.CALeftArm);
-        IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(chinese ? TargetID.CARightArm_CHINA : TargetID.CARightArm);
-        foreach (AgentItem ca in cas)
+        foreach (var position in attackTargetPositions)
         {
-            ca.OverrideType(AgentItem.AgentType.NPC, agentData);
-            ca.OverrideID(TargetID.ConjuredAmalgamate, agentData);
-        }
-        foreach (AgentItem leftArm in leftArms)
-        {
-            leftArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            leftArm.OverrideID(TargetID.CALeftArm, agentData);
-        }
-        foreach (AgentItem rightArm in rightArms)
-        {
-            rightArm.OverrideType(AgentItem.AgentType.NPC, agentData);
-            rightArm.OverrideID(TargetID.CARightArm, agentData);
+            var agent = attackTargetEvents.First(x => position.Src == x.AttackTarget).Src;
+            var atPos = position.GetPoint3D();
+            if (agent.IsSpecies(TargetID.CALeftArm) && (atPos - LeftArmAttackTargetPosForDamage).Length() < 5)
+            {
+                position.Src.OverrideID(TargetID.CALeftArmAttackTarget, agentData);
+            }
+            else if (agent.IsSpecies(TargetID.CARightArm) && (atPos - RightArmAttackTargetPosForDamage).Length() < 5)
+            {
+                position.Src.OverrideID(TargetID.CARightArmAttackTarget, agentData);
+            }
         }
     }
 
@@ -259,29 +280,18 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    private static List<long> GetTargetableTimes(ParsedEvtcLog log, SingleActor? target)
+    private static List<long> GetTargetableTimes(ParsedEvtcLog log, SingleActor? target, TargetID atID)
     {
         if (target == null)
         {
             return [];
         }
-        var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem);
-        var attackTargetEventsToUse = new HashSet<AttackTargetEvent>();
-        foreach (AttackTargetEvent c in attackTargetEvents) // 3rd one is weird
+        var attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault(x => x.AttackTarget.IsSpecies(atID));
+        if (attackTargetEvent != null)
         {
-            attackTargetEventsToUse.Add(c);
-            if (attackTargetEventsToUse.Count == 2)
-            {
-                break;
-            }
+            return attackTargetEvent.GetTargetableEvents(log).Where(x => x.Targetable).Select(x => x.Time).ToList();
         }
-        var targetables = new List<long>();
-        foreach (AttackTargetEvent attackTargetEvent in attackTargetEventsToUse)
-        {
-            IReadOnlyList<TargetableEvent> aux = attackTargetEvent.GetTargetableEvents(log);
-            targetables.AddRange(aux.Where(x => x.Targetable).Select(x => x.Time));
-        }
-        return targetables;
+        return [];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -318,8 +328,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
         if (leftArm != null || rightArm != null)
         {
             int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
-            var targetablesL = GetTargetableTimes(log, leftArm);
-            var targetablesR = GetTargetableTimes(log, rightArm);
+            var targetablesL = GetTargetableTimes(log, leftArm, TargetID.CALeftArmAttackTarget);
+            var targetablesR = GetTargetableTimes(log, rightArm, TargetID.CARightArmAttackTarget);
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

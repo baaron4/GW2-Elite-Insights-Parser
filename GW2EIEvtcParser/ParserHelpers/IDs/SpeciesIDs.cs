@@ -219,6 +219,9 @@ public static class SpeciesIDs
         ConjuredAmalgamate_CHINA = 44885, // Gadget
         CARightArm_CHINA = 11053, // Gadget
         CALeftArm_CHINA = 38375, // Gadget
+        CARightArmAttackTarget = SpeciesIDs.CARightArmAttackTarget,
+        CALeftArmAttackTarget = SpeciesIDs.CALeftArmAttackTarget,
+        CABodyAttackTarget = SpeciesIDs.CABodyAttackTarget,
         ConjuredGreatsword = 21255,
         ConjuredShield = 21170,
         ConjuredPlayerSword = CASword,
@@ -1129,6 +1132,9 @@ public static class SpeciesIDs
     private const int DhuumChest = -84;
     private const int TwinLargosChest = -85;
     private const int QadimsChest = -86;
+    private const int CALeftArmAttackTarget = -87;
+    private const int CARightArmAttackTarget = -88;
+    private const int CABodyAttackTarget = -89;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
