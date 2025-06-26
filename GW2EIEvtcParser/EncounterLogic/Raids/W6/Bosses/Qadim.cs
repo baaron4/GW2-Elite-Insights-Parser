@@ -447,7 +447,12 @@ internal class Qadim : MythwrightGambit
             TargetID.WindRider,
         ];
     }
-
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.QadimPlatform
+        ];
+    }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
