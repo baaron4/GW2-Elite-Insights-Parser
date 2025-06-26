@@ -30,7 +30,7 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstHitMechanic(TerrestialCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "LowCryo.H", "Hit by Terrestrial Cryoflash (Low Shockwave)", "Terrestrial Cryoflash Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstBuffApplyMechanic(GorefrostTarget, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Arrow.A", "Targeted by Gorefrost (Arrows)", "Gorefrost Target", 0),
+                new PlayerDstBuffApplyMechanic(GorefrostTarget, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Arrow.T", "Targeted by Gorefrost (Arrows)", "Gorefrost Target", 0),
                 new PlayerDstHitMechanic(Gorefrost, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "Arrow.H", "Hit by Gorefrost (Arrows)", "Gorefrost Hit", 0),
             ]),
             new MechanicGroup([
