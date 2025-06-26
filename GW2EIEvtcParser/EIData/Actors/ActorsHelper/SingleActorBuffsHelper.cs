@@ -240,34 +240,6 @@ partial class SingleActor
         return seg;
     }
 
-    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long time)
-    {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
-        {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
-        }
-        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log));
-        if (seg.Value > 0)
-        {
-            return new Segment(seg.Start, seg.End, 1);
-        }
-        return seg;
-    }
-
-    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
-    {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
-        {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
-        }
-        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
-        if (seg.Value > 0)
-        {
-            return new Segment(seg.Start, seg.End, 1);
-        }
-        return seg;
-    }
-
     private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
         return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];

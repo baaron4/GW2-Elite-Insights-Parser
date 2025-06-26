@@ -133,19 +133,6 @@ public abstract class Actor
         return AgentItem.InAwareTimes(other);
     }
 
-    public bool InAwareTimes(long time)
-    {
-        return AgentItem.InAwareTimes(time);
-    }
-    public bool InAwareTimes(Actor other)
-    {
-        return AgentItem.InAwareTimes(other);
-    }
-    public bool InAwareTimes(AgentItem other)
-    {
-        return AgentItem.InAwareTimes(other);
-    }
-
     // Getters
     // Damage logs
     public abstract IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
