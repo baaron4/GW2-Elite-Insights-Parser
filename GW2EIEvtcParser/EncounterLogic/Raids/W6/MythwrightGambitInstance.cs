@@ -171,12 +171,60 @@ internal class MythwrightGambitInstance : MythwrightGambit
         NumericallyRenamePhases(encounterPhases);
     }
 
+    private static void HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<PhaseData>();
+        var mainPhase = phases[0];
+        if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
+        {
+            var chest = log.AgentData.GetGadgetsByID(ChestID.QadimsChest).FirstOrDefault();
+            foreach (var qadim in qadims)
+            {
+                var qadimAnimatedCasts = qadim.GetAnimatedCastEvents(log, qadim.FirstAware, qadim.LastAware);
+                var qadimFirstCast = qadimAnimatedCasts.FirstOrDefault(x => x.SkillId == SkillIDs.QadimInitialCast);
+                var qadimSanityCheckCast = qadimAnimatedCasts.FirstOrDefault(x => (x.SkillId == SkillIDs.FlameSlash3 || x.SkillId == SkillIDs.FlameSlash || x.SkillId == SkillIDs.FlameWave));
+                if (qadimFirstCast == null || qadimSanityCheckCast == null || qadimSanityCheckCast.Time <= qadimFirstCast.Time)
+                {
+                    continue;
+                }
+                long start = qadimFirstCast.Time;
+                long end = qadim.LastAware;
+                bool success = false;
+                if (chest != null && chest.InAwareTimes(end + 500))
+                {
+                    end = chest.FirstAware;
+                    success = true;
+                }
+                var phase = new PhaseData(start, end, "Qadim");
+                phases.Add(phase);
+                encounterPhases.Add(phase);
+                if (qadim.GetHealth(log.CombatData) > 21e6)
+                {
+                    phase.Name += " CM";
+                }
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phase.AddParentPhase(mainPhase);
+                phase.AddTarget(qadim, log);
+                mainPhase.AddTarget(qadim, log);
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         HandleConjuredAmalgamatePhases(targetsByIDs, log, phases);
         HandleTwinLargosPhases(targetsByIDs, log, phases);
+        HandleQadimPhases(targetsByIDs, log, phases);
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
