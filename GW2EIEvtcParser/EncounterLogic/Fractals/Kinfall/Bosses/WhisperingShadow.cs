@@ -80,24 +80,49 @@ internal class WhisperingShadow : Kinfall
             return phases;
         }
 
-        // breakbars queue up at 80%, 50%, 20%
-        var (_, breakbarActives, _, _) = shadow.GetBreakbarStatus(log);
-        if (breakbarActives.Count > 0)
+        // guttering light queues up at 80%, 50%, 20%
+        // we use the first cast as start and stun/breakbar as end
+        int i = 1;
+        var start = log.FightData.FightStart;
+        bool isFirst = true;
+        var breakbarEnds = log.CombatData.GetBreakbarStateEvents(shadow.AgentItem).Where(x => x.State != ArcDPSEnums.BreakbarState.Active);
+        var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
+        foreach (var cast in log.CombatData.GetAnimatedCastData(shadow.AgentItem).Where(x => x.ActualDuration > 0))
         {
-            int i = 1;
-            var start = phases[0].Start;
-            foreach (var breakbarActive in breakbarActives)
+            if (cast.SkillId == GutteringLight)
             {
-                var phase = new PhaseData(start, breakbarActive.Start, "Phase " + i);
-                phase.AddTarget(shadow, log);
-                phases.Add(phase);
-                start = phase.End;
-                i++;
+                if (isFirst)
+                {
+                    var phase = new PhaseData(start, cast.Time, "Phase " + i);
+                    phase.AddParentPhase(phases[0]);
+                    phase.AddTarget(shadow, log);
+                    phases.Add(phase);
+
+                    var stunned = stuns.FirstOrDefault(x => x.Time > phase.End);
+                    var broken = breakbarEnds.FirstOrDefault(x => x.Time > phase.End);
+                    var end = Math.Min(stunned?.Time ?? log.FightData.FightEnd, broken?.Time ?? long.MaxValue);
+                    var split = new PhaseData(cast.Time, end, "Darkness " + i);
+                    phase.AddParentPhase(phases[0]);
+                    split.AddTarget(shadow, log);
+                    phases.Add(split);
+
+                    start = end;
+                    i++;
+                }
+                isFirst = false;
             }
-            var finalPhase = new PhaseData(start, phases[0].End, "Phase " + i);
-            finalPhase.AddTarget(shadow, log);
-            phases.Add(finalPhase);
+            else
+            {
+                isFirst = true;
+            }
         }
+        if (start != log.FightData.FightEnd)
+        {
+            var lastPhase = new PhaseData(start, log.FightData.FightEnd, "Phase " + i);
+            lastPhase.AddTarget(shadow, log);
+            phases.Add(lastPhase);
+        }
+
         return phases;
     }
 
