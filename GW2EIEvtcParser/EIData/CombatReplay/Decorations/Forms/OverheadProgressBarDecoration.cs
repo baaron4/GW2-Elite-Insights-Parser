@@ -67,6 +67,7 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
         ) : this(pixelWidth, (lifespan.Start, lifespan.End), color, secondaryColor, progress, connectedTo)
     {
     }
+
     public OverheadProgressBarDecoration(
         uint pixelWidth,
         (long start, long end) lifespan,
