@@ -134,84 +134,9 @@ internal class Qadim : MythwrightGambit
         return agentData.GetNPCsByID(TargetID.QadimPlatform).GroupBy(x => x.Name).Count() == 12;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RenamePyres(IReadOnlyList<SingleActor> targets)
     {
-        var maxHPUpdates = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
-            .Select(x => new MaxHealthUpdateEvent(x, agentData))
-            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
-        if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
-        {
-            if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
-            {
-                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
-                foreach (AgentItem platform in platformAgents)
-                {
-                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    platform.OverrideID(TargetID.QadimPlatform, agentData);
-                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
-                }
-            }
-        }
-        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
-        // Lamps
-        var qadimLampMarkerGUID = combatData
-            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
-                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
-            .FirstOrDefault();
-        if (qadimLampMarkerGUID != null)
-        {
-            var lamps = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
-                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
-                .Distinct();
-            foreach (var lamp in lamps)
-            {
-                lamp.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
-                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-            }
-        } 
-        else
-        {
-            if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
-            {
-                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
-                foreach (AgentItem lamp in lampAgents)
-                {
-                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    lamp.OverrideID(TargetID.QadimLamp, agentData);
-                }
-            }
-        }
-        // Pyres
-        var protectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
-        var stabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
-        var resolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
-        foreach (AgentItem pyre in pyres)
-        {
-            CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
-            if (positionEvt != null)
-            {
-                var position = MovementEvent.GetPoint3D(positionEvt).XY();
-                if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(TargetID.PyreGuardianProtect, agentData);
-                }
-                else if (stabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(TargetID.PyreGuardianStab, agentData);
-                }
-                else if (resolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TargetID.PyreGuardianResolution : TargetID.PyreGuardianRetal, agentData);
-                }
-            }
-        }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.PyreGuardianProtect))
             {
@@ -231,6 +156,101 @@ internal class Qadim : MythwrightGambit
             }
         }
     }
+
+    internal static void FindPlateforms(EvtcVersionEvent evtcVersion, IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
+    {
+        if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
+        {
+            if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
+            {
+                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
+                foreach (AgentItem platform in platformAgents)
+                {
+                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    platform.OverrideID(TargetID.QadimPlatform, agentData);
+                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
+                }
+            }
+        }
+    }
+
+    internal static void FindLamps(EvtcVersionEvent evtcVersion, IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
+    {
+        var qadimLampMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (qadimLampMarkerGUID != null)
+        {
+            var lamps = combatData
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var lamp in lamps)
+            {
+                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                lamp.OverrideID(TargetID.QadimLamp, agentData);
+            }
+        } 
+        else
+        {
+            if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
+            {
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
+                foreach (AgentItem lamp in lampAgents)
+                {
+                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    lamp.OverrideID(TargetID.QadimLamp, agentData);
+                }
+            }
+        }
+    }
+
+    private static readonly Vector2[] ProtectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
+    private static readonly Vector2[] StabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
+    private static readonly Vector2[] ResolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
+
+    internal static void FindPyres(ulong gw2Build, AgentData agentData, List<CombatItem> combatData)
+    {
+        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
+        foreach (AgentItem pyre in pyres)
+        {
+            CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
+            if (positionEvt != null)
+            {
+                var position = MovementEvent.GetPoint3D(positionEvt).XY();
+                if (ProtectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(TargetID.PyreGuardianProtect, agentData);
+                }
+                else if (StabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(TargetID.PyreGuardianStab, agentData);
+                }
+                else if (ResolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TargetID.PyreGuardianResolution : TargetID.PyreGuardianRetal, agentData);
+                }
+            }
+        }
+            }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+            {
+        var maxHPUpdates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
+            .Select(x => new MaxHealthUpdateEvent(x, agentData))
+            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+        FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
+        FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
+        FindPyres(gw2Build, agentData, combatData);
+        // Pyres
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenamePyres(Targets);
+            }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
@@ -425,6 +445,13 @@ internal class Qadim : MythwrightGambit
             TargetID.TamedWarg,
             TargetID.TarElemental,
             TargetID.WindRider,
+        ];
+    }
+
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.QadimPlatform
         ];
     }
 
