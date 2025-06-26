@@ -98,9 +98,9 @@ internal class Sabir : TheKeyOfAhdashim
         ];
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem));
+        NegateDamageAgainstBarrier(combatData, agentData, [TargetID.Sabir]);
         return [];
     }
 

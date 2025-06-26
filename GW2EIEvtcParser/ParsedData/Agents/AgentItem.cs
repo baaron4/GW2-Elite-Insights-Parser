@@ -395,6 +395,10 @@ public class AgentItem
     {
         return new Segment(FirstAware, LastAware).Intersects(start, end);
     }
+    public bool InAwareTimes(Actor other)
+    {
+        return InAwareTimes(other.FirstAware, other.LastAware);
+    }
     public bool InAwareTimes(AgentItem other)
     {
         return InAwareTimes(other.FirstAware, other.LastAware);

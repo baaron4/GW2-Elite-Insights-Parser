@@ -429,7 +429,7 @@ public abstract class FightLogic
         return [ ];
     }
 
-    internal virtual List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal virtual List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
         return [ ];
     }

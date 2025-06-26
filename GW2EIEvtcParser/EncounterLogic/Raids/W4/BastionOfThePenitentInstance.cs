@@ -44,28 +44,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return "Bastion Of The Penitent";
     }
 
-    internal override List<InstantCastFinder> GetInstantCastFinders()
-    {
-        List<InstantCastFinder> finders = [
-            .. _cairn.GetInstantCastFinders(),
-            .. _mursaatOverseer.GetInstantCastFinders(),
-            .. _samarog.GetInstantCastFinders(),
-            .. _deimos.GetInstantCastFinders()
-        ];
-        return finders;
-    }
-
-    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
-    {
-        List<TargetID> trashes = [
-            .. _cairn.GetTrashMobsIDs(),
-            .. _mursaatOverseer.GetTrashMobsIDs(),
-            .. _samarog.GetTrashMobsIDs(),
-            .. _deimos.GetTrashMobsIDs()
-        ];
-        return trashes.Distinct().ToList();
-    }
-
     private static void HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
@@ -101,7 +79,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
                 bool success = false;
                 long end = cairn.LastAware;
-                if (cairn == lastTarget && chest != null)
+                if (chest != null && chest.InAwareTimes(cairn.LastAware + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
@@ -109,7 +87,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 var phase = new PhaseData(start, end, "Cairn");
                 phases.Add(phase);
                 encounterPhases.Add(phase);
-                if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= cairn.FirstAware && x.Time <= cairn.LastAware))
+                if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end))
                 {
                     phase.Name += " CM";
                 }
@@ -129,7 +107,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         NumericallyRenamePhases(encounterPhases);
     }
 
-    private static void HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private void HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var mainPhase = phases[0];
         var encounterPhases = new List<PhaseData>();
@@ -242,18 +220,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         phase.AddParentPhase(mainPhase);
                         phase.AddTarget(target, log);
                         phase.AddTargets(demonicBonds, log, PhaseData.TargetPriority.Blocking);
-                        if (targetsByIDs.TryGetValue((int)TargetID.Thief, out var thieves))
-                        {
-                            phase.AddTargets(thieves, log, PhaseData.TargetPriority.NonBlocking);
-                        }
-                        if (targetsByIDs.TryGetValue((int)TargetID.Gambler, out var gamblers))
-                        {
-                            phase.AddTargets(gamblers, log, PhaseData.TargetPriority.NonBlocking);
-                        }
-                        if (targetsByIDs.TryGetValue((int)TargetID.Drunkard, out var drunkards))
-                        {
-                            phase.AddTargets(drunkards, log, PhaseData.TargetPriority.NonBlocking);
-                        }
+                        AddTargetsToPhase(phase, [TargetID.Thief, TargetID.Gambler, TargetID.Drunkard], log, PhaseData.TargetPriority.NonBlocking);
                         encounterStartThreshold = encounterEnd;
                     }
                 }
@@ -277,6 +244,27 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return phases;
     }
 
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        List<InstantCastFinder> finders = [
+            .. _cairn.GetInstantCastFinders(),
+            .. _mursaatOverseer.GetInstantCastFinders(),
+            .. _samarog.GetInstantCastFinders(),
+            .. _deimos.GetInstantCastFinders()
+        ];
+        return finders;
+    }
+
+    internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
+    {
+        List<TargetID> trashes = [
+            .. _cairn.GetTrashMobsIDs(),
+            .. _mursaatOverseer.GetTrashMobsIDs(),
+            .. _samarog.GetTrashMobsIDs(),
+            .. _deimos.GetTrashMobsIDs()
+        ];
+        return trashes.Distinct().ToList();
+    }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         List<TargetID> targets = [
@@ -347,12 +335,12 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return res;
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var res = new List<HealthDamageEvent>();
         foreach (var subLogic in _subLogics)
         {
-            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, skillData));
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, agentData, skillData));
         }
         return res;
     }
