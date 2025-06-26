@@ -390,7 +390,7 @@ internal class HallOfChainsInstance : HallOfChains
         var res = new List<HealthDamageEvent>();
         foreach (var subLogic in _subLogics)
         {
-            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, TODO, skillData));
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, agentData, skillData));
         }
         return res;
     }
