@@ -127,7 +127,8 @@ internal class WhisperingShadow : Kinfall
         var wintryOrbs = player.GetBuffStatus(log, LethalCoalescenceBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (var segment in wintryOrbs)
         {
-            replay.Decorations.Add(new CircleDecoration(250, segment.TimeSpan, Colors.Green, 0.2, new AgentConnector(player.AgentItem)));
+            var decoration = new CircleDecoration(240, segment.TimeSpan, Colors.DarkGreen, 0.2, new AgentConnector(player.AgentItem));
+            replay.Decorations.AddWithGrowing(decoration, segment.End, true);
         }
 
         // hailstorm (spread)
