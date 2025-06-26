@@ -124,9 +124,9 @@ public partial class CombatData
         }
     }
 
-    private void EIDamageParse(SkillData skillData, FightData fightData)
+    private void EIDamageParse(SkillData skillData, AgentData agentData, FightData fightData)
     {
-        var toAdd = fightData.Logic.SpecialDamageEventProcess(this, skillData);
+        var toAdd = fightData.Logic.SpecialDamageEventProcess(this, agentData, skillData);
 
         var idsToSort = new HashSet<long>(toAdd.Count);
         var dstToSort = new HashSet<AgentItem>(toAdd.Count);
@@ -392,7 +392,7 @@ public partial class CombatData
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
         EIBuffParse(players, skillData, fightData, evtcVersion);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
-        EIDamageParse(skillData, fightData);
+        EIDamageParse(skillData, agentData, fightData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
         EICastParse(players, skillData, fightData, agentData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Status Events");

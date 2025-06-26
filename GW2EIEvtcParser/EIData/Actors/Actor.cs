@@ -120,6 +120,11 @@ public abstract class Actor
     {
         return AgentItem.IsAnySpecies(ids);
     }
+
+    public bool InAwareTimes(long time)
+    {
+        return AgentItem.InAwareTimes(time);
+    }
     public bool InAwareTimes(Actor other)
     {
         return AgentItem.InAwareTimes(other);

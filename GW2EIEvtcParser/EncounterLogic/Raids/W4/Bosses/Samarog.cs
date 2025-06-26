@@ -82,7 +82,7 @@ internal class Samarog : BastionOfThePenitent
         ];
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var fanaticalAppliedAgents = combatData.GetBuffApplyData(FanaticalResilience).Select(x => x.To).Distinct();
         foreach (var fanaticalAppliedTo in fanaticalAppliedAgents)

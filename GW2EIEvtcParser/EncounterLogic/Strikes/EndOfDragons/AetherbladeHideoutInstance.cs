@@ -76,9 +76,9 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         return _aetherbladeHideout.SpecialCastEventProcess(combatData, skillData);
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        return _aetherbladeHideout.SpecialDamageEventProcess(combatData, skillData);
+        return _aetherbladeHideout.SpecialDamageEventProcess(combatData, agentData, skillData);
     }
 
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
