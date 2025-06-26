@@ -86,7 +86,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 var phase = new PhaseData(start, end, "Cairn");
                 phases.Add(phase);
                 encounterPhases.Add(phase);
-                if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= cairn.FirstAware && x.Time <= cairn.LastAware))
+                if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end))
                 {
                     phase.Name += " CM";
                 }

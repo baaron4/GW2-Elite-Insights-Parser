@@ -228,7 +228,7 @@ internal static class EncounterLogicPhaseUtils
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
                 bool success = false;
                 long end = target.LastAware;
-                if (chest != null && chest.InAwareTimes(target.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
