@@ -251,32 +251,29 @@ internal class TwinLargos : MythwrightGambit
         return FightData.EncounterStartStatus.Normal;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void AdjustFinalHPEvents(List<CombatItem> combatData, AgentItem agentItem)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        // discard hp update events after determined apply
-        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        var nikareHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem));
-        if (nikareHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
+        var hpUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(agentItem));
+        if (hpUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
         {
-            CombatItem lastHPUpdate = nikareHPUpdates.Last();
+            CombatItem lastHPUpdate = hpUpdates.Last();
             if (lastHPUpdate.DstAgent == 10000)
             {
                 lastHPUpdate.OverrideSrcAgent(0);
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        // discard hp update events after determined apply
+        SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
+        AdjustFinalHPEvents(combatData, nikare.AgentItem);
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
-            var kenutHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem));
-            if (kenutHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
-            {
-                CombatItem lastHPUpdate = kenutHPUpdates.Last();
-                if (lastHPUpdate.DstAgent == 10000)
-                {
-                    lastHPUpdate.OverrideSrcAgent(0);
-                }
-            }
+            AdjustFinalHPEvents(combatData, kenut.AgentItem);
         }
     }
 
@@ -401,36 +398,37 @@ internal class TwinLargos : MythwrightGambit
     {
         return "Twin Largos";
     }
+    private static bool HasCastAquaticDomainOrCMHP(CombatData combatData, SingleActor actor, double hpThresholdForCM)
+    {
+        bool hasCastAquaticDomain = combatData.GetAnimatedCastData(actor.AgentItem).Any(x => x.SkillId == AquaticDomain);
+        if (hasCastAquaticDomain) // aquatic domain only present in 
+        {
+            return true;
+        }
+        if (combatData.GetHealthUpdateEvents(actor.AgentItem).Any(x => x.HealthPercent < 70)) // reached below 75% but did not cast aquatic domain, not possible
+        {
+            return false;
+        }
+        bool hasCMHP = actor.GetHealth(combatData) > hpThresholdForCM;
+        return hasCMHP;
+    }
+    internal static bool HasCastAquaticDomainOrCMHP(CombatData combatData, SingleActor? nikare, SingleActor? kenut)
+    {
+        if (nikare != null && HasCastAquaticDomainOrCMHP(combatData, nikare, 18e6))
+        {
+            return true;
+        }
+        if (kenut != null && HasCastAquaticDomainOrCMHP(combatData, kenut, 16e6))
+        {
+            return true;
+        }
+        return false;
+    }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillId == AquaticDomain);
-        if (nikareHasCastAquaticDomain) // aquatic domain only present in CM
-        {
-            return FightData.EncounterMode.CM;
-        }
-        FightData.EncounterMode mode = (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare;
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
-        if (kenut != null)
-        {
-            if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillId == AquaticDomain)) // aquatic domain only present in CM
-            {
-                return FightData.EncounterMode.CM;
-            }
-            if (mode != FightData.EncounterMode.CM && kenut.GetHealth(combatData) > 16e6) // Health of Kenut
-            {
-                mode = FightData.EncounterMode.CM;
-            }
-            if (mode == FightData.EncounterMode.CM && combatData.GetDamageTakenData(kenut.AgentItem).Any(x => x.CreditedFrom.IsPlayer && x.HealthDamage > 0) && !nikareHasCastAquaticDomain) // Kenut engaged but nikare never cast Aquatic Domain -> normal mode
-            {
-                mode = FightData.EncounterMode.Normal;
-            }
-        }
-        if (mode == FightData.EncounterMode.CM && combatData.GetHealthUpdateEvents(nikare.AgentItem).Any(x => x.HealthPercent < 70) && !nikareHasCastAquaticDomain) // Nikare went below 70% but never cast Aquatic Domain
-        {
-            mode = FightData.EncounterMode.Normal;
-        }
-        return mode;
+        return HasCastAquaticDomainOrCMHP(combatData, nikare, kenut) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }
