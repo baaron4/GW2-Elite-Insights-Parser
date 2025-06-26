@@ -106,7 +106,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         NumericallyRenamePhases(encounterPhases);
     }
 
-    private static void HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private void HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var mainPhase = phases[0];
         var encounterPhases = new List<PhaseData>();
@@ -219,18 +219,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         phase.AddParentPhase(mainPhase);
                         phase.AddTarget(target, log);
                         phase.AddTargets(demonicBonds, log, PhaseData.TargetPriority.Blocking);
-                        if (targetsByIDs.TryGetValue((int)TargetID.Thief, out var thieves))
-                        {
-                            phase.AddTargets(thieves, log, PhaseData.TargetPriority.NonBlocking);
-                        }
-                        if (targetsByIDs.TryGetValue((int)TargetID.Gambler, out var gamblers))
-                        {
-                            phase.AddTargets(gamblers, log, PhaseData.TargetPriority.NonBlocking);
-                        }
-                        if (targetsByIDs.TryGetValue((int)TargetID.Drunkard, out var drunkards))
-                        {
-                            phase.AddTargets(drunkards, log, PhaseData.TargetPriority.NonBlocking);
-                        }
+                        AddTargetsToPhase(phase, [TargetID.Thief, TargetID.Gambler, TargetID.Drunkard], log, PhaseData.TargetPriority.NonBlocking);
                         encounterStartThreshold = encounterEnd;
                     }
                 }

@@ -160,9 +160,13 @@ public static class SpeciesIDs
         SpearAggressionRevulsion = SpeciesIDs.SpearAggressionRevulsion,
         // - Deimos
         Deimos = 17154,
+        DeimosAttackTarget = SpeciesIDs.DeimosAttackTarget,
+        DeimosBodyStruct = SpeciesIDs.DeimosBodyStruct,
+        DeimosArmStruct = SpeciesIDs.DeimosArmStruct,
         Saul = 17126,
         ShackledPrisoner = SpeciesIDs.ShackledPrisoner,
         DemonicBond = SpeciesIDs.DemonicBond,
+        DemonicBondAttackTarget = SpeciesIDs.DemonicBondAttackTarget,
         Thief = 17206,
         Gambler = 17335,
         GamblerClones = 17161,
@@ -1135,6 +1139,10 @@ public static class SpeciesIDs
     private const int CALeftArmAttackTarget = -87;
     private const int CARightArmAttackTarget = -88;
     private const int CABodyAttackTarget = -89;
+    private const int DemonicBondAttackTarget = -90;
+    private const int DeimosAttackTarget = -90;
+    private const int DeimosBodyStruct = -91;
+    private const int DeimosArmStruct = -92;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
