@@ -116,9 +116,10 @@ internal class WhisperingShadow : Kinfall
                 isFirst = true;
             }
         }
-        if (start != log.FightData.FightEnd)
+        if (start < log.FightData.FightEnd)
         {
             var lastPhase = new PhaseData(start, log.FightData.FightEnd, "Phase " + i);
+            lastPhase.AddParentPhase(phases[0]);
             lastPhase.AddTarget(shadow, log);
             phases.Add(lastPhase);
         }
