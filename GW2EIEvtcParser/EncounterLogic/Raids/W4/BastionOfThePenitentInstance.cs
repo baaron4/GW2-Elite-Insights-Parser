@@ -50,7 +50,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            var lastTarget = cairns.Last();
             var chest = log.AgentData.GetGadgetsByID(ChestID.CairnChest).FirstOrDefault();
             foreach (var cairn in cairns)
             {
