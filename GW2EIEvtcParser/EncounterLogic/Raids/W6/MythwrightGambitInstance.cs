@@ -40,11 +40,148 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         return "Mythwright Gambit";
     }
+    private static void HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<PhaseData>();
+        var mainPhase = phases[0];
+        if (targetsByIDs.TryGetValue((int)TargetID.ConjuredAmalgamate, out var conjuredAmalgamates) && 
+            targetsByIDs.TryGetValue((int)TargetID.CALeftArm, out var leftArms) && 
+            targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) && 
+            log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CAArmSmash, out var armSmashes))
+        {
+            var chest = log.AgentData.GetGadgetsByID(ChestID.CAChest).FirstOrDefault();
+            long lowerThreshold = 0;
+            foreach (var armSmash in armSmashes)
+            {
+                if (armSmash.Time < lowerThreshold)
+                {
+                    continue;
+                }
+                long start = armSmash.Time;
+                var conjuredAmalgamate = conjuredAmalgamates.FirstOrDefault(x => x.InAwareTimes(start));
+                var leftArm = leftArms.FirstOrDefault(x => x.InAwareTimes(start));
+                var rightArm = rightArms.FirstOrDefault(x => x.InAwareTimes(start));
+                if (conjuredAmalgamate != null && leftArm != null && rightArm != null)
+                {
+                    bool success = false;
+                    // CA will be at 90% due to an arm being killed and that should be its first in combat health update
+                    double prevHPUpdate = 99;
+                    long end = conjuredAmalgamate.LastAware;
+                    foreach (var hpUpdate in log.CombatData.GetHealthUpdateEvents(conjuredAmalgamate.AgentItem))
+                    {
+                        if (hpUpdate.Time < start + 1000)
+                        {
+                            continue;
+                        }
+                        if (prevHPUpdate < hpUpdate.HealthPercent)
+                        {
+                            end = hpUpdate.Time;
+                        } 
+                        else
+                        {
+                            prevHPUpdate = hpUpdate.HealthPercent;
+                        }
+                    }
+                    if (chest != null && chest.InAwareTimes(end + 500))
+                    {
+                        end = chest.FirstAware;
+                        success = true;
+                    }
+                    lowerThreshold = end;
+                    var phase = new PhaseData(start, end, "Conjured Amalgamate");
+                    phases.Add(phase);
+                    encounterPhases.Add(phase);
+                    if (log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end))
+                    {
+                        phase.Name += " CM";
+                    }
+                    if (success)
+                    {
+                        phase.Name += " (Success)";
+                    }
+                    else
+                    {
+                        phase.Name += " (Failure)";
+                    }
+                    phase.AddParentPhase(mainPhase);
+                    phase.AddTarget(conjuredAmalgamate, log);
+                    phase.AddTargets([leftArm, rightArm], log, PhaseData.TargetPriority.Blocking);
+                    mainPhase.AddTarget(conjuredAmalgamate, log);
+                }
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
 
+    private static void HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<PhaseData>();
+        var mainPhase = phases[0];
+        if (targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts) &&
+            targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
+        {
+            var chest = log.AgentData.GetGadgetsByID(ChestID.TwinLargosChest).FirstOrDefault();
+            foreach (var nikare in nikares)
+            {
+                var kenut = kenuts.FirstOrDefault(x => x.InAwareTimes(nikare));
+                if (kenut != null)
+                {
+                    long start = nikare.FirstAware;
+                    var nikareEnterCombat = log.CombatData.GetEnterCombatEvents(nikare.AgentItem).FirstOrDefault();
+                    if (nikareEnterCombat != null)
+                    {
+                        start = nikareEnterCombat.Time;
+                    }
+                    var kenutEnterCombat = log.CombatData.GetEnterCombatEvents(kenut.AgentItem).FirstOrDefault();
+                    if (kenutEnterCombat != null)
+                    {
+                        start = Math.Min(start, kenutEnterCombat.Time);
+                    } else
+                    {
+                        start = Math.Min(start, kenut.FirstAware);
+                    }
+                    long end = Math.Max(nikare.LastAware, kenut.LastAware);
+                    bool success = false;
+                    if (chest != null && chest.InAwareTimes(end + 500))
+                    {
+                        end = chest.FirstAware;
+                        success = true;
+                    }
+                    var phase = new PhaseData(start, end, "Twin Largos");
+                    phases.Add(phase);
+                    encounterPhases.Add(phase);
+                    if (TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut))
+                    {
+                        phase.Name += " CM";
+                    }
+                    if (success)
+                    {
+                        phase.Name += " (Success)";
+                    }
+                    else
+                    {
+                        phase.Name += " (Failure)";
+                    }
+                    phase.AddParentPhase(mainPhase);
+                    phase.AddTargets([nikare, kenut], log);
+                    mainPhase.AddTargets([nikare, kenut], log);
+                }
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        return base.GetPhases(log, requirePhases);
+        List<PhaseData> phases = GetInitialPhase(log);
+        var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        HandleConjuredAmalgamatePhases(targetsByIDs, log, phases);
+        HandleTwinLargosPhases(targetsByIDs, log, phases);
+        if (phases[0].Targets.Count == 0)
+        {
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
+        }
+        return phases;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -86,13 +223,37 @@ internal class MythwrightGambitInstance : MythwrightGambit
         ];
         return friendlies.Distinct().ToList();
     }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.QadimPlatform
+        ];
+    }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ConjuredAmalgamate.HandleCAAgents(agentData, combatData);
         var sword = ConjuredAmalgamate.CreateCustomSwordAgent(fightData, agentData);
+        var maxHPUpdates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
+            .Select(x => new MaxHealthUpdateEvent(x, agentData))
+            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+        Qadim.FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
+        Qadim.FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
+        Qadim.FindPyres(gw2Build, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         ConjuredAmalgamate.RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
+        Qadim.RenamePyres(Targets);
+        foreach (SingleActor actor in Targets)
+        {
+            switch (actor.ID)
+            {
+                case (int)TargetID.Kenut:
+                case (int)TargetID.Nikare:
+                    TwinLargos.AdjustFinalHPEvents(combatData, actor.AgentItem);
+                    break;
+            }
+        }
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
@@ -115,12 +276,12 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return res;
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var res = new List<HealthDamageEvent>();
         foreach (var subLogic in _subLogics)
         {
-            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, skillData));
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, agentData, skillData));
         }
         return res;
     }
