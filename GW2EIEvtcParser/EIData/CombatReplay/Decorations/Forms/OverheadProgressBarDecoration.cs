@@ -82,23 +82,21 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
             )
     {
     }
-
     public OverheadProgressBarDecoration(
-        uint pixelWidth,
-        Segment lifespan,
-        Color color, double opacity,
-        Color secondaryColor, double secondaryOpacity,
-        IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
-        ) : this(
-            pixelWidth,
-            lifespan,
-            color.WithAlpha(opacity).ToString(true),
-            secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
-            progress, connectedTo
-            )
+       uint pixelWidth,
+       Segment lifespan,
+       Color color, double opacity,
+       Color secondaryColor, double secondaryOpacity,
+       IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
+       ) : this(
+           pixelWidth,
+           lifespan,
+           color.WithAlpha(opacity).ToString(true),
+           secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
+           progress, connectedTo
+           )
     {
     }
-
     public override FormDecoration Copy(string? color = null)
     {
         return (FormDecoration)new OverheadProgressBarDecoration(PixelWidth, Lifespan, color ?? Color, SecondaryColor, Progress, (AgentConnector)ConnectedTo)

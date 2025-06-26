@@ -212,6 +212,33 @@ partial class SingleActor
         }
         return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
     }
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long time)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log));
+        if (seg.Value > 0)
+        {
+            return new Segment(seg.Start, seg.End, 1);
+        }
+        return seg;
+    }
+
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    {
+        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        {
+            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+        }
+        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
+        if (seg.Value > 0)
+        {
+            return new Segment(seg.Start, seg.End, 1);
+        }
+        return seg;
+    }
 
     public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long time)
     {
@@ -324,7 +351,6 @@ partial class SingleActor
         FuseConsecutiveNonZeroAndSetTo1(presence);
         return presence;
     }
-
     public IReadOnlyDictionary<long, BuffStatistics> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
         _buffStats ??= new(log, BuffEnum.Self, 4);

@@ -694,7 +694,7 @@ internal class Dhuum : HallOfChains
             }
             // Progress Bar
             replay.Decorations.Add(new OverheadProgressBarDecoration(
-                CombatReplayOverheadProgressBarMinorSizeInPixel, c, Colors.CobaltBlue, 0.6, 
+                CombatReplayOverheadProgressBarMinorSizeInPixel, c, Colors.CobaltBlue, 0.6,
                 Colors.Black, 0.2, [(c.Start, 0), (c.Start + duration, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(130)));
             // Overhead Icon

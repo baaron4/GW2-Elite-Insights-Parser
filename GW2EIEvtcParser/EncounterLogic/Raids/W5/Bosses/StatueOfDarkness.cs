@@ -201,7 +201,6 @@ internal class StatueOfDarkness : HallOfChains
             }
         }
     }
-
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()
@@ -210,7 +209,6 @@ internal class StatueOfDarkness : HallOfChains
             {TargetID.EyeOfJudgement, 0 },
         };
     }
-
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Statue of Darkness";
