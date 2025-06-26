@@ -616,36 +616,60 @@ internal class Dhuum : HallOfChains
                     {
                         var greenStart = (int)greenTaken.Time - 5000;
 
+                        var greenTaker = log.FindActor(greenTaken.To);
 
-                        int reaperIndex = -1;
-                        foreach (var reaper in ReapersToGreen)
+                        if (greenTaker.TryGetCurrentInterpolatedPosition(log, greenTaken.Time, out var greenTakerPosition)) 
                         {
-                            if ((reaper.Position - pos.XYZ).Length() < 10)
+                            int firstReaperIndex = -1;
+
+                            foreach (var reaper in ReapersToGreen)
                             {
-                                reaperIndex = reaper.Index;
+                                if ((reaper.Position - greenTakerPosition).Length() < 250)
+                                {
+                                    firstReaperIndex = reaper.Index;
+                                    break;
+                                }
+                            }
+                            if (firstReaperIndex == -1)
+                            {
                                 break;
+                            }
+
+                            var deltaBetweenGreen = 30000;
+                            var deltaBetweenGreenOnSameReaper = 210000;
+
+                            greenStart -= firstReaperIndex * deltaBetweenGreen;
+
+                            int reaperIndex = -1;
+                            foreach (var reaper in ReapersToGreen)
+                            {
+                                if ((reaper.Position - pos.XYZ).Length() < 10)
+                                {
+                                    reaperIndex = reaper.Index;
+                                    break;
+                                }
+                            }
+
+                            if (reaperIndex == -1)
+                            {
+                                break;
+                            }
+
+                            int gStart = greenStart + reaperIndex * deltaBetweenGreen;
+                            var greens = new List<int>() {
+                                gStart,
+                                gStart + deltaBetweenGreenOnSameReaper,
+                                gStart + 2 * deltaBetweenGreenOnSameReaper
+                            };
+
+                            foreach (int gstart in greens)
+                            {
+                                int gend = gstart + 5000;
+                                var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
+                                replay.Decorations.AddWithGrowing(greenCircle, gend);
                             }
                         }
 
-                        if (reaperIndex == -1)
-                        {
-                            break;
-                        }
-
-                        int multiplier = 210000;
-                        int gStart = greenStart + reaperIndex * 30000;
-                        var greens = new List<int>() {
-                        gStart,
-                        gStart + multiplier,
-                        gStart + 2 * multiplier
-                    };
-
-                        foreach (int gstart in greens)
-                        {
-                            int gend = gstart + 5000;
-                            var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
-                            replay.Decorations.AddWithGrowing(greenCircle, gend);
-                        }
                     }
                 }
                 break;
