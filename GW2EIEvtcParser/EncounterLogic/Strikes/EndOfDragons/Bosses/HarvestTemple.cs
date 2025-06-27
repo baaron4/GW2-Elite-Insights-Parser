@@ -31,7 +31,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     .UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
                 new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0)
                     .UsingChecker((de, log) => (de.To.IsSpecies(TargetID.PushableVoidAmalgamate) || de.To.IsSpecies(TargetID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
-                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
+                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Eligibility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
                     .UsingAchievementEligibility(),
                 new PlayerDstHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
                 new PlayerDstHitMechanic(MagicDischarge, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
