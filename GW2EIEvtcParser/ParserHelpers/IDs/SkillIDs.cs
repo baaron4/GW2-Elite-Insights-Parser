@@ -991,7 +991,7 @@ public static class SkillIDs
     public const long GlacialHeartHeal = 13629;
     public const long LesserSymbolOfProtection = 13684;
     public const long RestorativeMantras = 13721;
-    public const long PowerBlock = 13752;
+    public const long PowerBlockBuff = 13752;
     public const long StrengthinNumbers = 13796;
     public const long FleshOfTheMaster = 13810;
     public const long VampiricStrikes2 = 13814;
@@ -4178,7 +4178,7 @@ public static class SkillIDs
     public const long DualOrbitFireAndWater = 69184;
     public const long DreadVisageAspectSkill = 69185;
     public const long FlareSilentSurf = 69189;
-    public const long RestorativeStrikes = 69193;
+    public const long RestorativeStrikesAndBiorythm = 69193;
     public const long FrighteningSpeedWindup = 69194;
     public const long RendingStormAxeTargetBuff1 = 69195;
     public const long HarrowshotDeath = 69199; // harrowshot is the boon steal attack
@@ -4997,8 +4997,12 @@ public static class SkillIDs
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
     public const long WintryOrb = 76482;
+    public const long PowerBlockDamage = 76483;
     public const long AchievementEligibilityUndyingLight = 76501;
+    public const long VowOfTheUntamedBiorythm = 76502;
+    public const long PhantomPain = 76505;
     public const long HailstormWhisperingShadow = 76510;
+    public const long GrandEntrance = 76519;
     //
     #endregion
 }

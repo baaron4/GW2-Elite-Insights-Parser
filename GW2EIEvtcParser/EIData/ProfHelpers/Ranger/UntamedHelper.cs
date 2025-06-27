@@ -15,8 +15,9 @@ internal static class UntamedHelper
     [
         new BuffGainCastFinder(UnleashPet, PetUnleashed),
         new BuffGainCastFinder(UnleashRanger, Unleashed),
-        new BuffGainCastFinder(RestorativeStrikes, RestorativeStrikes)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGainCastFinder(RestorativeStrikesAndBiorythm, RestorativeStrikesAndBiorythm)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
         new EffectCastFinderByDst(MutateConditions, EffectGUIDs.UntamedMutateConditions)
             .UsingDstSpecChecker(Spec.Untamed),
         new EffectCastFinderByDst(UnnaturalTraversal, EffectGUIDs.UntamedUnnaturalTraversal)
@@ -50,15 +51,21 @@ internal static class UntamedHelper
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.March2022Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "25% when unleashed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.March2022Balance),
+            .WithBuilds(GW2Builds.March2022Balance, GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2022Balance, GW2Builds.May2023BalanceHotFix),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "10% when unleashed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
-            .WithBuilds(GW2Builds.May2023BalanceHotFix),
+            .WithBuilds(GW2Builds.May2023BalanceHotFix, GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "15% when unleashed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
-            .WithBuilds(GW2Builds.May2023BalanceHotFix, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.May2023BalanceHotFix, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "20% when unleashed", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "25% when unleashed or biorythm proc", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "10% when unleashed or biorythm proc", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [Unleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "20% when unleashed or biorythm proc", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -68,22 +75,28 @@ internal static class UntamedHelper
             .WithBuilds(GW2Builds.EODBeta4),
         // Forest's Fortification
         new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.EODBeta1, GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-33%", DamageSource.Incoming, -33.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.sPvP)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_ForestsFortification, ForestsFortification, "Forest's Fortification", "-50%", DamageSource.Incoming, -50.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, SkillImages.ForestsFortification, DamageModifierMode.PvEWvW)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         // Vow of the Untamed
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, PetUnleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-25% when not unleashed", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.March2022Balance, GW2Builds.February2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
-        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, Unleashed, "Vow of the Untamed", "-15% when not unleashed", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByAbsence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, PetUnleashed, "Vow of the Untamed", "-25% when not unleashed", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.March2022Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, PetUnleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.March2022Balance, GW2Builds.February2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, PetUnleashed, "Vow of the Untamed", "-10% when not unleashed", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, PetUnleashed, "Vow of the Untamed", "-15% when not unleashed", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
+            .WithBuilds(GW2Builds.February2025Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "-25% when not unleashed or biorythm proc", DamageSource.Incoming, -25.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "-10% when not unleashed or biorythm proc", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.sPvP)
+            .WithBuilds( GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_VowOfTheUntamed, [PetUnleashed, VowOfTheUntamedBiorythm], "Vow of the Untamed", "-15% when not unleashed or biorythm proc", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, TraitImages.VowOfTheUntamed, DamageModifierMode.WvW)
+            .WithBuilds( GW2Builds.June2025Balance),
     ];
 
 
@@ -95,7 +108,12 @@ internal static class UntamedHelper
         new Buff("Perilous Gift", PerilousGift, Source.Untamed, BuffClassification.Other, SkillImages.PerilousGift),
         new Buff("Forest's Fortification", ForestsFortification, Source.Untamed, BuffClassification.Other, SkillImages.ForestsFortification),
         new Buff("Unleashed Power", UnleashedPowerBuff, Source.Untamed, BuffClassification.Other, TraitImages.UnleashedPower),
-        new Buff("Restorative Strikes", RestorativeStrikes, Source.Untamed, BuffClassification.Other, TraitImages.RestorativeStrikes),
+        new Buff("Restorative Strikes", RestorativeStrikesAndBiorythm, Source.Untamed, BuffClassification.Other, TraitImages.RestorativeStrikesAndBiorythm)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
+        new Buff("Biorythm", RestorativeStrikesAndBiorythm, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.RestorativeStrikesAndBiorythm)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new Buff("Vow of the Untamed (Biorythm)", VowOfTheUntamedBiorythm, Source.Untamed, BuffClassification.Other, TraitImages.VowOfTheUntamed),
+        // Todo Biorythm
     ];
 
 }

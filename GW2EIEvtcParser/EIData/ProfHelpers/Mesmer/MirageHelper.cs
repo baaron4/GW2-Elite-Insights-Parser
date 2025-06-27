@@ -26,13 +26,16 @@ internal static class MirageHelper
     [
         // Sharp Edges
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "15%", DamageSource.NoPets, 15, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "25%", DamageSource.NoPets, 25, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_SharpEdges, SharpEdges, "Sharp Edges", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, TraitImages.MirageMantle, DamageModifierMode.sPvPWvW),
+        // Phantom Pain
+        new BuffOnActorDamageModifier(Mod_PhantomPain, PhantomPain, "Phantom Pain", "6.25%", DamageSource.NoPets, 6.25, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.PhantomPain, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.June2025Balance),
         // Nomad's Endurance
         new BuffOnActorDamageModifier(Mod_NomadsEndurance, Vigor, "Nomad's Endurance", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.NomadsEndurance, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.February2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
@@ -41,6 +44,7 @@ internal static class MirageHelper
     [
         new Buff("Mirage Cloak", MirageCloak, Source.Mirage, BuffClassification.Other, SkillImages.MirageCloak),
         new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, SkillImages.FalseOasis),
+        new Buff("Phantom Pain", PhantomPain, Source.Mirage, ArcDPSEnums.BuffStackType.Stacking, 4, BuffClassification.Other, TraitImages.PhantomPain),
         // Spear
         new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, TraitImages.MirageMantle),
     ];

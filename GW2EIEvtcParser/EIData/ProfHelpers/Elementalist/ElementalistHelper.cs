@@ -87,9 +87,9 @@ internal static class ElementalistHelper
         // Fire
         // - Persisting Flames
         new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.PersistingFlames, DamageModifierMode.All)
-            .WithBuilds( GW2Builds.February2025BalancePatch),
+            .WithBuilds( GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.PersistingFlames, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.July2020Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.July2020Balance, GW2Builds.February2025Balance),
         // - Pyromancer's Training
         new BuffOnActorDamageModifier(Mod_PyromancersTraining, [FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PyromancersTraining, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
@@ -156,7 +156,9 @@ internal static class ElementalistHelper
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.November2023Balance),
+            .WithBuilds(GW2Builds.November2023Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
 
         // Pistol
         new BuffOnActorDamageModifier(Mod_RagingRicochet, RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.RagingRicochet, DamageModifierMode.PvE)

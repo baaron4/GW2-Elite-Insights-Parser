@@ -47,13 +47,13 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervorConditionLifeLeech, ImprovedKallasFervor, "Improved Kalla's Fervor (Condition and Lifeleech)", "3% per stack", DamageSource.NoPets, 3.0, DamageType.ConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         new BuffOnActorDamageModifier(Mod_ImprovedKallasFervorStrike, ImprovedKallasFervor, "Improved Kalla's Fervor (Strike)", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.April2025BalancePatch),
+            .WithBuilds(GW2Builds.April2025Balance),
         // Soulcleave's Summit
         new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -61,11 +61,11 @@ internal static class RenegadeHelper
             .WithBuilds(GW2Builds.May2021Balance),
         // All for One
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.June2024Balance, GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.June2024Balance, GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.sPvPWvW)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.February2025Balance),
         new BuffOnActorDamageModifier(Mod_AllForOne, AllForOne, "All for One", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Renegade, ByPresence, TraitImages.AllForOne, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.February2025BalancePatch),
+            .WithBuilds(GW2Builds.February2025Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -78,7 +78,7 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.Incoming, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.Incoming, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.May2021Balance),
+            .WithBuilds(GW2Builds.May2021Balance, GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
