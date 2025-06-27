@@ -569,6 +569,7 @@ internal static class EncounterBuffs
             new Buff("Inevitable Darkness (Player)", InevitableDarknessPlayer, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SpiritsConsumed),
             new Buff("Gorefrost Target", GorefrostTarget, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Shatterstep", AchievementEligibilityShatterstep, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: Undying Light", AchievementEligibilityUndyingLight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

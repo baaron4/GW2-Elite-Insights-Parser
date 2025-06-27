@@ -4998,6 +4998,7 @@ public static class SkillIDs
     public const long LifeFireCircleT3 = 76464;
     public const long WintryOrb = 76482;
     public const long PowerBlockDamage = 76483;
+    public const long AchievementEligibilityUndyingLight = 76501;
     public const long VowOfTheUntamedBiorythm = 76502;
     public const long PhantomPain = 76505;
     public const long HailstormWhisperingShadow = 76510;
