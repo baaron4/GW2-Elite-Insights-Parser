@@ -4992,6 +4992,7 @@ public static class SkillIDs
     public const long DeathlyGrime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
+    public const long GrandEntrance = 76519;
     //
     #endregion
 }

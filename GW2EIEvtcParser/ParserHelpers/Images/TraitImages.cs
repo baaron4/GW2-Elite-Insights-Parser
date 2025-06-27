@@ -66,6 +66,7 @@ internal static class TraitImages
     public const string ImpactSavant = "https://render.guildwars2.com/file/FD7AF757E6B02C7BC55101B0CFDCDAC87E5DBADD/1128528.png";
     public const string SystemShocker = "https://render.guildwars2.com/file/D218686E042F19144D99A11F7205FB4763D053EF/2175050.png";
     public const string OverShield = "https://render.guildwars2.com/file/F90CB6E3E23B6ECB761C062D92507799694CF4D2/1012366.png";
+    public const string GrandEntrance = "https://render.guildwars2.com/file/7093569DA52A64BE5C42AE0A0D0A700BAA320C0C/2261505.png";
     #endregion
     #region Guardian
     public const string HuntersFortification = "https://render.guildwars2.com/file/2F147CBEA990E470AF0F0D20F652040E67962AB9/1012396.png";

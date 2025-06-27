@@ -206,6 +206,7 @@ internal static class EngineerHelper
         new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, SkillImages.MedKit),
         new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  SkillImages.MedKit),
         new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, TraitImages.CompoundingChemicals),
+        new Buff("Grand Entrance", GrandEntrance, Source.Engineer, BuffClassification.Other, TraitImages.GrandEntrance),
         //TODO: Grand Entrance
         /*
         new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
