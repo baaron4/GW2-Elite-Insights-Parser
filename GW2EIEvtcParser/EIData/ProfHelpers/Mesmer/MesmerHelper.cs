@@ -157,8 +157,9 @@ internal static class MesmerHelper
             .UsingApproximate(),
         // - Fragility
         new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
-        // TODO: Power block
-        
+        // - Power block
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, PowerBlockBuff, "Power Block", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.PowerBlock, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
         // Dueling
         // - Superiority Complex
         new DamageLogDamageModifier(Mod_SuperiorityComplex, "Superiority Complex", "15% always", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.SuperiorityComplex, (x, log) => x.HasCrit && !SuperiorityComplexBonusChecker(x, log), DamageModifierMode.PvEInstanceOnly)
@@ -236,6 +237,7 @@ internal static class MesmerHelper
         new Buff("Reflection", Reflection, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
         new Buff("Reflection 2", Reflection2, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
         new Buff("Illusionary Membrane", IllusionaryMembrane, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.IllusionaryMembrane),
+        new Buff("Power Block", PowerBlockBuff, Source.Mesmer, BuffClassification.Other, TraitImages.PowerBlock),
         // Transformations
         new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphMoa),
         new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphTuna),

@@ -991,7 +991,7 @@ public static class SkillIDs
     public const long GlacialHeartHeal = 13629;
     public const long LesserSymbolOfProtection = 13684;
     public const long RestorativeMantras = 13721;
-    public const long PowerBlock = 13752;
+    public const long PowerBlockBuff = 13752;
     public const long StrengthinNumbers = 13796;
     public const long FleshOfTheMaster = 13810;
     public const long VampiricStrikes2 = 13814;
@@ -4992,6 +4992,7 @@ public static class SkillIDs
     public const long DeathlyGrime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
+    public const long PowerBlockDamage = 76483;
     public const long GrandEntrance = 76519;
     //
     #endregion
