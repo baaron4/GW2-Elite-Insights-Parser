@@ -41,6 +41,9 @@ public class CombatItem
     public readonly byte Pad4;
 
     public bool IsExtension => IsStateChange == StateChange.Extension || IsStateChange == StateChange.ExtensionCombat;
+    public bool IsGeographical => IsStateChange == StateChange.Position ||
+            IsStateChange == StateChange.Rotation ||
+            IsStateChange == StateChange.Velocity;
 
     public bool IsEffect => IsStateChange == StateChange.Effect_51 || IsStateChange == StateChange.Effect_45 || IsStateChange == StateChange.EffectAgentCreate || IsStateChange == StateChange.EffectAgentRemove || IsStateChange == StateChange.EffectGroundCreate || IsStateChange == StateChange.EffectGroundRemove;
     public bool IsMissile => IsStateChange == StateChange.MissileCreate || IsStateChange == StateChange.MissileLaunch || IsStateChange == StateChange.MissileRemove;
@@ -162,14 +165,6 @@ public class CombatItem
         return HasTime();
     }
 
-    internal bool IsGeographical()
-    {
-        return IsStateChange == StateChange.Position ||
-                IsStateChange == StateChange.Rotation ||
-                IsStateChange == StateChange.Velocity
-                ;
-    }
-
     internal bool IsDamage()
     {
         return IsStateChange == StateChange.None &&
@@ -239,7 +234,7 @@ public class CombatItem
             || IsStateChange == StateChange.MaxHealthUpdate
             || IsStateChange == StateChange.PointOfView
             || IsStateChange == StateChange.BuffInitial
-            || IsGeographical()
+            || IsGeographical
             || IsStateChange == StateChange.TeamChange
             || IsStateChange == StateChange.AttackTarget
             || IsStateChange == StateChange.Targetable

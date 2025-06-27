@@ -220,12 +220,12 @@ internal class SalvationPassInstance : SalvationPass
         return res;
     }
 
-    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var res = new List<HealthDamageEvent>();
         foreach (var subLogic in _subLogics)
         {
-            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, skillData));
+            res.AddRange(subLogic.SpecialDamageEventProcess(combatData, agentData, skillData));
         }
         return res;
     }

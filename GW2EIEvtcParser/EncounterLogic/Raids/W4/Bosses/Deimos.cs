@@ -134,7 +134,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         evt.OverrideSrcAgent(ParserHelper._unknownAgent);
                     }
-                    if (evt.IsGeographical() && evt.Time < upperTimeThreshold)
+                    if (evt.IsGeographical && evt.Time < upperTimeThreshold)
                     {
                         evt.OverrideTime(upperTimeThreshold);
                     }

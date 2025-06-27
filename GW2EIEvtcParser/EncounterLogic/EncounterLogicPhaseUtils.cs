@@ -217,7 +217,6 @@ internal static class EncounterLogicPhaseUtils
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
         {
-            var lastTarget = targets.Last();
             var chest = log.AgentData.GetGadgetsByID(chestID).FirstOrDefault();
             foreach (var target in targets)
             {
@@ -228,8 +227,8 @@ internal static class EncounterLogicPhaseUtils
                 }
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
                 bool success = false;
-                long end = target.LastAware;
-                if (target == lastTarget && chest != null)
+                long end = target.LastAware; 
+                if (chest != null && chest.InAwareTimes(end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;

@@ -66,8 +66,13 @@ internal static class EncounterLogicUtils
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
     }
 
-    internal static void NegateDamageAgainstBarrier(CombatData combatData, IEnumerable<AgentItem> agentItems)
+    internal static void NegateDamageAgainstBarrier(CombatData combatData, AgentData agentData, IEnumerable<TargetID> targetIDs)
     {
+        var agentItems = new List<AgentItem>();
+        foreach (var targetID in targetIDs)
+        {
+            agentItems.AddRange(agentData.GetNPCsByID(targetID));
+        }
         var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
         {

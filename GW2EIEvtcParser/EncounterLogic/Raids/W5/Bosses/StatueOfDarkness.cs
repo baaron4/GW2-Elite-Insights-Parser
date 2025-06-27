@@ -192,7 +192,14 @@ internal class StatueOfDarkness : HallOfChains
             }
         }
     }
-
+    internal override Dictionary<TargetID, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<TargetID, int>()
+        {
+            {TargetID.EyeOfFate, 0 },
+            {TargetID.EyeOfJudgement, 0 },
+        };
+    }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Statue of Darkness";

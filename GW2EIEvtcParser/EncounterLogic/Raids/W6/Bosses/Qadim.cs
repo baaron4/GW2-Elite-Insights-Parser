@@ -164,8 +164,8 @@ internal class Qadim : MythwrightGambit
                 .Distinct();
             foreach (var lamp in lamps)
             {
-                lamp.OverrideID(TargetID.UraGadget_BloodstoneShard, agentData);
                 lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                lamp.OverrideID(TargetID.QadimLamp, agentData);
             }
         } 
         else
@@ -447,7 +447,12 @@ internal class Qadim : MythwrightGambit
             TargetID.WindRider,
         ];
     }
-
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.QadimPlatform
+        ];
+    }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);

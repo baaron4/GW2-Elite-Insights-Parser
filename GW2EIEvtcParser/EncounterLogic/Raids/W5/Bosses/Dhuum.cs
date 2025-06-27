@@ -484,7 +484,7 @@ internal class Dhuum : HallOfChains
                 }
                 if (majorSplit != null)
                 {
-                    lifespan = (majorSplit.Time, log.FightData.FightEnd);
+                    lifespan = (majorSplit.Time, target.LastAware);
                     replay.Decorations.Add(new CircleDecoration(320, lifespan, "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                 }
 
@@ -524,37 +524,6 @@ internal class Dhuum : HallOfChains
                         }
                     }
                 }
-            }
-
-            // Collection Orbs
-            var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
-            foreach (MissileEvent orb in orbs)
-            {
-                uint radius = 0;
-                Color color = Colors.Grey;
-
-                switch (orb.SkillID)
-                {
-                    case DhuumEnforcerOrb:
-                        radius = 50;
-                        color = Colors.LightRed;
-                        break;
-                    case DhuumMessengerOrb:
-                        radius = 35;
-                        color = Colors.Purple;
-                        break;
-                    case DhuumSpiderOrb:
-                        radius = 20;
-                        color = Colors.Pink;
-                        break;
-                    case DhuumCollectableSmallOrb:
-                        radius = 10;
-                        color = Colors.Grey;
-                        break;
-                    default:
-                        break;
-                }
-                replay.Decorations.AddNonHomingMissile(log, orb, color, 0.5, radius);
             }
             break;
             case (int)TargetID.DhuumDesmina:
@@ -679,30 +648,22 @@ internal class Dhuum : HallOfChains
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
-        (long start, long end) lifespan;
-
         // spirit transform
-        var spiritTransform = log.CombatData.GetBuffApplyDataByIDByDst(FracturedSpirit, p.AgentItem);
-        foreach (BuffEvent c in spiritTransform)
+        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilDhuum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        foreach (var c in spiritTransform)
         {
             int duration = 15000;
-            if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ServerDelayConstant))
+            if (p.HasBuff(log, SourcePureOblivionBuff, c.Start + ServerDelayConstant))
             {
                 duration = 30000;
             }
-            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
-            lifespan = (c.Time, c.Time + duration);
-            if (removedBuff != null)
-            {
-                lifespan.end = removedBuff.Time;
-            }
-
             // Progress Bar
-            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(lifespan.start, 0), (lifespan.start + duration, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(
+                CombatReplayOverheadProgressBarMinorSizeInPixel, c, Colors.CobaltBlue, 0.6,
+                Colors.Black, 0.2, [(c.Start, 0), (c.Start + duration, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(130)));
-
             // Overhead Icon
-            replay.Decorations.AddRotatedOverheadIcon(new Segment(lifespan, 1), p, ParserIcons.GenericGreenArrowUp, 40f);
+            replay.Decorations.AddRotatedOverheadIcon(c, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -745,6 +706,37 @@ internal class Dhuum : HallOfChains
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+
+        // Collection Orbs
+        var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
+        foreach (MissileEvent orb in orbs)
+        {
+            uint radius = 0;
+            Color color = Colors.Grey;
+
+            switch (orb.SkillID)
+            {
+                case DhuumEnforcerOrb:
+                    radius = 50;
+                    color = Colors.LightRed;
+                    break;
+                case DhuumMessengerOrb:
+                    radius = 35;
+                    color = Colors.Purple;
+                    break;
+                case DhuumSpiderOrb:
+                    radius = 20;
+                    color = Colors.Pink;
+                    break;
+                case DhuumCollectableSmallOrb:
+                    radius = 10;
+                    color = Colors.Grey;
+                    break;
+                default:
+                    break;
+            }
+            environmentDecorations.AddNonHomingMissile(log, orb, color, 0.5, radius);
+        }
 
         // Death Mark - First Warning (2 seconds)
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out var deathMarkFirstIndicators))
