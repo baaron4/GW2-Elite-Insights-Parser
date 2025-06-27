@@ -23,6 +23,7 @@ internal static class EncounterImages
     internal const string EncounterIconKanaxai = "https://i.imgur.com/Q0qgy0t.png";
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://wiki.guildwars2.com/images/5/5a/Mini_Eparch.png";
+    internal const string EncounterIconWhisperingShadow = "https://i.imgur.com/4Xtgr4D.jpeg";
 
     // Instances
     internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";

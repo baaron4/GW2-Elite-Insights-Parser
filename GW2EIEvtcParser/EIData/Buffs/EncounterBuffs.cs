@@ -563,6 +563,7 @@ internal static class EncounterBuffs
             new Buff("Life-Fire (Circle T2)", LifeFireCircleT2, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
             new Buff("Life-Fire (Circle T3)", LifeFireCircleT3, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
             new Buff("Life-Fire (Circle T4)", LifeFireCircleT4, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
+            new Buff("Life-Fire (Circle CM)", LifeFireCircleCM, Source.FightSpecific, BuffClassification.Defensive, BuffImages.LightAura),
             new Buff("Deathly Grime", DeathlyGrime, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.FrozenBurst),
             new Buff("Inevitable Darkness", InevitableDarkness, Source.FightSpecific, BuffStackType.Stacking, 2, BuffClassification.Other, BuffImages.DarkAura),
             new Buff("Inevitable Darkness (Player)", InevitableDarknessPlayer, Source.FightSpecific, BuffClassification.Debuff, BuffImages.SpiritsConsumed),
