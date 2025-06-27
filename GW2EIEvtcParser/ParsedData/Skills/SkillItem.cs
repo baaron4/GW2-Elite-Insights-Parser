@@ -877,7 +877,7 @@ public class SkillItem
             { EletroctuteSkyChak, SkillImages.EletroctuteJuvenileSkyChak },
             { EvasivePurity, TraitImages.EvasivePurity },
             { AttackOfOpportunity, TraitImages.MomentOfClarity },
-            { RestorativeStrikes, TraitImages.RestorativeStrikes },
+            { RestorativeStrikesAndBiorythm, TraitImages.RestorativeStrikesAndBiorythm },
             { SpitGoopSkyChak, SkillImages.SpitGoopSkyChak },
             { UnleashEnergySkyChak, SkillImages.UnleashEnergySkyChak },
             { ChargingBiteShark, SkillImages.ChargingBiteShark },

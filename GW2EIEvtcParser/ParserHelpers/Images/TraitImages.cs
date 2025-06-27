@@ -192,7 +192,7 @@ internal static class TraitImages
     public const string NaturalHealing = "https://render.guildwars2.com/file/E10A27535DAC0BBFFCB205BFBBC9D30F68BE0C07/1012611.png";
     public const string PredatorsCunning = "https://render.guildwars2.com/file/25054EAF081EAB14A6B5C53197312F2AE6C32A17/1769977.png";
     public const string EvasivePurity = "https://render.guildwars2.com/file/C374B3F2C1BCFCB0B164FF0567FB6CC1B31B9651/1012633.png";
-    public const string RestorativeStrikes = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
+    public const string RestorativeStrikesAndBiorythm = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
     #endregion Ranger
     #region Revenant
     public const string CloseQuarters = "https://render.guildwars2.com/file/4DD75C0C7D64F2A80F24955E0CAE031530554AF7/1012690.png";

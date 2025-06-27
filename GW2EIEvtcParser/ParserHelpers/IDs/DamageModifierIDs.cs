@@ -358,5 +358,6 @@ public static class DamageModifierIDs
     public const int Mod_Brutality = 345;
     public const int Mod_PowerBlock = 346;
     public const int Mod_PhantomPain = 347;
+    public const int Mod_VowOfTheUntamedBiorythm = 348;
 }
 
