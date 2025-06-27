@@ -4997,6 +4997,7 @@ public static class SkillIDs
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
     public const long WintryOrb = 76482;
+    public const long AchievementEligibilityUndyingLight = 76501;
     public const long HailstormWhisperingShadow = 76510;
     //
     #endregion
