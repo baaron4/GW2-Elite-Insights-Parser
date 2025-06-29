@@ -1,13 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -95,7 +95,7 @@ internal class WhisperingShadow : Kinfall
         var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
         foreach (var cast in log.CombatData.GetAnimatedCastData(shadow.AgentItem).Where(x => x.ActualDuration > 0))
         {
-            if (cast.SkillId == GutteringLight)
+            if (cast.SkillID == GutteringLight)
             {
                 if (isFirst)
                 {
@@ -303,19 +303,20 @@ internal class WhisperingShadow : Kinfall
     {
         base.SetInstanceBuffs(log);
         
-        if (log.FightData.Success && log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
-            // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
-            // The buff is present only on the players that do not have the achievement yet.
-            // If any player dies, the buff is removed from everyone.
-            // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
+            int counter = 0;
             foreach (Player p in log.PlayerList)
             {
                 if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.FightData.FightEnd - ServerDelayConstant))
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityUndyingLight], 1));
-                    break;
+                    counter++;
                 }
+            }
+            // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
+            if (counter == 5)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
             }
         }
     }

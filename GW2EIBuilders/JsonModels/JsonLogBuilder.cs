@@ -56,7 +56,7 @@ internal static class JsonLogBuilder
                 {
                     continue;
                 }
-                string desc = formula.GetDescription(false, log.Buffs.BuffsByIds, buff);
+                string desc = formula.GetDescription(false, log.Buffs.BuffsByIDs, buff);
                 if (desc.Length > 0)
                 {
                     descriptions.Add(desc);

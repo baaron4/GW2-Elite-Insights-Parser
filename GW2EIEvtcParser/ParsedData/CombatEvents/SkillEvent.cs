@@ -11,7 +11,7 @@ public abstract class SkillEvent : TimeCombatEvent
     public readonly AgentItem To;
 
     public readonly SkillItem Skill;
-    public long SkillId => Skill.ID;
+    public long SkillID => Skill.ID;
     private readonly IFF _iff;
 
     public bool ToFriendly => _iff == IFF.Friend;
@@ -29,7 +29,7 @@ public abstract class SkillEvent : TimeCombatEvent
 
     public bool ConditionDamageBased(ParsedEvtcLog log)
     {
-        if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out var b))
+        if (_isCondi == -1 && log.Buffs.BuffsByIDs.TryGetValue(SkillID, out var b))
         {
             _isCondi = b.Classification == Buff.BuffClassification.Condition ? 1 : 0;
         }

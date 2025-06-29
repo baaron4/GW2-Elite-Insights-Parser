@@ -91,8 +91,8 @@ internal static class JsonPlayerBuilder
                     graph1SBreakbarDamageList[i] = player.GetBreakbarDamageGraph(log, phase.Start, phase.End, target)?.Values;
                 }
                 targetDamageDistList[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    player.GetJustActorDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                    player.GetJustActorBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    player.GetJustActorDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                    player.GetJustActorBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                     log,
                     skillMap,
                     buffMap
@@ -204,7 +204,7 @@ internal static class JsonPlayerBuilder
         var uptimes = new List<JsonPlayerBuffsGeneration>(buffs[0].Count);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;
@@ -250,7 +250,7 @@ internal static class JsonPlayerBuilder
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;
@@ -298,7 +298,7 @@ internal static class JsonPlayerBuilder
         var uptimes = new List<JsonPlayerBuffOutgoingVolumes>(buffVolumes[0].Count);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;
@@ -344,7 +344,7 @@ internal static class JsonPlayerBuilder
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;

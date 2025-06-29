@@ -70,7 +70,7 @@ internal class SkillDto : IDItemDto
         return new SkillCastDto()
         {
             Start = (cl.Time - phaseStart) / 1000.0,
-            SkillId = cl.SkillId,
+            SkillId = cl.SkillID,
             ActualDuration = cl.ActualDuration,
             Status = (int)cl.Status,
             Acceleration = cl.Acceleration,
@@ -83,9 +83,9 @@ internal class SkillDto : IDItemDto
         var list = new List<SkillCastDto>(casting.Count);
         foreach (CastEvent cl in casting)
         {
-            if (!usedSkills.ContainsKey(cl.SkillId))
+            if (!usedSkills.ContainsKey(cl.SkillID))
             {
-                usedSkills.Add(cl.SkillId, cl.Skill);
+                usedSkills.Add(cl.SkillID, cl.Skill);
             }
 
             list.Add(GetSkillData(cl, phase.Start));

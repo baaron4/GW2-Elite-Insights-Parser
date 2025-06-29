@@ -288,7 +288,7 @@ internal class TwinLargos : MythwrightGambit
             case (int)TargetID.Nikare:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Aquatic Barrage - Breakbar CC
                         case AquaticBarrage:
@@ -308,7 +308,7 @@ internal class TwinLargos : MythwrightGambit
             case (int)TargetID.Kenut:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Aquatic Barrage - Breakbar CC
                         case AquaticBarrage:
@@ -403,7 +403,7 @@ internal class TwinLargos : MythwrightGambit
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
-        bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillId == AquaticDomain);
+        bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillID == AquaticDomain);
         if (nikareHasCastAquaticDomain) // aquatic domain only present in CM
         {
             return FightData.EncounterMode.CM;
@@ -412,7 +412,7 @@ internal class TwinLargos : MythwrightGambit
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
         if (kenut != null)
         {
-            if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillId == AquaticDomain)) // aquatic domain only present in CM
+            if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillID == AquaticDomain)) // aquatic domain only present in CM
             {
                 return FightData.EncounterMode.CM;
             }

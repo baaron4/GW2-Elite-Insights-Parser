@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal class BuffSourceFinder20191001 : BuffSourceFinder20190305
 {
-    public BuffSourceFinder20191001(HashSet<long> boonIds) : base(boonIds)
+    public BuffSourceFinder20191001(HashSet<long> boonIDs) : base(boonIDs)
     {
         ImbuedMelodies = int.MinValue;
     }

@@ -167,15 +167,6 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
         }
     }
-    /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
-    {
-        var res = new List<AbstractBuffEvent>();
-        // Greatsword Power
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 52667);
-        // Conjured Shield
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 52754);
-        return res;
-    }*/
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -349,7 +340,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Conjured Protection - Shield AoE
         var casts = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-        var shieldCast = casts.Where(x => x.SkillId == ConjuredProtectionSAK);
+        var shieldCast = casts.Where(x => x.SkillID == ConjuredProtectionSAK);
         foreach (CastEvent c in shieldCast)
         {
             int duration = 10000;

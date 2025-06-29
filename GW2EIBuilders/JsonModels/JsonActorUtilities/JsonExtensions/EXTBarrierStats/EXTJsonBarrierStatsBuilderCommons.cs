@@ -39,7 +39,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         {
             if (!buffMap.ContainsKey(id))
             {
-                if (log.Buffs.BuffsByIds.TryGetValue(id, out var buff))
+                if (log.Buffs.BuffsByIDs.TryGetValue(id, out var buff))
                 {
                     buffMap[id] = buff;
                 }

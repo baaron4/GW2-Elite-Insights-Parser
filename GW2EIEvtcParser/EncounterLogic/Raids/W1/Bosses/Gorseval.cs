@@ -181,7 +181,7 @@ internal class Gorseval : SpiritVale
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // World Eater - Oneshot
                         case GorsevalWorldEater:

@@ -115,7 +115,7 @@ internal class Sabir : TheKeyOfAhdashim
         }
 
         var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-        var wallopingWinds = casts.Where(x => x.SkillId == WallopingWind);
+        var wallopingWinds = casts.Where(x => x.SkillID == WallopingWind);
         long start = 0;
         int i = 0;
         foreach (var wallopingWind in wallopingWinds)
@@ -124,7 +124,7 @@ internal class Sabir : TheKeyOfAhdashim
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
-            CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
+            CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillID == StormsEdgeRightHand || x.SkillID == StormsEdgeLeftHand || x.SkillID == ChainLightning));
             if (nextAttack == null)
             {
                 break;
@@ -175,7 +175,7 @@ internal class Sabir : TheKeyOfAhdashim
             case (int)TargetID.Sabir:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Fury of the Storm
                         case FuryOfTheStorm:

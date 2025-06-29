@@ -149,7 +149,7 @@ partial class SingleActor
         }).ToList();
         foreach (CastEvent cl in casting)
         {
-            if (cl.ActualDuration == 0 && cl.SkillId != SkillIDs.WeaponSwap)
+            if (cl.ActualDuration == 0 && cl.SkillID != SkillIDs.WeaponSwap)
             {
                 continue;
             }

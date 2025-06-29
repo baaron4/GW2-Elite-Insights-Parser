@@ -54,7 +54,7 @@ internal static class JsonActorBuilder
         var casts = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         if (casts.Any())
         {
-            jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, casts.GroupBy(x => x.SkillId), skillMap).ToList();
+            jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, casts.GroupBy(x => x.SkillID), skillMap).ToList();
         }
         //
         if (settings.RawFormatTimelineArrays)
@@ -110,8 +110,8 @@ internal static class JsonActorBuilder
         {
             PhaseData phase = phases[i];
             res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 log,
                 skillMap,
                 buffMap
@@ -127,8 +127,8 @@ internal static class JsonActorBuilder
         {
             PhaseData phase = phases[i];
             res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                actor.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                actor.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 log,
                 skillMap,
                 buffMap

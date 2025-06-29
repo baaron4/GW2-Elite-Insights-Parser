@@ -309,14 +309,14 @@ internal class Qadim : MythwrightGambit
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
         phases[0].AddTarget(qadim, log);
-        var secondaryTargetIds = new HashSet<TargetID>
+        var secondaryTargetIDs = new HashSet<TargetID>
                     {
                        TargetID.WyvernMatriarch,
                        TargetID.WyvernPatriarch,
                        TargetID.AncientInvokedHydra,
                        TargetID.ApocalypseBringer,
                     };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIds)), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -338,9 +338,9 @@ internal class Qadim : MythwrightGambit
                         TargetID.PyreGuardianRetal,
                         TargetID.PyreGuardianResolution,
                     };
-                foreach (var pyreId in pyres)
+                foreach (var pyreID in pyres)
                 {
-                    pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreId).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
+                    pyresFirstAware.AddRange(log.AgentData.GetNPCsByID(pyreID).Where(x => phase.InInterval(x.FirstAware)).Select(x => x.FirstAware));
                 }
                 if (pyresFirstAware.Count > 0 && pyresFirstAware.Max() > phase.Start)
                 {
@@ -538,7 +538,7 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.Qadim:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Breakbar CC
                         case QadimCC:
@@ -578,7 +578,7 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.AncientInvokedHydra:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Fiery Meteor - Breakbar CC
                         case FieryMeteor:
@@ -606,7 +606,7 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.WyvernMatriarch:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Wing Buffet
                         case WingBuffet:
@@ -673,7 +673,7 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.WyvernPatriarch:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Breakbar CC
                         case PatriarchCC:
@@ -728,7 +728,7 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.ApocalypseBringer:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Shattered Earth - Jump with shockwave
                         case ShatteredEarth:
@@ -1444,7 +1444,7 @@ internal class Qadim : MythwrightGambit
             }
             else if (CustomCheckManipulateTheManipulator(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityManipulateTheManipulator], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
             }
         }
     }

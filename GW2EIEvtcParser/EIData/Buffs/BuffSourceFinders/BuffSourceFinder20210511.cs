@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
 {
-    public BuffSourceFinder20210511(HashSet<long> boonIds) : base(boonIds)
+    public BuffSourceFinder20210511(HashSet<long> boonIDs) : base(boonIDs)
     {
     }
 

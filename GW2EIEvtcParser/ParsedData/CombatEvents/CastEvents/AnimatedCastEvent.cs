@@ -48,7 +48,7 @@ public class AnimatedCastEvent : CastEvent
             }
             Acceleration = Math.Max(Math.Min(Acceleration, 1.0), -1.0);
         }
-        if (SkillId != SkillIDs.Resurrect)
+        if (SkillID != SkillIDs.Resurrect)
         {
             switch (endItem.IsActivation)
             {
@@ -109,7 +109,7 @@ public class AnimatedCastEvent : CastEvent
     // End missing
     internal AnimatedCastEvent(CombatItem startItem, AgentData agentData, SkillData skillData, long maxEnd) : this(startItem, agentData, skillData)
     {
-        if (Skill.ID == skillData.DodgeId)
+        if (Skill.ID == skillData.DodgeID)
         {
             // TODO: vindicator dodge duration
             ExpectedDuration = 750;

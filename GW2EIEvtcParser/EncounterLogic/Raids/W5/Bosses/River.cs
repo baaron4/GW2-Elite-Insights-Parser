@@ -196,7 +196,7 @@ internal class River : HallOfChains
             case (int)TargetID.HollowedBomber:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case BombShellRiverOfSouls:
                             castDuration = 3500;

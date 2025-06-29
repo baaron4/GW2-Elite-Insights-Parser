@@ -275,7 +275,7 @@ internal class BanditTrio : SalvationPass
             case (int)TargetID.Berg:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Overhead Smash - Cone knock
                         case OverheadSmashBerg:
@@ -296,7 +296,7 @@ internal class BanditTrio : SalvationPass
             case (int)TargetID.Zane:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Hail of Bullets - 3 Cones attack
                         case HailOfBulletsZane:

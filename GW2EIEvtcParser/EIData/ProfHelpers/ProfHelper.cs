@@ -787,23 +787,23 @@ internal static class ProfHelper
         return buffs.Select(bae => new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
     }
 
-    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
+    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, long buffID)
     {
-        SkillItem skill = skillData.Get(skillId);
-        return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor), skill);
+        SkillItem skill = skillData.Get(skillID);
+        return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffID, actor), skill);
     }
 
-    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
+    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, long startOffset, long skillDuration, long buffID)
     {
-        SkillItem skill = skillData.Get(skillId);
-        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
+        SkillItem skill = skillData.Get(skillID);
+        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffID, actor).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
     }
 
-    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)
+    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillID, long buffID)
     {
-        SkillItem skill = skillData.Get(skillId);
+        SkillItem skill = skillData.Get(skillID);
         var res = new List<AnimatedCastEvent>();
-        var dict = combatData.GetBuffData(buffId).GroupBy(x => x.To);
+        var dict = combatData.GetBuffData(buffID).GroupBy(x => x.To);
         foreach (var group in dict)
         {
             res.AddRange(ComputeUnderBuffCastEvents(combatData, group.ToList(), skill));

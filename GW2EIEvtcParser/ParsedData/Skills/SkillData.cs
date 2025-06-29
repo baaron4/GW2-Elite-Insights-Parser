@@ -5,14 +5,14 @@ public class SkillData
     // Fields
     private readonly Dictionary<long, SkillItem> _skills = [];
     private readonly GW2EIGW2API.GW2APIController _apiController;
-    public readonly long DodgeId;
-    public readonly long GenericBreakbarId;
+    public readonly long DodgeID;
+    public readonly long GenericBreakbarID;
     // Public Methods
 
     internal SkillData(GW2EIGW2API.GW2APIController apiController, EvtcVersionEvent evtcVersion)
     {
         _apiController = apiController;
-        (DodgeId, GenericBreakbarId) = SkillItem.GetArcDPSCustomIDs(evtcVersion);
+        (DodgeID, GenericBreakbarID) = SkillItem.GetArcDPSCustomIDs(evtcVersion);
     }
 
     public SkillItem Get(long ID)

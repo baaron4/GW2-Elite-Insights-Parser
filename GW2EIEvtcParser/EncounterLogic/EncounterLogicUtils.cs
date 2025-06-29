@@ -87,31 +87,6 @@ internal static class EncounterLogicUtils
         }
     }
 
-    /*protected static void AdjustTimeRefreshBuff(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, long id)
-    {
-        if (buffsById.TryGetValue(id, out List<AbstractBuffEvent> buffList))
-        {
-            var agentsToSort = new HashSet<AgentItem>();
-            foreach (AbstractBuffEvent be in buffList)
-            {
-                if (be is AbstractBuffRemoveEvent abre)
-                {
-                    // to make sure remove events are before applications
-                    abre.OverrideTime(abre.Time - 1);
-                    agentsToSort.Add(abre.To);
-                }
-            }
-            if (buffList.Count > 0)
-            {
-                buffsById[id].Sort((x, y) => x.Time.CompareTo(y.Time));
-            }
-            foreach (AgentItem a in agentsToSort)
-            {
-                buffsByDst[a].Sort((x, y) => x.Time.CompareTo(y.Time));
-            }
-        }
-    }*/
-
     internal static ErrorEvent? GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation)
@@ -339,18 +314,18 @@ internal static class EncounterLogicUtils
 
     /// <summary>
     /// Compute the end time of a cast.<br></br>
-    /// If <paramref name="buffId"/> is present before the end of the cast, return the <paramref name="buffId"/> application time.
+    /// If <paramref name="buffID"/> is present before the end of the cast, return the <paramref name="buffID"/> application time.
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="actor">Actor casting.</param>
-    /// <param name="buffId">Buff application that ends the cast earlier than the expected duration.</param>
+    /// <param name="buffID">Buff application that ends the cast earlier than the expected duration.</param>
     /// <param name="startCastTime">Starting time of the cast.</param>
     /// <param name="castDuration">Duration of the cast.</param>
     /// <returns>The end time of the cast.</returns>
-    internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, SingleActor actor, long buffId, long startCastTime, long castDuration)
+    internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, SingleActor actor, long buffID, long startCastTime, long castDuration)
     {
         long end = startCastTime + castDuration;
-        Segment? segment = actor.GetBuffStatus(log, buffId, startCastTime, end).FirstOrNull((in Segment x) => x.Value > 0);
+        Segment? segment = actor.GetBuffStatus(log, buffID, startCastTime, end).FirstOrNull((in Segment x) => x.Value > 0);
         if (segment != null)
         {
             return segment.Value.Start;

@@ -390,12 +390,12 @@ internal class KainengOverlook : EndOfDragonsStrike
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             // Check for the normal mode skill for older logs
                             case DragonSlashWaveNM:
                             case DragonSlashWaveCM:
-                                int durationCone = cast.SkillId == DragonSlashWaveNM ? 1000 : 500;
+                                int durationCone = cast.SkillID == DragonSlashWaveNM ? 1000 : 500;
                                 lifespan = (cast.Time, cast.Time + durationCone);
                                 AddDragonSlashWaveDecoration(log, target, replay, lifespan, durationCone);
                                 break;
@@ -416,7 +416,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Fall of the Axe - Small Cone
                         case FallOfTheAxeSmallConeNM:

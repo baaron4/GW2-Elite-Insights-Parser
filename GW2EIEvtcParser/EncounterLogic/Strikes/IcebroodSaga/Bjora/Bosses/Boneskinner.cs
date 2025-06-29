@@ -103,7 +103,7 @@ internal class Boneskinner : Bjora
             case (int)TargetID.Boneskinner:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Death Wind
                         case DeathWind:

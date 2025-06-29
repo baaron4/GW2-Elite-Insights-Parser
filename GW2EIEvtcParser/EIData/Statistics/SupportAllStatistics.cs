@@ -17,7 +17,7 @@ public class SupportAllStatistics : SupportPerAllyStatistics
         (int Count, long Duration) reses = (0, 0);
         foreach (CastEvent cl in cls)
         {
-            if (cl.SkillId == SkillIDs.Resurrect)
+            if (cl.SkillID == SkillIDs.Resurrect)
             {
                 reses.Count++;
                 reses.Duration += cl.ActualDuration;

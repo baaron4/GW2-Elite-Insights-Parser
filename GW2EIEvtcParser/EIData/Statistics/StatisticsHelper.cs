@@ -101,13 +101,13 @@ public class StatisticsHelper
         }
 
         // All class specific boons
-        var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault()!);
+        var remainingBuffsByIDs = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault()!);
         foreach (Player player in players)
         {
             _presentRemainingBuffsPerPlayer[player] = [];
             foreach (BuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
             {
-                if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out var boon))
+                if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIDs.TryGetValue(item.BuffID, out var boon))
                 {
                     _presentRemainingBuffsPerPlayer[player].Add(boon);
                 }

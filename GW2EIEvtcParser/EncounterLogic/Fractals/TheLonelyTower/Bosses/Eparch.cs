@@ -448,7 +448,7 @@ internal class Eparch : LonelyTower
                 {
                     const long globuleDelay = 700;
                     AnimatedCastEvent? lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
-                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out var color))
+                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillID, out var color))
                     {
                         if (gadget.TryGetCurrentPosition(log, gadget.LastAware, out var position))
                         {

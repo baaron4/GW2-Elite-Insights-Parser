@@ -233,12 +233,12 @@ internal class WvWFight : FightLogic
             var usedModes = modes.Select(x => x.BuffID).Distinct();
             foreach (long buffID in usedModes)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[buffID], 1));
             }
             // When buff is missing on a player, they are in PvE mode
             if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To == x.AgentItem)))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[GuildHallPvEMode], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[GuildHallPvEMode], 1));
             }
         }
     }

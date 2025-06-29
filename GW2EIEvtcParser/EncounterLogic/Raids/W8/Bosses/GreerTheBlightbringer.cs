@@ -489,8 +489,8 @@ internal class GreerTheBlightbringer : MountBalrior
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerSweepTheMoldRakeTheRotIndicator, out var indicators))
         {
             var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
-            x.SkillId == SweepTheMold || x.SkillId == SweepTheMold2 || x.SkillId == SweepTheMold3 ||
-            x.SkillId == RakeTheRot || x.SkillId == RakeTheRot2 || x.SkillId == RakeTheRot3);
+            x.SkillID == SweepTheMold || x.SkillID == SweepTheMold2 || x.SkillID == SweepTheMold3 ||
+            x.SkillID == RakeTheRot || x.SkillID == RakeTheRot2 || x.SkillID == RakeTheRot3);
 
             foreach (var cast in casts)
             {
@@ -499,7 +499,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     // Sweep the Mold has a X 20 and Y 40 offset, the X is already covered by the effect rotation.
                     // Adding 40 to the radius matches the in game visual
                     uint radius = 0;
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case SweepTheMold:
                             radius = 750 + 40;
@@ -664,14 +664,14 @@ internal class GreerTheBlightbringer : MountBalrior
         // Stomp the Growth - Circle indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerStompTheGrowth, out var stompTheGrowth))
         {
-            var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == StompTheGrowth || x.SkillId == StompTheGrowth2 || x.SkillId == StompTheGrowth3);
+            var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == StompTheGrowth || x.SkillID == StompTheGrowth2 || x.SkillID == StompTheGrowth3);
             
             foreach (var cast in casts)
             {
                 foreach (EffectEvent effect in stompTheGrowth.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 3000)) // 3 seconds padding
                 {
                     uint radius = 0;
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case StompTheGrowth:
                             radius = 800;
@@ -811,7 +811,7 @@ internal class GreerTheBlightbringer : MountBalrior
             AgentItem? ereg = log.AgentData.GetNPCsByID((int)TargetID.Ereg).FirstOrDefault();
             if (ereg != null && !log.CombatData.GetDeadEvents(ereg).Any())
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilitySpareTheEreg], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1));
             }
             
         }

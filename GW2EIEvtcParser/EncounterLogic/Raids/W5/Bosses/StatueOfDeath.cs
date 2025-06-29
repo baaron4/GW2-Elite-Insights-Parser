@@ -96,7 +96,7 @@ internal class StatueOfDeath : HallOfChains
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             case Imbibe:
                                 replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (cast.Time, cast.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(cast.Time, 0), (cast.ExpectedEndTime, 100)], new AgentConnector(target))
@@ -127,7 +127,7 @@ internal class StatueOfDeath : HallOfChains
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             case GreensEaterofSouls:
                                 long greenDuration = 5000;

@@ -279,8 +279,8 @@ public class HealingStatsExtensionHandler : ExtensionHandler
                     RunningExtensionInternal.Add(agent);
                 }
             }
-            var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, HybridHealIDs);
+            var healDataByID = _healingEvents.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataByID, HybridHealIDs);
             operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
         }
         //
@@ -302,8 +302,8 @@ public class HealingStatsExtensionHandler : ExtensionHandler
                     RunningExtensionInternal.Add(pair.Key);
                 }
             }
-            var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
+            var barrierDataByID = _barrierEvents.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataByID);
             operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _barrierEvents.Count + " barrier events to CombatData");
         }
         int running = Math.Max(RunningExtensionInternal.Count, 1);

@@ -150,7 +150,7 @@ internal static class EncounterLogicPhaseUtils
     {
         long last = start;
         var invuls = mainTarget.GetCastEvents(log, start, end)
-            .Where(x => skillIDs.Contains(x.SkillId))
+            .Where(x => skillIDs.Contains(x.SkillID))
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
 

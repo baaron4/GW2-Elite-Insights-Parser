@@ -407,50 +407,50 @@ public class AgentItem
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
+    public bool HasBuff(ParsedEvtcLog log, long buffID, long time, long window = 0)
     {
         SingleActor? actor = log.FindActor(this);
         if (actor == null)
         {
             return false;
         }
-        return actor.HasBuff(log, buffId, time, window);
+        return actor.HasBuff(log, buffID, time, window);
     }
 
     /// <summary>
     /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
-        return log.FindActor(this).HasBuff(log, by, buffId, time);
+        return log.FindActor(this).HasBuff(log, by, buffID, time);
     }
 
     /// <summary>
     /// Checks if the buffs are present on the actor.  Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise.
     /// </summary>
-    public bool HasAnyBuff(ParsedEvtcLog log, IEnumerable<long> buffIds, long time, long window = 0)
+    public bool HasAnyBuff(ParsedEvtcLog log, IEnumerable<long> buffIDs, long time, long window = 0)
     {
-        return buffIds.Any(id => log.FindActor(this).HasBuff(log, id, time, window));
+        return buffIDs.Any(id => log.FindActor(this).HasBuff(log, id, time, window));
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, long buffID, long time)
     {
-        return log.FindActor(this).GetBuffStatus(log, buffId, time);
+        return log.FindActor(this).GetBuffStatus(log, buffID, time);
     }
 
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID, long start, long end)
     {
-        return log.FindActor(this).GetBuffStatus(log, buffId, start, end);
+        return log.FindActor(this).GetBuffStatus(log, buffID, start, end);
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
-        return log.FindActor(this).GetBuffStatus(log, by, buffId, time);
+        return log.FindActor(this).GetBuffStatus(log, by, buffID, time);
     }
 
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
     {
-        return log.FindActor(this).GetBuffStatus(log, by, buffId, start, end);
+        return log.FindActor(this).GetBuffStatus(log, by, buffID, start, end);
     }
 
 

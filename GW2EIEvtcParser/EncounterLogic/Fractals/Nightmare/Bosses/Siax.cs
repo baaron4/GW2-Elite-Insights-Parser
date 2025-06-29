@@ -150,7 +150,7 @@ internal class Siax : Nightmare
             case (int)TargetID.Siax:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Caustic Explosion - Breakbar
                         case CausticExplosionSiaxBreakbar:
@@ -188,7 +188,7 @@ internal class Siax : Nightmare
             case (int)TargetID.EchoOfTheUnclean:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Caustic Explosion
                         case CausticExplosionSiaxEcho:

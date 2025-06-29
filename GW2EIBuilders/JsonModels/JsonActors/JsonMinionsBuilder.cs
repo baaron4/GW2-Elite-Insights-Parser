@@ -98,7 +98,7 @@ internal static class JsonMinionsBuilder
         //TODO(Rennorb) @perf
         if (minionCastEvents.Any())
         {
-            jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillId), skillMap).ToList();
+            jsonMinions.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, minionCastEvents.GroupBy(x => x.SkillID), skillMap).ToList();
         }
         //
         var totalDamageDist = new IReadOnlyList<JsonDamageDist>[phases.Count];
@@ -107,15 +107,15 @@ internal static class JsonMinionsBuilder
         {
             PhaseData phase = phases[i];
             totalDamageDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 log,
                 skillMap,
                 buffMap
             );
             totalDamageTakenDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                minions.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                minions.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                minions.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                minions.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 log,
                 skillMap,
                 buffMap
@@ -134,8 +134,8 @@ internal static class JsonMinionsBuilder
                 {
                     PhaseData phase = phases[j];
                     targetDamageDist[i][j] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                        minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
-                        minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                        minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                        minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                         log,
                         skillMap,
                         buffMap

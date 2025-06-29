@@ -108,19 +108,19 @@ partial class SingleActor
             var trackedBuffs = GetTrackedBuffs(log);
             var buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count);
             _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
-            var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
-            var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
+            var boonIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+            var condiIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
             //
-            var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
-            var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
+            var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfBoons]);
+            var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfConditions]);
             //
             foreach (Buff buff in trackedBuffs)
             {
                 long buffID = buff.ID;
                 if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
                 {
-                    bool updateBoonPresence = boonIds.Contains(buffID);
-                    bool updateCondiPresence = condiIds.Contains(buffID);
+                    bool updateBoonPresence = boonIDs.Contains(buffID);
+                    bool updateCondiPresence = condiIDs.Contains(buffID);
                     var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
@@ -163,62 +163,62 @@ partial class SingleActor
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
+    public bool HasBuff(ParsedEvtcLog log, long buffID, long time, long window = 0)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
 
         IReadOnlyDictionary<long, BuffGraph> bgms = GetBuffGraphs(log);
-        return bgms.TryGetValue(buffId, out var bgm) && bgm.IsPresent(time, window);
+        return bgms.TryGetValue(buffID, out var bgm) && bgm.IsPresent(time, window);
     }
 
     /// <summary>
     /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
 
         IReadOnlyDictionary<long, BuffGraph> bgms = GetBuffGraphs(log, by);
-        return bgms.TryGetValue(buffId, out var bgm) && bgm.IsPresent(time);
+        return bgms.TryGetValue(buffID, out var bgm) && bgm.IsPresent(time);
     }
 
     private static readonly Segment _emptySegment = new(long.MinValue, long.MaxValue, 0);
 
-    private static Segment GetBuffStatus(long buffId, long time, IReadOnlyDictionary<long, BuffGraph> bgms)
+    private static Segment GetBuffStatus(long buffID, long time, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(time) : _emptySegment;
+        return bgms.TryGetValue(buffID, out var bgm) ? bgm.GetBuffStatus(time) : _emptySegment;
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, long buffID, long time)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        return GetBuffStatus(buffId, time, GetBuffGraphs(log));
+        return GetBuffStatus(buffID, time, GetBuffGraphs(log));
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
+        return GetBuffStatus(buffID, time, GetBuffGraphs(log, by));
     }
-    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long time)
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, long buffID, long time)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log));
+        var seg = GetBuffStatus(buffID, time, GetBuffGraphs(log));
         if (seg.Value > 0)
         {
             return new Segment(seg.Start, seg.End, 1);
@@ -226,13 +226,13 @@ partial class SingleActor
         return seg;
     }
 
-    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
+    public Segment GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        var seg = GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
+        var seg = GetBuffStatus(buffID, time, GetBuffGraphs(log, by));
         if (seg.Value > 0)
         {
             return new Segment(seg.Start, seg.End, 1);
@@ -240,29 +240,29 @@ partial class SingleActor
         return seg;
     }
 
-    private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
+    private static IReadOnlyList<Segment> GetBuffStatus(long buffID, long start, long end, IReadOnlyDictionary<long, BuffGraph> bgms)
     {
-        return bgms.TryGetValue(buffId, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
+        return bgms.TryGetValue(buffID, out var bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
     }
 
     /// <exception cref="InvalidOperationException"></exception>
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID, long start, long end)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        return GetBuffStatus(buffId, start, end, GetBuffGraphs(log));
+        return GetBuffStatus(buffID, start, end, GetBuffGraphs(log));
     }
 
     /// <exception cref="InvalidOperationException"></exception>
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        return GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by));
+        return GetBuffStatus(buffID, start, end, GetBuffGraphs(log, by));
     }
     private static void FuseConsecutiveNonZeroAndSetTo1(List<Segment> segments)
     {
@@ -301,25 +301,25 @@ partial class SingleActor
     }
 
     /// <exception cref="InvalidOperationException"></exception>
-    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffID, long start, long end)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        var presence = GetBuffStatus(buffId, start, end, GetBuffGraphs(log)).ToList();
+        var presence = GetBuffStatus(buffID, start, end, GetBuffGraphs(log)).ToList();
         FuseConsecutiveNonZeroAndSetTo1(presence);
         return presence;
     }
 
     /// <exception cref="InvalidOperationException"></exception>
-    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
     {
-        if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
+        if (!log.Buffs.BuffsByIDs.ContainsKey(buffID))
         {
-            throw new InvalidOperationException($"Buff id {buffId} must be simulated");
+            throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
-        var presence = GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by)).ToList();
+        var presence = GetBuffStatus(buffID, start, end, GetBuffGraphs(log, by)).ToList();
         FuseConsecutiveNonZeroAndSetTo1(presence);
         return presence;
     }
@@ -388,12 +388,12 @@ partial class SingleActor
         }
         // Fill in Boon Map
 #if DEBUG
-        var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
-        var test2 = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+        var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIDs.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+        var test2 = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => log.Buffs.BuffsByIDs.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
         foreach (var buffEvent in log.CombatData.GetBuffDataByDst(AgentItem))
         {
-            if (!log.Buffs.BuffsByIds.TryGetValue(buffEvent.BuffID, out var buff))
+            if (!log.Buffs.BuffsByIDs.TryGetValue(buffEvent.BuffID, out var buff))
             {
                 continue;
             }
@@ -430,13 +430,13 @@ partial class SingleActor
 
         var trackedBuffs = GetTrackedBuffs(log);
         _buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count + 5);
-        var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
-        var activeCombatMinionsGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
-        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
-        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
-        var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
-        var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
-        var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
+        var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfBoons]);
+        var activeCombatMinionsGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfActiveCombatMinions]);
+        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfClones]) : null;
+        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfRangerPets]) : null;
+        var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfConditions]);
+        var boonIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+        var condiIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
 
         // Init status
         _buffDistribution = new(log);
@@ -471,8 +471,8 @@ partial class SingleActor
                     simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                 }
                 _buffSimulators[buffID] = simulator;
-                bool updateBoonPresence = boonIds.Contains(buffID);
-                bool updateCondiPresence = condiIds.Contains(buffID); // move
+                bool updateBoonPresence = boonIDs.Contains(buffID);
+                bool updateCondiPresence = condiIDs.Contains(buffID); // move
                 var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count);
                 foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                 {

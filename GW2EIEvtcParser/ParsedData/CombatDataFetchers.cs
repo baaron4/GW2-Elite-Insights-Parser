@@ -9,7 +9,7 @@ partial class CombatData
 {
     public IReadOnlyCollection<long> GetSkills()
     {
-        return _skillIds;
+        return _skillIDs;
     }
     #region BUILD
     public EvtcVersionEvent GetEvtcVersionEvent()
@@ -376,14 +376,14 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(long skillID)
     {
-        return _breakbarDamageDataById.GetValueOrEmpty(skillID);
+        return _breakbarDamageDataByID.GetValueOrEmpty(skillID);
     }
     /// <summary>
     /// Returns list of damage events applied by a skill
     /// </summary>
     public IReadOnlyList<HealthDamageEvent> GetDamageData(long skillID)
     {
-        return _damageDataById.GetValueOrEmpty(skillID);
+        return _damageDataByID.GetValueOrEmpty(skillID);
     }
     /// <summary>
     /// Returns list of damage events taken by Agent
@@ -414,7 +414,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<CrowdControlEvent> GetCrowdControlData(long skillID)
     {
-        return _crowControlDataById.GetValueOrEmpty(skillID);
+        return _crowControlDataByID.GetValueOrEmpty(skillID);
     }
 
     /// <summary>
@@ -451,7 +451,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<InstantCastEvent> GetInstantCastData(long skillID)
     {
-        return _instantCastDataById.GetValueOrEmpty(skillID);
+        return _instantCastDataByID.GetValueOrEmpty(skillID);
     }
 
     /// <summary>
@@ -466,7 +466,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(long skillID)
     {
-        return _animatedCastDataById.GetValueOrEmpty(skillID);
+        return _animatedCastDataByID.GetValueOrEmpty(skillID);
     }
     #endregion CAST
     #region MOVEMENTS

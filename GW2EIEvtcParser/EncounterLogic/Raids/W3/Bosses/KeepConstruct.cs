@@ -259,7 +259,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case TowerDrop:
                             {
@@ -438,7 +438,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
             if (hasHitKc == log.PlayerList.Count)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDownDownDowned], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDownDownDowned], 1));
             }
         }
     }

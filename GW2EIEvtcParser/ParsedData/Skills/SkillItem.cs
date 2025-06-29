@@ -1445,7 +1445,7 @@ public class SkillItem
         || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
         || IsAnimatedDodge(skillData);
-    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId
+    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID
         || VindicatorHelper.IsVindicatorDodge(ID);
     public bool IsAutoAttack(ParsedEvtcLog log) => AA
         || FirebrandHelper.IsAutoAttack(log, ID)

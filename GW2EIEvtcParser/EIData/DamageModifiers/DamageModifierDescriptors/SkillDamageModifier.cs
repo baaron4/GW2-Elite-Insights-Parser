@@ -50,7 +50,7 @@ internal class SkillDamageModifier : DamageModifierDescriptor
     protected override bool ComputeGain(IReadOnlyDictionary<long, BuffGraph>? bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         gain = 0;
-        if (dl.SkillId != _skillID)
+        if (dl.SkillID != _skillID)
         {
             return false;
         }

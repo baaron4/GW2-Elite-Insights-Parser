@@ -392,7 +392,7 @@ internal static class ElementalistHelper
         // Firestorm
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out var firestorms))
         {
-            var firestormCasts = player.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword).ToList();
+            var firestormCasts = player.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == FirestormGlyphOfStorms || x.SkillID == FirestormFieryGreatsword).ToList();
             foreach (EffectEvent effect in firestorms)
             {
                 SkillModeDescriptor skill;
@@ -400,7 +400,7 @@ internal static class ElementalistHelper
                 var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
                 if (firestormCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillID);
                     icon = skill.SkillID == FirestormGlyphOfStorms ? EffectImages.EffectFirestormGlyph : EffectImages.EffectFirestormFieryGreatsword;
                 }
                 else
@@ -600,11 +600,11 @@ internal static class ElementalistHelper
     /// <param name="replay">The Combat Replay.</param>
     /// <param name="color">The specialization color.</param>
     /// <param name="effects">The etching effects.</param>
-    /// <param name="skillId">The etching skill ID.</param>
+    /// <param name="skillID">The etching skill ID.</param>
     /// <param name="icon">The etching icon.</param>
-    private static void AddEtchingDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillId, string icon)
+    private static void AddEtchingDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillID, string icon)
     {
-        var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillId, SkillModeCategory.ShowOnSelect);
+        var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillID, SkillModeCategory.ShowOnSelect);
         foreach (EffectEvent effect in effects)
         {
             (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);

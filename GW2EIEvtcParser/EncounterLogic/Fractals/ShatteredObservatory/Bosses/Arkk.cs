@@ -235,7 +235,7 @@ internal class Arkk : ShatteredObservatory
         // The party must have 5 players to be eligible
         if (counter == 5)
         {
-            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityBeDynamic], 1));
+            InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
         }
     }
 
@@ -272,7 +272,7 @@ internal class Arkk : ShatteredObservatory
             case (int)TargetID.Arkk:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case SolarBlastArkk1:
                             replay.Decorations.AddOverheadIcon(new Segment((int)cast.Time, cast.EndTime, 1), target, ParserIcons.EyeOverhead, 30);
@@ -306,7 +306,7 @@ internal class Arkk : ShatteredObservatory
                             {
                                 long start = cast.Time + offset * (i + 1);
                                 long end = start + castDuration;
-                                if (cast.SkillId == HorizonStrikeArkk1)
+                                if (cast.SkillID == HorizonStrikeArkk1)
                                 {
                                     float angle = facing + 180 / 5 * i;
                                     if (start >= cap)
@@ -318,7 +318,7 @@ internal class Arkk : ShatteredObservatory
                                     replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
                                     replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
                                 }
-                                else if (cast.SkillId == HorizonStrikeArkk2)
+                                else if (cast.SkillID == HorizonStrikeArkk2)
                                 {
                                     float angle = facing + 90 - 180 / 5 * i;
                                     if (start >= cap)

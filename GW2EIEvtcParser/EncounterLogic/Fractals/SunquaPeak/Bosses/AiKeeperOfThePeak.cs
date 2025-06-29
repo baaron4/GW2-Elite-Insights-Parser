@@ -140,16 +140,6 @@ internal class AiKeeperOfThePeak : SunquaPeak
                         (5411, -95, 8413, 3552));
     }
 
-    /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
-    {
-        var res = new List<AbstractBuffEvent>();
-        // Tidal Bargain, Cacophonous Mind and Crushing Guilt adjust
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 61512);
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 61208);
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 61435);
-        return res;
-    }*/
-
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return
@@ -321,7 +311,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                         long skillID = 61187;
                         var casts = elementalAi.GetCastEvents(log, phase.Start, phase.End);
                         // use last cast since determined is fixed 5s and the transition out (ai flying up) can happen after loss
-                        CastEvent? castEvt = casts.LastOrDefault(x => x.SkillId == skillID);
+                        CastEvent? castEvt = casts.LastOrDefault(x => x.SkillID == skillID);
                         if (castEvt != null)
                         {
                             phase.OverrideStart(castEvt.Time);
@@ -352,7 +342,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 // sub phases
                 long fearToSorrowSkillID = _china ? EmpathicManipulationSorrowCN : EmpathicManipulationSorrow;
-                CastEvent? fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
+                CastEvent? fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillID == fearToSorrowSkillID);
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart, fearToSorrow.Time, "Fear");
@@ -360,7 +350,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     fearPhase.AddParentPhase(darkPhase);
                     phases.Add(fearPhase);
                     long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
-                    CastEvent? sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
+                    CastEvent? sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillID == sorrowToGuiltSkillID);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, sorrowToGuilt.Time, "Sorrow");
@@ -438,7 +428,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
                 if (counter == 5)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityDancingWithDemons], 1));
+                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
                 }
             }
             if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
@@ -494,13 +484,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
                     foreach (CastEvent cast in casts)
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             // Overwhelming Sorrow - Explosion
                             case OverwhelmingSorrowWindup:
                                 growing = cast.Time + sorrowFullCastDuration;
                                 lifespan = (cast.Time, growing);
-                                CastEvent? detonate = casts.FirstOrDefault(x => x.SkillId == OverwhelmingSorrowDetonate && x.Time > lifespan.start && x.Time < lifespan.end + ServerDelayConstant);
+                                CastEvent? detonate = casts.FirstOrDefault(x => x.SkillID == OverwhelmingSorrowDetonate && x.Time > lifespan.start && x.Time < lifespan.end + ServerDelayConstant);
                                 if (detonate != null)
                                 {
                                     lifespan.end = detonate.Time;

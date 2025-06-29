@@ -258,7 +258,7 @@ internal static class WarriorHelper
             RupturingSmash,
         ];
 
-        if (!improvedSkills.Contains(x.SkillId))
+        if (!improvedSkills.Contains(x.SkillID))
         {
             return false;
         }

@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
 {
     private List<CastEvent>? _vindicatorDodges = null;
-    public BuffSourceFinder20210921(HashSet<long> boonIds) : base(boonIds)
+    public BuffSourceFinder20210921(HashSet<long> boonIDs) : base(boonIDs)
     {
         ImperialImpactExtension = 2000;
     }
@@ -25,7 +25,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
             {
                 if (p.Spec == ParserHelper.Spec.Vindicator)
                 {
-                    _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == SkillIDs.ImperialImpactDodge));
+                    _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillIDs.ImperialImpactDodge));
                 }
             }
             _vindicatorDodges.SortByTime();

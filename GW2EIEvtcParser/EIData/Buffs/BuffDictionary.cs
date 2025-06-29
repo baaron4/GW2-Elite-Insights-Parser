@@ -9,13 +9,13 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
     readonly int _layer2InitialCapacityBuffs = layer2InitialCapacityBuffs;
     readonly int _layer2InitialCapacityExts = layer2InitialCapacityExts;
     readonly int _layer3InitialCapacityExts = layer3InitialCapacityExts;
-    readonly Dictionary<long, List<BuffEvent>> _buffIdToEvents = new(layer1InitialCapacity);
+    readonly Dictionary<long, List<BuffEvent>> _buffIDToEvents = new(layer1InitialCapacity);
     // Fast look up table for AddToList
-    readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIdToExtensions = new(layer1InitialCapacity);
+    readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIDToExtensions = new(layer1InitialCapacity);
 
     public bool TryGetValue(long buffID, [NotNullWhen(true)] out List<BuffEvent>? list)
     {
-        return _buffIdToEvents.TryGetValue(buffID, out list);
+        return _buffIDToEvents.TryGetValue(buffID, out list);
     }
 
     static void AddToList(ParsedEvtcLog log, List<BuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, BuffEvent buffEvent, int initialListCapacity)
@@ -71,14 +71,14 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         }
 
         buffEvent.TryFindSrc(log);
-        if (!_buffIdToEvents.TryGetValue(buff.ID, out var list))
+        if (!_buffIDToEvents.TryGetValue(buff.ID, out var list))
         {
             list = new(_layer2InitialCapacityBuffs);
-            _buffIdToEvents[buff.ID] = list;
-            _buffIdToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
+            _buffIDToEvents[buff.ID] = list;
+            _buffIDToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
         }
 
-        AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
+        AddToList(log, list, _buffIDToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
     }
 
     private BuffRemoveSingleEvent? _lastRemovedRegen = null;
@@ -104,14 +104,14 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         }
         
         buffEvent.TryFindSrc(log);
-        if (!_buffIdToEvents.TryGetValue(buff.ID, out var list))
+        if (!_buffIDToEvents.TryGetValue(buff.ID, out var list))
         {
             list = new(_layer2InitialCapacityBuffs);
-            _buffIdToEvents[buff.ID] = list;
-            _buffIdToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
+            _buffIDToEvents[buff.ID] = list;
+            _buffIDToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
         }
         
-        AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
+        AddToList(log, list, _buffIDToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
     }
 
 
@@ -122,7 +122,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
         {
             lastDespawn = dsp.Time;
-            foreach (var pair in _buffIdToEvents)
+            foreach (var pair in _buffIDToEvents)
             {
                 pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
@@ -130,7 +130,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
 
         if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
         {
-            foreach (var pair in _buffIdToEvents)
+            foreach (var pair in _buffIDToEvents)
             {
                 pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
@@ -138,16 +138,16 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
 
         foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
         {
-            foreach (var pair in _buffIdToEvents)
+            foreach (var pair in _buffIDToEvents)
             {
                 pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
             }
         }
 
-        trackedBuffs = new HashSet<Buff>(_buffIdToEvents.Count);
-        foreach (var (buffId, events) in _buffIdToEvents)
+        trackedBuffs = new HashSet<Buff>(_buffIDToEvents.Count);
+        foreach (var (buffID, events) in _buffIDToEvents)
         {
-            trackedBuffs.Add(log.Buffs.BuffsByIds[buffId]);
+            trackedBuffs.Add(log.Buffs.BuffsByIDs[buffID]);
             events.SortByTime();
         }
     }

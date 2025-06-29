@@ -471,7 +471,7 @@ class Animator {
             if (!decorationRendering.isMechanicOrSkill) {
                 switch (decorationRendering.type) {
                     case Types.ActorOrientation:
-                        this.actorOrientationData.set(decorationRendering.connectedTo.masterId, new FacingMechanicDrawable(decorationRendering));
+                        this.actorOrientationData.set(decorationRendering.connectedTo.masterID, new FacingMechanicDrawable(decorationRendering));
                         break;
                     case Types.MovingPlatform:
                         this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));

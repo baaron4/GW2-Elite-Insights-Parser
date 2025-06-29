@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 internal abstract class BuffSourceFinder
 {
     private List<CastEvent>? _extensionSkills = null;
-    private readonly HashSet<long> _boonIds;
+    private readonly HashSet<long> _boonIDs;
     protected HashSet<long> ExtensionIDS = [];
     protected Dictionary<long, HashSet<long>> DurationToIDs = [];
     // non trackable times
@@ -20,9 +20,9 @@ internal abstract class BuffSourceFinder
         Certain,
     }
 
-    protected BuffSourceFinder(HashSet<long> boonIds)
+    protected BuffSourceFinder(HashSet<long> boonIDs)
     {
-        _boonIds = boonIds;
+        _boonIDs = boonIDs;
     }
 
     private IEnumerable<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
@@ -32,10 +32,10 @@ internal abstract class BuffSourceFinder
             _extensionSkills = [];
             foreach (Player p in log.PlayerList)
             {
-                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && !x.IsInterrupted));
+                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillID) && !x.IsInterrupted));
             }
         }
-        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);
+        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillID) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);
     }
     // Spec specific checks
 
@@ -121,7 +121,7 @@ internal abstract class BuffSourceFinder
     // Main method
     public AgentItem TryFindSrc(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, uint buffInstance)
     {
-        if (!_boonIds.Contains(buffID))
+        if (!_boonIDs.Contains(buffID))
         {
             if (buffInstance > 0)
             {
