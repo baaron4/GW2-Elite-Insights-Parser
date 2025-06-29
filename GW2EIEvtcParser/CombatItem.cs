@@ -52,7 +52,7 @@ public class CombatItem
         || IsStateChange == StateChange.GWBuild || IsStateChange == StateChange.InstanceStart 
         || IsStateChange == StateChange.LogNPCUpdate || IsStateChange == StateChange.FractalScale 
         || IsStateChange == StateChange.Language || IsStateChange == StateChange.MapID 
-        || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.ShardId 
+        || IsStateChange == StateChange.RuleSet || IsStateChange == StateChange.ShardID 
         || IsStateChange == StateChange.SquadCombatEnd || IsStateChange == StateChange.SquadCombatStart 
         || IsStateChange == StateChange.TickRate;
 
@@ -63,7 +63,7 @@ public class CombatItem
 
     // Constructor
     public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-           uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
+           uint skillID, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
            ushort dstMasterInstid, byte iff, byte isBuff,
            byte result, byte isActivation,
            byte isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
@@ -75,7 +75,7 @@ public class CombatItem
         Value = value;
         BuffDmg = buffDmg;
         OverstackValue = overstackValue;
-        SkillID = skillId;
+        SkillID = skillID;
         SrcInstid = srcInstid;
         DstInstid = dstInstid;
         SrcMasterInstid = srcMasterInstid;

@@ -86,7 +86,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     {
                         return eligibilityRemovedEvents;
                     }
-                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillId) && x.HasHit));
+                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
                     IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
                     // In case player is dead but death event did not happen during encounter
                     if (agentItem.IsDead(log, log.FightData.FightEnd) && !deads.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
@@ -212,7 +212,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
         phases[0].AddTarget(cerus, log);
-        var embodimentIds = new List<TargetID>
+        var embodimentIDs = new List<TargetID>
         {
             TargetID.EmbodimentOfDespair,
             TargetID.EmbodimentOfEnvy,
@@ -221,7 +221,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             TargetID.EmbodimentOfRage,
             TargetID.EmbodimentOfRegret,
         };
-        var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIds));
+        var embodiments = Targets.Where(target => target.IsAnySpecies(embodimentIDs));
         var embodimentsKilled = embodiments.Where(target => log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).Any());
         phases[0].AddTargets(embodimentsKilled, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
@@ -244,7 +244,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     return invulnApplies.Any(apply => phase.InInterval(apply.Time)); // phase interval is unfitted = based on cerus invuln
                 });
                 var priority = killed.Any() ? PhaseData.TargetPriority.NonBlocking : PhaseData.TargetPriority.Main; // default to all as main if none killed
-                AddTargetsToPhaseAndFit(phase, embodimentIds, log, priority);
+                AddTargetsToPhaseAndFit(phase, embodimentIDs, log, priority);
                 phase.AddTargets(killed, log); // overwrite priority for killed
             }
             else
@@ -254,7 +254,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent? enragedSmash = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
+        CastEvent? enragedSmash = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM).FirstOrDefault();
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
@@ -427,7 +427,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             case (int)TargetID.Cerus:
                 foreach (CastEvent cast in casts)
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Enraged Smash - 10% attacks
                         case EnragedSmashNM:
@@ -622,7 +622,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
-        var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw);
+        var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
         long invisibleStart = log.FightData.LogStart;
         bool startTrimmed = false;
 
@@ -683,7 +683,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <param name="casts">The cast events.</param>
     private static void AddCryOfRageDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<CastEvent> casts)
     {
-        var cryOfRage = casts.Where(x => x.SkillId == CryOfRageNM || x.SkillId == CryOfRageCM || x.SkillId == CryOfRageEmpoweredNM || x.SkillId == CryOfRageEmpoweredCM);
+        var cryOfRage = casts.Where(x => x.SkillID == CryOfRageNM || x.SkillID == CryOfRageCM || x.SkillID == CryOfRageEmpoweredNM || x.SkillID == CryOfRageEmpoweredCM);
         foreach (CastEvent cast in cryOfRage)
         {
             uint radius = 0;
@@ -691,7 +691,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             (long start, long end) lifespan = (cast.Time, cast.Time + defaultCastDuration);
             long growing = lifespan.end;
 
-            switch (cast.SkillId)
+            switch (cast.SkillID)
             {
                 case CryOfRageNM:
                 case CryOfRageCM:
@@ -731,14 +731,14 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     {
         uint width = 2200;
 
-        var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM);
+        var enviousGaze = casts.Where(x => x.SkillID == EnviousGazeNM || x.SkillID == EnviousGazeEmpoweredNM || x.SkillID == EnviousGazeCM || x.SkillID == EnviousGazeEmpoweredCM);
         foreach (CastEvent cast in enviousGaze)
         {
             if (cast.IsUnknown)
             {
                 continue;
             }
-            bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM;
+            bool isEmpowered = cast.SkillID == EnviousGazeEmpoweredNM || cast.SkillID == EnviousGazeEmpoweredCM;
             long indicatorDuration = 1500;
             (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
             long growing = lifespanIndicator.end;
@@ -853,7 +853,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
             if (target.IsSpecies(TargetID.Cerus))
             {
-                var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill);
+                var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == PetrifySkill);
                 foreach (CastEvent cast in casts)
                 {
                     if (lifespan.start <= cast.Time && lifespan.end > cast.Time)
@@ -910,7 +910,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 };
                 if (empoweredBuffs.Count(x => cerus.HasBuff(log, x, log.FightData.LogStart, log.FightData.LogEnd)) == 6)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityApathetic], 1));
+                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1));
                 }
             }
         }

@@ -213,7 +213,7 @@ internal class Artsariiv : ShatteredObservatory
             case (int)TargetID.Artsariiv:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case Obliterate:
                             castDuration = 3160;

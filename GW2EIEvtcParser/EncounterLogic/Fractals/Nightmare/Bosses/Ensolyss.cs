@@ -301,7 +301,7 @@ internal class Ensolyss : Nightmare
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Tail Lash - Cone Swipe
                         case TailLashEnsolyss:
@@ -446,7 +446,7 @@ internal class Ensolyss : Nightmare
             case (int)TargetID.NightmareHallucination1:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Lunge - Dash
                         case LungeNightmareHallucination:

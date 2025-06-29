@@ -267,18 +267,18 @@ public abstract partial class SingleActor : Actor
     }
 
     /// <summary>
-    /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIds"/> in input.
+    /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIDs"/> in input.
     /// </summary>
-    /// <param name="buffIds">Buff IDs of which to find the <see cref="Segment"/> of.</param>
+    /// <param name="buffIDs">Buff IDs of which to find the <see cref="Segment"/> of.</param>
     /// <param name="start">Start time to search.</param>
     /// <param name="end">End time to search.</param>
     /// <returns><see cref="List{T}"/> with the <see cref="Segment"/>s found.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIds, long start, long end)
+    public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs, long start, long end)
     {
         //TODO(Rennorb) @perf
         var result = new List<Segment>();
-        foreach (long id in buffIds)
+        foreach (long id in buffIDs)
         {
             result.AddRange(GetBuffStatus(log, id, start, end));
         }
@@ -542,7 +542,7 @@ public abstract partial class SingleActor : Actor
         #pragma warning restore IDE0028 
         foreach (WeaponSwapEvent wepSwap in log.CombatData.GetWeaponSwapData(AgentItem))
         {
-            if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillId == WeaponSwap)
+            if (CastEvents.Count > 0 && (wepSwap.Time - CastEvents.Last().Time) < ServerDelayConstant && CastEvents.Last().SkillID == WeaponSwap)
             {
                 CastEvents[^1] = wepSwap;
             }

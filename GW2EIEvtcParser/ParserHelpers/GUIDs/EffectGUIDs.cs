@@ -565,6 +565,7 @@ public static class EffectGUIDs
     public static readonly GUID EparchEyeOfJudgmentArrowHits = new("564C69F260387449A354A7B37C8FEB2C"); // Src Judgment - 0 Duration - 0 Default Duration
     // Kinfall Fractal
     public static readonly GUID WhisperingShadowVitreousSpike = new("423C89C869E13A40A338A183CBDF7920"); // owned by shadow, 1.5s duration
+    public static readonly GUID WhisperingShadowVitreousSpikeDanger = new("A44E4FEB1F90024B8E489ED312DF8536"); // owned by shadow, 2s duration
     public static readonly GUID WhisperingShadowFrozenTeethArrows = new("1A262BDD265422439BE245BB67D374F5"); // owned by shadow, 10s duration, arrow indicator
     public static readonly GUID WhisperingShadowFrozenTeethFissure = new("FC1C589E9E8C624E8159C1BDAAA966E7"); // owned by shadow, default duration 6333ms
     public static readonly GUID WhisperingShadowFrozenTeethExplosion = new("3B3763966DE4F448A029CF9E5EC1B263"); // owned by shadow, default duration 333ms, explosion around fissures as cryoflash detonates
@@ -575,6 +576,10 @@ public static class EffectGUIDs
     public static readonly GUID WhisperingShadowGorefrost2 = new("C94E3EB279F7EE4D957CBB5FC29427B9"); // owned by shadow, 1s duration
     public static readonly GUID WhisperingShadowGorefrostLaunch = new("0D3866B45C47A34D8C6767BD023A60CC"); // owned by shadow, default duration 3366ms, small shockwave from launched gorefrost
     public static readonly GUID WhisperingShadowFreezingFan = new("B1EBFFDA5D58FD40AF96FF7689C43175"); // owned by shadow, 1.5s duration
+    public static readonly GUID WhisperingShadowWintryOrb1 = new("A4F200408147504E901F4FFD821F4393"); // no owner, default duration 7667ms
+    public static readonly GUID WhisperingShadowWintryOrb2 = new("795EC8C08BDB514794900B1107C07EC5"); // no owner, default duration 1167ms
+    public static readonly GUID WhisperingShadowHailstorm1 = new("C127DECDC53F13428FF21CF0C236C25D"); // no owner, default duration 6667ms
+    public static readonly GUID WhisperingShadowHailstorm2 = new("66046924ADCA9E4F831A44E2B4ACA40C"); // no owner, default duration 1167ms
     #endregion
 
     #region Raids

@@ -8,17 +8,17 @@ public class EXTHealingCombatData
 {
     private readonly Dictionary<AgentItem, List<EXTHealingEvent>> _healData;
     private readonly Dictionary<AgentItem, List<EXTHealingEvent>> _healReceivedData;
-    private readonly Dictionary<long, List<EXTHealingEvent>> _healDataById;
+    private readonly Dictionary<long, List<EXTHealingEvent>> _healDataByID;
 
     private readonly Dictionary<long, EXTHealingType> EncounteredIDs = []; //TODO(Rennorb) @perf
 
     private readonly IReadOnlyCollection<long> _hybridHealIDs;
 
-    internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTHealingEvent>> healData, Dictionary<AgentItem, List<EXTHealingEvent>> healReceivedData, Dictionary<long, List<EXTHealingEvent>> healDataById, IReadOnlyCollection<long> hybridHealIDs)
+    internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTHealingEvent>> healData, Dictionary<AgentItem, List<EXTHealingEvent>> healReceivedData, Dictionary<long, List<EXTHealingEvent>> healDataByID, IReadOnlyCollection<long> hybridHealIDs)
     {
         _healData = healData;
         _healReceivedData = healReceivedData;
-        _healDataById = healDataById;
+        _healDataByID = healDataByID;
         _hybridHealIDs = hybridHealIDs;
     }
 
@@ -33,7 +33,7 @@ public class EXTHealingCombatData
 
     public IReadOnlyList<EXTHealingEvent> GetHealData(long key)
     {
-        return _healDataById.GetValueOrEmpty(key);
+        return _healDataByID.GetValueOrEmpty(key);
     }
 
     public EXTHealingType GetHealingType(long id, ParsedEvtcLog log)

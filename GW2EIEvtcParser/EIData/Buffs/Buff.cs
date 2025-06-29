@@ -167,35 +167,35 @@ public class Buff : IVersionable
         };
     }
 
-    internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)
+    internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIDs)
     {
         ulong gw2Build = combatData.GetGW2BuildEvent().Build;
 
         if (gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary)
         {
-            return new BuffSourceFinder20240319(boonIds);
+            return new BuffSourceFinder20240319(boonIDs);
         }
         if (gw2Build >= GW2Builds.October2022BalanceHotFix)
         {
-            return new BuffSourceFinder20221018(boonIds);
+            return new BuffSourceFinder20221018(boonIDs);
         }
         if (gw2Build >= GW2Builds.EODBeta2)
         {
-            return new BuffSourceFinder20210921(boonIds);
+            return new BuffSourceFinder20210921(boonIDs);
         }
         if (gw2Build >= GW2Builds.May2021Balance)
         {
-            return new BuffSourceFinder20210511(boonIds);
+            return new BuffSourceFinder20210511(boonIDs);
         }
         if (gw2Build >= GW2Builds.October2019Balance)
         {
-            return new BuffSourceFinder20191001(boonIds);
+            return new BuffSourceFinder20191001(boonIDs);
         }
         if (gw2Build >= GW2Builds.March2019Balance)
         {
-            return new BuffSourceFinder20190305(boonIds);
+            return new BuffSourceFinder20190305(boonIDs);
         }
-        return new BuffSourceFinder20181211(boonIds);
+        return new BuffSourceFinder20181211(boonIDs);
     }
 
     public bool Available(CombatData combatData)

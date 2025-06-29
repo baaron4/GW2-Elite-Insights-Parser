@@ -19,7 +19,7 @@ public partial class CombatData
     //private List<CombatItem> _healingReceivedData;
     private readonly StatusEventsContainer _statusEvents = new();
     private readonly MetaEventsContainer _metaDataEvents = new();
-    private readonly HashSet<long> _skillIds;
+    private readonly HashSet<long> _skillIDs;
     private readonly Dictionary<long, List<BuffEvent>> _buffData;
     private Dictionary<long, List<AbstractBuffApplyEvent>> _buffApplyData;
     private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
@@ -32,14 +32,14 @@ public partial class CombatData
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
-    private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataById;
-    private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataById;
-    private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataById;
+    private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataByID;
+    private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
+    private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
     private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
     private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
     private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
-    private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataById;
-    private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataById;
+    private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataByID;
+    private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataByID;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageTakenData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
@@ -142,13 +142,13 @@ public partial class CombatData
             srcToSort.Add(de.From);
 
             //TODO(Rennorb) @perf @mem: find average complexity
-            _damageDataById.AddToList(de.SkillId, de);
-            idsToSort.Add(de.SkillId);
+            _damageDataByID.AddToList(de.SkillID, de);
+            idsToSort.Add(de.SkillID);
         }
 
         foreach (long buffID in idsToSort)
         {
-            _damageDataById[buffID].SortByTime();
+            _damageDataByID[buffID].SortByTime();
         }
 
         foreach (AgentItem a in dstToSort)
@@ -257,8 +257,8 @@ public partial class CombatData
                 castAgentsToSort.Add(ace.Caster);
 
                 //TODO(Rennorb) @perf @mem: find average complexity
-                _animatedCastDataById.AddToList(ace.SkillId, ace, 10);
-                castIDsToSort.Add(ace.SkillId);
+                _animatedCastDataByID.AddToList(ace.SkillID, ace, 10);
+                castIDsToSort.Add(ace.SkillID);
             }
 
             if (cast is WeaponSwapEvent wse)
@@ -275,14 +275,14 @@ public partial class CombatData
                 instantAgentsToSort.Add(ice.Caster);
 
                 //TODO(Rennorb) @perf @mem: find average complexity
-                _instantCastDataById.AddToList(ice.SkillId, ice, 10);
-                instantIDsToSort.Add(ice.SkillId);
+                _instantCastDataByID.AddToList(ice.SkillID, ice, 10);
+                instantIDsToSort.Add(ice.SkillID);
             }
         }
 
         foreach (long castID in castIDsToSort)
         {
-            _animatedCastDataById[castID].SortByTime();
+            _animatedCastDataByID[castID].SortByTime();
         }
 
         foreach (AgentItem a in castAgentsToSort)
@@ -302,7 +302,7 @@ public partial class CombatData
 
         foreach (long instantID in instantIDsToSort)
         {
-            _instantCastDataById[instantID].SortByTime();
+            _instantCastDataByID[instantID].SortByTime();
         }
     }
 
@@ -422,11 +422,11 @@ public partial class CombatData
                 .Where(x => x.BuffInstance != 0)
                 .GroupBy(x => x.BuffInstance);
                
-            foreach (var extensionEventsPerId in dictExtensions)
+            foreach (var extensionEventsPerID in dictExtensions)
             {
-                if (!dictApply.TryGetValue(extensionEventsPerId.Key, out var appliesPerBuffID)) { continue; }
+                if (!dictApply.TryGetValue(extensionEventsPerID.Key, out var appliesPerBuffID)) { continue; }
 
-                foreach (var extensionEvents in extensionEventsPerId.GroupBy(y => y.BuffID))
+                foreach (var extensionEvents in extensionEventsPerID.GroupBy(y => y.BuffID))
                 {
                     if (!appliesPerBuffID.TryGetValue(extensionEvents.Key, out var applies)) { continue; }
 
@@ -468,7 +468,7 @@ public partial class CombatData
         combatEvents.SortByTime();
 
         //TODO(Rennorb) @perf: find average complexity
-        _skillIds = new HashSet<long>(combatEvents.Count / 2);
+        _skillIDs = new HashSet<long>(combatEvents.Count / 2);
         var castCombatEvents = new Dictionary<ulong, List<CombatItem>>(combatEvents.Count / 5);
         var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
         var wepSwaps = new List<WeaponSwapEvent>(combatEvents.Count / 50);
@@ -538,7 +538,7 @@ public partial class CombatData
 
             if (insertToSkillIDs)
             {
-                _skillIds.Add(combatItem.SkillID);
+                _skillIDs.Add(combatItem.SkillID);
             }
         }
 
@@ -559,8 +559,8 @@ public partial class CombatData
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO(Rennorb) @perf
         _instantCastData = [];
-        _instantCastDataById = [];
-        _animatedCastDataById = animatedCastData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+        _instantCastDataByID = [];
+        _animatedCastDataByID = animatedCastData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -571,12 +571,12 @@ public partial class CombatData
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Events");
         _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-        _damageDataById = damageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+        _damageDataByID = damageData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-        _breakbarDamageDataById = brkDamageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+        _breakbarDamageDataByID = brkDamageData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _crowControlData = crowdControlData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-        _crowControlDataById = crowdControlData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+        _crowControlDataByID = crowdControlData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _crowControlTakenData = crowdControlData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         // buff depend events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Dependent Events");

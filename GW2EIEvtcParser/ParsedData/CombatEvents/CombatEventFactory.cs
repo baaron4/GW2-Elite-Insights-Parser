@@ -96,7 +96,7 @@ internal static class CombatEventFactory
                 }
                 metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                 break;
-            case StateChange.ShardId:
+            case StateChange.ShardID:
                 metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent));
                 break;
             case StateChange.Reward:
@@ -504,11 +504,11 @@ internal static class CombatEventFactory
         foreach (var castEvents in castEventsBySrcAgent.Values)
         {
             var resBySrcAgent = new List<AnimatedCastEvent>();
-            foreach (var castEventsBySkillId in castEvents.GroupBy(x => x.SkillID))
+            foreach (var castEventsBySkillID in castEvents.GroupBy(x => x.SkillID))
             {
                 var resBySrcAgentBySkillID = new List<AnimatedCastEvent>();
                 CombatItem? startItem = null;
-                foreach (CombatItem c in castEventsBySkillId)
+                foreach (CombatItem c in castEventsBySkillID)
                 {
                     if (c.StartCasting())
                     {

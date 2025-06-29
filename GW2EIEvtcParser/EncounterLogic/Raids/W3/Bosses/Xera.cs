@@ -404,7 +404,7 @@ internal class Xera : StrongholdOfTheFaithful
             case (int)TargetID.Xera:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case SummonFragments:
                             replay.Decorations.Add(new CircleDecoration(180, (cast.Time, cast.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));

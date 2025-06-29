@@ -336,14 +336,14 @@ public class AgentData
     }
 
     /// <summary>
-    /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <paramref name="agentId"/>.<br></br>
+    /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <paramref name="speciesID"/>.<br></br>
     /// </summary>
-    /// <param name="agentId">The ID of the agent to search for.</param>
+    /// <param name="speciesID">The ID of the agent to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
-    /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="agentId"/>; otherwise, <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(int agentId, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
+    /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="speciesID"/>; otherwise, <see langword="false"/>.</returns>
+    public bool TryGetFirstAgentItem(int speciesID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
-        agentItem = GetNPCsByID(agentId).FirstOrDefault();
+        agentItem = GetNPCsByID(speciesID).FirstOrDefault();
         if (agentItem != null)
         {
             return true;

@@ -204,7 +204,7 @@ public static class ArcDPSEnums
         PointOfView = 13,
         Language = 14,
         GWBuild = 15,
-        ShardId = 16,
+        ShardID = 16,
         Reward = 17,
         BuffInitial = 18,
         Position = 19,

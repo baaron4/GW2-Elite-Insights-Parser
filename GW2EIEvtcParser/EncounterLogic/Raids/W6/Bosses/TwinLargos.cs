@@ -287,7 +287,7 @@ internal class TwinLargos : MythwrightGambit
             case (int)TargetID.Nikare:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Aquatic Barrage - Breakbar CC
                         case AquaticBarrage:
@@ -307,7 +307,7 @@ internal class TwinLargos : MythwrightGambit
             case (int)TargetID.Kenut:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Aquatic Barrage - Breakbar CC
                         case AquaticBarrage:
@@ -400,7 +400,7 @@ internal class TwinLargos : MythwrightGambit
     }
     private static bool HasCastAquaticDomainOrCMHP(CombatData combatData, SingleActor actor, double hpThresholdForCM)
     {
-        bool hasCastAquaticDomain = combatData.GetAnimatedCastData(actor.AgentItem).Any(x => x.SkillId == AquaticDomain);
+        bool hasCastAquaticDomain = combatData.GetAnimatedCastData(actor.AgentItem).Any(x => x.SkillID == AquaticDomain);
         if (hasCastAquaticDomain) // aquatic domain only present in 
         {
             return true;

@@ -146,7 +146,7 @@ internal class Cairn : BastionOfThePenitent
             case (int)TargetID.Cairn:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Orbital Sweep - Arm rotation swipe
                         case OrbitalSweep:

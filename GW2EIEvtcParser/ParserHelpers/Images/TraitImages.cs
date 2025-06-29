@@ -66,6 +66,7 @@ internal static class TraitImages
     public const string ImpactSavant = "https://render.guildwars2.com/file/FD7AF757E6B02C7BC55101B0CFDCDAC87E5DBADD/1128528.png";
     public const string SystemShocker = "https://render.guildwars2.com/file/D218686E042F19144D99A11F7205FB4763D053EF/2175050.png";
     public const string OverShield = "https://render.guildwars2.com/file/F90CB6E3E23B6ECB761C062D92507799694CF4D2/1012366.png";
+    public const string GrandEntrance = "https://render.guildwars2.com/file/7093569DA52A64BE5C42AE0A0D0A700BAA320C0C/2261505.png";
     #endregion
     #region Guardian
     public const string HuntersFortification = "https://render.guildwars2.com/file/2F147CBEA990E470AF0F0D20F652040E67962AB9/1012396.png";
@@ -115,6 +116,7 @@ internal static class TraitImages
     public const string NomadsEndurance = "https://render.guildwars2.com/file/EC4E5BEAD50EC6A5A91C312EE521B7C6EC56393B/1769961.png";
     public const string EmpoweredIllusions = "https://render.guildwars2.com/file/4337F2F9DCC4F7A6022997409400423F7A1BB946/1012487.png";
     public const string SuperiorityComplex = "https://render.guildwars2.com/file/AAD25BD0F7753D5B447E9654A4AE6A35057B2932/1012504.png";
+    public const string PhantomPain = "https://render.guildwars2.com/file/3999015BF80BA211F8AD463C50BEBD0826DC1D12/1769956.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://render.guildwars2.com/file/22B370D754AC1D69A8FE66DCCB36BE940455E5EA/1012539.png";
@@ -190,7 +192,7 @@ internal static class TraitImages
     public const string NaturalHealing = "https://render.guildwars2.com/file/E10A27535DAC0BBFFCB205BFBBC9D30F68BE0C07/1012611.png";
     public const string PredatorsCunning = "https://render.guildwars2.com/file/25054EAF081EAB14A6B5C53197312F2AE6C32A17/1769977.png";
     public const string EvasivePurity = "https://render.guildwars2.com/file/C374B3F2C1BCFCB0B164FF0567FB6CC1B31B9651/1012633.png";
-    public const string RestorativeStrikes = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
+    public const string RestorativeStrikesAndBiorythm = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
     #endregion Ranger
     #region Revenant
     public const string CloseQuarters = "https://render.guildwars2.com/file/4DD75C0C7D64F2A80F24955E0CAE031530554AF7/1012690.png";
@@ -228,6 +230,7 @@ internal static class TraitImages
     public const string ElevatedCompassion = "https://render.guildwars2.com/file/07A728FDFD275D406F255B08A26BBDCB37F6EE1F/2029284.png";
     public const string AllForOne = "https://render.guildwars2.com/file/9398D8F8E764A23596E17EDAA35B99961D62F061/1769993.png";
     public const string RedemptorsSermon = "https://render.guildwars2.com/file/2FE60DE76D79B54EB1911ED896020C183BD2C878/2491533.png";
+    public const string Brutality = "https://render.guildwars2.com/file/B6A10BFFE10708A20EC6019F7607BF04A071770D/1029962.png";
     #endregion
     #region Thief
     public const string ExposedWeakness = "https://render.guildwars2.com/file/B6765208D0266538000932E40ED202D95701276B/1012749.png";

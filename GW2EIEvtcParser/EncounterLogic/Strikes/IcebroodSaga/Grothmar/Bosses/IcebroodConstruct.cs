@@ -96,7 +96,7 @@ internal class IcebroodConstruct : Grothmar
                 var casts = target.GetAnimatedCastEvents(log, target.FirstAware, target.LastAware);
                 foreach (AnimatedCastEvent cast in casts)
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case IceArmSwing:
                             /* 

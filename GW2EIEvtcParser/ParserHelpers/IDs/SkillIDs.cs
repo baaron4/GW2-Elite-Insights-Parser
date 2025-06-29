@@ -991,7 +991,7 @@ public static class SkillIDs
     public const long GlacialHeartHeal = 13629;
     public const long LesserSymbolOfProtection = 13684;
     public const long RestorativeMantras = 13721;
-    public const long PowerBlock = 13752;
+    public const long PowerBlockBuff = 13752;
     public const long StrengthinNumbers = 13796;
     public const long FleshOfTheMaster = 13810;
     public const long VampiricStrikes2 = 13814;
@@ -4178,7 +4178,7 @@ public static class SkillIDs
     public const long DualOrbitFireAndWater = 69184;
     public const long DreadVisageAspectSkill = 69185;
     public const long FlareSilentSurf = 69189;
-    public const long RestorativeStrikes = 69193;
+    public const long RestorativeStrikesAndBiorythm = 69193;
     public const long FrighteningSpeedWindup = 69194;
     public const long RendingStormAxeTargetBuff1 = 69195;
     public const long HarrowshotDeath = 69199; // harrowshot is the boon steal attack
@@ -4976,6 +4976,8 @@ public static class SkillIDs
     public const long BloodstoneExplosion = 76315;
     public const long AgonyOfTheChoir = 76319;
     public const long BloodstoneFervor = 76326;
+    public const long FrozenTeethCM = 76332;
+    public const long LifeFireCircleCM = 76339;
     public const long VitreousSpikeHit2 = 76343;
     public const long InevitableDarkness = 76350;
     public const long SoulOfTheTitan = 76351;
@@ -4984,14 +4986,23 @@ public static class SkillIDs
     public const long VitreousSpikeCast = 76393;
     public const long GutteringLight = 76397;
     public const long POV_ArmsOfTheTitan = 76390;
+    public const long VitreosSpikeHit3 = 76393;
     public const long LoftedCryoflash = 76402;
     public const long InevitableDarknessPlayer = 76412;
+    public const long FallingIceCM = 76417;
     public const long TerrestialCryoflash = 76420;
     public const long POV_HeartOfTheTitan = 76448;
     public const long FreezingVortex = 76444;
     public const long DeathlyGrime = 76446;
     public const long POV_HeadOfTheTitan = 76455;
     public const long LifeFireCircleT3 = 76464;
+    public const long WintryOrb = 76482;
+    public const long PowerBlockDamage = 76483;
+    public const long AchievementEligibilityUndyingLight = 76501;
+    public const long VowOfTheUntamedBiorythm = 76502;
+    public const long PhantomPain = 76505;
+    public const long HailstormWhisperingShadow = 76510;
+    public const long GrandEntrance = 76519;
     //
     #endregion
 }

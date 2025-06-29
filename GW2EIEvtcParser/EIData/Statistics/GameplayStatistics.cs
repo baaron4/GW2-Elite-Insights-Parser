@@ -101,7 +101,7 @@ public class GameplayStatistics
         SkillCastUptimeNoAutoAttack = Math.Round(100.0 * SkillCastUptimeNoAutoAttack, ParserHelper.TimeDigit);
         //
         double avgBoons = 0;
-        foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Boon).Select(x => x.Value))
+        foreach (long boonDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIDs[x.Key].Classification == BuffClassification.Boon).Select(x => x.Value))
         {
             avgBoons += boonDuration;
         }
@@ -110,7 +110,7 @@ public class GameplayStatistics
         AverageActiveBoons = activeDuration > 0 ? Math.Round(avgBoons / activeDuration, ParserHelper.BuffDigit) : 0.0;
         //
         double avgCondis = 0;
-        foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIds[x.Key].Classification == BuffClassification.Condition).Select(x => x.Value))
+        foreach (long conditionDuration in actor.GetBuffPresence(log, start, end).Where(x => log.Buffs.BuffsByIDs[x.Key].Classification == BuffClassification.Condition).Select(x => x.Value))
         {
             avgCondis += conditionDuration;
         }

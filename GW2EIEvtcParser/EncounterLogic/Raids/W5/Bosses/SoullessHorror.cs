@@ -135,14 +135,6 @@ internal class SoullessHorror : HallOfChains
         HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
-    /*internal override List<AbstractBuffEvent> SpecialBuffEventProcess(Dictionary<AgentItem, List<AbstractBuffEvent>> buffsByDst, Dictionary<long, List<AbstractBuffEvent>> buffsById, SkillData skillData)
-    {
-        var res = new List<AbstractBuffEvent>();
-        // Necrosis adjust
-        AdjustTimeRefreshBuff(buffsByDst, buffsById, 47414);
-        return res;
-    }*/
-
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         long fightEnd = log.FightData.FightEnd;
@@ -154,7 +146,7 @@ internal class SoullessHorror : HallOfChains
             return phases;
         }
         var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath);
+        var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillID == HowlingDeath);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in howling)
@@ -230,7 +222,7 @@ internal class SoullessHorror : HallOfChains
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case HowlingDeath:
                             lifespan = (cast.Time, cast.EndTime);

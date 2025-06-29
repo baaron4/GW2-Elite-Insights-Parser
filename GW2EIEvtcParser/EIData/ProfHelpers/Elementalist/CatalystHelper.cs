@@ -103,12 +103,12 @@ internal static class CatalystHelper
         AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, EffectImages.EffectDeployJadeSphereEarth);
     }
 
-    internal static void AddJadeSphereDecoration(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)
+    internal static void AddJadeSphereDecoration(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillID, string icon)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effect, out var sphereEffects))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
-            var skillQuickness = new SkillModeDescriptor(player, Spec.Catalyst, skillId, SkillModeDescriptor.SkillModeCategory.ImportantBuffs);
+            var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillID);
+            var skillQuickness = new SkillModeDescriptor(player, Spec.Catalyst, skillID, SkillModeDescriptor.SkillModeCategory.ImportantBuffs);
             foreach (EffectEvent sphereEffect in sphereEffects)
             {
                 (long, long) lifespan = sphereEffect.ComputeLifespan(log, 5000);

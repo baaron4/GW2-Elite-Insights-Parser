@@ -220,7 +220,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             case (int)TargetID.PeerlessQadim:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Big Magma Drop - Pylon Destroyed
                         case BigMagmaDrop:
@@ -455,10 +455,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
         // Add custom arrow overhead for the player lifted up
-        var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == UnleashSAK);
+        var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == UnleashSAK);
         var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem);
 
-        var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless);
+        var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
         foreach (CastEvent cast in castsLiftUp)
         {
             long liftUpEnd = log.FightData.LogEnd;
@@ -651,9 +651,9 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
-    private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
+    private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffID, Color color, double opacity)
     {
-        var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent);
+        var tethers = log.CombatData.GetBuffDataByIDByDst(buffID, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent);
         var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
         foreach (var appliedTether in tethers.OfType<BuffApplyEvent>())
         {

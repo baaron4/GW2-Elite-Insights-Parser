@@ -31,7 +31,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     .UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
                 new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0)
                     .UsingChecker((de, log) => (de.To.IsSpecies(TargetID.PushableVoidAmalgamate) || de.To.IsSpecies(TargetID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
-                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
+                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Eligibility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
                     .UsingAchievementEligibility(),
                 new PlayerDstHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
                 new PlayerDstHitMechanic(MagicDischarge, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
@@ -1487,7 +1487,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.ZhaitansReach:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Thrash - Circle that pulls in
                         case ZhaitansReachThrashHT1:
@@ -1499,7 +1499,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         // Ground Slam - AoE that knocks out
                         case ZhaitansReachGroundSlam:
                         case ZhaitansReachGroundSlamHT:
-                            castDuration = cast.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
+                            castDuration = cast.SkillID == ZhaitansReachGroundSlam ? 800 : 2500;
                             lifespan = (cast.Time, cast.Time + castDuration);
                             replay.Decorations.AddWithGrowing(new CircleDecoration(400, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                             break;
@@ -1511,7 +1511,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.VoidBrandbomber:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Branded Artillery
                         case BrandedArtillery:
@@ -1582,7 +1582,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.VoidGiant:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Death Scream - Fear
                         case DeathScream:
@@ -1742,7 +1742,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.VoidAbomination:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Abomination Swipe - Launch
                         case AbominationSwipe:
@@ -1761,7 +1761,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.VoidObliterator:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Charge - Indicator
                         case VoidObliteratorChargeWindup:
@@ -1866,7 +1866,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)TargetID.VoidGoliath:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Glacial Slam - Cast Indicator
                         case GlacialSlam:
@@ -2091,7 +2091,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
             else if (CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityVoidwalker], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityVoidwalker], 1));
             }
         }
     }

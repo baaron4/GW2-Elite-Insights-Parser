@@ -7,7 +7,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
     protected bool Minions = false;
     private readonly GUID _effectGUID;
-    private int _speciesId = 0;
+    private int _speciesID = 0;
 
     public EffectCastFinder WithMinions()
     {
@@ -154,7 +154,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     internal EffectCastFinder UsingAgentRedirectionIfUnknown(int speciesID)
     {
-        _speciesId = speciesID;
+        _speciesID = speciesID;
         return this;
     }
 
@@ -181,9 +181,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                     }
                     lastTime = effectEvent.Time;
                     var caster = group.Key;
-                    if (_speciesId > 0 && caster.IsUnamedSpecies())
+                    if (_speciesID > 0 && caster.IsUnamedSpecies())
                     {
-                        AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
+                        AgentItem? agent = agentData.GetNPCsByID(_speciesID).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                         if (agent != null)
                         {
                             caster = agent;

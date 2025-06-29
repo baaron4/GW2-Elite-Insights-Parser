@@ -89,7 +89,7 @@ internal class StatueOfIce : HallOfChains
             case (int)TargetID.BrokenKing:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case KingsWrathConeShards:
                             (long start, long end) lifespan = (cast.Time, cast.EndTime);

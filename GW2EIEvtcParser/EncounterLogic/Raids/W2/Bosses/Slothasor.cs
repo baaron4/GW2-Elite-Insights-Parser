@@ -121,7 +121,7 @@ internal class Slothasor : SalvationPass
         {
             return phases;
         }
-        var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == NarcolepsySkill);
+        var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillID == NarcolepsySkill);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in sleepy)
@@ -195,7 +195,7 @@ internal class Slothasor : SalvationPass
             case (int)TargetID.Slothasor:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Halitosis - Fire breath
                         case Halitosis:

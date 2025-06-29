@@ -181,8 +181,8 @@ internal class MythwrightGambitInstance : MythwrightGambit
             foreach (var qadim in qadims)
             {
                 var qadimAnimatedCasts = qadim.GetAnimatedCastEvents(log, qadim.FirstAware, qadim.LastAware);
-                var qadimFirstCast = qadimAnimatedCasts.FirstOrDefault(x => x.SkillId == SkillIDs.QadimInitialCast);
-                var qadimSanityCheckCast = qadimAnimatedCasts.FirstOrDefault(x => (x.SkillId == SkillIDs.FlameSlash3 || x.SkillId == SkillIDs.FlameSlash || x.SkillId == SkillIDs.FlameWave));
+                var qadimFirstCast = qadimAnimatedCasts.FirstOrDefault(x => x.SkillID == SkillIDs.QadimInitialCast);
+                var qadimSanityCheckCast = qadimAnimatedCasts.FirstOrDefault(x => (x.SkillID == SkillIDs.FlameSlash3 || x.SkillID == SkillIDs.FlameSlash || x.SkillID == SkillIDs.FlameWave));
                 if (qadimFirstCast == null || qadimSanityCheckCast == null || qadimSanityCheckCast.Time <= qadimFirstCast.Time)
                 {
                     continue;

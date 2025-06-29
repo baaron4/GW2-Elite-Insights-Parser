@@ -46,7 +46,7 @@ internal static class JsonBuffsUptimeBuilder
         };
         if (!buffMap.ContainsKey(buffID))
         {
-            buffMap[buffID] = log.Buffs.BuffsByIds[buffID];
+            buffMap[buffID] = log.Buffs.BuffsByIDs[buffID];
         }
         if (settings.RawFormatTimelineArrays)
         {

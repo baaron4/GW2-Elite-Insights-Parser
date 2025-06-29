@@ -111,7 +111,7 @@ internal class Matthias : SalvationPass
             }
             if (expectedPlayersForSuccess <= playersWithBisque)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[BloodstoneBisque], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[BloodstoneBisque], 1));
             }
         }
     }
@@ -301,7 +301,7 @@ internal class Matthias : SalvationPass
             case (int)TargetID.Matthias:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Shards of Rage - Jump with AoEs
                         case ShardsOfRageHuman:

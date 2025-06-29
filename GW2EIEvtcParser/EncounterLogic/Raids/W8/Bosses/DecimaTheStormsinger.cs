@@ -81,7 +81,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 new PlayerDstHitMechanic(Sparkwave, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightOrange), "Sparkwave.H", "Hit by Sparkwave (Transcendent Boulders Cone)", "Sparkwave Hit", 0),
                 new PlayerDstHitMechanic(ChargedGround, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "CharGrnd.H", "Hit by Charged Ground (Transcendent Boulders AoEs)", "Charged Ground Hit", 0),
             ]),
-            new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder], new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Elibigility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
+            new PlayerDstHitMechanic([FulgentFenceCM, FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5, ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder], new MechanicPlotlySetting(Symbols.Pentagon, Colors.Lime), "BugDance.Achiv", "Achievement Eligibility: This Bug Can Dance", "Achiv: This Bug Can Dance", 0).UsingChecker((adhe, log) =>
             {
                 // If you are dead, lose the achievement
                 if (adhe.To.IsDead(log, log.FightData.FightStart, log.FightData.FightEnd))
@@ -90,7 +90,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // If you get hit by Fulgent Fence, lose the achievement
-                if (adhe.SkillId == FulgentFenceCM && adhe.HasHit)
+                if (adhe.SkillID == FulgentFenceCM && adhe.HasHit)
                 {
                     return true;
                 }
@@ -100,12 +100,12 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // If you get hit by your own Fluxlance only during the current sequence, keep the achievement
                 // If you get hit by 2 Fluxlance in the current sequence, lose the achievement
-                long[] fluxlanceIds = [FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5];
-                var fluxlanceTimes = damageTaken.Where(x => (fluxlanceIds.Contains(x.SkillId)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
+                long[] fluxlanceIDs = [FluxlanceFusilladeCM, FluxlanceSalvoCM1, FluxlanceSalvoCM2, FluxlanceSalvoCM3, FluxlanceSalvoCM4, FluxlanceSalvoCM5];
+                var fluxlanceTimes = damageTaken.Where(x => (fluxlanceIDs.Contains(x.SkillID)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
                 foreach (long fluxlanceTime in fluxlanceTimes)
                 {
                     // Fluxlance sequence lasts about 5 seconds, giving it 7 as margin
-                    if (Math.Abs(fluxlanceTime - adhe.Time) < 7000 && fluxlanceIds.Contains(adhe.SkillId) && hasExposed)
+                    if (Math.Abs(fluxlanceTime - adhe.Time) < 7000 && fluxlanceIDs.Contains(adhe.SkillID) && hasExposed)
                     {
                         return true;
                     }
@@ -113,11 +113,11 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // If you get hit by your own thunder, keep the achievement
                 // If you get hit by a thunder on another player or on a conduit, lose the achievement
-                long[] thunderIds = [ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder];
-                var thunderTimes = damageTaken.Where(x => (thunderIds.Contains(x.SkillId)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
+                long[] thunderIDs = [ChorusOfThunderCM, DiscordantThunderCM, HarmoniousThunder];
+                var thunderTimes = damageTaken.Where(x => (thunderIDs.Contains(x.SkillID)) && x.HasHit).Select(x => x.Time).OrderBy(x => x);
                 foreach (long thunderTime in thunderTimes)
                 {
-                    if (Math.Abs(thunderTime - adhe.Time) < ServerDelayConstant && thunderIds.Contains(adhe.SkillId) && hasExposed)
+                    if (Math.Abs(thunderTime - adhe.Time) < ServerDelayConstant && thunderIDs.Contains(adhe.SkillID) && hasExposed)
                     {
                         return true;
                     }
@@ -362,8 +362,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                long buffId = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
-                var thrummingSegments = target.GetBuffStatus(log, buffId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                long buffID = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
+                var thrummingSegments = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var segment in thrummingSegments)
                 {
                     replay.Decorations.Add(new CircleDecoration(700, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
@@ -392,7 +392,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // For some reason the effects all start at the same time
                 // We sequence them using the skill cast
-                var foreshock = casts.Where(x => x.SkillId == Foreshock || x.SkillId == ForeshockCM1 || x.SkillId == ForeshockCM2 || x.SkillId == ForeshockCM3 || x.SkillId == ForeshockCM4);
+                var foreshock = casts.Where(x => x.SkillID == Foreshock || x.SkillID == ForeshockCM1 || x.SkillID == ForeshockCM2 || x.SkillID == ForeshockCM3 || x.SkillID == ForeshockCM4);
                 foreach (var cast in foreshock)
                 {
                     (long start, long end) = (cast.Time, cast.Time + cast.ActualDuration + 3000); // 3s padding as safety
@@ -680,7 +680,7 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)TargetID.TranscendentBoulder:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Sparking Reverberation - Breakbar
                         case SparkingReverberation:
@@ -854,7 +854,7 @@ internal class DecimaTheStormsinger : MountBalrior
         {
             if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.Value > 0))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityCalmBeforeTheStorm], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
             }
         }
     }

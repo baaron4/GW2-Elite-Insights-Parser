@@ -133,7 +133,7 @@ internal class Dhuum : HallOfChains
     //TODO(Rennorb) @perf
     private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long fightDuration, long start, PhaseData mainFightPhase)
     {
-        CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+        CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillID == MajorSoulSplit);
         // Dhuum brought down to 10%
         if (shield != null)
         {
@@ -142,7 +142,7 @@ internal class Dhuum : HallOfChains
             dhuumFight.AddTarget(dhuum, log);
             dhuumFight.AddParentPhase(mainFightPhase);
             phases.Add(dhuumFight);
-            CastEvent? firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
+            CastEvent? firstDamageable = castLogs.FirstOrDefault(x => x.SkillID == DhuumVulnerableLast10Percent && x.Time >= end);
             // ritual started
             if (firstDamageable != null)
             {
@@ -168,8 +168,8 @@ internal class Dhuum : HallOfChains
     private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, IEnumerable<SingleActor> enforcers, long mainStart, long mainEnd, bool hasRitual, PhaseData parentPhase)
     {
         var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-        var cataCycles = cls.Where(x => x.SkillId == CataclysmicCycle);
-        var gDeathmarks = cls.Where(x => x.SkillId == GreaterDeathMark).ToList();
+        var cataCycles = cls.Where(x => x.SkillID == CataclysmicCycle);
+        var gDeathmarks = cls.Where(x => x.SkillID == GreaterDeathMark).ToList();
         if (gDeathmarks.Count < cataCycles.Count())
         {
             // anomaly, don't do sub phases
@@ -368,7 +368,7 @@ internal class Dhuum : HallOfChains
 
                 foreach (CastEvent cast in casts)
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Cataclysmic Cycle - Suction during Major Soul Split
                         case CataclysmicCycle:
@@ -427,8 +427,8 @@ internal class Dhuum : HallOfChains
                     }
                 }
 
-                var deathmark = casts.Where(x => x.SkillId == DeathMark);
-                CastEvent? majorSplit = casts.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+                var deathmark = casts.Where(x => x.SkillID == DeathMark);
+                CastEvent? majorSplit = casts.FirstOrDefault(x => x.SkillID == MajorSoulSplit);
                 // Using new effects method for logs that contain them
                 if (!log.CombatData.HasEffectData)
                 {
@@ -494,7 +494,7 @@ internal class Dhuum : HallOfChains
                 }
 
                 // Scythe Swing - AoEs
-                var scytheSwing = casts.Where(x => x.SkillId == ScytheSwing).ToList();
+                var scytheSwing = casts.Where(x => x.SkillID == ScytheSwing).ToList();
                 for (int i = 0; i < scytheSwing.Count; i++)
                 {
                     var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
@@ -540,7 +540,7 @@ internal class Dhuum : HallOfChains
             {
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case RendingSwipe:
                             long castDuration = 667;

@@ -44,7 +44,7 @@ public class DeathRecap
                 {
                     Time = (int)dl.Time,
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
-                    ID = dl.SkillId,
+                    ID = dl.SkillID,
                     Damage = dl.HealthDamage,
                     SourceAgent = log.FindActor(ag).Character
                 };
@@ -65,7 +65,7 @@ public class DeathRecap
                 {
                     Time = (int)dl.Time,
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
-                    ID = dl.SkillId,
+                    ID = dl.SkillID,
                     Damage = dl.HealthDamage,
                     SourceAgent = log.FindActor(ag).Character
                 };
@@ -86,7 +86,7 @@ public class DeathRecap
                 {
                     Time = (int)dl.Time,
                     IndirectDamage = dl is NonDirectHealthDamageEvent,
-                    ID = dl.SkillId,
+                    ID = dl.SkillID,
                     Damage = dl.HealthDamage,
                     SourceAgent = log.FindActor(ag).Character
                 };

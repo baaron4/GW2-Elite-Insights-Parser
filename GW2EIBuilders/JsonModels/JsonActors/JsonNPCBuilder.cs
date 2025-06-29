@@ -66,7 +66,7 @@ internal static class JsonNPCBuilder
         var buffDictionaries = phases.Select(x => npc.GetBuffsDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;
@@ -97,7 +97,7 @@ internal static class JsonNPCBuilder
         var buffVolumeDictionaries = phases.Select(x => npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
-            Buff buff = log.Buffs.BuffsByIds[pair.Key];
+            Buff buff = log.Buffs.BuffsByIDs[pair.Key];
             if (buff.Classification == Buff.BuffClassification.Hidden)
             {
                 continue;

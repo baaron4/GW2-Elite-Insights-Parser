@@ -88,11 +88,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         switch (target.ID)
         {
             case (int)TargetID.Dagda:
-                var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
+                var demonicBlasts = casts.Where(x => x.SkillID == DemonicBlast);
 
                 foreach (CastEvent cast in casts)
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Demonic Blast - Red AoE during 75-50-25 % phases
                         case DemonicBlast:

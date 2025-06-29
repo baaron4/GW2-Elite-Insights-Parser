@@ -110,7 +110,7 @@ internal class DamageDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
+                if (boons.BuffsByIDs.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }

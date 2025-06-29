@@ -117,7 +117,7 @@ public class OffensiveStatistics
                         } 
                         else
                         {
-                            if (SkillItem.CanCrit(dl.SkillId, log.LogData.GW2Build))
+                            if (SkillItem.CanCrit(dl.SkillID, log.LogData.GW2Build))
                             {
                                 if (dl.HasCrit)
                                 {

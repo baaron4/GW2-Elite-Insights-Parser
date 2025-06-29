@@ -364,7 +364,7 @@ internal class UraTheSteamshrieker : MountBalrior
             case (int)TargetID.Ura:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Propel - Arrow Dash
                         case Propel:
@@ -508,7 +508,7 @@ internal class UraTheSteamshrieker : MountBalrior
             case (int)TargetID.LegendaryVentshot:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Stone Slam - Autoattack with cone
                         case StoneSlamConeKnockback:
@@ -695,7 +695,7 @@ internal class UraTheSteamshrieker : MountBalrior
             }
             if (eligible)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityNoGeysersNoProblems], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
             }
         }
     }

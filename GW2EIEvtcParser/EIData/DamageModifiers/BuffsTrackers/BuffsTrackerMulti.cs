@@ -1,8 +1,8 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
+internal class BuffsTrackerMulti(HashSet<long> buffsIDs) : BuffsTracker
 {
-    private readonly HashSet<long> _ids = buffsIds;
+    private readonly HashSet<long> _ids = buffsIDs;
 
     public override int GetStack(IReadOnlyDictionary<long, BuffGraph> bgms, long time)
     {

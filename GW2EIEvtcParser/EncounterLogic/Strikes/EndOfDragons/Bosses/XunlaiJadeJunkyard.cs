@@ -244,7 +244,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
         if (log.FightData.Success && log.FightData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
         {
-            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityGazeIntoTheVoid], 1));
+            InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1));
         }
     }
 
@@ -272,7 +272,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         {
             case (int)TargetID.Ankka:
                 {
-                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == DeathsEmbraceSkill).ToList();
+                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == DeathsEmbraceSkill).ToList();
                     castDuration = 10143;
 
                     foreach (CastEvent cast in casts)
@@ -395,7 +395,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             // Wave of Torment - Circle explosion around Quaggan
                             case WaveOfTormentNM:
@@ -414,7 +414,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             // Wave of Torment - Circle explosion around Quaggan
                             case WaveOfTormentCM:
@@ -433,7 +433,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 {
                     foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                     {
-                        switch (cast.SkillId)
+                        switch (cast.SkillID)
                         {
                             // Thrash - Circle that pulls in
                             case ZhaitansReachThrashXJJ1:
@@ -446,7 +446,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                             case ZhaitansReachGroundSlam:
                             case ZhaitansReachGroundSlamXJJ:
                                 // 66534 -> Fast AoE -- 66397 -> Slow AoE
-                                castDuration = cast.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
+                                castDuration = cast.SkillID == ZhaitansReachGroundSlam ? 800 : 2500;
                                 lifespan = (cast.Time, cast.Time + castDuration);
                                 replay.Decorations.AddWithGrowing(new CircleDecoration(400, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                                 break;

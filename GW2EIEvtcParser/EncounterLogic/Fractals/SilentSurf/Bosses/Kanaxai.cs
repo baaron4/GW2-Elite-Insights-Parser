@@ -312,7 +312,7 @@ internal class Kanaxai : SilentSurf
             case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // World Cleaver - 66 & 33% Attack
                         case WorldCleaver:
@@ -360,7 +360,7 @@ internal class Kanaxai : SilentSurf
 
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Tether casts performed by Aspects
                         case AspectTetherSkill:
@@ -449,7 +449,7 @@ internal class Kanaxai : SilentSurf
                 foreach (EffectEvent aoe in axeAoEs)
                 {
                     // Find the first cast time event present after the AoE effect time
-                    var cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
+                    var cast = casts.Where(x => x.SkillID == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
                     long worldCleaverTime = cast?.Time ?? 0;
 
                     // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time

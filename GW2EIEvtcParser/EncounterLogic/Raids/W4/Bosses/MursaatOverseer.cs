@@ -100,7 +100,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             case (int)TargetID.Jade:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         case JadeSoldierExplosion:
                             long start = cast.Time;

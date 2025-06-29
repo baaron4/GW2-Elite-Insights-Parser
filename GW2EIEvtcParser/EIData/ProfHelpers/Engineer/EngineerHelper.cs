@@ -26,8 +26,8 @@ internal static class EngineerHelper
                 }
                 WeaponSwapEvent? nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
                 long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
-                var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
-                return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
+                var castIDs = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillID));
+                return skill.ApiSkill.BundleSkills.Intersect(castIDs).Any();
             });
             UsingNotAccurate();
         }
@@ -179,7 +179,8 @@ internal static class EngineerHelper
 
         // Alchemy
         // - Iron Blooded
-        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.Incoming, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
@@ -205,6 +206,8 @@ internal static class EngineerHelper
         new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, SkillImages.MedKit),
         new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  SkillImages.MedKit),
         new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, TraitImages.CompoundingChemicals),
+        new Buff("Grand Entrance", GrandEntrance, Source.Engineer, BuffClassification.Other, TraitImages.GrandEntrance),
+        //TODO: Grand Entrance
         /*
         new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
         new Buff("Bomb Kit", POV_BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),

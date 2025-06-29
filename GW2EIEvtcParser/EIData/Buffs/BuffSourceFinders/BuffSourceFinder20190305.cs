@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal class BuffSourceFinder20190305 : BuffSourceFinder20181211
 {
-    public BuffSourceFinder20190305(HashSet<long> boonIds) : base(boonIds)
+    public BuffSourceFinder20190305(HashSet<long> boonIDs) : base(boonIDs)
     {
         DurationToIDs = new Dictionary<long, HashSet<long>>
         {

@@ -393,7 +393,7 @@ class MechanicDrawable {
             this.positionFetcher = interpolatedPositionFetcher;
         } else if (this.connectedTo.position) {
             this.positionFetcher = staticPositionFetcher;
-        } else if (this.connectedTo.masterId >= 0) {         
+        } else if (this.connectedTo.masterID >= 0) {         
             this.positionFetcher = masterPositionFetcher;
         }
         this.offsetFetcher = noOffsetFetcher;
@@ -411,9 +411,9 @@ class MechanicDrawable {
                 this.rotationFetcher = spinningAngleFetcher;
             } else if (this.rotationConnectedTo.angle !== undefined) {
                 this.rotationFetcher = staticAngleFetcher;
-            } else if (this.rotationConnectedTo.dstMasterId) {
+            } else if (this.rotationConnectedTo.dstMasterID) {
                 this.rotationFetcher = masterToMasterRotationFetcher;
-            } else if (this.rotationConnectedTo.masterId) {
+            } else if (this.rotationConnectedTo.masterID) {
                 this.rotationFetcher = masterRotationFetcher;
                 this.rotationOffset = this.rotationConnectedTo.rotationOffset;
                 this.rotationOffsetMode = this.rotationConnectedTo.rotationOffsetMode;
@@ -494,8 +494,8 @@ class MechanicDrawable {
         }
         if (this.positionFetcher === masterPositionFetcher || this.positionFetcher === positionToMasterPositionFetcher) {
             if (this.master === null) {
-                let masterId = this.connectedTo.masterId;
-                this.master = animator.getActorData(masterId);
+                let masterID = this.connectedTo.masterID;
+                this.master = animator.getActorData(masterID);
             }
             if (!this.master || (!this.master.canDraw() && !this.ownerID )) {
                 return false;
@@ -503,16 +503,16 @@ class MechanicDrawable {
         }
         if (this.rotationFetcher === masterRotationFetcher || this.rotationFetcher === masterToMasterRotationFetcher) {
             if (this.rotationMaster === null) {
-                let masterId = this.rotationConnectedTo.masterId;
-                this.rotationMaster = animator.getActorData(masterId);
+                let masterID = this.rotationConnectedTo.masterID;
+                this.rotationMaster = animator.getActorData(masterID);
             }
             if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
                 return false;
             }
             if (this.rotationFetcher === masterToMasterRotationFetcher) {
                 if (this.dstRotationMaster === null) {
-                    let dstMasterId = this.rotationConnectedTo.dstMasterId;
-                    this.dstRotationMaster = animator.getActorData(dstMasterId);
+                    let dstMasterID = this.rotationConnectedTo.dstMasterID;
+                    this.dstRotationMaster = animator.getActorData(dstMasterID);
                 }
                 if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.ownerID)) {
                     return false;
@@ -998,8 +998,8 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         }
         if (this.targetPositionFetcher === masterPositionFetcher) {
             if (this.endMaster === null) {
-                let masterId = this.connectedFrom.masterId;
-                this.endMaster = animator.getActorData(masterId);
+                let masterID = this.connectedFrom.masterID;
+                this.endMaster = animator.getActorData(masterID);
             }
             if (!this.endMaster || !this.endMaster.canDraw()) {
                 return false;

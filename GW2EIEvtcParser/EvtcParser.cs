@@ -376,11 +376,11 @@ public class EvtcParser
         for (int i = 0; i < skillCount; i++)
         {
             // 4 bytes: skill ID
-            int skillId = reader.ReadInt32();
+            int skillID = reader.ReadInt32();
             // 64 bytes: name
             string name = GetString(reader, 64);
             //Save
-            _skillData.Add(skillId, name);
+            _skillData.Add(skillID, name);
         }
     }
 
@@ -411,7 +411,7 @@ public class EvtcParser
         ushort overstackValue = reader.ReadUInt16();
 
         // 2 bytes: skill_id
-        ushort skillId = reader.ReadUInt16();
+        ushort skillID = reader.ReadUInt16();
 
         // 2 bytes: src_instid
         ushort srcInstid = reader.ReadUInt16();
@@ -466,7 +466,7 @@ public class EvtcParser
 
         //save
         // Add combat
-        return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
+        return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillID,
             srcInstid, dstInstid, srcMasterInstid, 0, iff, buff, result, isActivation, isBuffRemove,
             isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, 0);
     }
@@ -498,7 +498,7 @@ public class EvtcParser
         uint overstackValue = reader.ReadUInt32();
 
         // 4 bytes: skill_id
-        uint skillId = reader.ReadUInt32();
+        uint skillID = reader.ReadUInt32();
 
         // 2 bytes: src_instid
         ushort srcInstid = reader.ReadUInt16();
@@ -550,7 +550,7 @@ public class EvtcParser
 
         //save
         // Add combat
-        return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
+        return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillID,
             srcInstid, dstInstid, srcMasterInstid, dstmasterInstid, iff, buff, result, isActivation, isBuffRemove,
             isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields, isOffcycle, pad);
     }
@@ -711,7 +711,7 @@ public class EvtcParser
     /// Find the master of a minion.
     /// </summary>
     /// <param name="logTime">Log time.</param>
-    /// <param name="masterInstid">Id of the master.</param>
+    /// <param name="masterInstid">SpeciesID of the master.</param>
     /// <param name="minionAgent"></param>
     private void FindAgentMaster(long logTime, ushort masterInstid, ulong minionAgent)
     {

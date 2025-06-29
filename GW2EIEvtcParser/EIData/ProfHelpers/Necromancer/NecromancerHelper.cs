@@ -299,7 +299,7 @@ internal static class NecromancerHelper
         // Mark of Blood or Chillblains (Staff 2/3)
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out var markOfBloodOrChillblains))
         {
-            var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == MarkOfBlood || x.SkillId == Chillblains || x.Skill.IsDodge(log.SkillData));
+            var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == MarkOfBlood || x.SkillID == Chillblains || x.Skill.IsDodge(log.SkillData));
             foreach (EffectEvent effect in markOfBloodOrChillblains)
             {
                 SkillModeDescriptor skill;
@@ -308,7 +308,7 @@ internal static class NecromancerHelper
                 var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
                 if (markCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.First().SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.First().SkillID);
                     if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
                     {
                         fromDodge = true;

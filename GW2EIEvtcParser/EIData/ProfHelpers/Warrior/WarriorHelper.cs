@@ -59,13 +59,20 @@ internal static class WarriorHelper
         // Defense
         // - Stalwart Strength
         new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.October2022Balance),
+            .WithBuilds(GW2Builds.October2022Balance, GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "12.5%", DamageSource.NoPets, 12.5, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.PvE)
+            .WithBuilds(GW2Builds.June2025Balance),
+        new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.BerserkersPower, DamageModifierMode.sPvPWvW)
+            .WithBuilds(GW2Builds.June2025Balance),
         // - Merciless Hammer
         new DamageLogDamageModifier(Mod_MercilessHammerDefiant, "Merciless Hammer", "20% to hammer and mace skills when hitting defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
-            .WithBuilds(GW2Builds.November2022Balance)
+            .WithBuilds(GW2Builds.November2022Balance, GW2Builds.June2025Balance)
             .WithEvtcBuilds(ArcDPSBuilds.StartOfLife, ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
         new DamageLogDamageModifier(Mod_MercilessHammer, "Merciless Hammer", "20% to hammer and mace skills when hitting disabled or defiant foe", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.November2022Balance, GW2Builds.June2025Balance)
             .WithEvtcBuilds(ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents),
+        new DamageLogDamageModifier(Mod_MercilessHammer, "Merciless Hammer", "25% to hammer and mace skills when hitting disabled or defiant foe", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Warrior, TraitImages.MercilessHammer, MercilessHammerChecker, DamageModifierMode.PvEInstanceOnly)
+            .WithBuilds(GW2Builds.June2025Balance),
         // - Cull the Weak
         new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "5% on weakened target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, TraitImages.CullTheWeak, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2017Balance),
@@ -251,7 +258,7 @@ internal static class WarriorHelper
             RupturingSmash,
         ];
 
-        if (!improvedSkills.Contains(x.SkillId))
+        if (!improvedSkills.Contains(x.SkillID))
         {
             return false;
         }

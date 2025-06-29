@@ -28,7 +28,7 @@ public class BuffStatistics
             playerCount++;
         }
 
-        var buffsToTrack = new HashSet<Buff>(buffDistributionPerPlayer.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
+        var buffsToTrack = new HashSet<Buff>(buffDistributionPerPlayer.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIDs[x]));
 
         var buffs = new Dictionary<long, BuffStatistics>();
         var activeBuffs = new Dictionary<long, BuffStatistics>();

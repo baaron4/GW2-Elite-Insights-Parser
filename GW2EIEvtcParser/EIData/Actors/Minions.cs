@@ -291,7 +291,7 @@ public class Minions : Actor
         {
             return true;
         }
-        if (GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillId != SkillIDs.WeaponStow && x.SkillId != SkillIDs.WeaponDraw && x.SkillId != SkillIDs.WeaponSwap && x.SkillId != SkillIDs.MirageCloakDodge))
+        if (GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw && x.SkillID != SkillIDs.WeaponSwap && x.SkillID != SkillIDs.MirageCloakDodge))
         {
             return true;
         }

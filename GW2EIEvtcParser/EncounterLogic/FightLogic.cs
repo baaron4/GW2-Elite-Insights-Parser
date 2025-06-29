@@ -150,7 +150,7 @@ public abstract class FightLogic
             }).Max();
             if (emboldenedStacks > 0)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[SkillIDs.Emboldened], emboldenedStacks));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
             }
         }
     }
@@ -178,11 +178,11 @@ public abstract class FightLogic
 
     internal virtual Dictionary<TargetID, int> GetTargetsSortIDs()
     {
-        var targetsIds = GetTargetsIDs();
-        var res = new Dictionary<TargetID, int>(targetsIds.Count);
-        for (int i = 0; i < targetsIds.Count; i++)
+        var targetsIDs = GetTargetsIDs();
+        var res = new Dictionary<TargetID, int>(targetsIDs.Count);
+        for (int i = 0; i < targetsIDs.Count; i++)
         {
-            res.Add(targetsIds[i], i);
+            res.Add(targetsIDs[i], i);
         }
         return res;
     }
@@ -577,7 +577,7 @@ public abstract class FightLogic
         {
             if (p.HasBuff(log, buff, log.FightData.FightEnd - ServerDelayConstant))
             {
-                return (log.Buffs.BuffsByIds[buff], stack);
+                return (log.Buffs.BuffsByIDs[buff], stack);
             }
         }
         return null;

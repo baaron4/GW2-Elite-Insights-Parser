@@ -78,8 +78,8 @@ internal class MAMA : Nightmare
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
         phases[0].AddTarget(mama, log);
-        var knightIds = KnightPhases.Select(pair => pair.Item1).ToList();
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIds)), log, PhaseData.TargetPriority.Blocking);
+        var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -91,7 +91,7 @@ internal class MAMA : Nightmare
             phase.AddParentPhase(phases[0]);
             if (i % 2 == 0)
             {
-                AddTargetsToPhaseAndFit(phase, knightIds, log);
+                AddTargetsToPhaseAndFit(phase, knightIDs, log);
                 phase.Name = "Split " + i / 2;
                 if (phase.Targets.Count > 0)
                 {
@@ -162,7 +162,7 @@ internal class MAMA : Nightmare
             case (int)TargetID.MAMA:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Blastwave - AoE Knockback
                         case Blastwave1:
@@ -213,7 +213,7 @@ internal class MAMA : Nightmare
             case (int)TargetID.GreenKnight:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Explosive Launch - Knight Jump in air
                         case ExplosiveLaunch:

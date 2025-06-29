@@ -156,7 +156,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
             }
             else if (CustomCheckMildlyInsaneEligibility(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityMildlyInsane], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
             }
         }
     }

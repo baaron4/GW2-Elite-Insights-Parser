@@ -101,13 +101,13 @@ internal class ValeGuardian : SpiritVale
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget, log);
-        var splitGuardianIds = new List<TargetID>
+        var splitGuardianIDs = new List<TargetID>
         {
             TargetID.BlueGuardian,
             TargetID.GreenGuardian,
             TargetID.RedGuardian
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -121,7 +121,7 @@ internal class ValeGuardian : SpiritVale
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
-                AddTargetsToPhaseAndFit(phase, splitGuardianIds, log);
+                AddTargetsToPhaseAndFit(phase, splitGuardianIDs, log);
             }
             else
             {
@@ -179,7 +179,7 @@ internal class ValeGuardian : SpiritVale
             case (int)TargetID.ValeGuardian:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Magic Storm - Breakbar
                         case MagicStorm:

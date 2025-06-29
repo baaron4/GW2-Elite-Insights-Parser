@@ -206,16 +206,18 @@ public static class GW2Builds
     public const ulong December2024MountBalriorNerfs = 172309;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-02-11
-    public const ulong February2025BalancePatch = 175086;
+    public const ulong February2025Balance = 175086;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-03-11
     public const ulong March2025W8CMReleaseAndNewCoreRelics = 176750;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-04-15
-    public const ulong April2025BalancePatch = 178947;
+    public const ulong April2025Balance = 178947;
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-05-06
     public const ulong May2025BalanceHotFix = 180154;
+    // https://wiki.guildwars2.com/wiki/Game_updates/2025-06-24
+    public const ulong June2025Balance = 182824;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }

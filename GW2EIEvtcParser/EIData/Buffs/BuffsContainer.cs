@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData;
 public class BuffsContainer
 {
 
-    public readonly IReadOnlyDictionary<long, Buff> BuffsByIds;
+    public readonly IReadOnlyDictionary<long, Buff> BuffsByIDs;
     public readonly IReadOnlyDictionary<BuffClassification, IReadOnlyList<Buff>> BuffsByClassification;
     public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource;
     private readonly Dictionary<string, Buff> _buffsByName;
@@ -130,7 +130,7 @@ public class BuffsContainer
             }
         }
         //
-        BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
+        BuffsByIDs = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
             if (x.Count() > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
             {
@@ -139,7 +139,7 @@ public class BuffsContainer
             return x.First();
         });
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buffs");
-        BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
+        BuffInfoSolver.AdjustBuffs(combatData, BuffsByIDs, operation);
         foreach (Buff buff in currentBuffs)
         {
             BuffInfoEvent? buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
@@ -149,7 +149,7 @@ public class BuffsContainer
                 {
                     if (formula.Attr1 == BuffAttribute.Unknown)
                     {
-                        operation.UpdateProgressWithCancellationCheck("Parsing: Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIDs, buff));
                     }
                 }
             }

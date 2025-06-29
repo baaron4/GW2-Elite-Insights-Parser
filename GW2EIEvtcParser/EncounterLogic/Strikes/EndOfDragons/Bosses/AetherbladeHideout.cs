@@ -136,7 +136,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             case (int)TargetID.MaiTrinStrike:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Nightmare Fusillade - Cone Attack
                         case NightmareFusilladeMain:
@@ -177,7 +177,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             case (int)TargetID.MaiTrinStrikeDuringEcho:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Nightmare Fusillade - Cone Attack
                         case NightmareFusilladeSide:
@@ -292,7 +292,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             case (int)TargetID.ScarletPhantomBeamNM:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
                         case FlankingShot:
@@ -783,14 +783,14 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     /// <param name="actor">Actor with the buff, can be the player or the Ferrous Bomb.</param>
     /// <param name="replay">Combat Replay.</param>
     /// <param name="log">The log.</param>
-    /// <param name="skillId">The buff applied on the player or the Ferrous Bomb.</param>
+    /// <param name="skillID">The buff applied on the player or the Ferrous Bomb.</param>
     /// <param name="angle1">The rotation angle of the first rectangle.</param>
     /// <param name="angle2">The rotation angle of the second rectangle.</param>
-    private static void AddMagBeamDecorations(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
+    private static void AddMagBeamDecorations(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillID, int angle1, int angle2)
     {
         const uint width = 320;
         const uint length = 2000;
-        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var segments = actor.GetBuffStatus(log, skillID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
 
         // If the actor is a player, add the overhead bomb icon.
         if (actor.AgentItem.IsPlayer)
@@ -942,10 +942,10 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             int previousIndex = 0;
 
             var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x =>
-                x.SkillId == ElectricBlastCastSkillLeftNM ||
-                x.SkillId == ElectricBlastCastSkillRightNM ||
-                x.SkillId == ElectricBlastCastSkillLeftCM ||
-                x.SkillId == ElectricBlastCastSkillSpiralsCM).ToList();
+                x.SkillID == ElectricBlastCastSkillLeftNM ||
+                x.SkillID == ElectricBlastCastSkillRightNM ||
+                x.SkillID == ElectricBlastCastSkillLeftCM ||
+                x.SkillID == ElectricBlastCastSkillSpiralsCM).ToList();
 
             // Store the times for binary search
             var times = new long[electricBlasts.Count];
@@ -969,7 +969,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 // Find the skill cast at the index and assign a radius based on the skill cast.
                 // Skill definitions are empty, value found through testing and video review.
-                switch (electricBlasts[index].SkillId)
+                switch (electricBlasts[index].SkillID)
                 {
                     case ElectricBlastCastSkillLeftNM: // Swipe from the left side of the Echo, clockwise.
                         initialRadius = 100;
@@ -988,7 +988,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                         radiusIncrease = 5;
                         break;
                     default:
-                        Debug.Assert(false, $"Unknown indicator skill id {electricBlasts[index].SkillId}");
+                        Debug.Assert(false, $"Unknown indicator skill id {electricBlasts[index].SkillID}");
                         break;
                 }
 
@@ -1053,7 +1053,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             }
             else if (CustomCheckTriangulationEligibility(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityTriangulation], 1));
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityTriangulation], 1));
             }
         }
     }

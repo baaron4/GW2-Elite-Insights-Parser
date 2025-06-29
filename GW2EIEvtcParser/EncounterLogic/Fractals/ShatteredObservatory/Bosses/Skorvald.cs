@@ -65,7 +65,7 @@ internal class Skorvald : ShatteredObservatory
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         phases[0].AddTarget(skorvald, log);
-        var anomalyIds = new List<TargetID>
+        var anomalyIDs = new List<TargetID>
         {
             TargetID.FluxAnomaly1,
             TargetID.FluxAnomaly2,
@@ -76,7 +76,7 @@ internal class Skorvald : ShatteredObservatory
             TargetID.FluxAnomalyCM3,
             TargetID.FluxAnomalyCM4,
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -89,7 +89,7 @@ internal class Skorvald : ShatteredObservatory
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
-                AddTargetsToPhaseAndFit(phase, anomalyIds, log);
+                AddTargetsToPhaseAndFit(phase, anomalyIDs, log);
             }
             else
             {
@@ -122,7 +122,7 @@ internal class Skorvald : ShatteredObservatory
             manualFractalScaleSet = true;
         }
         var fluxAnomalies = new List<AgentItem>();
-        var fluxIds = new List<TargetID>
+        var fluxIDs = new List<TargetID>
                 {
                     TargetID.FluxAnomaly1,
                     TargetID.FluxAnomaly2,
@@ -133,9 +133,9 @@ internal class Skorvald : ShatteredObservatory
                     TargetID.FluxAnomalyCM3,
                     TargetID.FluxAnomalyCM4,
                 };
-        for (int i = 0; i < fluxIds.Count; i++)
+        for (int i = 0; i < fluxIDs.Count; i++)
         {
-            fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIds[i]));
+            fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIDs[i]));
         }
         foreach (AgentItem fluxAnomaly in fluxAnomalies)
         {
@@ -287,7 +287,7 @@ internal class Skorvald : ShatteredObservatory
             case (int)TargetID.Skorvald:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Horizon Strike
                         case HorizonStrikeSkorvald2:
@@ -303,7 +303,7 @@ internal class Skorvald : ShatteredObservatory
                                 float degree = facingHorizonStrike.GetRoundedZRotationDeg();
 
                                 // Horizon Strike starting at Skorvald's facing point
-                                if (cast.SkillId == HorizonStrikeSkorvald4)
+                                if (cast.SkillID == HorizonStrikeSkorvald4)
                                 {
                                     for (int i = 0; i < 4; i++)
                                     {
@@ -314,7 +314,7 @@ internal class Skorvald : ShatteredObservatory
                                     }
                                 }
                                 // Starting at Skorvald's 90° of facing point
-                                if (cast.SkillId == HorizonStrikeSkorvald2)
+                                if (cast.SkillID == HorizonStrikeSkorvald2)
                                 {
                                     degree -= 90;
                                     for (int i = 0; i < 4; i++)
@@ -342,11 +342,11 @@ internal class Skorvald : ShatteredObservatory
                             {
                                 float degree = facingCrimsonDawn.GetRoundedZRotationDeg();
 
-                                if (cast.SkillId == CrimsonDawnSkorvaldCM2)
+                                if (cast.SkillID == CrimsonDawnSkorvaldCM2)
                                 {
                                     degree += 90;
                                 }
-                                if (cast.SkillId == CrimsonDawnSkorvaldCM1)
+                                if (cast.SkillID == CrimsonDawnSkorvaldCM1)
                                 {
                                     degree += 270;
                                 }
@@ -422,7 +422,7 @@ internal class Skorvald : ShatteredObservatory
             case (int)TargetID.FluxAnomalyCM4:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Solar Stomp
                         case SolarStomp:

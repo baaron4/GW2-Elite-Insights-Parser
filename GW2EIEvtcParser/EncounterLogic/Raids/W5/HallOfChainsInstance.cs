@@ -104,7 +104,7 @@ internal class HallOfChainsInstance : HallOfChains
         {
             foreach (var brokenKing in brokenKings)
             {
-                var firstCombatCast = brokenKing.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == SkillIDs.BrokenKingFirstCast);
+                var firstCombatCast = brokenKing.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillID == SkillIDs.BrokenKingFirstCast);
                 if (firstCombatCast == null)
                 {
                     continue;

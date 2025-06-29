@@ -91,13 +91,13 @@ internal class Sabetha : SpiritVale
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
         phases[0].AddTarget(sabetha, log);
-        var miniBossIds = new List<TargetID>
+        var miniBossIDs = new List<TargetID>
         {
              TargetID.Karde, // reverse order for mini boss phase detection
              TargetID.Knuckles,
              TargetID.Kernan,
         };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
@@ -112,9 +112,9 @@ internal class Sabetha : SpiritVale
             {
                 int phaseID = i / 2;
                 phase.Name = "Unknown";
-                foreach (var miniBossId in miniBossIds)
+                foreach (var miniBossID in miniBossIDs)
                 {
-                    AddTargetsToPhaseAndFit(phase, [miniBossId], log);
+                    AddTargetsToPhaseAndFit(phase, [miniBossID], log);
                     if (phase.Targets.Count > 0)
                     {
                         SingleActor phaseTarget = phase.Targets.Keys.First();
@@ -125,14 +125,14 @@ internal class Sabetha : SpiritVale
                         break; // we found our main target
                     }
                 }
-                AddTargetsToPhase(phase, miniBossIds, log, PhaseData.TargetPriority.NonBlocking);
+                AddTargetsToPhase(phase, miniBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 int phaseID = (i + 1) / 2;
                 phase.Name = "Phase " + phaseID;
                 phase.AddTarget(sabetha, log);
-                AddTargetsToPhase(phase, miniBossIds, log, PhaseData.TargetPriority.NonBlocking);
+                AddTargetsToPhase(phase, miniBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
         }
         return phases;
@@ -172,7 +172,7 @@ internal class Sabetha : SpiritVale
             case (int)TargetID.Sabetha:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Firestorm - Flame Wall
                         case Firestorm:
@@ -197,7 +197,7 @@ internal class Sabetha : SpiritVale
             case (int)TargetID.Kernan:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Bullet Hail - 3 Cones
                         case BulletHail:
@@ -223,7 +223,7 @@ internal class Sabetha : SpiritVale
             case (int)TargetID.Knuckles:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Platform Quake
                         case PlatformQuake:
@@ -239,7 +239,7 @@ internal class Sabetha : SpiritVale
             case (int)TargetID.Karde:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
                 {
-                    switch (cast.SkillId)
+                    switch (cast.SkillID)
                     {
                         // Flame Blast
                         case FlameBlast:
