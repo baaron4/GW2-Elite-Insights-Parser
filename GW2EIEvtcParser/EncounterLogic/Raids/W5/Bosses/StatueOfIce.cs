@@ -11,9 +11,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class StatueOfIce : HallOfChains
 {
-    public StatueOfIce(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new MechanicGroup([
                 new PlayerDstHitMechanic(KingsWrathConeAoE, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
@@ -25,8 +23,10 @@ internal class StatueOfIce : HallOfChains
                 new PlayerDstBuffApplyMechanic(Glaciate, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Glaciate", "Glaciated (Frozen by 4th Stack of Frozen Wind)", "Glaciate", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "Ice Breaker", "Hailstorm Explosion (Missed Green)", "Ice Breaker (Green Missed)", 0),
             ]),
-        ])
-        );
+        ]);
+    public StatueOfIce(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "brokenking";
         Icon = EncounterIconStatueOfIce;
         EncounterCategoryInformation.InSubCategoryOrder = 2;

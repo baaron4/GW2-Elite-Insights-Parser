@@ -160,9 +160,13 @@ public static class SpeciesIDs
         SpearAggressionRevulsion = SpeciesIDs.SpearAggressionRevulsion,
         // - Deimos
         Deimos = 17154,
+        DeimosAttackTarget = SpeciesIDs.DeimosAttackTarget,
+        DeimosBodyStruct = SpeciesIDs.DeimosBodyStruct,
+        DeimosArmStruct = SpeciesIDs.DeimosArmStruct,
         Saul = 17126,
         ShackledPrisoner = SpeciesIDs.ShackledPrisoner,
         DemonicBond = SpeciesIDs.DemonicBond,
+        DemonicBondAttackTarget = SpeciesIDs.DemonicBondAttackTarget,
         Thief = 17206,
         Gambler = 17335,
         GamblerClones = 17161,
@@ -219,6 +223,9 @@ public static class SpeciesIDs
         ConjuredAmalgamate_CHINA = 44885, // Gadget
         CARightArm_CHINA = 11053, // Gadget
         CALeftArm_CHINA = 38375, // Gadget
+        CARightArmAttackTarget = SpeciesIDs.CARightArmAttackTarget,
+        CALeftArmAttackTarget = SpeciesIDs.CALeftArmAttackTarget,
+        CABodyAttackTarget = SpeciesIDs.CABodyAttackTarget,
         ConjuredGreatsword = 21255,
         ConjuredShield = 21170,
         ConjuredPlayerSword = CASword,
@@ -993,7 +1000,11 @@ public static class SpeciesIDs
     internal static readonly Vector3 SaulsTreasureChestPosition = new(-8445.49f, 3033.19f, -4011.12f);
     internal static readonly Vector3 ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     internal static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
+    internal static readonly Vector3 GrenthChestPosition = new(7825.54f, 177.448f, -5750.63f);
+    internal static readonly Vector3 DhuumChestPosition = new(16877.2f, 644.802f, -6223.94f);
     internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
+    internal static readonly Vector3 TwinLargosChestPosition = new(15262.2f, 6799.07f, -1497.76f);
+    internal static readonly Vector3 QadimsChestPosition = new(-8291.92f, 12078.5f, -5008.73f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
     public enum ChestID : int
@@ -1013,7 +1024,11 @@ public static class SpeciesIDs
         SaulsTreasureChest = SpeciesIDs.SaulsTreasureChest,
         ChestOfDesmina = SpeciesIDs.ChestOfDesmina,
         ChestOfSouls = SpeciesIDs.ChestOfSouls,
+        GrenthChest = SpeciesIDs.GrenthChest,
+        DhuumChest = SpeciesIDs.DhuumChest,
         CAChest = SpeciesIDs.CAChest,
+        TwinLargosChest = SpeciesIDs.TwinLargosChest,
+        QadimsChest = SpeciesIDs.QadimsChest,
         GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
 
         None = int.MaxValue,
@@ -1117,6 +1132,17 @@ public static class SpeciesIDs
     private const int RecreationRoomChest = -80;
     private const int SamarogChest = -81;
     private const int SaulsTreasureChest = -82;
+    private const int GrenthChest = -83;
+    private const int DhuumChest = -84;
+    private const int TwinLargosChest = -85;
+    private const int QadimsChest = -86;
+    private const int CALeftArmAttackTarget = -87;
+    private const int CARightArmAttackTarget = -88;
+    private const int CABodyAttackTarget = -89;
+    private const int DemonicBondAttackTarget = -90;
+    private const int DeimosAttackTarget = -90;
+    private const int DeimosBodyStruct = -91;
+    private const int DeimosArmStruct = -92;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

@@ -15,10 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class StatueOfDeath : HallOfChains
 {
-    
-    public StatueOfDeath(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHitMechanic(HungeringMiasma, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit", "Hungering Miasma (Vomit Goo)","Vomit Dmg", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected", "Applied when taking a light orb","Light Orb", 0),
@@ -26,8 +23,12 @@ internal class StatueOfDeath : HallOfChains
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
             new PlayerDstBuffApplyMechanic(FracturedSpirit, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD", "Applied when taking green","Green port", 0),
-        ])
-        );
+        ]);
+
+
+    public StatueOfDeath(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "souleater";
         Icon = EncounterIconStatueOfDeath;
         EncounterCategoryInformation.InSubCategoryOrder = 2;

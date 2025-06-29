@@ -43,6 +43,64 @@ internal class SpiritValeInstance : SpiritVale
         return "Spirit Vale";
     }
 
+    private static void ProcessSpiritRacePhases_SingleGadgetInstances(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<PhaseData>();
+        if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
+        {
+            var wallOfGhosts = log.AgentData.GetNPCsByID(TargetID.WallOfGhosts);
+            for (int i = 0; i < wallOfGhosts.Count; i++)
+            {
+                var wallOfGhost = wallOfGhosts[i];
+                long nextWallOfGhostStart = log.FightData.FightEnd;
+                if (i < wallOfGhosts.Count - 1) 
+                {
+                    nextWallOfGhostStart = wallOfGhosts[i + 1].FirstAware;
+                }
+                long start = wallOfGhost.FirstAware;
+                foreach (var velocityEvent in log.CombatData.GetMovementData(wallOfGhost).OfType<VelocityEvent>())
+                {
+                    if (velocityEvent.GetPointXY().Length() > 0)
+                    {
+                        start = velocityEvent.Time;
+                        break;
+                    }
+                }
+                long end = wallOfGhost.LastAware;
+                foreach (var etherealBarrier in etherealBarriers)
+                {
+                    var lastHPUpdate = log.CombatData.GetHealthUpdateEvents(etherealBarrier.AgentItem).LastOrDefault(x => x.Time >= start && x.Time < nextWallOfGhostStart && x.HealthPercent < 100);
+                    if (lastHPUpdate != null)
+                    {
+                        end = Math.Max(lastHPUpdate.Time, end);
+                    }
+                }
+                RewardEvent? reward = GetOldRaidReward2Event(log.CombatData, start, end + 5000);
+                bool success = false;
+                if (reward != null)
+                {
+                    end = reward.Time;
+                    success = true;
+                }
+                var phase = new PhaseData(start, end, "Spirit Race");
+                if (success)
+                {
+                    phase.Name += " (Success)";
+                }
+                else
+                {
+                    phase.Name += " (Failure)";
+                }
+                phases.Add(phase);
+                encounterPhases.Add(phase);
+                phase.AddTargets(etherealBarriers, log);
+                phase.AddParentPhase(phases[0]);
+                phases[0].AddTargets(etherealBarriers, log);
+            }
+        }
+        NumericallyRenamePhases(encounterPhases);
+    }
+
     private static void ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
