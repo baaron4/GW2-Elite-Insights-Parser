@@ -303,7 +303,7 @@ internal class WhisperingShadow : Kinfall
     {
         base.SetInstanceBuffs(log);
         
-        if (log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.FightData.Success && log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
             // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
             // The buff is present only on the players that do not have the achievement yet.
