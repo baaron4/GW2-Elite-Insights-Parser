@@ -1,12 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
-using static GW2EIEvtcParser.SpeciesIDs;
-using static GW2EIEvtcParser.SkillIDs;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -308,7 +309,14 @@ internal class WhisperingShadow : Kinfall
             // The buff is present only on the players that do not have the achievement yet.
             // If any player dies, the buff is removed from everyone.
             // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
-            InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityUndyingLight], 1));
+            foreach (Player p in log.PlayerList)
+            {
+                if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.FightData.FightEnd - ServerDelayConstant))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityUndyingLight], 1));
+                    break;
+                }
+            }
         }
     }
 }
