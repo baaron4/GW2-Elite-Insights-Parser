@@ -1,13 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
-using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -303,20 +303,19 @@ internal class WhisperingShadow : Kinfall
     {
         base.SetInstanceBuffs(log);
         
-        if (log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.FightData.Success && log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
-            int counter = 0;
+            // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
+            // The buff is present only on the players that do not have the achievement yet.
+            // If any player dies, the buff is removed from everyone.
+            // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
             foreach (Player p in log.PlayerList)
             {
                 if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.FightData.FightEnd - ServerDelayConstant))
                 {
-                    counter++;
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityUndyingLight], 1));
+                    break;
                 }
-            }
-            // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
-            if (counter == 5)
-            {
-                InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityUndyingLight], 1));
             }
         }
     }
