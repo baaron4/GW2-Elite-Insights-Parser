@@ -178,7 +178,7 @@
                         if (player.isFake) {
                             continue;
                         }
-                        if (this.phase.mechanicStats[i][j][0] > 0) {
+                        if (this.phase.mechanicStats[i][j][0] > 0 || allPlayerMechs[j].isAchievementEligibility) {
                             res.push(allPlayerMechs[j]);
                             break;
                         }
@@ -214,7 +214,7 @@
                     allEnemyMechs[j]._index = j;
                     for (var i = 0; i < enemies.length; i++) {
                         var enemy = enemies[i];
-                        if (this.phase.enemyMechanicStats[i][j][0] > 0) {
+                        if (this.phase.enemyMechanicStats[i][j][0] > 0 || allEnemyMechs[j].isAchievementEligibility) {
                             res.push(allEnemyMechs[j]);
                             break;
                         }
