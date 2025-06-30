@@ -30,10 +30,10 @@ public partial class CombatData
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
     private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffApplyEvent>>> _buffApplyDataByIDByDst;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
-    private readonly Dictionary<AgentItem, List<BreakbarRecoveredEvent>> _breakbarRecoveredData;
+    private readonly Dictionary<AgentItem, List<BreakbarRecoveryEvent>> _breakbarRecoveredData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
-    private readonly Dictionary<long, List<BreakbarRecoveredEvent>> _breakbarRecoveredDataByID;
+    private readonly Dictionary<long, List<BreakbarRecoveryEvent>> _breakbarRecoveredDataByID;
     private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataByID;
     private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
     private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
@@ -475,7 +475,7 @@ public partial class CombatData
         var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
         var wepSwaps = new List<WeaponSwapEvent>(combatEvents.Count / 50);
         var brkDamageData = new List<BreakbarDamageEvent>(combatEvents.Count / 25);
-        var brkRecoveredData = new List<BreakbarRecoveredEvent>(combatEvents.Count / 25);
+        var brkRecoveredData = new List<BreakbarRecoveryEvent>(combatEvents.Count / 25);
         var crowdControlData = new List<CrowdControlEvent>(combatEvents.Count / 10);
         var damageData = new List<HealthDamageEvent>(combatEvents.Count / 2);
 
