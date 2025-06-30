@@ -400,6 +400,20 @@ partial class CombatData
     {
         return _breakbarDamageTakenData.GetValueOrEmpty(dst);
     }
+    /// <summary>
+    /// Returns list of breakbar recover events done by skill id
+    /// </summary>
+    public IReadOnlyList<BreakbarRecoveredEvent> GetBreakbarRecoveredData(long skillID)
+    {
+        return _breakbarRecoveredDataByID.GetValueOrEmpty(skillID);
+    }
+    /// <summary>
+    /// Returns list of breakbar recover events on agent
+    /// </summary>
+    public IReadOnlyList<BreakbarRecoveredEvent> GetBreakbarRecoveredData(AgentItem dst)
+    {
+        return _breakbarRecoveredData.GetValueOrEmpty(dst);
+    }
     #endregion DAMAGE
     #region CROWDCONTROL
     /// <summary>

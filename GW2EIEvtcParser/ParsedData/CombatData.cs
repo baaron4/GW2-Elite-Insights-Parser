@@ -30,8 +30,10 @@ public partial class CombatData
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
     private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffApplyEvent>>> _buffApplyDataByIDByDst;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
+    private readonly Dictionary<AgentItem, List<BreakbarRecoveredEvent>> _breakbarRecoveredData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
+    private readonly Dictionary<long, List<BreakbarRecoveredEvent>> _breakbarRecoveredDataByID;
     private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataByID;
     private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
     private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
@@ -473,6 +475,7 @@ public partial class CombatData
         var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
         var wepSwaps = new List<WeaponSwapEvent>(combatEvents.Count / 50);
         var brkDamageData = new List<BreakbarDamageEvent>(combatEvents.Count / 25);
+        var brkRecoveredData = new List<BreakbarRecoveredEvent>(combatEvents.Count / 25);
         var crowdControlData = new List<CrowdControlEvent>(combatEvents.Count / 10);
         var damageData = new List<HealthDamageEvent>(combatEvents.Count / 2);
 
@@ -528,7 +531,7 @@ public partial class CombatData
                 }
                 else if (combatItem.IsBuff == 0)
                 {
-                    CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, crowdControlData, agentData, skillData);
+                    CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, brkRecoveredData, crowdControlData, agentData, skillData);
                 }
                 else if (combatItem.IsBuff != 0 && combatItem.Value == 0)
                 {
@@ -545,7 +548,7 @@ public partial class CombatData
         HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
         UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
-        HasBreakbarDamageData = brkDamageData.Count != 0;
+        HasBreakbarDamageData = brkDamageData.Count != 0 || brkRecoveredData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
@@ -572,6 +575,8 @@ public partial class CombatData
         _damageData = damageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         _damageTakenData = damageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         _damageDataByID = damageData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+        _breakbarRecoveredData = brkRecoveredData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+        _breakbarRecoveredDataByID = brkRecoveredData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         _breakbarDamageDataByID = brkDamageData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

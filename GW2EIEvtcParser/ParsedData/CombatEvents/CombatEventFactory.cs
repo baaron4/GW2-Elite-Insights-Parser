@@ -560,13 +560,21 @@ internal static class CombatEventFactory
         return res;
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
+    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<BreakbarRecoveredEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
     {
         PhysicalResult result = GetPhysicalResult(damageEvent.Result);
         switch (result)
         {
             case PhysicalResult.BreakbarDamage:
-                brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
+                var brkDamage = new BreakbarDamageEvent(damageEvent, agentData, skillData);
+                if (brkDamage.SkillID == skillData.GenericBreakbarID && brkDamage.From.IsUnknown && brkDamage.BreakbarDamage >= 0)
+                {
+                    brkBarRecovered.Add(new BreakbarRecoveredEvent(damageEvent, agentData, skillData));
+                } 
+                else
+                {
+                    brkBarDamage.Add(brkDamage);
+                }
                 break;
             case PhysicalResult.CrowdControl:
                 crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
