@@ -76,39 +76,55 @@ internal class ConjuredAmalgamate : MythwrightGambit
             .Where(x => x.IsStateChange == StateChange.AttackTarget)
             .Select(x => new AttackTargetEvent(x, agentData))
             .ToList();
-        var tst = attackTargetEvents.Select(x => x.GetTargetableEvents(combatData, agentData)).ToList();
-        var attackTargetPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && attackTargetEvents.Any(y => x.SrcMatchesAgent(y.AttackTarget))).Select(x => new PositionEvent(x, agentData)).ToList();
-        foreach (var position in attackTargetPositions)
+        var positionEvents = combatData.Where(x => x.IsStateChange == StateChange.Position);
+        var attackTargetPositions = positionEvents.Where(x => attackTargetEvents.Any(y => x.SrcMatchesAgent(y.AttackTarget)));
+        foreach (var positionEvent in attackTargetPositions)
         {
-            var agent = attackTargetEvents.First(x => position.Src == x.AttackTarget).Src;
+            var position = new PositionEvent(positionEvent, agentData);
+            var attackTargetEvent = attackTargetEvents.First(x => position.Src == x.AttackTarget);
+            var atAgent = attackTargetEvent.AttackTarget;
+            var agent = attackTargetEvent.Src;
             var atPos = position.GetPoint3D();
-            if ((atPos - BodyAttackTargetPos).Length() < 5)
+            if (agent.Type == AgentItem.AgentType.Gadget)
             {
-                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
-                agent.OverrideID(TargetID.ConjuredAmalgamate, agentData);
-            }
-            else if ((atPos - LeftArmAttackTargetPosNoDamage).Length() < 5)
-            {
-                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
-                agent.OverrideID(TargetID.CALeftArm, agentData);
-            }
-            else if ((atPos - RightArmAttackTargetPosNoDamage).Length() < 5)
-            {
-                agent.OverrideType(AgentItem.AgentType.NPC, agentData);
-                agent.OverrideID(TargetID.CARightArm, agentData);
+                if ((atPos - BodyAttackTargetPos).Length() < 5)
+                {
+                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideID(TargetID.ConjuredAmalgamate, agentData);
+                    atAgent.OverrideID(TargetID.CABodyAttackTarget, agentData);
+                    atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
+                }
+                else if ((atPos - LeftArmAttackTargetPosNoDamage).Length() < 5)
+                {
+                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideID(TargetID.CALeftArm, agentData);
+                }
+                else if ((atPos - RightArmAttackTargetPosNoDamage).Length() < 5)
+                {
+                    agent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    agent.OverrideID(TargetID.CARightArm, agentData);
+                }
             }
         }
-        foreach (var position in attackTargetPositions)
+        foreach (var positionEvent in attackTargetPositions)
         {
-            var agent = attackTargetEvents.First(x => position.Src == x.AttackTarget).Src;
+            var position = new PositionEvent(positionEvent, agentData);
+            var attackTargetEvent = attackTargetEvents.First(x => position.Src == x.AttackTarget);
+            var atAgent = attackTargetEvent.AttackTarget;
+            var agent = attackTargetEvent.Src;
             var atPos = position.GetPoint3D();
             if (agent.IsSpecies(TargetID.CALeftArm) && (atPos - LeftArmAttackTargetPosForDamage).Length() < 5)
             {
-                position.Src.OverrideID(TargetID.CALeftArmAttackTarget, agentData);
+                atAgent.OverrideID(TargetID.CALeftArmAttackTarget, agentData);
+                atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
             else if (agent.IsSpecies(TargetID.CARightArm) && (atPos - RightArmAttackTargetPosForDamage).Length() < 5)
             {
-                position.Src.OverrideID(TargetID.CARightArmAttackTarget, agentData);
+                atAgent.OverrideID(TargetID.CARightArmAttackTarget, agentData);
+                atAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+                atAgent.OverrideHitbox(500, atAgent.HitboxHeight);
             }
         }
     }
@@ -173,7 +189,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return
         [
             TargetID.ConjuredGreatsword,
-            TargetID.ConjuredShield
+            TargetID.ConjuredShield,
+            TargetID.CALeftArmAttackTarget,
+            TargetID.CARightArmAttackTarget,
+            TargetID.CABodyAttackTarget,
         ];
     }
 
@@ -222,6 +241,36 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 break;
             case (int)TargetID.CALeftArm:
             case (int)TargetID.CARightArm:
+                break;
+            case (int)TargetID.CABodyAttackTarget:
+                var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
+                var body = log.CombatData.GetAttackTargetEventsByAttackTarget(target.AgentItem).First().Src;
+                var bodyInvulStatus = body.GetBuffStatus(log, CAInvul, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0);
+                var bodyAtHideStart = log.FightData.FightStart;
+                foreach (var noInvul in bodyInvulStatus)
+                {
+                    replay.Hidden.Add(new Segment(bodyAtHideStart, noInvul.Start));
+                    bodyAtHideStart = noInvul.End;
+                }
+                replay.Hidden.Add(new Segment(bodyAtHideStart, log.FightData.FightEnd));
+                break;
+            case (int)TargetID.CALeftArmAttackTarget:
+            case (int)TargetID.CARightArmAttackTarget:
+                var armTargetableEvents = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
+                var arm = log.CombatData.GetAttackTargetEventsByAttackTarget(target.AgentItem).First().Src;
+                var armAtHideStart = log.FightData.FightStart;
+                foreach (var targetable in armTargetableEvents)
+                {
+                    if (targetable.Targetable)
+                    {
+                        replay.Hidden.Add(new Segment(armAtHideStart, targetable.Time));
+                    }
+                    else
+                    {
+                        armAtHideStart = targetable.Time;
+                    }
+                }
+                replay.Hidden.Add(new Segment(armAtHideStart, log.FightData.FightEnd));
                 break;
             case (int)TargetID.ConjuredGreatsword:
                 break;
