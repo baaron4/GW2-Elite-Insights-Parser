@@ -1042,7 +1042,7 @@ public class EvtcParser
         }
         foreach (AgentItem a in _allAgentsList)
         {
-            a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
+            a.ApplyOffset(offset);
         }
         
         _fightData.ApplyOffset(offset);
