@@ -16,9 +16,14 @@ public class AgentItem
             MergeStart = start;
             MergeEnd = end;
         }
+        internal void ApplyOffset(long offset)
+        {
+            MergeStart -= offset;
+            MergeEnd -= offset;
+        }
         public readonly AgentItem Merged;
-        public readonly long MergeStart;
-        public readonly long MergeEnd;
+        public long MergeStart { get; private set; }
+        public long MergeEnd { get; private set; }
     }
 
     private List<MergedAgentItem>? _merges;
@@ -186,6 +191,16 @@ public class AgentItem
     {
         FirstAware = firstAware;
         LastAware = lastAware;
+    }
+
+    internal void ApplyOffset(long offset)
+    {
+        FirstAware -= offset;
+        LastAware -= offset;
+        foreach (var merge in Merges)
+        {
+            merge.ApplyOffset(offset);
+        }
     }
 
     internal void SetMaster(AgentItem master)

@@ -31,7 +31,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     {
         return new CombatReplayMap(CombatReplayMountBalrior, 
             (1280, 1280),
-            (-21504, -21504, 24576, 24576)); // TODO Fix values
+            (-15454, -22004, 20326, 20076));
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
@@ -80,6 +80,10 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         var fullPhase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
+        if (!requirePhases)
+        {
+            return phases;
+        }
 
         // Sub Phases
         Segment start = hpUpdates.FirstOrDefault(x => x.Value <= 100.0 && x.Value != 0 && x.Start != 0);

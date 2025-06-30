@@ -37,7 +37,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerDstHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
                     .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)
-                    .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.TitanspawnGeyser)),
+                    .UsingChecker((brae, log) => brae.To.IsAnySpecies([TargetID.TitanspawnGeyser, TargetID.TitanspawnGeyserGadget])),
             ]),
             // Toxic Geysers
             new MechanicGroup([
@@ -129,6 +129,7 @@ internal class UraTheSteamshrieker : MountBalrior
         [
             TargetID.SulfuricGeyser,
             TargetID.TitanspawnGeyser,
+            TargetID.TitanspawnGeyserGadget,
             TargetID.ToxicGeyser,
             TargetID.UraGadget_BloodstoneShard,
         ];
@@ -176,6 +177,26 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        // titanspawn geysers
+        var titanGeyserMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (titanGeyserMarkerGUID != null)
+        {
+            var titanAgents = combatData
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var titanAgent in titanAgents)
+            {
+                titanAgent.OverrideID(TargetID.TitanspawnGeyserGadget, agentData);
+                titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
+            }
+        }
         // Toxic geysers
         var toxicEffectGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
@@ -194,26 +215,6 @@ internal class UraTheSteamshrieker : MountBalrior
             {
                 toxicAgent.OverrideID(TargetID.ToxicGeyser, agentData);
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
-            }
-        }
-        // titanspawn geysers
-        var titanGeyserMarkerGUID = combatData
-            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
-                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.UraTitanspawnGeyserMarker.Equals(x.SrcAgent, x.DstAgent))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
-            .FirstOrDefault();
-        if (titanGeyserMarkerGUID != null)
-        {
-            var titanAgents = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == titanGeyserMarkerGUID.ContentID)
-                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
-                .Distinct();
-            foreach (var titanAgent in titanAgents)
-            {
-                titanAgent.OverrideID(TargetID.TitanspawnGeyser, agentData);
-                titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         // Sulfuric geysers
@@ -496,6 +497,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 // Damage field ring
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 break;
+            case (int)TargetID.TitanspawnGeyserGadget:
             case (int)TargetID.TitanspawnGeyser:
                 // Hardened Crust - Overhead
                 replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);

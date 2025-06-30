@@ -358,6 +358,7 @@ public static class SpeciesIDs
         ToxicGeyser = SpeciesIDs.ToxicGeyser,
         SulfuricGeyser = SpeciesIDs.SulfuricGeyser,
         TitanspawnGeyser = 26741,
+        TitanspawnGeyserGadget = SpeciesIDs.TitanspawnGeyserGadget,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
         // Strike Missions
@@ -1143,6 +1144,7 @@ public static class SpeciesIDs
     private const int DeimosAttackTarget = -90;
     private const int DeimosBodyStruct = -91;
     private const int DeimosArmStruct = -92;
+    private const int TitanspawnGeyserGadget = -93;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
