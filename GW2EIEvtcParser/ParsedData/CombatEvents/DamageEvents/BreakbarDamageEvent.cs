@@ -7,8 +7,8 @@ public class BreakbarDamageEvent : SkillEvent
     {
         BreakbarDamage = Math.Round(evtcItem.Value / 10.0, 1);
 
-        // generic breakbar damage is changed amount rather than damage, need to flip sign
-        if (SkillID == skillData.GenericBreakbarID)
+        // generic breakbar damage from unknown agent is changed amount rather than damage, need to flip sign
+        if (From.IsUnknown && SkillID == skillData.GenericBreakbarID)
         {
             BreakbarDamage *= -1.0;
         }
