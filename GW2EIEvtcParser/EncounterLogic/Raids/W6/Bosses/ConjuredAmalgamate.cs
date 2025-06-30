@@ -113,9 +113,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         HandleCAAgents(agentData, combatData);
+    }
+
+    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    {
         // time starts at first smash
         var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
         if (effectIDToGUIDs.Any())

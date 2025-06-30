@@ -448,27 +448,8 @@ internal class HarvestTemple : EndOfDragonsStrike
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
-        var maxHPEvents = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
-            .Select(x => new MaxHealthUpdateEvent(x, agentData))
-            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key);
-        //
-        if (maxHPEvents.TryGetValue(491550, out var dragonOrbMaxHPs))
-        {
-            foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
-            {
-                AgentItem dragonOrb = dragonOrbMaxHP.Src;
-                if (!dragonOrb.IsUnknown && combatData.Count(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
-                {
-                    dragonOrb.OverrideName("Dragon Orb");
-                    dragonOrb.OverrideID(TargetID.DragonEnergyOrb, agentData);
-                }
-            }
-        }
-        //
         var idsToUse = new List<TargetID> {
             TargetID.TheDragonVoidJormag,
             TargetID.TheDragonVoidPrimordus,
@@ -567,6 +548,33 @@ internal class HarvestTemple : EndOfDragonsStrike
                 copyEventsFrom.Add(extra);
             }
         }
+        // Add missing agents
+        for (int i = index; i < idsToUse.Count; i++)
+        {
+            agentData.AddCustomNPCAgent(fightData.FightStart + index, fightData.FightStart + index + 1, "Dragonvoid", Spec.NPC, idsToUse[i], false);
+        }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
+        var maxHPEvents = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
+            .Select(x => new MaxHealthUpdateEvent(x, agentData))
+            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key);
+        //
+        if (maxHPEvents.TryGetValue(491550, out var dragonOrbMaxHPs))
+        {
+            foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
+            {
+                AgentItem dragonOrb = dragonOrbMaxHP.Src;
+                if (!dragonOrb.IsUnknown && combatData.Count(x => x.IsStateChange == StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
+                {
+                    dragonOrb.OverrideName("Dragon Orb");
+                    dragonOrb.OverrideID(TargetID.DragonEnergyOrb, agentData);
+                }
+            }
+        }
         //
         IReadOnlyList<AgentItem> voidAmalgamates = agentData.GetNPCsByID(TargetID.VoidAmalgamate);
         foreach (AgentItem voidAmal in voidAmalgamates)
@@ -615,11 +623,6 @@ internal class HarvestTemple : EndOfDragonsStrike
                 knownFrostBeams.AddRange(agentData.GetNPCsByID(TargetID.JormagMovingFrostBeamCenter));
                 knownFrostBeams.ForEach(x => x.SetMaster(jormagAgent));
             }
-        }
-        // Add missing agents
-        for (int i = index; i < idsToUse.Count; i++)
-        {
-            agentData.AddCustomNPCAgent(fightData.FightStart + index, fightData.FightStart + index + 1, "Dragonvoid", Spec.NPC, idsToUse[i], false);
         }
         //
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);

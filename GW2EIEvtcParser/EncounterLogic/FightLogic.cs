@@ -534,6 +534,14 @@ public abstract class FightLogic
         }
     }
 
+    /// <summary>
+    /// To be used in situations where the encounter has been triggered by a gadget and its stabilisation is necessary ASAP
+    /// </summary>
+    internal virtual void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+
+    }
+
     internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
