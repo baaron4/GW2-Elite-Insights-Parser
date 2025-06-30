@@ -147,7 +147,7 @@ internal class ActorDetailsDto
                 if (phase.Targets.ContainsKey(target))
                 {
                     dmgDistributions.Add(DamageDistributionDto.BuildTargetMinionDamageDistributionData(log, target, minion, phase, usedSkills, usedBuffs));
-                    dmgDistributions.Add(DamageDistributionDto.BuildTargetMinionDamageTakenDistributionData(log, minion, phase, usedSkills, usedBuffs));
+                    dmgTakenDistributions.Add(DamageDistributionDto.BuildTargetMinionDamageTakenDistributionData(log, minion, phase, usedSkills, usedBuffs));
                 }
                 else
                 {
