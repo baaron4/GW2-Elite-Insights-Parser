@@ -215,6 +215,14 @@ public class AgentData
         _dirty |= status;
     }
 
+    internal void ApplyOffset(long offset)
+    {
+        foreach (var agentItem in _allAgentsList)
+        {
+            agentItem.ApplyOffset(offset);
+        }
+    }
+
     internal void RemoveAllFrom(HashSet<AgentItem> agents)
     {
         if (agents.Count == 0)
