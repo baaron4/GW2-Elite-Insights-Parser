@@ -1040,10 +1040,7 @@ public class EvtcParser
                 c.OverrideSrcAgent((ulong)(offset - (long)c.SrcAgent));
             }
         }
-        foreach (AgentItem a in _allAgentsList)
-        {
-            a.OverrideAwareTimes(a.FirstAware - offset, a.LastAware - offset);
-        }
+        _agentData.ApplyOffset(offset);
         
         _fightData.ApplyOffset(offset);
     }

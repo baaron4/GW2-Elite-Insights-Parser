@@ -20,6 +20,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "FractalScale", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac075875f8eb8fb8be5a415655a951459", null ],
     [ "GW2Build", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b", null ],
     [ "InstanceIP", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aebd87dfd421149a38e8f29ba06234f59", null ],
+    [ "InstancePrivacy", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a0ca1eb2431159f4fc3717905d8b78029", null ],
     [ "InstanceTimeStartStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab7c320b4922f441a628867d21eb2351a", null ],
     [ "IsCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8", null ],
     [ "IsLateStart", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3dae87c28216f2ecb937c1eaa5618346", null ],

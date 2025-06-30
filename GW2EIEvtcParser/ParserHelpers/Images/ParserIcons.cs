@@ -1206,6 +1206,7 @@ internal static class ParserIcons
         { TargetID.ToxicGeyser, TrashToxicGeyser },
         { TargetID.SulfuricGeyser, TrashSulfuricGeyser },
         { TargetID.TitanspawnGeyser, TrashTitanspawnGeyser },
+        { TargetID.TitanspawnGeyserGadget, TrashTitanspawnGeyser },
         { TargetID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
         { TargetID.DecimaBeamStart, NoImage },
         { TargetID.DecimaBeamEnd, NoImage },

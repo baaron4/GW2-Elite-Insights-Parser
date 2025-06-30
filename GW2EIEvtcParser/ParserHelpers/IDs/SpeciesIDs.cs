@@ -351,6 +351,7 @@ public static class SpeciesIDs
         ToxicGeyser = SpeciesIDs.ToxicGeyser,
         SulfuricGeyser = SpeciesIDs.SulfuricGeyser,
         TitanspawnGeyser = 26741,
+        TitanspawnGeyserGadget = SpeciesIDs.TitanspawnGeyserGadget,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
         // Strike Missions
@@ -1117,6 +1118,7 @@ public static class SpeciesIDs
     private const int RecreationRoomChest = -80;
     private const int SamarogChest = -81;
     private const int SaulsTreasureChest = -82;
+    private const int TitanspawnGeyserGadget = -83;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
