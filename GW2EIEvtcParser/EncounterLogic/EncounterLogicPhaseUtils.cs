@@ -233,7 +233,7 @@ internal static class EncounterLogicPhaseUtils
         phase.AddTargets(targets, log);
         phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
         phase.AddTargets(nonBlockingBosses, log, PhaseData.TargetPriority.NonBlocking);
-        parentPhase.AddTargets(targets.Where(x => !x.IsSpecies(TargetID.DummyTarget)), log);
+        parentPhase.AddTargets(targets.Where(x => x != null && !x.IsSpecies(TargetID.DummyTarget)), log);
         return phase;
     }
 

@@ -230,16 +230,48 @@ internal class Sabir : TheKeyOfAhdashim
                 break;
             // Placeholder decorations for plateforms
             case (int)TargetID.SabirMainPlateform:
-                replay.Decorations.Add(new RectangleDecoration(1500, 1500, lifespan, Colors.Blue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                var mainPlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
+                var mainPlateformDecoration = new BackgroundIconDecoration(
+                    ParserIcons.SabirMainPlatform, 0, 1660,
+                    mainPlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+                    (target.FirstAware, target.LastAware),
+                    new AgentConnector(target)
+                );
+                RotationConnector mainPlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                replay.Decorations.Add(mainPlateformDecoration.UsingRotationConnector(mainPlatformRotationConnector));
                 break;
             case (int)TargetID.SabirSquarePlateform:
-                replay.Decorations.Add(new RectangleDecoration(450, 450, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                var squarePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
+                var squarePlateformDecoration = new BackgroundIconDecoration(
+                    ParserIcons.SabirSquarePlatform, 0, 580,
+                    squarePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+                    (target.FirstAware, target.LastAware),
+                    new AgentConnector(target)
+                );
+                RotationConnector squarePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                replay.Decorations.Add(squarePlateformDecoration.UsingRotationConnector(squarePlatformRotationConnector));
                 break;
             case (int)TargetID.SabirRectanglePlateform:
-                replay.Decorations.Add(new RectangleDecoration(450, 750, lifespan, Colors.CobaltBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                var rectanglePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
+                var rectanglePlateformDecoration = new BackgroundIconDecoration(
+                    ParserIcons.SabirRectanglePlatform, 0, 800,
+                    rectanglePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+                    (target.FirstAware, target.LastAware),
+                    new AgentConnector(target)
+                );
+                RotationConnector rectanglePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                replay.Decorations.Add(rectanglePlateformDecoration.UsingRotationConnector(rectanglePlatformRotationConnector));
                 break;
             case (int)TargetID.SabirBigRectanglePlateform:
-                replay.Decorations.Add(new RectangleDecoration(450, 1850, lifespan, Colors.LightCobaltBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                var bigRectanglePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
+                var bigRectanglePlateformDecoration = new BackgroundIconDecoration(
+                    ParserIcons.SabirBigRectanglePlatform, 0, 1640,
+                    bigRectanglePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+                    (target.FirstAware, target.LastAware),
+                    new AgentConnector(target)
+                );
+                RotationConnector bigRectanglePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+                replay.Decorations.Add(bigRectanglePlateformDecoration.UsingRotationConnector(bigRectanglePlatformRotationConnector));
                 break;
             default:
                 break;
@@ -250,7 +282,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal static void FindPlateforms(AgentData agentData)
     {
         // Disabled until we get nice looking assets for them
-        return;
+        //return;
         foreach (var candidate in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
         {
             switch (candidate.HitboxWidth)
