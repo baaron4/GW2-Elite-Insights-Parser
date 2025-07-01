@@ -57,6 +57,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         MechanicList.Add(Mechanics);
         Extension = "prlqadim";
         Icon = EncounterIconPeerlessQadim;
+        ChestID = ChestID.QadimThePeerlessChest;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000003;
     }
@@ -83,6 +84,12 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             //TargetID.DummyPeerlessQadim,
         ];
     }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.PeerlessQadimPylon
+        ];
+    }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
@@ -102,15 +109,26 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         return base.GetEncounterStartStatus(combatData, agentData, fightData);
     }
 
+    internal static void RenamePylons(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        // Update pylon names with their cardinal locations.
+        var nameCount = new Dictionary<string, int> { { "(N)", 1 }, { "(SW)", 1 }, { "(SE)", 1 } };
+        var pylons = targets.Where(x => x.IsSpecies(TargetID.PeerlessQadimPylon)).ToList();
+        foreach (SingleActor target in pylons)
+        {
+            string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
+            if (pylons.Count > 3 && suffix != null && nameCount.ContainsKey(suffix))
+            {
+                // deduplicate name
+                target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Update pylon names with their cardinal locations.
-        foreach (NPC target in Targets.Where(x => x.IsSpecies(TargetID.PeerlessQadimPylon)).Cast<NPC>())
-        {
-            AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
-        }
+        RenamePylons(Targets, combatData);
     }
 
     protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
@@ -389,11 +407,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 break;
             case (int)TargetID.GiantQadimThePeerless:
                 // Trim the first giant Qadim, it exists since log start.
-                var firstGiantQadim = log.AgentData.GetNPCsByID(TargetID.GiantQadimThePeerless).FirstByAware();
-                var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstByNonZeroTime();
-                if (firstGiantQadim != null && firstLiftUp != null && target.AgentItem == firstGiantQadim)
+                var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstOrDefault(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                if (firstLiftUp != null)
                 {
-                    replay.Trim(firstLiftUp.Time, firstGiantQadim.LastAware);
+                    replay.Trim(firstLiftUp.Time, target.LastAware);
                 }
                 break;
             default:

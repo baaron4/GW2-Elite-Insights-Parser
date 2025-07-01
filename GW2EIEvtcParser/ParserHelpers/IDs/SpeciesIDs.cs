@@ -1012,6 +1012,7 @@ public static class SpeciesIDs
     internal static readonly Vector3 QadimsChestPosition = new(-8291.92f, 12078.5f, -5008.73f);
     internal static readonly Vector3 AdinasChestPosition = new(14908.8f, -1478.69f, -303.638f);
     internal static readonly Vector3 SabirsChestPosition = new(-12095.1f, 2407.99f, -6542.6f);
+    internal static readonly Vector3 QadimThePeerlessChestPosition = new(1636.04f, 10079.2f, -660.289f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
     public enum ChestID : int
@@ -1038,6 +1039,7 @@ public static class SpeciesIDs
         QadimsChest = SpeciesIDs.QadimsChest,
         AdinasChest = SpeciesIDs.AdinasChest,
         SabirsChest = SpeciesIDs.SabirsChest,
+        QadimThePeerlessChest = SpeciesIDs.QadimThePeerlessChest,
         GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
 
         None = int.MaxValue,
@@ -1159,6 +1161,7 @@ public static class SpeciesIDs
     private const int SabirSquarePlateform = -97;
     private const int SabirRectanglePlateform = -98;
     private const int SabirBigRectanglePlateform = -99;
+    private const int QadimThePeerlessChest = -100;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
