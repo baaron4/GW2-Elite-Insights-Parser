@@ -69,7 +69,7 @@ public class GameplayStatistics
                 }
                 if (referencePoint.Value.Time < firstPos.Time)
                 {
-                    offset++;
+                    offset = time + 1;
                     continue;
                 }
                 if (referencePoint.Value.Time > lastPos.Time)
