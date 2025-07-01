@@ -1006,6 +1006,7 @@ public static class SpeciesIDs
     internal static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
     internal static readonly Vector3 TwinLargosChestPosition = new(15262.2f, 6799.07f, -1497.76f);
     internal static readonly Vector3 QadimsChestPosition = new(-8291.92f, 12078.5f, -5008.73f);
+    internal static readonly Vector3 AdinasChestPosition = new(14908.8f, -1478.69f, -303.638f);
     internal static readonly Vector3 GrandStrikeChestHarvestTemplePosition = new(605.31f, -20400.5f, -15420.1f);
 
     public enum ChestID : int
@@ -1030,6 +1031,7 @@ public static class SpeciesIDs
         CAChest = SpeciesIDs.CAChest,
         TwinLargosChest = SpeciesIDs.TwinLargosChest,
         QadimsChest = SpeciesIDs.QadimsChest,
+        AdinasChest = SpeciesIDs.AdinasChest,
         GrandStrikeChest = SpeciesIDs.GrandStrikeChest,
 
         None = int.MaxValue,
@@ -1145,6 +1147,7 @@ public static class SpeciesIDs
     private const int DeimosBodyStruct = -91;
     private const int DeimosArmStruct = -92;
     private const int TitanspawnGeyserGadget = -93;
+    private const int AdinasChest = -94;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

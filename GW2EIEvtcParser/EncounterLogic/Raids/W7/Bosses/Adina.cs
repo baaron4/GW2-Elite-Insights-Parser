@@ -31,6 +31,7 @@ internal class Adina : TheKeyOfAhdashim
         MechanicList.Add(Mechanics);
         Extension = "adina";
         Icon = EncounterIconAdina;
+        ChestID = ChestID.AdinasChest;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }
@@ -72,7 +73,8 @@ internal class Adina : TheKeyOfAhdashim
             (int)TargetID.HandOfEruption,
         ];
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+
+    internal static void FindHands(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var attackTargetEvents = combatData
             .Where(x => x.IsStateChange == StateChange.AttackTarget)
@@ -131,12 +133,14 @@ internal class Adina : TheKeyOfAhdashim
                 RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra, true);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+    }
 
-        var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
-        foreach (SingleActor target in Targets)
+    internal static void RenameHands(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        var nameCount = new Dictionary<string, int> { { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
+        foreach (SingleActor target in targets)
         {
-            if (target.IsAnySpecies(new [] { TargetID.HandOfErosion, TargetID.HandOfEruption }))
+            if (target.IsAnySpecies(new[] { TargetID.HandOfErosion, TargetID.HandOfEruption }))
             {
                 string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))
@@ -146,6 +150,13 @@ internal class Adina : TheKeyOfAhdashim
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindHands(fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameHands(Targets, combatData);
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
