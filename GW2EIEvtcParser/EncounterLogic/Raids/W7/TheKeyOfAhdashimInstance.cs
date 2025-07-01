@@ -44,7 +44,16 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        return base.GetPhases(log, requirePhases);
+        List<PhaseData> phases = GetInitialPhase(log);
+        var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", (log, adina) => adina.GetHealth(log.CombatData) > 23e6);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.QadimThePeerlessChest, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6);
+        if (phases[0].Targets.Count == 0)
+        {
+            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
+        }
+        return phases;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -86,10 +95,22 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         ];
         return friendlies.Distinct().ToList();
     }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.HandOfErosion,
+            (int)TargetID.HandOfEruption,
+            (int)TargetID.PeerlessQadimPylon,
+        ];
+    }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        Adina.FindHands(fightData, agentData, combatData, extensions);
+        Sabir.FindPlateforms(agentData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        Adina.RenameHands(Targets, combatData);
+        PeerlessQadim.RenamePylons(Targets, combatData);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)

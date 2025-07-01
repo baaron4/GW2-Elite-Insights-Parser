@@ -406,11 +406,12 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)TargetID.GiantQadimThePeerless:
-                // Trim the first giant Qadim, it exists since log start.
+                // Trim giant Qadim, based on matching lift up event.
                 var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstOrDefault(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
                 if (firstLiftUp != null)
                 {
-                    replay.Trim(firstLiftUp.Time, target.LastAware);
+                    // Add 15s of wiggle room at the start
+                    replay.Trim(firstLiftUp.Time - 15000, target.LastAware);
                 }
                 break;
             default:
