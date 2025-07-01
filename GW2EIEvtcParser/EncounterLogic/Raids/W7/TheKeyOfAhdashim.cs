@@ -26,6 +26,7 @@ internal abstract class TheKeyOfAhdashim : RaidLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadget(ChestID.AdinasChest, agentData, combatData, AdinasChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
+        FindChestGadget(ChestID.SabirsChest, agentData, combatData, SabirsChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 }

@@ -53,6 +53,7 @@ internal class Sabir : TheKeyOfAhdashim
         // rotating cc 56403
         Extension = "sabir";
         Icon = EncounterIconSabir;
+        ChestID = ChestID.SabirsChest;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000002;
     }
