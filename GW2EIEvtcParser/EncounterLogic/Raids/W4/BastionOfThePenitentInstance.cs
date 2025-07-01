@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
@@ -83,24 +84,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Cairn");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end))
-                {
-                    phase.Name += " CM";
-                }
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(cairn, log);
-                mainPhase.AddTarget(cairn, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], mainPhase, "Cairn", start, end, success, log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end));
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -113,17 +97,18 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         if (targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies) && targetsByIDs.TryGetValue((int)TargetID.DemonicBond, out var demonicBonds))
         {
             var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
-            var chest = log.AgentData.GetGadgetsByID(ChestID.SaulsTreasureChest).FirstOrDefault();
             if (deimosDummy != null)
             {
+                var chest = log.AgentData.GetGadgetsByID(ChestID.SaulsTreasureChest).FirstOrDefault();
+                var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
                 var greenApplies = log.CombatData.GetBuffApplyData(SkillIDs.GreenTeleport);
                 foreach (AbstractBuffApplyEvent buffApplyEvent in greenApplies)
                 {
                     if (buffApplyEvent.Time >= encounterStartThreshold)
                     {
-                        long encounterStart = long.MaxValue;
-                        long encounterEnd = long.MinValue;
+                        long start = long.MaxValue;
+                        long end = long.MinValue;
                         // Find encounter start based on demonic bonds being targetable
                         foreach (var demonicBond in demonicBonds)
                         {
@@ -133,12 +118,12 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                                 var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Time >= buffApplyEvent.Time - 2000 && x.Time <= buffApplyEvent.Time);
                                 if (targetableEvent != null)
                                 {
-                                    encounterStart = targetableEvent.Time;
+                                    start = targetableEvent.Time;
                                     break;
                                 }
                             }
                         }
-                        if (encounterStart == long.MaxValue)
+                        if (start == long.MaxValue)
                         {
                             continue;
                         }
@@ -146,7 +131,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                         SingleActor target = deimosDummy;
                         if (targetsByIDs.TryGetValue((int)TargetID.Deimos, out var deimoss))
                         {
-                            var deimos = deimoss.FirstOrDefault(x => x.FirstAware > encounterStart || x.AgentItem.InAwareTimes(encounterStart));
+                            var deimos = deimoss.FirstOrDefault(x => x.FirstAware > start || x.AgentItem.InAwareTimes(start));
                             if (deimos != null)
                             {
                                 target = deimos;
@@ -161,7 +146,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                                 var attackTargetEvents = log.CombatData.GetAttackTargetEventsBySrc(demonicBond.AgentItem);
                                 foreach (var attackTargetEvent in attackTargetEvents)
                                 {
-                                    var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Time >= encounterStart + 5000);
+                                    var targetableEvent = attackTargetEvent.GetTargetableEvents(log).FirstOrDefault(x => x.Time >= start + 5000);
                                     if (targetableEvent != null)
                                     {
                                         if (target.FirstAware > targetableEvent.Time)
@@ -179,48 +164,25 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                             var prides = log.AgentData.GetNPCsByID(TargetID.Pride);
                             if (prides.Any())
                             {
-                                encounterEnd = Math.Max(prides.Max(x => x.LastAware), encounterEnd);
+                                end = Math.Max(prides.Max(x => x.LastAware), end);
                             }
                             var greeds = log.AgentData.GetNPCsByID(TargetID.Greed);
                             if (greeds.Any())
                             {
-                                encounterEnd = Math.Max(greeds.Max(x => x.LastAware), encounterEnd);
+                                end = Math.Max(greeds.Max(x => x.LastAware), end);
                             }
                         }
-                        if (encounterEnd == long.MinValue)
+                        if (end == long.MinValue)
                         {
                             continue;
                         }
                         bool success = false;
-                        if (chest != null && chest.InAwareTimes(encounterStart, encounterEnd + 2000))
+                        if (chest != null && chest.InAwareTimes(start, end + 2000))
                         {
-                            encounterEnd = chest.FirstAware;
+                            end = chest.FirstAware;
                             success = true;
                         }
-                        var phase = new PhaseData(encounterStart, encounterEnd, "Deimos");
-                        phases.Add(phase);
-                        encounterPhases.Add(phase);
-                        if (target.IsSpecies(TargetID.Deimos))
-                        {
-                            mainPhase.AddTarget(target, log);
-                            if (target.GetHealth(log.CombatData) > 40e6)
-                            {
-                                phase.Name += " CM";
-                            }
-                        }
-                        if (success)
-                        {
-                            phase.Name += " (Success)";
-                        }
-                        else
-                        {
-                            phase.Name += " (Failure)";
-                        }
-                        phase.AddParentPhase(mainPhase);
-                        phase.AddTarget(target, log);
-                        phase.AddTargets(demonicBonds, log, PhaseData.TargetPriority.Blocking);
-                        AddTargetsToPhase(phase, [TargetID.Thief, TargetID.Gambler, TargetID.Drunkard], log, PhaseData.TargetPriority.NonBlocking);
-                        encounterStartThreshold = encounterEnd;
+                        AddInstanceEncounterPhase(log, phases, encounterPhases, [target], demonicBonds, nonBlockingSubBosses, mainPhase, "Deimos", start, end, success, target.GetHealth(log.CombatData) > 40e6);
                     }
                 }
             }

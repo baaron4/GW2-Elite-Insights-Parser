@@ -77,19 +77,7 @@ internal class HallOfChainsInstance : HallOfChains
                         end = chest.FirstAware;
                         success = true;
                     }
-                    var phase = new PhaseData(start, end, "River of Souls");
-                    phases.Add(phase);
-                    encounterPhases.Add(phase);
-                    if (success)
-                    {
-                        phase.Name += " (Success)";
-                    }
-                    else
-                    {
-                        phase.Name += " (Failure)";
-                    }
-                    phase.AddParentPhase(mainPhase);
-                    phase.AddTarget(dummy, log);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "River of Souls", start, end, success, false);
                 }
             }
         }
@@ -118,20 +106,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Statue of Ice");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(brokenKing, log);
-                mainPhase.AddTarget(brokenKing, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success, false);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -164,20 +139,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Statue of Death");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(eaterOfSoul, log);
-                mainPhase.AddTarget(eaterOfSoul, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success, false);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -211,22 +173,7 @@ internal class HallOfChainsInstance : HallOfChains
                     success = true;
                     end = intersectTime;
                 }
-                var phase = new PhaseData(start, end, "Statue of Darkness");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(eyeOfFate, log);
-                phase.AddTarget(eyeOfJudgement, log);
-                mainPhase.AddTarget(eyeOfFate, log);
-                mainPhase.AddTarget(eyeOfJudgement, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success, false);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -255,24 +202,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Dhuum");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (dhuum.GetHealth(log.CombatData) > 35e6)
-                {
-                    phase.Name += " CM";
-                }
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(dhuum, log);
-                mainPhase.AddTarget(dhuum, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, dhuum.GetHealth(log.CombatData) > 35e6);
             }
         }
         NumericallyRenamePhases(encounterPhases);

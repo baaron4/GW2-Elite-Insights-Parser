@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
@@ -88,25 +89,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         success = true;
                     }
                     lowerThreshold = end;
-                    var phase = new PhaseData(start, end, "Conjured Amalgamate");
-                    phases.Add(phase);
-                    encounterPhases.Add(phase);
-                    if (log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end))
-                    {
-                        phase.Name += " CM";
-                    }
-                    if (success)
-                    {
-                        phase.Name += " (Success)";
-                    }
-                    else
-                    {
-                        phase.Name += " (Failure)";
-                    }
-                    phase.AddParentPhase(mainPhase);
-                    phase.AddTarget(conjuredAmalgamate, log);
-                    phase.AddTargets([leftArm, rightArm], log, PhaseData.TargetPriority.Blocking);
-                    mainPhase.AddTarget(conjuredAmalgamate, log);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end));
                 }
             }
         }
@@ -147,37 +130,21 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         end = chest.FirstAware;
                         success = true;
                     }
-                    var phase = new PhaseData(start, end, "Twin Largos");
-                    phases.Add(phase);
-                    encounterPhases.Add(phase);
-                    if (TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut))
-                    {
-                        phase.Name += " CM";
-                    }
-                    if (success)
-                    {
-                        phase.Name += " (Success)";
-                    }
-                    else
-                    {
-                        phase.Name += " (Failure)";
-                    }
-                    phase.AddParentPhase(mainPhase);
-                    phase.AddTargets([nikare, kenut], log);
-                    mainPhase.AddTargets([nikare, kenut], log);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut));
                 }
             }
         }
         NumericallyRenamePhases(encounterPhases);
     }
 
-    private static void HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private void HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {
             var chest = log.AgentData.GetGadgetsByID(ChestID.QadimsChest).FirstOrDefault();
+            var subBosses = Targets.Where(x => x.IsAnySpecies([TargetID.AncientInvokedHydra, TargetID.ApocalypseBringer, TargetID.WyvernPatriarch, TargetID.WyvernMatriarch]));
             foreach (var qadim in qadims)
             {
                 var qadimAnimatedCasts = qadim.GetAnimatedCastEvents(log, qadim.FirstAware, qadim.LastAware);
@@ -195,24 +162,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Qadim");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (qadim.GetHealth(log.CombatData) > 21e6)
-                {
-                    phase.Name += " CM";
-                }
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(qadim, log);
-                mainPhase.AddTarget(qadim, log);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, qadim.GetHealth(log.CombatData) > 21e6);
             }
         }
         NumericallyRenamePhases(encounterPhases);

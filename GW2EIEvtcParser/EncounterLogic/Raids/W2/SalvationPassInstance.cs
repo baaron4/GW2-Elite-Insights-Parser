@@ -117,19 +117,7 @@ internal class SalvationPassInstance : SalvationPass
                 success = true;
                 end = chest.FirstAware;
             }
-            var phase = new PhaseData(start, end, "Bandit Trio");
-            phases.Add(phase);
-            encounterPhases.Add(phase);
-            if (success)
-            {
-                phase.Name += " (Success)";
-            }
-            else
-            {
-                phase.Name += " (Failure)";
-            }
-            phase.AddTargets(pack, log);
-            phases[0].AddTargets(pack, log);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, false);
         }
         NumericallyRenamePhases(encounterPhases);
     }

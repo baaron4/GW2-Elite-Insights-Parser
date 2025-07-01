@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -210,6 +211,32 @@ internal static class EncounterLogicPhaseUtils
         ];
     }
 
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData parentPhase, string phaseName, long start, long end, bool success, bool cm)
+    {
+
+        var phase = new PhaseData(start, end, phaseName);
+        phases.Add(phase);
+        encounterPhases.Add(phase);
+        if (cm)
+        {
+            phase.Name += " CM";
+        }
+        if (success)
+        {
+            phase.Name += " (Success)";
+        }
+        else
+        {
+            phase.Name += " (Failure)";
+        }
+        phase.AddParentPhase(parentPhase);
+        phase.AddTargets(targets, log);
+        phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
+        phase.AddTargets(nonBlockingBosses, log, PhaseData.TargetPriority.NonBlocking);
+        parentPhase.AddTargets(targets.Where(x => !x.IsSpecies(TargetID.DummyTarget)), log);
+        return phase;
+    }
+
     internal delegate bool CMChecker(ParsedEvtcLog log, SingleActor target);
     internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, CMChecker? cmChecker = null)
     {
@@ -233,25 +260,7 @@ internal static class EncounterLogicPhaseUtils
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, phaseName);
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (cmChecker != null && cmChecker(log, target))
-                {
-                    phase.Name += " CM";
-                }
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(target, log);
-                phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
-                mainPhase.AddTarget(target, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, cmChecker != null && cmChecker(log, target));
             }
         }
         NumericallyRenamePhases(encounterPhases);
