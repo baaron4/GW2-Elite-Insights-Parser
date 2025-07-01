@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -66,7 +67,10 @@ internal class Sabir : TheKeyOfAhdashim
             TargetID.VoltaicWisp,
             TargetID.SmallKillerTornado,
             TargetID.SmallJumpyTornado,
-            TargetID.BigKillerTornado
+            TargetID.SabirMainPlateform,
+            TargetID.SabirBigRectanglePlateform,
+            TargetID.SabirRectanglePlateform,
+            TargetID.SabirSquarePlateform
         ];
     }
 
@@ -148,7 +152,12 @@ internal class Sabir : TheKeyOfAhdashim
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        return new CombatReplayMap(CombatReplaySabir,
+        string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirRectanglePlateform).Count > 0 ?
+                CombatReplayNoImage : CombatReplaySabir;
+        return new CombatReplayMap(mapUrl,
                         (1000, 910),
                         (-14122, 142, -9199, 4640)/*,
                         (-21504, -21504, 24576, 24576),
@@ -219,10 +228,56 @@ internal class Sabir : TheKeyOfAhdashim
             case (int)TargetID.ParalyzingWisp:
             case (int)TargetID.VoltaicWisp:
                 break;
+            // Placeholder decorations for plateforms
+            case (int)TargetID.SabirMainPlateform:
+                replay.Decorations.Add(new RectangleDecoration(1500, 1500, lifespan, Colors.Blue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                break;
+            case (int)TargetID.SabirSquarePlateform:
+                replay.Decorations.Add(new RectangleDecoration(450, 450, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                break;
+            case (int)TargetID.SabirRectanglePlateform:
+                replay.Decorations.Add(new RectangleDecoration(450, 750, lifespan, Colors.CobaltBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                break;
+            case (int)TargetID.SabirBigRectanglePlateform:
+                replay.Decorations.Add(new RectangleDecoration(450, 1850, lifespan, Colors.LightCobaltBlue, 0.3, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
+                break;
             default:
                 break;
 
         }
+    }
+
+    internal static void FindPlateforms(AgentData agentData)
+    {
+        // Disabled until we get nice looking assets for them
+        return;
+        foreach (var candidate in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+        {
+            switch (candidate.HitboxWidth)
+            {
+                case 2350:
+                    candidate.OverrideID(TargetID.SabirMainPlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 806:
+                    candidate.OverrideID(TargetID.SabirSquarePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 950:
+                    candidate.OverrideID(TargetID.SabirRectanglePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 1752:
+                    candidate.OverrideID(TargetID.SabirBigRectanglePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+            }
+        }
+    }
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindPlateforms(agentData);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {

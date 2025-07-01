@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -110,7 +111,7 @@ public abstract class FightLogic
 
     protected virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        return new CombatReplayMap("", (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
+        return new CombatReplayMap(CombatReplayNoImage, (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
     }
 
     public CombatReplayMap GetCombatReplayMap(ParsedEvtcLog log)

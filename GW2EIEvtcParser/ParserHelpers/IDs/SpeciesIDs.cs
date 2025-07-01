@@ -313,6 +313,10 @@ public static class SpeciesIDs
         SmallKillerTornado = 21957,
         BigKillerTornado = 21987,
         SabirPlatform = 21998,
+        SabirMainPlateform = SpeciesIDs.SabirMainPlateform,
+        SabirSquarePlateform = SpeciesIDs.SabirSquarePlateform,
+        SabirRectanglePlateform = SpeciesIDs.SabirRectanglePlateform,
+        SabirBigRectanglePlateform = SpeciesIDs.SabirBigRectanglePlateform,
         // - Peerless Qadim
         PeerlessQadim = 22000,
         PeerlessQadimPylon = 21996,
@@ -1151,6 +1155,10 @@ public static class SpeciesIDs
     private const int TitanspawnGeyserGadget = -93;
     private const int AdinasChest = -94;
     private const int SabirsChest = -95;
+    private const int SabirMainPlateform = -96;
+    private const int SabirSquarePlateform = -97;
+    private const int SabirRectanglePlateform = -98;
+    private const int SabirBigRectanglePlateform = -99;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
