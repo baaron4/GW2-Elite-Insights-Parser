@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class PeerlessQadim : TheKeyOfAhdashim
 {
-    public PeerlessQadim(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(EnergizedAffliction, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
                 new PlayerDstHitMechanic(ForceOfRetaliation, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000)
@@ -53,7 +51,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             ]),
             new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
             new PlayerDstBuffApplyMechanic(SappingSurge, new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
-        ]));
+        ]);
+    public PeerlessQadim(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "prlqadim";
         Icon = EncounterIconPeerlessQadim;
         EncounterCategoryInformation.InSubCategoryOrder = 1;

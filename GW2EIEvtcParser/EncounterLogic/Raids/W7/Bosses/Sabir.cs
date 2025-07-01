@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Sabir : TheKeyOfAhdashim
 {
-    public Sabir(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstSkillMechanic(DireDrafts, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500)
                     .UsingChecker((de, log) => de.HasDowned || de.HasKilled),
@@ -48,7 +46,10 @@ internal class Sabir : TheKeyOfAhdashim
                     new EnemyDstBuffRemoveMechanic(RepulsionField, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Rot.Breakbar Brkn", "Rotating Breakbar Broken","Rotating Breakbar Broken", 0),
                 ]),
             ]),
-        ]));
+        ]);
+    public Sabir(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         // rotating cc 56403
         Extension = "sabir";
         Icon = EncounterIconSabir;

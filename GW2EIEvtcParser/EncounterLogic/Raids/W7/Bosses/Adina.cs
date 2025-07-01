@@ -16,9 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Adina : TheKeyOfAhdashim
 {
-    public Adina(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstBuffApplyMechanic(RadiantBlindness, new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "R.Blind", "Unremovable blindness", "Radiant Blindness", 0),
             new PlayerDstBuffApplyMechanic(ErodingCurse, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "Curse", "Stacking damage debuff from Hand of Erosion", "Eroding Curse", 0),
             new PlayerDstHitMechanic(BoulderBarrage, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Red), "Boulder", "Hit by boulder thrown during pillars", "Boulder Barrage", 0),
@@ -27,7 +25,10 @@ internal class Adina : TheKeyOfAhdashim
             new PlayerDstHitMechanic(StalagmitesDetonation, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
             new PlayerDstHitMechanic(DiamondPalisadeEye, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Pink), "Eye", "Looked at Eye", "Looked at Eye", 0),
             new PlayerDstSkillMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
-        ]));
+        ]);
+    public Adina(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "adina";
         Icon = EncounterIconAdina;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
