@@ -20,9 +20,8 @@ internal class DecimaTheStormsinger : MountBalrior
     private readonly bool isCM = false;
 
     private SingleActor Decima => Targets.FirstOrDefault(x => isCM ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
-    public DecimaTheStormsinger(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic([ChorusOfThunderDamage, ChorusOfThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.DecimaChorusOfThunderAoE, new MechanicPlotlySetting(Symbols.Circle, Colors.LightGrey), "ChorThun.T", "Targeted by Chorus of Thunder (Spreads)", "Chorus of Thunder Target", 0),
@@ -129,7 +128,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 .UsingAchievementEligibility(),
             new EnemyDstBuffApplyMechanic(ChargeDecima, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
-        ]));
+        ]);
+
+    public DecimaTheStormsinger(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "decima";
         Icon = EncounterIconDecima;
         EncounterCategoryInformation.InSubCategoryOrder = 1;

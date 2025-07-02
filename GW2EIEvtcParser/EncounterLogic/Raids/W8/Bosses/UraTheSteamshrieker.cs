@@ -18,9 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class UraTheSteamshrieker : MountBalrior
 {
-    public UraTheSteamshrieker(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             // Sulfuric Geysers
             new MechanicGroup([
                 new PlayerDstHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),
@@ -86,8 +84,10 @@ internal class UraTheSteamshrieker : MountBalrior
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
             new EnemyDstBuffApplyMechanic(RisingPressure, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "Rising Pressure", "Applied Rising Pressure", "Rising Pressure", 0),
             new EnemyDstBuffApplyMechanic(TitanicResistance, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "Titanic Resistance", "Applied Titanic Resistance", "Titanic Resistance", 0),
-        ])
-        );
+        ]);
+    public UraTheSteamshrieker(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "ura";
         Icon = EncounterIconUra;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
