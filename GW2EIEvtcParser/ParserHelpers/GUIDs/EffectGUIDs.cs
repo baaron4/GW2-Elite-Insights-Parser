@@ -672,6 +672,10 @@ public static class EffectGUIDs
     public static readonly GUID QadimInfernoAoEs = new("37DF91103EC45240AA7910575F1FC55F"); // On non static platform - 3000 duration - 150 radius
     public static readonly GUID QadimJumpingBlueOrbs = new("9FE9CEE3B3B1A743B769D16B196AD45D");
     public static readonly GUID QadimPlatformStartsOrEndsMoving = new("98891680AFB80A4E9CAFCCBD1662DF88");
+    // Adina
+    public static readonly GUID AdinaSelectedForPillar = new("591BDFC7F39F7949B1BE60267D3CF437"); // 6000 ms duration
+    public static readonly GUID AdinaPillarDropLocationWarning = new("160CBAE34F4A2941885EB3F3CD6BB0C3"); // 6000ms duration but drops happen after 2000ms
+    public static readonly GUID AdinaPillarShockwave = new("758F59A7C564EE499F0536D73EC9C9A0"); // 1333 duration
     // Sabir
     public static readonly GUID SabirFlashDischarge = new("40818C8E9CC6EF4388C2821FCC26A9EC");
     // Qadim the Peerless
