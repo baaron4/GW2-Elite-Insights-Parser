@@ -211,13 +211,17 @@ internal static class EncounterLogicPhaseUtils
         ];
     }
 
-    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData parentPhase, string phaseName, long start, long end, bool success, bool cm)
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData parentPhase, string phaseName, long start, long end, bool success, bool cm, bool lcm = false)
     {
 
         var phase = new PhaseData(start, end, phaseName);
         phases.Add(phase);
         encounterPhases.Add(phase);
-        if (cm)
+        if (lcm)
+        {
+            phase.Name += " LCM";
+        } 
+        else if (cm)
         {
             phase.Name += " CM";
         }

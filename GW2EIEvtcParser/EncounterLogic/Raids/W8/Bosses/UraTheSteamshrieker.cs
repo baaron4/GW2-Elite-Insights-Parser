@@ -152,12 +152,12 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             var deterrences = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Deterrence);
             var activeDeterrences = new Dictionary<ulong, long>();
-            foreach ( var deterrence in deterrences)
+            foreach (var deterrence in deterrences)
             {
                 if (deterrence.IsBuffApply())
                 {
                     activeDeterrences[deterrence.DstAgent] = deterrence.Time;
-                } 
+                }
                 else
                 {
                     activeDeterrences.Remove(deterrence.SrcAgent);
@@ -176,7 +176,7 @@ internal class UraTheSteamshrieker : MountBalrior
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindGeysers(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
     {
         // titanspawn geysers
         var titanGeyserMarkerGUID = combatData
@@ -240,6 +240,10 @@ internal class UraTheSteamshrieker : MountBalrior
             remainingGeyser.OverrideID(TargetID.ToxicGeyser, agentData);
             remainingGeyser.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
+    }
+
+    internal static void FindBloodstoneShards(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
+    {
         // Bloodstone shards
         var bloodstoneShardMarkerGUID = combatData
             .Where(x => x.IsStateChange == StateChange.IDToGUID &&
@@ -260,8 +264,11 @@ internal class UraTheSteamshrieker : MountBalrior
                 toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+    }
+
+    internal static void RenameFumarollers(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
             switch (target.ID)
             {
@@ -278,6 +285,14 @@ internal class UraTheSteamshrieker : MountBalrior
                     break;
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindGeysers(evtcVersion, agentData, combatData);
+        FindBloodstoneShards(evtcVersion, agentData, combatData);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameFumarollers(Targets);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -442,39 +457,36 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 break;
             case (int)TargetID.ToxicGeyser:
-                if (log.FightData.IsCM || log.FightData.IsLegendaryCM)
+                // Damage field ring
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraToxicGeyserGrowing, out var effects))
                 {
-                    // Damage field ring
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.UraToxicGeyserGrowing, out var effects))
+                    uint initialRadius = 480;
+                    uint radiusIncrease = 12; // Aprox
+                    uint counter = 0;
+
+                    // Find the first effect appearing after the breakbar has started to recover.
+                    var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                    List<long> resetTimes = [];
+                    foreach (var segment in breakbarRecoverings)
                     {
-                        uint initialRadius = 480;
-                        uint radiusIncrease = 12; // Aprox
-                        uint counter = 0;
-
-                        // Find the first effect appearing after the breakbar has started to recover.
-                        var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
-                        List<long> resetTimes = [];
-                        foreach (var segment in breakbarRecoverings)
+                        var effect = effects.FirstOrDefault(x => x.Time > segment.Start);
+                        if (effect != null)
                         {
-                            var effect = effects.FirstOrDefault(x => x.Time > segment.Start);
-                            if (effect != null)
-                            {
-                                resetTimes.Add(effect.Time);
-                            }
+                            resetTimes.Add(effect.Time);
                         }
+                    }
 
-                        foreach (var effect in effects)
+                    foreach (var effect in effects)
+                    {
+                        // If the breakbar has been broken, reset the effect radius.
+                        if (resetTimes.Contains(effect.Time))
                         {
-                            // If the breakbar has been broken, reset the effect radius.
-                            if (resetTimes.Contains(effect.Time))
-                            {
-                                counter = 0;
-                            }
-                            lifespan = effect.ComputeDynamicLifespan(log, 1200);
-                            uint radius = initialRadius + (radiusIncrease * counter);
-                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
-                            counter++;
+                            counter = 0;
                         }
+                        lifespan = effect.ComputeDynamicLifespan(log, 1200);
+                        uint radius = initialRadius + (radiusIncrease * counter);
+                        replay.Decorations.Add(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
+                        counter++;
                     }
 
                     // Hardened Crust - Overhead
@@ -487,7 +499,6 @@ internal class UraTheSteamshrieker : MountBalrior
                 }
                 else
                 {
-                    // Damage field ring
                     replay.Decorations.Add(new CircleDecoration(480, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 }
                 break;
