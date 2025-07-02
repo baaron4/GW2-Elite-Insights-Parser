@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class DecimaTheStormsinger : MountBalrior
 {
-    private readonly bool isCM = false;
+    private bool isCM => GenericTriggerID == (int)TargetID.DecimaCM;
 
     private SingleActor Decima => Targets.FirstOrDefault(x => isCM ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
 
@@ -137,7 +137,6 @@ internal class DecimaTheStormsinger : MountBalrior
         Icon = EncounterIconDecima;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
-        isCM = triggerID == (int)TargetID.DecimaCM;
     }
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
@@ -210,39 +209,28 @@ internal class DecimaTheStormsinger : MountBalrior
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindConduits(AgentData agentData, List<CombatItem> combatData)
     {
-        var conduitsGadgets = combatData
+        var maxHPEventsAgents = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
+        var conduitsGadgets = maxHPEventsAgents
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 200)
             .Distinct();
-        var effects = isCM ? combatData.Where(x => x.IsEffect) : [];
+        var effects = combatData.Where(x => x.IsEffect && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM));
         foreach (var conduitGadget in conduitsGadgets)
         {
-            if (isCM)
+            conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
+            conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            var effectByConduitOnGadget = effects
+                .Where(x => x.DstMatchesAgent(conduitGadget)).FirstOrDefault();
+            if (effectByConduitOnGadget != null)
             {
-                var effectByConduitOnGadget = effects
-                    .Where(x => x.DstMatchesAgent(conduitGadget)
-                                && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.EnlightenedConduitCM)
-                    ).FirstOrDefault();
-                if (effectByConduitOnGadget != null)
-                {
-                    conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
-                    conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
-                }
-            } 
-            else
-            {
-                conduitGadget.OverrideID(TargetID.EnlightenedConduitGadget, agentData);
-                conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+                conduitGadget.SetMaster(agentData.GetAgent(effectByConduitOnGadget.SrcAgent, effectByConduitOnGadget.Time));
             }
         }
-        var bigConduitsGadgets = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 15276)
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget )
+        var bigConduitsGadgets = maxHPEventsAgents
+            .Where(x => x.Type == AgentItem.AgentType.Gadget)
             .Distinct();
 
         foreach (var conduitGadget in conduitsGadgets)
@@ -250,6 +238,11 @@ internal class DecimaTheStormsinger : MountBalrior
             conduitGadget.OverrideID(TargetID.BigEnlightenedConduitGadget, agentData);
             conduitGadget.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindConduits(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
@@ -365,8 +358,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                long buffID = isCM ? ThrummingPresenceBuffCM : ThrummingPresenceBuff;
-                var thrummingSegments = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var thrummingSegments = target.GetBuffStatus(log, ThrummingPresenceBuffCM, log.FightData.FightStart, log.FightData.FightEnd)
+                    .Where(x => x.Value > 0)
+                    .Concat(target.GetBuffStatus(log, ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd)
+                        .Where(x => x.Value > 0)
+                    );
                 foreach (var segment in thrummingSegments)
                 {
                     replay.Decorations.Add(new CircleDecoration(700, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
@@ -491,8 +487,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Aftershock - Moving AoEs - 4 Cascades
-                GUID guid = isCM ? EffectGUIDs.DecimaAftershockAoECM : EffectGUIDs.DecimaAftershockAoE;
-                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, guid, out var aftershock, 12000))
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.DecimaAftershockAoECM, EffectGUIDs.DecimaAftershockAoE], out var aftershock, 12000))
                 {
                     // All the AoEs take roughly 11-12 seconds to appear
                     // There are 10 AoEs of radius 200, then 10 of 240, 10 of 280 and 10 of 320. When they bounce back to Decima they restart at 200 radius.
@@ -591,94 +586,60 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TargetID.EnlightenedConduit:
+                AddThunderAoE(target, log, replay);
+                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuffCM, DecimaConduitWallBuff);
+                    break;
             case (int)TargetID.EnlightenedConduitCM:
-                // Chorus of Thunder / Discordant Thunder - Orange AoE
-                if (!isCM)
-                {
-                    AddThunderAoE(target, log, replay);
-                }
-
-                // Focused Fluxlance - Green Arrow from Decima to the Conduit
-                var greenArrow = GetFilteredList(log.CombatData, isCM ? FluxlanceTargetBuffCM1 : FluxlanceTargetBuff1, target, true, true).Where(x => x is BuffApplyEvent);
-                foreach (var apply in greenArrow)
-                {
-                    replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
-                    replay.Decorations.Add(new LineDecoration((apply.Time + 5500, apply.Time + 6500), Colors.DarkGreen, 0.5, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
-                }
-
-                // Warning indicator of walls spawning between Conduits.
-                var wallsWarnings = GetFilteredList(log.CombatData, isCM ? DecimaConduitWallWarningBuffCM : DecimaConduitWallWarningBuff, target, true, true);
-                replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
-
-                // Walls connecting Conduits to each other.
-                var walls = GetFilteredList(log.CombatData, isCM ? DecimaConduitWallBuffCM: DecimaConduitWallBuff, target, true, true);
-                replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
+                AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuffCM1, DecimaConduitWallWarningBuff, DecimaConduitWallBuffCM);
                 break;
             case (int)TargetID.EnlightenedConduitGadget:
-                if (isCM && target.AgentItem.Master == null)
+                var gadgetConnectorAgent = target.AgentItem.GetFinalMaster();
+                var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
+                List<long> chargeTierBuffs = [EnlightenedConduitGadgetChargeTier1Buff, EnlightenedConduitGadgetChargeTier2Buff, EnlightenedConduitGadgetChargeTier3Buff];
+                List<uint> chargeRadius = [100, 200, 400];
+                List<string> chargeIcons = [ParserIcons.TargetOrder1Overhead, ParserIcons.TargetOrder2Overhead, ParserIcons.TargetOrder3Overhead];
+                if (target.AgentItem.Master != null)
                 {
-                    break;
-                }
-                var gadgetConnectorAgent = (isCM ? target.AgentItem.Master : target.AgentItem)!;
-
-                // Chorus of Thunder / Discordant Thunder - Orange AoE
-                if (isCM)
-                {
+                    chargeTierBuffs = [EnlightenedConduitGadgetChargeTier1BuffCM, EnlightenedConduitGadgetChargeTier2BuffCM, EnlightenedConduitGadgetChargeTier3BuffCM];
+                    // Chorus of Thunder / Discordant Thunder - Orange AoE
                     AddThunderAoE(target, log, replay);
                 }
-
-                // Fulgent Aura - Tier 1 Charge
-                var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
-                var tier1 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier1BuffCM : EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
-                foreach (var segment in tier1.Where(x => x.Value > 0))
+                // Fulgent Aura - Tier Charges
+                for (int i = 0; i <  chargeTierBuffs.Count; i++)
                 {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder1Overhead);
-                }
-
-                // Fulgent Aura - Tier 2 Charge
-                var tier2 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier2BuffCM : EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
-                foreach (var segment in tier2.Where(x => x.Value > 0))
-                {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder2Overhead);
-                }
-
-                // Fulgent Aura - Tier 3 Charge
-                var tier3 = target.GetBuffStatus(log, isCM ? EnlightenedConduitGadgetChargeTier3BuffCM : EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
-                foreach (var segment in tier3.Where(x => x.Value > 0))
-                {
-                    replay.Decorations.AddWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
-                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, ParserIcons.TargetOrder3Overhead);
+                    var tier = target.GetBuffStatus(log, chargeTierBuffs[i], log.FightData.FightStart, log.FightData.FightEnd);
+                    foreach (var segment in tier.Where(x => x.Value > 0))
+                    {
+                        replay.Decorations.AddWithBorder(new CircleDecoration(chargeRadius[i], segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
+                        replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, chargeIcons[i]);
+                    }
                 }
                 break;
             case (int)TargetID.DecimaBeamStart:
-            case (int)TargetID.DecimaBeamStartCM:
                 const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
-                if (isCM)
-                {
-                    var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
-                    AddBeamWarning(log, target, replay, DecimaBeamLoadingCM1, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                    AddBeamWarning(log, target, replay, DecimaBeamLoadingCM2, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                    AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
+                var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
+                AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
 
-                    var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
-                    AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM1, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                    AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM2, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                    AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
-                } 
-                else
-                {
-                    var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
-                    AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                    AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
+                var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
+                AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
+                AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
+                break;
+            case (int)TargetID.DecimaBeamStartCM:
+                const uint beamLengthCM = 3900;
+                const uint orangeBeamWidthCM = 80;
+                const uint redBeamWidthCM = 160;
+                var orangeBeamsCM = GetFilteredList(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
+                AddBeamWarning(log, target, replay, DecimaBeamLoadingCM1, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                AddBeamWarning(log, target, replay, DecimaBeamLoadingCM2, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                AddBeam(log, replay, orangeBeamWidthCM, orangeBeamsCM, Colors.LightOrange);
 
-                    var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
-                    AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                    AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
-                }
+                var redBeamsCM = GetFilteredList(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
+                AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM1, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
+                AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM2, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
+                AddBeam(log, replay, redBeamWidthCM, redBeamsCM, Colors.Red);
                 break;
             case (int)TargetID.TranscendentBoulder:
                 foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
@@ -745,6 +706,26 @@ internal class DecimaTheStormsinger : MountBalrior
             default:
                 break;
         }
+    }
+
+    private static void AddEnlightenedConduitDecorations(ParsedEvtcLog log, SingleActor target, CombatReplay replay, long fluxLanceTargetBuffID, long wallWarningBuffID, long wallBuffID)
+    {
+
+        // Focused Fluxlance - Green Arrow from Decima to the Conduit
+        var greenArrow = GetFilteredList(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
+        foreach (var apply in greenArrow)
+        {
+            replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
+            replay.Decorations.Add(new LineDecoration((apply.Time + 5500, apply.Time + 6500), Colors.DarkGreen, 0.5, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
+        }
+
+        // Warning indicator of walls spawning between Conduits.
+        var wallsWarnings = GetFilteredList(log.CombatData, wallWarningBuffID, target, true, true);
+        replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
+
+        // Walls connecting Conduits to each other.
+        var walls = GetFilteredList(log.CombatData, wallBuffID, target, true, true);
+        replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
     }
 
     private static void AddBeam(ParsedEvtcLog log, CombatReplay replay, uint beamWidth, IEnumerable<BuffEvent> beams, Color color)
@@ -833,7 +814,7 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
-            AgentItem dst = (log.FightData.IsCM && !actor.AgentItem.IsPlayer ? actor.AgentItem.Master : actor.AgentItem)!;
+            AgentItem dst = (actor.AgentItem.Master != null ? actor.AgentItem.Master : actor.AgentItem);
             foreach (var effect in thunders)
             {
                 long duration = 5000;
