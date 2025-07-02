@@ -133,18 +133,21 @@ internal class GreerTheBlightbringer : MountBalrior
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RenameProtoGreerlings(IReadOnlyList<SingleActor> targets)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Enumerating Proto-Greerlings
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.ProtoGreerling))
             {
                 target.OverrideName("Champion " + target.Character);
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameProtoGreerlings(Targets);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
