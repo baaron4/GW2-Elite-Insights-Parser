@@ -231,14 +231,7 @@ internal class Sabir : TheKeyOfAhdashim
             // Placeholder decorations for plateforms
             case (int)TargetID.SabirMainPlateform:
                 var mainPlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
-                var mainPlateformDecoration = new BackgroundIconDecoration(
-                    ParserIcons.SabirMainPlatform, 0, 1660,
-                    mainPlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
-                    (target.FirstAware, target.LastAware),
-                    new AgentConnector(target)
-                );
-                RotationConnector mainPlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-                replay.Decorations.Add(mainPlateformDecoration.UsingRotationConnector(mainPlatformRotationConnector));
+                AddPlateformDecoration(target, replay, ParserIcons.SabirMainPlatform, 1660, mainPlateformOpacities);
                 break;
             case (int)TargetID.SabirSquarePlateform:
                 AddSmallPlateformDecoration(target, replay, ParserIcons.SabirSquarePlateform, 580);
@@ -255,17 +248,22 @@ internal class Sabir : TheKeyOfAhdashim
         }
     }
 
-    private static void AddSmallPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height)
+    private static void AddPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height, IReadOnlyList<ParametricPoint1D> opacities)
     {
-        var smallPlateformOpacities = new List<ParametricPoint1D> { new(1, plateform.FirstAware) };
-        var smallPlateformDecoration = new BackgroundIconDecoration(
+        var plateformDecoration = new BackgroundIconDecoration(
             imageUrl, 0, height,
-            smallPlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+            opacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
             (plateform.FirstAware, plateform.LastAware),
             new AgentConnector(plateform)
         );
-        RotationConnector smallPlatformRotationConnector = new AgentFacingConnector(plateform, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-        replay.Decorations.Add(smallPlateformDecoration.UsingRotationConnector(smallPlatformRotationConnector));
+        RotationConnector plateformRotationConnector = new AgentFacingConnector(plateform, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+        replay.Decorations.Add(plateformDecoration.UsingRotationConnector(plateformRotationConnector));
+    }
+
+    private static void AddSmallPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height)
+    {
+        var smallPlateformOpacities = new List<ParametricPoint1D> { new(1, plateform.FirstAware) };
+        AddPlateformDecoration(plateform, replay, imageUrl, height, smallPlateformOpacities);
     }
 
     internal static void FindPlateforms(AgentData agentData)
