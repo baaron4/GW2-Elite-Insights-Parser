@@ -27,7 +27,7 @@ public class EvtcParser
     private List<Player> _playerList;
     private byte _revision;
     private ushort _id;
-    private long _logStartTime;
+    private long _logStartOffset;
     private long _logEndTime;
     private EvtcVersionEvent _evtcVersion;
     private ulong _gw2Build;
@@ -42,7 +42,7 @@ public class EvtcParser
         _allAgentsList = [];
         _combatItems = [];
         _playerList = [];
-        _logStartTime = 0;
+        _logStartOffset = long.MinValue;
         _logEndTime = 0;
         _enabledExtensions = [];
     }
@@ -598,10 +598,11 @@ public class EvtcParser
             
             if (combatItem.HasTime())
             {
-                if (_logStartTime == 0)
+                if (_logStartOffset == long.MinValue)
                 {
-                    _logStartTime = combatItem.Time;
+                    _logStartOffset = combatItem.Time;
                 }
+                combatItem.OverrideTime(combatItem.Time - _logStartOffset);
                 _logEndTime = combatItem.Time;
             }
 
@@ -622,12 +623,12 @@ public class EvtcParser
         {
             throw new EvtcCombatEventException("No combat events found");
         }
-        if (_logEndTime - _logStartTime < _parserSettings.TooShortLimit)
+        if (_logEndTime < _parserSettings.TooShortLimit)
         {
-            throw new TooShortException(_logEndTime - _logStartTime, _parserSettings.TooShortLimit);
+            throw new TooShortException(_logEndTime, _parserSettings.TooShortLimit);
         }
         // 24 hours
-        if (_logEndTime - _logStartTime > 86400000)
+        if (_logEndTime > 86400000)
         {
             throw new TooLongException();
         }
@@ -696,7 +697,7 @@ public class EvtcParser
             }
         }
 
-        if (ag.FirstAware == 0)
+        if (ag.LastAware == long.MaxValue)
         {
             ag.OverrideAwareTimes(logTime, logTime);
         }
@@ -737,7 +738,7 @@ public class EvtcParser
         IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem playerAgent in playerAgentList)
         {
-            if (playerAgent.InstID == 0 || playerAgent.FirstAware == 0 || playerAgent.LastAware == long.MaxValue)
+            if (playerAgent.InstID == 0 || playerAgent.LastAware == long.MaxValue)
             {
                 operation.UpdateProgressWithCancellationCheck("Parsing: Skipping invalid player");
                 continue;
@@ -967,10 +968,10 @@ public class EvtcParser
             _combatItems.RemoveAll(invalidCombatItems.Contains);
 #endif
         }
-        _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
+        _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
-        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
+        _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
@@ -1016,7 +1017,7 @@ public class EvtcParser
             }
         }
 
-        _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartTime, _logEndTime, _evtcVersion);
+        _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating players");
         CompletePlayers(operation);
@@ -1028,6 +1029,10 @@ public class EvtcParser
     private void OffsetEvtcData()
     {
         long offset = _fightData.Logic.GetFightOffset(_evtcVersion, _fightData, _agentData, _combatItems);
+        if (offset == 0)
+        {
+            return;
+        }
         // apply offset to everything
         foreach (CombatItem c in _combatItems)
         {
@@ -1054,6 +1059,8 @@ public class EvtcParser
     private void PreProcessEvtcData(ParserController operation)
     {
         using var _t = new AutoTrace("Prepare Data for output");
+        operation.UpdateProgressWithCancellationCheck("Parsing: Identifying critical gadgets");
+        _fightData.Logic.HandleCriticalGadgets(_evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
         operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
         OffsetEvtcData();
         operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");

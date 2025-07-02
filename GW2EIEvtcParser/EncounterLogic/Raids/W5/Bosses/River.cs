@@ -15,10 +15,8 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class River : HallOfChains
 {
-    public River(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
-        
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
+
             new PlayerDstHitMechanic(BombShellRiverOfSouls, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb Hit","Hit by Hollowed Bomber Exlosion", "Hit by Bomb", 0 ),
             new PlayerDstHitMechanic(SoullessTorrent, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Stun Bomb", "Stunned by Soulless Torrent (Mini Bomb)", "Stun Bomb", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
@@ -26,8 +24,10 @@ internal class River : HallOfChains
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
             new EnemySrcHitMechanic(EnervatorDamageSkillToDesmina, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.GreenishYellow), "Tether Desmina", "Enervator tethers and damages Desmina", "Enervator Tether", 0)
                 .UsingChecker((de, log) => de.To.IsSpecies(TargetID.Desmina)),
-        ])
-        );
+        ]);
+    public River(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         ChestID = ChestID.ChestOfSouls;
         Extension = "river";
         Targetless = true;
@@ -105,7 +105,6 @@ internal class River : HallOfChains
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, ChestOfSoulsPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
         foreach (var desmina in agentData.GetNPCsByID(TargetID.Desmina))
         {

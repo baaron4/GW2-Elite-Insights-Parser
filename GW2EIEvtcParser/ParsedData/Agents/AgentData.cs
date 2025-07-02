@@ -167,9 +167,9 @@ public class AgentData
     }
 
 
-    public AgentItem? GetAgentByUniqueID(long uniqueID)
+    public AgentItem GetAgentByUniqueID(long uniqueID)
     {
-        return _allAgentsList.FirstOrDefault(x => x.UniqueID == uniqueID);
+        return _allAgentsList.FirstOrDefault(x => x.UniqueID == uniqueID) ?? ParserHelper._unknownAgent;
     }
 
     public AgentItem GetAgentByInstID(ushort instid, long time)

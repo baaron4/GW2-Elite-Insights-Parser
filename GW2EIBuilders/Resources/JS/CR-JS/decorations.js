@@ -1255,7 +1255,9 @@ class IconMechanicDrawable extends MechanicDrawable {
             ctx.rotate(-ToRadians(rot + this.rotationOffset));
         }
         const size = this.getSize();   
-        ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
+        const aspectRatio = this.image.width/this.image.height;
+        const sizeW = size * aspectRatio;
+        ctx.drawImage(this.image, - sizeW / 2, - size / 2, sizeW, size);
         ctx.restore();
     }
 }

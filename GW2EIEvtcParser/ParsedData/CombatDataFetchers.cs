@@ -683,9 +683,26 @@ partial class CombatData
     /// </summary>
     /// <param name="epsilon">Windows size</param>
     /// <returns>true on success</returns>
-    public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
+    public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, GUID guid, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
-        if (!TryGetEffectEventsBySrcWithGUID(agent, effect, out var effects))
+        if (!TryGetEffectEventsBySrcWithGUID(agent, guid, out var effects))
+        {
+            groupedEffectEvents = null;
+            return false;
+        }
+        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+
+        return true;
+    }
+    /// <summary>
+    /// Returns effect events by the given agent and effect GUIDs.
+    /// Effects happening within epsilon milliseconds are grouped together.
+    /// </summary>
+    /// <param name="epsilon">Windows size</param>
+    /// <returns>true on success</returns>
+    public bool TryGetGroupedEffectEventsBySrcWithGUIDs(AgentItem agent, Span<GUID> guids, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
+    {
+        if (!TryGetEffectEventsBySrcWithGUIDs(agent, guids, out var effects))
         {
             groupedEffectEvents = null;
             return false;
@@ -703,6 +720,24 @@ partial class CombatData
     public bool TryGetGroupedEffectEventsByGUID(GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
         if (!TryGetEffectEventsByGUID(effect, out var effects))
+        {
+            groupedEffectEvents = null;
+            return false;
+        }
+
+        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
+
+        return true;
+    }
+    /// <summary>
+    /// Returns effect events for the given effect GUIDs.
+    /// Effects happening within epsilon milliseconds are grouped together.
+    /// </summary>
+    /// <param name="epsilon">Window size</param>
+    /// <returns>true on success</returns>
+    public bool TryGetGroupedEffectEventsByGUIDs(Span<GUID> guids, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
+    {
+        if (!TryGetEffectEventsByGUIDs(guids, out var effects))
         {
             groupedEffectEvents = null;
             return false;

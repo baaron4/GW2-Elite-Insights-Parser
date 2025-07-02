@@ -16,15 +16,13 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
-    private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores]; // Legacy, no longer reflectable.
+    private static readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores]; // Legacy, no longer reflectable.
     private static readonly long[] Boons =
     [
         Aegis, Alacrity, Fury, Might, Protection, Quickness, Regeneration, Resistance, Resolution, Stability, Swiftness, Vigor
     ];
 
-    public GreerTheBlightbringer(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerSrcHitMechanic(ReflectableProjectiles, new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0)
                     .UsingChecker((hde, log) => hde.To.IsSpecies(TargetID.Greer)).WithBuilds(GW2Builds.November2024MountBalriorRelease, GW2Builds.December2024MountBalriorNerfs),
@@ -74,9 +72,14 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstBuffRemoveMechanic(Boons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "BoonCorrupt", "Boons corrupted (any)", "Boons Corrupted", 100)
                 .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg, (int)TargetID.Ereg])),
             new EnemyDstBuffApplyMechanic(EmpoweredGreer, new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", 0),
-        ]));
+        ]);
+
+    public GreerTheBlightbringer(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "greer";
         Icon = EncounterIconGreer;
+        ChestID = ChestID.GreersChest;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }
@@ -130,18 +133,21 @@ internal class GreerTheBlightbringer : MountBalrior
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RenameProtoGreerlings(IReadOnlyList<SingleActor> targets)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Enumerating Proto-Greerlings
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.ProtoGreerling))
             {
                 target.OverrideName("Champion " + target.Character);
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenameProtoGreerlings(Targets);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

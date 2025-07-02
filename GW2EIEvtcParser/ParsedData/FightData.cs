@@ -72,11 +72,12 @@ public class FightData
     public InstancePrivacyMode InstancePrivacy {  get; private set; } = InstancePrivacyMode.NotApplicable;
 
     // Constructors
-    internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)
+    internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long offset, long end, EvtcVersionEvent evtcVersion)
     {
-        LogStart = start;
+        LogStart = 0;
         LogEnd = end;
-        FightEnd = end - start;
+        FightEnd = LogEnd;
+        LogOffset = offset;
         EvtcRecordingDuration = ParserHelper.ToDurationString(FightEnd);
 
         Logic = DetectFight(id, agentData, parserSettings, evtcVersion);
@@ -386,8 +387,8 @@ public class FightData
 
     internal void ApplyOffset(long offset)
     {
-        LogOffset = offset;
-        FightEnd += LogStart - offset;
+        LogOffset += offset;
+        FightEnd -= offset;
         LogStart -= offset;
         LogEnd -= offset;
     }

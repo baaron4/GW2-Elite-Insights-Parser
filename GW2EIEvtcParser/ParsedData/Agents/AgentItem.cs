@@ -54,8 +54,8 @@ public class AgentItem
     public readonly ushort Healing;
     public readonly ushort Condition;
     public readonly ushort Concentration;
-    public readonly uint HitboxWidth;
-    public readonly uint HitboxHeight;
+    public uint HitboxWidth { get; private set; }
+    public uint HitboxHeight { get; private set; }
 
     private readonly bool Unamed;
 
@@ -149,6 +149,12 @@ public class AgentItem
     {
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
         Type = type;
+    }
+
+    internal void OverrideHitbox(uint hitboxWidth, uint hitboxHeight)
+    {
+        HitboxWidth = hitboxWidth;
+        HitboxHeight = hitboxHeight;
     }
 
     internal void OverrideName(string name)

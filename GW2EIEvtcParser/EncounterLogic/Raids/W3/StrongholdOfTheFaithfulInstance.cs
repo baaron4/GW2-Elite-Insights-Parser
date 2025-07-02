@@ -64,24 +64,11 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = chest!.FirstAware;
                     success = true;
                 }
-                var phase = new PhaseData(start, end, "Siege the Stronghold");
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                phase.AddParentPhase(mainPhase);
-                phase.AddTargets(mcLeods, log);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, false);
                 if (phase.Targets.Count == 0)
                 {
                     phase.AddTarget(dummy, log);
                 }
-                phase.AddTargets(subMcLeods, log, PhaseData.TargetPriority.Blocking);
             }
         }
         mainPhase.AddTargets(mcLeods, log);
@@ -94,6 +81,10 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues))
         {
             var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Twisted Castle");
+            if (dummy == null)
+            {
+                return;
+            }
             var mainPhase = phases[0];
             var packedStatus = new List<List<SingleActor>>();
             var currentPack = new List<SingleActor>();
@@ -139,25 +130,18 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     success = true;
                     end = reward.Time;
                 }
-                var phase = new PhaseData(start, end, "Twisted Castle");
-                phases.Add(phase);
-                encounterPhases.Add(phase);
-                if (success)
-                {
-                    phase.Name += " (Success)";
-                }
-                else
-                {
-                    phase.Name += " (Failure)";
-                }
-                phase.AddParentPhase(mainPhase);
-                phase.AddTarget(dummy, log);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success, false);
             }
         }
         NumericallyRenamePhases(encounterPhases);
     }
     private static void HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
+        var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event");
+        if (dummy == null)
+        {
+            return;
+        }
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         var fakeXeras = log.AgentData.GetNPCsByID(TargetID.FakeXera);
@@ -211,27 +195,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = log.FightData.FightEnd;
                 }
             }
-            var phase = new PhaseData(start, end, "Xera");
-            phases.Add(phase);
-            if (success)
-            {
-                phase.Name += " (Success)";
-            }
-            else
-            {
-                phase.Name += " (Failure)";
-            }
-            phase.AddParentPhase(mainPhase);
-            if (xera != null)
-            {
-                var xeraActor = log.FindActor(xera);
-                phase.AddTarget(xeraActor, log);
-                mainPhase.AddTarget(xeraActor, log);
-            } 
-            else
-            {
-                phase.AddTarget(targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event"), log);
-            }
+            AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success, false);
         }
         NumericallyRenamePhases(encounterPhases);
     }

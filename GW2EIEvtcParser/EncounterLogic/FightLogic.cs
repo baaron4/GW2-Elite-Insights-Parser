@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -110,7 +111,7 @@ public abstract class FightLogic
 
     protected virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        return new CombatReplayMap("", (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
+        return new CombatReplayMap(CombatReplayNoImage, (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
     }
 
     public CombatReplayMap GetCombatReplayMap(ParsedEvtcLog log)
@@ -262,7 +263,7 @@ public abstract class FightLogic
         _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(trashIDs)).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2
-        var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID) && !x.GetFinalMaster().IsPlayer).ToList();
+        var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTargetID(x.ID)) && !targetIDs.Contains(GetTargetID(x.ID)) && !x.GetFinalMaster().IsPlayer).ToList();
         unknownAList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.LastAware - x.FirstAware > 1000 && !x.GetFinalMaster().IsPlayer));
         foreach (AgentItem a in unknownAList)
         {
@@ -532,6 +533,14 @@ public abstract class FightLogic
         {
             SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
         }
+    }
+
+    /// <summary>
+    /// To be used in situations where the encounter has been triggered by a gadget and its stabilisation is necessary ASAP
+    /// </summary>
+    internal virtual void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+
     }
 
     internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
