@@ -241,42 +241,31 @@ internal class Sabir : TheKeyOfAhdashim
                 replay.Decorations.Add(mainPlateformDecoration.UsingRotationConnector(mainPlatformRotationConnector));
                 break;
             case (int)TargetID.SabirSquarePlateform:
-                var squarePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
-                var squarePlateformDecoration = new BackgroundIconDecoration(
-                    ParserIcons.SabirSquarePlatform, 0, 580,
-                    squarePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
-                    (target.FirstAware, target.LastAware),
-                    new AgentConnector(target)
-                );
-                RotationConnector squarePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-                replay.Decorations.Add(squarePlateformDecoration.UsingRotationConnector(squarePlatformRotationConnector));
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirSquarePlateform, 580);
                 break;
             case (int)TargetID.SabirRectanglePlateform:
-                var rectanglePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
-                var rectanglePlateformDecoration = new BackgroundIconDecoration(
-                    ParserIcons.SabirRectanglePlatform, 0, 800,
-                    rectanglePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
-                    (target.FirstAware, target.LastAware),
-                    new AgentConnector(target)
-                );
-                RotationConnector rectanglePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-                replay.Decorations.Add(rectanglePlateformDecoration.UsingRotationConnector(rectanglePlatformRotationConnector));
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirRectanglePlateform, 800);
                 break;
             case (int)TargetID.SabirBigRectanglePlateform:
-                var bigRectanglePlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
-                var bigRectanglePlateformDecoration = new BackgroundIconDecoration(
-                    ParserIcons.SabirBigRectanglePlatform, 0, 1640,
-                    bigRectanglePlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
-                    (target.FirstAware, target.LastAware),
-                    new AgentConnector(target)
-                );
-                RotationConnector bigRectanglePlatformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
-                replay.Decorations.Add(bigRectanglePlateformDecoration.UsingRotationConnector(bigRectanglePlatformRotationConnector));
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirBigRectanglePlateform, 1640);
                 break;
             default:
                 break;
 
         }
+    }
+
+    private static void AddSmallPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height)
+    {
+        var smallPlateformOpacities = new List<ParametricPoint1D> { new(1, plateform.FirstAware) };
+        var smallPlateformDecoration = new BackgroundIconDecoration(
+            imageUrl, 0, height,
+            smallPlateformOpacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+            (plateform.FirstAware, plateform.LastAware),
+            new AgentConnector(plateform)
+        );
+        RotationConnector smallPlatformRotationConnector = new AgentFacingConnector(plateform, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+        replay.Decorations.Add(smallPlateformDecoration.UsingRotationConnector(smallPlatformRotationConnector));
     }
 
     internal static void FindPlateforms(AgentData agentData)

@@ -675,9 +675,9 @@ internal static class ParserIcons
     // - Other
     internal const string QadimPlatform = "https://i.imgur.com/DbXr5Fo.png";
     internal const string SabirMainPlatform = "https://i.imgur.com/xrf4FPh.png";
-    internal const string SabirSquarePlatform = "https://i.imgur.com/KUedrXN.png";
-    internal const string SabirRectanglePlatform = "https://i.imgur.com/SN7eJaq.png";
-    internal const string SabirBigRectanglePlatform = "https://i.imgur.com/cwwmCc0.png";
+    internal const string SabirSquarePlateform = "https://i.imgur.com/KUedrXN.png";
+    internal const string SabirRectanglePlateform = "https://i.imgur.com/SN7eJaq.png";
+    internal const string SabirBigRectanglePlateform = "https://i.imgur.com/cwwmCc0.png";
 
     internal const string NoImage = "";
 
