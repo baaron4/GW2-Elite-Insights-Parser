@@ -359,11 +359,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                var thrummingSegments = target.GetBuffStatus(log, ThrummingPresenceBuffCM, log.FightData.FightStart, log.FightData.FightEnd)
-                    .Where(x => x.Value > 0)
-                    .Concat(target.GetBuffStatus(log, ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd)
-                        .Where(x => x.Value > 0)
-                    );
+                var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd)
+                    .Where(x => x.Value > 0);
                 foreach (var segment in thrummingSegments)
                 {
                     replay.Decorations.Add(new CircleDecoration(700, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
