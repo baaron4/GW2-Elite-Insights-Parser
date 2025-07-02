@@ -230,7 +230,23 @@ internal class Sabir : TheKeyOfAhdashim
                 break;
             // Placeholder decorations for plateforms
             case (int)TargetID.SabirMainPlateform:
-                var mainPlateformOpacities = new List<ParametricPoint1D> { new(1, target.FirstAware) };
+                var mainPlateformOpacities = new List<ParametricPoint1D> { new(0, target.FirstAware) };
+                var plateformPosition = replay.Positions.Last();
+                foreach (var sabir in log.AgentData.GetNPCsByID(TargetID.Sabir))
+                {
+                    var positions = log.FindActor(sabir).GetCombatReplayNonPolledPositions(log);
+                    foreach (var position in positions)
+                    {
+                        if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) < 200 && mainPlateformOpacities.Last().X != 1)
+                        {
+                            mainPlateformOpacities.Add(new(1, position.Time - 8000));
+                        } 
+                        else if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) >= 200 && mainPlateformOpacities.Last().X != 0)
+                        {
+                            mainPlateformOpacities.Add(new(0, position.Time + 20000));
+                        }
+                    }
+                }
                 AddPlateformDecoration(target, replay, ParserIcons.SabirMainPlatform, 1660, mainPlateformOpacities);
                 break;
             case (int)TargetID.SabirSquarePlateform:
