@@ -79,6 +79,7 @@ internal class GreerTheBlightbringer : MountBalrior
         MechanicList.Add(Mechanics);
         Extension = "greer";
         Icon = EncounterIconGreer;
+        ChestID = ChestID.GreersChest;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }

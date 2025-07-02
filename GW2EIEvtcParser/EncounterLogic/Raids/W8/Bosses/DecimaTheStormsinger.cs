@@ -135,6 +135,7 @@ internal class DecimaTheStormsinger : MountBalrior
         MechanicList.Add(Mechanics);
         Extension = "decima";
         Icon = EncounterIconDecima;
+        ChestID = ChestID.DecimasChest;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
     }

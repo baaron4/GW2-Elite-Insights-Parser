@@ -90,6 +90,7 @@ internal class UraTheSteamshrieker : MountBalrior
         MechanicList.Add(Mechanics);
         Extension = "ura";
         Icon = EncounterIconUra;
+        ChestID = ChestID.UrasChest;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
     }
