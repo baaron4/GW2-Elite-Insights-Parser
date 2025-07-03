@@ -34,9 +34,9 @@ internal static class MirageHelper
         new BuffOnActorDamageModifier(Mod_PhantomPain, PhantomPain, "Phantom Pain", "3%", DamageSource.NoPets, 3, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.PhantomPain, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2025Balance),
         new BuffOnActorDamageModifier(Mod_PhantomPain, PhantomPain, "Phantom Pain", "6.25%", DamageSource.NoPets, 6.25, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.PhantomPain, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.June2025BalanceHotfix),
+            .WithBuilds(GW2Builds.June2025Balance, GW2Builds.July2025BalanceHotFix),
         new BuffOnActorDamageModifier(Mod_PhantomPain, PhantomPain, "Phantom Pain", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.PhantomPain, DamageModifierMode.PvE)
-            .WithBuilds(GW2Builds.June2025BalanceHotfix),
+            .WithBuilds(GW2Builds.July2025BalanceHotFix),
         // Nomad's Endurance
         new BuffOnActorDamageModifier(Mod_NomadsEndurance, Vigor, "Nomad's Endurance", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Mirage, ByPresence, TraitImages.NomadsEndurance, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2025Balance),

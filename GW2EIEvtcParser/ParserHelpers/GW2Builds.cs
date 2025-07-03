@@ -219,7 +219,7 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-06-24
     public const ulong June2025Balance = 182824;
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-07-01
-    public const ulong June2025BalanceHotfix = 183275;
+    public const ulong July2025BalanceHotFix = 183275;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }
