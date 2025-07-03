@@ -149,7 +149,8 @@ internal static class EncounterLogicPhaseUtils
     internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCasts, long start, long end, bool filterSmallPhases = true)
     {
         long last = start;
-        var invuls = mainTarget.GetCastEvents(log, start, end)
+        var casts = mainTarget.GetAnimatedCastEvents(log, start, end);
+        var invuls = casts
             .Where(x => skillIDs.Contains(x.SkillID))
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs
@@ -158,11 +159,16 @@ internal static class EncounterLogicPhaseUtils
         bool nextToAddIsSkipPhase = !mainBetweenCasts;
         foreach (CastEvent c in invuls)
         {
+            long endTime = c.EndTime;
+            if (c.IsUnknown && !casts.Any(x => x.Time >= endTime))
+            {
+                endTime = end;
+            }
             if (mainBetweenCasts)
             {
                 phases.Add(new PhaseData(last, c.Time));
                 if (addSkipPhases) {
-                    phases.Add(new PhaseData(c.Time, c.EndTime));
+                    phases.Add(new PhaseData(c.Time, endTime));
                 }
             } 
             else
@@ -171,9 +177,9 @@ internal static class EncounterLogicPhaseUtils
                 {
                     phases.Add(new PhaseData(last, c.Time));
                 }
-                phases.Add(new PhaseData(c.Time, c.EndTime));
+                phases.Add(new PhaseData(c.Time, endTime));
             }
-            last = c.EndTime;
+            last = endTime;
         }
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
