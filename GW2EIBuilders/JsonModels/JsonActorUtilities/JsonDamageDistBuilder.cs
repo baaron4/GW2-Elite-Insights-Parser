@@ -77,6 +77,24 @@ internal static class JsonDamageDistBuilder
         return jsonDamageDist;
     }
 
+    private static JsonDamageDist BuildJsonDamageDist(long id, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    {
+        var jsonDamageDist = new JsonDamageDist();
+        if (!skillMap.ContainsKey(id))
+        {
+            SkillItem skill = log.SkillData.Get(id);
+            skillMap[id] = skill;
+        }
+        jsonDamageDist.Id = id;
+        foreach (BreakbarDamageEvent brkEvent in brList)
+        {
+            jsonDamageDist.Hits += 1;
+            jsonDamageDist.ConnectedHits += 1;
+            jsonDamageDist.TotalBreakbarDamage += brkEvent.BreakbarDamage;
+        }
+        return jsonDamageDist;
+    }
+
     internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonDamageDist>(dlsByID.Count + brlsByID.Count);
@@ -97,7 +115,7 @@ internal static class JsonDamageDistBuilder
             {
                 continue;
             }
-            res.Add(BuildJsonDamageDist(key, [ ], brls, log, skillMap, buffMap));
+            res.Add(BuildJsonDamageDist(key, brls, log, skillMap, buffMap));
         }
         return res;
     }
