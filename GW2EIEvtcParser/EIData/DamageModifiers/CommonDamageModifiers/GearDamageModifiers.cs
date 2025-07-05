@@ -80,7 +80,7 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2025Balance, GW2Builds.July2025BalanceHotFix),
         new BuffOnActorDamageModifier(Mod_RelicOfBloodstone, BloodstoneFervor, "Bloodstone Fervor", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, ItemImages.RelicOfBloodstone, DamageModifierMode.All)
-            .WithBuilds(GW2Builds.June2022BalanceHotFix),
+            .WithBuilds(GW2Builds.July2025BalanceHotFix),
         //
         new DamageLogDamageModifier(Mod_RelicOfTheEagle,"Relic of the Eagle", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ItemImages.RelicOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2025W8CMReleaseAndNewCoreRelics),
