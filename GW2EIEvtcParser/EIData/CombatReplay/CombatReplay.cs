@@ -184,7 +184,7 @@ public class CombatReplay
 
     #region DEBUG EFFECTS
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
-    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end);
@@ -199,12 +199,12 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
             }
             else
             {
 
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
@@ -220,17 +220,17 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
             }
             else
             {
 
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
 
-    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0);
@@ -245,18 +245,18 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
             }
             else
             {
 
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
 
     }
 
-    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0);
@@ -271,17 +271,17 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
             }
             else
             {
 
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
 
-    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end && x.EffectID > 0);
@@ -296,12 +296,12 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
             }
             else
             {
 
-                replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
