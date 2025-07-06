@@ -130,8 +130,27 @@ internal class MursaatOverseer : BastionOfThePenitent
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
+
+        (long start, long end) lifespan;
+
+        // Claim - Overhead
         var claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
+
+        // Protect - Bubble
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MursaarOverseerProtectBubble, out var protects))
+        {
+            foreach (EffectEvent effect in protects)
+            {
+                lifespan = effect.ComputeLifespan(log, 5000);
+                var circle = new CircleDecoration(180, lifespan, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
+                replay.Decorations.AddWithBorder(circle, Colors.Blue, 0.2);
+            }
+        }
+
+        // Dispel - Projectile
+        var dispels = log.CombatData.GetMissileEventsBySrcBySkillID(player.AgentItem, DispelSAK);
+        replay.Decorations.AddNonHomingMissiles(log, dispels, Colors.Yellow, 0.3, 25);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
