@@ -134,6 +134,28 @@ internal class MursaatOverseer : BastionOfThePenitent
         replay.Decorations.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+
+        (long start, long end) lifespan;
+
+        // Protect - Bubble
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerProtectBubble, out var protects))
+        {
+            foreach (EffectEvent effect in protects)
+            {
+                lifespan = effect.ComputeLifespan(log, 5000);
+                var circle = new CircleDecoration(180, lifespan, Colors.LightBlue, 0.1, new PositionConnector(effect.Position));
+                environmentDecorations.AddWithBorder(circle, Colors.Blue, 0.2);
+            }
+        }
+
+        // Dispel - Projectile
+        var dispels = log.CombatData.GetMissileEventsBySkillID(DispelSAK);
+        environmentDecorations.AddNonHomingMissiles(log, dispels, Colors.Yellow, 0.3, 25);
+    }
+
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
