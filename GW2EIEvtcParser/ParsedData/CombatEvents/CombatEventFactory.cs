@@ -566,9 +566,9 @@ internal static class CombatEventFactory
         switch (result)
         {
             case PhysicalResult.BreakbarDamage:
-                var brkDamage = new BreakbarChangeEvent(damageEvent, agentData, skillData);
+                var brkChange = new BreakbarChangeEvent(damageEvent, agentData, skillData);
                 // Change from unknown with generic id is recovery when positive, soft cc will cause negative values to appear
-                if (brkDamage.SkillID == skillData.GenericBreakbarID && brkDamage.From.IsUnknown)
+                if (brkChange.SkillID == skillData.GenericBreakbarID && brkChange.From.IsUnknown)
                 {
                     brkBarRecovered.Add(new BreakbarRecoveryEvent(damageEvent, agentData, skillData));
                 } 
