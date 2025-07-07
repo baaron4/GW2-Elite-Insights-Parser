@@ -96,7 +96,7 @@ public class AgentItem
         {
 
         }
-        Unamed = Name.Contains("ch"+ID+"-");
+        Unamed = Name.Contains("ch" + ID + "-") || Name.Contains("gd" + ID + "-");
     }
 
     internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, AgentType.NPC, toughness, healing, condition, concentration, hbWidth, hbHeight)
