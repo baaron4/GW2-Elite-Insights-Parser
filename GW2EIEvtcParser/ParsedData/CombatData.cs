@@ -597,6 +597,16 @@ public partial class CombatData
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
         EIExtraEventProcess(skillData, agentData, fightData, operation, evtcVersion);
+
+#if DEBUG
+        foreach (var effectGUID in _metaDataEvents.EffectGUIDEventsByGUID.Keys)
+        {
+            if (!TryGetEffectEventsByGUID(effectGUID, out var effectEvents))
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Found orphan GUID: " + effectGUID.ToHex());
+            }
+        }
+#endif
     }
 
     private void BuildBuffDependentContainers()

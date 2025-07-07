@@ -181,7 +181,7 @@ public class CombatReplay
         RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
     }
 
-
+#if DEBUG
     #region DEBUG EFFECTS
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
     internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
@@ -199,12 +199,23 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                var dstActor = log.FindActor(effectEvt.Dst);
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                {
+                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                }
+                else
+                {
+                    if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
+                    {
+                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                    }
+                }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
@@ -220,7 +231,18 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                var dstActor = log.FindActor(effectEvt.Dst);
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                {
+                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.GreenishYellow, 0.5, new AgentConnector(dstActor)));
+                }
+                else
+                {
+                    if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
+                    {
+                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkGreen, 0.5, new PositionConnector(position)));
+                    }
+                }
             }
             else
             {
@@ -245,12 +267,22 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                var dstActor = log.FindActor(effectEvt.Dst);
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                {
+                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                } else
+                {
+                    if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
+                    {
+                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                    }
+                }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
 
@@ -271,12 +303,23 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                var dstActor = log.FindActor(effectEvt.Dst);
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                {
+                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                }
+                else
+                {
+                    if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
+                    {
+                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                    }
+                }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
@@ -296,12 +339,23 @@ public class CombatReplay
             }
             if (effectEvt.IsAroundDst)
             {
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                var dstActor = log.FindActor(effectEvt.Dst);
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                {
+                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                }
+                else
+                {
+                    if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
+                    {
+                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                    }
+                }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
@@ -322,7 +376,7 @@ public class CombatReplay
         replay.Decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
     }
     #endregion DEBUG MISSILES
-
+#endif
     /// <summary>
     /// Add hide based on buff's presence
     /// </summary>
