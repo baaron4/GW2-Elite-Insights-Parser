@@ -184,10 +184,10 @@ public class CombatReplay
 #if DEBUG
     #region DEBUG EFFECTS
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
-    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
-            .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end);
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end);
         var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsOnAgentDistinct = effectGUIDsOnAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in effectEventsOnAgent)
@@ -202,24 +202,24 @@ public class CombatReplay
                 var dstActor = log.FindActor(effectEvt.Dst);
                 if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
-                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                    decorations.Add(new CircleDecoration(100, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
                 }
                 else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
-                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                        decorations.Add(new CircleDecoration(100, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
                     }
                 }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(100, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
-            .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end);
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end);
         var effectGUIDsByAgent = effectEventsByAgent.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsByAgentDistinct = effectGUIDsByAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in effectEventsByAgent)
@@ -234,28 +234,28 @@ public class CombatReplay
                 var dstActor = log.FindActor(effectEvt.Dst);
                 if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
-                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.GreenishYellow, 0.5, new AgentConnector(dstActor)));
+                    decorations.Add(new CircleDecoration(100, lifeSpan, Colors.GreenishYellow, 0.5, new AgentConnector(dstActor)));
                 }
                 else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
-                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkGreen, 0.5, new PositionConnector(position)));
+                        decorations.Add(new CircleDecoration(100, lifeSpan, Colors.DarkGreen, 0.5, new PositionConnector(position)));
                     }
                 }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(100, lifeSpan, Colors.Green, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
 
-    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0);
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0);
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
@@ -270,28 +270,28 @@ public class CombatReplay
                 var dstActor = log.FindActor(effectEvt.Dst);
                 if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
-                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                    decorations.Add(new CircleDecoration(100, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
                 } else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
-                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                        decorations.Add(new CircleDecoration(100, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
                     }
                 }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(100, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
 
     }
 
-    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0);
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0);
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
@@ -306,28 +306,28 @@ public class CombatReplay
                 var dstActor = log.FindActor(effectEvt.Dst);
                 if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
-                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                    decorations.Add(new CircleDecoration(100, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
                 }
                 else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
-                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                        decorations.Add(new CircleDecoration(100, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
                     }
                 }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(100, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
 
-    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
-            .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end && x.EffectID > 0);
+            .Where(x => !knownEffectIDs.Contains(x.GUIDEvent.ContentGUID) && x.Time >= start && x.Time <= end && x.EffectID > 0);
         var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent).ToList();
         var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
@@ -342,20 +342,20 @@ public class CombatReplay
                 var dstActor = log.FindActor(effectEvt.Dst);
                 if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
-                    decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
+                    decorations.Add(new CircleDecoration(100, lifeSpan, Colors.Teal, 0.5, new AgentConnector(dstActor)));
                 }
                 else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
-                        decorations.Add(new CircleDecoration(180, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
+                        decorations.Add(new CircleDecoration(100, lifeSpan, Colors.DarkBlue, 0.5, new PositionConnector(position)));
                     }
                 }
             }
             else
             {
 
-                decorations.Add(new CircleDecoration(180, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
+                decorations.Add(new CircleDecoration(100, lifeSpan, Colors.LightBlue, 0.5, new PositionConnector(effectEvt.Position)));
             }
         }
     }
