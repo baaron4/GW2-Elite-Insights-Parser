@@ -16,9 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class SoullessHorror : HallOfChains
 {
-    public SoullessHorror(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(InnerVortexSlash, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In", "Vortex Slash (Inner Donut hit)","Inner Donut", 0),
                 new PlayerDstHitMechanic(OuterVortexSlash, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out", "Vortex Slash (Outer Donut hit)","Outer Donut", 0),
@@ -48,7 +46,10 @@ internal class SoullessHorror : HallOfChains
                 new PlayerDstHitMechanic(SoulRift, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem", "Soul Rift (stood in Golem Aoe)","Golem Aoe", 0),
                 new PlayerSrcBuffApplyMechanic(Immobile, new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem", "Immobilized Golem","Immobilized Golem", 50).UsingChecker((ce, log) => ce.To.IsSpecies(TargetID.TormentedDead)),
             ]),
-        ]));
+        ]);
+    public SoullessHorror(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "sh";
         ChestID = ChestID.ChestOfDesmina;
         Icon = EncounterIconSoullessHorror;
@@ -115,12 +116,9 @@ internal class SoullessHorror : HallOfChains
             }
         }
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void HandleSoullessHorrorFinalHPUpdate(List<CombatItem> combatData, SingleActor soullessHorror)
     {
-        FindChestGadget(ChestID, agentData, combatData, ChestOfDesminaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // discard hp update events after determined apply
-        SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
@@ -129,6 +127,12 @@ internal class SoullessHorror : HallOfChains
                 combatEvent.OverrideSrcAgent(0);
             }
         }
+    }
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+        HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -207,7 +211,7 @@ internal class SoullessHorror : HallOfChains
                     Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
                     if (hpUpdate != null)
                     {
-                        var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
+                        var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, target.LastAware), Colors.Orange, 0.3, new PositionConnector(center));
                         replay.Decorations.AddWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
                     }
                     else
@@ -355,13 +359,13 @@ internal class SoullessHorror : HallOfChains
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal static bool HasFastNecrosis(CombatData combatData, long start, long end)
     {
         // split necrosis
         var splitNecrosis = new Dictionary<AgentItem, List<BuffEvent>>();
         foreach (BuffEvent c in combatData.GetBuffData(Necrosis))
         {
-            if (c is not BuffApplyEvent)
+            if (c is not BuffApplyEvent || c.Time < start || c.Time > end)
             {
                 continue;
             }
@@ -378,7 +382,7 @@ internal class SoullessHorror : HallOfChains
 
         if (splitNecrosis.Count == 0)
         {
-            return 0;
+            return false;
         }
 
         List<BuffEvent> longestNecrosis = splitNecrosis.Values.OrderByDescending(x => x.Count).First();
@@ -393,6 +397,11 @@ internal class SoullessHorror : HallOfChains
                 minDiff = timeDiff;
             }
         }
-        return (minDiff < 11000) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return minDiff < 11000;
+    }
+
+    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    {       
+        return HasFastNecrosis(combatData, fightData.FightStart, fightData.FightEnd) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

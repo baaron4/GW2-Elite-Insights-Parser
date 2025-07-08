@@ -254,6 +254,9 @@ internal static class ParserIcons
     private const string TrashConjuredGreatsword = "https://i.imgur.com/vHka0QN.png";
     private const string TrashConjuredPlayerSword = "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
     private const string TrashConjuredShield = "https://i.imgur.com/wUiI19S.png";
+    private const string TrashConjuredAmalgamateAttackTarget = "https://i.imgur.com/Dr3grlm.png";
+    private const string TrashCALeftArmAttackTarget = "https://i.imgur.com/QUe8eQf.png";
+    private const string TrashCARightArmAttackTarget = "https://i.imgur.com/M4Ljmhp.png";
     private const string TrashGreaterMagmaElemental = "https://i.imgur.com/sr146T6.png";
     private const string TrashLavaElemental = "https://i.imgur.com/mydwiYy.png";
     private const string TrashPyreGuardianKillerTornado = "https://i.imgur.com/6zNPTUw.png";
@@ -671,6 +674,10 @@ internal static class ParserIcons
 
     // - Other
     internal const string QadimPlatform = "https://i.imgur.com/DbXr5Fo.png";
+    internal const string SabirMainPlatform = "https://i.imgur.com/xrf4FPh.png";
+    internal const string SabirSquarePlateform = "https://i.imgur.com/KUedrXN.png";
+    internal const string SabirRectanglePlateform = "https://i.imgur.com/SN7eJaq.png";
+    internal const string SabirBigRectanglePlateform = "https://i.imgur.com/cwwmCc0.png";
 
     internal const string NoImage = "";
 
@@ -931,6 +938,9 @@ internal static class ParserIcons
         { TargetID.ConjuredGreatsword, TrashConjuredGreatsword },
         { TargetID.ConjuredPlayerSword, TrashConjuredPlayerSword },
         { TargetID.ConjuredShield, TrashConjuredShield },
+        { TargetID.CABodyAttackTarget, TrashConjuredAmalgamateAttackTarget },
+        { TargetID.CALeftArmAttackTarget, TrashCALeftArmAttackTarget },
+        { TargetID.CARightArmAttackTarget, TrashCARightArmAttackTarget },
         { TargetID.GreaterMagmaElemental1, TrashGreaterMagmaElemental },
         { TargetID.GreaterMagmaElemental2, TrashGreaterMagmaElemental },
         { TargetID.LavaElemental1, TrashLavaElemental },
@@ -939,6 +949,10 @@ internal static class ParserIcons
         { TargetID.PyreGuardian, TrashPyreGuardianKillerTornado },
         { TargetID.SmallKillerTornado, TrashPyreGuardianKillerTornado},
         { TargetID.BigKillerTornado, TrashPyreGuardianKillerTornado },
+        { TargetID.SabirBigRectanglePlateform, NoImage},
+        { TargetID.SabirMainPlateform, NoImage},
+        { TargetID.SabirRectanglePlateform, NoImage},
+        { TargetID.SabirSquarePlateform, NoImage},
         { TargetID.PoisonMushroom, TrashPoisonMushroom },
         { TargetID.SpearAggressionRevulsion, TrashSpearAggressionRevulsion },
         { TargetID.QadimLamp, TrashQadimLamp },

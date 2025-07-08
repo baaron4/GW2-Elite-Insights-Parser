@@ -60,8 +60,8 @@ internal class UnknownInstanceLogic : UnknownFightLogic
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
-        // Handle potentially wrongly associated logs
-        if (mapIDEvent != null)
+        // Handle potentially wrongly associated logs, we don't officially support pre-effect logs
+        if (mapIDEvent != null && combatData.Any(x => x.IsEffect))
         {
             switch (MapIDEvent.GetMapID(mapIDEvent))
             {

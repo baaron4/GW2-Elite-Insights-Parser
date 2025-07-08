@@ -278,11 +278,16 @@ internal class Deimos : BastionOfThePenitent
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == StateChange.MaxHealthUpdate).ToList();
         var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
         bool hasBonds = false;
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget);
         foreach (AgentItem demonicBond in demonicBonds)
         {
             hasBonds = true;
             demonicBond.OverrideID(TargetID.DemonicBond, agentData);
             demonicBond.OverrideType(AgentItem.AgentType.NPC, agentData);
+            foreach (var atAgent in attackTargetEvents.Where(x => x.DstMatchesAgent(demonicBond)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)))
+            {
+                atAgent.OverrideID(TargetID.DemonicBondAttackTarget, agentData);
+            }
         }
         return hasBonds;
     }
@@ -321,15 +326,21 @@ internal class Deimos : BastionOfThePenitent
         {
             var attackTarget = attackTargetEvents.FirstOrDefault(x => x.AttackTarget == firstTargetable.Src);
             if (attackTarget != null && attackTarget.Src.Type == AgentItem.AgentType.Gadget)
-            {                
+            {
+                attackTarget.AttackTarget.OverrideID(TargetID.DeimosAttackTarget, agentData);
                 var bodyStruct = attackTarget.Src;
+                bodyStruct.OverrideID(TargetID.DeimosBodyStruct, agentData);
                 gadgetsAgents.Add(bodyStruct);
                 long targetableTime = firstTargetable.Time;
 
                 var notTargetable = targetableEvents.FirstOrDefault(x => x.Time >= firstTargetable.Time && x.Src == firstTargetable.Src && !x.Targetable);
                 long upperThreshold = notTargetable != null ? notTargetable.Time : fightData.LogEnd;
-                gadgetsAgents.UnionWith(combatData.Where(x => x.Time >= targetableTime && x.Time <= upperThreshold && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)));
-
+                var armStructs = combatData.Where(x => x.Time >= targetableTime && x.Time <= upperThreshold && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0).Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
+                gadgetsAgents.UnionWith(armStructs);
+                foreach (var armStruct in armStructs)
+                {
+                    bodyStruct.OverrideID(TargetID.DeimosArmStruct, agentData);
+                }
                 return (bodyStruct, gadgetsAgents, targetableTime, upperThreshold);
             }
         }
@@ -364,7 +375,7 @@ internal class Deimos : BastionOfThePenitent
         // Find target
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).Where(x => !x.AttackTarget.IsSpecies(TargetID.DemonicBondAttackTarget));
         var targetableEvents = new List<TargetableEvent>();
         foreach (var attackTarget in attackTargetEvents)
         {

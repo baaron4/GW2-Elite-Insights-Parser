@@ -91,6 +91,7 @@ internal static class EncounterImages
     internal const string InstanceIconMountBalrior = "https://i.imgur.com/kBVYPEV.png";
 
     // Combat Replay Maps
+    internal const string CombatReplayNoImage = "";
     internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
     internal const string CombatReplaySpiritRun = "https://i.imgur.com/RyA0XH3.png";
     internal const string CombatReplayGorseval = "https://i.imgur.com/U9pH5dG.png";

@@ -18,10 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Qadim : MythwrightGambit
 {
-    private bool _manualPlatforms = true;
-    public Qadim(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new EnemyCastStartMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC", "Qadim CC","Qadim CC", 0),
                 new EnemyCastEndMechanic(QadimCC, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed", "Qadim Breakbar broken","Qadim CCed", 0)
@@ -92,10 +89,14 @@ internal class Qadim : MythwrightGambit
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K", "Retal Pyre Killed","Retal Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
                 new EnemyStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K", "Resolution Pyre Killed","Resolution Pyre Killed", 0,(log, a) => a.IsSpecies(TargetID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             ]),
-        ]));
+        ]);
+    public Qadim(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "qadim";
         Icon = EncounterIconQadim;
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
+        ChestID = ChestID.QadimsChest;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
     }
@@ -128,84 +129,14 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private static bool HasPlateformAgents(AgentData agentData)
     {
-        var maxHPUpdates = combatData
-            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
-            .Select(x => new MaxHealthUpdateEvent(x, agentData))
-            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
-        if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
-        {
-            if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
-            {
-                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
-                foreach (AgentItem platform in platformAgents)
-                {
-                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    platform.OverrideID(TargetID.QadimPlatform, agentData);
-                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
-                }
-            }
-        }
-        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
-        // Lamps
-        var qadimLampMarkerGUID = combatData
-            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
-                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
-                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
-            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
-            .FirstOrDefault();
-        if (qadimLampMarkerGUID != null)
-        {
-            var lamps = combatData
-                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
-                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget)
-                .Distinct();
-            foreach (var lamp in lamps)
-            {
-                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-                lamp.OverrideID(TargetID.QadimLamp, agentData);
-            }
-        } 
-        else
-        {
-            if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
-            {
-                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
-                foreach (AgentItem lamp in lampAgents)
-                {
-                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
-                    lamp.OverrideID(TargetID.QadimLamp, agentData);
-                }
-            }
-        }
-        // Pyres
-        var protectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
-        var stabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
-        var resolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
-        foreach (AgentItem pyre in pyres)
-        {
-            CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
-            if (positionEvt != null)
-            {
-                var position = MovementEvent.GetPoint3D(positionEvt).XY();
-                if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(TargetID.PyreGuardianProtect, agentData);
-                }
-                else if (stabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(TargetID.PyreGuardianStab, agentData);
-                }
-                else if (resolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
-                {
-                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TargetID.PyreGuardianResolution : TargetID.PyreGuardianRetal, agentData);
-                }
-            }
-        }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+        return agentData.GetNPCsByID(TargetID.QadimPlatform).GroupBy(x => x.Name).Count() == 12;
+    }
+
+    internal static void RenamePyres(IReadOnlyList<SingleActor> targets)
+    {
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.PyreGuardianProtect))
             {
@@ -224,32 +155,101 @@ internal class Qadim : MythwrightGambit
                 target.OverrideName("Stab " + target.Character);
             }
         }
-        var platformNames = new List<string>()
+    }
+
+    internal static void FindPlateforms(EvtcVersionEvent evtcVersion, IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
+    {
+        if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
         {
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "00",
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-        };
-        _manualPlatforms = TrashMobs.Count(x => platformNames.Contains(x.Character)) != 12;
+            if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
+            {
+                var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
+                foreach (AgentItem platform in platformAgents)
+                {
+                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    platform.OverrideID(TargetID.QadimPlatform, agentData);
+                    platform.OverrideAwareTimes(platform.FirstAware, int.MaxValue);
+                }
+            }
+        }
+    }
+
+    internal static void FindLamps(EvtcVersionEvent evtcVersion, IReadOnlyDictionary<int, List<MaxHealthUpdateEvent>> maxHPUpdates, AgentData agentData, List<CombatItem> combatData)
+    {
+        var qadimLampMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.QadimLampMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (qadimLampMarkerGUID != null)
+        {
+            var lamps = combatData
+                .Where(x => x.IsStateChange == StateChange.Marker && x.Value == qadimLampMarkerGUID.ContentID)
+                .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+                .Where(x => x.Type == AgentItem.AgentType.Gadget)
+                .Distinct();
+            foreach (var lamp in lamps)
+            {
+                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                lamp.OverrideID(TargetID.QadimLamp, agentData);
+            }
+        }
+        else
+        {
+            if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
+            {
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
+                foreach (AgentItem lamp in lampAgents)
+                {
+                    lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    lamp.OverrideID(TargetID.QadimLamp, agentData);
+                }
+            }
+        }
+    }
+
+    private static readonly Vector2[] ProtectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
+    private static readonly Vector2[] StabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
+    private static readonly Vector2[] ResolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
+
+    internal static void FindPyres(ulong gw2Build, AgentData agentData, List<CombatItem> combatData)
+    {
+        IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TargetID.PyreGuardian);
+        foreach (AgentItem pyre in pyres)
+        {
+            CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
+            if (positionEvt != null)
+            {
+                var position = MovementEvent.GetPoint3D(positionEvt).XY();
+                if (ProtectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(TargetID.PyreGuardianProtect, agentData);
+                }
+                else if (StabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(TargetID.PyreGuardianStab, agentData);
+                }
+                else if (ResolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
+                {
+                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TargetID.PyreGuardianResolution : TargetID.PyreGuardianRetal, agentData);
+                }
+            }
+        }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var maxHPUpdates = combatData
+            .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
+            .Select(x => new MaxHealthUpdateEvent(x, agentData))
+            .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+        FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
+        FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
+        FindPyres(gw2Build, agentData, combatData);
+        // Pyres
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        RenamePyres(Targets);
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -457,9 +457,9 @@ internal class Qadim : MythwrightGambit
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        if (_manualPlatforms)
+        if (!HasPlateformAgents(log.AgentData))
         {
-            AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, environmentDecorations);
+            ManuallyAnimatePlateforms(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, environmentDecorations);
         }
 
         // Incineration Orbs - CM
@@ -524,6 +524,204 @@ internal class Qadim : MythwrightGambit
                 environmentDecorations.Add(circleRed.UsingGrowingEnd(lifespan.end));
             }
         }*/
+    }
+
+    private const float HiddenOpacity = 0.1f;
+    private const float VisibleOpacity = 1f;
+    private const float NoOpacity = -1f;
+    private static void AnimatePlateforms(ParsedEvtcLog log, CombatReplay replay, SingleActor plateform, List<ParametricPoint1D> opacities, AgentItem? qadimAgent)
+    {
+        if (qadimAgent == null)
+        {
+            return;
+        }
+        var qadim = log.FindActor(qadimAgent);
+        HealthUpdateEvent? below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
+        long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : 0;
+        float threshold = 1f;
+        long qadimStart = qadim.FirstAware;
+        long qadimEnd = qadim.LastAware;
+        bool isCM = qadim.GetHealth(log.CombatData) > 21e6;
+        int velocityIndex = 0; 
+        switch (plateform.Character)
+        {
+            case "00":
+            case "0":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-76.52588f, 44.1894531f, 22.7294922f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                    }
+                }
+                break;
+            case "01":
+            case "1":
+                foreach (var velocity in replay.Velocities)
+                {
+                    if (velocity.Time < qadimStart)
+                    {
+                        continue;
+                    }
+                    if ((velocity.XYZ - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold)
+                    {
+                        opacities.Add(new ParametricPoint1D(HiddenOpacity, velocity.Time));
+                        break;
+                    }
+                }
+                break;
+            case "02":
+            case "2":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-0.122070313f, 77.88086f, 4.54101563f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(37.0361328f, -13.94043f, -22.7294922f), VisibleOpacity, velocityIndex, out velocityIndex, 10000, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(153.723145f, -110.742188f, -3.63769531f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                        }
+                    }
+                }
+                break;
+            case "03":
+            case "3":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(348.474121f, -123.4375f, 10.9130859f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                }
+                break;
+            case "04":
+            case "4":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(37.20703f, 13.94043f, 22.7294922f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-0.29296875f, -59.6923828f, -13.6352539f), VisibleOpacity, velocityIndex, out velocityIndex, 10000, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(357.592773f, -294.018555f, 13.6352539f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                        }
+                    }
+                }
+                break;
+            case "05":
+            case "5":
+                bool doNormalPlat5 = true;
+                if (log.FightData.IsCM)
+                {
+                    doNormalPlat5 = false;
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-8.0078125f, 0, 0), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(6.7871094f, 18.188477f, -9.094238f), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            doNormalPlat5 = AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity);
+                        }
+                    }
+                }
+                if (doNormalPlat5)
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(255.712891f, -69.43359f, 2.722168f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                    }
+                }
+                break;
+            case "06":
+            case "6":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(182.8125f, -80.15137f, 22.7294922f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(plateform.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbs))
+                            {
+                                EffectEvent? lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time && x.Time < qadimEnd);
+                                if (lastBlueOrb != null)
+                                {
+                                    (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
+                                    if (Math.Abs(end - qadimEnd) > 500)
+                                    {
+                                        opacities.Add(new ParametricPoint1D(HiddenOpacity, end));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "07":
+            case "7":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-98.53516f, 49.2919922f, -19.0917969f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(46.75293f, 0, -6.35986328f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0, 0, 0), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity);
+                        }
+                    }
+                }
+                break;
+            case "08":
+            case "8":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(37.20703f, -14.0136719f, 18.17627f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(15.234375f, 31.9580078f, -9.094238f), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(87.25586f, -70.87402f, 4.54101563f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                                {
+                                    AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "09":
+            case "9":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(50.7568359f, 69.3847656f, -6.35986328f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                }
+                break;
+            case "10":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-0.122070313f, -77.92969f, 4.54101563f), HiddenOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), NoOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                    {
+                        if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                        {
+                            bool doNormalPlat10 = true;
+                            if (isCM)
+                            {
+                                doNormalPlat10 = AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(49.8291f, -43.5791f, 4.5410156f), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity);
+                            }
+                            if (doNormalPlat10)
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.FightData.IsCM ? NoOpacity : HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                                {
+                                    AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "11":
+                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(143.493652f, 114.282227f, 17.27295f), NoOpacity, 0, out velocityIndex, 0, 0, HiddenOpacity))
+                {
+                    AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), NoOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
+                }
+                break;
+            default:
+                break;
+        }
+        // Make everything visible at the end
+        opacities.Add(new ParametricPoint1D(VisibleOpacity, qadimEnd + 500));
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -794,194 +992,21 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.QadimPlatform:
-                if (_manualPlatforms)
+                if (!HasPlateformAgents(log.AgentData))
                 {
                     return;
                 }
-                const float hiddenOpacity = 0.1f;
-                const float visibleOpacity = 1f;
-                const float noOpacity = -1f;
-                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time));
-                var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
-                int velocityIndex = 0;
-                SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-                HealthUpdateEvent? below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
-                long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
-                float threshold = 1f;
-                switch (target.Character)
+                var opacities = new List<ParametricPoint1D> { new(VisibleOpacity, target.FirstAware) };
+                foreach (var qadimAgent in log.AgentData.GetNPCsByID(TargetID.Qadim))
                 {
-                    case "00":
-                    case "0":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                            }
-                        }
-                        break;
-                    case "01":
-                    case "1":
-                        foreach (var velocity in replay.Velocities)
-                        {
-                            if ((velocity.XYZ - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold)
-                            {
-                                opacities.Add(new ParametricPoint1D(hiddenOpacity, velocity.Time));
-                                break;
-                            }
-                        }
-                        break;
-                    case "02":
-                    case "2":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                                }
-                            }
-                        }
-                        break;
-                    case "03":
-                    case "3":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                        }
-                        break;
-                    case "04":
-                    case "4":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                                }
-                            }
-                        }
-                        break;
-                    case "05":
-                    case "5":
-                        bool doNormalPlat5 = true;
-                        if (log.FightData.IsCM)
-                        {
-                            doNormalPlat5 = false;
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-8.0078125f, 0, 0), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(6.7871094f, 18.188477f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    doNormalPlat5 = AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
-                                }
-                            }
-                        }
-                        if (doNormalPlat5)
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                            }
-                        }
-                        break;
-                    case "06":
-                    case "6":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbs))
-                                    {
-                                        EffectEvent? lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
-                                        if (lastBlueOrb != null)
-                                        {
-                                            (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
-                                            if (Math.Abs(end - log.FightData.FightEnd) > 500)
-                                            {
-                                                opacities.Add(new ParametricPoint1D(hiddenOpacity, end));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "07":
-                    case "7":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
-                                }
-                            }
-                        }
-                        break;
-                    case "08":
-                    case "8":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                    {
-                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                        {
-                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "09":
-                    case "9":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                        }
-                        break;
-                    case "10":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                            {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                {
-                                    bool doNormalPlat10 = true;
-                                    if (log.FightData.IsCM)
-                                    {
-                                        doNormalPlat10 = AddOpacityUsingVelocity(replay.Velocities, opacities, new(49.8291f, -43.5791f, 4.5410156f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
-                                    }
-                                    if (doNormalPlat10)
-                                    {
-                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.FightData.IsCM ? noOpacity : hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
-                                        {
-                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "11":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
-                        {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
-                        }
-                        break;
-                    default:
-                        break;
+                    AnimatePlateforms(log, replay, target, opacities, qadimAgent);
                 }
-                var platformDecoration = new BackgroundIconDecoration(ParserIcons.QadimPlatform, 0, 2247, opacities, heights, (target.FirstAware, target.LastAware), new AgentConnector(target));
+                var platformDecoration = new BackgroundIconDecoration(
+                    ParserIcons.QadimPlatform, 0, 2247, 
+                    opacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)), 
+                    (target.FirstAware, target.LastAware), 
+                    new AgentConnector(target)
+                );
                 RotationConnector platformRotationConnector = new AgentFacingConnector(target, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                 replay.Decorations.Add(platformDecoration.UsingRotationConnector(platformRotationConnector));
                 break;
@@ -1000,16 +1025,21 @@ internal class Qadim : MythwrightGambit
     /// <param name="timeOffset">Time to be added to found velocity time</param>
     /// <param name="forceHideTime">If > 0, forces the addition of a hidden opacity at given time</param>
     /// <param name="hiddenOpacity">Hidden opacity value</param>
-    private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, in Vector3 referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
+    private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, long startOffset, List<ParametricPoint1D> opacities, in Vector3 referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
     {
         float threshold = 1f;
         for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
-        {
-            if ((referenceVelocity - velocities[velocityIndex].XYZ).Length() < threshold)
+        { 
+            var velocity = velocities[velocityIndex];
+            if (velocity.Time < startOffset)
+            {
+                continue;
+            }
+            if ((referenceVelocity - velocity.XYZ).Length() < threshold)
             {
                 if (opacity >= 0)
                 {
-                    opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
+                    opacities.Add(new ParametricPoint1D(opacity, velocity.Time + timeOffset));
                 }
 
                 if (forceHideTime > 0 && opacity != hiddenOpacity)
@@ -1031,7 +1061,7 @@ internal class Qadim : MythwrightGambit
         return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    private static void AddManuallyAnimatedPlatformsToCombatReplay(SingleActor? qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
+    private static void ManuallyAnimatePlateforms(SingleActor? qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
     {
         if (qadim == null)
         {

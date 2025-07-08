@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -15,9 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Sabir : TheKeyOfAhdashim
 {
-    public Sabir(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstSkillMechanic(DireDrafts, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500)
                     .UsingChecker((de, log) => de.HasDowned || de.HasKilled),
@@ -48,10 +47,14 @@ internal class Sabir : TheKeyOfAhdashim
                     new EnemyDstBuffRemoveMechanic(RepulsionField, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Rot.Breakbar Brkn", "Rotating Breakbar Broken","Rotating Breakbar Broken", 0),
                 ]),
             ]),
-        ]));
+        ]);
+    public Sabir(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         // rotating cc 56403
         Extension = "sabir";
         Icon = EncounterIconSabir;
+        ChestID = ChestID.SabirsChest;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000002;
     }
@@ -64,7 +67,10 @@ internal class Sabir : TheKeyOfAhdashim
             TargetID.VoltaicWisp,
             TargetID.SmallKillerTornado,
             TargetID.SmallJumpyTornado,
-            TargetID.BigKillerTornado
+            TargetID.SabirMainPlateform,
+            TargetID.SabirBigRectanglePlateform,
+            TargetID.SabirRectanglePlateform,
+            TargetID.SabirSquarePlateform
         ];
     }
 
@@ -146,7 +152,12 @@ internal class Sabir : TheKeyOfAhdashim
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        return new CombatReplayMap(CombatReplaySabir,
+        string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
+            log.AgentData.GetNPCsByID(TargetID.SabirRectanglePlateform).Count > 0 ?
+                CombatReplayNoImage : CombatReplaySabir;
+        return new CombatReplayMap(mapUrl,
                         (1000, 910),
                         (-14122, 142, -9199, 4640)/*,
                         (-21504, -21504, 24576, 24576),
@@ -217,10 +228,91 @@ internal class Sabir : TheKeyOfAhdashim
             case (int)TargetID.ParalyzingWisp:
             case (int)TargetID.VoltaicWisp:
                 break;
+            // Placeholder decorations for plateforms
+            case (int)TargetID.SabirMainPlateform:
+                var mainPlateformOpacities = new List<ParametricPoint1D> { new(0, target.FirstAware) };
+                var plateformPosition = replay.Positions.Last();
+                foreach (var sabir in log.AgentData.GetNPCsByID(TargetID.Sabir))
+                {
+                    var positions = log.FindActor(sabir).GetCombatReplayNonPolledPositions(log);
+                    foreach (var position in positions)
+                    {
+                        if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) < 200 && mainPlateformOpacities.Last().X != 1)
+                        {
+                            mainPlateformOpacities.Add(new(1, position.Time - 8000));
+                        } 
+                        else if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) >= 200 && mainPlateformOpacities.Last().X != 0)
+                        {
+                            mainPlateformOpacities.Add(new(0, position.Time + 20000));
+                        }
+                    }
+                }
+                AddPlateformDecoration(target, replay, ParserIcons.SabirMainPlatform, 1660, mainPlateformOpacities);
+                break;
+            case (int)TargetID.SabirSquarePlateform:
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirSquarePlateform, 580);
+                break;
+            case (int)TargetID.SabirRectanglePlateform:
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirRectanglePlateform, 800);
+                break;
+            case (int)TargetID.SabirBigRectanglePlateform:
+                AddSmallPlateformDecoration(target, replay, ParserIcons.SabirBigRectanglePlateform, 1640);
+                break;
             default:
                 break;
 
         }
+    }
+
+    private static void AddPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height, IReadOnlyList<ParametricPoint1D> opacities)
+    {
+        var plateformDecoration = new BackgroundIconDecoration(
+            imageUrl, 0, height,
+            opacities, replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time)),
+            (plateform.FirstAware, plateform.LastAware),
+            new AgentConnector(plateform)
+        );
+        RotationConnector plateformRotationConnector = new AgentFacingConnector(plateform, 180, AgentFacingConnector.RotationOffsetMode.AddToMaster);
+        replay.Decorations.Add(plateformDecoration.UsingRotationConnector(plateformRotationConnector));
+    }
+
+    private static void AddSmallPlateformDecoration(SingleActor plateform, CombatReplay replay, string imageUrl, uint height)
+    {
+        var smallPlateformOpacities = new List<ParametricPoint1D> { new(1, plateform.FirstAware) };
+        AddPlateformDecoration(plateform, replay, imageUrl, height, smallPlateformOpacities);
+    }
+
+    internal static void FindPlateforms(AgentData agentData)
+    {
+        // Disabled until we get nice looking assets for them
+        //return;
+        foreach (var candidate in agentData.GetAgentByType(AgentItem.AgentType.Gadget))
+        {
+            switch (candidate.HitboxWidth)
+            {
+                case 2350:
+                    candidate.OverrideID(TargetID.SabirMainPlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 806:
+                    candidate.OverrideID(TargetID.SabirSquarePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 950:
+                    candidate.OverrideID(TargetID.SabirRectanglePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+                case 1752:
+                    candidate.OverrideID(TargetID.SabirBigRectanglePlateform, agentData);
+                    candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    break;
+            }
+        }
+    }
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        FindPlateforms(agentData);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {

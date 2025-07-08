@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class PeerlessQadim : TheKeyOfAhdashim
 {
-    public PeerlessQadim(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHitMechanic(EnergizedAffliction, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
                 new PlayerDstHitMechanic(ForceOfRetaliation, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000)
@@ -53,9 +51,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             ]),
             new PlayerDstBuffApplyMechanic(FixatedQadimThePeerless, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixated", "Fixated", "Fixated", 0),
             new PlayerDstBuffApplyMechanic(SappingSurge, new MechanicPlotlySetting(Symbols.YDownOpen,Colors.Red), "B.Tether", "25% damage reduction", "Bad Tether", 0),
-        ]));
+        ]);
+    public PeerlessQadim(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "prlqadim";
         Icon = EncounterIconPeerlessQadim;
+        ChestID = ChestID.QadimThePeerlessChest;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000003;
     }
@@ -82,6 +84,12 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             //TargetID.DummyPeerlessQadim,
         ];
     }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.PeerlessQadimPylon
+        ];
+    }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
@@ -101,15 +109,26 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         return base.GetEncounterStartStatus(combatData, agentData, fightData);
     }
 
+    internal static void RenamePylons(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
+        // Update pylon names with their cardinal locations.
+        var nameCount = new Dictionary<string, int> { { "(N)", 1 }, { "(SW)", 1 }, { "(SE)", 1 } };
+        var pylons = targets.Where(x => x.IsSpecies(TargetID.PeerlessQadimPylon)).ToList();
+        foreach (SingleActor target in pylons)
+        {
+            string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
+            if (pylons.Count > 3 && suffix != null && nameCount.ContainsKey(suffix))
+            {
+                // deduplicate name
+                target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+            }
+        }
+    }
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-        // Update pylon names with their cardinal locations.
-        foreach (NPC target in Targets.Where(x => x.IsSpecies(TargetID.PeerlessQadimPylon)).Cast<NPC>())
-        {
-            AddNameSuffixBasedOnInitialPosition(target, combatData, PylonLocations);
-        }
+        RenamePylons(Targets, combatData);
     }
 
     protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
@@ -387,12 +406,12 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)TargetID.GiantQadimThePeerless:
-                // Trim the first giant Qadim, it exists since log start.
-                var firstGiantQadim = log.AgentData.GetNPCsByID(TargetID.GiantQadimThePeerless).FirstByAware();
-                var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstByNonZeroTime();
-                if (firstGiantQadim != null && firstLiftUp != null && target.AgentItem == firstGiantQadim)
+                // Trim giant Qadim, based on matching lift up event.
+                var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstOrDefault(x => x.Time >= target.FirstAware && x.Time <= target.LastAware);
+                if (firstLiftUp != null)
                 {
-                    replay.Trim(firstLiftUp.Time, firstGiantQadim.LastAware);
+                    // Add 15s of wiggle room at the start
+                    replay.Trim(firstLiftUp.Time - 15000, target.LastAware);
                 }
                 break;
             default:
