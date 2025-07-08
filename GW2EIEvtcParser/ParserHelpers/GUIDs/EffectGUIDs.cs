@@ -673,6 +673,20 @@ public static class EffectGUIDs
     public static readonly GUID QadimJumpingBlueOrbs = new("9FE9CEE3B3B1A743B769D16B196AD45D");
     public static readonly GUID QadimPlatformStartsOrEndsMoving = new("98891680AFB80A4E9CAFCCBD1662DF88");
     // Adina
+    public static readonly GUID AdinaPillarOrGroundSomething = new("C5E3060F62C0FE4AA0F502CCC4E23C81"); // 2000ms duration, src Adina
+    public static readonly GUID AdinaPillarDestroyedByProjectiles = new("96D31AA183A34E4E9864C8232102C781"); // 1000ms duration, no src
+    public static readonly GUID AdinaPillarDestroyedByProjectiles0ms = new("0DCF064D110DD244ADAD462EC663030C"); // 0ms duration, no src
+    public static readonly GUID AdinaPillarDestroyedByAdina = new("777B28E1A1ED6B4BA53A7870AAC66028"); // 1000ms duration, no src
+    public static readonly GUID AdinaPillarDestroyedByAdina2 = new("C31EE285EC2E8844AE828115EAFA138A"); // 1000ms duration, src Adina, not sure what is the difference from the other
+    public static readonly GUID AdinaGroundRetracted = new("4C9901D5FEBA28429B13FC54EF7538A8"); // 0ms duration, no src
+    public static readonly GUID AdinaGroundRetracted0ms = new("85CE384F78083A49BA01BC2327FDA4DE"); // 0ms duration, no src
+    public static readonly GUID AdinaGroundRetractedWarning = new("C1A523D71A841048897211B1020B8D95"); // 4271ms duration, no src
+    public static readonly GUID AdinaMineWarning = new("A1A0DBCBE03394468E760B14A819B5F8"); // 4000ms, src Adina
+    public static readonly GUID AdinaMineWarning2 = new("F8E6EAED5F8A73449B8823E9CC1C5F7B"); // 3000ms, src gadget
+    public static readonly GUID AdinaMine = new("F4099C57AD1C184BB750422AF3D62BAC"); // dynamic, src Adina
+    public static readonly GUID AdinaMineExplosionAnimation = new("AB0AB6290B2DEA4DB3AEE3BCC2ED99DA"); // 333ms, no src
+    public static readonly GUID AdinaMineExplosion = new("5F65774FF73E39408C92387DDA163BA7"); // 0ms, no src
+    public static readonly GUID AdinaSweep = new("5456C6A09E09B944B501ACAD66F653AC"); // 450 ms duration, src Adina
     public static readonly GUID AdinaSelectedForPillar = new("591BDFC7F39F7949B1BE60267D3CF437"); // 6000 ms duration
     public static readonly GUID AdinaPillarDropLocationWarning = new("160CBAE34F4A2941885EB3F3CD6BB0C3"); // 6000ms duration but drops happen after 2000ms
     public static readonly GUID AdinaPillarShockwave = new("758F59A7C564EE499F0536D73EC9C9A0"); // 1333 duration
