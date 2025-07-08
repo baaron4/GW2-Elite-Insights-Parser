@@ -305,6 +305,7 @@ public static class SpeciesIDs
         Adina = 22006,
         HandOfErosion = SpeciesIDs.HandOfErosion,
         HandOfEruption = SpeciesIDs.HandOfEruption,
+        AdinaPlateform = SpeciesIDs.AdinaPlateform,
         // - Sabir
         Sabir = 21964,
         ParalyzingWisp = 21955,
@@ -1171,6 +1172,7 @@ public static class SpeciesIDs
     private const int GreersChest = -101;
     private const int DecimasChest = -102;
     private const int UrasChest = -103;
+    private const int AdinaPlateform = -104;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
