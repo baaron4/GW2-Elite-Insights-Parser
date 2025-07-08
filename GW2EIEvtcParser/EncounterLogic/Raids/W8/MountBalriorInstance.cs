@@ -85,7 +85,7 @@ internal class MountBalriorInstance : MountBalrior
             foreach (var decima in decimas)
             {
                 long start = decima.FirstAware;
-                var determinedBuffs = log.CombatData.GetBuffApplyData(SkillIDs.Determined762).Where(x => x.To == decima.AgentItem);
+                var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, decima.AgentItem);
                 var determinedLost = determinedBuffs.OfType<BuffRemoveAllEvent>().FirstOrDefault();
                 var determinedApply = determinedBuffs.OfType<BuffApplyEvent>().FirstOrDefault();
                 var enterCombat = log.CombatData.GetEnterCombatEvents(decima.AgentItem).FirstOrDefault();
