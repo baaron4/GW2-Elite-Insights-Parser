@@ -363,17 +363,23 @@ public class CombatReplay
     #endregion DEBUG EFFECTS
 
     #region DEBUG MISSILES
-    internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugMissiles(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
+    {
+        var allMissileEvents = log.CombatData.GetMissileEventsBySrc(actor.AgentItem)
+            .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+    }
+    internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
-        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
     }
-    internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplay replay, long start = long.MinValue, long end = long.MaxValue)
+    internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.IsNPC);
-        replay.Decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
     }
     #endregion DEBUG MISSILES
 #endif

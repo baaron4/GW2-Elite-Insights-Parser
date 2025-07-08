@@ -406,6 +406,8 @@ internal class Adina : TheKeyOfAhdashim
                         replay.Decorations.Add(new PolygonDecoration(60, 6, sweepLifespan, Colors.Red, 0.2, new PositionConnector(sweep.Position)));
                     }
                 }
+                var boulderBarrages = log.CombatData.GetMissileEventsBySrcBySkillID(target.AgentItem, BoulderBarrage);
+                replay.Decorations.AddNonHomingMissiles(log, boulderBarrages, Colors.Red, 0.4, 30);
                 break;
             default:
                 break;
