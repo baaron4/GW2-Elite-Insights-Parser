@@ -106,6 +106,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        Adina.FindPlatforms(agentData);
         Adina.FindHands(fightData, agentData, combatData, extensions);
         Sabir.FindPlateforms(agentData);
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
