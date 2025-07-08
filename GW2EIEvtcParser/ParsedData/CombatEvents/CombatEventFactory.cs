@@ -560,13 +560,22 @@ internal static class CombatEventFactory
         return res;
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
+    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<BreakbarRecoveryEvent> brkBarRecovered, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
     {
         PhysicalResult result = GetPhysicalResult(damageEvent.Result);
         switch (result)
         {
             case PhysicalResult.BreakbarDamage:
-                brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
+                var brkChange = new BreakbarChangeEvent(damageEvent, agentData, skillData);
+                // Change from unknown with generic id is recovery when positive, soft cc will cause negative values to appear
+                if (brkChange.SkillID == skillData.GenericBreakbarID && brkChange.From.IsUnknown)
+                {
+                    brkBarRecovered.Add(new BreakbarRecoveryEvent(damageEvent, agentData, skillData));
+                } 
+                else
+                {
+                    brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
+                }
                 break;
             case PhysicalResult.CrowdControl:
                 crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));

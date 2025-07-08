@@ -67,6 +67,11 @@
                         <img :src="UIIcons.Interrupt" alt="Interrupts"                 
                             class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 27)" @click="sortBy('Data', 27)"
+                        data-original-title="CC">
+                        <img :src="UIIcons.CC" alt="CC"
+                             class="icon icon-hover">
+                    </th> 
                     <th class="stat-cell" :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)"
                         data-original-title="Times the enemy was invulnerable to attacks">
                         <img :src="UIIcons.Invul" alt="Invuln"
@@ -81,12 +86,7 @@
                         data-original-title="Times the enemy blocked an attack">
                         <img :src="UIIcons.Block" alt="Blocked"
                              class="icon icon-hover">
-                    </th>  
-                    <th class="stat-cell" :class="getHeaderClass('Data', 27)" @click="sortBy('Data', 27)"
-                        data-original-title="CC">
-                        <img :src="UIIcons.CC" alt="CC"
-                             class="icon icon-hover">
-                    </th>    
+                    </th>     
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17)"
                         data-original-title="Down Contribution">
                          <img :src="UIIcons.Damage" alt="Damage"
@@ -169,6 +169,9 @@
                     <td :class="getBodyClass('Data', 7)">
                         {{row.data[7]}}
                     </td>
+                    <td :class="getBodyClass('Data', 27)" :data-original-title="round3(row.data[28]/1000) + ' seconds'">
+                        {{row.data[27]}}
+                    </td>
                     <td :class="getBodyClass('Data', 8)"
                         :data-original-title="round2(100*row.data[8]/ row.data[0]) + '% of '+ row.data[16] + ' hit(s)'">
                         {{row.data[8]}}
@@ -180,9 +183,6 @@
                     <td :class="getBodyClass('Data', 10)"
                         :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
-                    </td>
-                    <td :class="getBodyClass('Data', 27)" :data-original-title="round3(row.data[28]/1000) + ' seconds'">
-                        {{row.data[27]}}
                     </td>
                     <td v-if="wvw" :class="getBodyClass('Data', 17)"
                         :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
@@ -234,6 +234,9 @@
                     <td>
                         {{row.data[7]}}
                     </td>
+                    <td :data-original-title="round3(row.data[28] / 1000) + ' seconds'">
+                        {{row.data[27]}}
+                    </td>
                     <td :data-original-title="round2(100*row.data[8]/ row.data[0])+ '% of '+ row.data[16] + ' hit(s)'">
                         {{row.data[8]}}
                     </td>
@@ -242,9 +245,6 @@
                     </td>
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
-                    </td>
-                    <td :data-original-title="round3(row.data[28] / 1000) + ' seconds'">
-                        {{row.data[27]}}
                     </td>
                     <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}

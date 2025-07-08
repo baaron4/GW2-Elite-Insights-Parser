@@ -4,7 +4,7 @@
         <TargetFramework>net8</TargetFramework>
         <LangVersion>12.0</LangVersion>
         <Nullable>enable</Nullable>
-        <Version>0.14.0.0</Version>
+        <Version>0.14.1.0</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
     </PropertyGroup>

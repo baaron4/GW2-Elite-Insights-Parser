@@ -35,6 +35,11 @@
                         <img :src="UIIcons.Interrupt" alt="Interrupted"
                             class="icon icon-hover">
                     </th>
+                    <th class="stat-cell" :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17)"
+                        data-original-title="CC">                  
+                        <img :src="UIIcons.CC" alt="CC"
+                            class="icon icon-hover">
+                    </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)"
                         data-original-title="Number of times was invulnerable to damage">
                         <img :src="UIIcons.Invul" alt="Invuln"
@@ -63,11 +68,6 @@
                     <th class="stat-cell" :class="getHeaderClass('Data', 10)" @click="sortBy('Data', 10)"
                         data-original-title="Boon Strips">
                         <img :src="UIIcons.Strip" alt="Boon Strips"
-                            class="icon icon-hover">
-                    </th>
-                    <th class="stat-cell" :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17)"
-                        data-original-title="CC">                  
-                        <img :src="UIIcons.CC" alt="CC"
                             class="icon icon-hover">
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12)"
@@ -118,6 +118,9 @@
                     <td :class="getBodyClass('Data', 3)">
                         {{row.def[3]}}
                     </td>
+                    <td :class="getBodyClass('Data', 17)" :data-original-title="round3(row.def[18]/1000) + ' seconds'">
+                        {{row.def[17]}}
+                    </td>
                     <td :class="getBodyClass('Data', 4)">
                         {{row.def[4]}}
                     </td>
@@ -135,9 +138,6 @@
                     </td>
                     <td :class="getBodyClass('Data', 10)" :data-original-title="row.def[11] + ' seconds'">
                         {{row.def[10]}}
-                    </td>
-                    <td :class="getBodyClass('Data', 17)" :data-original-title="round3(row.def[18]/1000) + ' seconds'">
-                        {{row.def[17]}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" :data-original-title="row.def[13]">
                         {{row.def[12]}}
@@ -159,16 +159,14 @@
                     <td>{{sum.def[0]}}</td>
                     <td>{{sum.def[1]}}</td>
                     <td>{{sum.def[2]}}</td>
-                    <td>
-                        {{sum.def[3]}}
-                    </td>
+                    <td>{{sum.def[3]}}</td>
+                    <td>{{sum.def[17]}}</td>
                     <td>{{sum.def[4]}}</td>
                     <td>{{sum.def[5]}}</td>
                     <td>{{sum.def[6]}}</td>
                     <td>{{sum.def[7]}}</td>
                     <td>{{sum.def[8]}}</td>
                     <td>{{sum.def[10]}}</td>
-                    <td>{{sum.def[17]}}</td>
                     <td>{{sum.def[12]}}</td>
                     <td>{{sum.def[16]}}</td>
                     <td>{{sum.def[14]}}</td>

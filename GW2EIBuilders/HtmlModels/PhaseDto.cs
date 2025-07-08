@@ -176,7 +176,7 @@ internal class PhaseDto
             {
                 PhaseData curPhase = phases[j];
                 if (curPhase.Start < phase.Start || curPhase.End > phase.End ||
-                    (curPhase.Start == phase.Start && curPhase.End == phase.End) || !curPhase.CanBeASubPhaseOf(phase))
+                    (curPhase == phase) || !curPhase.CanBeASubPhaseOf(phase))
                 {
                     continue;
                 }

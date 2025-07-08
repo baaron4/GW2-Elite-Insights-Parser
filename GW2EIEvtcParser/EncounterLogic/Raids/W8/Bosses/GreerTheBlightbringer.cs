@@ -233,7 +233,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 phase.Name = "Split " + (i) / 2;
                 phase.AddParentPhase(phases[0]);
                 phase.AddTargets(subTitans, log);
-                phase.AddTarget(ereg, log, PhaseData.TargetPriority.NonBlocking);
+                phase.AddTargets([greer, ereg], log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {

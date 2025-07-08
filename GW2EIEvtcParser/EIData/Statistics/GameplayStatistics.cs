@@ -25,24 +25,40 @@ public class GameplayStatistics
     public readonly double SkillCastUptime;
     public readonly double SkillCastUptimeNoAutoAttack;
 
-    private static double GetDistanceToTarget(SingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> reference)
+    private static double GetDistanceToTarget(SingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> references)
     {
 
-        var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
-        int offset = actor.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
-        if (positions.Count > 1 && reference.Count > 0)
+        var positions = actor.GetCombatReplayPolledPositions(log);
+        if (positions.Count > 0 && references.Count > 0)
         {
-            var distances = new List<float>();
-            //TODO(Rennorb) @cleanup: Dual indexing requires us to generate sparse lists with the same amount of entries and null values. 
-            // These are already parametric points and they are sorted, we don't need to fill up the list to equal lengths. Investigate perf. 
-            for (int time = 0; time < positions.Count; time++)
+            var distances = new List<float>(positions.Count);
+            int curReferenceIndex = 0;
+            for (int i = 0; i < positions.Count; i++)
             {
-                if (time + offset >= reference.Count || reference[time + offset] == null)
+                var curPosition = positions[i];
+                if (curPosition.Time < start || curPosition.Time > end)
                 {
                     continue;
                 }
-
-                distances.Add((positions[time].XYZ - reference[time + offset]!.Value.XYZ).XY().Length());
+                for (int j = curReferenceIndex; j < references.Count; j++)
+                {
+                    curReferenceIndex = j;
+                    var curReferencePosition = references[j];
+                    if (curReferencePosition != null)
+                    {
+                        var curReferencePoint = curReferencePosition.Value;
+                        if (curReferencePoint.Time < curPosition.Time)
+                        {
+                            continue;
+                        } 
+                        else if (curReferencePoint.Time == curPosition.Time)
+                        {
+                            distances.Add((curPosition.XYZ - curReferencePoint.XYZ).XY().Length());
+                            break;
+                        }
+                        break;
+                    }
+                }
             }
             return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
         }
