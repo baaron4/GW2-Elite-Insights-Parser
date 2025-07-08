@@ -116,6 +116,7 @@ internal static class EncounterImages
     internal const string CombatReplayConjuredAmalgamate = "https://i.imgur.com/lgzr1xD.png";
     internal const string CombatReplayTwinLargos = "https://i.imgur.com/O8wIWds.png";
     internal const string CombatReplayQadim = "https://i.imgur.com/f4jfgiX.png";
+    internal const string CombatReplayAdinaMainPhase1NoPillars = "https://i.imgur.com/ZbjOCsx.png";
     internal const string CombatReplayAdinaMainPhase1 = "https://i.imgur.com/IQn2RJV.png";
     internal const string CombatReplayAdinaMainPhase2 = "https://i.imgur.com/3pO7eCB.png";
     internal const string CombatReplayAdinaMainPhase3 = "https://i.imgur.com/ZFw590w.png";

@@ -517,7 +517,16 @@ internal class Adina : TheKeyOfAhdashim
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        var map = new CombatReplayMap(CombatReplayAdinaMainPhase1,
+        string mainPhase1;
+        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
+        {
+            mainPhase1 = CombatReplayAdinaMainPhase1NoPillars;
+        }      
+        else
+        {
+            mainPhase1 = CombatReplayAdinaMainPhase1;
+        }
+        var map = new CombatReplayMap(mainPhase1,
                         (866, 1000),
                         (13860, -2678, 15951, -268)/*,
                         (-21504, -21504, 24576, 24576),
@@ -533,7 +542,7 @@ internal class Adina : TheKeyOfAhdashim
             };
             var mainPhasesMap = new List<string>()
             {
-                    CombatReplayAdinaMainPhase1,
+                    mainPhase1,
                     CombatReplayAdinaMainPhase2,
                     CombatReplayAdinaMainPhase3,
                     CombatReplayAdinaMainPhase4
