@@ -76,6 +76,7 @@ const Types = {
     Target: 18,
     TargetPlayer: 19,
     Text: 20,
+    Polygon: 21,
 };
 
 function getDefaultCombatReplayTime() {
@@ -379,6 +380,9 @@ class Animator {
                 case Types.Circle:
                     MetadataClass = CircleMetadata;
                     break;
+                case Types.Polygon:
+                    MetadataClass = PolygonMetadata;
+                    break;
                 case Types.Doughnut:
                     MetadataClass = DoughnutMetadata;
                     break;
@@ -494,6 +498,9 @@ class Animator {
                         break;
                     case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
+                        break;
+                    case Types.Polygon:
+                        DecorationClass = PolygonMechanicDrawable;
                         break;
                     case Types.Rectangle:
                         DecorationClass = RectangleMechanicDrawable;

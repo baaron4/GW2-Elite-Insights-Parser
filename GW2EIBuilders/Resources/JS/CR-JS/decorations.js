@@ -45,6 +45,14 @@ class CircleMetadata extends FormMetadata {
     }
 }
 
+class PolygonMetadata extends FormMetadata {
+    constructor(params) {
+        super(params);
+        this.radius = InchToPixel * params.radius;
+        this.nbPolygon = params.nbPolygon;
+    }
+}
+
 class DoughnutMetadata extends FormMetadata {
     constructor(params) {
         super(params);
@@ -631,6 +639,51 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
         ctx.beginPath();
         ctx.arc(0, 0, this.getPercent() * (this.radius - this.minRadius) + this.minRadius, 0, 2 * Math.PI);
         ctx.closePath();
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = (2 / animator.scale).toString();
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+}
+
+class PolygonMechanicDrawable extends FormMechanicDrawable {
+    constructor(params) {
+        super(params);
+    }
+
+    get radius() {
+        return this.metadata.radius;
+    }
+
+    get nbPolygon() {
+        return this.metadata.nbPolygon;
+    }
+
+    draw() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        const ctx = animator.mainContext;
+        ctx.save();
+        this.moveContext(ctx, pos, rot);
+        ctx.beginPath();
+        const radius = this.getPercent() * this.radius;
+        const nbPolygon = this.nbPolygon;
+        ctx.moveTo(radius * Math.cos(0), radius * Math.sin(0));
+        for (let i = 1; i <= nbPolygon; i += 1) {
+            ctx.lineTo(radius * Math.cos(i * 2 * Math.PI / nbPolygon), radius * Math.sin(i * 2 * Math.PI / nbPolygon));
+        }
+
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();

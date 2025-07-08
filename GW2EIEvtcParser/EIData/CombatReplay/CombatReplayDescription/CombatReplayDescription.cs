@@ -29,7 +29,8 @@ public abstract class CombatReplayDescription
         SquadMarkerOverhead = 17,
         Target = 18,
         TargetPlayer = 19,
-        Text = 20
+        Text = 20,
+        Polygon = 21
     }
 
     protected CombatReplayDescription()
