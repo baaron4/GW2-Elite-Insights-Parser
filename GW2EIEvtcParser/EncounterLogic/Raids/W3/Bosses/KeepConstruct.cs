@@ -361,10 +361,17 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             case (int)TargetID.Galletta:
             case (int)TargetID.Ianim:
                 replay.Decorations.Add(new CircleDecoration(600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
-                replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.GreenishYellow, 0.2, new AgentConnector(target)));
                 if (replay.PolledPositions.Count > 0)
                 {
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.LightBlue, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                }
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KeepConstructStatueDeathEmbraceRemoveTrigger, out var embraceRemoveAreas))
+                {
+                    foreach (var embraceRemoveArea in embraceRemoveAreas)
+                    {
+                        replay.Decorations.Add(new CircleDecoration(400, embraceRemoveArea.ComputeLifespan(log, 1000), Colors.GreenishYellow, 0.4, new PositionConnector(embraceRemoveArea.Position)));
+                    }
                 }
                 break;
             case (int)TargetID.GreenPhantasm:
@@ -414,7 +421,18 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KeepConstructHailOfFuryWarning, out var debrisWarnings))
+        {
+            foreach (var debris in debrisWarnings)
+            {
+                var debrisLifespan = debris.ComputeLifespan(log, 3000);
+                var growingEnd = debrisLifespan.end;
+                // One second for the actual drop, we have the drop effect but server delay can create visual flickering
+                debrisLifespan.end += 1000;
+                var debrisDecoration = new CircleDecoration(150, debrisLifespan, Colors.Orange, 0.2, new PositionConnector(debris.Position));
+                environmentDecorations.AddWithGrowing(debrisDecoration, growingEnd);
+            }
+        }
         // Crimson Energy (red) and Radiant Energy (white) orbs
         var radiantOrbs = log.CombatData.GetMissileEventsBySkillID(RadiantEnergyWhiteOrb);
         var crimsonOrbs = log.CombatData.GetMissileEventsBySkillID(CrimsonEnergyRedOrb);

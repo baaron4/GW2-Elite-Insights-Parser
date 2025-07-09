@@ -603,6 +603,10 @@ public static class EffectGUIDs
     public static readonly GUID MatthiasWellOfTheProfane = new("9BEF037F1B8C2346B5F71A88128DF1A4"); // 90000 duration - Matthias Src
     // Escort Glenna
     public static readonly GUID EscortOverHere = new("64CD79C1A121EC42B1278DEF9280ED35");
+    // KC
+    public static readonly GUID KeepConstructHailOfFuryWarning = new("692D6ECAF104DA48B8167EE1AA35B97E"); // 3000ms, no src
+    public static readonly GUID KeepConstructHailOfFuryFall = new("C8209E81C9E1F94E9754545E7D5C315A"); // 1000ms, no src
+    public static readonly GUID KeepConstructStatueDeathEmbraceRemoveTrigger = new("5DEE99D37A13F943A8BBC47A28DF605A"); // 1000ms, statue src
     // Xera
     public static readonly GUID XeraIntervention1 = new("63C34770B4EFF64B8EAA21BB835BB560"); // 4294967295 duration - Src Player - Usable with ComputeDynamicEffectLifespan
     public static readonly GUID XeraIntervention2 = new("79EA3F01274B4F418B2C571BAE1B9E17"); // 0 duration - Src Player
