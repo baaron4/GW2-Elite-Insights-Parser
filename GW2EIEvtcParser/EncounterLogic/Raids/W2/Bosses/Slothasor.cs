@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -256,16 +257,6 @@ internal class Slothasor : SalvationPass
                         replay.Decorations.Add(circle);
                     }
                 }
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorSporeReleaseProjectileImpacts, out var sporeReleaseImpacts))
-                {
-                    foreach (var sporeReleaseImpact in sporeReleaseImpacts)
-                    {
-                        // TODO: confirm size
-                        lifespan = sporeReleaseImpact.ComputeLifespan(log, 1000);
-                        var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(sporeReleaseImpact.Position));
-                        replay.Decorations.Add(circle);
-                    }
-                }
                 break;
             case (int)TargetID.PoisonMushroom:
                 break;
@@ -310,6 +301,16 @@ internal class Slothasor : SalvationPass
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorSporeReleaseProjectileImpacts, out var sporeReleaseImpacts))
+        {
+            foreach (var sporeReleaseImpact in sporeReleaseImpacts)
+            {
+                // TODO: confirm size
+                var lifespan = sporeReleaseImpact.ComputeLifespan(log, 1000);
+                var circle = new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(sporeReleaseImpact.Position));
+                environmentDecorations.Add(circle);
+            }
+        }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorGrowingVolatilePoison, out var growingVolatilePoisons))
         {
             foreach (var growingVolatilePoison in growingVolatilePoisons)
