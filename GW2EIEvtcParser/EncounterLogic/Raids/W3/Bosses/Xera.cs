@@ -476,7 +476,19 @@ internal class Xera : StrongholdOfTheFaithful
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-
+        /*CombatReplay.DebugAllNPCEffects(log, environmentDecorations, [
+            EffectGUIDs.XeraHalfArenaGravityWell,
+            EffectGUIDs.XeraIntervention1,
+            EffectGUIDs.XeraIntervention2,
+            EffectGUIDs.XeraIntervention3,
+            EffectGUIDs.XeraTemporalShredAoE,
+            EffectGUIDs.XeraShardAoEs1,
+            EffectGUIDs.XeraShardAoEs2,
+            EffectGUIDs.XeraBloodstoneFragmentSomething,
+            EffectGUIDs.XeraSplitShardAoEs1,
+            EffectGUIDs.XeraSplitShardAoEs2,
+            EffectGUIDs.XeraUnstableLeyRiftClosed,
+            ]);*/
         // Intervention Bubble
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var intervention))
         {

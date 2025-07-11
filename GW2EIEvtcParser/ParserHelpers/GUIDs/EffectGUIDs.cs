@@ -613,6 +613,12 @@ public static class EffectGUIDs
     public static readonly GUID XeraIntervention3 = new("5FA6527231BB8041AC783396142C6200"); // 0 duration - No Src No Dst
     public static readonly GUID XeraHalfArenaGravityWell = new("66E848A88B572940852764912BFC5DF3"); // 0 duration - No Src, Dst is a plateform related gadget
     public static readonly GUID XeraTemporalShredAoE = new("606802DCC10523488AF3AE65333D5C84"); // 1500 duration
+    public static readonly GUID XeraShardAoEs1 = new("73414BA39AFCF540A90CF91DE961CCEF"); // 500ms, no src, no dst
+    public static readonly GUID XeraShardAoEs2 = new("482F04E7037CF74A93D2A42AC5704A68"); // 3000ms, no src, no dst
+    public static readonly GUID XeraBloodstoneFragmentSomething = new("2400B83D37A4D642893994C7AB24C9BD"); // 833ms, src unknown, dst blood stone fragment
+    public static readonly GUID XeraSplitShardAoEs1 = new("A819914E35A47444AB1CDDE789D7C69F"); // 2000ms duration, src and dst unknown
+    public static readonly GUID XeraSplitShardAoEs2 = new("05562003A595F94DA649F7F3CFFB94D1"); // 1000ms duration, src and dst unknown
+    public static readonly GUID XeraUnstableLeyRiftClosed = new("092F17E341342F4192085FF2851611DE"); // 4666ms duration, dst unstable ley rift, src unknown
     // Cairn
     public static readonly GUID CairnDisplacement = new("7798B97ED6B6EB489F7E33DF9FE6BD99");
     public static readonly GUID CairnDashGreen = new("D2E6D55CC94F79418BB907F063CBDD81");
