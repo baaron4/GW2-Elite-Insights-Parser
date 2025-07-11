@@ -273,14 +273,16 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         var xeras = agentData.GetNPCsByID(TargetID.Xera);
         var xeras2 = agentData.GetNPCsByID(TargetID.Xera2);
+        long start = 0;
         foreach (var xera2 in xeras2)
         {
-            var attachedXera = xeras.LastOrDefault(x => x.FirstAware < xera2.FirstAware);
+            var attachedXera = xeras.LastOrDefault(x => x.FirstAware < xera2.FirstAware && x.FirstAware >= start);
             if (attachedXera != null)
             {
                 attachedXera.OverrideAwareTimes(attachedXera.FirstAware, xera2.LastAware);
                 RedirectAllEvents(combatData, extensions, agentData, xera2, attachedXera);
             }
+            start = xera2.LastAware;
         }
     }
 
