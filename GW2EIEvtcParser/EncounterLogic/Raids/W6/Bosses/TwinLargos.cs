@@ -21,20 +21,20 @@ internal class TwinLargos : MythwrightGambit
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Waterlogged, new MechanicPlotlySetting(Symbols.HexagonOpen,Colors.LightBlue), "Debuff", "Waterlogged (stacking water debuff)","Waterlogged", 0),
-                new PlayerDstHitMechanic(VaporRush, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge", "Vapor Rush (Triple Charge)","Vapor Rush Charge", 0),
-                new PlayerDstHitMechanic(TidalPoolSkill, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool", "Tidal Pool","Tidal Pool", 0),
+                new PlayerDstHealthDamageHitMechanic(VaporRush, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightBlue), "Charge", "Vapor Rush (Triple Charge)","Vapor Rush Charge", 0),
+                new PlayerDstHealthDamageHitMechanic(TidalPoolSkill, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Pool", "Tidal Pool","Tidal Pool", 0),
                 new PlayerDstBuffApplyMechanic(TidalPoolBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Poison", "Expanding Water Field","Water Poison", 0),
-                new PlayerDstHitMechanic(AquaticDetainmentHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float", "Aquatic Detainment (Float Bubble)","Float Bubble", 6000),
+                new PlayerDstHealthDamageHitMechanic(AquaticDetainmentHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Float", "Aquatic Detainment (Float Bubble)","Float Bubble", 6000),
                 new PlayerDstBuffApplyMechanic(AquaticAuraNikare, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Nik Aura", "Increasing Damage Debuff on Nikare's Last Platform","Nikare Aura Debuff", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(SeaSwell, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave", "Sea Swell (Shockwave)","Shockwave", 0),
-                new PlayerDstHitMechanic(AquaticVortex, new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado", "Aquatic Vortex (Water Tornados)","Tornado", 0),
-                new PlayerDstHitMechanic(VaporJet, new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal", "Vapor Jet (Boon Steal)","Boon Steal", 0),
+                new PlayerDstHealthDamageHitMechanic(SeaSwell, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkPurple), "Wave", "Sea Swell (Shockwave)","Shockwave", 0),
+                new PlayerDstHealthDamageHitMechanic(AquaticVortex, new MechanicPlotlySetting(Symbols.StarSquareOpenDot,Colors.LightBlue), "Tornado", "Aquatic Vortex (Water Tornados)","Tornado", 0),
+                new PlayerDstHealthDamageHitMechanic(VaporJet, new MechanicPlotlySetting(Symbols.Square,Colors.Pink), "Steal", "Vapor Jet (Boon Steal)","Boon Steal", 0),
                 new PlayerDstBuffApplyMechanic(AquaticAuraKenut, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ken Aura", "Increasing Damage Debuff on Kenut's Last Platform","Kenut Aura Debuff", 0),
-                new PlayerDstHitMechanic(CycloneBurst, new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field", "Cyclone Burst (triangular rotating fields on Kenut)","Cyclone Burst", 0),
+                new PlayerDstHealthDamageHitMechanic(CycloneBurst, new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Y Field", "Cyclone Burst (triangular rotating fields on Kenut)","Cyclone Burst", 0),
             ]),
-            new PlayerDstHitMechanic(Geyser, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch", "Geyser (Launching Aoes)","Launch Field", 0),
+            new PlayerDstHealthDamageHitMechanic(Geyser, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Teal), "KB/Launch", "Geyser (Launching Aoes)","Launch Field", 0),
             new EnemyDstBuffApplyMechanic(EnragedTwinLargos, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Enrage", "Enraged","Enrage", 0),
         ]);
     public TwinLargos(int triggerID) : base(triggerID)

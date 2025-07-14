@@ -23,31 +23,31 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstBuffRemoveMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "LifeFire.R", "Lost Life-Fire Circle", "Life-Fire Circle Remove", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2, VitreosSpikeHit3], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
-                new PlayerDstHitMechanic([FallingIce, FallingIceCM], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightBlue), "Fall.H", "Hit by Falling Ice", "Falling Ice Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([VitreousSpikeHit1, VitreousSpikeHit2, VitreosSpikeHit3], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.SkyBlue), "Spike.H", "Hit by Vitreous Spike", "Vitreous Spike Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([FallingIce, FallingIceCM], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightBlue), "Fall.H", "Hit by Falling Ice", "Falling Ice Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([FrozenTeeth, FrozenTeethCM], new MechanicPlotlySetting(Symbols.XThinOpen, Colors.SkyBlue), "Fissure.H", "Hit by Frozen Teeth (Fissures)", "Frozen Teeth Hit", 0),
-                new PlayerDstHitMechanic(LoftedCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Red), "HighCryo.H", "Hit by Lofted Cryoflash (High Shockwave)", "Lofted Cryoflash Hit", 0),
-                new PlayerDstHitMechanic(TerrestialCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "LowCryo.H", "Hit by Terrestrial Cryoflash (Low Shockwave)", "Terrestrial Cryoflash Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([FrozenTeeth, FrozenTeethCM], new MechanicPlotlySetting(Symbols.XThinOpen, Colors.SkyBlue), "Fissure.H", "Hit by Frozen Teeth (Fissures)", "Frozen Teeth Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(LoftedCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Red), "HighCryo.H", "Hit by Lofted Cryoflash (High Shockwave)", "Lofted Cryoflash Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(TerrestialCryoflash, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.Red), "LowCryo.H", "Hit by Terrestrial Cryoflash (Low Shockwave)", "Terrestrial Cryoflash Hit", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(GorefrostTarget, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Arrow.T", "Targeted by Gorefrost (Arrows)", "Gorefrost Target", 0),
-                new PlayerDstHitMechanic(Gorefrost, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "Arrow.H", "Hit by Gorefrost (Arrows)", "Gorefrost Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(Gorefrost, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Orange), "Arrow.H", "Hit by Gorefrost (Arrows)", "Gorefrost Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([FreezingFan, FreezingFan2], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Orange), "Frontal.H", "Hit by Freezing Fan (Frontal)", "Freezing Fan Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([FreezingFan, FreezingFan2], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Orange), "Frontal.H", "Hit by Freezing Fan (Frontal)", "Freezing Fan Hit", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "Green.T", "Targeted by Wintry Orb (Green)", "Wintry Orb Target", 500),
-                new PlayerDstHitMechanic(WintryOrb, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.H", "Hit by Wintry Orb (Green)", "Wintry Orb Hit", 0),
-                new PlayerDstHitMechanic(HailstormWhisperingShadow, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Spread.H", "Hit by Hailstorm (Spread)", "Hailstorm Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(WintryOrb, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.H", "Hit by Wintry Orb (Green)", "Wintry Orb Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(HailstormWhisperingShadow, new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "Spread.H", "Hit by Hailstorm (Spread)", "Hailstorm Hit", 0),
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([LoftedCryoflash, TerrestialCryoflash], new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
+                new PlayerDstHealthDamageHitMechanic([LoftedCryoflash, TerrestialCryoflash], new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
                     .UsingAchievementEligibility(),
             ]),
         ]));

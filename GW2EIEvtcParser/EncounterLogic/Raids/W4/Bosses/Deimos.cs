@@ -19,8 +19,8 @@ internal class Deimos : BastionOfThePenitent
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
-                new PlayerDstFirstHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
+                new PlayerDstHealthDamageHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil", "Rapid Decay (Black expanding oil)","Black Oil", 0),
+                new PlayerDstFirstHealthDamageHitMechanic(RapidDecay, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0)
                     .UsingChecker((ce, log) => {
                         SingleActor? actor = log.FindActor(ce.To);
                         if (actor == null)
@@ -47,15 +47,15 @@ internal class Deimos : BastionOfThePenitent
                 new EnemyCastEndMechanic(BoonThief, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed", "Boon Thief CCed","CCed (Thief)", 0)
                     .UsingChecker((ce, log) => ce.ActualDuration < 4400),
             ]),
-            new PlayerDstHitMechanic([Annihilate2, Annihilate1], new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza", "Annihilate (Cascading Pizza attack)","Boss Smash", 0),
+            new PlayerDstHealthDamageHitMechanic([Annihilate2, Annihilate1], new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza", "Annihilate (Cascading Pizza attack)","Boss Smash", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DemonicShockWaveRight, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash", "Knockback (right hand) in 10% Phase","10% Right Smash", 0),
-                new PlayerDstHitMechanic(DemonicShockWaveLeft, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash", "Knockback (left hand) in 10% Phase","10% Left Smash", 0),
-                new PlayerDstHitMechanic(DemonicShockWaveCenter, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash", "Knockback (both hands) in 10% Phase","10% Double Smash", 0),
+                new PlayerDstHealthDamageHitMechanic(DemonicShockWaveRight, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash", "Knockback (right hand) in 10% Phase","10% Right Smash", 0),
+                new PlayerDstHealthDamageHitMechanic(DemonicShockWaveLeft, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash", "Knockback (left hand) in 10% Phase","10% Left Smash", 0),
+                new PlayerDstHealthDamageHitMechanic(DemonicShockWaveCenter, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash", "Knockback (both hands) in 10% Phase","10% Double Smash", 0),
             ]),
             new PlayerDstBuffApplyMechanic(TearInstability, new MechanicPlotlySetting(Symbols.Diamond,Colors.DarkTeal), "Tear", "Collected a Demonic Tear","Tear", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(MindCrush, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush", "Hit by Mind Crush without Bubble Protection","Mind Crush", 0)
+                new PlayerDstHealthDamageHitMechanic(MindCrush, new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Mind Crush", "Hit by Mind Crush without Bubble Protection","Mind Crush", 0)
                     .UsingChecker( (de,log) => de.HealthDamage > 0),
                 new PlayerDstBuffApplyMechanic(WeakMinded, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Weak Mind", "Weak Minded (Debuff after Mind Crush)","Weak Minded", 0),
             ]),

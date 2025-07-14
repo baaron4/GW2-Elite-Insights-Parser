@@ -19,20 +19,20 @@ internal class Freezie : FestivalStrikeMissionLogic
         MechanicList.Add(new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(AuroraBeamTargetBuff, new MechanicPlotlySetting(Symbols.Star, Colors.Purple), "AuroraBeam.T", "Targeted by Aurora Beam", "Aurora Beam Target", 0),
-                new PlayerDstHitMechanic([AuroraBeam1, AuroraBeam2, AuroraBeam3], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Purple), "AuroraBeam.H", "Hit by Aurora Beam", "Aurora Beam Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([AuroraBeam1, AuroraBeam2, AuroraBeam3], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Purple), "AuroraBeam.H", "Hit by Aurora Beam", "Aurora Beam Hit", 0),
                 new EnemyCastStartMechanic([AuroraBeam1, AuroraBeam2, AuroraBeam3], new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.Purple), "AuroraBeam.C", "Casted Aurora Beam", "Aurora Beam Cast", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(GiantSnowballFreezieTargetBuff1, new MechanicPlotlySetting(Symbols.Star, Colors.Purple, 5), "GiantSnowball.T", "Targeted by Giant Snowball", "Giant Snowball Target", 0),
-                new PlayerDstHitMechanic(GiantSnowballFreezieDamage, new MechanicPlotlySetting(Symbols.Circle, Colors.White), "GiantSnowball.H", "Hit by Giant Snowball", "Giant Snowball Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(GiantSnowballFreezieDamage, new MechanicPlotlySetting(Symbols.Circle, Colors.White), "GiantSnowball.H", "Hit by Giant Snowball", "Giant Snowball Hit", 0),
                 new EnemyCastStartMechanic(GiantSnowballFreezieCast, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.White), "GiantSnowball.C", "Casted Giant Snowball", "Giant Snowball Cast", 0),
             ]),
-            new PlayerDstHitMechanic(Blizzard, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Orange), "Blizzard.H", "Hit by Blizzard (Outer circle)", "Blizzard Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(Blizzard, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Orange), "Blizzard.H", "Hit by Blizzard (Outer circle)", "Blizzard Hit", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(FrostPatchDamage, new MechanicPlotlySetting(Symbols.Octagon, Colors.Blue), "FrostPatch.H", "Hit by Frost Patch (Cracks)", "Frost Patch Hit (Cracks)", 0),
+                new PlayerDstHealthDamageHitMechanic(FrostPatchDamage, new MechanicPlotlySetting(Symbols.Octagon, Colors.Blue), "FrostPatch.H", "Hit by Frost Patch (Cracks)", "Frost Patch Hit (Cracks)", 0),
                 new EnemyCastStartMechanic(FrostPatchSkill, new MechanicPlotlySetting(Symbols.Octagon, Colors.LightBlue), "FrostPatch.C", "Casted Frost Patch", "Frost Patch Cast", 0),
             ]),
-            new PlayerDstHitMechanic([JuttingIceSpikes1, JuttingIceSpikes2], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightGrey), "IceSpike.H", "Hit by Jutting Ice Spike", "Jutting Ice Spike Hit", 0),
+            new PlayerDstHealthDamageHitMechanic([JuttingIceSpikes1, JuttingIceSpikes2], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightGrey), "IceSpike.H", "Hit by Jutting Ice Spike", "Jutting Ice Spike Hit", 0),
             new PlayerCastStartMechanic(FireSnowball, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Snowball.C", "Used SAK: Throw Snowball", "Threw Snowball", 0),
             new EnemyDstBuffApplyMechanic(IcyBarrier, new MechanicPlotlySetting(Symbols.Square, Colors.DarkBlue), "IcyBarrier.A", "Icy Barrier Applied", "Icy Barrier Application", 0),
         ])

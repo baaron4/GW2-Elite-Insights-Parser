@@ -19,17 +19,17 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([  
-            new PlayerDstHitMechanic(GraspingHorror, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
+            new PlayerDstHealthDamageHitMechanic(GraspingHorror, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "Hands.H", "Hit by Hands AoE", "Hands Hit", 150),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
+                new PlayerDstHealthDamageHitMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleCross, Colors.DarkRed), "AnkkaPull.H", "Hit by Death's Embrace (Ankka's Pull)", "Death's Embrace Hit", 150),
                     new EnemyCastStartMechanic(DeathsEmbraceSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Blue), "AnkkaPull.C", "Casted Death's Embrace", "Death's Embrace Cast", 150),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathsHandInBetween, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
-                new PlayerDstHitMechanic(DeathsHandDropped, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
+                new PlayerDstHealthDamageHitMechanic(DeathsHandInBetween, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Sctn.AoE.H", "Hit by in-between sections AoE", "Death's Hand Hit (transitions)", 150),
+                new PlayerDstHealthDamageHitMechanic(DeathsHandDropped, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Sprd.AoE.H", "Hit by placeable Death's Hand AoE", "Death's Hand Hit (placeable)", 150),
                 new PlayerDstBuffApplyMechanic(DeathsHandSpreadBuff, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Green), "Sprd.AoE.B", "Received Death's Hand Spread", "Death's Hand Spread", 150),
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(ImminentDeathSkill, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 0),
+                    new PlayerDstHealthDamageHitMechanic(ImminentDeathSkill, new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Green), "Imm.Death.H", "Hit by Imminent Death", "Imminent Death Hit", 0),
                     new PlayerDstBuffApplyMechanic(ImminentDeathBuff, new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Green), "Imm.Death.B", "Placed Death's Hand AoE and gained Imminent Death Buff", "Imminent Death Buff", 150),
                 ]),
             ]),
@@ -37,23 +37,23 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             new MechanicGroup([
                 // Kraits
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(WallOfFear, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic(WallOfFear, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkRed), "Krait.H", "Hit by Krait AoE", "Krait Hit", 150),
                 ]),
                 // Quaggans
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([WaveOfTormentNM, WaveOfTormentCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([WaveOfTormentNM, WaveOfTormentCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Quaggan.H", "Hit by Quaggan Explosion", "Quaggan Hit", 150),
                 ]),
                 // Lich
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(TerrifyingApparition, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic(TerrifyingApparition, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Lich.H", "Hit by Lich AoE", "Lich Hit", 150),
                     new PlayerDstBuffApplyMechanic(AnkkaLichHallucinationFixation, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightBlue), "Lich.H.F", "Fixated by Lich Hallucination", "Lich Fixation", 150),
                 ]),
-                new PlayerDstHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
+                new PlayerDstHealthDamageHitMechanic([WallOfFear, WaveOfTormentNM, WaveOfTormentCM, TerrifyingApparition], new MechanicPlotlySetting(Symbols.DiamondTall, Colors.Blue), "Clarity.Achiv", "Achievement Eligibility: Clarity", "Achiv Clarity", 150)
                     .UsingAchievementEligibility(),
                 // Reaches
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
-                    new PlayerDstHitMechanic([ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
+                    new PlayerDstHealthDamageHitMechanic([ZhaitansReachThrashXJJ1, ZhaitansReachThrashXJJ2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkGreen), "ZhtRch.Pull", "Pulled by Zhaitan's Reach", "Zhaitan's Reach Pull", 150),
+                    new PlayerDstHealthDamageHitMechanic([ZhaitansReachGroundSlam, ZhaitansReachGroundSlamXJJ], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen), "ZhtRch.Knck", "Knocked by Zhaitan's Reach", "Zhaitan's Reach Knock", 150),
                 ]),
                 // Hallucinations
                 new MechanicGroup([

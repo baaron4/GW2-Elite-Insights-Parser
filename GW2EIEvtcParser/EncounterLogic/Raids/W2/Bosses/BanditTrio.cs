@@ -28,20 +28,20 @@ internal class BanditTrio : SalvationPass
                 ]),
                 new MechanicGroup([
                     new PlayerCastStartMechanic(Beehive, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Beehive.T", "Threw Beehive", "Beehive Throw", 0),
-                    new PlayerSrcHitMechanic(Beehive, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Berg)),
-                    new PlayerSrcHitMechanic(Beehive, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
+                    new PlayerSrcHealthDamageHitMechanic(Beehive, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Berg)),
+                    new PlayerSrcHealthDamageHitMechanic(Beehive, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
                 ]),
-                new PlayerDstHitMechanic(OverheadSmashBerg, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash", "Overhead Smash (CC Attack Berg)","CC Smash", 0),
+                new PlayerDstHealthDamageHitMechanic(OverheadSmashBerg, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash", "Overhead Smash (CC Attack Berg)","CC Smash", 0),
             ]),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Blind, new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Zane)),
-                new PlayerDstHitMechanic(HailOfBulletsZane, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone", "Hail of Bullets (Zane Cone Shot)","Hail of Bullets", 0),
+                new PlayerDstHealthDamageHitMechanic(HailOfBulletsZane, new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone", "Hail of Bullets (Zane Cone Shot)","Hail of Bullets", 0),
             ]),
             new MechanicGroup([
                 new PlayerCastStartMechanic(ThrowOilKeg, new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
                 new PlayerDstBuffApplyMechanic(Burning, new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Narella)),
-                new PlayerDstHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
-                new PlayerDstHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
+                new PlayerDstHealthDamageHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
             ]),
         ]);
     public BanditTrio(int triggerID) : base(triggerID)

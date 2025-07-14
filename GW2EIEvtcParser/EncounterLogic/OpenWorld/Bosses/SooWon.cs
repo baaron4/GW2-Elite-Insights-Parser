@@ -17,19 +17,19 @@ internal class SooWon : OpenWorldLogic
     {
         MechanicList.Add(new MechanicGroup([
         
-        new PlayerDstHitMechanic(TsunamiSlamOW, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
-        new PlayerDstHitMechanic(VoidPurgeOW, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
-        new PlayerDstSkillMechanic(ClawSlapOW, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0)
+        new PlayerDstHealthDamageHitMechanic(TsunamiSlamOW, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
+        new PlayerDstHealthDamageHitMechanic(VoidPurgeOW, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
+        new PlayerDstHealthDamageMechanic(ClawSlapOW, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0)
             .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
-        new PlayerDstHitMechanic(TailSlap, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
-        new PlayerDstHitMechanic(BiteOW, new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
+        new PlayerDstHealthDamageHitMechanic(TailSlap, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
+        new PlayerDstHealthDamageHitMechanic(BiteOW, new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
         new MechanicGroup([
 
-            new PlayerDstSkillMechanic(NightmareDevastationOW1, new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),
-            new PlayerDstSkillMechanic(NightmareDevastationOW2, new MechanicPlotlySetting(Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", 0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW1, new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),
+            new PlayerDstHealthDamageMechanic(NightmareDevastationOW2, new MechanicPlotlySetting(Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", 0),
         ]),
         new PlayerDstBuffApplyMechanic(WispForm, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", 0),
-        new PlayerDstSkillMechanic(SeveredFromBody, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", 0).UsingChecker((de, log) => de.HasKilled),
+        new PlayerDstHealthDamageMechanic(SeveredFromBody, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", 0).UsingChecker((de, log) => de.HasKilled),
         new MechanicGroup([
             new PlayerDstBuffApplyMechanic(Drown1, new MechanicPlotlySetting(Symbols.Circle,Colors.LightBlue), "Bubble", "Player was trapped in a bubble by Soo-Won's Tail", "Bubble", 0),
             new PlayerDstBuffApplyMechanic(Drown2, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkTeal), "Whirlpool", "Player was trapped in a whirlpool", "Whirlpool", 0),

@@ -4,20 +4,20 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData;
 
 
-internal abstract class SkillMechanic : IDBasedMechanic<HealthDamageEvent>
+internal abstract class HealthDamageMechanic : IDBasedMechanic<HealthDamageEvent>
 {
 
     protected bool Minions { get; private set; } = false;
 
-    public SkillMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public HealthDamageMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
-    public SkillMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public HealthDamageMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
-    public SkillMechanic WithMinions()
+    public HealthDamageMechanic WithMinions()
     {
         Minions = true;
         return this;

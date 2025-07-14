@@ -20,9 +20,9 @@ internal class Dhuum : HallOfChains
     private bool _hasPrevent;
 
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
-            new PlayerDstHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
+            new PlayerDstHealthDamageHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(ArcingAfflictionHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg", "Arcing Affliction (Bomb) hit","Bomb dmg", 0),
+                new PlayerDstHealthDamageHitMechanic(ArcingAfflictionHit, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Bomb dmg", "Arcing Affliction (Bomb) hit","Bomb dmg", 0),
                 new PlayerDstBuffApplyMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Bomb", "Arcing Affliction (Bomb) application","Bomb", 0),
                 new PlayerDstBuffRemoveMechanic(ArcingAffliction, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Bomb Trig","Arcing Affliction (Bomb) manualy triggered", "Bomb Triggered",0).UsingChecker((br, log) =>
                 {
@@ -50,20 +50,20 @@ internal class Dhuum : HallOfChains
             ]),
             new MechanicGroup([
                 new PlayerSrcPlayerDstBuffApplyMechanic(DhuumShacklesBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Teal), "Shackles","Soul Shackle (Tether) application", "Shackles",10000),//  //also used for removal.
-                new PlayerDstHitMechanic(DhuumShacklesHit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg", "Soul Shackle (Tether) dmg ticks","Shackles Dmg", 0)
+                new PlayerDstHealthDamageHitMechanic(DhuumShacklesHit, new MechanicPlotlySetting(Symbols.DiamondOpen,Colors.Teal), "Shackles dmg", "Soul Shackle (Tether) dmg ticks","Shackles Dmg", 0)
                     .UsingChecker((de,log) => de.HealthDamage > 0),
             ]),
             new PlayerDstBuffApplyMechanic(Superspeed, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Grey), "SupSpeed.Orb", "Gained Superspeed from Desmina (Walked over orb)", "Took Superspeed orb", 0)
                 .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.DhuumDesmina)),
-            new PlayerDstHitMechanic(ConeSlash, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone", "Boon ripping Cone Attack","Cone", 0),
-            new PlayerDstHitMechanic(CullDamage, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Teal), "Crack", "Cull (Fearing Fissures)","Cracks", 0),
-            new PlayerDstHitMechanic(PutridBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark", "Necro Marks during Scythe attack","Necro Marks", 0),
-            new PlayerDstHitMechanic(CataclysmicCycle, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg", "Damage when sucked to close to middle","Suck dmg", 0),
+            new PlayerDstHealthDamageHitMechanic(ConeSlash, new MechanicPlotlySetting(Symbols.TriangleUp,Colors.DarkGreen), "Cone", "Boon ripping Cone Attack","Cone", 0),
+            new PlayerDstHealthDamageHitMechanic(CullDamage, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Teal), "Crack", "Cull (Fearing Fissures)","Cracks", 0),
+            new PlayerDstHealthDamageHitMechanic(PutridBomb, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Mark", "Necro Marks during Scythe attack","Necro Marks", 0),
+            new PlayerDstHealthDamageHitMechanic(CataclysmicCycle, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Suck dmg", "Damage when sucked to close to middle","Suck dmg", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathMark, new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip", "Lesser Death Mark hit (Dip into ground)","Dip AoE", 0),
-                new PlayerDstHitMechanic(GreaterDeathMark, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg", "Knockback damage during Greater Deathmark (mid port)","Knockback dmg", 0),
+                new PlayerDstHealthDamageHitMechanic(DeathMark, new MechanicPlotlySetting(Symbols.Hexagon,Colors.LightOrange), "Dip", "Lesser Death Mark hit (Dip into ground)","Dip AoE", 0),
+                new PlayerDstHealthDamageHitMechanic(GreaterDeathMark, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "KB dmg", "Knockback damage during Greater Deathmark (mid port)","Knockback dmg", 0),
             ]),
-            new PlayerDstHitMechanic(RendingSwipe, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightOrange), "Enf.Swipe", "Hit by Dhuum's Enforcer Rending Swipe", "Rending Swipe Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(RendingSwipe, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightOrange), "Enf.Swipe", "Hit by Dhuum's Enforcer Rending Swipe", "Rending Swipe Hit", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(FracturedSpirit, new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Orb CD", "Applied when taking green","Green port", 0),
                 new PlayerDstBuffApplyMechanic(SourcePureOblivionBuff, new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Black), "10%", "Lifted by Pure Oblivion", "Pure Oblivion (10%)", 0),

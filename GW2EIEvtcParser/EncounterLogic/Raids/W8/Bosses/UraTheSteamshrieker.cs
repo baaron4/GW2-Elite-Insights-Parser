@@ -21,37 +21,37 @@ internal class UraTheSteamshrieker : MountBalrior
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             // Sulfuric Geysers
             new MechanicGroup([
-                new PlayerDstHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),
-                new PlayerDstHitMechanic(EruptionVent, new MechanicPlotlySetting(Symbols.TriangleSW, Colors.DarkPink), "ErupVent.H", "Hit by Eruption Vent (Geyser Shockwave)", "Eruption Vent Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SulfuricEruption, new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "SulfErup.H", "Hit by Sulfuric Eruption (Geyser Spawn)", "Sulfuric Eruption Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(EruptionVent, new MechanicPlotlySetting(Symbols.TriangleSW, Colors.DarkPink), "ErupVent.H", "Hit by Eruption Vent (Geyser Shockwave)", "Eruption Vent Hit", 0),
                 new PlayerDstEffectMechanic([EffectGUIDs.UraSulfuricGeyserTarget, EffectGUIDs.UraSulfuricGeyserTargetCM], new MechanicPlotlySetting(Symbols.Hexagon, Colors.Blue), "SulfGey.T", "Targeted by Sulfuric Geyser (Spawn)", "Sulfuric Geyser Spawn Target", 0),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
-                new PlayerDstHitMechanic([EruptionVent, SulfuricEruption], new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
+                new PlayerDstHealthDamageHitMechanic([EruptionVent, SulfuricEruption], new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
                     .UsingEnable(log => log.FightData.IsCM || log.FightData.IsLegendaryCM).UsingAchievementEligibility(),
             ]),
             // Titanspawn Geysers
             new MechanicGroup([
-                new PlayerDstHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Orange), "UraJump.H", "Hit by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser Hit", 0),
-                new PlayerDstHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
+                new PlayerDstHealthDamageHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Orange), "UraJump.H", "Hit by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(CreateTitanspawnGeyser, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightOrange), "UraJump.CC", "CC by Create Titanspawn Geyser AoE (Ura jump in place)", "Create Titanspawn Geyser CC", 0)
                     .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleX, Colors.White), "Dispel.Titn", "Dispelled Titanspawn Geyser (Removed Hardened Crust)", "Dispelled Titanspawn Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsAnySpecies([TargetID.TitanspawnGeyser, TargetID.TitanspawnGeyserGadget])),
             ]),
             // Toxic Geysers
             new MechanicGroup([
-                new PlayerDstHitMechanic([ToxicGeyser1, ToxicGeyser2, ToxicGeyserCM], new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([ToxicGeyser1, ToxicGeyser2, ToxicGeyserCM], new MechanicPlotlySetting(Symbols.StarSquare, Colors.GreenishYellow), "ToxGeyser.H", "Hit by Toxic Geyser", "Toxic Geyser Hit", 0),
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCross, Colors.White), "Dispel.Toxc", "Dispelled Toxic Geyser (Removed Hardened Crust)", "Dispelled Toxic Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.ToxicGeyser)),
             ]),
             // Ura
             new MechanicGroup([
-                new PlayerDstHitMechanic(ScaldingAura, new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightPink), "ScalAura.H", "Hit by Scalding Aura (Ura's Hitbox)", "Scalding Aura Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(ScaldingAura, new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightPink), "ScalAura.H", "Hit by Scalding Aura (Ura's Hitbox)", "Scalding Aura Hit", 0),
                 new PlayerDstBuffApplyMechanic(SulfuricAcid, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Purple), "SulfAcid.A", "Received Sulfuric Acid", "Sulfuric Acid Application", 0),
-                new PlayerDstHitMechanic(SulfuricFroth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "SulfFroth.H", "Hit by Sulfuric Froth (Acid Projectile from Ura)", "Sulfuric Froth Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SulfuricFroth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "SulfFroth.H", "Hit by Sulfuric Froth (Acid Projectile from Ura)", "Sulfuric Froth Hit", 0),
             ]),
             // Steam Prison
             new MechanicGroup([
-                new PlayerDstHitMechanic(SteamPrison, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange), "Ste.Prison.H", "Hit by Steam Prison", "Steam Prison Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SteamPrison, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange), "Ste.Prison.H", "Hit by Steam Prison", "Steam Prison Hit", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.UraSteamPrisonIndicator, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "Ste.Prison.T", "Targeted by Steam Prison (Ring)", "Steam Prison Target", 0),
             ]),
             // Pressure Blast
@@ -68,19 +68,19 @@ internal class UraTheSteamshrieker : MountBalrior
             ]),
             // Fumaroller
             new MechanicGroup([
-                new PlayerDstHitMechanic(BreakingGround, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "BreGround.H", "Hit by Breaking Ground (Fumaroller 8 pointed star)", "Breaking Ground Hit", 0),
-                new PlayerDstHitMechanic(MantleGrinder, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkPurple), "MantGrind.H", "Hit by Mantle Grinder (Fumaroller Roll)", "Mantle Grinder Hit", 0),
-                new PlayerDstHitMechanic(FullSteam, new MechanicPlotlySetting(Symbols.Octagon, Colors.GreyishGreen), "FullSteam.H", "Hit by Full Steam (Fumaroller Dash)", "Full Steam Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(BreakingGround, new MechanicPlotlySetting(Symbols.Star, Colors.Red), "BreGround.H", "Hit by Breaking Ground (Fumaroller 8 pointed star)", "Breaking Ground Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(MantleGrinder, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkPurple), "MantGrind.H", "Hit by Mantle Grinder (Fumaroller Roll)", "Mantle Grinder Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(FullSteam, new MechanicPlotlySetting(Symbols.Octagon, Colors.GreyishGreen), "FullSteam.H", "Hit by Full Steam (Fumaroller Dash)", "Full Steam Hit", 0),
             ]),
             // Ventshot
             new MechanicGroup([
-                new PlayerDstHitMechanic(PressureRelease, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "PresRel.H", "Hit by Pressure Release (Ventshot Jump AoE)", "Pressure Release Hit", 0),
-                new PlayerDstHitMechanic(ForcedEruption, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "ForcErup.H", "Hit by Forced Eruption (Ventshot Homing Orb)", "Forced Eruption Hit", 0),
-                new PlayerDstHitMechanic(SearingSnipe, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.LightBlue), "SearSnipe.H", "Hit by Searing Snipe (Ventshot Projectile)", "Searing Snipe Hit", 0),
-                new PlayerDstHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", 0)
+                new PlayerDstHealthDamageHitMechanic(PressureRelease, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.CobaltBlue), "PresRel.H", "Hit by Pressure Release (Ventshot Jump AoE)", "Pressure Release Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(ForcedEruption, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "ForcErup.H", "Hit by Forced Eruption (Ventshot Homing Orb)", "Forced Eruption Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SearingSnipe, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.LightBlue), "SearSnipe.H", "Hit by Searing Snipe (Ventshot Projectile)", "Searing Snipe Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", 0)
                     .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
             ]),
-            new EnemySrcSkillMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
+            new EnemySrcHealthDamageMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
             new EnemyDstBuffApplyMechanic(RisingPressure, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightOrange), "Rising Pressure", "Applied Rising Pressure", "Rising Pressure", 0),
             new EnemyDstBuffApplyMechanic(TitanicResistance, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "Titanic Resistance", "Applied Titanic Resistance", "Titanic Resistance", 0),

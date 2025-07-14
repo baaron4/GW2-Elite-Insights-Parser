@@ -14,10 +14,10 @@ internal class StatueOfIce : HallOfChains
     internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new MechanicGroup([
-                new PlayerDstHitMechanic(KingsWrathConeAoE, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
-                new PlayerDstHitMechanic(KingsWrathConeShards, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Cone Shards", "Hit by King's Wrath (Frontal Cone Shards)", "King's Wrath Cone Shards Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(KingsWrathConeAoE, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Cone AoE", "Hit by King's Wrath (Cone AoEs)", "King's Wrath Cone AoE Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(KingsWrathConeShards, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Cone Shards", "Hit by King's Wrath (Frontal Cone Shards)", "King's Wrath Cone Shards Hit", 0),
             ]),
-            new PlayerDstHitMechanic(NumbingBreach, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Cracks", "Stood on Numbing Breach (Ice Cracks in the Ground)", "Cracks", 0),
+            new PlayerDstHealthDamageHitMechanic(NumbingBreach, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightBlue), "Cracks", "Stood on Numbing Breach (Ice Cracks in the Ground)", "Cracks", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(FrozenWind, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green", "Frozen Wind (Stood in Green)", "Green Stack", 0),
                 new PlayerDstBuffApplyMechanic(Glaciate, new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Glaciate", "Glaciated (Frozen by 4th Stack of Frozen Wind)", "Glaciate", 0),

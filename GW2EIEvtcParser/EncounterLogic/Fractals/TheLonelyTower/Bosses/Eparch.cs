@@ -38,11 +38,11 @@ internal class Eparch : LonelyTower
             ]),
             // Eparch Attacks
             new MechanicGroup([
-                new PlayerDstHitMechanic([RainOfDespair, RainOfDespairPool], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.RedSkin), "Desp.H", "Hit by Rain of Despair", "Rain of Despair Hit", 0),
-                new PlayerDstHitMechanic(WaveOfEnvy, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkGreen), "Envy.H", "Hit by Wave of Envy", "Wave of Envy Hit", 0),
-                new PlayerDstHitMechanic(Inhale, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Glut.H", "Hit by Inhile", "Inhile Hit", 0),
-                new PlayerDstHitMechanic(SpikeOfMaliceHit, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Mali.H", "Hit by Spike of Malice", "Spike of Malice Hit", 0),
-                new PlayerDstHitMechanic(RageFissure, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rage.H", "Hit by Rage Fissure", "Rage Fissure Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([RainOfDespair, RainOfDespairPool], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.RedSkin), "Desp.H", "Hit by Rain of Despair", "Rain of Despair Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(WaveOfEnvy, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkGreen), "Envy.H", "Hit by Wave of Envy", "Wave of Envy Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(Inhale, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Glut.H", "Hit by Inhile", "Inhile Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SpikeOfMaliceHit, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Mali.H", "Hit by Spike of Malice", "Spike of Malice Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(RageFissure, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rage.H", "Hit by Rage Fissure", "Rage Fissure Hit", 0),
             ]),
             // Consume
             new MechanicGroup([
@@ -50,11 +50,11 @@ internal class Eparch : LonelyTower
             ]),
             // Split Phase
             new MechanicGroup([
-                new PlayerDstHitMechanic([CruelDetonation1, CruelDetonation2], new MechanicPlotlySetting(Symbols.Square, Colors.Ice), "CruDeto.H", "Hit by Cruel Detonation", "Cruel Detonation Hit", 0),
-                new PlayerDstHitMechanic(WallOfTalons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "Wall.H", "Hit by Wall of Talons", "Wall of Talons Hit", 0),
-                new PlayerDstHitMechanic(PoolOfDraining, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "PoolDra.H", "Hit by Pool of Draining (Boonstrip)", "Pool of Draining Hit", 0),
-                new PlayerDstHitMechanic(UnliddedEye, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "EyeWave.H", "Hit by Unlidded Eye (Shockwave)", "Unlidded Eye Hit", 0),
-                new PlayerDstHitMechanic(EyeOfJudgment, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.LightOrange), "EyeArrow.H", "Hit by Eye of Judgment (Arrows)", "Eye of Judgment Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([CruelDetonation1, CruelDetonation2], new MechanicPlotlySetting(Symbols.Square, Colors.Ice), "CruDeto.H", "Hit by Cruel Detonation", "Cruel Detonation Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(WallOfTalons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "Wall.H", "Hit by Wall of Talons", "Wall of Talons Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(PoolOfDraining, new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "PoolDra.H", "Hit by Pool of Draining (Boonstrip)", "Pool of Draining Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(UnliddedEye, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Yellow), "EyeWave.H", "Hit by Unlidded Eye (Shockwave)", "Unlidded Eye Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(EyeOfJudgment, new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.LightOrange), "EyeArrow.H", "Hit by Eye of Judgment (Arrows)", "Eye of Judgment Hit", 0),
             ]),
             // Eparch Casts
             new MechanicGroup([

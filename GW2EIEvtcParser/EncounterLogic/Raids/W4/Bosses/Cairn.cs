@@ -14,15 +14,15 @@ internal class Cairn : BastionOfThePenitent
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
 
-            new PlayerDstHitMechanic(CairnDisplacement, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port", "Orange Teleport Field","Orange TP", 0),
+            new PlayerDstHealthDamageHitMechanic(CairnDisplacement, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port", "Orange Teleport Field","Orange TP", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0)
+                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0)
                     .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new PlayerDstHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0)
+                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0)
                     .UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB", "Knockback Crystals","KB Crystal", 1000),
+                new PlayerDstHealthDamageHitMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB", "Knockback Crystals","KB Crystal", 1000),
                 new EnemySrcMissileMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal", 0)
                     .UsingReflected(),
             ]),
@@ -32,9 +32,9 @@ internal class Cairn : BastionOfThePenitent
                 new PlayerDstBuffApplyMechanic(SharedAgony50, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50", "Shared Agony Damage (50% Player's HP)","SA dmg 50%", 0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
                 new PlayerDstBuffApplyMechanic(SharedAgony75, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Red), "Agony 75", "Shared Agony Damage (75% Player's HP)","SA dmg 75%", 0), //Chaining from the first person hit by 37768, applying a 1 second debuff to the next person.
             ]),
-            new PlayerDstHitMechanic(EnergySurge, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap", "Jump between green fields","Leap", 100),
-            new PlayerDstHitMechanic(OrbitalSweep, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep", "Sword Spin (Knockback)","Sweep", 100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
-            new PlayerDstHitMechanic(GravityWave, new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut", "Expanding Crystal Donut Wave (Knockback)","Crystal Donut", 0)
+            new PlayerDstHealthDamageHitMechanic(EnergySurge, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.DarkGreen), "Leap", "Jump between green fields","Leap", 100),
+            new PlayerDstHealthDamageHitMechanic(OrbitalSweep, new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Magenta), "Sweep", "Sword Spin (Knockback)","Sweep", 100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
+            new PlayerDstHealthDamageHitMechanic(GravityWave, new MechanicPlotlySetting(Symbols.Octagon,Colors.Magenta), "Donut", "Expanding Crystal Donut Wave (Knockback)","Crystal Donut", 0)
             // Spatial Manipulation IDs correspond to the following: 1st green when starting the fight: 37629;
             // Greens after Energy Surge/Orbital Sweep: 38302
             //100% - 75%: 37611

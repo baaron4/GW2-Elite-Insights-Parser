@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData;
 
 
-internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
+internal class PlayerDstFirstHealthDamageHitMechanic : PlayerDstHealthDamageHitMechanic
 {
     protected override bool Keep(HealthDamageEvent c, ParsedEvtcLog log)
     {
@@ -12,11 +12,11 @@ internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
 
     private readonly Dictionary<AgentItem, HealthDamageEvent?> _firstHits = [];
 
-    public PlayerDstFirstHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerDstFirstHealthDamageHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
-    public PlayerDstFirstHitMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerDstFirstHealthDamageHitMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

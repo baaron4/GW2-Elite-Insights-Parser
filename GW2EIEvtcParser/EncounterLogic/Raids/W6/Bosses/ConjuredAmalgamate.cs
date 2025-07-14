@@ -19,19 +19,19 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam", "Pulverize (Arm Slam)","Arm Slam", 0)
+                new PlayerDstHealthDamageHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam", "Pulverize (Arm Slam)","Arm Slam", 0)
                     .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new PlayerDstHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam", "Pulverize (Arm Slam) while affected by stability","Stabilized Arm Slam", 0)
+                new PlayerDstHealthDamageHitMechanic(Pulverize, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam", "Pulverize (Arm Slam) while affected by stability","Stabilized Arm Slam", 0)
                     .UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(JunkAbsorption, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls", "Junk Absorption (Purple Balls during collect)","Purple Balls", 0),
-                new PlayerDstHitMechanic([JunkFall1, JunkFall2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk", "Junk Fall (Falling Debris)","Junk Fall", 0),
-                new PlayerDstHitMechanic(JunkTorrent, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall", "Junk Torrent (Moving Wall)","Junk Torrent (Wall)", 0)
+                new PlayerDstHealthDamageHitMechanic(JunkAbsorption, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls", "Junk Absorption (Purple Balls during collect)","Purple Balls", 0),
+                new PlayerDstHealthDamageHitMechanic([JunkFall1, JunkFall2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk", "Junk Fall (Falling Debris)","Junk Fall", 0),
+                new PlayerDstHealthDamageHitMechanic(JunkTorrent, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall", "Junk Torrent (Moving Wall)","Junk Torrent (Wall)", 0)
                     .UsingChecker((de,log) => de.HealthDamage > 0),
             ]),
-            new PlayerDstHitMechanic(RupturedGround, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground", "Ruptured Ground (Relics after Junk Wall)","Ruptured Ground", 0).UsingChecker((de,log) => de.HealthDamage > 0),
-            new PlayerDstHitMechanic(Tremor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor", "Tremor (Field adjacent to Arm Slam)","Near Arm Slam", 0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHealthDamageHitMechanic(RupturedGround, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground", "Ruptured Ground (Relics after Junk Wall)","Ruptured Ground", 0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHealthDamageHitMechanic(Tremor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor", "Tremor (Field adjacent to Arm Slam)","Near Arm Slam", 0).UsingChecker((de,log) => de.HealthDamage > 0),
             new MechanicGroup([
                 new PlayerCastStartMechanic(ConjuredSlashSAK, new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst", "Conjured Slash (Special action sword)","Sword Cast", 0),
                 new PlayerCastStartMechanic(ConjuredProtectionSAK, new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst", "Conjured Protection (Special action shield)","Shield Cast", 0),

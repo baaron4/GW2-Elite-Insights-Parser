@@ -19,10 +19,10 @@ internal class Siax : Nightmare
     {
         MechanicList.Add(new MechanicGroup(
         [
-            new PlayerDstHitMechanic(VileSpit, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", 0),
-            new PlayerDstHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
+            new PlayerDstHealthDamageHitMechanic(VileSpit, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", 0),
+            new PlayerDstHealthDamageHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
             new SpawnMechanic((int)TargetID.NightmareHallucinationSiax, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Black), "Hallu", "Nightmare Hallucination Spawn","Hallucination", 0),
-            new PlayerDstHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", 0),
+            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", 0),
             new MechanicGroup(
                 [
                     new EnemyCastStartMechanic([CausticExplosionSiaxPhase66, CausticExplosionSiaxPhase33], new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Yellow), "Phase", "Phase Start","Phase", 0),
