@@ -109,7 +109,7 @@ internal class WhisperingShadow : Kinfall
                     var broken = breakbarEnds.FirstOrDefault(x => x.Time > phase.End);
                     var end = Math.Min(stunned?.Time ?? log.FightData.FightEnd, broken?.Time ?? long.MaxValue);
                     var split = new PhaseData(cast.Time, end, "Darkness " + i);
-                    phase.AddParentPhase(phases[0]);
+                    split.AddParentPhase(phases[0]);
                     split.AddTarget(shadow, log);
                     phases.Add(split);
 
