@@ -185,6 +185,8 @@ public class CombatReplay
 
 #if DEBUG
     #region DEBUG EFFECTS
+    private static uint DebugRadius = 100;
+    private static uint DebugOpeningAngle = 120;
     //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
     internal static void DebugEffects(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, HashSet<GUID> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
@@ -230,11 +232,11 @@ public class CombatReplay
             }
             if (effectEvt.Rotation.Z != 0)
             {
-                decorations.Add(new PieDecoration(100, 45, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
+                decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
             }
             else
             {
-                decorations.Add(new CircleDecoration(100, lifeSpan, color, 0.5, positionConnector));
+                decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));
             }
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
@@ -279,11 +281,11 @@ public class CombatReplay
             }
             if (effectEvt.Rotation.Z != 0)
             {
-                decorations.Add(new PieDecoration(100, 45, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
+                decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
             }
             else
             {
-                decorations.Add(new CircleDecoration(100, lifeSpan, color, 0.5, positionConnector));
+                decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));
             }
         }
     }
@@ -332,11 +334,11 @@ public class CombatReplay
             }
             if (effectEvt.Rotation.Z != 0)
             {
-                decorations.Add(new PieDecoration(100, 45, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
+                decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
             }
             else
             {
-                decorations.Add(new CircleDecoration(100, lifeSpan, color, 0.5, positionConnector));
+                decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));
             }
         }
 
@@ -386,11 +388,11 @@ public class CombatReplay
             }
             if (effectEvt.Rotation.Z != 0)
             {
-                decorations.Add(new PieDecoration(100, 45, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
+                decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
             } 
             else
             {
-                decorations.Add(new CircleDecoration(100, lifeSpan, color, 0.5, positionConnector));
+                decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));
             }
         }
     }
@@ -439,11 +441,11 @@ public class CombatReplay
             }
             if (effectEvt.Rotation.Z != 0)
             {
-                decorations.Add(new PieDecoration(100, 45, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
+                decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
             }
             else
             {
-                decorations.Add(new CircleDecoration(100, lifeSpan, color, 0.5, positionConnector));
+                decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));
             }
         }
     }
@@ -451,23 +453,24 @@ public class CombatReplay
     #endregion DEBUG EFFECTS
 
     #region DEBUG MISSILES
+    private static uint DebugMissileRadius = 40;
     internal static void DebugMissiles(SingleActor actor, ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEventsBySrc(actor.AgentItem)
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
-        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
     internal static void DebugAllMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0);
-        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
     internal static void DebugAllNPCMissiles(ParsedEvtcLog log, CombatReplayDecorationContainer decorations, long start = long.MinValue, long end = long.MaxValue)
     {
         var allMissileEvents = log.CombatData.GetMissileEvents()
             .Where(x => x.Time >= start && x.Time <= end && x.SkillID > 0 && x.Src.IsNPC);
-        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, 40);
+        decorations.AddNonHomingMissiles(log, allMissileEvents, Colors.Red, 0.5, DebugMissileRadius);
     }
     #endregion DEBUG MISSILES
 #endif
