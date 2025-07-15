@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -482,23 +483,54 @@ internal class Xera : StrongholdOfTheFaithful
             EffectGUIDs.XeraIntervention2,
             EffectGUIDs.XeraIntervention3,
             EffectGUIDs.XeraTemporalShredAoE,
-            EffectGUIDs.XeraShardAoEs1,
-            EffectGUIDs.XeraShardAoEs2,
+            EffectGUIDs.XeraShardAoEs,
+            EffectGUIDs.XeraSomething,
             EffectGUIDs.XeraBloodstoneFragmentSomething,
-            EffectGUIDs.XeraSplitShardAoEs1,
-            EffectGUIDs.XeraSplitShardAoEs2,
+            EffectGUIDs.XeraSplitShardAoEsIndicator,
+            EffectGUIDs.XeraSplitShardAoEsHit,
             EffectGUIDs.XeraUnstableLeyRiftClosed,
+            new("F7BE4829C606B3459F747F667FB3D894"),
+            new("FD2802E2DC92124F940DDDD998B8B57B"),
+            new("86EDD215438A704196F540CBDB10D934"),
+            new("1FD11FB1DB7C224D929CB797AD2101DD"),
+            new("74D24FC59143004B8E6E73DBC9CAC1CE"),
+            new("207E322FE91683469E2E4A0D841BB1B0"),
+            new("F57C7DD4E9BDE348BF8583F97E1C01C1"),
+            new("4E547E3AAD823B4187989810D14D834B"),
+            new("3D26F89685240644B79FEA787F17C2B3"),
+            new("3D26F89685240644B79FEA787F17C2B3"),
+            new("B6BA0272B7786B4EB8E6C9C949A2EB3D"),
             ]);*/
         // Intervention Bubble
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var intervention))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var interventions))
         {
-            foreach (EffectEvent effect in intervention)
+            foreach (EffectEvent intervention in interventions)
             {
                 // Effect has duration of 4294967295 but the skill lasts only 6000
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
-                var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
+                (long, long) lifespan = intervention.ComputeDynamicLifespan(log, 6000);
+                var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(intervention.Position));
                 environmentDecorations.Add(circle);
                 environmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
+            }
+        }
+
+        if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.XeraShardAoEs, EffectGUIDs.XeraSplitShardAoEsHit], out var shardAoEs))
+        {
+            foreach (EffectEvent shardAoE in shardAoEs)
+            {
+                (long, long) lifespan = shardAoE.ComputeLifespan(log, shardAoE.GUIDEvent.ContentGUID == EffectGUIDs.XeraShardAoEs ? 3000 : 1000);
+                var circle = new CircleDecoration(180, lifespan, Colors.Red, 0.2, new PositionConnector(shardAoE.Position)).UsingFilled(false);
+                environmentDecorations.Add(circle);
+            }
+        }
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraSplitShardAoEsIndicator, out var splitShardAoEsIndicator))
+        {
+            foreach (EffectEvent splitShardAoEIndicator in splitShardAoEsIndicator)
+            {
+                (long, long) lifespan = splitShardAoEIndicator.ComputeLifespan(log, 2000);
+                var circle = new CircleDecoration(180, lifespan, Colors.Orange, 0.15, new PositionConnector(splitShardAoEIndicator.Position));
+                environmentDecorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 
