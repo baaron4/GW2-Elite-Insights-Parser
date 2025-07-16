@@ -96,7 +96,7 @@ internal class WhisperingShadow : Kinfall
         var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
         foreach (var cast in log.CombatData.GetAnimatedCastData(shadow.AgentItem).Where(x => x.ActualDuration > 0))
         {
-            if (cast.SkillID == GutteringLight)
+            if (cast.SkillID == GutteringLight || cast.SkillID == GutteringLightCM)
             {
                 if (isFirst)
                 {
