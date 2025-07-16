@@ -130,7 +130,7 @@ internal class Gorseval : SpiritVale
         RenameChargedSouls(Targets, combatData);
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [
@@ -200,111 +200,116 @@ internal class Gorseval : SpiritVale
                             break;
                         // Ghastly Rampage - Doughnuts
                         case GhastlyRampage:
-                        {
-                            Vector3 pos = new(1657.0142f, -4483.577f, -1908.5195f);
-                            lifespan = (cast.Time, cast.EndTime);
-                            replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)));
-                            // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                            int ticks = (int)Math.Min(Math.Ceiling(cast.ActualDuration / 4000.0), 6);
-                            var curHP = target.GetCurrentHealthPercent(log, cast.Time);
-                            int phaseIndex = 1;
-                            if (curHP < 66)
                             {
-                                phaseIndex++;
-                                if (curHP < 33)
+                                lifespan = (cast.Time, cast.EndTime);
+                                if (!log.CombatData.HasBreakbarDamageData)
                                 {
-                                    phaseIndex++;
+                                    replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)));
                                 }
-                            }
-                            List<byte> patterns;
-                            switch (phaseIndex)
-                            {
-                                case 1:
-                                    patterns =
-                                    [
-                                            second | third | fifth,
+                                if (!log.CombatData.HasEffectData)
+                                {
+                                    // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
+                                    int ticks = (int)Math.Min(Math.Ceiling(cast.ActualDuration / 4000.0), 6);
+                                    var curHP = target.GetCurrentHealthPercent(log, cast.Time);
+                                    int phaseIndex = 1;
+                                    if (curHP < 66)
+                                    {
+                                        phaseIndex++;
+                                        if (curHP < 33)
+                                        {
+                                            phaseIndex++;
+                                        }
+                                    }
+                                    Vector3 pos = new(1657.0142f, -4483.577f, -1908.5195f);
+                                    List<byte> patterns;
+                                    switch (phaseIndex)
+                                    {
+                                        case 1:
+                                            patterns =
+                                            [
+                                                    second | third | fifth,
                                             second | third | fourth,
                                             first | fourth | fifth,
                                             first | second | fifth,
                                             first | third | fifth,
                                             full
-                                    ];
-                                    break;
-                                case 2:
-                                    patterns =
-                                    [
-                                            second | third | fourth,
+                                            ];
+                                            break;
+                                        case 2:
+                                            patterns =
+                                            [
+                                                    second | third | fourth,
                                             first | fourth | fifth,
                                             first | third | fourth,
                                             first | second | fifth,
                                             first | second | third,
                                             full
-                                    ];
-                                    break;
-                                case 3:
-                                    patterns =
-                                    [
-                                            first | fourth | fifth,
+                                            ];
+                                            break;
+                                        case 3:
+                                            patterns =
+                                            [
+                                                    first | fourth | fifth,
                                             first | second | fifth,
                                             second | third | fifth,
                                             third | fourth | fifth,
                                             third | fourth | fifth,
                                             full
-                                    ];
-                                    break;
-                                default:
-                                    // no reason to stop parsing because of CR, worst case, no rampage
-                                    patterns = [];
-                                    ticks = 0;
-                                    break;
-                                    //throw new EIException("Gorseval cast rampage during a split phase");
+                                            ];
+                                            break;
+                                        default:
+                                            // no reason to stop parsing because of CR, worst case, no rampage
+                                            patterns = [];
+                                            ticks = 0;
+                                            break;
+                                            //throw new EIException("Gorseval cast rampage during a split phase");
+                                    }
+                                    lifespan.start += 2200;
+                                    for (int i = 0; i < ticks; i++)
+                                    {
+                                        byte pattern = patterns[i];
+                                        var connector = new PositionConnector(pos);
+                                        //
+                                        var nonFullDecorations = new List<FormDecoration>();
+                                        long tickStartNonFull = lifespan.start + 4000 * i;
+                                        long explosionNonFull = tickStartNonFull + 3000;
+                                        long tickEndNonFull = tickStartNonFull + 3500;
+                                        (long, long) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
+                                        if ((pattern & first) > 0)
+                                        {
+                                            nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                        }
+                                        if ((pattern & second) > 0)
+                                        {
+                                            nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                        }
+                                        if ((pattern & third) > 0)
+                                        {
+                                            nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                        }
+                                        if ((pattern & fourth) > 0)
+                                        {
+                                            nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                        }
+                                        if ((pattern & fifth) > 0)
+                                        {
+                                            nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
+                                        }
+                                        foreach (FormDecoration decoration in nonFullDecorations)
+                                        {
+                                            replay.Decorations.AddWithGrowing(decoration, explosionNonFull);
+                                        }
+                                        // Full a different timings
+                                        if ((pattern & full) > 0)
+                                        {
+                                            (long, long) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
+                                            long fullExplosion = explosionNonFull - 1000;
+                                            replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, Colors.DarkPurpleBlue, 0.25, connector), fullExplosion);
+                                        }
+                                    }
+                                }
                             }
-                            lifespan.start += 2200;
-                            for (int i = 0; i < ticks; i++)
-                            {
-                                byte pattern = patterns[i];
-                                var connector = new PositionConnector(pos);
-                                //
-                                var nonFullDecorations = new List<FormDecoration>();
-                                long tickStartNonFull = lifespan.start + 4000 * i;
-                                long explosionNonFull = tickStartNonFull + 3000;
-                                long tickEndNonFull = tickStartNonFull + 3500;
-                                (long, long) lifespanRampageNonFull = (tickStartNonFull, tickEndNonFull);
-                                if ((pattern & first) > 0)
-                                {
-                                    nonFullDecorations.Add(new CircleDecoration(360, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                                }
-                                if ((pattern & second) > 0)
-                                {
-                                    nonFullDecorations.Add(new DoughnutDecoration(360, 720, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                                }
-                                if ((pattern & third) > 0)
-                                {
-                                    nonFullDecorations.Add(new DoughnutDecoration(720, 1080, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                                }
-                                if ((pattern & fourth) > 0)
-                                {
-                                    nonFullDecorations.Add(new DoughnutDecoration(1080, 1440, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                                }
-                                if ((pattern & fifth) > 0)
-                                {
-                                    nonFullDecorations.Add(new DoughnutDecoration(1440, 1800, lifespanRampageNonFull, Colors.DarkPurpleBlue, 0.25, connector));
-                                }
-                                foreach (FormDecoration decoration in nonFullDecorations)
-                                {
-                                    replay.Decorations.AddWithGrowing(decoration, explosionNonFull);
-                                }
-                                // Full a different timings
-                                if ((pattern & full) > 0)
-                                {
-                                    (long, long) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
-                                    long fullExplosion = explosionNonFull - 1000;
-                                    replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, Colors.DarkPurpleBlue, 0.25, connector), fullExplosion);
-                                }
-                            }
-
-                        }
-                        break;
+                            break;
                         default:
                             break;
                     }
@@ -314,7 +319,14 @@ internal class Gorseval : SpiritVale
                 var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var seg in protection)
                 {
-                    replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightBlue, 0.5, new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightOrange, 0.5, new AgentConnector(target)));
+                }
+                //  Ghastly Rampage
+                var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
+                var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
+                foreach (var segment in breakbarActives)
+                {
+                    replay.Decorations.AddActiveBreakbar(segment.TimeSpan, target, breakbarUpdates);
                 }
                 break;
             case (int)TargetID.ChargedSoul:
@@ -329,6 +341,54 @@ internal class Gorseval : SpiritVale
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (log.CombatData.TryGetEffectEventsByGUIDs([
+            EffectGUIDs.GorsevalGhastlyRampageLayer0,
+            EffectGUIDs.GorsevalGhastlyRampageLayer1,
+            EffectGUIDs.GorsevalGhastlyRampageLayer4,
+            EffectGUIDs.GorsevalGhastlyRampageLayer3,
+            EffectGUIDs.GorsevalGhastlyRampageLayer2,
+            ], out var ghastlyRamplages))
+        {
+            Vector3 pos = new(1657.0142f, -4483.577f, -1908.5195f);
+            foreach (EffectEvent ghastlyRampage in ghastlyRamplages)
+            {
+                (long start, long end) lifespan = ghastlyRampage.ComputeLifespan(log, 3000);
+                // for the explosion
+                lifespan.end += 500;
+                FormDecoration rampage;
+                var contentGUID = ghastlyRampage.GUIDEvent.ContentGUID;
+                if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer0)
+                {
+                    rampage = new CircleDecoration(360, lifespan, Colors.DarkPurpleBlue, 0.25, new PositionConnector(pos));
+                } 
+                else
+                {
+                    uint innerRadius, outerRadius;
+                    if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer1)
+                    {
+                        innerRadius = 360;
+                        outerRadius = 720;
+                    } 
+                    else if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer2)
+                    {
+                        innerRadius = 720;
+                        outerRadius = 1080;
+                    } 
+                    else if (contentGUID == EffectGUIDs.GorsevalGhastlyRampageLayer3)
+                    {
+                        innerRadius = 1080;
+                        outerRadius = 1440;
+                    }
+                    else
+                    {
+                        innerRadius = 1440;
+                        outerRadius = 1800;
+                    }
+                    rampage = new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.DarkPurpleBlue, 0.25, new PositionConnector(pos));
+                }
+                environmentDecorations.AddWithGrowing(rampage, lifespan.end - 500);
+            }
+        }
 
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GorsevalGhastlyPrison, out var ghstlyPrison))
         {

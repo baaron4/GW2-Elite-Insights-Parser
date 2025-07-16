@@ -588,6 +588,11 @@ public static class EffectGUIDs
     public static readonly GUID ValeGuardianMagicSpike = new("55364633145D264A934935C3F026B19F"); // 2000 duration
     // Gorseval
     public static readonly GUID GorsevalGhastlyPrison = new("16BBFDBEC55958419CC5564CB1FEED04"); // 2000 duration
+    public static readonly GUID GorsevalGhastlyRampageLayer0 = new("029CD34593C0FE4D81E0FBAADE0E3928"); // 3000 duration, Src Gorseval
+    public static readonly GUID GorsevalGhastlyRampageLayer1 = new("D9F8F612801E4D41A18F5E99F3B17596"); // 3000 duration, Src Gorseval
+    public static readonly GUID GorsevalGhastlyRampageLayer2 = new("7D9FC82789C2DD4FB8466CD63F34205F"); // 3000 duration, Src Gorseval
+    public static readonly GUID GorsevalGhastlyRampageLayer3 = new("947769986596634AB09B2AB382EC29E0");// 3000 duration, Src Gorseval
+    public static readonly GUID GorsevalGhastlyRampageLayer4 = new("A0CB3F87B91D304D894235E136BA2C0E"); // 3000 duration, Src Gorseval
     // Sabetha
     public static readonly GUID SabethaCannonBarrier = new("3C4BADFCD8987D449715C9A72FDC2149"); // 600.000 duration - Src Cannon Dst Cannon
     public static readonly GUID SabethaCannonBarrage = new("3ED61C8A1C2E594A8AD2E2E69AF16322"); // 3500 duration - Src Cannon
