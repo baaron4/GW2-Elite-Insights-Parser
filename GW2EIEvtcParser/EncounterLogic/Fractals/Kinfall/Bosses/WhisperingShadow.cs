@@ -204,6 +204,17 @@ internal class WhisperingShadow : Kinfall
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
+        // falling ice
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFallingIce, out var fallingIce))
+        {
+            foreach (var effect in fallingIce)
+            {
+                var lifespan = effect.ComputeLifespan(log, 3000);
+                var decoration = new CircleDecoration(180, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.Add(decoration);
+            }
+        }
+
         // vitreous spike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpike, out var spikes))
         {
