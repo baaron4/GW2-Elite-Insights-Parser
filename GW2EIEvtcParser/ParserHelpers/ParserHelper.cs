@@ -44,15 +44,17 @@ public static class ParserHelper
     {
         Common,
         Item, Gear,
-        Necromancer, Reaper, Scourge, Harbinger,
+        // professions, sort alphabetically per base spec then add elite spec per expansion
         Elementalist, Tempest, Weaver, Catalyst,
-        Mesmer, Chronomancer, Mirage, Virtuoso,
-        Warrior, Berserker, Spellbreaker, Bladesworn,
-        Revenant, Herald, Renegade, Vindicator,
-        Guardian, Dragonhunter, Firebrand, Willbender,
-        Thief, Daredevil, Deadeye, Specter,
-        Ranger, Druid, Soulbeast, Untamed,
         Engineer, Scrapper, Holosmith, Mechanist,
+        Guardian, Dragonhunter, Firebrand, Willbender,
+        Mesmer, Chronomancer, Mirage, Virtuoso,
+        Necromancer, Reaper, Scourge, Harbinger,
+        Ranger, Druid, Soulbeast, Untamed,
+        Revenant, Herald, Renegade, Vindicator,
+        Thief, Daredevil, Deadeye, Specter,
+        Warrior, Berserker, Spellbreaker, Bladesworn,
+        //
         PetSpecific,
         FightSpecific,
         FractalInstability,
@@ -61,15 +63,17 @@ public static class ParserHelper
 
     public enum Spec
     {
-        Necromancer, Reaper, Scourge, Harbinger,
+        // professions, sort alphabetically per base spec then add elite spec per expansion
         Elementalist, Tempest, Weaver, Catalyst,
-        Mesmer, Chronomancer, Mirage, Virtuoso,
-        Warrior, Berserker, Spellbreaker, Bladesworn,
-        Revenant, Herald, Renegade, Vindicator,
-        Guardian, Dragonhunter, Firebrand, Willbender,
-        Thief, Daredevil, Deadeye, Specter,
-        Ranger, Druid, Soulbeast, Untamed,
         Engineer, Scrapper, Holosmith, Mechanist,
+        Guardian, Dragonhunter, Firebrand, Willbender,
+        Mesmer, Chronomancer, Mirage, Virtuoso,
+        Necromancer, Reaper, Scourge, Harbinger,
+        Ranger, Druid, Soulbeast, Untamed,
+        Revenant, Herald, Renegade, Vindicator,
+        Thief, Daredevil, Deadeye, Specter,
+        Warrior, Berserker, Spellbreaker, Bladesworn,
+        //
         NPC, Gadget,
         Unknown
     };
