@@ -98,13 +98,13 @@ public class ParsedEvtcLog
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling friendlies");
         var friendlies = new List<SingleActor>();
         friendlies.AddRange(PlayerList);
-        friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
+        friendlies.AddRange(fightData.Logic.NonSquadFriendlies);
         Friendlies = friendlies;
         FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
         FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + PlayerList.Count);
-        _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + FightData.Logic.NonPlayerFriendlies.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + FightData.Logic.NonSquadFriendlies.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + FightData.Logic.Targets.Count);
         _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + FightData.Logic.TrashMobs.Count);
         

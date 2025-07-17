@@ -203,7 +203,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        HandleEscortPhases(Targets, NonPlayerFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
+        HandleEscortPhases(Targets, NonSquadFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
         HashSet<TargetID> kcStatus = [
             TargetID.Jessica,
             TargetID.Olson,

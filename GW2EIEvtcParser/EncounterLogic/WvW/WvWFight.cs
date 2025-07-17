@@ -251,53 +251,6 @@ internal class WvWFight : FightLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, TargetID.WorldVersusWorld, true);
-        // Handle non squad players
-        IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-        //
-        var garbageList = new List<SingleActor>();
-        var auxTargets = new List<SingleActor>();
-        var auxFriendlies = new List<SingleActor>();
-        foreach (AgentItem a in aList)
-        {
-            var nonSquadPlayer = new PlayerNonSquad(a);
-            List<SingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
-            actorListToFill.Add(nonSquadPlayer);
-        }
-        //
-        if (!_detailed)
-        {
-            var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
-            var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x));
-            var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (CombatItem c in combatData)
-            {
-                if (c.IsDamage(extensions))
-                {
-                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out var srcs))
-                    {
-                        foreach (AgentItem src in srcs)
-                        {
-                            if (c.SrcMatchesAgent(src, extensions))
-                            {
-                                c.OverrideSrcAgent(dummyAgent);
-                                break;
-                            }
-                        }
-                    }
-                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out var dsts))
-                    {
-                        foreach (AgentItem dst in dsts)
-                        {
-                            if (c.DstMatchesAgent(dst, extensions))
-                            {
-                                c.OverrideDstAgent(dummyAgent);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
         CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
         if (modeEvent != null)
         {
@@ -315,9 +268,58 @@ internal class WvWFight : FightLogic
                     break;
             }
         }
-        _nonPlayerFriendlies.AddRange(auxFriendlies.OrderBy(x => x.Character));
-        _targets.AddRange(auxTargets.OrderBy(x => x.Character));
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        // Handle non squad players
+        IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
+        //
+        var auxTargets = new List<SingleActor>(aList.Count);
+        var auxFriendlies = new List<SingleActor>(aList.Count);
+        foreach (AgentItem a in aList)
+        {
+            var nonSquadPlayer = new PlayerNonSquad(a);
+            List<SingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : auxTargets;
+            actorListToFill.Add(nonSquadPlayer);
+        }
+        _nonSquadFriendlies.AddRange(auxFriendlies.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.Character));
+        //
+        if (!_detailed)
+        {
+            var enemyPlayerList = auxTargets;
+            var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.AgentItem.Agent).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (CombatItem c in combatData)
+            {
+                if (c.IsDamage(extensions))
+                {
+                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out var srcs))
+                    {
+                        foreach (SingleActor src in srcs)
+                        {
+                            if (c.SrcMatchesAgent(src.AgentItem, extensions))
+                            {
+                                c.OverrideSrcAgent(dummyAgent);
+                                break;
+                            }
+                        }
+                    }
+                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out var dsts))
+                    {
+                        foreach (SingleActor dst in dsts)
+                        {
+                            if (c.DstMatchesAgent(dst.AgentItem, extensions))
+                            {
+                                c.OverrideDstAgent(dummyAgent);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+        else
+        {
+            _targets.AddRange(auxTargets.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.Character));
+        }
+        FinalizeComputeFightTargets();
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

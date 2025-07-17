@@ -39,14 +39,14 @@ public abstract class FightLogic
     private readonly int _basicMechanicsCount;
     public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
     public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; } = [];
-    public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; } = [];
+    public IReadOnlyCollection<AgentItem> NonSquadFriendlyAgents { get; protected set; } = [];
     public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; } = [];
     public IReadOnlyList<NPC> TrashMobs => _trashMobs;
-    public IReadOnlyList<SingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
+    public IReadOnlyList<SingleActor> NonSquadFriendlies => _nonSquadFriendlies;
     public IReadOnlyList<SingleActor> Targets => _targets;
     public IReadOnlyList<SingleActor> Hostiles => _hostiles;
     protected List<NPC> _trashMobs { get; private set; } = [];
-    protected List<SingleActor> _nonPlayerFriendlies { get; private set; } = [];
+    protected List<SingleActor> _nonSquadFriendlies { get; private set; } = [];
     protected List<SingleActor> _targets { get; private set; } = [];
     protected List<SingleActor> _hostiles { get; private set; } = [];
 
@@ -216,17 +216,14 @@ public abstract class FightLogic
     private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var ignoredSpeciesForRenaming = IgnoreForAutoNumericalRenaming();
+
+        // Build targets
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();
         RegroupSameInstidNPCsByID(targetIDs, agentData, combatItems, extensions);
-        var trashIDs = GetTrashMobsIDs();
-        RegroupSameInstidNPCsByID(targetIDs, agentData, combatItems, extensions);
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
-
-        // Build targets
-#if !DEBUG2
         foreach (TargetID id in targetIDs)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
@@ -235,12 +232,8 @@ public abstract class FightLogic
                 _targets.Add(new NPC(agentItem));
             }
         }
-#else
-        _targets.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !trashIDs.Contains(GetTrashID(x.ID)) && !x.GetFinalMaster().IsPlayer && !x.IsNonIdentifiedSpecies()).Select(a => new NPC(a)));
-#endif
         //TODO(Rennorb) @perf @cleanup: is this required?
         _targets.SortByFirstAware();
-
         var targetSortIDs = GetTargetsSortIDs();
         //TODO(Rennorb) @perf
         _targets = _targets.OrderBy(x =>
@@ -252,7 +245,10 @@ public abstract class FightLogic
             return int.MaxValue;
         }).ToList();
         NumericallyRenameSpecies(Targets, ignoredSpeciesForRenaming);
+
         // Build trash mobs
+        var trashIDs = GetTrashMobsIDs();
+        RegroupSameInstidNPCsByID(trashIDs, agentData, combatItems, extensions);
         foreach (var trash in trashIDs)
         {
             if(targetIDs.IndexOf(trash) != -1)
@@ -273,14 +269,16 @@ public abstract class FightLogic
         _trashMobs.SortByFirstAware();
         NumericallyRenameSpecies(TrashMobs, ignoredSpeciesForRenaming);
 
+        // Build friendlies
         var friendlyIDs = GetFriendlyNPCIDs();
         RegroupSameInstidNPCsByID(friendlyIDs, agentData, combatItems, extensions);
         foreach (TargetID id in friendlyIDs)
         {
-            _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
+            _nonSquadFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }
-        _nonPlayerFriendlies.SortByFirstAware();
-        NumericallyRenameSpecies(NonPlayerFriendlies, ignoredSpeciesForRenaming);
+        _nonSquadFriendlies.SortByFirstAware();
+        NumericallyRenameSpecies(NonSquadFriendlies, ignoredSpeciesForRenaming);
+
         FinalizeComputeFightTargets();
     }
 
@@ -324,7 +322,7 @@ public abstract class FightLogic
     protected void FinalizeComputeFightTargets()
     {
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
-        NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
+        NonSquadFriendlyAgents = new HashSet<AgentItem>(_nonSquadFriendlies.Select(x => x.AgentItem));
         TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
         _hostiles = [.. _targets, .. _trashMobs];
     }
