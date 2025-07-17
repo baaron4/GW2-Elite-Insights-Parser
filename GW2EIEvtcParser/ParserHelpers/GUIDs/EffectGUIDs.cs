@@ -564,6 +564,7 @@ public static class EffectGUIDs
     public static readonly GUID EparchJudgmentUnliddedEyeWave = new("28FF802C476BF545AB9A4FF6D33FC6F7"); // Src Judgment - Dst Judgment - 2400 Duration
     public static readonly GUID EparchEyeOfJudgmentArrowHits = new("564C69F260387449A354A7B37C8FEB2C"); // Src Judgment - 0 Duration - 0 Default Duration
     // Kinfall Fractal
+    public static readonly GUID WhisperingShadowFallingIce = new("A54366270621E24BB4F763B93429E84C"); // no owner, 3s duration
     public static readonly GUID WhisperingShadowVitreousSpike = new("423C89C869E13A40A338A183CBDF7920"); // owned by shadow, 1.5s duration
     public static readonly GUID WhisperingShadowVitreousSpikeDanger = new("A44E4FEB1F90024B8E489ED312DF8536"); // owned by shadow, 2s duration
     public static readonly GUID WhisperingShadowFrozenTeethArrows = new("1A262BDD265422439BE245BB67D374F5"); // owned by shadow, 10s duration, arrow indicator
