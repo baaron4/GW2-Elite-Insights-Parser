@@ -280,7 +280,7 @@ internal class WvWFight : FightLogic
             List<SingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : auxTargets;
             actorListToFill.Add(nonSquadPlayer);
         }
-        _nonSquadFriendlies.AddRange(auxFriendlies.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.Character));
+        _nonSquadFriendlies.AddRange(auxFriendlies.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.AgentItem.InstID));
         //
         if (!_detailed)
         {
@@ -317,7 +317,7 @@ internal class WvWFight : FightLogic
         } 
         else
         {
-            _targets.AddRange(auxTargets.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.Character));
+            _targets.AddRange(auxTargets.OrderBy(x => x.BaseSpec.ToString()).ThenBy(x => x.Spec.ToString()).ThenBy(x => x.AgentItem.InstID));
         }
         FinalizeComputeFightTargets();
     }

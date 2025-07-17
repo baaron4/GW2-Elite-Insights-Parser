@@ -781,7 +781,7 @@ public class EvtcParser
             allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
             int playerOffset = _playerList.Count + 1;
-            foreach (AgentItem playerAgent in allPlayerAgents.OrderBy(x => x.Name))
+            foreach (AgentItem playerAgent in allPlayerAgents.OrderBy(x => x.InstID))
             {
                 if (!playerAgents.Contains(playerAgent))
                 {
