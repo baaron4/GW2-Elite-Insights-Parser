@@ -5003,6 +5003,7 @@ public static class SkillIDs
     public const long PhantomPain = 76505;
     public const long HailstormWhisperingShadow = 76510;
     public const long GrandEntrance = 76519;
+    public const long GutteringLightCM = 76535;
     //
     #endregion
 }

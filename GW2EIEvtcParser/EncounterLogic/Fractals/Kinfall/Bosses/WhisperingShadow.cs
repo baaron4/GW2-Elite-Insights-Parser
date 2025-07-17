@@ -96,7 +96,7 @@ internal class WhisperingShadow : Kinfall
         var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
         foreach (var cast in log.CombatData.GetAnimatedCastData(shadow.AgentItem).Where(x => x.ActualDuration > 0))
         {
-            if (cast.SkillID == GutteringLight)
+            if (cast.SkillID == GutteringLight || cast.SkillID == GutteringLightCM)
             {
                 if (isFirst)
                 {
@@ -203,6 +203,17 @@ internal class WhisperingShadow : Kinfall
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+
+        // falling ice
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFallingIce, out var fallingIce))
+        {
+            foreach (var effect in fallingIce)
+            {
+                var lifespan = effect.ComputeLifespan(log, 3000);
+                var decoration = new CircleDecoration(180, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                environmentDecorations.Add(decoration);
+            }
+        }
 
         // vitreous spike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowVitreousSpike, out var spikes))
