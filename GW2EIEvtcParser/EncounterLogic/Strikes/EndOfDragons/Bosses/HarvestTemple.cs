@@ -341,6 +341,11 @@ internal class HarvestTemple : EndOfDragonsStrike
         ];
     }
 
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [];
+    }
+
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return new Dictionary<TargetID, int>()

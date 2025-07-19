@@ -129,7 +129,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         };
     }
 
-    protected override List<TargetID> GetSuccessCheckIDs()
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
         return
         [

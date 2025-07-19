@@ -204,7 +204,7 @@ internal class SuperKodanBrothers : Bjora
         return "Super Kodan Brothers";
     }
 
-    protected override List<TargetID> GetSuccessCheckIDs()
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
         return
         [

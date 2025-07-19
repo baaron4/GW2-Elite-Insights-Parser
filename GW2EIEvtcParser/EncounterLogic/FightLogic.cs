@@ -511,7 +511,7 @@ public abstract class FightLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected virtual List<TargetID> GetSuccessCheckIDs()
+    protected virtual IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
         return [ GetTargetID(GenericTriggerID) ];
     }

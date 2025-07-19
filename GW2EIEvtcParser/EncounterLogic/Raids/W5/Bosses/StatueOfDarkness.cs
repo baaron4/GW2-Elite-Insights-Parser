@@ -68,7 +68,7 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    protected override List<TargetID> GetSuccessCheckIDs()
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
         return
         [

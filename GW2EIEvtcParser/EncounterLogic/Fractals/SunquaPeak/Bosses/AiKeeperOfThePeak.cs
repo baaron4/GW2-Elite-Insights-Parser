@@ -375,6 +375,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return phases;
     }
 
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [TargetID.AiKeeperOfThePeak, TargetID.AiKeeperOfThePeak2];
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         int status = 0;

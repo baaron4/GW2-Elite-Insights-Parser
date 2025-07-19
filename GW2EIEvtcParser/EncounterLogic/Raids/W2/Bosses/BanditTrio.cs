@@ -54,9 +54,13 @@ internal class BanditTrio : SalvationPass
         EncounterID |= 0x000002;
     }
 
-    protected override List<TargetID> GetSuccessCheckIDs()
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
     {
-        return [ TargetID.Narella ];
+        return [
+            TargetID.Berg,
+            TargetID.Zane,
+            TargetID.Narella
+        ];
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

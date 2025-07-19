@@ -528,6 +528,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
 
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [TargetID.MaiTrinStrike, TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM];
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);

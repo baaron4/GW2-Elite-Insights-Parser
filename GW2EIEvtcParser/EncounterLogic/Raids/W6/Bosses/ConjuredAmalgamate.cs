@@ -174,6 +174,11 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return FightData.EncounterStartStatus.Normal;
     }
 
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [];
+    }
+
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {
         return

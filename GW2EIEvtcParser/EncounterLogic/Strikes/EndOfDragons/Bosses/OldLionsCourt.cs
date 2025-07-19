@@ -101,6 +101,17 @@ internal class OldLionsCourt : EndOfDragonsStrike
             TargetID.PrototypeArseniteCM,
         ];
     }
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [
+            TargetID.PrototypeVermilion,
+            TargetID.PrototypeIndigo,
+            TargetID.PrototypeArsenite,
+            TargetID.PrototypeVermilionCM,
+            TargetID.PrototypeIndigoCM,
+            TargetID.PrototypeArseniteCM
+        ];
+    }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
     {

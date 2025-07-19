@@ -68,6 +68,11 @@ internal class CerusAndDeimos : LonelyTower
         return startToUse;
     }
 
+    protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
+    {
+        return [TargetID.CerusLonelyTower, TargetID.DeimosLonelyTower];
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
