@@ -27,6 +27,11 @@ internal class UnknownBossLogic : UnknownFightLogic
         return GetGenericFightOffset(fightData);
     }
 
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)), combatData, fightData, playerAgents, true);
+    }
+
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
