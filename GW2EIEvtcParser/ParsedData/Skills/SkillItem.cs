@@ -175,9 +175,9 @@ public class SkillItem
         #region Necromancer
         { DesertEmpowerment, "Desert Empowerment" },
         { SandCascadeBarrier, "Sand Cascade (Barrier)" },
-        { SandFlare, "Sand Cascade" }, // Eliphas: What the hell?
         { SadisticSearingActivation, "Sadistic Searing (Activation)" },
         { MarkOfBloodOrChillblainsTrigger, "Mark of Blood / Chillblains" },
+        { ChillblainsTransfusion, "Chillblains (Transfusion)" },
         #endregion Necromancer
         #region Ranger
         { WindborneNotes, "Windborne Notes" },
@@ -736,7 +736,7 @@ public class SkillItem
             { GarishPillarShadeHit, SkillImages.GarishPillars },
             { DesertShroudHit, SkillImages.DesertShroud },
             { SandstormShroudHit, SkillImages.SandstormShroud },
-            { SandFlare, SkillImages.SandFlare },
+            { SandFlareBuff, SkillImages.SandFlare },
             { DesertEmpowerment, TraitImages.DesertEmpowerment },
             { CascadingCorruption, TraitImages.CascadingCorruption },
             { DeathlyHaste, TraitImages.DeathlyHaste },
@@ -751,6 +751,7 @@ public class SkillItem
             { SignetOfVampirismHeal, SkillImages.SignetOfVampirism },
             { LifeTransferSomething, SkillImages.LifeTransfer },
             { MarkOfBloodOrChillblainsTrigger, SkillImages.MarkOfBloodOrChillblains },
+            { ChillblainsTransfusion, SkillImages.Chillblains },
             { VampiricStrikes, TraitImages.VampiricPresence },
             { LifeBlast, SkillImages.LifeBlast },
             { FiendLeechWvW, SkillImages.SummonBloodFiend },

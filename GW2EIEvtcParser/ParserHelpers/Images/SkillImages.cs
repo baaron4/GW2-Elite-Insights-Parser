@@ -345,6 +345,7 @@ internal static class SkillImages
     public const string SummonMadness = "https://render.guildwars2.com/file/590CC70C1003DC0F3C6498E8BED4FF0765CA1E72/103716.png";
     public const string LifeTransfer = "https://render.guildwars2.com/file/579400360B6E0C9D699B5D6D0AC9F2184CC707F8/103820.png";
     public const string MarkOfBloodOrChillblains = "https://i.imgur.com/oMv0Emd.png";
+    public const string Chillblains = "https://render.guildwars2.com/file/A33F6E0F51AD229AD57ED83D7AC040225DFD0FEA/103138.png";
     public const string LifeBlast = "https://render.guildwars2.com/file/E163E6D4B3E0DE946C00002526947BA20B542D40/103260.png";
     public const string SummonBloodFiend = "https://render.guildwars2.com/file/9BB42A45780BC6D0F5F8157BC26A64A3C31DAF02/103088.png";
     public const string BoneSlash = "https://wiki.guildwars2.com/images/8/8a/Bone_Slash.png";

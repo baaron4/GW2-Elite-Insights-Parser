@@ -2476,7 +2476,7 @@ public static class SkillIDs
     public const long Chapter2IgnitingBurst = 40635;
     public const long Chapter2RadiantRecovery = 40679;
     public const long HeatTherapy = 40694;
-    public const long SandFlare = 40774;
+    public const long SandFlareBuff = 40774;
     public const long Chapter1DesertBloomSkill = 40787;
     public const long FalseOasis = 40802;
     public const long NefariousFavorSkill = 40813;
@@ -5004,6 +5004,7 @@ public static class SkillIDs
     public const long HailstormWhisperingShadow = 76510;
     public const long GrandEntrance = 76519;
     public const long GutteringLightCM = 76535;
+    public const long ChillblainsTransfusion = 76506;
     //
     #endregion
 }
