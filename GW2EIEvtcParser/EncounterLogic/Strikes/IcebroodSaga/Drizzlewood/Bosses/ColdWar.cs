@@ -12,12 +12,12 @@ internal class ColdWar : Drizzlewood
     public ColdWar(int triggerID) : base(triggerID)
     {
         MechanicList.Add(new MechanicGroup([ 
-            new PlayerDstHitMechanic(IcyEchoes, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech", "Tight stacking damage","Icy Echoes", 0),
-            new PlayerDstHitMechanic(Detonate, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.", "Hit by Detonation","Detonate", 50),
-            new PlayerDstHitMechanic(LethalCoalescence, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.", "Soaked damage","Lethal Coalescence", 50),
-            new PlayerDstHitMechanic(FlameWall, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall", "Stood in Flame Wall","Flame Wall", 50),
-            new PlayerDstHitMechanic(CallAssassins, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.", "Hit by Assassins","Call Assassins", 50),
-            new PlayerDstHitMechanic(Charge, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!", "Hit by Charge","Charge!", 50),
+            new PlayerDstHealthDamageHitMechanic(IcyEchoes, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Icy.Ech", "Tight stacking damage","Icy Echoes", 0),
+            new PlayerDstHealthDamageHitMechanic(Detonate, new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Det.", "Hit by Detonation","Detonate", 50),
+            new PlayerDstHealthDamageHitMechanic(LethalCoalescence, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Orange), "Leth.Coal.", "Soaked damage","Lethal Coalescence", 50),
+            new PlayerDstHealthDamageHitMechanic(FlameWall, new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Flm.Wall", "Stood in Flame Wall","Flame Wall", 50),
+            new PlayerDstHealthDamageHitMechanic(CallAssassins, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.LightRed), "Call Ass.", "Hit by Assassins","Call Assassins", 50),
+            new PlayerDstHealthDamageHitMechanic(Charge, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Charge!", "Hit by Charge","Charge!", 50),
         ])
         );
         Extension = "coldwar";

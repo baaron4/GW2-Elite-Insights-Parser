@@ -22,11 +22,11 @@ internal class Kanaxai : SilentSurf
         [
             new MechanicGroup(
                 [
-                    new PlayerDstHitMechanic(RendingStormSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
+                    new PlayerDstHealthDamageHitMechanic(RendingStormSkill, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
                     new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
                 ]
             ),
-            new PlayerDstHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
+            new PlayerDstHealthDamageHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
             new MechanicGroup(
                 [
                     new PlayerDstBuffApplyMechanic(ExtremeVulnerability, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),

@@ -15,12 +15,12 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class Gorseval : SpiritVale
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
-            new PlayerDstHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", 4000)
+            new PlayerDstHealthDamageHitMechanic(SpectralImpact, new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Slam", "Spectral Impact (KB Slam)","Slam", 4000)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstBuffApplyMechanic(GhastlyPrison, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Egg", "Ghastly Prison (Egged)","Egged", 500),
             new PlayerDstBuffApplyMechanic(SpectralDarkness, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Orb Debuff", "Spectral Darkness (Stood in Orb AoE)","Orb Debuff", 100),
             new EnemyDstBuffApplyMechanic(SpiritedFusion, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Spirit Buff", "Spirited Fusion (Consumed a Spirit)","Ate Spirit", 0),
-            new PlayerDstHitMechanic(SpiritKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by small add","Spirit Kick", 0)
+            new PlayerDstHealthDamageHitMechanic(SpiritKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by small add","Spirit Kick", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(Vulnerability, new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Black", "Hit by Black Goo","Black Goo",3000)

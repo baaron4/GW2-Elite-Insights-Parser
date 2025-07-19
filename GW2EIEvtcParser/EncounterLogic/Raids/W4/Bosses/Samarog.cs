@@ -15,12 +15,12 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class Samarog : BastionOfThePenitent
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
-            new PlayerDstHitMechanic(SamarogShockwave, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv", "Shockwave from Spears","Shockwave", 0)
+            new PlayerDstHealthDamageHitMechanic(SamarogShockwave, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv", "Shockwave from Spears","Shockwave", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", 0)
+            new PlayerDstHealthDamageHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", 0)
                 .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(TramplingRush, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl", "Trampling Rush (hit by stampede towards home)","Trampling Rush", 0),
-            new PlayerDstHitMechanic(Bludgeon , new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam", "Bludgeon (vertical Slam)","Slam", 0),
+            new PlayerDstHealthDamageHitMechanic(TramplingRush, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl", "Trampling Rush (hit by stampede towards home)","Trampling Rush", 0),
+            new PlayerDstHealthDamageHitMechanic(Bludgeon , new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam", "Bludgeon (vertical Slam)","Slam", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(FixatedSamarog, new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "S.Fix", "Fixated by Samarog","Fixate: Samarog", 0),
                 new PlayerDstBuffApplyMechanic(FixatedGuldhem, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Orange), "G.Fix", "Fixated by Guldhem","Fixate: Guldhem", 0),
@@ -35,23 +35,23 @@ internal class Samarog : BastionOfThePenitent
                 new EnemyDstBuffApplyMechanic(StrengthenedBondRigom, new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Red), "R.Str", "Strengthened Bond: Rigom","Strengthened: Rigom", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(SpearReturn, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "S.Rt", "Hit by Spear Return","Spear Return", 0),
-                new PlayerDstHitMechanic(EffigyPulse, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls", "Effigy Pulse (Stood in Spear AoE)","Spear Aoe", 0),
-                new PlayerDstHitMechanic(SpearImpact, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn", "Spear Impact (hit by spawning Spear)","Spear Spawned", 0),
+                new PlayerDstHealthDamageHitMechanic(SpearReturn, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "S.Rt", "Hit by Spear Return","Spear Return", 0),
+                new PlayerDstHealthDamageHitMechanic(EffigyPulse, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls", "Effigy Pulse (Stood in Spear AoE)","Spear Aoe", 0),
+                new PlayerDstHealthDamageHitMechanic(SpearImpact, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn", "Spear Impact (hit by spawning Spear)","Spear Spawned", 0),
             ]),
-            new PlayerDstHitMechanic([InevitableBetrayalFailSmall, InevitableBetrayalFailBig], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl", "Inevitable Betrayal (failed Green)","Failed Green", 0),
+            new PlayerDstHealthDamageHitMechanic([InevitableBetrayalFailSmall, InevitableBetrayalFailBig], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl", "Inevitable Betrayal (failed Green)","Failed Green", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(BrutalizeBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta), "Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)","Brutalized", 0),
                 new EnemyCastEndMechanic(BrutalizeCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Brutalize (Breakbar)","Breakbar", 0),
-                new PlayerDstSkillMechanic(BrutalizeKill, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Brutalize (Failed CC)","CC Fail", 0)
+                new PlayerDstHealthDamageMechanic(BrutalizeKill, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail", "Brutalize (Failed CC)","CC Fail", 0)
                     .UsingChecker((de, log) => de.HasKilled),
                 new EnemyDstBuffRemoveMechanic(FanaticalResilience, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CC End", "Ended Brutalize","CC Ended", 0),
             ]),
             //new PlayerBoonRemoveMechanic(BrutalizeEffect, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Ended Brutalize (Breakbar broken)", "CCEnded",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.Manual)),
             //new Mechanic(BrutalizeEffect, "Brutalize", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.DiamondTall,"rgb(110,160,0)"), "CCed1","Ended Brutalize (Breakbar broken)", "CCed1",0),//(condition => condition.getCombatItem().IsBuffRemove == ParseEnum.BuffRemove.All)),
             new PlayerDstBuffApplyMechanic(SoulSwarm, new MechanicPlotlySetting(Symbols.XThinOpen,Colors.Teal), "Wall","Soul Swarm (stood in or beyond Spear Wall)","Spear Wall", 0),
-            new PlayerDstHitMechanic(ImpalingStab, new MechanicPlotlySetting(Symbols.Hourglass,Colors.Blue), "Shck.Wv Ctr","Impaling Stab (hit by Spears causing Shockwave)","Shockwave Center", 0),
-            new PlayerDstHitMechanic(AnguishedBolt, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Stun","Anguished Bolt (AoE Stun Circle by Guldhem)","Guldhem's Stun", 0),
+            new PlayerDstHealthDamageHitMechanic(ImpalingStab, new MechanicPlotlySetting(Symbols.Hourglass,Colors.Blue), "Shck.Wv Ctr","Impaling Stab (hit by Spears causing Shockwave)","Shockwave Center", 0),
+            new PlayerDstHealthDamageHitMechanic(AnguishedBolt, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Stun","Anguished Bolt (AoE Stun Circle by Guldhem)","Guldhem's Stun", 0),
         
             //  new Mechanic(SpearImpact, "Brutalize", ParseEnum.BossIDS.Samarog, new MechanicPlotlySetting(Symbols.StarSquare,Color.Red), "CC Target", casted without dmg odd
         ]);

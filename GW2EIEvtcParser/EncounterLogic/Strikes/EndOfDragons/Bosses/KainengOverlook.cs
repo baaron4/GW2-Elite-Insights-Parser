@@ -20,27 +20,27 @@ internal class KainengOverlook : EndOfDragonsStrike
         [  
             //Li
             new MechanicGroup([
-                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
-                new PlayerDstHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
+                new PlayerDstHealthDamageHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkRed), "Wave.H", "Hit by Wave", "Wave Hit", 150),
+                new PlayerDstHealthDamageHitMechanic([ DragonSlashBurstNM, DragonSlashBurstCM ], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkRed), "Burst.H", "Hit by Burst", "Burst Hit", 150),
+                new PlayerDstHealthDamageHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
+                new PlayerDstHealthDamageHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
                     .UsingAchievementEligibility()
                     .UsingEnable((log) => log.FightData.IsCM),
             ]),
             new MechanicGroup([             
                 // Mindblade
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([ StormOfSwords1, StormOfSwords2, StormOfSwords3, StormOfSwords4, StormOfSwords5, StormOfSwords6, StormOfSwords7, StormOfSwords8, StormOfSwords9, StormOfSwords10 ], new MechanicPlotlySetting(Symbols.Circle, Colors.Pink), "Storm.H", "Hit by bladestorm", "Bladestorm Hit", 150),
                     new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightPurple), "RainBlad.T", "Targeted by Rain of Blades", "Rain of Blades Target", 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.Purple), "Fixated.M", "Fixated by The Mindblade", "Fixated Mindblade", 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheMindblade, TargetID.TheMindbladeCM })),
                 ]),
                 // Enforcer
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
+                    new PlayerDstHealthDamageHitMechanic([ EnforcerRushingJusticeNM, EnforcerRushingJusticeCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "Flames.S", "Stood in Flames", "Stood in Flames", 150),
                     new PlayerDstBuffApplyMechanic(FixatedAnkkaKainengOverlook, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Fixated.E", "Fixated by The Enforcer", "Fixated Enforcer", 150)
                         .UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.TheEnforcer, TargetID.TheEnforcerCM })),
-                    new PlayerDstHitMechanic(BoomingCommandSkillNM, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
+                    new PlayerDstHealthDamageHitMechanic(BoomingCommandSkillNM, new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.O", "Red circle overlap", "Red Circle", 150),
                 ]),
                 // Ritualist
                 new MechanicGroup([
@@ -50,11 +50,11 @@ internal class KainengOverlook : EndOfDragonsStrike
             new MechanicGroup([          
                 // Mech Rider
                 new MechanicGroup([
-                    new PlayerDstHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
-                    new PlayerDstHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", 150),
-                    new PlayerDstHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", 150),
-                    new PlayerDstHitMechanic([ ElectricRainNM, ElectricRainCM ], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", 150),
-                    new PlayerDstHitMechanic(JadeBusterCannonMechRider, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([ ExplosiveUppercutNM, ExplosiveUppercutCM ], new MechanicPlotlySetting(Symbols.TriangleNE, Colors.Pink), "ExpUpper.H", "Hit by Explosive Uppercut", "Explosive Uppercut Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeSmallConeNM, FallOfTheAxeSmallConeCM ], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightGrey), "FallAxe.S.H", "Hit by Mech Rider Small Cone", "Mech Rider Small Cone Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([ FallOfTheAxeBigConeNM, FallOfTheAxeBigConeCM ], new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightGrey), "FallAxe.B.H", "Hit by Mech Rider Big Cone", "Mech Rider Small Big Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic([ ElectricRainNM, ElectricRainCM ], new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "ElecRain.H", "Hit by Electric Rain (Set of 5 AoEs by Mech Rider)", "Electic Rain Hit", 150),
+                    new PlayerDstHealthDamageHitMechanic(JadeBusterCannonMechRider, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Orange), "Laser.H", "Hit by Big Laser", "Laser Hit", 150),
                 ]),
                 // Sniper
                 new MechanicGroup([
@@ -63,11 +63,11 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new EnemyDstBuffApplyMechanic(EnhancedDestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Purple), "DescAura", "Enhanced Destructive Aura", "Powered Up 2", 150),
                 new EnemyDstBuffApplyMechanic(DestructiveAuraBuff, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Pwrd.Up2", "Powered Up (Split 2)", "Powered Up 2", 150),
                 new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
-                new PlayerDstNoSkillMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
+                new PlayerDstNoHealthDamageMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
                     .UsingAchievementEligibility()
                     .UsingEnable(x => x.FightData.IsCM),
             ]),
-            new PlayerDstSkillMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
+            new PlayerDstHealthDamageMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
             new PlayerDstBuffApplyMechanic([ TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 ], new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
             new MechanicGroup([
                 new PlayerDstEffectMechanic(EffectGUIDs.KainengOverlookSharedDestructionGreen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green),  "Green", "Selected for Green", "Green", 150),

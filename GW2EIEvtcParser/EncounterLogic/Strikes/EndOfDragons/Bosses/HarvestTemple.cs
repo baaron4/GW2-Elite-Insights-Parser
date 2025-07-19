@@ -25,16 +25,16 @@ internal class HarvestTemple : EndOfDragonsStrike
                 new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
                 new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
-                new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
-                new PlayerDstHitMechanic([VoidPoolNM, VoidPoolCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
-                new PlayerDstSkillMechanic([HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Targeted Expulsion (Spread)", "Targeted Expulsion (Spread)", 150)
+                new PlayerDstHealthDamageHitMechanic(InfluenceOfTheVoidSkill, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
+                new PlayerDstHealthDamageHitMechanic([VoidPoolNM, VoidPoolCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
+                new PlayerDstHealthDamageMechanic([HarvestTempleTargetedExpulsionNM, HarvestTempleTargetedExpulsionCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Orange), "Spread.H", "Hit by Targeted Expulsion (Spread)", "Targeted Expulsion (Spread)", 150)
                     .UsingChecker((@event, log) => @event.HasHit || @event.DoubleProcHit),
-                new PlayerSrcAllHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0)
+                new PlayerSrcAllHealthDamageHitsMechanic(new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Orb Push", "Orb was pushed by player", "Orb Push", 0)
                     .UsingChecker((de, log) => (de.To.IsSpecies(TargetID.PushableVoidAmalgamate) || de.To.IsSpecies(TargetID.KillableVoidAmalgamate)) && de is DirectHealthDamageEvent),
-                new PlayerDstHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Eligibility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
+                new PlayerDstHealthDamageHitMechanic([Shockwave, TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Eligibility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150)
                     .UsingAchievementEligibility(),
-                new PlayerDstHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
-                new PlayerDstHitMechanic(MagicDischarge, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
+                new PlayerDstHealthDamageHitMechanic([VoidExplosion, VoidExplosion2, VoidExplosion3], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
+                new PlayerDstHealthDamageHitMechanic(MagicDischarge, new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
                 new MechanicGroup([
                     new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleSuccessGreen, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
                     new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0),
@@ -42,98 +42,98 @@ internal class HarvestTemple : EndOfDragonsStrike
             ]),
             // Purification 1
             new MechanicGroup([
-                new PlayerDstHitMechanic(LightningOfJormag, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", 0),
-                new PlayerDstHitMechanic(FlamesOfPrimordus, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Orange), "Flame.H", "Hit by Flames of Primordus", "Flames of Primordus", 0),
-                new PlayerDstHitMechanic(Stormfall, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Purple), "Storm.H", "Hit by Kralkatorrik's Stormfall", "Kralkatorrik's Stormfall", 0),
+                new PlayerDstHealthDamageHitMechanic(LightningOfJormag, new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", 0),
+                new PlayerDstHealthDamageHitMechanic(FlamesOfPrimordus, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Orange), "Flame.H", "Hit by Flames of Primordus", "Flames of Primordus", 0),
+                new PlayerDstHealthDamageHitMechanic(Stormfall, new MechanicPlotlySetting(Symbols.YUpOpen, Colors.Purple), "Storm.H", "Hit by Kralkatorrik's Stormfall", "Kralkatorrik's Stormfall", 0),
             ]),
             // Jormag
             new MechanicGroup([
-                new PlayerDstHitMechanic([BreathOfJormag1, BreathOfJormag2, BreathOfJormag3], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
-                new PlayerDstHitMechanic(GraspOfJormag, new MechanicPlotlySetting(Symbols.StarOpen, Colors.DarkWhite), "J.Grasp.H", "Hit by Grasp of Jormag", "Grasp of Jormag", 0),
-                new PlayerDstHitMechanic(FrostMeteor, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
+                new PlayerDstHealthDamageHitMechanic([BreathOfJormag1, BreathOfJormag2, BreathOfJormag3], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "J.Breath.H", "Hit by Jormag Breath", "Jormag Breath", 150),
+                new PlayerDstHealthDamageHitMechanic(GraspOfJormag, new MechanicPlotlySetting(Symbols.StarOpen, Colors.DarkWhite), "J.Grasp.H", "Hit by Grasp of Jormag", "Grasp of Jormag", 0),
+                new PlayerDstHealthDamageHitMechanic(FrostMeteor, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "J.Meteor.H", "Hit by Jormag Meteor", "Jormag Meteor", 150),
             ]),
             // Primordus
             new MechanicGroup([
-                new PlayerDstHitMechanic(LavaSlam, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
-                new PlayerDstHitMechanic(JawsOfDestruction, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Jaws.H", "Hit by Primordus Jaws", "Primordus Jaws", 150),
+                new PlayerDstHealthDamageHitMechanic(LavaSlam, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Red), "Slam.H", "Hit by Primordus Slam", "Primordus Slam", 150),
+                new PlayerDstHealthDamageHitMechanic(JawsOfDestruction, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Jaws.H", "Hit by Primordus Jaws", "Primordus Jaws", 150),
             ]),
             // Kralkatorrik 
             new MechanicGroup([
-                new PlayerDstHitMechanic(CrystalBarrage, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
-                new PlayerDstHitMechanic(BrandingBeam, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik's Branding Beam", "Kralkatorrik Beam", 150),
-                new PlayerDstHitMechanic(BrandedArtillery, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", 150),
-                new PlayerDstHitMechanic(VoidPoolKralkatorrik, new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "K.Pool.H", "Hit by Kralkatorrik Void Pool", "Kralkatorrik Void Pool", 150),
+                new PlayerDstHealthDamageHitMechanic(CrystalBarrage, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Purple), "Barrage.H", "Hit by Crystal Barrage", "Barrage", 150),
+                new PlayerDstHealthDamageHitMechanic(BrandingBeam, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Purple), "Beam.H", "Hit by Kralkatorrik's Branding Beam", "Kralkatorrik Beam", 150),
+                new PlayerDstHealthDamageHitMechanic(BrandedArtillery, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Purple), "Artillery.H", "Hit by Brandbomber Artillery", "Brandbomber Artillery", 150),
+                new PlayerDstHealthDamageHitMechanic(VoidPoolKralkatorrik, new MechanicPlotlySetting(Symbols.Circle, Colors.Black), "K.Pool.H", "Hit by Kralkatorrik Void Pool", "Kralkatorrik Void Pool", 150),
             ]),
             // Purification 2
             new MechanicGroup([
-                new PlayerDstHitMechanic(SwarmOfMordremoth_PoolOfUndeath, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Goop.H", "Hit by goop left by heart", "Heart Goop", 150),
-                new PlayerDstHitMechanic(SwarmOfMordremoth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", 150),
+                new PlayerDstHealthDamageHitMechanic(SwarmOfMordremoth_PoolOfUndeath, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Goop.H", "Hit by goop left by heart", "Heart Goop", 150),
+                new PlayerDstHealthDamageHitMechanic(SwarmOfMordremoth, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Red), "Bees.H", "Hit by bees from heart", "Heart Bees", 150),
                 // Timecaster
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(GravityCrushDamage, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Black), "Grav.Cru.H", "Hit by Gravity Crush", "Gravity Crush", 0),
-                    new PlayerDstHitMechanic(NightmareEpochDamage, new MechanicPlotlySetting(Symbols.Hexagon, Colors.Pink), "NigEpoch.H", "Hit by Nightmare Epoch", "Nightmare Epoch", 0),
+                    new PlayerDstHealthDamageHitMechanic(GravityCrushDamage, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Black), "Grav.Cru.H", "Hit by Gravity Crush", "Gravity Crush", 0),
+                    new PlayerDstHealthDamageHitMechanic(NightmareEpochDamage, new MechanicPlotlySetting(Symbols.Hexagon, Colors.Pink), "NigEpoch.H", "Hit by Nightmare Epoch", "Nightmare Epoch", 0),
                 ]),
             ]),
             // Mordremoth
             new MechanicGroup([
-                new PlayerDstHitMechanic(Shockwave, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new PlayerDstHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
-                new PlayerDstHitMechanic(PoisonRoar, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth Poison", "Mordremoth Poison", 150),
+                new PlayerDstHealthDamageHitMechanic(Shockwave, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
+                new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic(PoisonRoar, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth Poison", "Mordremoth Poison", 150),
             ]),
             // Giants
             new MechanicGroup([
-                new PlayerDstHitMechanic(DeathScream, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Grey), "Scream.G.CC", "CC'd by Giant's Death Scream", "Death Scream", 0)
+                new PlayerDstHealthDamageHitMechanic(DeathScream, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Grey), "Scream.G.CC", "CC'd by Giant's Death Scream", "Death Scream", 0)
                     .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
-                new PlayerDstHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", 0),
-                new PlayerDstHitMechanic(Stomp, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Teal), "Stomp.CC", "CC'd by Giant's Stomp", "Stomp", 0)
+                new PlayerDstHealthDamageHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", 0),
+                new PlayerDstHealthDamageHitMechanic(Stomp, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Teal), "Stomp.CC", "CC'd by Giant's Stomp", "Stomp", 0)
                     .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
             ]),
             // Zhaitan
             new MechanicGroup([
-                new PlayerDstHitMechanic([ScreamOfZhaitanNM, ScreamOfZhaitanCM], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
-                new PlayerDstHitMechanic(PutridDeluge, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkGreen), "Z.Poison.H", "Hit by Zhaitan Poison", "Zhaitan Poison", 150),
-                new PlayerDstHitMechanic(ZhaitanTailSlam, new MechanicPlotlySetting(Symbols.Circle, Colors.Grey), "Slam.H", "Hit by Zhaitan's Tail Slam", "Zhaitan Slam", 0),
+                new PlayerDstHealthDamageHitMechanic([ScreamOfZhaitanNM, ScreamOfZhaitanCM], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.DarkGreen), "Scream.H", "Hit by Zhaitan Scream", "Zhaitan Scream", 150),
+                new PlayerDstHealthDamageHitMechanic(PutridDeluge, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.DarkGreen), "Z.Poison.H", "Hit by Zhaitan Poison", "Zhaitan Poison", 150),
+                new PlayerDstHealthDamageHitMechanic(ZhaitanTailSlam, new MechanicPlotlySetting(Symbols.Circle, Colors.Grey), "Slam.H", "Hit by Zhaitan's Tail Slam", "Zhaitan Slam", 0),
             ]),
             // Purification 3
             new MechanicGroup([
-                new PlayerDstHitMechanic(SwarmOfMordremoth_CorruptedWaters, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightBlue), "Prjtile.H", "Hit by Corrupted Waters (Heart Projectile)", "Heart Projectile", 150),
+                new PlayerDstHealthDamageHitMechanic(SwarmOfMordremoth_CorruptedWaters, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.LightBlue), "Prjtile.H", "Hit by Corrupted Waters (Heart Projectile)", "Heart Projectile", 150),
                 // Saltspray
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(HydroBurst, new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Hydro Burst (Whirlpool)", "Hydro Burst (Whirlpool)", 150),
-                    new PlayerDstHitMechanic(CallLightning, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Purple), "CallLigh.H", "Hit by Call Lightning", "Call Lightning", 0),
-                    new PlayerDstHitMechanic(FrozenFury, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Ice), "FrozFury.H", "Hit by Frozen Fury", "Frozen Fury", 0),
-                    new PlayerDstHitMechanic(RollingFlame, new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "RollFlame.H", "Hit by Rolling Flame", "Rolling Flame", 0),
-                    new PlayerDstHitMechanic([ShatterEarth, ShatterEarth2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Brown), "ShatEarth.H", "Hit by Shatter Earth", "Shatter Earth", 0),
+                    new PlayerDstHealthDamageHitMechanic(HydroBurst, new MechanicPlotlySetting(Symbols.Circle, Colors.LightBlue), "Whrlpl.H", "Hit by Hydro Burst (Whirlpool)", "Hydro Burst (Whirlpool)", 150),
+                    new PlayerDstHealthDamageHitMechanic(CallLightning, new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Purple), "CallLigh.H", "Hit by Call Lightning", "Call Lightning", 0),
+                    new PlayerDstHealthDamageHitMechanic(FrozenFury, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.Ice), "FrozFury.H", "Hit by Frozen Fury", "Frozen Fury", 0),
+                    new PlayerDstHealthDamageHitMechanic(RollingFlame, new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "RollFlame.H", "Hit by Rolling Flame", "Rolling Flame", 0),
+                    new PlayerDstHealthDamageHitMechanic([ShatterEarth, ShatterEarth2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Brown), "ShatEarth.H", "Hit by Shatter Earth", "Shatter Earth", 0),
                 ]),
             ]),
             // Soo Won
             new MechanicGroup([
-                new PlayerDstHitMechanic([TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
-                new PlayerDstHitMechanic(ClawSlap, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
-                new PlayerDstHitMechanic(VoidPoolSooWon, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
-                new PlayerDstHitMechanic(TailSlam, new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
-                new PlayerDstHitMechanic(TormentOfTheVoid, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkMagenta), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
-                new PlayerDstHitMechanic(MagicHail, new MechanicPlotlySetting(Symbols.CircleX, Colors.Black), "MagHail.H", "Hit by Magic Hail", "Magic Hail Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([TsunamiSlamOrb, TsunamiSlamTailSlamOrb], new MechanicPlotlySetting(Symbols.TriangleRight, Colors.LightBlue), "Tsunami.H", "Hit by Soo-Won Tsunami", "Soo-Won Tsunami", 150),
+                new PlayerDstHealthDamageHitMechanic(ClawSlap, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.LightBlue), "Claw.H", "Hit by Soo-Won Claw", "Soo-Won Claw", 150),
+                new PlayerDstHealthDamageHitMechanic(VoidPoolSooWon, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPink), "SW.Pool.H", "Hit by Soo-Won Void Pool", "Soo-Won Void Pool", 150),
+                new PlayerDstHealthDamageHitMechanic(TailSlam, new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "Tail.H", "Hit by Soo-Won Tail", "Soo-Won Tail", 150),
+                new PlayerDstHealthDamageHitMechanic(TormentOfTheVoid, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkMagenta), "Torment.H", "Hit by Torment of the Void (Bouncing Orbs)", "Torment of the Void", 150),
+                new PlayerDstHealthDamageHitMechanic(MagicHail, new MechanicPlotlySetting(Symbols.CircleX, Colors.Black), "MagHail.H", "Hit by Magic Hail", "Magic Hail Hit", 0),
                 // Obliterator
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", 0),
-                    new PlayerDstHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", 0),
+                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", 0),
+                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", 0),
                     new MechanicGroup([
-                        new PlayerDstHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", 0),
-                        new PlayerDstHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0)
+                        new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", 0),
+                        new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0)
                             .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
                     ]),
                 ]),
                 // Goliath
                 new MechanicGroup([
-                    new PlayerDstHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0),
-                    new PlayerDstHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0)
+                    new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0),
+                    new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0)
                         .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
                 ]),
             ]),
             // Purification 4
             new MechanicGroup([
-                new PlayerDstHitMechanic(GraspOfTheVoid, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Black), "GraspVoid.H", "Hit by Grasp of the Void (Final Orb Projectile)", "Grasp of the Void", 0),
+                new PlayerDstHealthDamageHitMechanic(GraspOfTheVoid, new MechanicPlotlySetting(Symbols.Hexagram, Colors.Black), "GraspVoid.H", "Hit by Grasp of the Void (Final Orb Projectile)", "Grasp of the Void", 0),
             ]),
         ]));
         Icon = EncounterIconHarvestTemple;

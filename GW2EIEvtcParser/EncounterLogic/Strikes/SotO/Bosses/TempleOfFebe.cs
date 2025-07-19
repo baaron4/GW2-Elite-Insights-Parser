@@ -34,49 +34,49 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 new EnemyCastStartMechanic([InsatiableHungerSmallOrbSkillNM, InsatiableHungerSmallOrbEmpoweredSkillNM, InsatiableHungerSmallOrbSkillCM, InsatiableHungerSmallOrbEmpoweredSkillCM], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([CrushingRegretNM, CrushingRegretCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "CrushReg.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
-                new PlayerDstHitMechanic([CrushingRegretEmpoweredNM, CrushingRegretEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.GreenishYellow), "Emp.CrushReg.H", "Hit by Empowered Crushing Regret (Green)", "Empowered Crushing Regret Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([CrushingRegretNM, CrushingRegretCM], new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "CrushReg.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([CrushingRegretEmpoweredNM, CrushingRegretEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.GreenishYellow), "Emp.CrushReg.H", "Hit by Empowered Crushing Regret (Green)", "Empowered Crushing Regret Hit", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
                 new EnemyCastStartMechanic([CrushingRegretNM, CrushingRegretEmpoweredNM, CrushingRegretCM, CrushingRegretEmpoweredCM], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightMilitaryGreen), "CrushReg.C", "Casted Crushing Regret", "Crushing Regret Cast", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.TempleOfFebeGreenSuccess, new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "CrushReg.C.S", "Crushing Regret Successful", "Success Crushing Regret", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.TempleOfFebeGreenFailure, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "CrushReg.C.F", "Crushing Regret Failed", "Failed Crushing Regret", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([WailOfDespairNM, WailOfDespairCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Spread Player AoE)", "Wail of Despair Hit", 0),
-                new PlayerDstHitMechanic([WailOfDespairEmpoweredNM, WailOfDespairEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Emp.WailDesp.H", "Hit by Empowered Wail of Despair (Spread Player AoE)", "Empowered Wail of Despair Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([WailOfDespairNM, WailOfDespairCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Spread Player AoE)", "Wail of Despair Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([WailOfDespairEmpoweredNM, WailOfDespairEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Emp.WailDesp.H", "Hit by Empowered Wail of Despair (Spread Player AoE)", "Empowered Wail of Despair Hit", 0),
                 new EnemyCastStartMechanic([WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([PoolOfDespairNM, PoolOfDespairCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "PoolDesp.H", "Hit by Pool of Despair (Spread Ground AoE)", "Pool of Despair Hit", 0),
-                new PlayerDstHitMechanic([PoolOfDespairEmpoweredNM, PoolOfDespairEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.RedSkin), "Emp.PoolDesp.H", "Hit by Empowered Pool of Despair (Spread Ground AoE)", "Empowered Pool of Despair Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([PoolOfDespairNM, PoolOfDespairCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "PoolDesp.H", "Hit by Pool of Despair (Spread Ground AoE)", "Pool of Despair Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([PoolOfDespairEmpoweredNM, PoolOfDespairEmpoweredCM], new MechanicPlotlySetting(Symbols.Circle, Colors.RedSkin), "Emp.PoolDesp.H", "Hit by Empowered Pool of Despair (Spread Ground AoE)", "Empowered Pool of Despair Hit", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([EnviousGazeNM, EnviousGazeCM], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (Wall/Beam)", "Envious Gaze Hit", 0),
-                new PlayerDstHitMechanic([EnviousGazeEmpoweredNM, EnviousGazeEmpoweredRearNM, EnviousGazeEmpoweredCM, EnviousGazeEmpoweredRearCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Emp.EnvGaz.H", "Hit by Empowered Envious Gaze (Double Wall/Beam)", "Empowered Envious Gaze Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([EnviousGazeNM, EnviousGazeCM], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (Wall/Beam)", "Envious Gaze Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([EnviousGazeEmpoweredNM, EnviousGazeEmpoweredRearNM, EnviousGazeEmpoweredCM, EnviousGazeEmpoweredRearCM], new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Emp.EnvGaz.H", "Hit by Empowered Envious Gaze (Double Wall/Beam)", "Empowered Envious Gaze Hit", 0),
                 new PlayerDstBuffRemoveMechanic(Boons, new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "EnvGaze.Strip", "Boons removed by Envious Gaze (Any)", "Envious Gaze Boon Removal", 100)
                     .UsingChecker((brae, log) => brae.By.IsAnySpecies([(int)TargetID.Cerus, (int)TargetID.EmbodimentOfEnvy, (int)TargetID.PermanentEmbodimentOfEnvy])),
                 new EnemyCastStartMechanic([EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([MaliciousIntentSpawnDamageNM, MaliciousIntentSpawnDamageCM], new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent (Malicious Shadow Spawn)", "Malicious Intent Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([MaliciousIntentSpawnDamageNM, MaliciousIntentSpawnDamageCM], new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent (Malicious Shadow Spawn)", "Malicious Intent Hit", 0),
                 new PlayerDstBuffApplyMechanic([MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targeted by Malicious Intent", 0),
                 new EnemyCastStartMechanic([MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM], new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([CryOfRageNM, CryOfRageCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "CryRage.H", "Hit by Cry of Rage", "Cry of Rage Hit", 0),
-                new PlayerDstHitMechanic([CryOfRageEmpoweredNM, CryOfRageEmpoweredCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "Emp.CryRage.H", "Hit by Empowered Cry of Rage", "Empowered Cry of Rage Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([CryOfRageNM, CryOfRageCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "CryRage.H", "Hit by Cry of Rage", "Cry of Rage Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([CryOfRageEmpoweredNM, CryOfRageEmpoweredCM], new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "Emp.CryRage.H", "Hit by Empowered Cry of Rage", "Empowered Cry of Rage Hit", 0),
                 new EnemyCastStartMechanic([CryOfRageNM, CryOfRageEmpoweredNM, CryOfRageCM, CryOfRageEmpoweredCM], new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "CryRage.C", "Casted Cry of Rage", "Cry of Rage Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic([EnragedSmashNM, EnragedSmashCM], new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.H", "Hit by Enraged Smash", "Hit by Enraged Smash", 0),
-                new PlayerDstHitMechanic([EnragedSmashNM, EnragedSmashCM], new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0)
+                new PlayerDstHealthDamageHitMechanic([EnragedSmashNM, EnragedSmashCM], new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.H", "Hit by Enraged Smash", "Hit by Enraged Smash", 0),
+                new PlayerDstHealthDamageHitMechanic([EnragedSmashNM, EnragedSmashCM], new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0)
                     .UsingChecker((ahde, log) => ahde.HasDowned),
                 new EnemyCastStartMechanic([EnragedSmashNM, EnragedSmashCM], new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(PetrifyDamage, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(PetrifyDamage, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
                 new EnemyCastStartMechanic(PetrifySkill, new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Pet.C", "Casted Petrify", "Petrify breakbar start", 0),
-                new EnemySrcHitMechanic(PetrifyDamage, new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkTeal), "Pet.F", "Petrify hit players and healed Cerus", "Petrify breakbar fail", 100),
+                new EnemySrcHealthDamageHitMechanic(PetrifyDamage, new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkTeal), "Pet.F", "Petrify hit players and healed Cerus", "Petrify breakbar fail", 100),
             ]),
             new NonSpecializedCombatEventListMechanic<TimeCombatEvent>(new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0, false, (log, agentItem) =>
                 {

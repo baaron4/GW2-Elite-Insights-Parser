@@ -14,8 +14,8 @@ internal class MursaatOverseer : BastionOfThePenitent
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
-                new PlayerDstHitMechanic(JadeSoldierAura, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade", "Jade Soldier's Aura hit","Jade Aura", 0),
-                new PlayerDstHitMechanic(JadeSoldierExplosion, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl", "Jade Soldier's Death Explosion","Jade Explosion", 0),
+                new PlayerDstHealthDamageHitMechanic(JadeSoldierAura, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Jade", "Jade Soldier's Aura hit","Jade Aura", 0),
+                new PlayerDstHealthDamageHitMechanic(JadeSoldierExplosion, new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Jade Expl", "Jade Soldier's Death Explosion","Jade Explosion", 0),
             ]),
             //new Mechanic(ClaimSAK, "Claim", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Square,Colors.Yellow), "Claim",0), //Buff remove only
             //new Mechanic(DispelSAK, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only

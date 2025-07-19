@@ -23,7 +23,7 @@ internal abstract class FractalLogic : FightLogic
                 new MechanicGroup(
                     [
                         new PlayerDstBuffApplyMechanic(FluxBombBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux", "Flux Bomb application","Flux Bomb", 0),
-                        new PlayerDstHitMechanic(FluxBombSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", 0), // No longer tracking damage
+                        new PlayerDstHealthDamageHitMechanic(FluxBombSkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg", "Flux Bomb hit","Flux Bomb dmg", 0), // No longer tracking damage
                     ]
                 ),
                 new SpawnMechanic((int)TargetID.FractalVindicator, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator", "Fractal Vindicator spawned","Vindicator spawn", 0),

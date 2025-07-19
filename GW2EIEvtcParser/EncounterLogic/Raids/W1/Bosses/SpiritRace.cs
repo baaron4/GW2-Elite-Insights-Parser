@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class SpiritRace : SpiritVale
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
-            new PlayerDstHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(SpiritFog, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
             new PlayerDstBuffApplyMechanic(Crippled, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(),
         ]);
     public SpiritRace(int triggerID) : base(triggerID)

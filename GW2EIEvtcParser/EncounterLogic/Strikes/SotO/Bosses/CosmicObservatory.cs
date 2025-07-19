@@ -19,27 +19,27 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         MechanicList.Add( new MechanicGroup([
         
             new MechanicGroup([
-                new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
+                new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
                     .UsingEnable(x => x.FightData.IsCM)
                     .UsingAchievementEligibility(),
-                new PlayerDstHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
+                new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
                 new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
             ]),
-            new PlayerDstHitMechanic(DemonicBlast, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Dmn.Blst.H", "Demonic Blast Hit (Cones AoEs)", "Demonic Blast Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(DemonicBlast, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Dmn.Blst.H", "Demonic Blast Hit (Cones AoEs)", "Demonic Blast Hit", 0),
             new MechanicGroup([
-                new PlayerDstHitMechanic(SoulFeast, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Sl.Fst.H", "Soul Feat (Pulsing Orb AoEs)", "Soul Feast Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(SoulFeast, new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Sl.Fst.H", "Soul Feat (Pulsing Orb AoEs)", "Soul Feast Hit", 0),
                 new PlayerDstBuffApplyMechanic(Revealed, new MechanicPlotlySetting(Symbols.Bowtie, Colors.Teal), "Sl.Fst.T", "Soul Feast Target", "Targeted by Soul Feast", 0)
                     .UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Dagda)),
             ]),
             new MechanicGroup([
-                new PlayerDstHitMechanic(PlanetCrashProjectileSkill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", 0),
+                new PlayerDstHealthDamageHitMechanic(PlanetCrashProjectileSkill, new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", 0),
                 new EnemyCastStartMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "Planet Crash", "Planet Crash Cast", "Cast Planet Crash", 0),
                 new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "Planet Crash (Int)", "Interrupted Planet Crash", "Interrupted Planet Crash", 0)
                     .UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Dagda)),
-                new EnemySrcSkillMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", 1000)
+                new EnemySrcHealthDamageMechanic(PlanetCrashSkill, new MechanicPlotlySetting(Symbols.Star, Colors.DarkBlue), "Planet Crash (Land)", "Planet Crash Landed", "Fully Casted Planet Crash", 1000)
                     .UsingChecker((ahde, log) => ahde.HealthDamage >= 0 && ahde.To.IsPlayer),
             ]),
-            new PlayerDstHitMechanic(ChargingConstellationDamage, new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", 0),
+            new PlayerDstHealthDamageHitMechanic(ChargingConstellationDamage, new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", 0),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targeted by Shooting Stars", 0),
                 new EnemyCastStartMechanic(ShootingStars, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "Shooting Stars", "Shooting Stars Cast", "Cast Shooting Stars", 0),
@@ -57,10 +57,10 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     .UsingChecker((abre, log) => abre.CreditedBy.IsPlayer),
             ]),
             new MechanicGroup([
-                new PlayerSrcSkillMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
-                new PlayerSrcHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0)
+                new PlayerSrcHealthDamageMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightBlue), "PurLight.C", "Casted Purifying Light", "Casted Purifying Light", 0),
+                new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightBlue), "PurLight.Soul.C", "Casted Purifying Light (Hit Soul Feast)", "Purifying Light Hit Soul Feast", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
-                new PlayerSrcHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
+                new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
                     .UsingEnable(x => x.FightData.IsCM),
             ]),

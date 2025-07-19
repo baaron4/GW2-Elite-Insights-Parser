@@ -4,10 +4,10 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData;
 
 
-internal class PlayerSrcAllHitsMechanic : PlayerSrcHitMechanic
+internal class PlayerSrcAllHealthDamageHitsMechanic : PlayerSrcHealthDamageHitMechanic
 {
 
-    public PlayerSrcAllHitsMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerSrcAllHealthDamageHitsMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(0, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
     protected override bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor)
