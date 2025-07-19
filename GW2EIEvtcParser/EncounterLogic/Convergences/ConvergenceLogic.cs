@@ -22,8 +22,6 @@ internal abstract class ConvergenceLogic : FightLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-
         RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x =>
             x.RewardType == RewardTypes.ConvergenceReward1 ||
             x.RewardType == RewardTypes.ConvergenceReward2);
