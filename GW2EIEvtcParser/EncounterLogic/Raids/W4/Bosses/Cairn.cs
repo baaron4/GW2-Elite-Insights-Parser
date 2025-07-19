@@ -109,9 +109,10 @@ internal class Cairn : BastionOfThePenitent
         {
             foreach (EffectEvent displacement in displacementEffects)
             {
-                var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
+                var expectedDisplacementDuration = 3000;
+                var circle = new CircleDecoration(90, displacement.ComputeLifespan(log, expectedDisplacementDuration), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
                 environmentDecorations.Add(circle);
-                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
+                environmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + expectedDisplacementDuration));
             }
         }
 
@@ -125,7 +126,7 @@ internal class Cairn : BastionOfThePenitent
                 CastEvent? endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                 if (endEvent != null)
                 {
-                    dashGreenEnd = endEvent.Time + 3300; // from skill def
+                    dashGreenEnd = Math.Min(dashGreenEnd, endEvent.Time + 3300); // from skill def
                 }
                 environmentDecorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
                 environmentDecorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
