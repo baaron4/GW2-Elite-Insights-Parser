@@ -66,7 +66,7 @@ public abstract class FightLogic
     public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
     public EncounterCategory EncounterCategoryInformation { get; protected set; }
-    protected FallBackMethod GenericFallBackMethod = FallBackMethod.Death;
+    protected FallBackMethod GenericFallBackMethod;
 
     protected FightLogic(int triggerID)
     {
@@ -106,6 +106,7 @@ public abstract class FightLogic
         ];
         _basicMechanicsCount = MechanicList.Count;
         EncounterCategoryInformation = new EncounterCategory();
+        GenericFallBackMethod = IsInstance ? FallBackMethod.None : FallBackMethod.Death;
     }
 
     internal MechanicData GetMechanicData()
@@ -539,6 +540,14 @@ public abstract class FightLogic
         if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
         {
             SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+        }
+        if (!fightData.Success)
+        {
+            var targets = GetSuccessCheckTargets();
+            if (targets.Any())
+            {
+                fightData.SetSuccess(false, targets.Max(x => x.LastAware));
+            }
         }
     }
 

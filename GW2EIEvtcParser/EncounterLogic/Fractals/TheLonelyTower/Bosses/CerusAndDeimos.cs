@@ -82,6 +82,10 @@ internal class CerusAndDeimos : LonelyTower
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
             fightData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
+        } 
+        else
+        {
+            fightData.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
         }
     }
 

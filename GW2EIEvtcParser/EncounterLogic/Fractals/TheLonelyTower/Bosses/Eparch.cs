@@ -130,6 +130,10 @@ internal class Eparch : LonelyTower
         else if (!cmCheck && determinedApplies.Count >= 1)
         {
             fightData.SetSuccess(true, determinedApplies[0].Time);
+        } 
+        else
+        {
+            fightData.SetSuccess(false, eparch.LastAware);
         }
     }
 

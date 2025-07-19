@@ -252,6 +252,10 @@ internal class Kanaxai : SilentSurf
         {
             fightData.SetSuccess(true, invul762Gain.Time);
         }
+        else
+        {
+            fightData.SetSuccess(true, kanaxai.LastAware);
+        }
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

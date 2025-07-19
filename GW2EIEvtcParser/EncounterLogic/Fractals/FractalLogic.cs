@@ -102,6 +102,10 @@ internal abstract class FractalLogic : FightLogic
             {
                 NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             }
+        } 
+        else
+        {
+            fightData.SetSuccess(false, mainTarget.LastAware);
         }
     }
 

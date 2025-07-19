@@ -108,12 +108,17 @@ internal class Xera : StrongholdOfTheFaithful
         var mergedXera2 = GetXera2Merge(xera);
         if (mergedXera2 == null)
         {
+            BuffEvent? invulXera = GetInvulXeraEvent(combatData, xera);
+            if (invulXera == null)
+            {
+                fightData.SetSuccess(false, xera.LastAware);
+            }
             return;
         }
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (fightData.Success && fightData.FightEnd < mergedXera2.FirstAware)
         {
-            fightData.SetSuccess(false, fightData.LogEnd);
+            fightData.SetSuccess(false, mergedXera2.LastAware);
         }
     }
 
@@ -155,7 +160,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
             }
-            BuffEvent? invulXera = GetInvulXeraEvent(log, mainTarget);
+            BuffEvent? invulXera = GetInvulXeraEvent(log.CombatData, mainTarget);
             // split happened
             if (invulXera != null)
             {
@@ -215,15 +220,15 @@ internal class Xera : StrongholdOfTheFaithful
 
     private SingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Xera)) ?? throw new MissingKeyActorsException("Xera not found");
 
-    internal static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, AgentItem xera)
+    internal static BuffEvent? GetInvulXeraEvent(CombatData combatData, AgentItem xera)
     {
-        BuffEvent? determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? determined = combatData.GetBuffDataByIDByDst(Determined762, xera).FirstOrDefault(x => x is BuffApplyEvent) ?? combatData.GetBuffDataByIDByDst(SpawnProtection, xera).FirstOrDefault(x => x is BuffApplyEvent);
         return determined;
     }
 
-    private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
+    private static BuffEvent? GetInvulXeraEvent(CombatData combatData, SingleActor xera)
     {
-        return GetInvulXeraEvent(log, xera.AgentItem);
+        return GetInvulXeraEvent(combatData, xera.AgentItem);
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -553,7 +558,7 @@ internal class Xera : StrongholdOfTheFaithful
                 {
                     continue;
                 }
-                var splitEvent = GetInvulXeraEvent(log, activeXera);
+                var splitEvent = GetInvulXeraEvent(log.CombatData, activeXera);
                 if (splitEvent == null || splitEvent.Time > halfGravityWell.Time)
                 {
                     var timeLimit = splitEvent != null ? splitEvent.Time : activeXera.LastAware;

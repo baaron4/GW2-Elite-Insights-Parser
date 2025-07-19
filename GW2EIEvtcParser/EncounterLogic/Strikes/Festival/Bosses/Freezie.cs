@@ -108,6 +108,11 @@ internal class Freezie : FestivalStrikeMissionLogic
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
+        } 
+        else
+        {
+            AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault() ?? throw new MissingKeyActorsException("Freezie not found");
+            fightData.SetSuccess(false, freezie.LastAware);
         }
     }
 

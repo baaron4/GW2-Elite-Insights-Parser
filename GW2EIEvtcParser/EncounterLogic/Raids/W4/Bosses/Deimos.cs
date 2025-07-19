@@ -218,6 +218,10 @@ internal class Deimos : BastionOfThePenitent
                 }
                 fightData.SetSuccess(true, notAttackableEvent.Time);
             }
+            if (!fightData.Success)
+            {
+                fightData.SetSuccess(false, notAttackableEvent.Time);
+            }
         }
     }
 
@@ -397,7 +401,7 @@ internal class Deimos : BastionOfThePenitent
                 if (deimosGadgets.Any())
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
-                    gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
+                    gadgetAgents = [.. deimosGadgets];
                     deimosStructBody = gadgetAgents.FirstOrDefault(agent => !combatData.Any(evt => (evt.SkillID == DemonicShockWaveRight || evt.SkillID == DemonicShockWaveCenter || evt.SkillID == DemonicShockWaveLeft) && evt.IsDamage() && evt.SrcMatchesAgent(agent)));
                     _deimos10PercentTime = (deimos10PercentTargetable >= deimos.LastAware ? deimos10PercentTargetable : deimos.LastAware);
                 }

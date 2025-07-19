@@ -80,6 +80,10 @@ internal class Mordremoth : StoryInstance
         if (buffApply != null)
         {
             fightData.SetSuccess(true, mordremoth.LastAware);
+        } 
+        else
+        {
+            fightData.SetSuccess(false, mordremoth.LastAware);
         }
     }
 

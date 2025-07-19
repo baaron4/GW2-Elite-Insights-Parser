@@ -238,6 +238,10 @@ internal class KainengOverlook : EndOfDragonsStrike
         if (buffApplies.Any())
         {
             fightData.SetSuccess(true, buffApplies.First().Time);
+        } 
+        else
+        {
+            fightData.SetSuccess(false, ministerLi.LastAware);
         }
     }
 

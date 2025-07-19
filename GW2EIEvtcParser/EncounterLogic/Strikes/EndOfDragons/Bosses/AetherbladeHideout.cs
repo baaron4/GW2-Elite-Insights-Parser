@@ -546,6 +546,10 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
                     fightData.SetSuccess(true, buffApply.Time);
+                } 
+                else
+                {
+                    fightData.SetSuccess(false, echoOfScarlet.LastAware);
                 }
             }
         }

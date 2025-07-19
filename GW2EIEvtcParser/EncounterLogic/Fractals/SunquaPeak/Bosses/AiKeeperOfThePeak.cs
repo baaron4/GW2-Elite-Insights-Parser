@@ -395,17 +395,27 @@ internal class AiKeeperOfThePeak : SunquaPeak
         {
             case 1:
             case 2:
-                BuffApplyEvent? invul895Gain = combatData.GetBuffDataByIDByDst(Determined895, Targets[0].AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+                var ai = Targets[0];
+                BuffApplyEvent? invul895Gain = combatData.GetBuffDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (invul895Gain != null)
                 {
                     fightData.SetSuccess(true, invul895Gain.Time);
                 }
+                else
+                {
+                    fightData.SetSuccess(false, ai.LastAware);
+                }
                 break;
             case 3:
-                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, Targets.First(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2)).AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+                var darkAi = Targets.First(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2));
+                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (darkInvul895Gain != null)
                 {
                     fightData.SetSuccess(true, darkInvul895Gain.Time);
+                } 
+                else
+                {
+                    fightData.SetSuccess(false, darkAi.LastAware);
                 }
                 break;
             case 0:

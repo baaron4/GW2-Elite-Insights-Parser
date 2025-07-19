@@ -189,7 +189,7 @@ internal class Golem : FightLogic
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
-        long fightEndLogTime = fightData.FightEnd;
+        long fightEndLogTime = mainTarget.LastAware;
         bool success = false;
         DeadEvent? deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
         if (deadEvt != null)
