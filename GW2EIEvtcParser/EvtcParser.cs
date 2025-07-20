@@ -973,6 +973,8 @@ public class EvtcParser
         _agentData = new AgentData(_apiController, _allAgentsList);
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
+        RegroupSameInstidNPCs(_agentData, _combatItems, _enabledExtensions);
+
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
             throw new EvtcAgentException("No players found");
