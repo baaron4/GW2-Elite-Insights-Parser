@@ -464,6 +464,11 @@ public class AgentItem
         return log.FindActor(this).GetBuffStatus(log, buffID, start, end);
     }
 
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID)
+    {
+        return log.FindActor(this).GetBuffStatus(log, buffID);
+    }
+
     public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long time)
     {
         return log.FindActor(this).GetBuffStatus(log, by, buffID, time);
@@ -472,6 +477,10 @@ public class AgentItem
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
     {
         return log.FindActor(this).GetBuffStatus(log, by, buffID, start, end);
+    }
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID)
+    {
+        return log.FindActor(this).GetBuffStatus(log, by, buffID);
     }
 
 
