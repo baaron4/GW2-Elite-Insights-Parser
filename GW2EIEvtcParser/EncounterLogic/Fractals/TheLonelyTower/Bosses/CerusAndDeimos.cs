@@ -135,7 +135,7 @@ internal class CerusAndDeimos : LonelyTower
     {
         if (brother != null)
         {
-            var brothers = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            var brothers = target.GetBuffStatus(log, BrothersUnited).Where(x => x.Value > 0);
             foreach (var seg in brothers)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(brother)));
@@ -165,7 +165,7 @@ internal class CerusAndDeimos : LonelyTower
     {
         if (target != null)
         {
-            var fixated = p.GetBuffStatus(log, fixationID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            var fixated = p.GetBuffStatus(log, fixationID).Where(x => x.Value > 0);
             foreach (var seg in fixated)
             {
                 replay.Decorations.Add(new LineDecoration(seg, color, 0.3, new AgentConnector(p), new AgentConnector(target)));

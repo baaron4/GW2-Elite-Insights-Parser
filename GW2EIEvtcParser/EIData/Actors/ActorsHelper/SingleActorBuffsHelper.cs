@@ -320,6 +320,11 @@ partial class SingleActor
         return presence;
     }
 
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffID)
+    {
+        return GetBuffPresenceStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
     /// <exception cref="InvalidOperationException"></exception>
     public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
     {
@@ -331,6 +336,11 @@ partial class SingleActor
         FuseConsecutiveNonZeroAndSetTo1(presence);
         return presence;
     }
+    public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID)
+    {
+        return GetBuffPresenceStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
     public IReadOnlyDictionary<long, BuffStatistics> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
         _buffStats ??= new(log, BuffEnum.Self, 4);

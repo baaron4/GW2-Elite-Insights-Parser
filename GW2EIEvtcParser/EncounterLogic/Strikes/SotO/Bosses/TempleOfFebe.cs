@@ -671,7 +671,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <param name="replay">The Combat Replay.</param>
     private static void AddDeterminedOverhead(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
+        replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment).Where(x => x.Value > 0), target, BuffImages.Determined);
     }
 
     /// <summary>

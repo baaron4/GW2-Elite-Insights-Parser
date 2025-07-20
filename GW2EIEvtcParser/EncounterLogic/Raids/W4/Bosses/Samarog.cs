@@ -200,7 +200,7 @@ internal class Samarog : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)TargetID.Samarog:
-                var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var brutalize = target.GetBuffStatus(log, FanaticalResilience).Where(x => x.Value > 0);
                 foreach (Segment seg in brutalize)
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 15000, 100)], new AgentConnector(target))
@@ -248,7 +248,7 @@ internal class Samarog : BastionOfThePenitent
             replay.Decorations.Add(new CircleDecoration(80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
         }
         // fixated Samarog
-        var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixatedSam = p.GetBuffStatus(log, FixatedSamarog).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSam)
         {
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
@@ -256,7 +256,7 @@ internal class Samarog : BastionOfThePenitent
         var fixatedSamarog = GetBuffApplyRemoveSequence(log.CombatData, FixatedSamarog, p, true, true);
         replay.Decorations.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
         //fixated Guldhem
-        var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedGuldhem)
         {
             long mid = (seg.Start + seg.End) / 2;
@@ -267,7 +267,7 @@ internal class Samarog : BastionOfThePenitent
             }
         }
         //fixated Rigom
-        var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixatedRigom = p.GetBuffStatus(log, FixatedRigom).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedRigom)
         {
             long mid = (seg.Start + seg.End) / 2;

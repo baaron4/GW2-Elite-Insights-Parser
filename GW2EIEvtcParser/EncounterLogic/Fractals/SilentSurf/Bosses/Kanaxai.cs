@@ -284,25 +284,25 @@ internal class Kanaxai : SilentSurf
         replay.Decorations.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
         // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
-        IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2]).Where(x => x.Value > 0);
         foreach (Segment segment in axes)
         {
             replay.Decorations.AddWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
         }
 
         // Frightening Speed - Numbers spread AoEs
-        IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff).Where(x => x.Value > 0);
         foreach (Segment spreadSegment in spreads)
         {
             replay.Decorations.Add(new CircleDecoration(380, spreadSegment, Colors.Orange, 0.2, new AgentConnector(player)));
         }
 
         // Target Order Overhead
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

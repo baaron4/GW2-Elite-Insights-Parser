@@ -303,8 +303,8 @@ internal class Escort : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Attunements Overhead
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

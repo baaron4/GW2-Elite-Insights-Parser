@@ -461,7 +461,7 @@ internal class Xera : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
-        var derangements = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var derangements = player.GetBuffStatus(log, Derangement).Where(x => x.Value > 0);
         foreach (var segment in derangements)
         {
             if (segment.Value >= 90)

@@ -221,7 +221,7 @@ internal class Eparch : LonelyTower
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
         // Consume fixations
-        var consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var consumes = player.GetBuffStatus(log, Consume).Where(x => x.Value > 0);
         var consumeEvents = GetBuffApplyRemoveSequence(log.CombatData, [Consume], player, true, true);
         replay.Decorations.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
         replay.Decorations.AddTether(consumeEvents, Colors.Red, 0.5);

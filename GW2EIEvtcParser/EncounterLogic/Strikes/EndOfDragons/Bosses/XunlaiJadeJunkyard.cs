@@ -364,7 +364,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     }
 
                     // Power of the Void
-                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+                    IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid).Where(x => x.Value > 0);
                     replay.Decorations.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
                 }
                 break;
@@ -502,7 +502,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         replay.Decorations.AddTether(lichTethers, Colors.Teal, 0.5);
 
         // Reanimated Hatred Fixation
-        IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> hatredFixations = p.GetBuffStatus(log, FixatedAnkkaKainengOverlook).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(hatredFixations, p, ParserIcons.FixationPurpleOverhead);
         // Reanimated Hatred Tether to player - The buff is applied by Ankka to the player - The Reanimated Hatred spawns before the buff application
         replay.Decorations.AddTetherByThirdPartySrcBuff(log, p, FixatedAnkkaKainengOverlook, (int)TargetID.Ankka, (int)TargetID.ReanimatedHatred, Colors.Magenta, 0.5);

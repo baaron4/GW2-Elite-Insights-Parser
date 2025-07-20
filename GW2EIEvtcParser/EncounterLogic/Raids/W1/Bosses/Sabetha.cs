@@ -290,7 +290,7 @@ internal class Sabetha : SpiritVale
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Timed bombs
-        var timedBombs = p.GetBuffStatus(log, TimeBomb, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var timedBombs = p.GetBuffStatus(log, TimeBomb).Where(x => x.Value > 0);
         foreach (var seg in timedBombs)
         {
             // Buff lasts 4000ms, damage event happens at 3000ms.
@@ -299,7 +299,7 @@ internal class Sabetha : SpiritVale
         }
 
         // Sapper bombs
-        var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var sapperBombs = p.GetBuffStatus(log, SapperBombBuff).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
             long growing = seg.Start + 5000;

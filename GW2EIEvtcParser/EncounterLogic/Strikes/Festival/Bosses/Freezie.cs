@@ -175,11 +175,11 @@ internal class Freezie : FestivalStrikeMissionLogic
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Fixation Aurora Beam
-        var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixatedBeam, p, ParserIcons.FixationPurpleOverhead);
 
         // Fixation Giant Snowball
-        var fixated = p.GetBuffStatus(log, GiantSnowballFreezieTargetBuff1, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixated = p.GetBuffStatus(log, GiantSnowballFreezieTargetBuff1).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixated, p, ParserIcons.FixationYellowOverhead);
     }
 

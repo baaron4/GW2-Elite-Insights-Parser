@@ -359,7 +359,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd)
+                var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff)
                     .Where(x => x.Value > 0);
                 foreach (var segment in thrummingSegments)
                 {
@@ -367,7 +367,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Add the Charge indicator on top right of the replay
-                var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var chargeSegments = target.GetBuffStatus(log, ChargeDecima).Where(x => x.Value > 0);
                 foreach (Segment segment in chargeSegments)
                 {
                     replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
@@ -605,7 +605,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Fulgent Aura - Tier Charges
                 for (int i = 0; i <  chargeTierBuffs.Count; i++)
                 {
-                    var tier = target.GetBuffStatus(log, chargeTierBuffs[i], log.FightData.FightStart, log.FightData.FightEnd);
+                    var tier = target.GetBuffStatus(log, chargeTierBuffs[i]);
                     foreach (var segment in tier.Where(x => x.Value > 0))
                     {
                         replay.Decorations.AddWithBorder(new CircleDecoration(chargeRadius[i], segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
@@ -786,8 +786,8 @@ internal class DecimaTheStormsinger : MountBalrior
 
         // Target Overhead
         // In phase 2 you get the Fluxlance Target Buff but also Target Order, in game only Target Order is displayed overhead, so we filter those out.
-        var p2Targets = player.GetBuffStatus(log, [TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var allTargets = player.GetBuffStatus(log, FluxlanceTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var p2Targets = player.GetBuffStatus(log, [TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW]).Where(x => x.Value > 0);
+        var allTargets = player.GetBuffStatus(log, FluxlanceTargetBuff1).Where(x => x.Value > 0);
         var filtered = allTargets.Where(x => !p2Targets.Any(y => Math.Abs(x.Start - y.Start) < ServerDelayConstant));
         foreach (var segment in filtered)
         {
@@ -795,11 +795,11 @@ internal class DecimaTheStormsinger : MountBalrior
         }
 
         // Target Order Overhead
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
 
         // Chorus of Thunder / Discordant Thunder - Orange AoE
         AddThunderAoE(player, log, replay);
@@ -834,7 +834,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
         if (log.FightData.Success && isCM)
         {
-            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.Value > 0))
+            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
             }

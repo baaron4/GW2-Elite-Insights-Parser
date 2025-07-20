@@ -204,7 +204,7 @@ internal class Adina : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantBlindnesses, p, BuffImages.PersistentlyBlinded);
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.AdinaSelectedForPillar, out var selectedForPillars))
         {
@@ -391,7 +391,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
 
                 // Diamond Palisade
-                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade).Where(x => x.Value > 0);
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));

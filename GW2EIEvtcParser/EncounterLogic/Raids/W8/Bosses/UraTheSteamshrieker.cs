@@ -490,7 +490,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     }
 
                     // Hardened Crust - Overhead
-                    replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+                    replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                     // Breakbar
                     var toxicPercentUpdates = target.GetBreakbarPercentUpdates(log);
@@ -504,7 +504,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 break;
             case (int)TargetID.SulfuricGeyser:
                 // Hardened Crust - Overhead
-                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                 // Damage field ring
                 replay.Decorations.Add(new CircleDecoration(580, (target.FirstAware, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
@@ -512,7 +512,7 @@ internal class UraTheSteamshrieker : MountBalrior
             case (int)TargetID.TitanspawnGeyserGadget:
             case (int)TargetID.TitanspawnGeyser:
                 // Hardened Crust - Overhead
-                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
+                replay.Decorations.AddOverheadIcons(target.GetBuffStatus(log, HardenedCrust).Where(x => x.Value > 0), target, BuffImages.HardenedCrust);
 
                 // Breakbar
                 var titanspawnPercentUpdates = target.GetBreakbarPercentUpdates(log);
@@ -607,17 +607,17 @@ internal class UraTheSteamshrieker : MountBalrior
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
         // Deterrence - Pick-Up Bloodstone Shard
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, Deterrence, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.CrimsonAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, Deterrence).Where(x => x.Value > 0), player, ParserIcons.CrimsonAttunementOverhead);
 
         // Pressure Blast - Bubble AoE Indicator
-        var pressureBlastTarget = player.GetBuffStatus(log, PressureBlastTargetBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var pressureBlastTarget = player.GetBuffStatus(log, PressureBlastTargetBuff).Where(x => x.Value > 0);
         foreach (var segment in pressureBlastTarget)
         {
             replay.Decorations.AddWithGrowing(new CircleDecoration(180, segment.TimeSpan, Colors.LightOrange, 0.2, new AgentConnector(player)), segment.End);
         }
 
         // Pressure Blast - Bubble Lift Up
-        var pressureBlastBubble = player.GetBuffStatus(log, PressureBlastBubbleBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var pressureBlastBubble = player.GetBuffStatus(log, PressureBlastBubbleBuff).Where(x => x.Value > 0);
         foreach (var segment in pressureBlastBubble)
         {
             replay.Decorations.Add(new CircleDecoration(100, segment.TimeSpan, Colors.LightBlue, 0.2, new AgentConnector(player)));

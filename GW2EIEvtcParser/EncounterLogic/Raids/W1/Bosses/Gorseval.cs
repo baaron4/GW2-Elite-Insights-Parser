@@ -152,14 +152,14 @@ internal class Gorseval : SpiritVale
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Ghastly Prison - Eggs AoEs
-        var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var eggs = p.GetBuffStatus(log, GhastlyPrison).Where(x => x.Value > 0);
         foreach (var seg in eggs)
         {
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.2, new AgentConnector(p)));
         }
 
         // Spectral Darkness - Orbs Debuff Overhead
-        var spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(spectralDarknesses, p, ParserIcons.SpectralDarknessOverhead);
     }
 
@@ -316,7 +316,7 @@ internal class Gorseval : SpiritVale
                 }
 
                 // Protective Shadow - Invulnerability
-                var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var protection = target.GetBuffStatus(log, ProtectiveShadow).Where(x => x.Value > 0);
                 foreach (var seg in protection)
                 {
                     replay.Decorations.Add(new CircleDecoration(300, seg, Colors.LightOrange, 0.5, new AgentConnector(target)));

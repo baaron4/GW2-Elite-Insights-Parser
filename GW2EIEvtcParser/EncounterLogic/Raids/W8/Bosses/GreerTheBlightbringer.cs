@@ -214,7 +214,7 @@ internal class GreerTheBlightbringer : MountBalrior
 
         // The Proto-Greelings can respawn during 10%
         var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
-        var damageImmunity3StatusCount = greer.GetBuffStatus(log, DamageImmunity3, log.FightData.FightStart, log.FightData.FightEnd).Count(x => x.Value > 0);
+        var damageImmunity3StatusCount = greer.GetBuffStatus(log, DamageImmunity3).Count(x => x.Value > 0);
         var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(damageImmunity3StatusCount * 3);
         phases[0].AddTargets(filteredProtoGreelings, log, PhaseData.TargetPriority.Blocking);
 

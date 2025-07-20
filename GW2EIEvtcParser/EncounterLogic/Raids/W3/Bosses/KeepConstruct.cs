@@ -329,7 +329,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 }
 
-                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.End, 100)], new AgentConnector(target))
@@ -385,7 +385,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Bombs
-        var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var xeraFury = p.GetBuffStatus(log, XerasFury).Where(x => x.Value > 0);
         foreach (Segment seg in xeraFury)
         {
             replay.Decorations.AddWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);

@@ -285,6 +285,11 @@ public abstract partial class SingleActor : Actor
         return result;
     }
 
+    public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs)
+    {
+        return GetBuffStatus(log, buffIDs, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
     #endregion BUFFS
 
     #region COMBAT REPLAY
