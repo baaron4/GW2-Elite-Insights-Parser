@@ -761,7 +761,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
     private static void AddBeamWarning(ParsedEvtcLog log, SingleActor target, CombatReplay replay, long buffID, uint beamWidth, uint beamLength, IEnumerable<BuffApplyEvent> beamFireds, Color color)
     {
-        var beamWarnings = target.AgentItem.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        var beamWarnings = target.GetBuffStatus(log, buffID);
         foreach (var beamWarning in beamWarnings)
         {
             if (beamWarning.Value > 0)
