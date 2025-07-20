@@ -102,40 +102,27 @@ internal class StatueOfDarkness : HallOfChains
         return startToUse;
     }
 
-    private static List<PhaseData> GetSubPhases(SingleActor eye, ParsedEvtcLog log)
+    private static List<PhaseData> GetSubPhases(SingleActor eye, ParsedEvtcLog log, PhaseData mainPhase)
     {
         var res = new List<PhaseData>();
         BuffRemoveAllEvent? det762Loss = log.CombatData.GetBuffDataByIDByDst(Determined762, eye.AgentItem).OfType<BuffRemoveAllEvent>().FirstOrDefault();
         if (det762Loss != null)
         {
             int count = 0;
-            long start = det762Loss.Time;
-            var det895s = GetFilteredList(log.CombatData, Determined895, eye, true, true);
-            foreach (BuffEvent abe in det895s)
+            long det762LossTime = det762Loss.Time;
+            var det895s = eye.GetBuffStatus(log, Determined895);
+            foreach (var abe in det895s)
             {
-                if (abe is BuffApplyEvent)
+                if (abe.Value == 0)
                 {
-                    var phase = new PhaseData(start, Math.Min(abe.Time, log.FightData.FightEnd))
+                    var phase = new PhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, log.FightData.FightEnd))
                     {
                         Name = eye.Character + " " + (++count)
                     };
+                    phase.AddParentPhase(mainPhase);
                     phase.AddTarget(eye, log);
                     res.Add(phase);
                 }
-                else
-                {
-                    start = Math.Min(abe.Time, log.FightData.FightEnd);
-                }
-            }
-
-            if (start < log.FightData.FightEnd)
-            {
-                var phase = new PhaseData(start, log.FightData.FightEnd)
-                {
-                    Name = eye.Character + " " + (++count)
-                };
-                phase.AddTarget(eye, log);
-                res.Add(phase);
             }
         }
         return res;
@@ -152,8 +139,8 @@ internal class StatueOfDarkness : HallOfChains
         }
         phases[0].AddTarget(eyeJudgement, log);
         phases[0].AddTarget(eyeFate, log);
-        phases.AddRange(GetSubPhases(eyeFate, log));
-        phases.AddRange(GetSubPhases(eyeJudgement, log));
+        phases.AddRange(GetSubPhases(eyeFate, log, phases[0]));
+        phases.AddRange(GetSubPhases(eyeJudgement, log, phases[0]));
         return phases;
     }
 

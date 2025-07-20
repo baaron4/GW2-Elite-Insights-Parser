@@ -627,10 +627,10 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         bool startTrimmed = false;
 
         SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
-        IEnumerable<BuffApplyEvent> invulnsApply = [];
+        IEnumerable<Segment> invulnsApply = [];
         if (cerus != null)
         {
-            invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>();
+            invulnsApply = cerus.GetBuffStatus(log, InvulnerabilityCerus).Where(x => x.Value > 0);
         }
 
         foreach (CastEvent cast in castEvents)
@@ -639,11 +639,11 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             (long start, long end) = (cast.Time - 3500, cast.Time + castDuration + 3500);
 
             // End the cast early if Cerus gains Invulnerability for the 80% and 50% splits.
-            foreach (BuffApplyEvent invulnApply in invulnsApply)
+            foreach (var invulnApply in invulnsApply)
             {
-                if (start <= invulnApply.Time && end > invulnApply.Time)
+                if (start <= invulnApply.Start && end > invulnApply.Start)
                 {
-                    end = invulnApply.Time;
+                    end = invulnApply.Start;
                 }
             }
 
@@ -864,23 +864,24 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
             else
             {
+                var invuls = cerus.GetBuffStatus(log, InvulnerabilityCerus);
                 // If a permanent Embodiment is casting a mechanic, cancel it when Cerus gains invulnerability (start 80% and 50% split phases)
-                var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>();
-                foreach (BuffApplyEvent invulnApply in invulnsApply)
+                var invulnsApply = invuls.Where(x => x.Value > 0);
+                foreach (var invulnApply in invulnsApply)
                 {
-                    if (lifespan.start <= invulnApply.Time && lifespan.end > invulnApply.Time)
+                    if (lifespan.start <= invulnApply.Start && lifespan.end > invulnApply.Start)
                     {
-                        lifespan.end = Math.Min(lifespan.end, invulnApply.Time);
+                        lifespan.end = Math.Min(lifespan.end, invulnApply.Start);
                     }
                     else
                     {
                         // If a killable Embodiment is casting a mechanic, cancel it when Cerus loses invulnerability (end 80% and 50% split phases)
-                        var invulnsRemove = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>();
-                        foreach (BuffRemoveAllEvent invulnRemove in invulnsRemove)
+                        var invulnsRemove = invuls.Where(x => x.Value == 0);
+                        foreach (var invulnRemove in invulnsRemove)
                         {
-                            if (lifespan.start <= invulnRemove.Time && lifespan.end > invulnRemove.Time)
+                            if (lifespan.start <= invulnRemove.Start && lifespan.end > invulnRemove.Start)
                             {
-                                lifespan.end = Math.Min(lifespan.end, invulnRemove.Time);
+                                lifespan.end = Math.Min(lifespan.end, invulnRemove.Start);
                             }
                         }
                     }

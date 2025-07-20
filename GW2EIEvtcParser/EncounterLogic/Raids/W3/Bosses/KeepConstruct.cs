@@ -75,8 +75,6 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long start = 0;
-        long end = 0;
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
@@ -86,54 +84,42 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             return phases;
         }
         // Main phases 35025
-        var kcPhaseInvuls = GetFilteredList(log.CombatData, XerasBoon, mainTarget, true, true);
+        var kcPhaseInvuls = mainTarget.GetBuffStatus(log, XerasBoon);
         var mainPhases = new List<PhaseData>();
-        foreach (BuffEvent c in kcPhaseInvuls)
+        var mainPhaseCount = 1;
+        foreach (var c in kcPhaseInvuls)
         {
-            if (c is BuffApplyEvent)
+            if (c.Value == 0)
             {
-                end = c.Time;
-                mainPhases.Add(new PhaseData(start, end));
+                var mainPhase = new PhaseData(c.Start, c.End, "Phase " + (mainPhaseCount++));
+                mainPhase.AddParentPhase(phases[0]);
+                mainPhase.AddTarget(mainTarget, log);
+                mainPhases.Add(mainPhase);
             }
-            else
-            {
-                start = c.Time;
-            }
-        }
-        if (fightEnd - start > PhaseTimeLimit && mainPhases.Count > 0 && start >= mainPhases.Last().End)
-        {
-            mainPhases.Add(new PhaseData(start, fightEnd));
-            start = fightEnd;
-        }
-        for (int i = 0; i < mainPhases.Count; i++)
-        {
-            mainPhases[i].Name = "Phase " + (i + 1);
-            mainPhases[i].AddParentPhase(phases[0]);
-            mainPhases[i].AddTarget(mainTarget, log);
         }
         phases.AddRange(mainPhases);
         // add burn phases
         int offset = phases.Count;
         IReadOnlyList<BuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
         // Get number of orbs and filter the list
-        start = 0;
+        long orbStart = 0;
         int orbCount = 0;
         var segments = new List<Segment>();
         foreach (BuffEvent c in orbItems)
         {
             if (c is BuffApplyEvent)
             {
-                if (start == 0)
+                if (orbStart == 0)
                 {
-                    start = c.Time;
+                    orbStart = c.Time;
                 }
                 orbCount++;
             }
-            else if (start != 0)
+            else if (orbStart != 0)
             {
-                segments.Add(new Segment(start, Math.Min(c.Time, fightEnd), orbCount));
+                segments.Add(new Segment(orbStart, Math.Min(c.Time, fightEnd), orbCount));
                 orbCount = 0;
-                start = 0;
+                orbStart = 0;
             }
         }
         int burnCount = 1;
@@ -148,19 +134,19 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         // pre burn phases
         int preBurnCount = 1;
         var preBurnPhase = new List<PhaseData>();
-        var kcInvuls = GetFilteredList(log.CombatData, Determined762, mainTarget, true, true);
-        foreach (BuffEvent invul in kcInvuls)
+        var kcInvuls = mainTarget.GetBuffStatus(log, Determined762);
+        foreach (var invul in kcInvuls)
         {
-            if (invul is BuffApplyEvent)
+            if (invul.Value > 0)
             {
-                end = invul.Time;
-                PhaseData? prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
+                long preBurnEnd = invul.Start;
+                PhaseData? prevPhase = phases.LastOrDefault(x => x.Start <= preBurnEnd || x.End <= preBurnEnd);
                 if (prevPhase != null)
                 {
-                    start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
-                    if (end - start > 1000)
+                    long preBurnStart = (prevPhase.End >= preBurnEnd ? prevPhase.Start : prevPhase.End) + 1;
+                    if (preBurnEnd - preBurnStart > PhaseTimeLimit)
                     {
-                        var phase = new PhaseData(start, end, "Pre-Burn " + preBurnCount++);
+                        var phase = new PhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
                         phase.AddParentPhases(mainPhases);
                         phase.AddTarget(mainTarget, log);
                         preBurnPhase.Add(phase);

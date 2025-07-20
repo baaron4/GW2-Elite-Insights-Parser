@@ -164,15 +164,15 @@ internal class Arkk : ShatteredObservatory
                 bloomPhases.Add(new PhaseData(start, end));
             }
         }
-        var invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
+        var invuls = arkk.GetBuffStatus(log, Determined762);
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk, log);
-            BuffEvent? invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
-            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
+            var invulLoss = invuls.FirstOrNull((in Segment x) => x.Start > phase.Start && x.Value == 0);
+            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Start ?? log.FightData.FightEnd));
         }
         phases.AddRange(bloomPhases);
 
