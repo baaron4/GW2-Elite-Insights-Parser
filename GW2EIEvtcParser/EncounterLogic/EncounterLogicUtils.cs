@@ -11,32 +11,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupSameInstidNPCsByID(IReadOnlyList<TargetID>  ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
-    {
-        var toRemove = new List<AgentItem>(10);
-        var toAdd = new List<AgentItem>(3);
-        foreach (var id in ids)
-        {
-            var agentsByInstid = agentData.GetNPCsByID(id).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var pair in agentsByInstid)
-            {
-                var agents = pair.Value;
-                if (agents.Count > 1)
-                {
-                    AgentItem firstItem = agents.First();
-                    var newTargetAgent = new AgentItem(firstItem);
-                    newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                    foreach (AgentItem agentItem in agents)
-                    {
-                        RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
-                    }
-                    toRemove.AddRange(agents);
-                    toAdd.Add(newTargetAgent);
-                }
-            }
-        }
-        agentData.ReplaceAgents(toRemove, toAdd);
-    }
 
     internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {

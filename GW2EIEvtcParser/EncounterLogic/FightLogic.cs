@@ -231,7 +231,6 @@ public abstract class FightLogic
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         var targetIDs = GetTargetsIDs();
-        RegroupSameInstidNPCsByID(targetIDs, agentData, combatItems, extensions);
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         foreach (TargetID id in targetIDs)
@@ -258,7 +257,6 @@ public abstract class FightLogic
 
         // Build trash mobs
         var trashIDs = GetTrashMobsIDs();
-        RegroupSameInstidNPCsByID(trashIDs, agentData, combatItems, extensions);
         foreach (var trash in trashIDs)
         {
             if(targetIDs.IndexOf(trash) != -1)
@@ -281,7 +279,6 @@ public abstract class FightLogic
 
         // Build friendlies
         var friendlyIDs = GetFriendlyNPCIDs();
-        RegroupSameInstidNPCsByID(friendlyIDs, agentData, combatItems, extensions);
         foreach (TargetID id in friendlyIDs)
         {
             _nonSquadFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
