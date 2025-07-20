@@ -266,30 +266,6 @@ public abstract partial class SingleActor : Actor
         };
     }
 
-    /// <summary>
-    /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIDs"/> in input.
-    /// </summary>
-    /// <param name="buffIDs">Buff IDs of which to find the <see cref="Segment"/> of.</param>
-    /// <param name="start">Start time to search.</param>
-    /// <param name="end">End time to search.</param>
-    /// <returns><see cref="List{T}"/> with the <see cref="Segment"/>s found.</returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs, long start, long end)
-    {
-        //TODO(Rennorb) @perf
-        var result = new List<Segment>();
-        foreach (long id in buffIDs)
-        {
-            result.AddRange(GetBuffStatus(log, id, start, end));
-        }
-        return result;
-    }
-
-    public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs)
-    {
-        return GetBuffStatus(log, buffIDs, log.FightData.FightStart, log.FightData.FightEnd);
-    }
-
     #endregion BUFFS
 
     #region COMBAT REPLAY
