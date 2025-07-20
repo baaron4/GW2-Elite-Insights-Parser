@@ -254,6 +254,10 @@ partial class SingleActor
         }
         return GetBuffStatus(buffID, start, end, GetBuffGraphs(log));
     }
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID)
+    {
+        return GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+    }
 
     /// <exception cref="InvalidOperationException"></exception>
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID, long start, long end)
@@ -263,6 +267,10 @@ partial class SingleActor
             throw new InvalidOperationException($"Buff id {buffID} must be simulated");
         }
         return GetBuffStatus(buffID, start, end, GetBuffGraphs(log, by));
+    }
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID)
+    {
+        return GetBuffStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
     }
     private static void FuseConsecutiveNonZeroAndSetTo1(List<Segment> segments)
     {
