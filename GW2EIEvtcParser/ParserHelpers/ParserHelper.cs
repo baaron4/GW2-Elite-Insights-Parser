@@ -396,6 +396,45 @@ public static class ParserHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
+    internal static void RegroupSameInstidNPCs(AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var toRemove = new List<AgentItem>(100);
+        var toAdd = new List<AgentItem>(30);
+        var npcsBySpeciesIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        var combatDataDict = combatItems.Where(x => x.SrcIsAgent(extensions) || x.DstIsAgent(extensions));
+        var srcCombatDataDict = combatDataDict.Where(x => x.SrcIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
+        var dstCombatDataDict = combatDataDict.Where(x => x.DstIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.DstAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
+        foreach (var npcsBySpeciesID in npcsBySpeciesIDs)
+        {
+            var agentsByInstid = npcsBySpeciesID.Value.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var pair in agentsByInstid)
+            {
+                var agents = pair.Value;
+                if (agents.Count > 1)
+                {
+                    AgentItem firstItem = agents.First();
+                    var newTargetAgent = new AgentItem(firstItem);
+                    newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                    foreach (AgentItem agentItem in agents)
+                    {
+                        if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                        {
+                            srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                        }
+                        if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                        {
+                            dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
+                        }
+                        agentData.SwapMasters(agentItem, newTargetAgent);
+                    }
+                    toRemove.AddRange(agents);
+                    toAdd.Add(newTargetAgent);
+                }
+            }
+        }
+        agentData.ReplaceAgents(toRemove, toAdd);
+    }
+
     /// <summary>
     /// Method used to redirect all events from redirectFrom to to
     /// </summary>
