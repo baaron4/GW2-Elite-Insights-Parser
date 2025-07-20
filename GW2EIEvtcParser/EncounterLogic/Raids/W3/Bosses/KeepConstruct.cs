@@ -392,7 +392,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
         }
         // Fixated Statue tether to Player
-        var fixatedStatue = GetFilteredList(log.CombatData, [StatueFixated1, StatueFixated2], p, true, true);
+        var fixatedStatue = GetBuffApplyRemoveSequence(log.CombatData, [StatueFixated1, StatueFixated2], p, true, true);
         replay.Decorations.AddTether(fixatedStatue, Colors.Magenta, 0.5);
         // Fixation Overhead
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, [StatueFixated1, StatueFixated2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);

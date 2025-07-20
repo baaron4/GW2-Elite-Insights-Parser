@@ -266,7 +266,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         
         // Fixation
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
-        var fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
+        var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
         replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
         // Shared Destruction (Green)
@@ -465,14 +465,14 @@ internal class KainengOverlook : EndOfDragonsStrike
             case (int)TargetID.TheEnforcer:
             case (int)TargetID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
-                var enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
+                var enforcerInspiration = GetBuffApplyRemoveSequence(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
                 HideAfterDetermined(target, log, replay);
                 break;
             case (int)TargetID.TheMindblade:
             case (int)TargetID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
-                var mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
+                var mindbladeInspiration = GetBuffApplyRemoveSequence(log.CombatData, LethalInspiration, target, true, true);
                 replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
                 HideAfterDetermined(target, log, replay);
                 break;

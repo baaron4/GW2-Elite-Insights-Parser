@@ -249,7 +249,7 @@ internal class Arkk : ShatteredObservatory
 
         // Bloom Fixations
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var fixationEvents = GetFilteredList(log.CombatData, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], p, true, true);
+        var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], p, true, true);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
 

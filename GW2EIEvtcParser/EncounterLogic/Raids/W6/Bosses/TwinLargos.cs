@@ -97,7 +97,7 @@ internal class TwinLargos : MythwrightGambit
         var targetPhases = new List<PhaseData>();
         var states = new List<TimeCombatEvent>();
         states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
-        states.AddRange(GetFilteredList(log.CombatData, Determined762, target, true, true).Where(x => x is BuffApplyEvent));
+        states.AddRange(GetBuffApplyRemoveSequence(log.CombatData, Determined762, target, true, true).Where(x => x is BuffApplyEvent));
         states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
         states.Sort((x, y) => x.Time.CompareTo(y.Time));
         for (int i = 0; i < states.Count; i++)

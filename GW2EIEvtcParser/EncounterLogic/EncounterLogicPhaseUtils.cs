@@ -92,7 +92,7 @@ internal static class EncounterLogicPhaseUtils
     internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end, bool filterSmallPhases = true)
     {
         long last = start;
-        var invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
+        var invuls = GetBuffApplyRemoveSequence(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
             .Where(x => x.Time >= 0)
             .ToList();
         invuls.SortByTime(); // Sort in case there were multiple skillIDs

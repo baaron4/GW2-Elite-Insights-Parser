@@ -617,11 +617,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
-                var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
+                var orangeBeams = GetBuffApplyRemoveSequence(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
 
-                var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
+                var redBeams = GetBuffApplyRemoveSequence(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
                 break;
@@ -629,12 +629,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint beamLengthCM = 3900;
                 const uint orangeBeamWidthCM = 80;
                 const uint redBeamWidthCM = 160;
-                var orangeBeamsCM = GetFilteredList(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
+                var orangeBeamsCM = GetBuffApplyRemoveSequence(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaBeamLoadingCM1, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeamWarning(log, target, replay, DecimaBeamLoadingCM2, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeam(log, replay, orangeBeamWidthCM, orangeBeamsCM, Colors.LightOrange);
 
-                var redBeamsCM = GetFilteredList(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
+                var redBeamsCM = GetBuffApplyRemoveSequence(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM1, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM2, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeam(log, replay, redBeamWidthCM, redBeamsCM, Colors.Red);
@@ -710,7 +710,7 @@ internal class DecimaTheStormsinger : MountBalrior
     {
 
         // Focused Fluxlance - Green Arrow from Decima to the Conduit
-        var greenArrow = GetFilteredList(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
+        var greenArrow = GetBuffApplyRemoveSequence(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
         foreach (var apply in greenArrow)
         {
             replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
@@ -718,11 +718,11 @@ internal class DecimaTheStormsinger : MountBalrior
         }
 
         // Warning indicator of walls spawning between Conduits.
-        var wallsWarnings = GetFilteredList(log.CombatData, wallWarningBuffID, target, true, true);
+        var wallsWarnings = GetBuffApplyRemoveSequence(log.CombatData, wallWarningBuffID, target, true, true);
         replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
 
         // Walls connecting Conduits to each other.
-        var walls = GetFilteredList(log.CombatData, wallBuffID, target, true, true);
+        var walls = GetBuffApplyRemoveSequence(log.CombatData, wallBuffID, target, true, true);
         replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
     }
 

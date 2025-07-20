@@ -222,7 +222,7 @@ internal class Eparch : LonelyTower
 
         // Consume fixations
         var consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var consumeEvents = GetFilteredList(log.CombatData, [Consume], player, true, true);
+        var consumeEvents = GetBuffApplyRemoveSequence(log.CombatData, [Consume], player, true, true);
         replay.Decorations.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
         replay.Decorations.AddTether(consumeEvents, Colors.Red, 0.5);
     }
@@ -262,7 +262,7 @@ internal class Eparch : LonelyTower
                 break;
             case (int)TargetID.KryptisRift:
                 {
-                    var events = GetFilteredList(log.CombatData, [KryptisRiftIncarnationTether], target, true, true);
+                    var events = GetBuffApplyRemoveSequence(log.CombatData, [KryptisRiftIncarnationTether], target, true, true);
                     replay.Decorations.AddTether(events, Colors.Red, 0.5);
                     break;
                 }

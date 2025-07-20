@@ -551,7 +551,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         }
 
         // Malicious Intent - Malice Adds Tether
-        var maliciousIntent = GetFilteredList(log.CombatData, [MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], p, true, true);
+        var maliciousIntent = GetBuffApplyRemoveSequence(log.CombatData, [MaliciousIntentTargetBuff, MaliciousIntentTargetBuffCM], p, true, true);
         replay.Decorations.AddTether(maliciousIntent, Colors.RedSkin, 0.4, 5, false);
     }
 

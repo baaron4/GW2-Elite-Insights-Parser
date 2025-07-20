@@ -498,7 +498,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             }
         }
         // Tethering Players to Lich
-        var lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
+        var lichTethers = GetBuffApplyRemoveSequence(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
         replay.Decorations.AddTether(lichTethers, Colors.Teal, 0.5);
 
         // Reanimated Hatred Fixation

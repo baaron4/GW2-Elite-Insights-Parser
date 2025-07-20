@@ -162,7 +162,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         {
             case (int)TargetID.Freezie:
                 // Fixation tether to Icy Protector
-                var fixations = GetFilteredList(log.CombatData, IcyBarrier, target, true, true);
+                var fixations = GetBuffApplyRemoveSequence(log.CombatData, IcyBarrier, target, true, true);
                 replay.Decorations.AddTether(fixations, "rgba(30, 144, 255, 0.4)");
                 break;
             default:

@@ -152,7 +152,7 @@ internal class WhisperingShadow : Kinfall
 
         // inevitable darkness (tether) target
         var inevitableDarkness = player.GetBuffStatus(log, InevitableDarknessPlayer, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var inevitableDarknessEvents = GetFilteredList(log.CombatData, InevitableDarknessPlayer, player, true, false);
+        var inevitableDarknessEvents = GetBuffApplyRemoveSequence(log.CombatData, InevitableDarknessPlayer, player, true, false);
         replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
         replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
 

@@ -88,7 +88,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (var fanaticalAppliedTo in fanaticalAppliedAgents)
         {
             IReadOnlyList<HealthDamageEvent> damageTaken = combatData.GetDamageTakenData(fanaticalAppliedTo);
-            var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, fanaticalAppliedTo, true, false).Select(x => x.Time).ToList();
+            var fanaticalResilienceTimes = GetBuffApplyRemoveSequence(combatData, FanaticalResilience, fanaticalAppliedTo, true, false).Select(x => x.Time).ToList();
             var fanaticalResilienceSegments = new List<Segment>();
             for (int i = 0; i < fanaticalResilienceTimes.Count; i += 2)
             {
@@ -253,7 +253,7 @@ internal class Samarog : BastionOfThePenitent
         {
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
-        var fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
+        var fixatedSamarog = GetBuffApplyRemoveSequence(log.CombatData, FixatedSamarog, p, true, true);
         replay.Decorations.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
         //fixated Guldhem
         var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
