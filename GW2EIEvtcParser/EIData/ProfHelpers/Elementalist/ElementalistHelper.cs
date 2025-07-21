@@ -36,6 +36,8 @@ internal static class ElementalistHelper
             .UsingDisableWithEffectData(),
         new DamageCastFinder(Sunspot, Sunspot)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+        new DamageCastFinder(FlameExpulsion, FlameExpulsion)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(EarthenBlast, EarthenBlast)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir)

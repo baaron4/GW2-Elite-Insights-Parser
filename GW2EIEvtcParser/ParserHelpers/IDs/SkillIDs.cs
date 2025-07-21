@@ -984,6 +984,7 @@ public static class SkillIDs
     public const long DaggerStorm = 13134;
     public const long Infiltration = 13135;
     public const long ThievesGuildMinionDespawnSkill = 13139;
+    public const long FlameExpulsion = 13334;
     public const long PersistingFlames = 13342;
     public const long ArcaneLightning = 13423;
     public const long MedicalDispersionFieldHeal = 13515;
