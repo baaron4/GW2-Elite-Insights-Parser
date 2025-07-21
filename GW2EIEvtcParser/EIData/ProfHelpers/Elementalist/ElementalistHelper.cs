@@ -36,20 +36,12 @@ internal static class ElementalistHelper
             .UsingDisableWithEffectData(),
         new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir)
             .UsingDstBaseSpecChecker(Spec.Elementalist),
-        new DamageCastFinder(Sunspot, Sunspot)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new DamageCastFinder(EarthenBlast, EarthenBlast)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LightningRod, LightningRod)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new DamageCastFinder(LightningFlash, LightningFlash),
         new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
             .UsingDstBaseSpecChecker(Spec.Elementalist),
         //new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
-        new EXTHealingCastFinder(HealingRipple, HealingRipple)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(HealingRippleWvW, HealingRippleWvW)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new EXTHealingCastFinder(FlowLikeWaterHealing, FlowLikeWaterHealing)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Elementals

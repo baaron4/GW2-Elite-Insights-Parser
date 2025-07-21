@@ -78,8 +78,6 @@ internal static class GuardianHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new DamageCastFinder(ShatteredAegis, ShatteredAegis)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-        new EXTHealingCastFinder(SelflessDaring, SelflessDaring)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Pistol    
         new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel1)
             .UsingSrcBaseSpecChecker(Spec.Guardian),
