@@ -1,5 +1,4 @@
-﻿
-using System.Numerics;
+﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -580,6 +579,20 @@ internal class UraTheSteamshrieker : MountBalrior
                             replay.Decorations.Add(jet);
                         }
                     }
+                }
+
+                // Blue Tether - Applies Rising Pressure to targets - Skill ID is 75295
+                IEnumerable<AbstractBuffApplyEvent> tethers = log.CombatData.GetBuffApplyData(RisingPressure).Where(x => 
+                    x is BuffApplyEvent && 
+                    x.By == target.AgentItem && 
+                    x.To != target.AgentItem);
+
+                foreach (BuffEvent tether in tethers)
+                {
+                    // Manually setting the tether duration to 2 seconds.
+                    lifespan = (tether.Time, tether.Time + 2000);
+                    // Setting opacity to 0.1 because the Ventshot can apply multiple stacks of Rising Pressure, this makes it more visible in the replay.
+                    replay.Decorations.Add(new LineDecoration(lifespan, Colors.LightBlue, 0.1, new AgentConnector(tether.To), new AgentConnector(tether.By)).WithThickess(5, false));
                 }
                 break;
             case (int)TargetID.ChampionFumaroller:
