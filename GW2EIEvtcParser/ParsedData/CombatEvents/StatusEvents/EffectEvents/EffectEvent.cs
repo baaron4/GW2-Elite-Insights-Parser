@@ -118,6 +118,10 @@ public abstract class EffectEvent : StatusEvent
     {
         if (HasDynamicEndTime)
         {
+            if (maxDuration > 0)
+            {
+                return Math.Min(DynamicEndTime, Time + maxDuration);
+            }
             return DynamicEndTime;
         }
         if (associatedBuff != null)
@@ -148,20 +152,6 @@ public abstract class EffectEvent : StatusEvent
         long start = Time;
         long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
         return (start, end);
-    }
-
-    /// <summary>
-    /// Computes the lifespan of an effect.
-    /// Will use default duration if all other methods fail
-    /// Clamped to given default duration
-    /// To be used when used effect lingers longer than actual active time
-    /// See <see cref="ComputeEndTime"/> for information about computed end times.
-    /// </summary>
-    public (long start, long end) ComputeLifespanWithMaxedToDuration(ParsedEvtcLog log, long defaultDuration)
-    {
-        long start = Time;
-        long end = ComputeEndTime(log, defaultDuration);
-        return (start, Math.Min(end, start + defaultDuration));
     }
 
     /// <summary>

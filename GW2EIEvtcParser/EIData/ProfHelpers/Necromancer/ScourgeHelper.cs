@@ -134,7 +134,7 @@ internal static class ScourgeHelper
                 {
                     duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
                 }
-                (long, long) lifespan = effect.ComputeLifespanWithMaxedToDuration(log, duration);
+                (long, long) lifespan = effect.ComputeLifespan(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectShade);
             }
         }
