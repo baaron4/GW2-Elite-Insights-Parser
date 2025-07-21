@@ -4845,6 +4845,7 @@ public static class SkillIDs
     public const long FulgentFence = 75291;
     public const long AftershockDecima = 75293;
     public const long BlobOfBlight2 = 75294;
+    public const long VentshotsTetherSkill = 75295;
     public const long PealOfDiscord = 75301;
     public const long DecimaSpawnsConduitsP1 = 75311;
     public const long ScatteringSporeblast = 75330;
