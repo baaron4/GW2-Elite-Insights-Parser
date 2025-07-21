@@ -13,7 +13,8 @@ internal abstract class InstantCastFinder : IVersionable
     {
         Skill,
         Trait,
-        Gear
+        Gear,
+        Unconditional
     }
 
     public InstantCastOrigin CastOrigin { get; private set; } = InstantCastOrigin.Skill;

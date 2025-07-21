@@ -34,6 +34,10 @@ internal static class ElementalistHelper
         new BuffGainCastFinder(MistForm, MistForm),
         new DamageCastFinder(SignetOfAirSkill, SignetOfAirSkill)
             .UsingDisableWithEffectData(),
+        new DamageCastFinder(Sunspot, Sunspot)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+        new DamageCastFinder(EarthenBlast, EarthenBlast)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new EffectCastFinderByDst(SignetOfAirSkill, EffectGUIDs.ElementalistSignetOfAir)
             .UsingDstBaseSpecChecker(Spec.Elementalist),
         new DamageCastFinder(LightningRod, LightningRod)
@@ -42,6 +46,10 @@ internal static class ElementalistHelper
         new EffectCastFinderByDst(ArmorOfEarth, EffectGUIDs.ElementalistArmorOfEarth1)
             .UsingDstBaseSpecChecker(Spec.Elementalist),
         //new EffectCastFinderByDst(CleansingFire, EffectGUIDs.ElementalistCleansingFire).UsingChecker((evt, combatData, agentData, skillData) => evt.Dst.BaseSpec == Spec.Elementalist && evt.Src == evt.Dst),
+        new EXTHealingCastFinder(HealingRipple, HealingRipple)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+        new EXTHealingCastFinder(HealingRippleWvW, HealingRippleWvW)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new EXTHealingCastFinder(FlowLikeWaterHealing, FlowLikeWaterHealing)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         // Elementals

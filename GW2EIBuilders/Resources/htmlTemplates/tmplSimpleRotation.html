@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
-            <ul class="nav nav-pills mr-1 scale85">
+            <ul class="d-flex flex-row justify-content-center nav nav-pills mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="autoattack = !autoattack"
                        :class="{active: autoattack}">Show auto attacks</a>
@@ -15,7 +15,7 @@
                        :class="{active: hideSmallTime}">Hide < 10ms</a>
                 </li>
             </ul>
-            <ul class="nav nav-pills ml-1 mr-1 scale85">
+            <ul class="d-flex flex-row justify-content-center nav nav-pills ml-1 mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
                        :class="{active: hideInstantCast}">Hide all instant cast</a>
@@ -32,8 +32,12 @@
                     <a class="nav-link" @click="hideTraitProc = !hideTraitProc"
                        :class="{active: hideTraitProc, disabled: hideInstantCast}">Hide trait procs</a>
                 </li>
+                <li class="nav-item" v-if="hasInstantCastUnconditional">
+                    <a class="nav-link" @click="hideUnconditionalProc = !hideUnconditionalProc"
+                       :class="{active: hideUnconditionalProc, disabled: hideInstantCast}">Hide unconditional procs</a>
+                </li>
             </ul>
-            <ul class="nav nav-pills ml-1 scale85">
+            <ul class="d-flex flex-row justify-content-center nav nav-pills ml-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="small = !small"
                        :class="{active: small}">Small icons</a>
@@ -103,16 +107,21 @@
         props: ["actorindex", "phaseindex", "target"],
         template: `${template}`,
         data: function () {
-            var selectedSkills = {};
-            var phaseData = [];
-            for (var phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
-                var skillList = [];
-                var castCounts = {};
-                var rotation = this.target ? logData.targets[this.actorindex].details.rotation[phaseIndex] : logData.players[this.actorindex].details.rotation[phaseIndex];
+            const selectedSkills = {};
+            const phaseData = [];
+            let hasInstantCastUnconditional = false;
+            for (let phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
+                const skillList = [];
+                const castCounts = {};
+                const rotation = this.target ? logData.targets[this.actorindex].details.rotation[phaseIndex] : logData.players[this.actorindex].details.rotation[phaseIndex];
                 for (var i = 0; i < rotation.length; i++) {
-                    var rota = rotation[i];
-                    var skillID = rota[1];
-                    var skill = this.getSkill(skillID);
+                    const rota = rotation[i];
+                    const skillID = rota[1];
+                    const skill = this.getSkill(skillID);                
+                    const isInstant = rota[3] === RotationStatus.INSTANT;
+                    if (isInstant && skill.unconditionalProc) {
+                        hasInstantCastUnconditional = true;
+                    }
                     if (!castCounts[skillID]) {
                         castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
                         if (!skill.isSwap) {
@@ -137,9 +146,11 @@
                 small: false,
                 smallAA: true,
                 hideInterruptedAA: false,
+                hasInstantCastUnconditional: hasInstantCastUnconditional,
                 hideInstantCast: false,
                 hideInstantCastSkill: false,
                 hideTraitProc: false,
+                hideUnconditionalProc: true,
                 hideGearProc: false,
                 hideSmallTime: true,
                 aftercastBorder: true,
@@ -216,9 +227,11 @@
                         return false;
                     } else if (this.hideGearProc && skill.gearProc) {
                         return false;
-                    } else if (this.hideTraitProc && skill.traitProc) {
+                    } else if (this.hideTraitProc && (skill.traitProc || skill.unconditionalProc)) {
                         return false;
-                    } else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc) {
+                    } else if (this.hideUnconditionalProc && skill.unconditionalProc) {
+                        return false;
+                    }else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc) {
                         return false;
                     }
                 } else if (this.hideSmallTime) {

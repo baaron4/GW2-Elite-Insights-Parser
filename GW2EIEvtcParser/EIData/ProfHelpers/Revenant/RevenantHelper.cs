@@ -29,6 +29,9 @@ internal static class RevenantHelper
         new BuffGainCastFinder(VengefulHammersSkill, VengefulHammersBuff),
         new BuffLossCastFinder(ReleaseHammers, VengefulHammersBuff),
         new BuffLossCastFinder(ResistTheDarkness, EmbraceTheDarkness),
+        new DamageCastFinder(InvokingTorment, InvokingTorment)
+            .WithBuilds(GW2Builds.February2020Balance)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(CallOfTheAssassin, CallOfTheAssassin),
         new DamageCastFinder(CallOfTheDwarf, CallOfTheDwarf),
         new DamageCastFinder(CallOfTheDemon, CallOfTheDemon),

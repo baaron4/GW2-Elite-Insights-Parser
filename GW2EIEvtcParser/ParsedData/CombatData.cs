@@ -184,6 +184,9 @@ public partial class CombatData
                     case InstantCastFinder.InstantCastOrigin.Gear:
                         skillData.GearProc.Add(icf.SkillID);
                         break;
+                    case InstantCastFinder.InstantCastOrigin.Unconditional:
+                        skillData.UnconditionalProc.Add(icf.SkillID);
+                        break;
                     case InstantCastFinder.InstantCastOrigin.Skill:
                     default:
                         break;

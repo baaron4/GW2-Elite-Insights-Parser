@@ -24,6 +24,7 @@ internal static class JsonLogBuilder
             IsNotAccurate = log.SkillData.IsNotAccurate(skill.ID),
             IsGearProc = log.SkillData.IsGearProc(skill.ID),
             IsTraitProc = log.SkillData.IsTraitProc(skill.ID),
+            IsUnconditionalProc = log.SkillData.IsUnconditionalProc(skill.ID),
             ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
             HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(skill, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
         };

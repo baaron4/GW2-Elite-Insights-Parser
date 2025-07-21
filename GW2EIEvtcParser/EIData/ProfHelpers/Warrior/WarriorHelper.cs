@@ -15,6 +15,9 @@ internal static class WarriorHelper
 
     internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
+         new DamageCastFinder(RecklessImpact, RecklessImpact)
+            .WithBuilds(GW2Builds.December2017Balance)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
         new BuffGainCastFinder(BalancedStanceSkill, BalancedStanceBuff),
         new BuffGainCastFinder(EndurePainSkill, EnduringPainBuff),

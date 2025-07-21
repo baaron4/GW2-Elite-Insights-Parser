@@ -21,10 +21,21 @@ internal static class NecromancerHelper
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitDeathShroud, DeathShroud)
             .UsingBeforeWeaponSwap(),
+        new DamageCastFinder(LesserEnfeeble, LesserEnfeeble)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new DamageCastFinder(LesserSpinalShivers, LesserSpinalShivers)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
 
+        // distinguish unholy burst & spiteful spirit using hit, unholy burst will only ever trigger if a target is hit
         new DamageCastFinder(UnholyBurst, UnholyBurst),
+        new DamageCastFinder(SpitefulSpirit, SpitefulSpirit)
+            .UsingDisableWithEffectData()
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
+        new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
+            .UsingSrcBaseSpecChecker(Spec.Necromancer)
+            .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(DesertShroudBuff).OfType<BuffRemoveAllEvent>(), evt.Time, 50).Any()) // collides with sandstorm shroud
+            .UsingChecker((evt, combatData, skillData, agentData) => !combatData.HasRelatedHit(UnholyBurst, evt.Src, evt.Time))
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
 
         new BuffGainCastFinder(SpectralArmorSkill, SpectralArmorBuff)
             .WithBuilds(GW2Builds.December2018Balance),

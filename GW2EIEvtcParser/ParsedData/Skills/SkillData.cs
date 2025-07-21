@@ -44,6 +44,12 @@ public class SkillData
         return TraitProc.Contains(ID);
     }
 
+    internal HashSet<long> UnconditionalProc = [];
+    public bool IsUnconditionalProc(long ID)
+    {
+        return UnconditionalProc.Contains(ID);
+    }
+
     internal void Add(long id, string name)
     {
         if (!_skills.ContainsKey(id))

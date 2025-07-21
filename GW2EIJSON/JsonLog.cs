@@ -57,12 +57,17 @@ public class JsonLog
         /// </summary>
         public bool IsInstantCast;
         /// <summary>
-        /// True when the skill represents a trait proc.\
+        /// True when the skill represents a trait proc.\n
         /// <see cref="IsInstantCast"/> is necessarily true.
         /// </summary>
         public bool IsTraitProc;
         /// <summary>
-        /// True when the skill represents a trait proc.\
+        /// True when the skill represents a proc that purely augments existing skills and does not require any specific conditions to trigger.\n
+        /// <see cref="IsInstantCast"/> is necessarily true.
+        /// </summary>
+        public bool IsUnconditionalProc;
+        /// <summary>
+        /// True when the skill represents a gear proc.\n
         /// <see cref="IsInstantCast"/> is necessarily true.
         /// </summary>
         public bool IsGearProc;
