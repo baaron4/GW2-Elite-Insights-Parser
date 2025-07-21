@@ -395,12 +395,12 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var fixatedStatue = GetBuffApplyRemoveSequence(log.CombatData, [StatueFixated1, StatueFixated2], p, true, true);
         replay.Decorations.AddTether(fixatedStatue, Colors.Magenta, 0.5);
         // Fixation Overhead
-        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [StatueFixated1, StatueFixated2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [StatueFixated1, StatueFixated2]).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         // Attunements Overhead
-        IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [CrimsonAttunementPhantasm, CrimsonAttunementOrb], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [CrimsonAttunementPhantasm, CrimsonAttunementOrb]).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
-        IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [RadiantAttunementPhantasm, RadiantAttunementOrb], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [RadiantAttunementPhantasm, RadiantAttunementOrb]).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
     }
 

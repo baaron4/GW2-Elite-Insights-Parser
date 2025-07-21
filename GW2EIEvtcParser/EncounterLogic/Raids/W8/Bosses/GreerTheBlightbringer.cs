@@ -452,7 +452,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Infectious Rot - Failed Green AoE | Plague Rot - Failed Green AoE CM
-        var infectiousRot = player.GetBuffStatus(log, [InfectiousRotBuff, PlagueRot], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var infectiousRot = player.GetBuffStatus(log, [InfectiousRotBuff, PlagueRot]).Where(x => x.Value > 0);
         foreach (var segment in infectiousRot)
         {
             replay.Decorations.Add(new CircleDecoration(200, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(player)));

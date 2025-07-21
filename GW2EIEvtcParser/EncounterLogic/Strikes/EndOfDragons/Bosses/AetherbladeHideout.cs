@@ -950,7 +950,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             int index = 0;
             int previousIndex = 0;
 
-            var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x =>
+            var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
                 x.SkillID == ElectricBlastCastSkillLeftNM ||
                 x.SkillID == ElectricBlastCastSkillRightNM ||
                 x.SkillID == ElectricBlastCastSkillLeftCM ||
