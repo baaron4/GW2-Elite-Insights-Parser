@@ -525,7 +525,7 @@ internal class Deimos : BastionOfThePenitent
 
     private static void AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases)
     {
-        var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet).Where(x => x.Value > 0);
         int burstID = 1;
         foreach (Segment signet in signets)
         {
@@ -620,7 +620,7 @@ internal class Deimos : BastionOfThePenitent
                 }
 
                 // Unnatural Signet - Overhead
-                var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var signets = target.GetBuffStatus(log, UnnaturalSignet).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(signets, target, BuffImages.UnnaturalSignet);
                 break;
             case (int)TargetID.Gambler:
@@ -732,14 +732,14 @@ internal class Deimos : BastionOfThePenitent
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // teleport zone
-        var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen).Where(x => x.Value > 0);
         foreach (Segment seg in tpDeimos)
         {
             var circle = new CircleDecoration(180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p));
             replay.Decorations.AddWithGrowing(circle, seg.End);
         }
         // Tear Instability
-        IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
     }
 

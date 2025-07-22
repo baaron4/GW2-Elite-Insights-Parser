@@ -333,7 +333,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         // The buff is applied from Arsenite to Player, lasts 2000ms.
         // In game, the green tether lasts for the entire duration of the blade, meanwhile the buff on the player displays the green border overlay and is hidden.
         // In the log, the tether effect can't be found, so this decoration is only indicative of who has been targeted, the duration is not correct.
-        var noxiousBlade = GetFilteredList(log.CombatData, NoxiousVaporBladeTargetBuff, p, true, true);
+        var noxiousBlade = GetBuffApplyRemoveSequence(log.CombatData, NoxiousVaporBladeTargetBuff, p, true, true);
         replay.Decorations.AddTether(noxiousBlade, Colors.Green, 0.5);
 
         // Tri-Bolt

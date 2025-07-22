@@ -473,11 +473,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // tether between sprite and player
-        var spriteFixations = GetFilteredList(log.CombatData, [FixatedEnragedWaterSprite], p, true, true);
+        var spriteFixations = GetBuffApplyRemoveSequence(log.CombatData, [FixatedEnragedWaterSprite], p, true, true);
         replay.Decorations.AddTether(spriteFixations, Colors.Purple, 0.5);
 
         // Tethering Players to Fears
-        var fearFixations = GetFilteredList(log.CombatData, [FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], p, true, true);
+        var fearFixations = GetBuffApplyRemoveSequence(log.CombatData, [FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], p, true, true);
         replay.Decorations.AddTether(fearFixations, Colors.Magenta, 0.5);
     }
 
@@ -534,7 +534,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             case (int)TargetID.GuiltDemon:
                 {
                     // tether between guilt and player/boss, buff applied TO guilt
-                    var fixationBuffs = GetFilteredList(log.CombatData, [FixatedGuilt], target, true, true);
+                    var fixationBuffs = GetBuffApplyRemoveSequence(log.CombatData, [FixatedGuilt], target, true, true);
                     replay.Decorations.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
                     break;
                 }

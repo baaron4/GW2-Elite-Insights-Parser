@@ -240,7 +240,7 @@ internal class Slothasor : SalvationPass
                 }
 
                 // Narcolepsy - Invulnerability
-                var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff).Where(x => x.Value > 0);
                 foreach (var narcolepsy in narcolepsies)
                 {
                     replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
@@ -270,7 +270,7 @@ internal class Slothasor : SalvationPass
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Poison
-        var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff).Where(x => x.Value > 0);
         foreach (Segment seg in poisonToDrop)
         {
             int toDropStart = (int)seg.Start;
@@ -284,13 +284,13 @@ internal class Slothasor : SalvationPass
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
         // Transformation
-        var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var slubTrans = p.GetBuffStatus(log, MagicTransformation).Where(x => x.Value > 0);
         foreach (Segment seg in slubTrans)
         {
             replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
         }
         // Fixated
-        var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSloth)
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));

@@ -96,7 +96,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     {
                         // Demonic Blast - Red AoE during 75-50-25 % phases
                         case DemonicBlast:
-                            var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                            var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25).Where(x => x.Value > 0);
                             // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
                             // We check if she has gained the buff to be sure that the phase has started.
                             var phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrNull();
@@ -167,19 +167,19 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Lost Control
-        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
 
         // Shooting Stars Target Overhead
-        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
 
         // Target Order (CM)
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.

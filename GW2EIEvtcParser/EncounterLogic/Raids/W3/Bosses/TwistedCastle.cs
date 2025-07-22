@@ -116,7 +116,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Madness - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
-        IEnumerable<Segment> madnesses = player.GetBuffStatus(log, Madness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> madnesses = player.GetBuffStatus(log, Madness).Where(x => x.Value > 0);
         foreach (Segment segment in madnesses)
         {
             if (segment.Value >= 90)

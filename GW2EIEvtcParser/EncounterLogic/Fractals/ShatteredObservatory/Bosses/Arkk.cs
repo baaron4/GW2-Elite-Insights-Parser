@@ -164,15 +164,15 @@ internal class Arkk : ShatteredObservatory
                 bloomPhases.Add(new PhaseData(start, end));
             }
         }
-        var invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
+        var invuls = arkk.GetBuffStatus(log, Determined762);
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
             phase.AddParentPhase(phases[0]);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk, log);
-            BuffEvent? invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
-            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
+            var invulLoss = invuls.FirstOrNull((in Segment x) => x.Start > phase.Start && x.Value == 0);
+            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Start ?? log.FightData.FightEnd));
         }
         phases.AddRange(bloomPhases);
 
@@ -244,17 +244,17 @@ internal class Arkk : ShatteredObservatory
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Corporeal Reassignment (skull)
-        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
 
         // Bloom Fixations
-        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var fixationEvents = GetFilteredList(log.CombatData, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], p, true, true);
+        IEnumerable<Segment> fixations = p.GetBuffStatus(log, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4]).Where(x => x.Value > 0);
+        var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], p, true, true);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
         // Cosmic Meteor (green)
-        IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor).Where(x => x.Value > 0);
         foreach (Segment cosmicMeteor in cosmicMeteors)
         {
             int start = (int)cosmicMeteor.Start;

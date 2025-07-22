@@ -185,7 +185,7 @@ internal class River : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.Desmina:
-                var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var asylums = target.GetBuffStatus(log, FollowersAsylum).Where(x => x.Value > 0);
                 foreach (var asylum in asylums)
                 {
                     replay.Decorations.Add(new CircleDecoration(300, asylum, Colors.LightBlue, 0.2, new AgentConnector(target)));

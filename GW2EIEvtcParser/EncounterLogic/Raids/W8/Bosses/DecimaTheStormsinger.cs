@@ -359,7 +359,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
-                var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff, log.FightData.FightStart, log.FightData.FightEnd)
+                var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff)
                     .Where(x => x.Value > 0);
                 foreach (var segment in thrummingSegments)
                 {
@@ -367,7 +367,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Add the Charge indicator on top right of the replay
-                var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var chargeSegments = target.GetBuffStatus(log, ChargeDecima).Where(x => x.Value > 0);
                 foreach (Segment segment in chargeSegments)
                 {
                     replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
@@ -605,7 +605,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Fulgent Aura - Tier Charges
                 for (int i = 0; i <  chargeTierBuffs.Count; i++)
                 {
-                    var tier = target.GetBuffStatus(log, chargeTierBuffs[i], log.FightData.FightStart, log.FightData.FightEnd);
+                    var tier = target.GetBuffStatus(log, chargeTierBuffs[i]);
                     foreach (var segment in tier.Where(x => x.Value > 0))
                     {
                         replay.Decorations.AddWithBorder(new CircleDecoration(chargeRadius[i], segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
@@ -617,11 +617,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint beamLength = 3900;
                 const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
-                var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
+                var orangeBeams = GetBuffApplyRemoveSequence(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeam(log, replay, orangeBeamWidth, orangeBeams, Colors.LightOrange);
 
-                var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
+                var redBeams = GetBuffApplyRemoveSequence(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeam(log, replay, redBeamWidth, redBeams, Colors.Red);
                 break;
@@ -629,12 +629,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint beamLengthCM = 3900;
                 const uint orangeBeamWidthCM = 80;
                 const uint redBeamWidthCM = 160;
-                var orangeBeamsCM = GetFilteredList(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
+                var orangeBeamsCM = GetBuffApplyRemoveSequence(log.CombatData, DecimaBeamTargetingCM, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaBeamLoadingCM1, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeamWarning(log, target, replay, DecimaBeamLoadingCM2, orangeBeamWidthCM, beamLengthCM, orangeBeamsCM.OfType<BuffApplyEvent>(), Colors.LightOrange);
                 AddBeam(log, replay, orangeBeamWidthCM, orangeBeamsCM, Colors.LightOrange);
 
-                var redBeamsCM = GetFilteredList(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
+                var redBeamsCM = GetBuffApplyRemoveSequence(log.CombatData, DecimaRedBeamTargetingCM, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM1, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeamWarning(log, target, replay, DecimaRedBeamLoadingCM2, redBeamWidthCM, beamLengthCM, redBeamsCM.OfType<BuffApplyEvent>(), Colors.Red);
                 AddBeam(log, replay, redBeamWidthCM, redBeamsCM, Colors.Red);
@@ -710,7 +710,7 @@ internal class DecimaTheStormsinger : MountBalrior
     {
 
         // Focused Fluxlance - Green Arrow from Decima to the Conduit
-        var greenArrow = GetFilteredList(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
+        var greenArrow = GetBuffApplyRemoveSequence(log.CombatData, fluxLanceTargetBuffID, target, true, true).Where(x => x is BuffApplyEvent);
         foreach (var apply in greenArrow)
         {
             replay.Decorations.Add(new LineDecoration((apply.Time, apply.Time + 5500), Colors.DarkGreen, 0.2, new AgentConnector(apply.To), new AgentConnector(apply.By)).WithThickess(80, true));
@@ -718,11 +718,11 @@ internal class DecimaTheStormsinger : MountBalrior
         }
 
         // Warning indicator of walls spawning between Conduits.
-        var wallsWarnings = GetFilteredList(log.CombatData, wallWarningBuffID, target, true, true);
+        var wallsWarnings = GetBuffApplyRemoveSequence(log.CombatData, wallWarningBuffID, target, true, true);
         replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
 
         // Walls connecting Conduits to each other.
-        var walls = GetFilteredList(log.CombatData, wallBuffID, target, true, true);
+        var walls = GetBuffApplyRemoveSequence(log.CombatData, wallBuffID, target, true, true);
         replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
     }
 
@@ -761,7 +761,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
     private static void AddBeamWarning(ParsedEvtcLog log, SingleActor target, CombatReplay replay, long buffID, uint beamWidth, uint beamLength, IEnumerable<BuffApplyEvent> beamFireds, Color color)
     {
-        var beamWarnings = target.AgentItem.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        var beamWarnings = target.GetBuffStatus(log, buffID);
         foreach (var beamWarning in beamWarnings)
         {
             if (beamWarning.Value > 0)
@@ -786,8 +786,8 @@ internal class DecimaTheStormsinger : MountBalrior
 
         // Target Overhead
         // In phase 2 you get the Fluxlance Target Buff but also Target Order, in game only Target Order is displayed overhead, so we filter those out.
-        var p2Targets = player.GetBuffStatus(log, [TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var allTargets = player.GetBuffStatus(log, FluxlanceTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var p2Targets = player.GetBuffStatus(log, [TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW]).Where(x => x.Value > 0);
+        var allTargets = player.GetBuffStatus(log, FluxlanceTargetBuff1).Where(x => x.Value > 0);
         var filtered = allTargets.Where(x => !p2Targets.Any(y => Math.Abs(x.Start - y.Start) < ServerDelayConstant));
         foreach (var segment in filtered)
         {
@@ -795,11 +795,11 @@ internal class DecimaTheStormsinger : MountBalrior
         }
 
         // Target Order Overhead
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
 
         // Chorus of Thunder / Discordant Thunder - Orange AoE
         AddThunderAoE(player, log, replay);
@@ -834,7 +834,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
         if (log.FightData.Success && isCM)
         {
-            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.Value > 0))
+            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
             }

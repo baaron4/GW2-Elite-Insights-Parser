@@ -69,9 +69,9 @@ internal static class EncounterLogicUtils
         }
         return new("Missing confusion damage");
     }
-    internal static List<BuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
+    internal static List<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
-        bool needStart = beginWithStart;
+        bool needStart = beginWithApply;
         var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
         var filtered = new List<BuffEvent>();
         for (int i = 0; i < main.Count; i++)
@@ -92,7 +92,7 @@ internal static class EncounterLogicUtils
                 }
             }
         }
-        if (padEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
+        if (addDummyRemoveAllEventAtEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
         {
             BuffEvent last = filtered.Last();
             filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
@@ -100,19 +100,19 @@ internal static class EncounterLogicUtils
         return filtered;
     }
 
-    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, long buffID, SingleActor target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, long buffID, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
-        return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
+        return GetBuffApplyRemoveSequence(combatData, buffID, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
     }
 
-    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
-        return buffIDs.SelectMany(buffID => GetFilteredList(combatData, buffID, target, beginWithStart, padEnd));
+        return buffIDs.SelectMany(buffID => GetBuffApplyRemoveSequence(combatData, buffID, target, beginWithApply, addDummyRemoveAllEventAtEnd));
     }
 
-    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetBuffApplyRemoveSequence(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithApply, bool addDummyRemoveAllEventAtEnd)
     {
-        return GetFilteredList(combatData, buffIDs, target.AgentItem, beginWithStart, padEnd);
+        return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
     }
 
     internal static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)

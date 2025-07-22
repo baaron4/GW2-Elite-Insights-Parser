@@ -224,8 +224,8 @@ internal class Siax : Nightmare
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
-        IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
+        IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare).Where(x => x.Value > 0);
+        var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, FixatedNightmare, p, true, true);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
     }

@@ -562,7 +562,7 @@ internal class Dhuum : HallOfChains
             case (int)TargetID.Messenger:
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
-                var fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
+                var fixations = GetBuffApplyRemoveSequence(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                 replay.Decorations.AddTether(fixations, Colors.Red, 0.4);
                 break;
             case (int)TargetID.Deathling:
@@ -591,7 +591,7 @@ internal class Dhuum : HallOfChains
                     break;
                 }
 
-                var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var stealths = target.GetBuffStatus(log, Stealth).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
                 replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
@@ -684,7 +684,7 @@ internal class Dhuum : HallOfChains
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // spirit transform
-        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilDhuum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilDhuum).Where(x => x.Value > 0);
         foreach (var c in spiritTransform)
         {
             int duration = 15000;
@@ -701,7 +701,7 @@ internal class Dhuum : HallOfChains
             replay.Decorations.AddRotatedOverheadIcon(c, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
-        var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var bombDhuum = p.GetBuffStatus(log, ArcingAffliction).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, seg.TimeSpan, Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
@@ -709,17 +709,17 @@ internal class Dhuum : HallOfChains
             replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
         // shackles connection
-        var shackles = GetFilteredList(log.CombatData, [DhuumShacklesBuff, DhuumShacklesBuff2], p, true, true);
+        var shackles = GetBuffApplyRemoveSequence(log.CombatData, [DhuumShacklesBuff, DhuumShacklesBuff2], p, true, true);
         replay.Decorations.AddTether(shackles, Colors.Teal, 0.5);
 
         // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
         // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
         // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-        var shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
+        var shacklesDmg = GetBuffApplyRemoveSequence(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
         replay.Decorations.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
-        var hastenedDemise = p.GetBuffStatus(log, HastenedDemise, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1);
+        var hastenedDemise = p.GetBuffStatus(log, HastenedDemise).Where(x => x.Value == 1);
         var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
         foreach (AgentItem soul in souls)
         {

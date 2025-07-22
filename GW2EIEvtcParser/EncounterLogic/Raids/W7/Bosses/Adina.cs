@@ -204,7 +204,7 @@ internal class Adina : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantBlindnesses, p, BuffImages.PersistentlyBlinded);
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.AdinaSelectedForPillar, out var selectedForPillars))
         {
@@ -391,7 +391,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
 
                 // Diamond Palisade
-                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade).Where(x => x.Value > 0);
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
@@ -421,40 +421,25 @@ internal class Adina : TheKeyOfAhdashim
         SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         phases[0].AddTarget(adina, log);
         var handIDs = new TargetID[] { TargetID.HandOfErosion, TargetID.HandOfEruption };
-        var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
-        BuffEvent? lastInvuln = invuls.LastOrDefault();
-        long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
+        var invuls = adina.GetBuffStatus(log, Determined762);
+        var lastInvuln = invuls.LastOrNull();
+        long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIDs) && x.FirstAware < lastBossPhaseStart), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
         }
         // Split phases
-        long start = 0;
         var splitPhases = new List<PhaseData>();
         var splitPhaseEnds = new List<long>();
         for (int i = 0; i < invuls.Count; i++)
         {
-            PhaseData splitPhase;
-            BuffEvent be = invuls[i];
-            if (be is BuffApplyEvent)
+            var invul = invuls[i];
+            if (invul.Value > 0)
             {
-                start = be.Time;
-                if (i == invuls.Count - 1)
-                {
-                    splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
-                    splitPhase.AddParentPhase(phases[0]);
-                    splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
-                    splitPhases.Add(splitPhase);
-                }
-            }
-            else
-            {
-                long end = be.Time;
-                splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
+                var splitPhase = new PhaseData(invul.Start, invul.End, "Split " + (i / 2 + 1));
                 splitPhase.AddParentPhase(phases[0]);
-                splitPhaseEnds.Add(end);
+                splitPhaseEnds.Add(invul.End);
                 AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
@@ -472,7 +457,7 @@ internal class Adina : TheKeyOfAhdashim
             }
         }
         CastEvent? boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < 6000);
-        start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
+        long start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {
             int phaseIndex = 1;

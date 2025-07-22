@@ -237,7 +237,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         switch (target.ID)
         {
             case (int)TargetID.ConjuredAmalgamate:
-                var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var shieldCA = target.GetBuffStatus(log, ShieldedCA).Where(x => x.Value > 0);
                 uint CAShieldRadius = 800;
                 foreach (Segment seg in shieldCA)
                 {
@@ -250,7 +250,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             case (int)TargetID.CABodyAttackTarget:
                 var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
                 var body = log.CombatData.GetAttackTargetEventsByAttackTarget(target.AgentItem).First().Src;
-                var bodyInvulStatus = body.GetBuffStatus(log, CAInvul, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 0);
+                var bodyInvulStatus = body.GetBuffStatus(log, CAInvul).Where(x => x.Value == 0);
                 var bodyAtHideStart = log.FightData.FightStart;
                 foreach (var noInvul in bodyInvulStatus)
                 {
@@ -280,7 +280,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             case (int)TargetID.ConjuredGreatsword:
                 break;
             case (int)TargetID.ConjuredShield:
-                var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var shieldShield = target.GetBuffStatus(log, ShieldedCA).Where(x => x.Value > 0);
                 uint ShieldShieldRadius = 100;
                 foreach (Segment seg in shieldShield)
                 {
@@ -451,8 +451,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
         }
         // Shields and Greatswords Overheads
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -116,7 +116,7 @@ internal class MursaatOverseer : BastionOfThePenitent
                 }
 
                 // Jade Scout Shield
-                var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var shields = target.GetBuffStatus(log, MursaatOverseersShield).Where(x => x.Value > 0);
                 foreach (var seg in shields)
                 {
                     replay.Decorations.Add(new CircleDecoration(100, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
@@ -134,7 +134,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         (long start, long end) lifespan;
 
         // Claim - Overhead
-        var claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var claims = player.GetBuffStatus(log, ClaimBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
 
         // Protect - Bubble

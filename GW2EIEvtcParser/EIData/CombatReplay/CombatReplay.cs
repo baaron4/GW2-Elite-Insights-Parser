@@ -479,7 +479,7 @@ public class CombatReplay
     /// </summary>
     internal void AddHideByBuff(SingleActor actor, ParsedEvtcLog log, long buffID)
     {
-        Hidden.AddRange(actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
+        Hidden.AddRange(actor.GetBuffStatus(log, buffID).Where(x => x.Value > 0));
     }
 }
 

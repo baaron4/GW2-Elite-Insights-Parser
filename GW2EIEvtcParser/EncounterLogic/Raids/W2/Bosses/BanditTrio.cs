@@ -333,7 +333,7 @@ internal class BanditTrio : SalvationPass
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Sapper bombs
-        var sapperBombs = player.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var sapperBombs = player.GetBuffStatus(log, SapperBombBuff).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
             var circle = new CircleDecoration(180, seg, Colors.Lime, 0.5, new AgentConnector(player));

@@ -198,7 +198,7 @@ internal class Artsariiv : ShatteredObservatory
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Corporeal Reassignment (skull)
-        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
     }
 

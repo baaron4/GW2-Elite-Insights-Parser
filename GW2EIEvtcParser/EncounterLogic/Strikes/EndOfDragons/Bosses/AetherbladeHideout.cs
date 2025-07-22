@@ -340,7 +340,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetBlue, 60, 150);
 
         // Ley Breach - Visualizing the blue beam on the targeted player.
-        var segments = player.GetBuffStatus(log, LeyBreachTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var segments = player.GetBuffStatus(log, LeyBreachTargetBuff).Where(x => x.Value > 0);
         var offset = new Vector3(0, -100, 0);
         foreach (Segment segment in segments)
         {
@@ -799,7 +799,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     {
         const uint width = 320;
         const uint length = 2000;
-        var segments = actor.GetBuffStatus(log, skillID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var segments = actor.GetBuffStatus(log, skillID).Where(x => x.Value > 0);
 
         // If the actor is a player, add the overhead bomb icon.
         if (actor.AgentItem.IsPlayer)
@@ -950,7 +950,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             int index = 0;
             int previousIndex = 0;
 
-            var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x =>
+            var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
                 x.SkillID == ElectricBlastCastSkillLeftNM ||
                 x.SkillID == ElectricBlastCastSkillRightNM ||
                 x.SkillID == ElectricBlastCastSkillLeftCM ||

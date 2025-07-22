@@ -284,7 +284,7 @@ internal class Matthias : SalvationPass
 
     private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var shields = target.GetBuffStatus(log, buffID).Where(x => x.Value > 0);
         foreach (var seg in shields)
         {
             replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.3, new AgentConnector(target)));
@@ -441,7 +441,7 @@ internal class Matthias : SalvationPass
         }
 
         // Well of the Profane - Unstable Blood Magic SAK AoE
-        var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic).Where(x => x.Value > 0);
         foreach (var seg in wellMatthias)
         {
             growing = seg.Start + 9000;
@@ -459,11 +459,11 @@ internal class Matthias : SalvationPass
         }
 
         // Sacrifice Selection
-        var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
 
         // Sacrifice
-        var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
             replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, seg.TimeSpan, Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
@@ -479,7 +479,7 @@ internal class Matthias : SalvationPass
         }
 
         // Unbalanced
-        var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var unbalanced = p.GetBuffStatus(log, Unbalanced).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }
 

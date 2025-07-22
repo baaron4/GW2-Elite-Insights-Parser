@@ -217,7 +217,7 @@ internal class StatueOfDeath : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilStatueOfDeath, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilStatueOfDeath).Where(x => x.Value > 0);
         foreach (var c in spiritTransform)
         {
             int duration = 30000;

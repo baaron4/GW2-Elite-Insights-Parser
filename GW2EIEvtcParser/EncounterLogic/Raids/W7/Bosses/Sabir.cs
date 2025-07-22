@@ -167,7 +167,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var boltBreaks = p.GetBuffStatus(log, BoltBreak).Where(x => x.Value > 0);
         uint boltBreakRadius = 180;
         foreach (Segment seg in boltBreaks)
         {
@@ -211,11 +211,11 @@ internal class Sabir : TheKeyOfAhdashim
                 }
 
                 // Repulsion Field
-                var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var repulsionFields = target.GetBuffStatus(log, RepulsionField).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.TargetedLocust);
 
                 // Ion Shield
-                var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var ionShields = target.GetBuffStatus(log, IonShield).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.IonShield);
                 break;
             case (int)TargetID.BigKillerTornado:

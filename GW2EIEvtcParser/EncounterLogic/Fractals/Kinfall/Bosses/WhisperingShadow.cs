@@ -147,17 +147,17 @@ internal class WhisperingShadow : Kinfall
         AddLifeFireCircle(player, log, replay, LifeFireCircleCM, 250);
 
         // gorefrost (arrow) target
-        var gorefrosts = player.GetBuffStatus(log, GorefrostTarget, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var gorefrosts = player.GetBuffStatus(log, GorefrostTarget).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(gorefrosts, player, ParserIcons.TargetOverhead);
 
         // inevitable darkness (tether) target
-        var inevitableDarkness = player.GetBuffStatus(log, InevitableDarknessPlayer, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        var inevitableDarknessEvents = GetFilteredList(log.CombatData, InevitableDarknessPlayer, player, true, false);
+        var inevitableDarkness = player.GetBuffStatus(log, InevitableDarknessPlayer).Where(x => x.Value > 0);
+        var inevitableDarknessEvents = GetBuffApplyRemoveSequence(log.CombatData, InevitableDarknessPlayer, player, true, false);
         replay.Decorations.AddOverheadIcons(inevitableDarkness, player, BuffImages.SpiritsConsumed);
         replay.Decorations.AddTether(inevitableDarknessEvents, Colors.LightPurple, 0.5);
 
         // wintry orb (green)
-        var wintryOrbs = player.GetBuffStatus(log, LethalCoalescenceBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var wintryOrbs = player.GetBuffStatus(log, LethalCoalescenceBuff).Where(x => x.Value > 0);
         foreach (var segment in wintryOrbs)
         {
             var decoration = new CircleDecoration(240, segment.TimeSpan, Colors.DarkGreen, 0.2, new AgentConnector(player.AgentItem));
@@ -303,7 +303,7 @@ internal class WhisperingShadow : Kinfall
 
     protected static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
     {
-        var lifefires = player.GetBuffStatus(log, buff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var lifefires = player.GetBuffStatus(log, buff).Where(x => x.Value > 0);
         foreach (var lifefire in lifefires)
         {
             var decoration = new CircleDecoration(radius, lifefire, Colors.Ice, 0.05, new AgentConnector(player.AgentItem));

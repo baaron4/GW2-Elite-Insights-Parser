@@ -97,7 +97,7 @@ internal class TwinLargos : MythwrightGambit
         var targetPhases = new List<PhaseData>();
         var states = new List<TimeCombatEvent>();
         states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
-        states.AddRange(GetFilteredList(log.CombatData, Determined762, target, true, true).Where(x => x is BuffApplyEvent));
+        states.AddRange(GetBuffApplyRemoveSequence(log.CombatData, Determined762, target, true, true).Where(x => x is BuffApplyEvent));
         states.AddRange(log.CombatData.GetDeadEvents(target.AgentItem));
         states.Sort((x, y) => x.Time.CompareTo(y.Time));
         for (int i = 0; i < states.Count; i++)
@@ -360,7 +360,7 @@ internal class TwinLargos : MythwrightGambit
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Water "Poison Bomb"
-        var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff).Where(x => x.Value > 0);
         foreach (Segment seg in waterToDrop)
         {
             int timer = 5000;
@@ -377,7 +377,7 @@ internal class TwinLargos : MythwrightGambit
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
         }
         // Bubble (Aquatic Detainment)
-        var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff).Where(x => x.Value > 0);
         uint bubbleRadius = 100;
         foreach (Segment seg in bubble)
         {

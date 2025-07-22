@@ -366,7 +366,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     AddTetherDecorations(log, target, replay, SappingSurge, Colors.Red, 0.4);
 
                     // Stun icon
-                    IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                    IEnumerable<Segment> stuns = target.GetBuffStatus(log, Stun).Where(x => x.Value > 0);
                     replay.Decorations.AddOverheadIcons(stuns, target, BuffImages.Stun);
 
                     // Spawn animation
@@ -390,7 +390,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             case (int)TargetID.PeerlessQadimPylon:
                 {
                     // Red tether from Qadim to the Pylon during breakbar
-                    var breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
+                    var breakbarBuffs = GetBuffApplyRemoveSequence(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
                     replay.Decorations.AddTether(breakbarBuffs, Colors.Red, 0.4);
                     var breakbarUpdates = target.GetBreakbarPercentUpdates(log);
                     var (breakbarNones, breakbarActives, breakbarImmunes, breakbarRecoverings) = target.GetBreakbarStatus(log);
@@ -424,25 +424,25 @@ internal class PeerlessQadim : TheKeyOfAhdashim
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixated
-        var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless).Where(x => x.Value > 0);
         foreach (Segment seg in fixated)
         {
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
         // Chaos Corrosion
-        var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion).Where(x => x.Value > 0);
         foreach (Segment seg in chaosCorrosion)
         {
             replay.Decorations.AddRotatedOverheadIcon(seg, p, BuffImages.Fractured, -40f);
         }
         // Critical Mass, debuff while carrying an orb
-        var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var criticalMass = p.GetBuffStatus(log, CriticalMass).Where(x => x.Value > 0);
         foreach (Segment seg in criticalMass)
         {
             replay.Decorations.AddRotatedOverheadIcon(seg, p, BuffImages.OrbOfAscension, 40f);
         }
         // Magma drop
-        var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var magmaDrop = p.GetBuffStatus(log, MagmaDrop).Where(x => x.Value > 0);
         uint magmaRadius = 420;
         int magmaOffset = 4000;
         int magmaDuration = 600000;

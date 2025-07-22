@@ -231,9 +231,9 @@ internal class ValeGuardian : SpiritVale
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Attunements Overhead
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
-        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
     }
 
     /// <summary>

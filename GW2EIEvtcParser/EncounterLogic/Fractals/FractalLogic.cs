@@ -132,7 +132,7 @@ internal abstract class FractalLogic : FightLogic
         }
 
         // Flux Bomb on selected player
-        var fluxBombApplies = p.GetBuffStatus(log, FluxBombBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var fluxBombApplies = p.GetBuffStatus(log, FluxBombBuff).Where(x => x.Value > 0);
         foreach (Segment segment in fluxBombApplies)
         {
             replay.Decorations.AddWithGrowing(new CircleDecoration(120, segment, Colors.LightOrange, 0.2, new AgentConnector(p)), segment.End);
