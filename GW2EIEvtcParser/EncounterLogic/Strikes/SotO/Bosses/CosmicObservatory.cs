@@ -83,7 +83,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         (long start, long end) lifespan;
-        var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetAnimatedCastEvents(log).ToList();
 
         switch (target.ID)
         {

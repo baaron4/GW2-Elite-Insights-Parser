@@ -314,7 +314,7 @@ internal class Kanaxai : SilentSurf
         switch (target.ID)
         {
             case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -362,7 +362,7 @@ internal class Kanaxai : SilentSurf
                 // Check if the log contains Sugar Rush
                 bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -441,7 +441,7 @@ internal class Kanaxai : SilentSurf
             SingleActor? kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
             if (kanaxai != null)
             {
-                var casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                var casts = kanaxai.GetCastEvents(log);
 
                 // Get Axe AoE Buffs
                 //TODO(Rennorb) @perf: find average complexity

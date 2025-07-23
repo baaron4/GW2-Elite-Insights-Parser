@@ -51,7 +51,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         {
             return res;
         }
-        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
         if (damageModifier.NeedsMinions)
         {
             var ignoredSources = new HashSet<SingleActor>();

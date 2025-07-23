@@ -67,4 +67,9 @@ public abstract class DamageModifier
     public abstract int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
 
     public abstract IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
+
+    public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t)
+    {
+        return GetHitDamageEvents(actor, log, t, log.FightData.FightStart, log.FightData.FightEnd);
+    }
 }

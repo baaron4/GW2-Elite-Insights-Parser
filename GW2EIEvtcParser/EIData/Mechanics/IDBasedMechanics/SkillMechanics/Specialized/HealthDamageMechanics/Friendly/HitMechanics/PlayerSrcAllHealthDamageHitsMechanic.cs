@@ -24,7 +24,7 @@ internal class PlayerSrcAllHealthDamageHitsMechanic : PlayerSrcHealthDamageHitMe
     {
         foreach (Player p in log.PlayerList)
         {
-            foreach (HealthDamageEvent ahde in (Minions ? p.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd) : p.GetJustActorDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd)))
+            foreach (HealthDamageEvent ahde in (Minions ? p.GetDamageEvents(null, log) : p.GetJustActorDamageEvents(null, log)))
             {
                 if (Keep(ahde, log))
                 {

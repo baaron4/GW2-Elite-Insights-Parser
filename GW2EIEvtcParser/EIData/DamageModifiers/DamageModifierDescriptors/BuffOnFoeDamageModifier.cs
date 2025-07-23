@@ -75,7 +75,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
             }
         }
         var res = new List<DamageModifierEvent>();
-        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+        var typeHits = damageModifier.GetHitDamageEvents(actor, log, null);
         var ignoredTargets = new HashSet<SingleActor>();
         foreach (HealthDamageEvent evt in typeHits)
         {

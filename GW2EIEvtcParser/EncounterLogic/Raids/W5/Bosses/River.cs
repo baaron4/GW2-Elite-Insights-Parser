@@ -193,7 +193,7 @@ internal class River : HallOfChains
                 break;
 
             case (int)TargetID.HollowedBomber:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

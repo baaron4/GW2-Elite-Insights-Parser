@@ -394,7 +394,7 @@ internal static class ElementalistHelper
         // Firestorm
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out var firestorms))
         {
-            var firestormCasts = player.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == FirestormGlyphOfStorms || x.SkillID == FirestormFieryGreatsword).ToList();
+            var firestormCasts = player.GetAnimatedCastEvents(log).Where(x => x.SkillID == FirestormGlyphOfStorms || x.SkillID == FirestormFieryGreatsword).ToList();
             foreach (EffectEvent effect in firestorms)
             {
                 SkillModeDescriptor skill;
