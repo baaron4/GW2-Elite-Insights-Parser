@@ -416,7 +416,7 @@ public static class EffectGUIDs
     public static readonly GUID ThiefSignetOfAgility = new("BB5488951B60B546BB1BD5626DAE83E1");
     public static readonly GUID ThiefSignetOfShadows = new("14A5982DB277744CB928A4935555F563");
     public static readonly GUID ThiefPitfallAoE = new("7325E9B0DD2E914F9837E5FCFC740A95");
-    // public static readonly GUID ThiefThousandNeedlesAoECollision   = new("2125A13079C1C5479C150926EB60A15D"); // collision with shadow flare & other
+    public static readonly GUID ThiefThousandNeedlesAoECollision = new("2125A13079C1C5479C150926EB60A15D"); // collision with shadow flare & other
     public static readonly GUID ThiefThousandNeedlesAoE1 = new("9AF103E33FC235498190448A9496C98A"); // ~280ms delayed
     public static readonly GUID ThiefThousandNeedlesAoE2 = new("B8DC8C6736C8E0439295A9DBBADC6296"); // ~280ms delayed
     public static readonly GUID ThiefSealAreaAoE = new("92A7634C2C7F2746AFDA88E1AD9AE886");
