@@ -86,6 +86,7 @@ internal static class ItemImages
     public const string SuperiorRuneOfTheOgre = "https://render.guildwars2.com/file/136590B36FFC2053D135743B063405C9A54A9E6A/220716.png";
     public const string SuperiorRuneOfTheGolemancer = "https://render.guildwars2.com/file/EB4F765E36EC9CF57526789A3EAB6702110D0949/220705.png";
     public const string SuperiorRuneOfThePrivateer = "https://render.guildwars2.com/file/1C2095ADECD26F212D0F6C47BCCF5B7848B347CF/220718.png";
+    public const string SuperiorRuneOfTheFirebrand = "https://render.guildwars2.com/file/5BB9C1FF1BFF6A52217F4007C2B1FFCAB9BCC6B3/1766387.png";
     #endregion Rune
     #region Relic
     public const string RelicOfTheDragonhunter = "https://render.guildwars2.com/file/F61EEC535059F1FA027049AB4DEFCD5465405DB7/3122344.png";
