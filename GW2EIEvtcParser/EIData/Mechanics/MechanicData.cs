@@ -28,7 +28,7 @@ public class MechanicData
 
     }
 
-    private void CheckConfiguration(ParsedEvtcLog log)
+    private void CheckConfiguration()
     {
         var fightMechanics = _mechanicLogs;
         //TODO(Rennorb) @perf: find average complexity
@@ -100,7 +100,7 @@ public class MechanicData
         { 
             _mechanicLogs.Remove(x); 
         }
-        CheckConfiguration(log);
+        CheckConfiguration();
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
             mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
