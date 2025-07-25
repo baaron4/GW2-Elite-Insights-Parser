@@ -7,9 +7,8 @@ namespace GW2EIEvtcParser.EIData;
 internal class EnemyDstMissileLaunchMechanic : DstMissileLaunchMechanic
 {
 
-    public EnemyDstMissileLaunchMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public EnemyDstMissileLaunchMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
-        IsEnemyMechanic = true;
     }
 
     public EnemyDstMissileLaunchMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)

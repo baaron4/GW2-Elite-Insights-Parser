@@ -57,6 +57,7 @@ public partial class CombatData
     internal readonly bool HasStackIDs;
 
     public readonly bool HasBreakbarDamageData = false;
+    public readonly bool HasCrowdControlData = false;
     public readonly bool HasEffectData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
@@ -553,6 +554,7 @@ public partial class CombatData
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0 || brkRecoveredData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
+        HasCrowdControlData = crowdControlData.Count != 0;
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;
 

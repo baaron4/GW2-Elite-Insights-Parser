@@ -117,6 +117,16 @@ public abstract class Mechanic : MechanicContainer
         return UsingEnable(log => !log.CombatData.HasEffectData);
     }
 
+    internal Mechanic UsingDisableWithMissileData()
+    {
+        return UsingEnable(log => !log.CombatData.HasMissileData);
+    }
+
+    internal Mechanic UsingDisableWithCrowControlData()
+    {
+        return UsingEnable(log => !log.CombatData.HasCrowdControlData);
+    }
+
     internal Mechanic WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
     {
         _maxBuild = maxBuild;
