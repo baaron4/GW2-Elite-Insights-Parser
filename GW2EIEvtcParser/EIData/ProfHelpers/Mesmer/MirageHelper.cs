@@ -1,7 +1,10 @@
-﻿using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.DamageModifierIDs;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -57,5 +60,23 @@ internal static class MirageHelper
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);
+    }
+
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
+    {
+        Color color = Colors.Mesmer;
+        (long start, long end) lifespan;
+
+        // Mirage Mirror
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MirageMirror, out var mirageMirrors))
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Mirage, MirageMirror, SkillModeCategory.ShowOnSelect);
+            foreach (EffectEvent effect in mirageMirrors)
+            {
+                // Mirrors have infinite duration but despawn after 8 seconds
+                lifespan = effect.ComputeDynamicLifespan(log, 8000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 80, EffectImages.EffectMirageMirror); // Radius estimated
+            }
+        }
     }
 }

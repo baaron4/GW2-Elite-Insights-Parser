@@ -730,6 +730,7 @@ public static class SkillIDs
     public const long EggplantFritter = 10140;
     public const long CupOfLotusFries = 10141;
     public const long BackFire = 10166;
+    public const long ChaosStorm = 10169;
     public const long MindSlash = 10170;
     public const long MindGash = 10171;
     public const long MindSpike = 10172;
@@ -2679,6 +2680,7 @@ public static class SkillIDs
     public const long TargetBuff = 44655; // Used by Path of Fire bounties and Greer for Blob of Blight
     public const long DesertShroud = 44663;
     public const long POV_StealStrengthBuff = 44674;
+    public const long MirageMirror = 44677;
     public const long BreakrazorsBastionBuff = 44682;
     public const long PhantasmalForce = 44691;
     public const long Versatile = 44693;
