@@ -436,7 +436,7 @@ internal static class ElementalistHelper
         // Meteor
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteor, out var meteors))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Meteor, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Meteor);
             foreach (EffectEvent effect in meteors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000);
@@ -461,7 +461,7 @@ internal static class ElementalistHelper
         // Lesser Volcano
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistLesserVolcano, out var lesserVolcano))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Elementalist, LesserVolcano, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, LesserVolcano);
             foreach (EffectEvent effect in lesserVolcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4400);
@@ -474,7 +474,7 @@ internal static class ElementalistHelper
         // Volcano
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out var volcano))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano);
             foreach (EffectEvent effect in volcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4500);
@@ -512,7 +512,7 @@ internal static class ElementalistHelper
         // Fulgor
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFulgor, out var fulgors))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Elementalist, FulgorSkill, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, FulgorSkill);
             foreach (EffectEvent effect in fulgors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
@@ -548,7 +548,7 @@ internal static class ElementalistHelper
         // Fissure
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFissure, out var fissures))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Fissure, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, Fissure);
             foreach (EffectEvent effect in fissures)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
@@ -606,7 +606,7 @@ internal static class ElementalistHelper
     /// <param name="icon">The etching icon.</param>
     private static void AddEtchingDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillID, string icon)
     {
-        var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillID, SkillModeCategory.ShowOnSelect);
+        var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillID);
         foreach (EffectEvent effect in effects)
         {
             (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);

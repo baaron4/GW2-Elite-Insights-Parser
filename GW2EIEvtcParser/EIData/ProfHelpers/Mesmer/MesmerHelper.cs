@@ -534,7 +534,7 @@ internal static class MesmerHelper
                 { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
                 { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
             };
-            var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse);
             foreach (EffectEvent effect in mentalCollapses)
             {
                 long duration = 0; // Overriding logged duration of 0

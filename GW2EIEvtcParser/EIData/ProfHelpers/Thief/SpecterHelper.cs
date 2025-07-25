@@ -109,11 +109,16 @@ internal static class SpecterHelper
         // Well of Silence
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSilence2, out var wellsOfSilence))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence, SkillModeCategory.CC);
+            var skillCC = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence, SkillModeCategory.CC);
+            var skillDamage = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence);
             foreach (EffectEvent effect in wellsOfSilence)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfSilence);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
+                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
+                // CC on first pulse
+                AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 240, EffectImages.EffectWellOfSilence);
+                AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 240, EffectImages.EffectWellOfSilence);
             }
         }
         // Well of Sorrow
