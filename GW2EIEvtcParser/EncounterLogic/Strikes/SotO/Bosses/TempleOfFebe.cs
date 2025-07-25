@@ -86,7 +86,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     {
                         return eligibilityRemovedEvents;
                     }
-                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
+                    eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
                     IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
                     // In case player is dead but death event did not happen during encounter
                     if (agentItem.IsDead(log, log.FightData.FightEnd) && !deads.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
@@ -254,7 +254,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent? enragedSmash = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM).FirstOrDefault();
+        CastEvent? enragedSmash = cerus.GetCastEvents(log).Where(x => x.SkillID == EnragedSmashNM || x.SkillID == EnragedSmashCM).FirstOrDefault();
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
@@ -419,7 +419,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetAnimatedCastEvents(log).ToList();
         (long start, long end) lifespan;
 
         switch (target.ID)
@@ -622,7 +622,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
-        var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
+        var castEvents = target.GetCastEvents(log).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
         long invisibleStart = log.FightData.LogStart;
         bool startTrimmed = false;
 
@@ -853,7 +853,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
             if (target.IsSpecies(TargetID.Cerus))
             {
-                var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == PetrifySkill);
+                var casts = cerus.GetCastEvents(log).Where(x => x.SkillID == PetrifySkill);
                 foreach (CastEvent cast in casts)
                 {
                     if (lifespan.start <= cast.Time && lifespan.end > cast.Time)

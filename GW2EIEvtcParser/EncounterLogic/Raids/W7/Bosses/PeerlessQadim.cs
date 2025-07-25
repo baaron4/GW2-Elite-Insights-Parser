@@ -237,7 +237,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)TargetID.PeerlessQadim:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -474,10 +474,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
         // Add custom arrow overhead for the player lifted up
-        var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == UnleashSAK);
+        var castsUnleash = p.GetCastEvents(log).Where(x => x.SkillID == UnleashSAK);
         var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem);
 
-        var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
+        var castsLiftUp = p.GetCastEvents(log).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
         foreach (CastEvent cast in castsLiftUp)
         {
             long liftUpEnd = log.FightData.LogEnd;

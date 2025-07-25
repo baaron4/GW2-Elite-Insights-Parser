@@ -1493,7 +1493,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 #endif
                 break;
             case (int)TargetID.ZhaitansReach:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -1517,7 +1517,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.VoidBrandbomber:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -1588,7 +1588,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 replay.Decorations.Add(perimeter);
                 break;
             case (int)TargetID.VoidGiant:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -1748,7 +1748,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.VoidAbomination:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -1767,7 +1767,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.VoidObliterator:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -1872,7 +1872,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.VoidGoliath:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

@@ -351,7 +351,7 @@ internal class Adina : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)TargetID.Adina:
-                var adinaCasts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                var adinaCasts = target.GetAnimatedCastEvents(log);
                 foreach (CastEvent cast in adinaCasts)
                 {
                     switch (cast.SkillID)
@@ -456,7 +456,7 @@ internal class Adina : TheKeyOfAhdashim
                 mainPhaseEnds.Add(pair.Key);
             }
         }
-        CastEvent? boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < 6000);
+        CastEvent? boulderBarrage = adina.GetCastEvents(log).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < 6000);
         long start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {

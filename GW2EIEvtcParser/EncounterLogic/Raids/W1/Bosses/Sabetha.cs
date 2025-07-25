@@ -170,7 +170,7 @@ internal class Sabetha : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.Sabetha:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -195,7 +195,7 @@ internal class Sabetha : SpiritVale
                 }
                 break;
             case (int)TargetID.Kernan:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -221,7 +221,7 @@ internal class Sabetha : SpiritVale
                 break;
 
             case (int)TargetID.Knuckles:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -237,7 +237,7 @@ internal class Sabetha : SpiritVale
                 break;
 
             case (int)TargetID.Karde:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

@@ -179,7 +179,7 @@ internal class Gorseval : SpiritVale
                 const byte fifth = 1 << 4;
                 const byte full = 1 << 5;
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

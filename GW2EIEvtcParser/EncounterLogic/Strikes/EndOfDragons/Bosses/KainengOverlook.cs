@@ -392,7 +392,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 }
                 else
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {
@@ -418,7 +418,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 long jadeBusterCannonWarning = 2800;
                 var jadeBusterCannonOffset = new Vector3(0, -1400, 0);
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

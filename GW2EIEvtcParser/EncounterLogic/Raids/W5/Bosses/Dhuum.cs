@@ -167,7 +167,7 @@ internal class Dhuum : HallOfChains
 
     private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, IEnumerable<SingleActor> enforcers, long mainStart, long mainEnd, bool hasRitual, PhaseData parentPhase)
     {
-        var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var cls = dhuum.GetCastEvents(log);
         var cataCycles = cls.Where(x => x.SkillID == CataclysmicCycle);
         var gDeathmarks = cls.Where(x => x.SkillID == GreaterDeathMark).ToList();
         if (gDeathmarks.Count < cataCycles.Count())
@@ -214,7 +214,7 @@ internal class Dhuum : HallOfChains
         }
         var enforcers = Targets.Where(x => x.IsSpecies(TargetID.Enforcer));
         // Sometimes the pre event is not in the evtc
-        var castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var castLogs = dhuum.GetCastEvents(log);
         // present if not bugged and pre-event done
         PhaseData? mainFight = null;
         if (!_hasPrevent)
@@ -364,7 +364,7 @@ internal class Dhuum : HallOfChains
         {
             case (int)TargetID.Dhuum:
             {
-                var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetAnimatedCastEvents(log).ToList();
 
                 foreach (CastEvent cast in casts)
                 {
@@ -538,7 +538,7 @@ internal class Dhuum : HallOfChains
                 break;
             case (int)TargetID.Enforcer:
             {
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

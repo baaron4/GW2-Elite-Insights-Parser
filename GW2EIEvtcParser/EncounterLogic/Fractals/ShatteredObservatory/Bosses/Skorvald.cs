@@ -285,7 +285,7 @@ internal class Skorvald : ShatteredObservatory
         switch (target.ID)
         {
             case (int)TargetID.Skorvald:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -420,7 +420,7 @@ internal class Skorvald : ShatteredObservatory
             case (int)TargetID.FluxAnomalyCM2:
             case (int)TargetID.FluxAnomalyCM3:
             case (int)TargetID.FluxAnomalyCM4:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

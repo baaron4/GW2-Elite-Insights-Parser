@@ -726,7 +726,7 @@ internal class Qadim : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var cls = target.GetCastEvents(log);
 
         long castDuration;
         (long start, long end) lifespan;
@@ -734,7 +734,7 @@ internal class Qadim : MythwrightGambit
         switch (target.ID)
         {
             case (int)TargetID.Qadim:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -774,7 +774,7 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.AncientInvokedHydra:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -802,7 +802,7 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.WyvernMatriarch:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -869,7 +869,7 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.WyvernPatriarch:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -924,7 +924,7 @@ internal class Qadim : MythwrightGambit
                 }
                 break;
             case (int)TargetID.ApocalypseBringer:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
