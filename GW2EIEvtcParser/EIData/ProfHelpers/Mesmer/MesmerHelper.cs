@@ -550,5 +550,16 @@ internal static class MesmerHelper
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectMentalCollapse);
             }
         }
+
+        // Chaos Storm
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerChaosStorm1, out var chaosStorms))
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Mesmer, ChaosStorm, SkillModeCategory.CC);
+            foreach (EffectEvent effect in chaosStorms)
+            {
+                (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectChaosStorm);
+            }
+        }
     }
 }

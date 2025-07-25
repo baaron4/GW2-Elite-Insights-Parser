@@ -569,6 +569,7 @@ internal static class ProfHelper
                 break;
             case Spec.Mirage:
                 MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                MirageHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Virtuoso:
                 MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);

@@ -130,6 +130,8 @@ internal static class SkillImages
     public const string Fulgor = "https://render.guildwars2.com/file/ECE34CA514D057F0166EC50EF9AB19751C53BE96/3379081.png";
     public const string FirestormGlyphOfStormsOrFieryGreatsword = "https://i.imgur.com/6BTB3XT.png";
     public const string RingOfFire = "https://render.guildwars2.com/file/CD08FDC23B56EBB19C90B909C65D9EE4D9FFF8C8/103183.png";
+    public const string DebrisTornado = "https://render.guildwars2.com/file/F20A7D6B7FB71D520B4643CF120AF6A50DF7A2B0/102914.png";
+    public const string LavaFont = "https://render.guildwars2.com/file/CFA80DB42022C240001D249CED6235CEF70C9042/103135.png";
     #endregion Elementalist
     #region Engineer
     // Signets
@@ -184,6 +186,7 @@ internal static class SkillImages
     public const string CrashDown = "https://render.guildwars2.com/file/9156D3FECB94F8B27909B3EA904DAAE3C21043F9/2503677.png";
     public const string ThumperTurret = "https://render.guildwars2.com/file/EA2452FCE71C0F0B9755517324A47680BF45E79E/103201.png";
     public const string Overheat = "https://render.guildwars2.com/file/5DC4E10CE03E4D78EFACEEDB6F5FCF4F206BA7E3/1770392.png";
+    public const string GlueBomb = "https://wiki.guildwars2.com/images/4/42/Glue_Bomb.png";
     #endregion Engineer
     #region Guardian
     // Guardian F Skills
@@ -261,6 +264,7 @@ internal static class SkillImages
     public const string SolarStorm = "https://render.guildwars2.com/file/D026ABCF610D6E9615A2F7BDB8716EAFB99AAAFB/3379128.png";
     public const string SpearOfLight = "https://render.guildwars2.com/file/77931F01AE91A00998BD286BA2930DCE1A354318/103677.png";
     public const string HuntersWard = "https://render.guildwars2.com/file/BA2C3116B20CF142F70D18394E377A043D3E0E96/1012873.png";
+    public const string HammerOfWisdom = "https://render.guildwars2.com/file/99430A49F97BA45EF101E611A69193D57BF70A7D/103655.png";
     #endregion Guardian
     #region Mesmer
     // Signets
@@ -311,6 +315,7 @@ internal static class SkillImages
     public const string PhantasmalLancher = "https://render.guildwars2.com/file/5E6C98FA3B942EE76808530B016FF5621A25764F/3379157.png";
     public const string JabMesmerSpear = "https://render.guildwars2.com/file/BBEF48C50DEB9CD79747FD515958A6FC1129EE7D/103778.png";
     public const string StabMesmerSpear = "https://render.guildwars2.com/file/42066E7EE4A3770FE5D4550BD8EDA8237A0DB769/103777.png";
+    public const string PhantasmalSwordsman = "https://render.guildwars2.com/file/755CAC115104F0AA0630DCEB472D0678B62A916E/103723.png";
     #endregion Mesmer
     #region Necromancer
     // Shrouds
@@ -382,7 +387,7 @@ internal static class SkillImages
     public const string NaturesRenewal = "https://wiki.guildwars2.com/images/c/c1/Nature%27s_Renewal.png";
     // Glyphs
     public const string GlyphOfTheStars = "https://render.guildwars2.com/file/E04535E0710904BE9841BAC49922200E39B9B413/1128636.png";
-    public const string GlyphOfEmpowermentCelestialAvatar = "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png";
+    public const string GlyphOfTheStarsCelestialAvatar = "https://render.guildwars2.com/file/045471E55B24643A19C40B0D78593007AA1BE665/1128631.png";
     public const string GlyphOfUnity = "https://render.guildwars2.com/file/2A0DAB9B761FB75E2FEF5FF5D0ADE1143E32A6F4/1128639.png";
     public const string GlyphOfUnityCelestialAvatar = "https://render.guildwars2.com/file/7EFAFBEBC310D707342BF0EA5D166D0FA12E3EB8/1128634.png";
     // Stances
@@ -481,6 +486,7 @@ internal static class SkillImages
     public const string UnleashEnergySkyChak = "https://wiki.guildwars2.com/images/2/26/Unleash_Energy.png";
     public const string ChargingBiteShark = "https://wiki.guildwars2.com/images/d/d8/Charging_Bite.png";
     public const string StaringVoidSpinegazer = "https://wiki.guildwars2.com/images/9/9e/Staring_Void.png";
+    public const string CripplingThrow = "https://wiki.guildwars2.com/images/c/cd/Crippling_Throw.png";
     #endregion Ranger
     #region Revenant
     // Facets
@@ -614,6 +620,8 @@ internal static class SkillImages
     public const string BarbedSpear = "https://render.guildwars2.com/file/3A5C3F7697DAE8C90B450B92323937A396EDC4EC/3379188.png";
     public const string BolaShot = "https://render.guildwars2.com/file/C203DEA0472BEEA173A60DF41C66F75E7FC0D80A/2261529.png";
     public const string DebilitatingArc = "https://render.guildwars2.com/file/5AC578E641FC79E9B2F11F43EAF857140F937CF3/1058626.png";
+    public const string ThousandNeedles = "https://render.guildwars2.com/file/2E9B1FD2687F76E4CDF00ADF04B6AB07CE7CD880/2175069.png";
+    public const string ThrowLavaRock = "https://wiki.guildwars2.com/images/e/ed/Throw_Lava_Rock.png";
     #endregion Thief
     #region Warrior
     // Signets
@@ -628,6 +636,10 @@ internal static class SkillImages
     public const string BannerOfDiscipline = "https://render.guildwars2.com/file/B0BA02176B4E10539B0202CA64286DA97C4FE44E/103087.png";
     public const string BannerOfTactics = "https://render.guildwars2.com/file/6CA13E99B69F0150BCBD08D179D5464F39CEE84A/103917.png";
     public const string BannerOfDefense = "https://render.guildwars2.com/file/73B7B8A76934DAC798355ACC2C437EFFFB7EA23E/104142.png";
+    // Banner Skills
+    public const string Stab = "https://wiki.guildwars2.com/images/9/99/Stab_%28banner_skill%29.png";
+    public const string Inspire = "https://wiki.guildwars2.com/images/c/c4/Inspire.png";
+    public const string PlantStandard = "https://wiki.guildwars2.com/images/1/19/Plant_Standard.png";
     // Stances
     public const string BerserkerStance = "https://render.guildwars2.com/file/076E24B408AADF15ECE3537453F9E1FCB93843F5/103864.png";
     public const string EndurePain = "https://render.guildwars2.com/file/9D66F0BCCEC7A7C344170659D4CF7C7E3ECF0C60/102867.png";
@@ -758,6 +770,16 @@ internal static class SkillImages
     public const string WarclawLance = "https://wiki.guildwars2.com/images/f/f8/Lance.png";
     public const string WarclawChainPull = "https://wiki.guildwars2.com/images/0/0c/Chain_Pull.png";
     public const string WarclawDash = "https://wiki.guildwars2.com/images/2/24/Dash_%28Warclaw%29.png";
+    // Jackal
+    public const string JackalPounce = "https://wiki.guildwars2.com/images/9/97/Pounce_%28Jackal%29.png";
+    // Griffon
+    public const string GriffonSwoop = "https://wiki.guildwars2.com/images/9/94/Swoop_%28griffon%29.png";
+    // Beetle
+    public const string BeetleRollOut = "https://wiki.guildwars2.com/images/8/85/Roll_Out.png";
+    // Skimmer
+    public const string SkimmerBarrelRoll = "https://wiki.guildwars2.com/images/4/4b/Barrel_Roll.png";
+    // Springer
+    public const string SpringerCannonball = "https://wiki.guildwars2.com/images/f/f2/Cannonball_%28skill%29.png";
     #endregion Mount
     #region Bundle
     public const string SmashBottle = "https://wiki.guildwars2.com/images/b/ba/Smash_%28empty_bottle%29.png";
