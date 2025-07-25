@@ -555,7 +555,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in chaosStorms)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectChaosStorm);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectChaosStorm);
             }
         }
     }
