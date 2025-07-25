@@ -272,7 +272,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         {
             case (int)TargetID.Ankka:
                 {
-                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == DeathsEmbraceSkill).ToList();
+                    var casts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == DeathsEmbraceSkill).ToList();
                     castDuration = 10143;
 
                     foreach (CastEvent cast in casts)
@@ -393,7 +393,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
             case (int)TargetID.QuaggansHallucinationNM:
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {
@@ -412,7 +412,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
             case (int)TargetID.QuaggansHallucinationCM:
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {
@@ -431,7 +431,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
             case (int)TargetID.ZhaitansReach:
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {

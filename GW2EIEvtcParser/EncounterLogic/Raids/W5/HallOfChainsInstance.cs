@@ -92,7 +92,7 @@ internal class HallOfChainsInstance : HallOfChains
         {
             foreach (var brokenKing in brokenKings)
             {
-                var firstCombatCast = brokenKing.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillID == SkillIDs.BrokenKingFirstCast);
+                var firstCombatCast = brokenKing.GetCastEvents(log).FirstOrDefault(x => x.SkillID == SkillIDs.BrokenKingFirstCast);
                 if (firstCombatCast == null)
                 {
                     continue;
@@ -121,7 +121,7 @@ internal class HallOfChainsInstance : HallOfChains
             peasants.AddRange(log.AgentData.GetNPCsByID(TargetID.AscalonianPeasant2));
             foreach (var eaterOfSoul in eaterOfSouls)
             {
-                if (!eaterOfSoul.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Any(x => x.CreditedFrom.IsPlayer))
+                if (!eaterOfSoul.GetDamageEvents(null, log).Any(x => x.CreditedFrom.IsPlayer))
                 {
                     continue;
                 }

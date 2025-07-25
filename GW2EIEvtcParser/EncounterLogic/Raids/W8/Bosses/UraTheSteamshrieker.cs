@@ -378,7 +378,7 @@ internal class UraTheSteamshrieker : MountBalrior
         switch (target.ID)
         {
             case (int)TargetID.Ura:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -519,7 +519,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 replay.Decorations.AddBreakbar(target, titanspawnPercentUpdates, titanspawnStates);
                 break;
             case (int)TargetID.LegendaryVentshot:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

@@ -95,7 +95,7 @@ internal class StatueOfDeath : HallOfChains
         {
             case (int)TargetID.EaterOfSouls:
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {
@@ -126,7 +126,7 @@ internal class StatueOfDeath : HallOfChains
             case (int)TargetID.GreenSpirit1:
             case (int)TargetID.GreenSpirit2:
                 {
-                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                    foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                     {
                         switch (cast.SkillID)
                         {

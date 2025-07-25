@@ -243,7 +243,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 float bladeOpeningAngle = 360 * 3 / 32;
                 uint bladeRadius = 1600;
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -435,7 +435,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             int hasHitKc = 0;
             foreach (Player p in log.PlayerList)
             {
-                if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)), log, log.FightData.FightStart, log.FightData.FightEnd).Any())
+                if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)), log).Any())
                 {
                     hasHitKc++;
                 }

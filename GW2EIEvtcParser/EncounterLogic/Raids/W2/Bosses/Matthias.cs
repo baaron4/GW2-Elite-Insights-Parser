@@ -299,7 +299,7 @@ internal class Matthias : SalvationPass
         switch (target.ID)
         {
             case (int)TargetID.Matthias:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -374,7 +374,7 @@ internal class Matthias : SalvationPass
         (long start, long end) lifespan;
 
         // Corruption
-        var corruptedMatthias = p.GetBuffStatus(log, [Corruption1, Corruption2], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var corruptedMatthias = p.GetBuffStatus(log, [Corruption1, Corruption2]).Where(x => x.Value > 0);
         foreach (var seg in corruptedMatthias)
         {
             // Circle on player and overhead icon

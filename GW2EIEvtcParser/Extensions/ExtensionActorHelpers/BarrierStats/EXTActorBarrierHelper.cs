@@ -25,7 +25,15 @@ public abstract class EXTActorBarrierHelper
     protected abstract void InitIncomingBarrierEvents(ParsedEvtcLog log);
 
     public abstract IEnumerable<EXTBarrierEvent> GetOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<EXTBarrierEvent> GetOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetOutgoingBarrierEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
 
     public abstract IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetIncomingBarrierEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
 
 }

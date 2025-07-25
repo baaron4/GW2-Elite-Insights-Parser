@@ -25,7 +25,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
             {
                 if (p.Spec == ParserHelper.Spec.Vindicator)
                 {
-                    _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == SkillIDs.ImperialImpactDodge));
+                    _vindicatorDodges.AddRange(p.GetIntersectingCastEvents(log).Where(x => x.SkillID == SkillIDs.ImperialImpactDodge));
                 }
             }
             _vindicatorDodges.SortByTime();

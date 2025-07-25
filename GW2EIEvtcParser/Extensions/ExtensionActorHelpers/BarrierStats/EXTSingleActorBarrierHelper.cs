@@ -28,7 +28,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
             IReadOnlyDictionary<long, Minions> minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
             foreach (Minions minion in minions.Values)
             {
-                BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log));
             }
             BarrierEvents.SortByTime();
             BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

@@ -495,7 +495,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     const long sorrowFullCastDuration = 11840;
                     const long sorrowHitDelay = 400;
                     const uint sorrowIndicatorSize = 2000;
-                    var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var casts = target.GetAnimatedCastEvents(log).ToList();
 
                     foreach (CastEvent cast in casts)
                     {

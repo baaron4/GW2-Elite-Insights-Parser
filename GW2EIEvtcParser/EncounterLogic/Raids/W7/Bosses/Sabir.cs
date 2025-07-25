@@ -120,7 +120,7 @@ internal class Sabir : TheKeyOfAhdashim
             return phases;
         }
 
-        var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var casts = mainTarget.GetCastEvents(log);
         var wallopingWinds = casts.Where(x => x.SkillID == WallopingWind);
         long start = 0;
         int i = 0;
@@ -184,7 +184,7 @@ internal class Sabir : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)TargetID.Sabir:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
