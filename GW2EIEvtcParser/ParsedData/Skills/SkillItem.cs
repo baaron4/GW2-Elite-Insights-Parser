@@ -75,6 +75,7 @@ public class SkillItem
         { RuneOgreSpawn, "Superior Rune of the Ogre (Spawn Minion)" },
         { RuneGolemancerSpawn, "Superior Rune of the Golemancer (Spawn Minion)" },
         { RunePrivateerSpawn, "Superior Rune of the Privateer (Spawn Minion)" },
+        { FireNova, "Fire Nova (Superior Rune of the Firebrand)" },
         #endregion Runes
         { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
         { PortalExitWhiteMantleWatchwork, "Portal Exit" },
@@ -160,6 +161,7 @@ public class SkillItem
         { FireJurisdictionLevel1, "Fire Jurisdiction (Level 1)" },
         { FireJurisdictionLevel2, "Fire Jurisdiction (Level 2)" },
         { FireJurisdictionLevel3, "Fire Jurisdiction (Level 3)" },
+        { DetonateJurisdiction, "Detonate Jurisdiction" },
         #endregion Guardian
         #region Mesmer
         { PowerReturn, "Power Return" },
@@ -413,6 +415,12 @@ public class SkillItem
         { ArcDPSGenericBreakbar20220307, ParserIcons.Breakbar },
         { ArcDPSDodge20220307, SkillImages.Dodge },
         { Poisoned, BuffImages.Poison },
+        { Crippled, BuffImages.Crippled },
+        { Chilled, BuffImages.Chilled },
+        { Weakness, BuffImages.Weakness },
+        { Immobile, BuffImages.Immobile },
+        { Slow, BuffImages.Slow },
+        { ShockingAura, BuffImages.ShockingAura },
         #region ComboIcons
         // Combos
         { WaterBlastCombo1, ParserIcons.Healing },
@@ -484,6 +492,7 @@ public class SkillItem
         { RuneOgreSpawn, ItemImages.SuperiorRuneOfTheOgre },
         { RuneGolemancerSpawn, ItemImages.SuperiorRuneOfTheGolemancer },
         { RunePrivateerSpawn, ItemImages.SuperiorRuneOfThePrivateer },
+        { FireNova, ItemImages.SuperiorRuneOfTheFirebrand },
 #endregion ItemIcons
         #region MountIcons
         { BondOfLifeSkill, SkillImages.BondOfLife },
@@ -509,6 +518,16 @@ public class SkillItem
         { WarclawChainPull2, SkillImages.WarclawChainPull },
         { WarclawChainPullPvE, SkillImages.WarclawChainPull },
         { WarclawDashWildClaws, SkillImages.WarclawDash },
+        // Jackal
+        { JackalPounceDamage, SkillImages.JackalPounce },
+        // Griffon
+        { GriffonSwoopDamage, SkillImages.GriffonSwoop },
+        // Beetle
+        { BeetleRollOutDamage, SkillImages.BeetleRollOut },
+        // Skimmer
+        { SkimmerBarrelRollDamage, SkillImages.SkimmerBarrelRoll },
+        // Springer
+        { SpringerCannonballDamage, SkillImages.SpringerCannonball },
         #endregion MountIcons
         #region RelicIcons
         // Relics
@@ -597,6 +616,8 @@ public class SkillItem
         { LesserCleansingFire, SkillImages.CleansingFire },
         { FlashFreezeDelayed, SkillImages.FlashFreeze },
         { FlowLikeWaterHealing, TraitImages.FlowLikeWater },
+        { DebrisTornado, SkillImages.DebrisTornado },
+        { LesserLavaFont, SkillImages.LavaFont },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -630,6 +651,8 @@ public class SkillItem
         { ConduitSurge, SkillImages.ConduitSurge },
         { CrashDown2, SkillImages.CrashDown },
         { SystemShockerBarrier, TraitImages.SystemShocker },
+        { ExigencyProtocol, TraitImages.ExigencyProtocol },
+        { GlueBomb, SkillImages.GlueBomb },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
@@ -674,10 +697,12 @@ public class SkillItem
             { FireJurisdictionLevel1, SkillImages.FireJurisdiction },
             { FireJurisdictionLevel2, SkillImages.FireJurisdiction },
             { FireJurisdictionLevel3, SkillImages.FireJurisdiction },
+            { DetonateJurisdiction, SkillImages.FireJurisdiction },
             { DaybreakingSlashWave, SkillImages.DaybreakingSlash },
             { BindingBladeSelf, SkillImages.BindingBlade },
             { ReceiveTheLightPulse, SkillImages.ReceiveTheLight },
             { SolarStormIlluminatedHealing, SkillImages.SolarStorm },
+            { HammerOfWisdom, SkillImages.HammerOfWisdom },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, TraitImages.HealingPrism },
@@ -723,6 +748,9 @@ public class SkillItem
             { PhantasmalLancerDamage, SkillImages.PhantasmalLancher },
             { JabSpearClone, SkillImages.JabMesmerSpear },
             { StabSpearClone, SkillImages.StabMesmerSpear },
+            { PhantasmalSwordsman, SkillImages.PhantasmalSwordsman },
+            { PhantasmalSeekingAxe, TraitImages.PhantomPain },
+            { PhantasmalSpinningAxe, TraitImages.PhantomPain },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -883,6 +911,9 @@ public class SkillItem
             { UnleashEnergySkyChak, SkillImages.UnleashEnergySkyChak },
             { ChargingBiteShark, SkillImages.ChargingBiteShark },
             { StaringVoidSpinegazer, SkillImages.StaringVoidSpinegazer },
+            { CripplingThrow, SkillImages.CripplingThrow },
+            { GlyphOfEmpowermentSkill, SkillImages.GlyphOfTheStars },
+            { GlyphOfEmpowermentSkillCA, SkillImages.GlyphOfTheStarsCelestialAvatar },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
@@ -934,6 +965,7 @@ public class SkillItem
             { AbyssalStrike_SecondHit, SkillImages.AbyssalStrike },
             { BlitzMinesDrop, SkillImages.BlitzMines },
             { RedemptorsSermonHeal, TraitImages.RedemptorsSermon },
+            { ManiacalPulse, TraitImages.ManiacalPersistence },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
@@ -984,6 +1016,9 @@ public class SkillItem
             { DarkSaviorHealing, TraitImages.ShadowSavior },
             { ShieldingRestorationBarrier, TraitImages.ShieldingRestoration },
             { DebilitatingArcRoll, SkillImages.DebilitatingArc },
+            { ThousandNeedlesDamage, SkillImages.ThousandNeedles },
+            { ThrowLavaRock, SkillImages.ThrowLavaRock },
+            { ImpalingLotusDamage, TraitImages.LotusTraining },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },
@@ -1031,6 +1066,10 @@ public class SkillItem
             { SpearmarshalsSupportBombard, SkillImages.SpearmarshalsSupport },
             { ShrugItOffHeal, TraitImages.ShrugItOff },
             { BerserkEndSkill, SkillImages.BerserkerEnd },
+            { Stab, SkillImages.Stab },
+            { Inspire, SkillImages.Inspire },
+            { FuriousRally, SkillImages.BannerOfDiscipline },
+            { PlantStandard, SkillImages.PlantStandard },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },
