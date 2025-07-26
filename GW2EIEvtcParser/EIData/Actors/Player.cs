@@ -11,6 +11,7 @@ public class Player : PlayerActor
 {
 
     private List<GenericSegment<GUID>>? CommanderStates = null;
+    private bool _squadless = false;
     // Constructors
     internal Player(AgentItem agent, bool noSquad) : base(agent)
     {
@@ -28,17 +29,23 @@ public class Player : PlayerActor
             throw new EvtcAgentException("Missing Group on Player");
         }
         Account = name[1].TrimStart(':');
+        _squadless = noSquad;
         Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
     }
 
 
     internal void MakeSquadless()
     {
+        _squadless = true;
         Group = 1;
     }
 
     internal void OverrideGroup(int group)
     {
+        if (_squadless)
+        {
+            return;
+        }
         Group = group;
     }
 

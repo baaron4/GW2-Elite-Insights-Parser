@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 {
-    private SingleActor _actor;
+    private readonly SingleActor _actor;
     private AgentItem _agentItem => _actor.AgentItem;
 
     private CachingCollectionWithTarget<int[]>? _barrier1S;

@@ -29,6 +29,10 @@ public class AgentItem
     private List<MergedAgentItem>? _merges;
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
+    public MergedAgentItem? ParentAgentItem { get; private set; }
+    private List<MergedAgentItem>? _parentAgentItemOf;
+    public IReadOnlyList<MergedAgentItem> ParentAgentItemOf => _parentAgentItemOf ?? [];
+
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
 
@@ -99,7 +103,7 @@ public class AgentItem
         Unamed = Name.Contains("ch" + ID + "-") || Name.Contains("gd" + ID + "-");
     }
 
-    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, AgentType.NPC, toughness, healing, condition, concentration, hbWidth, hbHeight)
+    internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, type, toughness, healing, condition, concentration, hbWidth, hbHeight)
     {
         InstID = instid;
         FirstAware = firstAware;
@@ -126,6 +130,7 @@ public class AgentItem
         Master = other.Master;
         IsFake = other.IsFake;
         Unamed = other.Unamed;
+        IsNotInSquadFriendlyPlayer = other.IsNotInSquadFriendlyPlayer;
     }
 
     internal AgentItem()
@@ -434,12 +439,7 @@ public class AgentItem
     /// </summary>
     public bool HasBuff(ParsedEvtcLog log, long buffID, long time, long window = 0)
     {
-        SingleActor? actor = log.FindActor(this);
-        if (actor == null)
-        {
-            return false;
-        }
-        return actor.HasBuff(log, buffID, time, window);
+        return log.FindActor(this).HasBuff(log, buffID, time, window);
     }
 
     /// <summary>
@@ -659,6 +659,20 @@ public class AgentItem
             _merges = [];
         }
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
+    }
+
+    private void AddParentOf(AgentItem child)
+    {
+        if (_parentAgentItemOf == null)
+        {
+            _parentAgentItemOf = [];
+        }
+        _parentAgentItemOf.Add(new MergedAgentItem(child, child.FirstAware, child.LastAware));
+    }
+    internal void AddParentFrom(AgentItem parent)
+    {
+        ParentAgentItem = new MergedAgentItem(parent, FirstAware, LastAware);
+        parent.AddParentOf(this);
     }
 }
 

@@ -40,7 +40,7 @@ public class Minions : Actor
             DamageEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                DamageEvents.AddRange(minion.GetDamageEvents(null, log));
+                DamageEvents.AddRange(minion.GetDamageEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             DamageEvents.SortByTime();
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -74,7 +74,7 @@ public class Minions : Actor
             DamageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log));
+                DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             DamageTakenEvents.SortByTime();
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -110,7 +110,7 @@ public class Minions : Actor
             BreakbarDamageEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log));
+                BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             BreakbarDamageEvents.SortByTime();
             BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -144,7 +144,7 @@ public class Minions : Actor
             BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log));
+                BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             BreakbarDamageTakenEvents.SortByTime();
             BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -182,7 +182,7 @@ public class Minions : Actor
             OutgoingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                OutgoingCrowdControlEvents.AddRange(minion.GetOutgoingCrowdControlEvents(null, log));
+                OutgoingCrowdControlEvents.AddRange(minion.GetOutgoingCrowdControlEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             OutgoingCrowdControlEvents.SortByTime();
             OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -216,7 +216,7 @@ public class Minions : Actor
             IncomingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                IncomingCrowdControlEvents.AddRange(minion.GetIncomingCrowdControlEvents(null, log));
+                IncomingCrowdControlEvents.AddRange(minion.GetIncomingCrowdControlEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             IncomingCrowdControlEvents.SortByTime();
             IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -279,19 +279,19 @@ public class Minions : Actor
         {
             return true;
         }
-        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log).Any())
+        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log, Master.FirstAware, Master.LastAware).Any())
         {
             return true;
         }
-        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log).Any())
+        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log, Master.FirstAware, Master.LastAware).Any())
         {
             return true;
         }
-        if (GetDamageEvents(null, log).Any())
+        if (GetDamageEvents(null, log, Master.FirstAware, Master.LastAware).Any())
         {
             return true;
         }
-        if (GetCastEvents(log).Any(x => x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw && x.SkillID != SkillIDs.WeaponSwap && x.SkillID != SkillIDs.MirageCloakDodge))
+        if (GetCastEvents(log, Master.FirstAware, Master.LastAware).Any(x => x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw && x.SkillID != SkillIDs.WeaponSwap && x.SkillID != SkillIDs.MirageCloakDodge))
         {
             return true;
         }
