@@ -31,7 +31,7 @@ public class AgentItem
 
     public MergedAgentItem? ParentAgentItem { get; private set; }
     private List<MergedAgentItem>? _parentAgentItemOf;
-    public IReadOnlyList<MergedAgentItem> ParentAgentItemOf => _merges ?? [];
+    public IReadOnlyList<MergedAgentItem> ParentAgentItemOf => _parentAgentItemOf ?? [];
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
