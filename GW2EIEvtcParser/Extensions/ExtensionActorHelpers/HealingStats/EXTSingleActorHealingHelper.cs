@@ -7,6 +7,7 @@ namespace GW2EIEvtcParser.Extensions;
 public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 {
     private readonly SingleActor _actor;
+    private AgentItem _agentItem => _agentItem;
 
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>> _typedSelfHealEvents = [];
 
@@ -27,7 +28,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
     {
         if (HealEvents == null)
         {
-            HealEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
+            HealEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
             foreach (var minion in _actor.GetMinions(log).Values)
             {
                 HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -144,7 +145,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
     {
         if (HealReceivedEvents == null)
         {
-            HealReceivedEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));
+            HealReceivedEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_agentItem).Where(x => x.ToFriendly));
             HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
@@ -153,7 +154,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     public IEnumerable<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _actor.AgentItem);
+        return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _agentItem);
     }
 
     internal IReadOnlyList<EXTHealingEvent> GetJustActorTypedOutgoingHealEvents(SingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
@@ -166,7 +167,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
         if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
         {
-            dls = GetTypedOutgoingHealEvents(target, log, start, end, healingType).Where(x => x.From == _actor.AgentItem).ToList();
+            dls = GetTypedOutgoingHealEvents(target, log, start, end, healingType).Where(x => x.From == _agentItem).ToList();
             healEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
 

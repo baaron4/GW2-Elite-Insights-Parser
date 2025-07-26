@@ -396,6 +396,100 @@ public static class ParserHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
+    internal static void CopyEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to)
+    {
+        // Events copied
+        var copied = new List<CombatItem>();
+        // Redirect combat events
+        foreach (CombatItem evt in combatData)
+        {
+            if (to.InAwareTimes(evt.Time))
+            {
+                var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
+                var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
+                if (srcMatchesAgent)
+                {
+                    evt.OverrideSrcAgent(to);
+                }
+                if (dstMatchesAgent)
+                {
+                    evt.OverrideDstAgent(to);
+                }
+            }
+        }
+        // Copy states
+        var stateEventsToCopy = new List<CombatItem>();
+        Func<CombatItem, bool> canCopyFromAgent = (evt) => evt.SrcMatchesAgent(redirectFrom);
+        var stateChangeCopyFromAgentConditions = new List<Func<CombatItem, bool>>()
+        {
+            (x) => x.IsStateChange == StateChange.BreakbarState,
+            (x) => x.IsStateChange == StateChange.MaxHealthUpdate,
+            (x) => x.IsStateChange == StateChange.HealthUpdate,
+            (x) => x.IsStateChange == StateChange.BreakbarPercent,
+            (x) => x.IsStateChange == StateChange.BarrierUpdate,
+            (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
+            (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
+            (x) => x.IsStateChange == StateChange.Position,
+            (x) => x.IsStateChange == StateChange.Rotation,
+            (x) => x.IsStateChange == StateChange.Velocity,
+        };
+        foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyFromAgentConditions)
+        {
+            CombatItem? stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAgent(x) && x.Time <= to.FirstAware);
+            if (stateToCopy != null)
+            {
+                stateEventsToCopy.Add(stateToCopy);
+            }
+        }
+        if (stateEventsToCopy.Count > 0)
+        {
+            foreach (CombatItem c in stateEventsToCopy)
+            {
+                var cExtra = new CombatItem(c);
+                cExtra.OverrideTime(to.FirstAware - 1); // To make sure they are put before all actual agent events
+                cExtra.OverrideSrcAgent(to);
+                combatData.Add(cExtra);
+                copied.Add(cExtra);
+            }
+        }
+        if (copied.Count > 0)
+        {
+            combatData.SortByTime();
+            foreach (CombatItem c in copied)
+            {
+                c.OverrideTime(to.FirstAware);
+            }
+        }
+        // Redirect NPC and Gadget masters
+        IReadOnlyList<AgentItem> masterRedirectionCandidates = [
+             .. agentData.GetAgentByType(AgentItem.AgentType.NPC),
+             .. agentData.GetAgentByType(AgentItem.AgentType.Gadget)
+            ];
+
+        to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
+    }
+
+    internal static List<AgentItem> SplitPlayerPerSpecAndSubgroup(List<CombatItem> originalPlayerCombatEvents, List<CombatItem> enterCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
+    {
+        Spec previousSpec = Spec.Unknown;
+        int previousSubGroup = -1;
+        var newPlayers = new List<AgentItem>(enterCombatEvents.Count + 1);
+        for (var i = 0; i < enterCombatEvents.Count; i++)
+        {
+            var enterCombat = new EnterCombatEvent(enterCombatEvents[i],agentData);
+            if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousSubGroup)
+            {
+                long start = enterCombat.Time;
+                long end = i < enterCombatEvents.Count - 1 ? enterCombatEvents[i + 1].Time : originalPlayer.LastAware;
+
+
+                previousSpec = enterCombat.Spec;
+                previousSubGroup = enterCombat.Subgroup;
+            }
+        }
+        return newPlayers;
+    }
+
     internal static void RegroupSameInstidNPCs(AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var toRemove = new List<AgentItem>(100);

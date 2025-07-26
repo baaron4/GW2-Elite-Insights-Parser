@@ -57,7 +57,7 @@ public class AgentData
         {
             instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
         }
-        var agent = new AgentItem(agentValue, name, spec, ID, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
+        var agent = new AgentItem(agentValue, name, spec, ID, AgentItem.AgentType.NPC, instID, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight, start, end, isFake);
         _allAgentsList.Add(agent);
         _dirty |= AgentDataDirtyStatus.AgentsDirty;
         return agent;
@@ -66,6 +66,25 @@ public class AgentData
     internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, TargetID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
     {
         return AddCustomNPCAgent(start, end, name, spec, (int)ID, isFake, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
+    }
+
+    internal AgentItem AddCustomAgentFrom(AgentItem from, long start, long end, ParserHelper.Spec spec)
+    {
+        var rnd = new Random();
+        ulong agentValue = 0;
+        while (AgentValues.Contains(agentValue) || agentValue == 0)
+        {
+            agentValue = (ulong)rnd.Next(int.MaxValue / 2, int.MaxValue);
+        }
+        ushort instID = 0;
+        while (InstIDValues.Contains(instID) || instID == 0)
+        {
+            instID = (ushort)rnd.Next(ushort.MaxValue / 2, ushort.MaxValue);
+        }
+        var agent = new AgentItem(agentValue, from.Name, spec, 0, from.Type, instID, from.Toughness, from.Healing, from.Condition, from.Concentration, from.HitboxWidth, from.HitboxHeight, start, end, from.IsFake);
+        _allAgentsList.Add(agent);
+        _dirty |= AgentDataDirtyStatus.AgentsDirty;
+        return agent;
     }
 
     public AgentItem GetAgent(ulong agentAddress, long time)

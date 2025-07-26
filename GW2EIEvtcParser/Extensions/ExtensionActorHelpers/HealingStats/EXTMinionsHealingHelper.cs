@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.Metrics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions;
@@ -7,6 +8,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 {
     private readonly Minions _minions;
     private IReadOnlyList<NPC> _minionList => _minions.MinionList;
+    private SingleActor Master => _minions.Master;
 
     internal EXTMinionsHealingHelper(Minions minions) : base()
     {
@@ -33,26 +35,6 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
         return HealEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    /// <param name="healEventsList">Append to this list</param>
-    public void AppendOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, List<EXTHealingEvent> healEventsList)
-    {
-        InitHealEvents(log);
-
-        if (target != null)
-        {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
-            {
-                healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
-            }
-
-            return;
-        }
-
-        healEventsList.AddRange(HealEvents.Where(x => x.Time >= start && x.Time <= end));
-
-        return;
-    }
-
 #pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitHealEvents(ParsedEvtcLog log)
     {
@@ -62,7 +44,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
             HealEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {
-                minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, HealEvents);
+                HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             HealEvents.SortByTime();
             HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -89,26 +71,6 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
         return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    /// <param name="healEventsList">Append to this list</param>
-    /// <exception cref="InvalidOperationException">Heal Stats ext missing</exception>
-    public void AppendIncomingHealEvents(SingleActor target, ParsedEvtcLog log, long start, long end, List<EXTHealingEvent> healEventsList)
-    {
-        InitIncomingHealEvents(log);
-        if (target != null)
-        {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
-            {
-                healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
-            }
-
-            return;
-        }
-
-        healEventsList.AddRange(HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end));
-
-        return;
-    }
-
 #pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitIncomingHealEvents(ParsedEvtcLog log)
     {
@@ -118,7 +80,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
             HealReceivedEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {
-                minion.EXTHealing.AppendIncomingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, HealReceivedEvents);
+                HealReceivedEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             HealReceivedEvents.SortByTime();
             HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
