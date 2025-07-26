@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.Extensions;
 public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 {
     private readonly SingleActor _actor;
-    private AgentItem _agentItem => _agentItem;
+    private AgentItem _agentItem => _actor.AgentItem;
 
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>> _typedSelfHealEvents = [];
 
