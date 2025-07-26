@@ -160,7 +160,7 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void RedirectPlayerEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyList<CombatItem> combatDataFrom, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to)
+    private static void RedirectPlayerEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyList<CombatItem> combatDataFrom, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to)
     {
         if (!(redirectFrom.IsPlayer && to.IsPlayer))
         {
