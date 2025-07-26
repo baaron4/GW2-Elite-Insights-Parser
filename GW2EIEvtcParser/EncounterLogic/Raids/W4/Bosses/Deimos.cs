@@ -113,7 +113,7 @@ internal class Deimos : BastionOfThePenitent
     {
         foreach (AgentItem gadget in gadgets)
         {
-            RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, gadget, [gadget], deimos, false,
+            RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, gadget, [gadget], deimos, false,
                 (evt, from, to) =>
                 {
                     // Only keep damage events from arms
