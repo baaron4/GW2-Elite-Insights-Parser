@@ -160,7 +160,7 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    private static void RedirectPlayerEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyList<CombatItem> combatDataFrom, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to)
+    private static List<CombatItem> RedirectPlayerEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyList<CombatItem> combatDataFrom, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to)
     {
         if (!(redirectFrom.IsPlayer && to.IsPlayer))
         {
@@ -169,22 +169,22 @@ public static class AgentManipulationHelper
         // Redirect combat events
         var buffOnFromEvents = new List<CombatItem>();
         var copied = new List<CombatItem>();
+        var combatItems = new List<CombatItem>();
         foreach (CombatItem evt in combatDataFrom)
         {
-            // TODO: Special handling for buffs
+            // TODO: Special handling for buffs, we need to handle buffs that were applied before first aware and are still present
             if (evt.IsBuffApply() && evt.DstMatchesAgent(redirectFrom, extensions))
             {
                 buffOnFromEvents.Add(evt);
-                continue;
             }
             if (evt.IsBuffRemoval() && evt.SrcMatchesAgent(redirectFrom, extensions))
             {
                 buffOnFromEvents.Add(evt);
-                continue;
             }
             // The rest
             if (to.InAwareTimes(evt.Time))
             {
+                combatItems.Add(evt);
                 var srcMatchesAgent = evt.SrcMatchesAgent(redirectFrom, extensions);
                 var dstMatchesAgent = evt.DstMatchesAgent(redirectFrom, extensions);
                 if (srcMatchesAgent)
@@ -233,6 +233,8 @@ public static class AgentManipulationHelper
         }
         if (copied.Count > 0)
         {
+            combatItems.AddRange(copied);
+            combatItems.SortByTime();
             combatData.SortByTime();
             foreach (CombatItem c in copied)
             {
@@ -253,47 +255,39 @@ public static class AgentManipulationHelper
             }
         }
         to.AddParentFrom(redirectFrom);
+        return combatItems;
     }
 
     internal static void SplitPlayerPerSpecAndSubgroup(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
     {
-        var previousSpec = Spec.Unknown;
-        var previousGroup = -1;
         var previousPlayerAgent = originalPlayer;
-        var combatItemsToUse = combatData.Where(x => x.SrcMatchesAgent(previousPlayerAgent) || x.DstMatchesAgent(previousPlayerAgent)).ToList();
-        var enterCombatEvents = combatData.Where(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(previousPlayerAgent)).Select(x => new EnterCombatEvent(x, agentData)).Where(x => x.Spec != Spec.Unknown).ToList();
+        var player = new Player(previousPlayerAgent, false);
+        var previousSpec = player.Spec;
+        var previousGroup = player.Group;
+        var previousCombatItems = combatData.Where(x => x.SrcMatchesAgent(previousPlayerAgent) || x.DstMatchesAgent(previousPlayerAgent)).ToList();
+        var enterCombatEvents = previousCombatItems.Where(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(previousPlayerAgent)).Select(x => new EnterCombatEvent(x, agentData)).Where(x => x.Spec != Spec.Unknown).ToList();
         var newPlayers = new List<AgentItem>(enterCombatEvents.Count);
         for (var i = 0; i < enterCombatEvents.Count; i++)
         {
             var enterCombat = enterCombatEvents[i];
-            // We can leave the first enter combat alone
-            if (i == 0)
+            if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
             {
                 previousSpec = enterCombat.Spec;
                 previousGroup = enterCombat.Subgroup;
-            } 
-            else
-            {
-                if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
-                {
-                    previousSpec = enterCombat.Spec;
-                    previousGroup = enterCombat.Subgroup;
-                    // Redirect everything during aware times with the exception of:
-                    // - copy previous state changes in a similar manner to RedirectEventsAndCopyPreviousStates
-                    // - copy all buff events whose stacks are active during aware time
-                    // if a minion is alive during aware time but also before FirstAware, they need to be split using the same rule
-                    long start = enterCombat.Time;
-                    long end = previousPlayerAgent.LastAware;
+                // Redirect everything during aware times with the exception of:
+                // - copy previous state changes in a similar manner to RedirectEventsAndCopyPreviousStates
+                // - copy all buff events whose stacks are active during aware time
+                // if a minion is alive during aware time but also before FirstAware, they need to be split using the same rule
+                long start = enterCombat.Time;
+                long end = previousPlayerAgent.LastAware;
 
-                    var newPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, start, end, enterCombat.Spec);
-                    newPlayers.Add(newPlayerAgent);
+                var newPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, start, end, enterCombat.Spec);
+                newPlayers.Add(newPlayerAgent);
 
-                    RedirectPlayerEventsAndCopyPreviousStates(combatData, combatItemsToUse, extensions, agentData, previousPlayerAgent, newPlayerAgent);
+                previousCombatItems = RedirectPlayerEventsAndCopyPreviousStates(combatData, previousCombatItems, extensions, agentData, previousPlayerAgent, newPlayerAgent);
 
-                    previousPlayerAgent.OverrideAwareTimes(previousPlayerAgent.FirstAware, start);
-                    previousPlayerAgent = newPlayerAgent;
-                    combatItemsToUse = combatData.Where(x => x.SrcMatchesAgent(previousPlayerAgent) || x.DstMatchesAgent(previousPlayerAgent)).ToList();
-                }
+                previousPlayerAgent.OverrideAwareTimes(previousPlayerAgent.FirstAware, start);
+                previousPlayerAgent = newPlayerAgent;
             }
         }
     }

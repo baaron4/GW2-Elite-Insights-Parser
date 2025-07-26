@@ -71,7 +71,7 @@ internal class Slothasor : SalvationPass
                 if (transfoExit != null)
                 {
                     var enterCombat = combatData.GetEnterCombatEvents(transformedPlayer.AgentItem).Where(x => x.Time <= transfoExit.Time + 1000).LastOrDefault(x => x.Spec != Spec.Unknown);
-                    if (enterCombat != null && enterCombat.Subgroup != 0)
+                    if (enterCombat != null)
                     {
                         transformedPlayer.AgentItem.OverrideSpec(enterCombat.Spec);
                         transformedPlayer.OverrideGroup(enterCombat.Subgroup);

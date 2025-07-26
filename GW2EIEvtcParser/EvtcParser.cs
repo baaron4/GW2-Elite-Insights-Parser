@@ -911,20 +911,25 @@ public class EvtcParser
             }
         }
 
+        _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
         AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
 
-        operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
-        foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
+        if (_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld)
         {
-            AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
-        }
-        foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
-        {
-            AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
+            {
+                AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
+            }
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting non squad players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
+            {
+                AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
+            }
         }
 
-        _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating players");
         CompletePlayers(operation);
@@ -982,22 +987,24 @@ public class EvtcParser
                 operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (gone before fight start)");
             }
         }
-
-        foreach (Player p in _playerList)
+        if (!(_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld))
         {
-            // check for players who have spawned after fight start
-            if (p.FirstAware > 100)
+            foreach (Player p in _playerList)
             {
-                // look for a spawn event close to first aware
-                CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn
-                    && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
-                if (spawnEvent != null)
+                // check for players who have spawned after fight start
+                if (p.FirstAware > 100)
                 {
-                    var damageEvents = _combatItems.Where(x => x.IsDamage() && (x.SrcMatchesAgent(p.AgentItem) || x.DstMatchesAgent(p.AgentItem)));
-                    if (!damageEvents.Any())
+                    // look for a spawn event close to first aware
+                    CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn
+                        && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
+                    if (spawnEvent != null)
                     {
-                        agentsToRemove.Add(p.AgentItem);
-                        operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start and did not participate)");
+                        var damageEvents = _combatItems.Where(x => x.IsDamage() && (x.SrcMatchesAgent(p.AgentItem) || x.DstMatchesAgent(p.AgentItem)));
+                        if (!damageEvents.Any())
+                        {
+                            agentsToRemove.Add(p.AgentItem);
+                            operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start and did not participate)");
+                        }
                     }
                 }
             }

@@ -291,20 +291,6 @@ public abstract class FightLogic
 
     internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
     {
-        if (IsInstance || ParseMode == ParseModeEnum.WvW)
-        {
-            foreach (Player p in players)
-            {
-                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
-                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault(x => x.Spec != Spec.Unknown);
-                if (enterCombat != null && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
-                {
-                    p.AgentItem.OverrideSpec(enterCombat.Spec);
-                    p.OverrideGroup(enterCombat.Subgroup);
-                }
-            }
-            return;
-        }
         //
         long threshold = fightData.FightStart + 5000;
         foreach (Player p in players)
@@ -318,7 +304,7 @@ public abstract class FightLogic
             {
                 enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault(x => x.Spec != Spec.Unknown);
             }
-            if (enterCombat != null && enterCombat.Subgroup != 0)
+            if (enterCombat != null)
             {
                 p.AgentItem.OverrideSpec(enterCombat.Spec);
                 p.OverrideGroup(enterCombat.Subgroup);
@@ -403,7 +389,13 @@ public abstract class FightLogic
     {
         if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
         {
-            return [ new("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations") ];
+            List<ErrorEvent> errorMessages = [new("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations"),           
+                ];
+            if (IsInstance || ParseMode == ParseModeEnum.WvW || ParseMode == ParseModeEnum.OpenWorld)
+            {
+                errorMessages.Add(new("Buffs may be not accurate if specialization or subgroups have changed during the instance."));
+            }
+            return errorMessages;
         }
         return [ ];
     }
