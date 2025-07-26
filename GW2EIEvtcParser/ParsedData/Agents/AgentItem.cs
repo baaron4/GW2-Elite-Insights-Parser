@@ -169,6 +169,10 @@ public class AgentItem
 
     internal void OverrideID(int id, AgentData agentData)
     {
+        if (IsPlayer)
+        {
+            return;
+        }
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.SpeciesDirty);
         ID = id;
     }
@@ -597,12 +601,20 @@ public class AgentItem
 
     public bool IsNonIdentifiedSpecies()
     {
+        if (IsPlayer)
+        {
+            return false;
+        }
         return IsUnknown || IsSpecies(NonIdentifiedSpecies);
     }
 
     public bool IsSpecies(int id)
     {
-        return !IsPlayer && ID == id;
+        if (IsPlayer)
+        {
+            return false;
+        }
+        return ID == id;
     }
 
 
@@ -644,7 +656,7 @@ public class AgentItem
     {
         if (_merges == null)
         {
-            _merges = new List<MergedAgentItem>();
+            _merges = [];
         }
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
     }
