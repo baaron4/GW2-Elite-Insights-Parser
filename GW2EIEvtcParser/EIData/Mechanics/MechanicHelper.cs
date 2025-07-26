@@ -26,7 +26,7 @@ internal static class MechanicHelper
 
     public static SingleActor? FindPlayerActor(ParsedEvtcLog log, AgentItem a)
     {
-        if (log.PlayerAgents.Contains(a))
+        if (a.IsPlayer)
         {
             return log.FindActor(a);
         }

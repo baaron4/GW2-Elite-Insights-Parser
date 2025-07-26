@@ -675,6 +675,15 @@ public class AgentItem
         ParentAgentItem = new MergedAgentItem(parent, FirstAware, LastAware);
         parent.AddParentOf(this, agentData);
     }
+
+    internal AgentItem FindActiveAgent(long time)
+    {
+        if (ParentAgentItemOf.Count == 0)
+        {
+            return this;
+        }
+        return ParentAgentItemOf.FirstOrNull((in MergedAgentItem x) => x.Merged.InAwareTimes(time))?.Merged ?? this;
+    }
 }
 
 public static partial class ListExt

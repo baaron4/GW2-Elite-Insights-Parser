@@ -187,7 +187,8 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem);
+            var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == agentItemToCheck);
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
@@ -217,7 +218,7 @@ public abstract partial class SingleActor : Actor
                 }
             }
             // gadget, string based
-            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem);
+            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.GetFinalMaster() == agentItemToCheck);
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {
@@ -688,7 +689,9 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
+
+        var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+        return GetDamageEvents(target, log, start, end).Where(x => x.From == agentItemToCheck);
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
@@ -737,7 +740,8 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+            var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == agentItemToCheck).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -752,7 +756,8 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != AgentItem).ToList();
+            var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != agentItemToCheck).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -764,7 +769,8 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
+        var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == agentItemToCheck);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -841,7 +847,8 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem);
+        var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == agentItemToCheck);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting

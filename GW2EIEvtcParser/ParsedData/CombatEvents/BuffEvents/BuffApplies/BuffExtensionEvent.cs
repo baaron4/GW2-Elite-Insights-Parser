@@ -28,6 +28,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
             if (ExtendedDuration > 1)
             {
                 By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance);
+                By = By.ParentAgentItem?.Merged ?? By;
             }
         }
     }
