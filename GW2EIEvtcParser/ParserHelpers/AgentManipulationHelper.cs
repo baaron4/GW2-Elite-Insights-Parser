@@ -171,7 +171,7 @@ public static class AgentManipulationHelper
         var copied = new List<CombatItem>();
         foreach (CombatItem evt in combatDataFrom)
         {
-            // Special handling for buffs
+            // TODO: Special handling for buffs
             if (evt.IsBuffApply() && evt.DstMatchesAgent(redirectFrom, extensions))
             {
                 buffOnFromEvents.Add(evt);
@@ -239,7 +239,7 @@ public static class AgentManipulationHelper
                 c.OverrideTime(to.FirstAware);
             }
         }
-        // TODO overlapping minions
+        // TODO: overlapping minions
         // Redirect NPC and Gadget masters
         IReadOnlyList<AgentItem> masterRedirectionCandidates = [
              .. agentData.GetAgentByType(AgentItem.AgentType.NPC),
