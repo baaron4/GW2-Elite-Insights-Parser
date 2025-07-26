@@ -130,6 +130,7 @@ public class AgentItem
         Master = other.Master;
         IsFake = other.IsFake;
         Unamed = other.Unamed;
+        IsNotInSquadFriendlyPlayer = other.IsNotInSquadFriendlyPlayer;
     }
 
     internal AgentItem()
