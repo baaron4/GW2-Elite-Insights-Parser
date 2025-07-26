@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class PlayerDstNoHealthDamageMechanic : PlayerDstSkillMechanic<HealthDamageEvent>
 {
 
-    public PlayerDstNoHealthDamageMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown, (log, id) => log.CombatData.GetDamageData(id))
+    public PlayerDstNoHealthDamageMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

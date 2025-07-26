@@ -231,7 +231,7 @@
                         return false;
                     } else if (this.hideUnconditionalProc && skill.unconditionalProc) {
                         return false;
-                    }else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc) {
+                    } else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc && !skill.unconditionalProc) {
                         return false;
                     }
                 } else if (this.hideSmallTime) {

@@ -277,7 +277,7 @@ internal class BanditTrio : SalvationPass
         switch (target.ID)
         {
             case (int)TargetID.Berg:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -298,7 +298,7 @@ internal class BanditTrio : SalvationPass
                 }
                 break;
             case (int)TargetID.Zane:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

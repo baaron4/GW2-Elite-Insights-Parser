@@ -574,7 +574,7 @@ internal class Deimos : BastionOfThePenitent
         {
             case (int)TargetID.Deimos:
                 var hasSaul = log.AgentData.GetNPCsByID(TargetID.Saul).Any(x => x.InAwareTimes(target.FirstAware, target.FirstAware + 20000));
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

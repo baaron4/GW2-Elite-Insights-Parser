@@ -356,7 +356,7 @@ internal class DecimaTheStormsinger : MountBalrior
         {
             case (int)TargetID.Decima:
             case (int)TargetID.DecimaCM:
-                var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetAnimatedCastEvents(log).ToList();
 
                 // Thrumming Presence - Red Ring around Decima
                 var thrummingSegments = target.GetBuffStatus(log, target.IsSpecies(TargetID.DecimaCM) ? ThrummingPresenceBuffCM : ThrummingPresenceBuff)
@@ -640,7 +640,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 AddBeam(log, replay, redBeamWidthCM, redBeamsCM, Colors.Red);
                 break;
             case (int)TargetID.TranscendentBoulder:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

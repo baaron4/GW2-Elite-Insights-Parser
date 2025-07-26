@@ -189,7 +189,7 @@ internal static class FirebrandHelper
         // Scorched Aftermath
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandScorchedAftermath1, out var scorchedAftermath))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ScorchedAftermath, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ScorchedAftermath);
             foreach (EffectEvent effect in scorchedAftermath)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);

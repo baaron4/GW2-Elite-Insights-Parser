@@ -126,7 +126,7 @@ internal class SuperKodanBrothers : Bjora
             phases.Add(phase);
         }
         //
-        var teleports = voice.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == KodanTeleport);
+        var teleports = voice.GetCastEvents(log).Where(x => x.SkillID == KodanTeleport);
         long tpCount = 0;
         long preTPPhaseStart = 0;
         foreach (CastEvent teleport in teleports)

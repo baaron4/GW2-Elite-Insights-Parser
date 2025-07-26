@@ -81,6 +81,8 @@ public static class EffectGUIDs
     public static readonly GUID MesmerMentalCollapse120Radius = new("15C98898B2E33A49A7BAE3DFE99A2584");
     public static readonly GUID MesmerMentalCollapse240Radius = new("4590C8949239AE419CEC0F9053548A6F");
     public static readonly GUID MesmerMentalCollapse360Radius = new("674B586AEBEACC419A1EA44FE112F027");
+    public static readonly GUID MesmerChaosStorm1 = new("921F3521FB79F240B1A8F7EC855F8DF9"); // 5000ms duration
+    public static readonly GUID MesmerChaosStorm2 = new("EFB9CDA30AEBC744B9D377A99BEBC0B2"); // Collides with Necromancer marks, Engineer Spear Devastator
     public static readonly GUID ChronomancerSeizeTheMomentShatter = new("4C7A5E148F7FD642B34EE4996DDCBBAB"); // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
     public static readonly GUID ChronomancerSplitSecond = new("C035166E3E4C414ABE640F47797D9B4A"); // this is also triggered by the clones while being sourced to the chrono
     public static readonly GUID ChronomancerRewinder = new("DC1C8A043ADCD24B9458688A792B04BA"); // this is also triggered by the clones while being sourced to the chrono
@@ -105,7 +107,7 @@ public static class EffectGUIDs
     public static readonly GUID ChronomancerGravityWellPulse = new("60A74BCA1ECF974FB31CE28ABDF6D8AE"); // 1 pulse every second, 3 total
     public static readonly GUID ChronomancerGravityWellExplosion = new("E0D03976A4BC034E8ABFBBECCC828932"); // 1 second after final pulse
     public static readonly GUID MirageCloak = new("4C7A5E148F7FD642B34EE4996DDCBBAB");
-    public static readonly GUID MirageMirror = new("1370CDF5F2061445A656A1D77C37A55C");
+    public static readonly GUID MirageMirror = new("1370CDF5F2061445A656A1D77C37A55C"); // Has dynamic end time
     public static readonly GUID MirageJaunt = new("3A5A38C26A1FFB438EAD734F3ED42E5E"); // Src Mirage, Dst Mirage
     public static readonly GUID MirageJauntConflict1 = new("B6557C336041B24FA7CC198B6EBDAD9A"); // Src Mirage, Dst Mirage - used with e.g. jaunt & axes of symmetry
     public static readonly GUID MirageJauntConflict2 = new("D7A05478BA0E164396EB90C037DCCF42"); // Src Mirage, Dst Mirage - used with e.g. jaunt, axes of symmetry, illusionary ambush
@@ -142,7 +144,7 @@ public static class EffectGUIDs
     public static readonly GUID NecromancerMarkOfBloodActivated2 = new("5FA6527231BB8041AC783396142C6200");
     public static readonly GUID NecromancerChillblainsActivated = new("831159227814DF4FA354CAD7E0755FEE");
     public static readonly GUID NecromancerPutridMarkActivated1 = new("E52F2D6DBABA934882BBBB8F0832C777");
-    public static readonly GUID NecromancerPutridMarkActivated2 = new("EFB9CDA30AEBC744B9D377A99BEBC0B2");
+    public static readonly GUID NecromancerPutridMarkActivated2 = new("EFB9CDA30AEBC744B9D377A99BEBC0B2"); // Collides with Mesmer Chaos Storm, Engineer Spear Devastator
     public static readonly GUID NecromancerPutridMarkActivated3 = new("CAF4E62C2C5CC04499657C2A6A78087B"); // No src or dst
     public static readonly GUID NecromancerReapersMarkActivated = new("255FBE1C15D0C6488BD018748184624F");
     public static readonly GUID NecromancerSignetOfUndeathOverhead = new("1FEB5ECC28F92245A04646869B4A8169");
@@ -347,7 +349,7 @@ public static class EffectGUIDs
     public static readonly GUID EngineerMineField = new("997750CA2636154E9FFBFEE4AA51A970"); // 0 duration and infinite duration, both logged at the same time
     public static readonly GUID EngineerMineExplosion1 = new("885B7AAA68F09E48A926BFFE488DB5AD"); // 0 duration - Throw Mine and Mine Field use this effect
     public static readonly GUID EngineerMineExplosion2 = new("1B3ACEE36F61DE42AB1C24BD33B5B5AD"); // 0 duration - Throw Mine and Mine Field use this effect
-    public static readonly GUID EngineerSpearDevastator1 = new("EFB9CDA30AEBC744B9D377A99BEBC0B2"); // Happens at the end of the cast
+    public static readonly GUID EngineerSpearDevastator1 = new("EFB9CDA30AEBC744B9D377A99BEBC0B2"); // Collides with Necromancer Marks, Mesmer Chaos Storm - Happens at the end of the cast
     public static readonly GUID EngineerSpearDevastator2 = new("AA5B8BF4646103469C1846D51AA9E010"); // Happens at the end of the cast
     public static readonly GUID ScrapperThunderclap = new("8C8E0AB8328CC1418F9A815E022E20B6"); // has owner, 5s duration
     public static readonly GUID ScrapperThunderclapSpawn = new("039F8B46E5595C4E9C2D52AA58FDD8B0"); // has owner, 1s duration
@@ -416,7 +418,7 @@ public static class EffectGUIDs
     public static readonly GUID ThiefSignetOfAgility = new("BB5488951B60B546BB1BD5626DAE83E1");
     public static readonly GUID ThiefSignetOfShadows = new("14A5982DB277744CB928A4935555F563");
     public static readonly GUID ThiefPitfallAoE = new("7325E9B0DD2E914F9837E5FCFC740A95");
-    // public static readonly GUID ThiefThousandNeedlesAoECollision   = new("2125A13079C1C5479C150926EB60A15D"); // collision with shadow flare & other
+    public static readonly GUID ThiefThousandNeedlesAoECollision = new("2125A13079C1C5479C150926EB60A15D"); // collision with shadow flare & other
     public static readonly GUID ThiefThousandNeedlesAoE1 = new("9AF103E33FC235498190448A9496C98A"); // ~280ms delayed
     public static readonly GUID ThiefThousandNeedlesAoE2 = new("B8DC8C6736C8E0439295A9DBBADC6296"); // ~280ms delayed
     public static readonly GUID ThiefSealAreaAoE = new("92A7634C2C7F2746AFDA88E1AD9AE886");

@@ -51,7 +51,7 @@ internal static class JsonActorBuilder
             jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillMap, buffMap)).ToList();
         }
         //
-        var casts = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var casts = actor.GetIntersectingCastEvents(log);
         if (casts.Any())
         {
             jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, casts.GroupBy(x => x.SkillID), skillMap).ToList();

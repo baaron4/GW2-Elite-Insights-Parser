@@ -299,7 +299,7 @@ internal class Ensolyss : Nightmare
                     }
                 }
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -444,7 +444,7 @@ internal class Ensolyss : Nightmare
                 }
                 break;
             case (int)TargetID.NightmareHallucination1:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

@@ -516,9 +516,19 @@ public abstract partial class SingleActor : Actor
         return log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
     }
 
+    public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log)
+    {
+        return GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
     public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
     {
         return log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+    }
+
+    public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log)
+    {
+        return GetInstantCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
     }
 
     protected override void InitCastEvents(ParsedEvtcLog log)
@@ -651,7 +661,7 @@ public abstract partial class SingleActor : Actor
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
             foreach (Minions mins in minionsList.Values)
             {
-                DamageEvents.AddRange(mins.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                DamageEvents.AddRange(mins.GetDamageEvents(null, log));
             }
             DamageEvents.SortByTime();
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -680,6 +690,10 @@ public abstract partial class SingleActor : Actor
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
+    }
+    public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetJustActorDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -763,7 +777,7 @@ public abstract partial class SingleActor : Actor
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
             foreach (Minions mins in minionsList.Values)
             {
-                BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log));
             }
             BreakbarDamageEvents.SortByTime();
             BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -840,7 +854,7 @@ public abstract partial class SingleActor : Actor
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
             {
-                OutgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                OutgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log));
             }
             OutgoingCrowdControlEvents.SortByTime();
             OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());

@@ -31,7 +31,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             HealEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
             foreach (var minion in _actor.GetMinions(log).Values)
             {
-                HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log));
             }
             HealEvents.SortByTime();
             HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -63,32 +63,6 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         return HealEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    /// <param name="healEventsList">Append to this list</param>
-    /// <exception cref="InvalidOperationException">Heal Stats ext missing</exception>
-    public void AppendOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, List<EXTHealingEvent> healEventsList)
-    {
-        if (!log.CombatData.HasEXTHealing)
-        {
-            throw new InvalidOperationException("Healing Stats extension not present");
-        }
-
-        InitHealEvents(log);
-
-        if (target != null)
-        {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
-            {
-                healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
-            }
-
-            return;
-        }
-
-        healEventsList.AddRange(HealEvents.Where(x => x.Time >= start && x.Time <= end));
-
-        return;
-    }
-
     public override IEnumerable<EXTHealingEvent> GetIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.CombatData.HasEXTHealing)
@@ -111,32 +85,6 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         }
 
         return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-    /// <param name="healEventsList">Append to this list</param>
-    /// <exception cref="InvalidOperationException">Heal Stats ext missing</exception>
-    public void AppendIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, List<EXTHealingEvent> healEventsList)
-    {
-        if (!log.CombatData.HasEXTHealing)
-        {
-            throw new InvalidOperationException("Healing Stats extension not present");
-        }
-
-        InitIncomingHealEvents(log);
-
-        if (target != null)
-        {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
-            {
-                healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
-            }
-
-            return;
-        }
-
-        healEventsList.AddRange(HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end));
-
-        return;
     }
 
 

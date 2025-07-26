@@ -10,7 +10,7 @@ internal class PlayerDstHealthDamageHitMechanic : PlayerDstHealthDamageMechanic
         return c.HasHit && base.Keep(c, log);
     }
 
-    public PlayerDstHealthDamageHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerDstHealthDamageHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

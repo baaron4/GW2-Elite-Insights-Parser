@@ -7,9 +7,6 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class PlayerSkillMechanic<T> : SkillMechanic<T> where T : SkillEvent
 {
 
-    public PlayerSkillMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
-    {
-    }
 
     public PlayerSkillMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
     {

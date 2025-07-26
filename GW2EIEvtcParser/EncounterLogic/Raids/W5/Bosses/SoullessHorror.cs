@@ -183,7 +183,7 @@ internal class SoullessHorror : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.SoullessHorror:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                var cls = target.GetCastEvents(log);
                 // arena reduction
                 var center = new Vector3(-10581, 825, -817);
                 List<(double, uint, uint)> destroyedRings;
@@ -220,7 +220,7 @@ internal class SoullessHorror : HallOfChains
                     }
                 }
 
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

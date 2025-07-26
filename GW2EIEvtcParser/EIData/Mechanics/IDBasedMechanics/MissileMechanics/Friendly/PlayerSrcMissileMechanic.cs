@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class PlayerSrcMissileMechanic : SrcMissileMechanic
 {
 
-    public PlayerSrcMissileMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerSrcMissileMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

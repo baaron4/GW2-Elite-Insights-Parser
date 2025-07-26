@@ -83,6 +83,7 @@ internal class LogDataDto
     public ulong Gw2Build;
     public long TriggerID;
     public long EncounterID;
+    public long MapID;
     public string Parser;
     public string RecordedBy;
     public string RecordedAccountBy;
@@ -100,6 +101,11 @@ internal class LogDataDto
         {
             InstanceStart = log.LogData.LogInstanceStartStd;
             InstanceIP = log.LogData.LogInstanceIP;
+        }
+        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        if (mapIDEvent != null)
+        {
+            MapID = mapIDEvent.MapID;
         }
         ArcVersion = log.LogData.ArcVersion;
         EvtcBuild = log.LogData.EvtcBuild;

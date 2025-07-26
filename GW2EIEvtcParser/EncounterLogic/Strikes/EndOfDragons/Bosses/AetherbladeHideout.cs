@@ -134,7 +134,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         switch (target.ID)
         {
             case (int)TargetID.MaiTrinStrike:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -175,7 +175,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.MaiTrinStrikeDuringEcho:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -290,7 +290,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
                 break;
             case (int)TargetID.ScarletPhantomBeamNM:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -950,7 +950,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             int index = 0;
             int previousIndex = 0;
 
-            var electricBlasts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
+            var electricBlasts = target.GetCastEvents(log).Where(x =>
                 x.SkillID == ElectricBlastCastSkillLeftNM ||
                 x.SkillID == ElectricBlastCastSkillRightNM ||
                 x.SkillID == ElectricBlastCastSkillLeftCM ||

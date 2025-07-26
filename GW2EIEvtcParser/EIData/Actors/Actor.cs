@@ -49,6 +49,7 @@ public abstract class Actor
         Character = name[0];
         AgentItem = agent;
     }
+    #region Initializers
 
     [MemberNotNull(nameof(CastEvents))]
     protected abstract void InitCastEvents(ParsedEvtcLog log);
@@ -70,7 +71,8 @@ public abstract class Actor
     [MemberNotNull(nameof(IncomingCrowdControlEvents))]
     [MemberNotNull(nameof(IncomingCrowdControlEventsBySrc))]
     protected abstract void InitIncomingCrowdControlEvents(ParsedEvtcLog log);
-
+    #endregion Initializers
+    #region Species
     public bool IsUnamedSpecies()
     {
         return AgentItem.IsUnamedSpecies();
@@ -120,6 +122,8 @@ public abstract class Actor
     {
         return AgentItem.IsAnySpecies(ids);
     }
+    #endregion Species
+    #region AwareTimes
     public bool InAwareTimes(long time)
     {
         return AgentItem.InAwareTimes(time);
@@ -132,13 +136,96 @@ public abstract class Actor
     {
         return AgentItem.InAwareTimes(other);
     }
+    #endregion AwareTimes
 
-    // Getters
-    // Damage logs
+    #region Damage
     public abstract IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
 
-    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor target, ParsedEvtcLog log, long start, long end);
-    public abstract IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    {
+        if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
+        {
+            hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
+            _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
+        }
+
+        if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
+        {
+            dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
+            FilterDamageEvents(log, dls, damageType);
+            hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+    public IEnumerable<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    {
+        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
+        {
+            hitDamageTakenEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
+            _typedHitDamageTakenEvents[damageType] = hitDamageTakenEventsPerPhasePerTarget;
+        }
+        if (!hitDamageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
+        {
+            dls = GetDamageTakenEvents(target, log, start, end).Where(x => x.HasHit).ToList();
+            FilterDamageEvents(log, dls, damageType);
+            hitDamageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
+        }
+        return dls;
+    }
+
+    public abstract IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+
+    public IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetDamageTakenEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    #endregion Damage
+    #region BreakbarDamage
+    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetBreakbarDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetBreakbarDamageTakenEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    #endregion BreakbarDamage
+    #region CrowdControl
+    public abstract IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetOutgoingCrowdControlEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetIncomingCrowdControlEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    #endregion CrowdControl
+    #region Cast
+    public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
+    public IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log)
+    {
+        return GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    public abstract IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end);
+    public IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log)
+    {
+        return GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+    #endregion Cast
+    protected static bool KeepIntersectingCastLog(CastEvent evt, long start, long end)
+    {
+        return (evt.Time >= start && evt.Time <= end) || // start inside
+            (evt.EndTime >= start && evt.EndTime <= end) || // end inside
+            (evt.Time <= start && evt.EndTime >= end); // start before, end after
+    }
 
     private static void FilterDamageEvents(ParsedEvtcLog log, List<HealthDamageEvent> dls, ParserHelper.DamageType damageType)
     {
@@ -173,55 +260,6 @@ public abstract class Actor
             default:
                 throw new NotImplementedException("Not implemented damage type " + damageType);
         }
-    }
-    public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
-    {
-        if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
-        {
-            hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
-            _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
-        }
-
-        if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
-        {
-            dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-            FilterDamageEvents(log, dls, damageType);
-            hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
-        }
-        return dls;
-    }
-
-    public IEnumerable<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
-    {
-        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
-        {
-            hitDamageTakenEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
-            _typedHitDamageTakenEvents[damageType] = hitDamageTakenEventsPerPhasePerTarget;
-        }
-        if (!hitDamageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
-        {
-            dls = GetDamageTakenEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-            FilterDamageEvents(log, dls, damageType);
-            hitDamageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
-        }
-        return dls;
-    }
-
-    public abstract IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-
-    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-
-    // Cast logs
-    public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
-    public abstract IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end);
-    // privates
-
-    protected static bool KeepIntersectingCastLog(CastEvent evt, long start, long end)
-    {
-        return (evt.Time >= start && evt.Time <= end) || // start inside
-            (evt.EndTime >= start && evt.EndTime <= end) || // end inside
-            (evt.Time <= start && evt.EndTime >= end); // start before, end after
     }
 }
 

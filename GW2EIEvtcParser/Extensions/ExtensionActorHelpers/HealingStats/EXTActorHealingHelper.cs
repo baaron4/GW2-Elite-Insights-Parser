@@ -30,7 +30,16 @@ public abstract class EXTActorHealingHelper
 
     public abstract IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
 
+    public IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetOutgoingHealEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
     public abstract IEnumerable<EXTHealingEvent> GetIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    public IEnumerable<EXTHealingEvent> GetIncomingHealEvents(SingleActor? target, ParsedEvtcLog log)
+    {
+        return GetIncomingHealEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+    }
 
     private static void FilterHealEvents(ParsedEvtcLog log, List<EXTHealingEvent> dls, EXTHealingType healingType)
     {

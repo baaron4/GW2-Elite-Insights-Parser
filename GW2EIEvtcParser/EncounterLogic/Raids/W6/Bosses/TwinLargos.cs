@@ -281,11 +281,11 @@ internal class TwinLargos : MythwrightGambit
     {
         (long start, long end) lifespan;
 
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var cls = target.GetCastEvents(log);
         switch (target.ID)
         {
             case (int)TargetID.Nikare:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {
@@ -305,7 +305,7 @@ internal class TwinLargos : MythwrightGambit
                 }
                 break;
             case (int)TargetID.Kenut:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

@@ -205,6 +205,10 @@ public class JsonLog
     /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/
     /// </summary>
     public long EIEncounterID;
+    /// <summary>
+    /// The GW2API map id.
+    /// </summary>
+    public long MapID;
 
     /// <summary>
     /// The name of the fight

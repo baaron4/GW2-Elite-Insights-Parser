@@ -10,7 +10,7 @@ internal class EnemyCastEndMechanic : EnemyCastMechanic
         return evt.EndTime;
     }
 
-    public EnemyCastEndMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public EnemyCastEndMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

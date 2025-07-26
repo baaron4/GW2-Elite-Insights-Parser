@@ -12,7 +12,7 @@ internal class PlayerDstFirstHealthDamageHitMechanic : PlayerDstHealthDamageHitM
 
     private readonly Dictionary<AgentItem, HealthDamageEvent?> _firstHits = [];
 
-    public PlayerDstFirstHealthDamageHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public PlayerDstFirstHealthDamageHitMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

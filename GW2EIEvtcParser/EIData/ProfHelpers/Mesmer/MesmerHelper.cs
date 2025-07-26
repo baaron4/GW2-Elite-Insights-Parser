@@ -534,7 +534,7 @@ internal static class MesmerHelper
                 { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
                 { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
             };
-            var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse);
             foreach (EffectEvent effect in mentalCollapses)
             {
                 long duration = 0; // Overriding logged duration of 0
@@ -548,6 +548,21 @@ internal static class MesmerHelper
 
                 (long, long) lifespan = (effect.Time, effect.Time + duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectMentalCollapse);
+            }
+        }
+
+        // Chaos Storm
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerChaosStorm1, out var chaosStorms))
+        {
+            var skillCC = new SkillModeDescriptor(player, Spec.Mesmer, ChaosStorm, SkillModeCategory.CC);
+            var skillDamage = new SkillModeDescriptor(player, Spec.Mesmer, ChaosStorm);
+            foreach (EffectEvent effect in chaosStorms)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
+                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
+                AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 240, EffectImages.EffectChaosStorm);
+                AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 240, EffectImages.EffectChaosStorm);
             }
         }
     }

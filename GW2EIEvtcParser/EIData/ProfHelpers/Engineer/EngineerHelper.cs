@@ -285,20 +285,24 @@ internal static class EngineerHelper
         // Thunderclap
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out var thunderclaps))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
+            var skillCC = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.CC);
+            var skillDamage = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap);
             foreach (EffectEvent effect in thunderclaps)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 1000);
+                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
                 var connector = new PositionConnector(effect.Position);
-                replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(EffectImages.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                // CC is only on first tick
+                AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 240, EffectImages.EffectThunderclap);
+                AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 240, EffectImages.EffectThunderclap);
             }
         }
 
         // Throw Mine / Mine Field
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineExplosion1, out var mineDetonations))
         {
-            var throwMine = new SkillModeDescriptor(player, Spec.Engineer, ThrowMine, SkillModeCategory.Strip | SkillModeCategory.CC);
+            var throwMine = new SkillModeDescriptor(player, Spec.Engineer, ThrowMine);
             var mineField = new SkillModeDescriptor(player, Spec.Engineer, MineField);
             var detonate = new SkillModeDescriptor(player, Spec.Engineer, DetonateThrowMineOrMineField);
             var detonateThrowMine = new SkillModeDescriptor(player, Spec.Engineer, DetonateThrowMine, SkillModeCategory.Strip | SkillModeCategory.CC);

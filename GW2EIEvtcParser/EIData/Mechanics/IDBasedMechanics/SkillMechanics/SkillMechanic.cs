@@ -14,12 +14,7 @@ internal abstract class SkillMechanic<T> : IDBasedMechanic<T> where T : SkillEve
     private readonly CombatEventsGetter _getter;
     protected bool Minions { get; private set; } = false;
 
-    public SkillMechanic(long mechanicID, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(mechanicID, plotlySetting, shortName, description, fullName, internalCoolDown)
-    {
-        _getter = getter;
-    }
-
-    public SkillMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
+     public SkillMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
         _getter = getter;
     }

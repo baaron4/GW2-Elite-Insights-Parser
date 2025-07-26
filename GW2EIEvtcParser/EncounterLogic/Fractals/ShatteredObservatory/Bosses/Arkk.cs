@@ -270,7 +270,7 @@ internal class Arkk : ShatteredObservatory
         switch (target.ID)
         {
             case (int)TargetID.Arkk:
-                foreach (CastEvent cast in target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd))
+                foreach (CastEvent cast in target.GetAnimatedCastEvents(log))
                 {
                     switch (cast.SkillID)
                     {

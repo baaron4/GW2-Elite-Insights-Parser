@@ -341,7 +341,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddCageOfDecayOrNoxiousBlight(target, log, replay);
 
                 // Getting breakbar times to filter some effects of different sizes appearing at the end of it.
-                var breakbars = target.GetBuffStatus(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                var breakbars = target.GetBuffStatus(log, [DamageImmunity1, DamageImmunity2, DamageImmunity3]).Where(x => x.Value > 0);
                 foreach (var breakbar in breakbars)
                 {
                     // Rot the World - AoEs
@@ -494,7 +494,7 @@ internal class GreerTheBlightbringer : MountBalrior
         // Swepp the Mold / Rake the Rot - Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerSweepTheMoldRakeTheRotIndicator, out var indicators))
         {
-            var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
+            var casts = target.GetAnimatedCastEvents(log).Where(x =>
             x.SkillID == SweepTheMold || x.SkillID == SweepTheMold2 || x.SkillID == SweepTheMold3 ||
             x.SkillID == RakeTheRot || x.SkillID == RakeTheRot2 || x.SkillID == RakeTheRot3);
 
@@ -670,7 +670,7 @@ internal class GreerTheBlightbringer : MountBalrior
         // Stomp the Growth - Circle indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerStompTheGrowth, out var stompTheGrowth))
         {
-            var casts = target.GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillID == StompTheGrowth || x.SkillID == StompTheGrowth2 || x.SkillID == StompTheGrowth3);
+            var casts = target.GetAnimatedCastEvents(log).Where(x => x.SkillID == StompTheGrowth || x.SkillID == StompTheGrowth2 || x.SkillID == StompTheGrowth3);
             
             foreach (var cast in casts)
             {

@@ -15,11 +15,7 @@ public class MechanicData
     internal MechanicData(List<Mechanic> fightMechanics, bool isIntanceLog)
     {
         _mechanicLogs = new(fightMechanics.Count);
-
         Tracing.Trace.TrackAverageStat("fightMechanics", fightMechanics.Count);
-        //TODO(Rennorb) @perf: find average complexity
-        var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(fightMechanics.Count / 2);
-        var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(fightMechanics.Count);
         foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
         {
             // Ignore achievement eligibility mechanics in instances for now
@@ -27,7 +23,20 @@ public class MechanicData
             {
                 continue;
             }
-            if (!isIntanceLog) {
+            _mechanicLogs.Add(m, []);
+        }
+
+    }
+
+    private void CheckConfiguration()
+    {
+        var fightMechanics = _mechanicLogs;
+        //TODO(Rennorb) @perf: find average complexity
+        var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(fightMechanics.Count / 2);
+        var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(fightMechanics.Count);
+        foreach (Mechanic m in fightMechanics.Keys)
+        {
+            {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                 {
                     //TODO(Rennorb) @perf
@@ -77,20 +86,21 @@ public class MechanicData
                     throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming configuration");
                 }
             }
-            //TODO(Rennorb) @perf
-            _mechanicLogs.Add(m, []);
         }
 
         Tracing.Trace.TrackAverageStat("errorMechanicConfig", errorMechanicConfig.Count);
         Tracing.Trace.TrackAverageStat("errorMechanicNaming", errorMechanicNaming.Count);
-
     }
 
     private void ComputeMechanics(ParsedEvtcLog log)
     {
         //TODO(Rennorb) @perf <regroupedMobs> = 0
         var regroupedMobs = new Dictionary<int, SingleActor>();
-        foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) { _mechanicLogs.Remove(x); }
+        foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) 
+        { 
+            _mechanicLogs.Remove(x); 
+        }
+        CheckConfiguration();
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
             mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);

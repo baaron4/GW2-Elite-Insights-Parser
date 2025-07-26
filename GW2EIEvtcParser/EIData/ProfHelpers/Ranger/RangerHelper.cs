@@ -547,7 +547,7 @@ internal static class RangerHelper
         // Barrage
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out var barrages))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage);
             foreach (EffectEvent effect in barrages)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 600); // ~600ms interval
@@ -557,7 +557,7 @@ internal static class RangerHelper
         // Bonfire
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out var bonfires))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire);
             foreach (EffectEvent effect in bonfires)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
@@ -567,7 +567,7 @@ internal static class RangerHelper
         // Healing Spring - Inactive
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringInactive2, out var healingSpringsInactive))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring);
             foreach (EffectEvent effect in healingSpringsInactive)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 300000);
@@ -591,7 +591,7 @@ internal static class RangerHelper
         // Frost Trap
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out var frostTraps))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap);
             foreach (EffectEvent effect in frostTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
@@ -601,7 +601,7 @@ internal static class RangerHelper
         // Flame Trap
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out var flameTraps))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap);
             foreach (EffectEvent effect in flameTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
@@ -611,7 +611,7 @@ internal static class RangerHelper
         // Viper's Nest
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out var vipersNests))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest);
             foreach (EffectEvent effect in vipersNests)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
@@ -621,7 +621,7 @@ internal static class RangerHelper
         // Spike Trap
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out var spikeTraps))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
+            var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.CC);
             foreach (EffectEvent effect in spikeTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame

@@ -90,6 +90,11 @@ internal static class JsonLogBuilder
         log.UpdateProgressWithCancellationCheck("Raw Format: Building Meta Data");
         jsonLog.TriggerID = log.FightData.TriggerID;
         jsonLog.EIEncounterID = log.FightData.Logic.EncounterID;
+        var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
+        if (mapIDEvent != null)
+        {
+            jsonLog.MapID = mapIDEvent.MapID;
+        }
         jsonLog.FightName = log.FightData.FightName;
         jsonLog.FightIcon = log.FightData.Logic.Icon;
         jsonLog.EliteInsightsVersion = parserVersion.ToString();

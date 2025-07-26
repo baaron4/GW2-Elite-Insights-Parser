@@ -437,7 +437,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Conjured Protection - Shield AoE
-        var casts = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var casts = p.GetCastEvents(log);
         var shieldCast = casts.Where(x => x.SkillID == ConjuredProtectionSAK);
         foreach (CastEvent c in shieldCast)
         {

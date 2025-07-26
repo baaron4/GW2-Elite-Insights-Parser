@@ -140,7 +140,7 @@ partial class SingleActor
         {
             return;
         }
-        var casting = GetCastEvents(log, log.FightData.LogStart, log.FightData.FightEnd);
+        var casting = GetCastEvents(log);
         int swapped = WeaponSetIDs.NoSet;
         long swappedTime = log.FightData.FightStart;
         List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
@@ -188,7 +188,7 @@ partial class SingleActor
         IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
         _deathRecaps = new List<DeathRecap>(deads.Count);
         long lastDeathTime = 0;
-        var damageLogs = GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
+        var damageLogs = GetDamageTakenEvents(null, log);
         foreach (DeadEvent dead in deads)
         {
             _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));

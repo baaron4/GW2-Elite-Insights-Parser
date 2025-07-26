@@ -389,7 +389,7 @@ internal static class RevenantHelper
         // Abyssal Blitz (Mines)
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearBlitzMines2, out var abyssalBlitzMines))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Revenant, BlitzMines, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Revenant, BlitzMines);
             foreach (EffectEvent effect in abyssalBlitzMines)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);
@@ -400,18 +400,23 @@ internal static class RevenantHelper
         // Abyssal Blot
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlot, out var abyssalBlots))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot, SkillModeCategory.CC);
+            var skillCC = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot, SkillModeCategory.CC);
+            var skillDamage= new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot);
             foreach (EffectEvent effect in abyssalBlots)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectAbyssalBlot);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
+                (long start, long end) lifespanCC = (lifespan.start, lifespan.start + 500);
+                (long start, long end) lifespanDamage = (lifespanCC.end, lifespan.end);
+                // CC on first pulse
+                AddCircleSkillDecoration(replay, effect, color, skillCC, lifespanCC, 240, EffectImages.EffectAbyssalBlot);
+                AddCircleSkillDecoration(replay, effect, color, skillDamage, lifespanDamage, 240, EffectImages.EffectAbyssalBlot);
             }
         }
 
         // Abyssal Raze
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRaze, out var abyssalRazes))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalRaze, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalRaze);
             foreach (EffectEvent effect in abyssalRazes)
             {
                 uint radius = 180;

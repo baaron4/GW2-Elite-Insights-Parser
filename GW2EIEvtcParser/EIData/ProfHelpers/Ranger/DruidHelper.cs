@@ -62,13 +62,13 @@ internal static class DruidHelper
         new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, SkillImages.CelestialAvatar),
         new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, SkillImages.AncestralGrace)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM),
-        new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, SkillImages.GlyphOfTheStars)
+        new Buff("Glyph of Empowerment", GlyphOfEmpowermentBuff, Source.Druid, BuffClassification.Offensive, SkillImages.GlyphOfTheStars)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, SkillImages.GlyphOfUnity),
         new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, SkillImages.GlyphOfUnityCelestialAvatar),
         new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStars)
             .WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
-        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfEmpowermentCelestialAvatar)
+        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStarsCelestialAvatar)
             .WithBuilds(GW2Builds.April2019Balance),
         new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.NaturalMender)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),

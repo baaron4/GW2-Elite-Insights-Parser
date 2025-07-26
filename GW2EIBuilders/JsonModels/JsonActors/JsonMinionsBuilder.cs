@@ -94,7 +94,7 @@ internal static class JsonMinionsBuilder
             jsonMinions.TotalTargetBreakbarDamage = totalTargetBreakbarDamage;
         }
         //
-        var minionCastEvents = minions.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var minionCastEvents = minions.GetIntersectingCastEvents(log);
         //TODO(Rennorb) @perf
         if (minionCastEvents.Any())
         {

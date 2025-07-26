@@ -72,7 +72,7 @@ internal static class ScrapperHelper
         // Function Gyro
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperFunctionGyro, out var functionGyros))
         {
-            var skill = new SkillModeDescriptor(player, Spec.Scrapper, FunctionGyro, SkillModeCategory.ShowOnSelect);
+            var skill = new SkillModeDescriptor(player, Spec.Scrapper, FunctionGyro);
             foreach (EffectEvent effect in functionGyros)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
