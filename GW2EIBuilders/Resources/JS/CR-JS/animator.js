@@ -1152,6 +1152,13 @@ class Animator {
     draw() {
         if (!this.mainCanvas) {
             return;
+        }    
+        if (this.selectedActor && this.selectedActor.parentID >= 0) {
+            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
+            if (perParentArray) {
+                this.selectedActor = perParentArray.filter(x => x.getPosition() != null)[0] || this.selectedActor;
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
+            }
         }
         //
         //this._drawPickCanvas();
