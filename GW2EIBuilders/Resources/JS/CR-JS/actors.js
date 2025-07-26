@@ -283,8 +283,7 @@ class NonSquadIconDrawable extends IconDrawable {
         }
         const perParentArray = animator.agentDataPerParentID.get(this.masterID);
         if (perParentArray) {     
-            const time = animator.reactiveDataStatus.time;
-            this.master = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+            this.master = perParentArray.filter(x => x.getPosition() != null)[0];
         } else if (this.master === null) {
             this.master = animator.getActorData(this.masterID);
         }

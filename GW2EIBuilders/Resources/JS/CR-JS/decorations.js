@@ -504,8 +504,7 @@ class MechanicDrawable {
             const masterID = this.connectedTo.masterID;
             const perParentArray = animator.agentDataPerParentID.get(masterID);
             if (perParentArray) {
-                const time = animator.reactiveDataStatus.time;
-                this.rotationMaster = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+                this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.master === null) {
                 this.master = animator.getActorData(masterID);
             }
@@ -518,7 +517,7 @@ class MechanicDrawable {
             const perParentArray = animator.agentDataPerParentID.get(masterID);
             if (perParentArray) {
                 const time = animator.reactiveDataStatus.time;
-                this.rotationMaster = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+                this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.rotationMaster === null) {
                 this.rotationMaster = animator.getActorData(masterID);
             }
@@ -529,8 +528,7 @@ class MechanicDrawable {
                 const dstMasterID = this.rotationConnectedTo.dstMasterID;
                 const perParentArray = animator.agentDataPerParentID.get(dstMasterID);
                 if (perParentArray) {       
-                    const time = animator.reactiveDataStatus.time;
-                    this.dstRotationMaster = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+                    this.dstRotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
                 } else if (this.dstRotationMaster === null) {
                     this.dstRotationMaster = animator.getActorData(dstMasterID);
                 }
@@ -543,8 +541,7 @@ class MechanicDrawable {
             const ownerID = this.ownerID;
             const perParentArray = animator.agentDataPerParentID.get(ownerID);
             if (perParentArray) {       
-                const time = animator.reactiveDataStatus.time;
-                this.owner = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+                this.owner = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.owner === null) {
                 this.owner = animator.getActorData(ownerID);
             }
@@ -1070,8 +1067,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             const masterID = this.connectedFrom.masterID;
             const perParentArray = animator.agentDataPerParentID.get(masterID);
             if (perParentArray) {       
-                const time = animator.reactiveDataStatus.time;
-                this.endMaster = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+                this.endMaster = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.endMaster === null) {
                 this.endMaster = animator.getActorData(masterID);
             }
