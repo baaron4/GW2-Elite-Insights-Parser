@@ -29,7 +29,7 @@ public class SupportPerAllyStatistics
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    var braeTo = brae.To.FindActiveAgent(brae.Time);
+                    var braeTo = brae.To.FindEnglobedAgentItem(brae.Time);
                     if (to != null && braeTo != to.AgentItem)
                     {
                         continue;

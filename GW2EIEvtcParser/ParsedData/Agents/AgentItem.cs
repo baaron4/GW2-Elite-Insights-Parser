@@ -29,9 +29,9 @@ public class AgentItem
     private List<MergedAgentItem>? _merges;
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
-    public MergedAgentItem? ParentAgentItem { get; private set; }
-    private List<MergedAgentItem>? _parentAgentItemOf;
-    public IReadOnlyList<MergedAgentItem> ParentAgentItemOf => _parentAgentItemOf ?? [];
+    public AgentItem? EnglobingAgentItem { get; private set; }
+    private List<AgentItem>? _englobedAgentItems;
+    public IReadOnlyList<AgentItem> EnglobedAgentItems => _englobedAgentItems ?? [];
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
@@ -661,28 +661,28 @@ public class AgentItem
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
     }
 
-    private void AddParentOf(AgentItem child, AgentData agentData)
+    private void AddEnglobedAgentItem(AgentItem child, AgentData agentData)
     {
-        if (_parentAgentItemOf == null)
+        if (_englobedAgentItems == null)
         {
-            _parentAgentItemOf = [];
+            _englobedAgentItems = [];
         }
-        _parentAgentItemOf.Add(new MergedAgentItem(child, child.FirstAware, child.LastAware));
+        _englobedAgentItems.Add(child);
         agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty | AgentData.AgentDataDirtyStatus.SpeciesDirty);
     }
-    internal void AddParentFrom(AgentItem parent, AgentData agentData)
+    internal void SetEnglobingAgentItem(AgentItem parent, AgentData agentData)
     {
-        ParentAgentItem = new MergedAgentItem(parent, FirstAware, LastAware);
-        parent.AddParentOf(this, agentData);
+        EnglobingAgentItem = parent;
+        parent.AddEnglobedAgentItem(this, agentData);
     }
 
-    internal AgentItem FindActiveAgent(long time)
+    internal AgentItem FindEnglobedAgentItem(long time)
     {
-        if (ParentAgentItemOf.Count == 0)
+        if (EnglobedAgentItems.Count == 0)
         {
             return this;
         }
-        return ParentAgentItemOf.FirstOrNull((in MergedAgentItem x) => x.Merged.InAwareTimes(time))?.Merged ?? this;
+        return EnglobedAgentItems.FirstOrDefault(x => x.InAwareTimes(time)) ?? this;
     }
 }
 

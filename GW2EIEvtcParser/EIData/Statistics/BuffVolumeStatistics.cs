@@ -48,7 +48,7 @@ public class BuffVolumeStatistics
                 {
                     if (abae.Time >= start && abae.Time <= end)
                     {
-                        var creditedBy = abae.CreditedBy.FindActiveAgent(abae.Time);
+                        var creditedBy = abae.CreditedBy.FindEnglobedAgentItem(abae.Time);
                         abae.TryFindSrc(log);
                         if (creditedBy == srcAgentItem)
                         {
@@ -141,7 +141,7 @@ public class BuffVolumeStatistics
             {
                 if (abae.Time >= start && abae.Time <= end)
                 {
-                    var creditedBy = abae.CreditedBy.FindActiveAgent(abae.Time);
+                    var creditedBy = abae.CreditedBy.FindEnglobedAgentItem(abae.Time);
                     abae.TryFindSrc(log);
                     if (abae is BuffApplyEvent bae)
                     {

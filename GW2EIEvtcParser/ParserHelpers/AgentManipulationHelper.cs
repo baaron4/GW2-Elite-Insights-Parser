@@ -182,11 +182,11 @@ public static class AgentManipulationHelper
                 {
                     firstSplit = false;
                     previousPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, previousPlayerAgent.FirstAware, start - 1, previousPlayerAgent.Spec);
-                    previousPlayerAgent.AddParentFrom(originalPlayer, agentData);
+                    previousPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
                 }
 
                 var newPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, start, end, enterCombat.Spec);
-                newPlayerAgent.AddParentFrom(originalPlayer, agentData);
+                newPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
 
                 previousPlayerAgent.OverrideAwareTimes(previousPlayerAgent.FirstAware, start - 1);
                 previousPlayerAgent = newPlayerAgent;

@@ -53,7 +53,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         End = replay.TimeOffsets.end;
         Img = actor.GetIcon(true);
         ID = actor.UniqueID;
-        ParentID = actor.AgentItem.ParentAgentItem?.Merged.UniqueID ?? -1;
+        ParentID = actor.AgentItem.EnglobingAgentItem?.UniqueID ?? -1;
         Type = GetActorType(actor, log);
         HitboxWidth = actor.AgentItem.HitboxWidth;
 

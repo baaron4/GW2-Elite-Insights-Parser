@@ -38,9 +38,9 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             {
                 timeToUse = _timeClamper(time, log);
             }
-            if (actor.AgentItem.ParentAgentItemOf.Count > 0)
+            if (actor.AgentItem.EnglobedAgentItems.Count > 0)
             {
-                actor = log.FindActor(actor.AgentItem.FindActiveAgent(time));
+                actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
             }
             mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
         }

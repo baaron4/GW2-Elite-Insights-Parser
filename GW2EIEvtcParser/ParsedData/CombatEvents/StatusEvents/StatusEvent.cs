@@ -14,7 +14,7 @@ public abstract class StatusEvent : TimeCombatEvent
     internal StatusEvent(AgentItem src, long time) : base(time)
     {
         IsCustom = true;
-        Src = src.ParentAgentItem?.Merged ?? src;
+        Src = src.EnglobingAgentItem ?? src;
     }
 
 }

@@ -254,7 +254,7 @@ public class AgentData
 
     private void Refresh()
     {
-        var agentListWithoutParents = _allAgentsList.Where(x => x.ParentAgentItemOf.Count == 0);
+        var agentListWithoutParents = _allAgentsList.Where(x => x.EnglobedAgentItems.Count == 0);
         _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
         _allNPCsByID = agentListWithoutParents.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         _allGadgetsByID = agentListWithoutParents.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());

@@ -187,7 +187,7 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var agentItemToCheck = AgentItem.ParentAgentItem?.Merged ?? AgentItem;
+            var agentItemToCheck = AgentItem.EnglobingAgentItem ?? AgentItem;
             var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == agentItemToCheck);
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
