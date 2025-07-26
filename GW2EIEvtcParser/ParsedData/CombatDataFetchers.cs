@@ -31,6 +31,15 @@ partial class CombatData
         return dict.GetValueOrEmpty(agent);
     }
 
+    internal static IReadOnlyList<T> GetTimeNoClampValueOfEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : TimeCombatEvent
+    {
+        if (agent.ParentAgentItem != null)
+        {
+            return dict.GetValueOrEmpty(agent.ParentAgentItem.Value.Merged);
+        }
+        return dict.GetValueOrEmpty(agent);
+    }
+
     #region BUILD
     public EvtcVersionEvent GetEvtcVersionEvent()
     {
@@ -48,23 +57,23 @@ partial class CombatData
     #region STATUS
     public IReadOnlyList<AliveEvent> GetAliveEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.AliveEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.AliveEvents, src);
     }
     public IReadOnlyList<DeadEvent> GetDeadEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DeadEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.DeadEvents, src);
     }
     public IReadOnlyList<DespawnEvent> GetDespawnEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DespawnEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.DespawnEvents, src);
     }
     public IReadOnlyList<DownEvent> GetDownEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DownEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.DownEvents, src);
     }
     public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.SpawnEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.SpawnEvents, src);
     }
     #endregion STATUS
     #region ATTACKTARGETS
@@ -74,12 +83,12 @@ partial class CombatData
     }
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsBySrc(AgentItem targetedAgent)
     {
-        return GetTimeValueOfEmpty(_statusEvents.AttackTargetEventsBySrc, targetedAgent);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.AttackTargetEventsBySrc, targetedAgent);
     }
 
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)
     {
-        return GetTimeValueOfEmpty(_statusEvents.AttackTargetEventsByAttackTarget, attackTarget);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.AttackTargetEventsByAttackTarget, attackTarget);
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEvents()
     {
@@ -87,7 +96,7 @@ partial class CombatData
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
     {
-        return GetTimeValueOfEmpty(_statusEvents.TargetableEventsBySrc, attackTarget);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.TargetableEventsBySrc, attackTarget);
     }
     #endregion ATTACKTARGETS
     #region DATE
@@ -231,25 +240,25 @@ partial class CombatData
 
     public IReadOnlyList<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.BarrierUpdateEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.BarrierUpdateEvents, src);
     }
 
     public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MaxHealthUpdateEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.MaxHealthUpdateEvents, src);
     }
     public IReadOnlyList<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.HealthUpdateEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.HealthUpdateEvents, src);
     }
     public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.BreakbarStateEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.BreakbarStateEvents, src);
     }
 
     public IReadOnlyList<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.BreakbarPercentEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.BreakbarPercentEvents, src);
     }
     public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem src)
     {
@@ -261,7 +270,7 @@ partial class CombatData
     }
     public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.TeamChangeEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.TeamChangeEvents, src);
     }
     #endregion STATES
 
@@ -500,11 +509,11 @@ partial class CombatData
     #region MOVEMENTS
     public IReadOnlyList<MovementEvent> GetMovementData(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MovementEvents, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.MovementEvents, src);
     }
     public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.GliderEventsBySrc, src);
+        return GetTimeNoClampValueOfEmpty(_statusEvents.GliderEventsBySrc, src);
     }
     #endregion MOVEMENTS
     #region EFFECTS
