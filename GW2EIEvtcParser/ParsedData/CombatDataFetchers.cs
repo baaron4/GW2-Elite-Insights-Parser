@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -570,6 +571,51 @@ partial class CombatData
         return effectEvents.Count > 0;
     }
 
+    private static List<EffectEvent> GetSrcEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
+    {
+        List<EffectEvent> result;
+        if (agent.ParentAgentItem != null)
+        {
+            var parentAgent = agent.ParentAgentItem.Value.Merged;
+            result = effects.Where(effect => effect.Src == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+        }
+        else
+        {
+            result = effects.Where(effect => effect.Src == agent).ToList();
+        }
+        return result;
+    }
+
+    private static List<EffectEvent> GetSrcWithMasterEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
+    {
+        List<EffectEvent> result;
+        if (agent.ParentAgentItem != null)
+        {
+            var parentAgent = agent.ParentAgentItem.Value.Merged;
+            result = effects.Where(effect => effect.Src.GetFinalMaster() == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+        }
+        else
+        {
+            result = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
+        }
+        return result;
+    }
+
+    private static List<EffectEvent> GetDstEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
+    {
+        List<EffectEvent> result;
+        if (agent.ParentAgentItem != null)
+        {
+            var parentAgent = agent.ParentAgentItem.Value.Merged;
+            result = effects.Where(effect => effect.Dst == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+        }
+        else
+        {
+            result = effects.Where(effect => effect.Dst == agent).ToList();
+        }
+        return result;
+    }
+
     /// <summary>
     /// Returns effect events by the given agent and effect GUID.
     /// </summary>
@@ -578,16 +624,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            List<EffectEvent> result;
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                result = effects.Where(effect => effect.Src == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
-            } 
-            else
-            {
-                result = effects.Where(effect => effect.Src == agent).ToList();
-            }
+            List<EffectEvent> result = GetSrcEffectEventsCheckingParent(agent, effects);
             if (result.Count > 0)
             {
                 effectEvents = result;
@@ -606,15 +643,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                effectEvents.AddRange(effects.Where(effect => effect.Src == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware));
-            }
-            else
-            {
-                effectEvents.AddRange(effects.Where(effect => effect.Src == agent));
-            }
+            effectEvents.AddRange(GetSrcEffectEventsCheckingParent(agent, effects));
         }
     }
 
@@ -627,16 +656,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            List<EffectEvent> result;
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                result = effects.Where(effect => effect.Dst == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
-            }
-            else
-            {
-                result = effects.Where(effect => effect.Dst == agent).ToList();
-            }
+            List<EffectEvent> result = GetDstEffectEventsCheckingParent(agent, effects);
             if (result.Count > 0)
             {
                 effectEvents = result;
@@ -654,15 +674,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                effectEvents.AddRange(effects.Where(effect => effect.Dst == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware));
-            }
-            else
-            {
-                effectEvents.AddRange(effects.Where(effect => effect.Dst == agent));
-            }
+            effectEvents.AddRange(GetDstEffectEventsCheckingParent(agent, effects));
         }
     }
 
@@ -705,16 +717,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            List<EffectEvent> result;
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                result = effects.Where(effect => effect.Src.GetFinalMaster() == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
-            }
-            else
-            {
-                result = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
-            }
+            List<EffectEvent> result = GetSrcWithMasterEffectEventsCheckingParent(agent, effects);
             if (result.Count > 0)
             {
                 effectEvents = result;
@@ -733,15 +736,7 @@ partial class CombatData
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
-            if (agent.ParentAgentItem != null)
-            {
-                var parentAgent = agent.ParentAgentItem.Value.Merged;
-                effectEvents.AddRange(effects.Where(effect => effect.Src.GetFinalMaster() == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware));
-            }
-            else
-            {
-                effectEvents.AddRange(effects.Where(effect => effect.Src.GetFinalMaster() == agent));
-            }
+            effectEvents.AddRange(GetSrcWithMasterEffectEventsCheckingParent(agent, effects));
         }
     }
 
