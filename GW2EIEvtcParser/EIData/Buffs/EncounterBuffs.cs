@@ -443,7 +443,7 @@ internal static class EncounterBuffs
             new Buff("Pressure Blast", PressureBlastBubbleBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Pressure Blast Target", PressureBlastTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Sulfuric Acid", SulfuricAcid, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.SulfuricAcid),
-            new Buff("Titanic Resistance", TitanicResistance, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Titanic Resistance", TitanicResistance, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.TitanicResistance),
             new Buff("Subsided", Subsided, Source.FightSpecific, BuffClassification.Other, BuffImages.SonicOverload),
             new Buff("Deterrence", Deterrence, Source.FightSpecific, BuffClassification.Other, BuffImages.Deterrence),
             new Buff("Bloodstone Saturation", BloodstoneSaturation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BloodstoneSaturation),
