@@ -55,7 +55,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             foreach (var cairn in cairns)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(cairn.AgentItem).FirstOrDefault();
-                var spawnProtectLost = log.CombatData.GetBuffRemoveAllData(SkillIDs.SpawnProtection).Where(x => x.To == cairn.AgentItem).FirstOrDefault();
+                var spawnProtectLost = log.CombatData.GetBuffRemoveAllDataByDst(SkillIDs.SpawnProtection, cairn.AgentItem).FirstOrDefault();
                 bool hasEnteredCombat = enterCombat != null || spawnProtectLost != null;
                 if (!hasEnteredCombat && !log.CombatData.GetDamageTakenData(cairn.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
                 {

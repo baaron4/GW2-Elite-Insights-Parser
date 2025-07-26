@@ -25,11 +25,12 @@ public class SupportPerAllyStatistics
             long friendlyTime = 0;
             int unknownCount = 0;
             long unknownTime = 0;
-            foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllData(buffID, actor.AgentItem))
+            foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllDataBySrc(buffID, actor.AgentItem))
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    if (to != null && brae.To != to.AgentItem)
+                    var braeTo = brae.To.FindActiveAgent(brae.Time);
+                    if (to != null && braeTo != to.AgentItem)
                     {
                         continue;
                     }
@@ -42,7 +43,7 @@ public class SupportPerAllyStatistics
                     {
                         foeCount++;
                         foeTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
-                        if (brae.To.IsDownedBeforeNext90(log, brae.Time))
+                        if (braeTo.IsDownedBeforeNext90(log, brae.Time))
                         {
                             foeDownContributionCount++;
                             foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);

@@ -198,7 +198,7 @@ internal class Kanaxai : SilentSurf
                         case (int)TargetID.AspectOfExposure:
                         case (int)TargetID.AspectOfDeath:
                         case (int)TargetID.AspectOfFear:
-                            if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
+                            if (log.CombatData.GetBuffRemoveAllDataByDst(Determined762, aspect.AgentItem).Any(x => x.Time >= curPhase.Start && x.Time <= curPhase.End))
                             {
                                 curPhase.AddTarget(aspect, log);
                             }

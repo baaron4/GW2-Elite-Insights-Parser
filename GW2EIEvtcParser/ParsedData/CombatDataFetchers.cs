@@ -57,23 +57,23 @@ partial class CombatData
     #region STATUS
     public IReadOnlyList<AliveEvent> GetAliveEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.AliveEvents, src);
+        return GetTimeValueOfEmpty(_statusEvents.AliveEvents, src);
     }
     public IReadOnlyList<DeadEvent> GetDeadEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.DeadEvents, src);
+        return GetTimeValueOfEmpty(_statusEvents.DeadEvents, src);
     }
     public IReadOnlyList<DespawnEvent> GetDespawnEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.DespawnEvents, src);
+        return GetTimeValueOfEmpty(_statusEvents.DespawnEvents, src);
     }
     public IReadOnlyList<DownEvent> GetDownEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.DownEvents, src);
+        return GetTimeValueOfEmpty(_statusEvents.DownEvents, src);
     }
     public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.SpawnEvents, src);
+        return GetTimeValueOfEmpty(_statusEvents.SpawnEvents, src);
     }
     #endregion STATUS
     #region ATTACKTARGETS
@@ -361,11 +361,20 @@ partial class CombatData
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
     }
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID, AgentItem src)
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataBySrc(long buffID, AgentItem src)
     {
         if (_buffRemoveAllDataBySrc.TryGetValue(buffID, out var bySrc))
         {
             return GetTimeValueOfEmpty(bySrc, src);
+        }
+        return [];
+    }
+
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByDst(long buffID, AgentItem dst)
+    {
+        if (_buffRemoveAllDataByDst.TryGetValue(buffID, out var byDst))
+        {
+            return GetTimeValueOfEmpty(byDst, dst);
         }
         return [];
     }

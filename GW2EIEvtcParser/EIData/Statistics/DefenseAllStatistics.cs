@@ -20,7 +20,7 @@ public class DefenseAllStatistics : DefensePerTargetStatistics
         {
             if (actor.BaseSpec == ParserHelper.Spec.Elementalist)
             {
-                var vaporFormRemoves = log.CombatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(brae => brae.To == actor.AgentItem && brae.Time >= start && brae.Time <= end);
+                var vaporFormRemoves = log.CombatData.GetBuffRemoveAllDataByDst(SkillIDs.VaporForm, actor.AgentItem).Where(brae =>brae.Time >= start && brae.Time <= end);
                 var downEvents = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent);
                 DownCount = downEvents.Count(downEvent => !vaporFormRemoves.Any(vaporRemove => Math.Abs(vaporRemove.Time - downEvent.Time) < ParserHelper.ServerDelayConstant));
             }
