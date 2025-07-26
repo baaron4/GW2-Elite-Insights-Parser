@@ -30,6 +30,8 @@ public class AgentItem
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
     public MergedAgentItem? ParentAgentItem { get; private set; }
+    private List<MergedAgentItem>? _parentAgentItemOf;
+    public IReadOnlyList<MergedAgentItem> ParentAgentItemOf => _merges ?? [];
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
@@ -658,9 +660,18 @@ public class AgentItem
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
     }
 
+    private void AddParentOf(AgentItem child)
+    {
+        if (_parentAgentItemOf == null)
+        {
+            _parentAgentItemOf = [];
+        }
+        _parentAgentItemOf.Add(new MergedAgentItem(child, child.FirstAware, child.LastAware));
+    }
     internal void AddParentFrom(AgentItem parent)
     {
         ParentAgentItem = new MergedAgentItem(parent, FirstAware, LastAware);
+        parent.AddParentOf(this);
     }
 }
 
