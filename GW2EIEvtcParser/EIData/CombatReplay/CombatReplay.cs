@@ -62,7 +62,7 @@ public class CombatReplay
         List<ParametricPoint3D> positions = Positions;
         if (Positions.Count == 0 && forcePolling)
         {
-            positions = [ new(int.MinValue, int.MinValue, 0, 0) ];
+            positions = [ new(0, 0, 0, 0) ];
         }
         else if (Positions.Count == 0)
         {
