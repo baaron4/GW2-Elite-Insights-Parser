@@ -14,6 +14,14 @@ public abstract class JsonActor
     /// </summary>
     public string? Name;
     /// <summary>
+    /// Time at which actor started being tracked
+    /// </summary>
+    public int FirstAware;
+    /// <summary>
+    /// Time at which target ended being tracked
+    /// </summary>
+    public int LastAware;
+    /// <summary>
     /// Total health of the actor. -1 if information is missing (ex: players)
     /// </summary>
     public int TotalHealth;

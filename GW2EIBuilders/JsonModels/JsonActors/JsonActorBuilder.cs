@@ -3,6 +3,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
+using static GW2EIJSON.JsonStatistics;
 
 namespace GW2EIBuilders.JsonModels.JsonActors;
 
@@ -18,6 +19,8 @@ internal static class JsonActorBuilder
     {
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         //
+        jsonActor.FirstAware = (int)actor.FirstAware;
+        jsonActor.LastAware = (int)actor.LastAware;
         jsonActor.Name = actor.Character;
         jsonActor.TotalHealth = actor.GetHealth(log.CombatData);
         jsonActor.Toughness = actor.Toughness;

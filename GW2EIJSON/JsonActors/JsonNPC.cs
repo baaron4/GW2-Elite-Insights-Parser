@@ -31,16 +31,6 @@ public class JsonNPC : JsonActor
     public double HealthPercentBurned;
 
     /// <summary>
-    /// Time at which target became active
-    /// </summary>
-    public int FirstAware;
-
-    /// <summary>
-    /// Time at which target became inactive 
-    /// </summary>
-    public int LastAware;
-
-    /// <summary>
     /// List of buff status
     /// </summary>
     /// <seealso cref="JsonBuffsUptime"/>

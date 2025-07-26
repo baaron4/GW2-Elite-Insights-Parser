@@ -23,8 +23,6 @@ internal static class JsonNPCBuilder
         jsonNPC.Id = npc.ID;
         IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
         IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(npc.AgentItem);
-        jsonNPC.FirstAware = (int)npc.FirstAware;
-        jsonNPC.LastAware = (int)npc.LastAware;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;
