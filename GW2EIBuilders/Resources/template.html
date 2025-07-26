@@ -122,8 +122,8 @@
                 EVTC Duration: {{ getLogData().evtcRecordingDuration}}
             </div>      
             <div v-if="getLogData().instanceStart">
-                Instance Start: {{getLogData().instanceStart}} {{ getLogData().instanceIP ? ' | 
-                Instance IP: ' + getLogData().instanceIP : '' }}
+                Instance Start: {{getLogData().instanceStart}} 
+                {{ getLogData().instanceIP ? ' | Instance IP: ' + getLogData().instanceIP : '' }}
             </div>
             <div>
                 ARC: {{getLogData().arcVersion}} | 
