@@ -254,13 +254,14 @@ public class AgentData
 
     private void Refresh()
     {
+        var agentListWithoutParents = _allAgentsList.Where(x => x.ParentAgentItemOf.Count == 0);
         _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
-        _allNPCsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        _allGadgetsByID = _allAgentsList.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        _allNPCsByID = agentListWithoutParents.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        _allGadgetsByID = agentListWithoutParents.Where(x => x.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-        _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByType = agentListWithoutParents.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
 #if DEBUG
-        _allAgentsByName = _allAgentsList.Where(x => !x.Name.Contains("UNKNOWN")).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+        _allAgentsByName = agentListWithoutParents.Where(x => !x.Name.Contains("UNKNOWN")).GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
         _dirty = AgentDataDirtyStatus.Clean;
     }

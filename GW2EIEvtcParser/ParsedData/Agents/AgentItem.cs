@@ -661,18 +661,19 @@ public class AgentItem
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
     }
 
-    private void AddParentOf(AgentItem child)
+    private void AddParentOf(AgentItem child, AgentData agentData)
     {
         if (_parentAgentItemOf == null)
         {
             _parentAgentItemOf = [];
         }
         _parentAgentItemOf.Add(new MergedAgentItem(child, child.FirstAware, child.LastAware));
+        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty | AgentData.AgentDataDirtyStatus.SpeciesDirty);
     }
-    internal void AddParentFrom(AgentItem parent)
+    internal void AddParentFrom(AgentItem parent, AgentData agentData)
     {
         ParentAgentItem = new MergedAgentItem(parent, FirstAware, LastAware);
-        parent.AddParentOf(this);
+        parent.AddParentOf(this, agentData);
     }
 }
 

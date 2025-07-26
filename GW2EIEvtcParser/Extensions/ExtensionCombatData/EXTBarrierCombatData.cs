@@ -17,27 +17,15 @@ public class EXTBarrierCombatData
 
     public IReadOnlyList<EXTBarrierEvent> GetBarrierData(AgentItem key)
     {
-        if (_barrierData.TryGetValue(key, out var barrierEvents))
-        {
-            return barrierEvents;
-        }
-        return new List<EXTBarrierEvent>();
+        return CombatData.GetTimeValueOfEmpty(_barrierData, key);
     }
     public IReadOnlyList<EXTBarrierEvent> GetBarrierReceivedData(AgentItem key)
     {
-        if (_barrierReceivedData.TryGetValue(key, out var barrierEvents))
-        {
-            return barrierEvents;
-        }
-        return new List<EXTBarrierEvent>();
+        return CombatData.GetTimeValueOfEmpty(_barrierReceivedData, key);
     }
 
     public IReadOnlyList<EXTBarrierEvent> GetBarrierData(long key)
     {
-        if (_barrierDataByID.TryGetValue(key, out var barrierEvents))
-        {
-            return barrierEvents;
-        }
-        return new List<EXTBarrierEvent>();
+        return _barrierDataByID.GetValueOrEmpty(key);
     }
 }
