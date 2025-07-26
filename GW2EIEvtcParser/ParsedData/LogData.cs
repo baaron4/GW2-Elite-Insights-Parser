@@ -119,7 +119,7 @@ public class LogData
     private void SetPOV(AgentItem pov, IReadOnlyList<Player> playerList)
     {
         PoV = pov;
-        Player? povPlayer = playerList.FirstOrDefault(x => x.AgentItem == pov);
+        Player? povPlayer = playerList.FirstOrDefault(x => (x.AgentItem.ParentAgentItem?.Merged ?? x.AgentItem) == pov);
         if (povPlayer != null)
         {
             PoVName = povPlayer.Character;

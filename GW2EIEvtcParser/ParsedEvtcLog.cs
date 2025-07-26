@@ -42,21 +42,7 @@ public class ParsedEvtcLog
         _operation = operation;
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
-        CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion);
-
-        if (parserSettings.AnonymousPlayers)
-        {
-            operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous guilds");
-            var allPlayerAgents = AgentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
-            allPlayerAgents.AddRange(AgentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
-            foreach (AgentItem playerAgent in allPlayerAgents)
-            {
-                foreach (GuildEvent guildEvent in CombatData.GetGuildEvents(playerAgent))
-                {
-                    guildEvent.Anonymize();
-                }
-            }
-        }
+        CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Checking Encounter Status");
         FightData.ProcessEncounterStatus(CombatData, AgentData);

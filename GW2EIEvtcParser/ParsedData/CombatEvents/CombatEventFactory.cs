@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData;
 internal static class CombatEventFactory
 {
 
-    public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion)
+    public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion, EvtcParserSettings settings)
     {
         switch (stateChangeEvent.IsStateChange)
         {
@@ -53,7 +53,7 @@ internal static class CombatEventFactory
             case StateChange.SquadCombatStart:
                 if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                 {
-                    return;
+                    break;
                 }
                 var squadCombatStart = new SquadCombatStartEvent(stateChangeEvent);
                 metaDataEvents.SquadCombatStartEvents.Add(squadCombatStart);
@@ -69,7 +69,7 @@ internal static class CombatEventFactory
             case StateChange.SquadCombatEnd:
                 if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                 {
-                    return;
+                    break;
                 }
                 var squadCombatEndEvent = new SquadCombatEndEvent(stateChangeEvent);
                 metaDataEvents.LogEndEvent = squadCombatEndEvent;
@@ -80,9 +80,9 @@ internal static class CombatEventFactory
                 Add(statusEvents.MaxHealthUpdateEvents, maxHealthEvt.Src, maxHealthEvt);
                 break;
             case StateChange.PointOfView:
-                if (stateChangeEvent.SrcAgent == 0)
+                if (settings.AnonymousPlayers || stateChangeEvent.SrcAgent == 0)
                 {
-                    return;
+                    break;
                 }
                 metaDataEvents.PointOfViewEvent = new PointOfViewEvent(stateChangeEvent, agentData);
                 break;
@@ -92,7 +92,7 @@ internal static class CombatEventFactory
             case StateChange.GWBuild:
                 if (stateChangeEvent.SrcAgent == 0)
                 {
-                    return;
+                    break;
                 }
                 metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                 break;
@@ -123,6 +123,10 @@ internal static class CombatEventFactory
                 metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
                 break;
             case StateChange.Guild:
+                if (settings.AnonymousPlayers)
+                {
+                    break;
+                }
                 var gEvt = new GuildEvent(stateChangeEvent, agentData);
                 Add(metaDataEvents.GuildEvents, gEvt.Src, gEvt);
                 break;
@@ -349,7 +353,7 @@ internal static class CombatEventFactory
                 // Sanity check
                 if (stateChangeEvent.SrcAgent == 0)
                 {
-                    return;
+                    break;
                 }
                 metaDataEvents.FractalScaleEvent = new FractalScaleEvent(stateChangeEvent);
                 break;
