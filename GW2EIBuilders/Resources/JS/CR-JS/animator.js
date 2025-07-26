@@ -280,6 +280,7 @@ class Animator {
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
         this.screenSpaceActorData = new RenderablesRoot(start, end);
+        this.agentDataPerParentID = new Map();
         this.selectedActor = null;
         // maps
         this.backgroundImages = [];
@@ -466,7 +467,13 @@ class Animator {
                 default:
                     throw "Unknown decoration type " + actor.type;
             }
-            mapToFill.add(new ActorClass(actor, actorSize));
+            const renderable = new ActorClass(actor, actorSize);
+            mapToFill.add(renderable);
+            if (renderable.parentID >= 0) {
+                let array = this.agentDataPerParentID.get(renderable.parentID) ?? [];
+                array.push(renderable);
+                this.agentDataPerParentID.set(renderable.parentID, array);
+            }
         }
         for (let i = 0; i < decorationRenderings.length; i++) {
             const decorationRendering = {};

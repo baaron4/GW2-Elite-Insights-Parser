@@ -12,7 +12,7 @@ public class NPCCombatReplayDescription : SingleActorCombatReplayDescription
         // Don't put minions of NPC or unknown minions into the minion display system
         if (master != npc.AgentItem && master.IsPlayer && ParserHelper.IsKnownMinionID(npc.AgentItem, master.Spec))
         {
-            MasterID = master.UniqueID;
+            MasterID = master.ParentAgentItem?.Merged.UniqueID ?? master.UniqueID;
         }
     }
 }

@@ -7,7 +7,8 @@ public class AgentFacingConnectorDescription : RotationConnectorDescription
     public int RotationOffsetMode { get; private set; }
     internal AgentFacingConnectorDescription(AgentFacingConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
-        MasterID = connector.Agent.UniqueID;
+        var master = connector.Agent;
+        MasterID = master.ParentAgentItem?.Merged.UniqueID ?? master.UniqueID;
         RotationOffset = connector.RotationOffset;
         RotationOffsetMode = (int)connector.OffsetMode;
     }

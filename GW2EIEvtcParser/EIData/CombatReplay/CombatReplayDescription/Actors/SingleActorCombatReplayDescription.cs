@@ -11,6 +11,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
     public long End { get; protected set; }
     public readonly string Img;
     public readonly int ID;
+    public readonly int ParentID;
     public readonly IReadOnlyList<float> Positions;
     public readonly IReadOnlyList<float> Angles;
     public IReadOnlyList<long>? Dead { get; private set; }
@@ -52,6 +53,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         End = replay.TimeOffsets.end;
         Img = actor.GetIcon(true);
         ID = actor.UniqueID;
+        ParentID = actor.AgentItem.ParentAgentItem?.Merged.UniqueID ?? -1;
         Type = GetActorType(actor, log);
         HitboxWidth = actor.AgentItem.HitboxWidth;
 

@@ -36,6 +36,7 @@ class IconDrawable {
         this.hitboxWidth = InchToPixel * params.hitboxWidth;
         //
         this.id = params.id;
+        this.parentID = params.parentID;
         uint32[0] = params.id;
         this.pickingColor = params.img && params.img.length > 0 ? `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)` : null;
     }
@@ -280,7 +281,11 @@ class NonSquadIconDrawable extends IconDrawable {
         if (!super.canDraw()) {
             return false;
         }
-        if (this.master === null) {
+        const perParentArray = animator.agentDataPerParentID.get(this.masterID);
+        if (perParentArray) {     
+            const time = animator.reactiveDataStatus.time;
+            this.master = perParentArray.filter(x => x.start <= time && x.end >= time)[0];
+        } else if (this.master === null) {
             this.master = animator.getActorData(this.masterID);
         }
         if (this.master && !animator.displaySettings.displayAllMinions) {
