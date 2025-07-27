@@ -7,6 +7,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 {
     private readonly SingleActor _actor;
     private AgentItem _agentItem => _actor.AgentItem;
+    private AgentItem _englobingAgentItem => _actor.EnglobingAgentItem;
 
     private CachingCollectionWithTarget<int[]>? _barrier1S;
     private CachingCollectionWithTarget<int[]>? _barrierReceived1S;
@@ -47,9 +48,11 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out var barrierEvents))
+            if (BarrierEventsByDst.TryGetValue(target.EnglobingAgentItem, out var barrierEvents))
             {
-                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return barrierEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -81,9 +84,11 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         InitIncomingBarrierEvents(log);
         if (target != null)
         {
-            if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (BarrierReceivedEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -96,7 +101,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 
     public IEnumerable<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _agentItem);
+        return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _englobingAgentItem);
     }
 
     private static int[] ComputeBarrierGraph(IEnumerable<EXTBarrierEvent> dls, long start, long end)
