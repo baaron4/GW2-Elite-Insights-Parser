@@ -49,13 +49,6 @@ public class Player : PlayerActor
         Group = group;
     }
 
-    internal void Anonymize(int index)
-    {
-        Character = "Player " + index;
-        Account = "Account " + index;
-        AgentItem.OverrideName(Character + "\0:" + Account + "\0" + Group);
-    }
-
     internal override (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
     {
         return (type) switch 

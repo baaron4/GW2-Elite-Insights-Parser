@@ -734,6 +734,7 @@ public class EvtcParser
     private void CompletePlayers(ParserController operation)
     {
         var toRemove = new HashSet<AgentItem>();
+        var noSquads = _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP;
         //Handle squad players
         IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem playerAgent in playerAgentList)
@@ -744,7 +745,7 @@ public class EvtcParser
                 continue;
             }
             bool skip = false;
-            var player = new Player(playerAgent, _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP);
+            var player = new Player(playerAgent, noSquads);
             foreach (Player p in _playerList)
             {
                 if (p.Account == player.Account)// same player
@@ -785,9 +786,14 @@ public class EvtcParser
             {
                 if (!playerAgents.Contains(playerAgent))
                 {
-                    string character = "Player " + playerOffset;
-                    string account = "Account " + (playerOffset++);
-                    playerAgent.OverrideName(character + "\0:" + account + "\00");
+                    if (playerAgent.Type == AgentItem.AgentType.Player)
+                    {
+                        new Player(playerAgent, noSquads).Anonymize(playerOffset++);
+                    } 
+                    else
+                    {
+                        new PlayerNonSquad(playerAgent).Anonymize(playerOffset++);
+                    }
                 }
             }
         }

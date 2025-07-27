@@ -4,12 +4,12 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class PlayerActor : SingleActor
+public abstract class PlayerActor : SingleActor
 {
     public bool IsFriendlyPlayer => AgentItem.Type == AgentItem.AgentType.Player || AgentItem.IsNotInSquadFriendlyPlayer;
 
     // Constructors
-    internal PlayerActor(AgentItem agent) : base(agent)
+    protected PlayerActor(AgentItem agent) : base(agent)
     {
         if (agent.IsNPC)
         {
@@ -19,6 +19,13 @@ public class PlayerActor : SingleActor
         {
             throw new EvtcAgentException("Players can't be fake actors");
         }
+    }
+
+    internal void Anonymize(int index)
+    {
+        Character = "Player " + index;
+        Account = "Account " + index;
+        AgentItem.OverrideName(Character + "\0:" + Account + "\0" + Group);
     }
     internal override void OverrideName(string name)
     {
