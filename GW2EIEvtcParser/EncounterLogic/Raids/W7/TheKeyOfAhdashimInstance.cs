@@ -48,7 +48,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", (log, adina) => adina.GetHealth(log.CombatData) > 23e6);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.QadimThePeerlessChest, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6);
         if (phases[0].Targets.Count == 0)
         {
             phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
