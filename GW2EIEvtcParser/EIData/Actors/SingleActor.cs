@@ -14,7 +14,7 @@ public abstract partial class SingleActor : Actor
 {
     public new AgentItem AgentItem => base.AgentItem;
 
-    protected AgentItem AgentItemToCheck => AgentItem.EnglobingAgentItem ?? AgentItem;
+    public AgentItem EnglobingAgentItem => AgentItem.EnglobingAgentItem;
     public string Account { get; protected set; }
     public int Group { get; protected set; }
 
@@ -190,8 +190,7 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var agentItemToCheck = AgentItem.EnglobingAgentItem ?? AgentItem;
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == agentItemToCheck);
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == EnglobingAgentItem);
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
@@ -221,7 +220,7 @@ public abstract partial class SingleActor : Actor
                 }
             }
             // gadget, string based
-            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.GetFinalMaster() == agentItemToCheck);
+            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.GetFinalMaster() == EnglobingAgentItem);
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {
@@ -698,7 +697,7 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (DamageEventByDst.TryGetValue(target.AgentItemToCheck, out var damageEvents))
+            if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var damageEvents))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -716,7 +715,7 @@ public abstract partial class SingleActor : Actor
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
 
-        return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItemToCheck);
+        return GetDamageEvents(target, log, start, end).Where(x => x.From == EnglobingAgentItem);
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
@@ -739,7 +738,7 @@ public abstract partial class SingleActor : Actor
         InitDamageTakenEvents(log);
         if (target != null)
         {
-            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItemToCheck, out var damageTakenEvents))
+            if (DamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var damageTakenEvents))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -765,7 +764,7 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItemToCheck).ToList();
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == EnglobingAgentItem).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -780,7 +779,7 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != AgentItemToCheck).ToList();
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != EnglobingAgentItem).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -792,7 +791,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItemToCheck);
+        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == EnglobingAgentItem);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -818,7 +817,7 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItemToCheck, out var list))
+            if (BreakbarDamageEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -850,7 +849,7 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItemToCheck, out var list))
+            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -871,7 +870,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItemToCheck);
+        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == EnglobingAgentItem);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -896,7 +895,7 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItemToCheck, out var ccList))
+            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.EnglobingAgentItem, out var ccList))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -927,7 +926,7 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItemToCheck, out var list))
+            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;

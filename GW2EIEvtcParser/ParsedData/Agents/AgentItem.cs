@@ -29,7 +29,8 @@ public class AgentItem
     private List<MergedAgentItem>? _merges;
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
-    public AgentItem? EnglobingAgentItem { get; private set; }
+    private AgentItem? _englobingAgentItem;
+    public AgentItem EnglobingAgentItem => _englobingAgentItem ?? this;
     private List<AgentItem>? _englobedAgentItems;
     public IReadOnlyList<AgentItem> EnglobedAgentItems => _englobedAgentItems ?? [];
 
@@ -672,7 +673,7 @@ public class AgentItem
     }
     internal void SetEnglobingAgentItem(AgentItem parent, AgentData agentData)
     {
-        EnglobingAgentItem = parent;
+        _englobingAgentItem = parent;
         parent.AddEnglobedAgentItem(this, agentData);
     }
 

@@ -62,7 +62,7 @@ public class OffensiveStatistics
         var dls = actor.GetDamageEvents(target, log, start, end);
         foreach (HealthDamageEvent dl in dls)
         {
-            if (dl.From.Master == null)
+            if (dl.From == actor.EnglobingAgentItem)
             {
                 if (!dl.DoubleProcHit)
                 {

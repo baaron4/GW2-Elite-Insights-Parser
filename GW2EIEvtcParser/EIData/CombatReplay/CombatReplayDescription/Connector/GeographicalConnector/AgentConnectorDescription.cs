@@ -6,6 +6,6 @@ public class AgentConnectorDescription : GeographicalConnectorDescription
     internal AgentConnectorDescription(AgentConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
         var agent = connector.Agent;
-        MasterID = agent.EnglobingAgentItem?.UniqueID ?? agent.UniqueID; ;
+        MasterID = agent.EnglobingAgentItem.UniqueID; ;
     }
 }

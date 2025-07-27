@@ -15,8 +15,8 @@ public abstract class AbstractBuffApplyEvent : BuffEvent
 
     internal AbstractBuffApplyEvent(AgentItem by, AgentItem to, long time, SkillItem buffSkill, IFF iff, uint id) : base(buffSkill, time, iff)
     {
-        By = by.EnglobingAgentItem ?? by;
-        To = to.EnglobingAgentItem ?? to;
+        By = by.EnglobingAgentItem;
+        To = to.EnglobingAgentItem;
         BuffInstance = id;
     }
 }

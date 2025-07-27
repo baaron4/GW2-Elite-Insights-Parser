@@ -16,8 +16,8 @@ public abstract class AbstractBuffRemoveEvent : BuffEvent
     internal AbstractBuffRemoveEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff) : base(buffSkill, time, iff)
     {
         RemovedDuration = removedDuration;
-        By = by.EnglobingAgentItem ?? by;
-        To = to.EnglobingAgentItem ?? to;
+        By = by.EnglobingAgentItem;
+        To = to.EnglobingAgentItem;
     }
 
     internal void OverrideRemovedDuration(int removedDuration)
