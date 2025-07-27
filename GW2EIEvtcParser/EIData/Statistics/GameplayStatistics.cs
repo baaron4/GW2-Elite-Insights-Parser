@@ -28,7 +28,7 @@ public class GameplayStatistics
     private static double GetDistanceToTarget(SingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> references)
     {
 
-        var positions = actor.GetCombatReplayActivePolledPositions(log);
+        var positions = actor.GetCombatReplayActivePositions(log);
         if (positions.Count > 0 && references.Count > 0)
         {
             var distances = new List<float>(positions.Count);

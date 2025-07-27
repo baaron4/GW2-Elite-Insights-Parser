@@ -302,6 +302,7 @@ public static class BuffImages
     public const string ElectrifiedMinion = "https://wiki.guildwars2.com/images/6/6d/Electrified_Minion.png";
     // Ura
     public const string RisingPressure = "https://wiki.guildwars2.com/images/5/53/Fiery_Tornado_%28effect%29.png";
+    public const string TitanicResistance = "https://wiki.guildwars2.com/images/d/d4/Titanic_Resistance.png";
     public const string BloodstoneSaturation = "https://wiki.guildwars2.com/images/4/4d/Heat_Level.png";
     public const string Deterrence = "https://wiki.guildwars2.com/images/c/cc/Luck_of_Kings.png";
     public const string SulfuricAcid = "https://wiki.guildwars2.com/images/a/ab/Grasp_of_Joko_%28effect%29.png";

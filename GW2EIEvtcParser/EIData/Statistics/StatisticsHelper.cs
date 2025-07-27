@@ -181,7 +181,7 @@ public class StatisticsHelper
         var positionsPerPlayer = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
         foreach (Player player in log.PlayerList)
         {
-            positionsPerPlayer.Add(player.GetCombatReplayActivePolledPositions(log));
+            positionsPerPlayer.Add(player.GetCombatReplayActivePositions(log));
         }
 
         var sampleCount = positionsPerPlayer[0].Count;
