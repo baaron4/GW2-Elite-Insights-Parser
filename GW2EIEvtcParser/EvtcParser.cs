@@ -925,15 +925,22 @@ public class EvtcParser
 
         if (_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld)
         {
+            var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
             foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
             {
-                AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: Splitting non squad players per spec and subgroup");
             foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
             {
-                AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(_combatItems, _enabledExtensions, _agentData, playerAgentItem);
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
             }
         }
 

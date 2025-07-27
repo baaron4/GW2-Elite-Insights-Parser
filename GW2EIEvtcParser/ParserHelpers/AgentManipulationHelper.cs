@@ -160,14 +160,12 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void SplitPlayerPerSpecAndSubgroup(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
+    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
     {
         var previousPlayerAgent = originalPlayer;
         var player = new Player(previousPlayerAgent, false);
         var previousSpec = player.Spec;
         var previousGroup = player.Group;
-        var previousCombatItems = combatData.Where(x => x.SrcMatchesAgent(previousPlayerAgent) || x.DstMatchesAgent(previousPlayerAgent)).ToList();
-        var enterCombatEvents = previousCombatItems.Where(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(previousPlayerAgent)).Select(x => new EnterCombatEvent(x, agentData)).Where(x => x.Spec != Spec.Unknown).ToList();
         var firstSplit = true;
         for (var i = 0; i < enterCombatEvents.Count; i++)
         {
