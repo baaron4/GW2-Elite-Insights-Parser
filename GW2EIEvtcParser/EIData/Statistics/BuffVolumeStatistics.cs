@@ -136,37 +136,34 @@ public class BuffVolumeStatistics
             double totalActiveIncomingByUnknownExtension = 0;
             double totalActiveOutgoing = 0;
             double totalActiveOutgoingByExtension = 0;
-            foreach (BuffEvent abae in log.CombatData.GetBuffApplyData(buff.ID))
+            foreach (BuffEvent abae in log.CombatData.GetBuffApplyDataByIDByDst(buff.ID, dstActor.AgentItem))
             {
                 if (abae.Time >= start && abae.Time <= end)
                 {
                     abae.TryFindSrc(log);
-                    if (abae.To == dstActor.AgentItem)
+                    if (abae is BuffApplyEvent bae)
                     {
-                        if (abae is BuffApplyEvent bae)
+                        // We ignore infinite duration buffs
+                        /*if (bae.AppliedDuration >= int.MaxValue)
                         {
-                            // We ignore infinite duration buffs
-                            /*if (bae.AppliedDuration >= int.MaxValue)
-                            {
-                                continue;
-                            }*/
-                            if (abae.CreditedBy == dstActor.AgentItem)
-                            {
-                                totalOutgoing += bae.AppliedDuration;
-                            }
-                            totalIncoming += bae.AppliedDuration;
+                            continue;
+                        }*/
+                        if (abae.CreditedBy == dstActor.AgentItem)
+                        {
+                            totalOutgoing += bae.AppliedDuration;
                         }
-                        if (abae is BuffExtensionEvent bee)
+                        totalIncoming += bae.AppliedDuration;
+                    }
+                    if (abae is BuffExtensionEvent bee)
+                    {
+                        if (abae.CreditedBy == dstActor.AgentItem)
                         {
-                            if (abae.CreditedBy == dstActor.AgentItem)
-                            {
-                                totalOutgoingByExtension += bee.ExtendedDuration;
-                            }
-                            totalIncomingByExtension += bee.ExtendedDuration;
-                            if (abae.CreditedBy.IsUnknown)
-                            {
-                                totalIncomingByUnknownExtension += bee.ExtendedDuration;
-                            }
+                            totalOutgoingByExtension += bee.ExtendedDuration;
+                        }
+                        totalIncomingByExtension += bee.ExtendedDuration;
+                        if (abae.CreditedBy.IsUnknown)
+                        {
+                            totalIncomingByUnknownExtension += bee.ExtendedDuration;
                         }
                     }
                 }

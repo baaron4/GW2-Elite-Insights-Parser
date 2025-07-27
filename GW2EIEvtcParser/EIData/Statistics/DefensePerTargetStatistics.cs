@@ -52,10 +52,10 @@ public class DefensePerTargetStatistics
         foreach (Buff buff in buffs)
         {
             double currentBoonStripTime = 0;
-            IReadOnlyList<BuffRemoveAllEvent> removeAllArray = log.CombatData.GetBuffRemoveAllData(buff.ID);
+            IReadOnlyList<BuffRemoveAllEvent> removeAllArray = log.CombatData.GetBuffRemoveAllDataByDst(buff.ID, actor.AgentItem);
             foreach (BuffRemoveAllEvent brae in removeAllArray)
             {
-                if (brae.Time >= start && brae.Time <= end && brae.To == actor.AgentItem)
+                if (brae.Time >= start && brae.Time <= end)
                 {
                     if (from != null && brae.CreditedBy != from.AgentItem || brae.CreditedBy.IsUnknown || (excludeSelf && brae.CreditedBy == actor.AgentItem))
                     {

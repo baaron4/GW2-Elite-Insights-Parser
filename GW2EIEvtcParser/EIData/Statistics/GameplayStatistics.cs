@@ -28,7 +28,7 @@ public class GameplayStatistics
     private static double GetDistanceToTarget(SingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> references)
     {
 
-        var positions = actor.GetCombatReplayPolledPositions(log);
+        var positions = actor.GetCombatReplayActivePositions(log);
         if (positions.Count > 0 && references.Count > 0)
         {
             var distances = new List<float>(positions.Count);
@@ -36,7 +36,7 @@ public class GameplayStatistics
             for (int i = 0; i < positions.Count; i++)
             {
                 var curPosition = positions[i];
-                if (curPosition.Time < start || curPosition.Time > end)
+                if (curPosition == null || curPosition.Value.Time < start || curPosition.Value.Time > end)
                 {
                     continue;
                 }
@@ -47,13 +47,13 @@ public class GameplayStatistics
                     if (curReferencePosition != null)
                     {
                         var curReferencePoint = curReferencePosition.Value;
-                        if (curReferencePoint.Time < curPosition.Time)
+                        if (curReferencePoint.Time < curPosition.Value.Time)
                         {
                             continue;
                         } 
-                        else if (curReferencePoint.Time == curPosition.Time)
+                        else if (curReferencePoint.Time == curPosition.Value.Time)
                         {
-                            distances.Add((curPosition.XYZ - curReferencePoint.XYZ).XY().Length());
+                            distances.Add((curPosition.Value.XYZ - curReferencePoint.XYZ).XY().Length());
                             break;
                         }
                         break;
