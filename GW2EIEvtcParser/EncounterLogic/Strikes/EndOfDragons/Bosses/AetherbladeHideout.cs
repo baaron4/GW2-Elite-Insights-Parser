@@ -776,10 +776,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
+        var maiTrin = agentData.GetNPCsByID(TargetID.MaiTrinStrike).FirstOrDefault() ?? throw new MissingKeyActorsException("Mai Trin not found");
         if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
         {
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
-            agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
+            long time = maiTrin.LastAware - 1;
+            agentData.AddCustomNPCAgent(time, time, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
+            agentData.AddCustomNPCAgent(time, time, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         SanitizeLastHealthUpdateEvents(Targets, combatData);
