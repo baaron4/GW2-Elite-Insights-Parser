@@ -584,6 +584,11 @@ internal static class CombatEventFactory
             case PhysicalResult.CrowdControl:
                 crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
                 break;
+            case PhysicalResult.Interrupt:
+            case PhysicalResult.KillingBlow:
+            case PhysicalResult.Downed:
+                hpDamage.Add(new NoDamageHealthDamageEvent(damageEvent, agentData, skillData, result));
+                break;
             case PhysicalResult.Activation:
             case PhysicalResult.Unknown:
                 break;
