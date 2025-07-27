@@ -734,6 +734,7 @@ public class EvtcParser
     private void CompletePlayers(ParserController operation)
     {
         //Create squad players
+        var noSquads = _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP;
         IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem playerAgent in playerAgentList)
         {
@@ -742,7 +743,7 @@ public class EvtcParser
                 operation.UpdateProgressWithCancellationCheck("Parsing: Skipping invalid player");
                 continue;
             }
-            var player = new Player(playerAgent, _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP);
+            var player = new Player(playerAgent, noSquads);
             _playerList.Add(player);
         }
         if (_playerList.Exists(x => x.Group == 0))
@@ -765,9 +766,14 @@ public class EvtcParser
             {
                 if (!playerAgents.Contains(playerAgent))
                 {
-                    string character = "Player " + playerOffset;
-                    string account = "Account " + (playerOffset++);
-                    playerAgent.OverrideName(character + "\0:" + account + "\00");
+                    if (playerAgent.Type == AgentItem.AgentType.Player)
+                    {
+                        new Player(playerAgent, noSquads).Anonymize(playerOffset++);
+                    } 
+                    else
+                    {
+                        new PlayerNonSquad(playerAgent).Anonymize(playerOffset++);
+                    }
                 }
             }
         }
