@@ -22,9 +22,11 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -58,9 +60,11 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {

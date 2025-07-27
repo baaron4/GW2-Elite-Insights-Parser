@@ -6,7 +6,6 @@ public class SkillConnectorDescription : ConnectorDescription
 
     internal SkillConnectorDescription(SkillConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
-        var agent = connector.Agent;
-        OwnerID = agent.EnglobingAgentItem.UniqueID;
+        OwnerID = connector.Agent.EnglobingAgentItem.UniqueID;
     }
 }

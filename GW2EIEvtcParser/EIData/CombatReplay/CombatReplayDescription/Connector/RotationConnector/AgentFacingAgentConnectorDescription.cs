@@ -5,7 +5,6 @@ public class AgentFacingAgentConnectorDescription : AgentFacingConnectorDescript
     public readonly int DstMasterID;
     internal AgentFacingAgentConnectorDescription(AgentFacingAgentConnector connector, CombatReplayMap map, ParsedEvtcLog log) : base(connector, map, log)
     {
-        var agent = connector.DstAgent;
-        DstMasterID = agent.EnglobingAgentItem.UniqueID;
+        DstMasterID = connector.DstAgent.EnglobingAgentItem.UniqueID;
     }
 }
