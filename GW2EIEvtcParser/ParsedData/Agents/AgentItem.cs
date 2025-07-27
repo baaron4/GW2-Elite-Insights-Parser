@@ -434,12 +434,7 @@ public class AgentItem
     /// </summary>
     public bool HasBuff(ParsedEvtcLog log, long buffID, long time, long window = 0)
     {
-        SingleActor? actor = log.FindActor(this);
-        if (actor == null)
-        {
-            return false;
-        }
-        return actor.HasBuff(log, buffID, time, window);
+        return log.FindActor(this).HasBuff(log, buffID, time, window);
     }
 
     /// <summary>

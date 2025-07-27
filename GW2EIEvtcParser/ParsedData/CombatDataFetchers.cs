@@ -338,11 +338,20 @@ partial class CombatData
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
     }
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllData(long buffID, AgentItem src)
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataBySrc(long buffID, AgentItem src)
     {
         if (_buffRemoveAllDataBySrc.TryGetValue(buffID, out var bySrc))
         {
             return bySrc.GetValueOrEmpty(src);
+        }
+        return [];
+    }
+
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByDst(long buffID, AgentItem dst)
+    {
+        if (_buffRemoveAllDataByDst.TryGetValue(buffID, out var byDst))
+        {
+            return byDst.GetValueOrEmpty(dst);
         }
         return [];
     }

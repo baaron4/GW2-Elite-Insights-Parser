@@ -67,7 +67,7 @@ internal class Slothasor : SalvationPass
             var transformedPlayer = players.FirstOrDefault(x => x.AgentItem == slubTransformApplyAtStart.To);
             if (transformedPlayer != null)
             {
-                var transfoExit = combatData.GetBuffRemoveAllData(MagicTransformation, transformedPlayer.AgentItem).FirstOrDefault(x => x.Time >= slubTransformApplyAtStart.Time);
+                var transfoExit = combatData.GetBuffRemoveAllDataBySrc(MagicTransformation, transformedPlayer.AgentItem).FirstOrDefault(x => x.Time >= slubTransformApplyAtStart.Time);
                 if (transfoExit != null)
                 {
                     var enterCombat = combatData.GetEnterCombatEvents(transformedPlayer.AgentItem).Where(x => x.Time <= transfoExit.Time + 1000).LastOrDefault();

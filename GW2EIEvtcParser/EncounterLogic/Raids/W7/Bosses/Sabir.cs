@@ -96,8 +96,8 @@ internal class Sabir : TheKeyOfAhdashim
             new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge)
                 .UsingChecker((effect, combatData, agentData, skillData) =>
                 {
-                    BuffRemoveAllEvent? buffRemove = combatData.GetBuffRemoveAllData(ViolentCurrents)
-                        .Where(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant && x.To == effect.Src)
+                    BuffRemoveAllEvent? buffRemove = combatData.GetBuffRemoveAllDataByDst(ViolentCurrents, effect.Src)
+                        .Where(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant)
                         .FirstOrDefault();
                     return buffRemove != null;
                 }),

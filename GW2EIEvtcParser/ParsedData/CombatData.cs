@@ -24,7 +24,8 @@ public partial class CombatData
     private Dictionary<long, List<AbstractBuffApplyEvent>> _buffApplyData;
     private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
     private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
-    private Dictionary<long,  Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataBySrc;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataBySrc;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByDst;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataByDst;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
@@ -621,6 +622,12 @@ public partial class CombatData
             x => x.Key, 
             x => x.Value.OfType<BuffRemoveAllEvent>()
                 .GroupBy(y => y.CreditedBy)
+                .ToDictionary(y => y.Key, y => y.ToList())
+        );
+        _buffRemoveAllDataByDst = _buffData.ToDictionary(
+            x => x.Key,
+            x => x.Value.OfType<BuffRemoveAllEvent>()
+                .GroupBy(y => y.To)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );
         _buffDataByIDByDst = _buffData.ToDictionary(x => x.Key, x => x.Value.GroupBy(y => y.To).ToDictionary(y => y.Key, y => y.ToList()));
