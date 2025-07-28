@@ -354,7 +354,7 @@ internal class Xera : StrongholdOfTheFaithful
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
         {
             firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
-            RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
+            AgentManipulationHelper.RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         RenameBloodStones(Targets);

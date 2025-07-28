@@ -755,7 +755,7 @@ public class EvtcParser
                         skip = true;
                         toRemove.Add(playerAgent);
                         operation.UpdateProgressWithCancellationCheck("Parsing: Merging player " + player.AgentItem.InstID);
-                        RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
+                        AgentManipulationHelper.RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
                         p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
                         break;
                     }
@@ -979,7 +979,7 @@ public class EvtcParser
         _agentData = new AgentData(_apiController, _allAgentsList);
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
-        RegroupSameInstidNPCs(_agentData, _combatItems, _enabledExtensions);
+        AgentManipulationHelper.RegroupSameInstidNPCs(_agentData, _combatItems, _enabledExtensions);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
