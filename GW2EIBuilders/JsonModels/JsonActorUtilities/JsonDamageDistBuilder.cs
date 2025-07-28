@@ -45,7 +45,7 @@ internal static class JsonDamageDistBuilder
         jsonDamageDist.Max = int.MinValue;
         foreach (HealthDamageEvent dmgEvt in dmList)
         {
-            jsonDamageDist.Hits += dmgEvt.DoubleProcHit ? 0 : 1;
+            jsonDamageDist.Hits += dmgEvt.IsNotADamageEvent ? 0 : 1;
             jsonDamageDist.TotalDamage += dmgEvt.HealthDamage;
             if (dmgEvt.HasHit)
             {

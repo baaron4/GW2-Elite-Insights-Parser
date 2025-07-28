@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.11.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.12.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -131,14 +131,6 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>BarrierPercent</b><
 double&#160;</td><td class="memItemRight" valign="bottom"><b>HealthPercentBurned</b></td></tr>
 <tr class="memdesc:ab0842d6f5fec2ca25764c9fc771bdaa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">% of health burned <br /></td></tr>
 <tr class="separator:ab0842d6f5fec2ca25764c9fc771bdaa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a542d10d476c183c453814065da6f6223" id="r_a542d10d476c183c453814065da6f6223"><td class="memItemLeft" align="right" valign="top"><a id="a542d10d476c183c453814065da6f6223" name="a542d10d476c183c453814065da6f6223"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>FirstAware</b></td></tr>
-<tr class="memdesc:a542d10d476c183c453814065da6f6223"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which target became active. <br /></td></tr>
-<tr class="separator:a542d10d476c183c453814065da6f6223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a132a00b4388c2a07e63bc8c62587fc5d" id="r_a132a00b4388c2a07e63bc8c62587fc5d"><td class="memItemLeft" align="right" valign="top"><a id="a132a00b4388c2a07e63bc8c62587fc5d" name="a132a00b4388c2a07e63bc8c62587fc5d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>LastAware</b></td></tr>
-<tr class="memdesc:a132a00b4388c2a07e63bc8c62587fc5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which target became inactive. <br /></td></tr>
-<tr class="separator:a132a00b4388c2a07e63bc8c62587fc5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9214cd4ecc0ff7b55c7d62784e0c39b0" id="r_a9214cd4ecc0ff7b55c7d62784e0c39b0"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html">JsonBuffsUptime</a> &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a9214cd4ecc0ff7b55c7d62784e0c39b0">Buffs</a></td></tr>
 <tr class="memdesc:a9214cd4ecc0ff7b55c7d62784e0c39b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of buff status.  <br /></td></tr>
 <tr class="separator:a9214cd4ecc0ff7b55c7d62784e0c39b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +153,14 @@ If i corresponds to the last element that means the breakbar did not change for 
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b></td></tr>
 <tr class="memdesc:a309f9e6dc7ce10cd331b219a85c48a08 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the actor. <br /></td></tr>
 <tr class="separator:a309f9e6dc7ce10cd331b219a85c48a08 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_afc437a7cb137cd4c55b250fa05714062"><td class="memItemLeft" align="right" valign="top">
+int&#160;</td><td class="memItemRight" valign="bottom"><b>FirstAware</b></td></tr>
+<tr class="memdesc:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which actor started being tracked. <br /></td></tr>
+<tr class="separator:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a692d4ac4c43cd9862813e180552e30f3"><td class="memItemLeft" align="right" valign="top">
+int&#160;</td><td class="memItemRight" valign="bottom"><b>LastAware</b></td></tr>
+<tr class="memdesc:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which target ended being tracked. <br /></td></tr>
+<tr class="separator:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d6e844feaeb74afb0992ae8c0c3e73a inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a4d6e844feaeb74afb0992ae8c0c3e73a"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>TotalHealth</b></td></tr>
 <tr class="memdesc:a4d6e844feaeb74afb0992ae8c0c3e73a inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total health of the actor. -1 if information is missing (ex: players) <br /></td></tr>

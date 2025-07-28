@@ -46,7 +46,7 @@ public class EXTHealingCombatData
         {
             return type;
         }
-        if (log.CombatData.GetDamageData(id).Any(x => x.HealthDamage > 0 && !x.DoubleProcHit))
+        if (log.CombatData.GetDamageData(id).Any(x => x.HealthDamage > 0 && !x.IsNotADamageEvent))
         {
             type = EXTHealingType.ConversionBased;
         }

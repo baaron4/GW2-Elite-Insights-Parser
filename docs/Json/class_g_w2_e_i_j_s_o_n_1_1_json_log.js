@@ -29,6 +29,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "LanguageID", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae12642cdb8b209e31ca150b4b198ad86", null ],
     [ "LogErrors", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4b4cad9689e8da5693bcc49df256a263", null ],
     [ "LogStartOffset", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1e1890a14195ad2f83a75d25235157bf", null ],
+    [ "MapID", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a4b37375e74637cfa2653f6930bddacf4", null ],
     [ "Mechanics", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a6ab623fd0ba6959783cc845017c4998b", null ],
     [ "MissingPreEvent", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab8dbdb5f96fda513ad748bcb2df3d74c", null ],
     [ "PersonalBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aa753e843e65b1612429894bf8280c2be", null ],

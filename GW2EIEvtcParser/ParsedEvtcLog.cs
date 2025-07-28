@@ -56,6 +56,10 @@ public class ParsedEvtcLog
         {
             throw new TooShortException(FightData.FightDuration, ParserSettings.TooShortLimit);
         }
+        if (FightData.FightEnd > FightData.LogEnd)
+        {
+            throw new InvalidDataException("FightEnd can't be bigger than LogEnd");
+        }
         if (ParserSettings.SkipFailedTries && !FightData.Success)
         {
             throw new SkipException();

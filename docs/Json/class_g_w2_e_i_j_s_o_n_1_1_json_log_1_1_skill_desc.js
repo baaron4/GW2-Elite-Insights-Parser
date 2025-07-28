@@ -10,5 +10,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc =
     [ "IsNotAccurate", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a263adadb266370df3431a5a90e66f364", null ],
     [ "IsSwap", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a621c82c97ccd5b5892ddb95a00f95677", null ],
     [ "IsTraitProc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2fdf1a6737488ea50ca1cc783ee33cf9", null ],
+    [ "IsUnconditionalProc", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a2a614a2b7a190589f0d0e96444ad8e3b", null ],
     [ "Name", "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#aa7606adcd0fcbdcfd46efbfe9147214e", null ]
 ];

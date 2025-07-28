@@ -12,14 +12,10 @@ public class DirectHealthDamageEvent : HealthDamageEvent
         IsBlind = result == PhysicalResult.Blind;
         IsBlocked = result == PhysicalResult.Block;
         HasCrit = result == PhysicalResult.Crit;
-        HasDowned = result == PhysicalResult.Downed;
         IsEvaded = result == PhysicalResult.Evade;
         HasGlanced = result == PhysicalResult.Glance;
-        HasKilled = result == PhysicalResult.KillingBlow;
-        HasInterrupted = result == PhysicalResult.Interrupt;
         ShieldDamage = evtcItem.IsShields > 0 ? (int)evtcItem.OverstackValue : 0;
-        HasHit = result == PhysicalResult.Normal || HasGlanced || HasCrit; //Downed and Interrupt omitted for now due to double procing mechanics || result == ParseEnum.PhysicalResult.Downed || result == ParseEnum.PhysicalResult.Interrupt;
-        DoubleProcHit = HasDowned || HasInterrupted || HasKilled;
+        HasHit = result == PhysicalResult.Normal || HasGlanced || HasCrit; 
     }
 
     internal override void MakeIntoAbsorbed()

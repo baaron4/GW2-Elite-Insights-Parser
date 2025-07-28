@@ -64,7 +64,7 @@ public class OffensiveStatistics
         {
             if (dl.From == actor.EnglobingAgentItem)
             {
-                if (!dl.DoubleProcHit)
+                if (!dl.IsNotADamageEvent)
                 {
                     TotalDamageEventCount++;
                     TotalDamageEventDamage += dl.HealthDamage;

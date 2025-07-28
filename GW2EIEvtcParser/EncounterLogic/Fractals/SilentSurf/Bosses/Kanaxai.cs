@@ -254,7 +254,7 @@ internal class Kanaxai : SilentSurf
         }
         else
         {
-            fightData.SetSuccess(true, kanaxai.LastAware);
+            fightData.SetSuccess(false, kanaxai.LastAware);
         }
     }
 

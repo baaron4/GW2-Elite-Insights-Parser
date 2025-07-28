@@ -874,6 +874,9 @@ public class EvtcParser
         _agentData = new AgentData(_apiController, _allAgentsList);
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
+        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
+        AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
+
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
             throw new EvtcAgentException("No players found");
@@ -919,10 +922,7 @@ public class EvtcParser
         }
 
         _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
-
-        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
-        AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
-
+     
         if (_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld)
         {
             var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
