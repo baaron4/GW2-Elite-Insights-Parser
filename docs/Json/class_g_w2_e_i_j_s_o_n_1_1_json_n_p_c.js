@@ -7,8 +7,6 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c =
     [ "EnemyPlayer", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#aaccb118342bb867a368256c5a8d90850", null ],
     [ "FinalBarrier", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a70da43ec8315d974df648e063c4f606b", null ],
     [ "FinalHealth", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#af9285ee9e50a2236809e9eeba28a8ab2", null ],
-    [ "FirstAware", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a542d10d476c183c453814065da6f6223", null ],
     [ "HealthPercentBurned", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#ab0842d6f5fec2ca25764c9fc771bdaa6", null ],
-    [ "Id", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#af339fe0a049cdde6edf2fc2ae47a09e3", null ],
-    [ "LastAware", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#a132a00b4388c2a07e63bc8c62587fc5d", null ]
+    [ "Id", "class_g_w2_e_i_j_s_o_n_1_1_json_n_p_c.html#af339fe0a049cdde6edf2fc2ae47a09e3", null ]
 ];
