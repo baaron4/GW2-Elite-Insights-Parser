@@ -49,6 +49,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         MechanicList.Add(Mechanics);
         Extension = "ca";
+        GenericFallBackMethod = FallBackMethod.None;
         Icon = EncounterIconConjuredAmalgamate;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;

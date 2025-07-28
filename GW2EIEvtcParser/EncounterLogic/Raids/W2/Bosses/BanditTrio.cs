@@ -48,6 +48,7 @@ internal class BanditTrio : SalvationPass
     {
         MechanicList.Add(Mechanics);
         Extension = "trio";
+        GenericFallBackMethod = FallBackMethod.None;
         ChestID = ChestID.ChestOfPrisonCamp;
         Icon = EncounterIconBanditTrio;
         EncounterCategoryInformation.InSubCategoryOrder = 2;
