@@ -596,14 +596,22 @@ public class EvtcParser
                 continue;
             }
             
-            if (combatItem.HasTime())
+            if (combatItem.HasTime(_enabledExtensions))
             {
-                if (_logStartOffset == long.MinValue)
+                // don't allow extension events to contribute to log times
+                if (!combatItem.IsExtension)
                 {
-                    _logStartOffset = combatItem.Time;
+                    if (_logStartOffset == long.MinValue)
+                    {
+                        _logStartOffset = combatItem.Time;
+                    }
+                    combatItem.OverrideTime(combatItem.Time - _logStartOffset);
+                    _logEndTime = combatItem.Time;
+                } 
+                else
+                {
+                    combatItem.OverrideTime(combatItem.Time - _logStartOffset);
                 }
-                combatItem.OverrideTime(combatItem.Time - _logStartOffset);
-                _logEndTime = combatItem.Time;
             }
 
             _combatItems.Add(combatItem);
