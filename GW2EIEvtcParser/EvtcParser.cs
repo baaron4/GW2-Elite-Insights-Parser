@@ -572,6 +572,7 @@ public class EvtcParser
         int discardedCbtEvents = 0;
         bool keepOnlyExtensionEvents = false;
         bool stopAtLogEnd = _id != (int)TargetID.Instance;
+        var extensionEvents = new List<CombatItem>(5000);
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
@@ -596,25 +597,21 @@ public class EvtcParser
                 continue;
             }
             
-            if (combatItem.HasTime(_enabledExtensions))
+            if (combatItem.HasTime())
             {
-                // don't allow extension events to contribute to log times
-                if (!combatItem.IsExtension)
+                if (_logStartOffset == long.MinValue)
                 {
-                    if (_logStartOffset == long.MinValue)
-                    {
-                        _logStartOffset = combatItem.Time;
-                    }
-                    combatItem.OverrideTime(combatItem.Time - _logStartOffset);
-                    _logEndTime = combatItem.Time;
-                } 
-                else
-                {
-                    combatItem.OverrideTime(combatItem.Time - _logStartOffset);
+                    _logStartOffset = combatItem.Time;
                 }
+                combatItem.OverrideTime(combatItem.Time - _logStartOffset);
+                _logEndTime = combatItem.Time;
             }
 
             _combatItems.Add(combatItem);
+            if (combatItem.IsExtension)
+            {
+                extensionEvents.Add(combatItem);
+            }
 
             if (combatItem.IsStateChange == StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
             {
@@ -626,6 +623,13 @@ public class EvtcParser
                 keepOnlyExtensionEvents = true;
             }
         }
+        extensionEvents.ForEach(x =>
+        {
+            if (x.HasTime(_enabledExtensions))
+            {
+                x.OverrideTime(x.Time - _logStartOffset);
+            }
+        });
         operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Discarded " + discardedCbtEvents);
         if (_combatItems.Count == 0)
         {
