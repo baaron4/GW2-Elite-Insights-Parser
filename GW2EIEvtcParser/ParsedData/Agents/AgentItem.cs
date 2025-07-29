@@ -251,11 +251,11 @@ public class AgentItem
         }
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, StatusEvent cur, long nextTime, long minTime, int index)
+    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, long nextTime, long minTime, int index)
     {
         long cTime = cur.Time;
-
-        if (cur is DownEvent)
+        var curEvt = cur.evt;
+        if (curEvt is DownEvent)
         {
             if (index == 0)
             {
@@ -263,7 +263,7 @@ public class AgentItem
             }
             AddSegment(down, cTime, nextTime);
         }
-        else if (cur is DeadEvent)
+        else if (curEvt is DeadEvent)
         {
             if (index == 0)
             {
@@ -271,7 +271,7 @@ public class AgentItem
             }
             AddSegment(dead, cTime, nextTime);
         }
-        else if (cur is DespawnEvent)
+        else if (curEvt is DespawnEvent)
         {
             if (index == 0)
             {
@@ -292,24 +292,41 @@ public class AgentItem
     internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
         //TODO(Rennorb) @perf: find average complexity
-        var downEvents = combatData.GetDownEvents(EnglobingAgentItem);
-        var aliveEvents = combatData.GetAliveEvents(EnglobingAgentItem);
-        var deadEvents = combatData.GetDeadEvents(EnglobingAgentItem);
-        var spawnEvents = combatData.GetSpawnEvents(EnglobingAgentItem);
-        var despawnEvents = combatData.GetDespawnEvents(EnglobingAgentItem);
+        var downEvents = combatData.GetDownEvents(this);
+        var aliveEvents = combatData.GetAliveEvents(this);
+        var deadEvents = combatData.GetDeadEvents(this);
+        var spawnEvents = combatData.GetSpawnEvents(this);
+        var despawnEvents = combatData.GetDespawnEvents(this);
 
-        var status = new List<StatusEvent>(
+        var status = new List<(long Time, StatusEvent evt)>(
             downEvents.Count +
             aliveEvents.Count +
             deadEvents.Count +
             spawnEvents.Count +
-            despawnEvents.Count
+            despawnEvents.Count +
+            (this != EnglobingAgentItem ? 1 : 0)
         );
-        status.AddRange(downEvents);
-        status.AddRange(aliveEvents);
-        status.AddRange(deadEvents);
-        status.AddRange(spawnEvents);
-        status.AddRange(despawnEvents);
+        if (this != EnglobingAgentItem)
+        {
+            List<StatusEvent?> firstEvents = [
+                combatData.GetDownEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetAliveEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetDeadEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetSpawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetDespawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+            ];
+            var firstEvent = firstEvents.Where(x => x != null).OrderBy(x => x!.Time).FirstOrDefault();
+            if (firstEvent != null)
+            {
+                status.Add((FirstAware, firstEvent));
+            }
+        }
+        status.AddRange(downEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(aliveEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(deadEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(spawnEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(despawnEvents.Select(x => (x.Time, (StatusEvent)x)));
+
         AddSegment(dc, long.MinValue, FirstAware);
 
         if (status.Count == 0)
@@ -318,22 +335,21 @@ public class AgentItem
             AddSegment(dc, LastAware, long.MaxValue);
             return;
         }
-
-        status.SortByTime();
+        status = status.OrderBy(x => x.Time).ToList();
 
         for (int i = 0; i < status.Count - 1; i++)
         {
-            StatusEvent cur = status[i];
-            StatusEvent next = status[i + 1];
+            var cur = status[i];
+            var next = status[i + 1];
             AddValueToStatusList(dead, down, dc, actives, cur, next.Time, FirstAware, i);
         }
 
         // check last value
         if (status.Count > 0)
         {
-            StatusEvent cur = status.Last();
+            var cur = status.Last();
             AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1); 
-            if (cur is DeadEvent)
+            if (cur.evt is DeadEvent)
             {
                 AddSegment(dead, LastAware, long.MaxValue);
             }
@@ -346,9 +362,18 @@ public class AgentItem
 
     internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
     {
-        var status = new List<BreakbarStateEvent>(combatData.GetBreakbarStateEvents(EnglobingAgentItem));
+        var status = new List<(long Time, BreakbarStateEvent evt)>();
+        if (this != EnglobingAgentItem)
+        {
+            var firstEvent = combatData.GetBreakbarStateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
+            if (firstEvent != null)
+            {
+                status.Add((FirstAware, firstEvent));
+            }
+        }
+        status.AddRange(combatData.GetBreakbarStateEvents(this).Select(x => (x.Time, x)));
         // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
-        if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
+        if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.evt.IsCustom))
         {
             return;
         }
@@ -360,13 +385,13 @@ public class AgentItem
         }
         for (int i = 0; i < status.Count - 1; i++)
         {
-            BreakbarStateEvent cur = status[i];
+            var cur = status[i];
             if (i == 0 && cur.Time > FirstAware)
             {
                 AddSegment(nones, FirstAware, cur.Time);
             }
-            BreakbarStateEvent next = status[i + 1];
-            switch (cur.State)
+            var next = status[i + 1];
+            switch (cur.evt.State)
             {
                 case BreakbarState.Active:
                     AddSegment(actives, cur.Time, next.Time);
@@ -385,10 +410,10 @@ public class AgentItem
         // check last value
         if (status.Count > 0)
         {
-            BreakbarStateEvent cur = status.Last();
+            var cur = status.Last();
             if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
             {
-                switch (cur.State)
+                switch (cur.evt.State)
                 {
                     case BreakbarState.Active:
                         AddSegment(actives, cur.Time, LastAware);
