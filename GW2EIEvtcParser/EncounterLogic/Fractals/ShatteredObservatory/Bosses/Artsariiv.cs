@@ -122,7 +122,7 @@ internal class Artsariiv : ShatteredObservatory
         var targetArtsariiv = FindTargetArtsariiv(agentData);
         foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
         {
-            if (artsariiv != targetArtsariiv)
+            if (!artsariiv.Is(targetArtsariiv))
             {
                 artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
             }

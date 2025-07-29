@@ -29,8 +29,7 @@ public class SupportPerAllyStatistics
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    var braeTo = brae.To.FindEnglobedAgentItem(brae.Time);
-                    if (to != null && braeTo != to.AgentItem)
+                    if (to != null && !to.AgentItem.Is(brae.To))
                     {
                         continue;
                     }
@@ -43,7 +42,7 @@ public class SupportPerAllyStatistics
                     {
                         foeCount++;
                         foeTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
-                        if (braeTo.IsDownedBeforeNext90(log, brae.Time))
+                        if (brae.To.IsDownedBeforeNext90(log, brae.Time))
                         {
                             foeDownContributionCount++;
                             foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);

@@ -255,7 +255,7 @@ internal static class ProfHelper
                 if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
                 {
                     // more than one candidate, put to unknown and drop the search
-                    if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
+                    if (gadget.Master != null && !gadget.GetFinalMaster().Is(castEvent.Caster.GetFinalMaster()))
                     {
                         gadget.SetMaster(_unknownAgent);
                         break;

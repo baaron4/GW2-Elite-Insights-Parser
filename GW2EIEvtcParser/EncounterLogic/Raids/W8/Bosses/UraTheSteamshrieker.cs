@@ -585,7 +585,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 IEnumerable<AbstractBuffApplyEvent> tethers = log.CombatData.GetBuffApplyData(RisingPressure).Where(x => 
                     x is BuffApplyEvent && 
                     x.By == target.AgentItem && 
-                    x.To != target.AgentItem);
+                    !x.To.Is(target.AgentItem));
 
                 foreach (BuffEvent tether in tethers)
                 {

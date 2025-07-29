@@ -311,14 +311,14 @@ public class AgentData
     {
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
         {
-            if (a.Master != null && froms.Contains(a.Master))
+            if (a.Master != null && froms.Any(a.Is))
             {
                 a.SetMaster(to);
             }
         }
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.Gadget))
         {
-            if (a.Master != null && froms.Contains(a.Master))
+            if (a.Master != null && froms.Any(a.Is))
             {
                 a.SetMaster(to);
             }

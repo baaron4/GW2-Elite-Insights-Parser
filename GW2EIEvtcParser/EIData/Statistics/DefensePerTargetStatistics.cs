@@ -57,8 +57,7 @@ public class DefensePerTargetStatistics
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    var braeBy = brae.CreditedBy.FindEnglobedAgentItem(brae.Time);
-                    if (from != null && braeBy != from.AgentItem || braeBy.IsUnknown || (excludeSelf && braeBy == actor.AgentItem))
+                    if (from != null && !from.AgentItem.Is(brae.CreditedBy) || brae.CreditedBy.IsUnknown || (excludeSelf && brae.CreditedBy.Is(actor.AgentItem)))
                     {
                         continue;
                     }

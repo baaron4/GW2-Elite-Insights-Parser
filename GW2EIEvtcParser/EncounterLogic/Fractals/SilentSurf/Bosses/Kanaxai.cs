@@ -272,7 +272,7 @@ internal class Kanaxai : SilentSurf
         {
             tetherAspect = apply.By.IsUnknown ? tetherAspect : apply.By;
             int start = (int)apply.Time;
-            BuffApplyEvent? replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
+            BuffApplyEvent? replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && !x.By.Is(tetherAspect));
             BuffRemoveAllEvent? remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
             long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
             replay.Decorations.Add(new LineDecoration((start, (int)end), Colors.Yellow, 0.5, new AgentConnector(tetherAspect), new AgentConnector(player)));
