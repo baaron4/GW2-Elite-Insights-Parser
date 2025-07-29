@@ -8,7 +8,7 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
 
     protected internal BuffSimulationItemBaseWithSeed(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        _seedSrc       = buffStackItem.SeedSrc;
+        _seedSrc = buffStackItem.SeedSrc;
     }
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
@@ -16,91 +16,77 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            if (_seedSrc.EnglobedAgentItems.Count == 0)
+
+            if (distribution.TryGetValue(_seedSrc, out var toModify))
             {
-                if (distribution.TryGetValue(_seedSrc, out var toModify))
+                toModify.IncrementExtended(cDur);
+            }
+            else
+            {
+                distribution.Add(_seedSrc, new BuffDistributionItem(
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    cDur
+                ));
+            }
+            if (_src.IsUnknown)
+            {
+
+                if (distribution.TryGetValue(_seedSrc, out toModify))
                 {
-                    toModify.IncrementExtended(cDur);
+                    toModify.IncrementUnknownExtension(cDur);
                 }
                 else
                 {
                     distribution.Add(_seedSrc, new BuffDistributionItem(
                         0,
-                        0, 
-                        0, 
-                        0, 
-                        0, 
-                        cDur
+                        0,
+                        0,
+                        cDur,
+                        0,
+                        0
                     ));
                 }
-            } 
-            else
-            {
-                foreach (var subSrc in _seedSrc.EnglobedAgentItems)
-                {
-                    long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                    if (subcDur > 0)
-                    {
-                        if (distribution.TryGetValue(subSrc, out var toModify))
-                        {
-                            toModify.IncrementExtended(subcDur);
-                        }
-                        else
-                        {
-                            distribution.Add(subSrc, new BuffDistributionItem(
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                subcDur
-                            ));
-                        }
-                    }
-                }
             }
-            if (_src.IsUnknown)
+            foreach (var subSeedSrc in _seedSrc.EnglobedAgentItems)
             {
-                if (_src.EnglobedAgentItems.Count == 0)
+                long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
+                if (subcDur > 0)
                 {
-                    if (distribution.TryGetValue(_seedSrc, out var toModify))
+                    if (distribution.TryGetValue(subSeedSrc, out toModify))
                     {
-                        toModify.IncrementUnknownExtension(cDur);
+                        toModify.IncrementExtended(subcDur);
                     }
                     else
                     {
-                        distribution.Add(_seedSrc, new BuffDistributionItem(
+                        distribution.Add(subSeedSrc, new BuffDistributionItem(
                             0,
                             0,
                             0,
-                            cDur,
                             0,
-                            0
+                            0,
+                            subcDur
                         ));
                     }
-                } 
-                else
-                {
-                    foreach (var subSrc in _src.EnglobedAgentItems)
+                    if (_src.IsUnknown)
                     {
-                        long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                        if (subcDur > 0)
+                        if (distribution.TryGetValue(subSeedSrc, out toModify))
                         {
-                            if (distribution.TryGetValue(subSrc, out var toModify))
-                            {
-                                toModify.IncrementUnknownExtension(subcDur);
-                            }
-                            else
-                            {
-                                distribution.Add(subSrc, new BuffDistributionItem(
-                                    0,
-                                    0,
-                                    0,
-                                    subcDur,
-                                    0,
-                                    0
-                                ));
-                            }
+                            toModify.IncrementUnknownExtension(subcDur);
+                        }
+                        else
+                        {
+                            distribution.Add(subSeedSrc, new BuffDistributionItem(
+                                0,
+                                0,
+                                0,
+                                subcDur,
+                                0,
+                                0
+                            ));
                         }
                     }
                 }

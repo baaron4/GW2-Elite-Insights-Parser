@@ -11,53 +11,49 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
 
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
-        Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
         long value = GetValue(start, end);
         if (value > 0)
         {
-            if (Src.EnglobedAgentItems.Count == 0)
+            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
+            if (distrib.TryGetValue(Src, out var toModify))
             {
-                if (distrib.TryGetValue(Src, out var toModify))
-                {
-                    toModify.IncrementWaste(value);
-                }
-                else
-                {
-                    distrib.Add(Src, new BuffDistributionItem(
-                        0,
-                        0, 
-                        value, 
-                        0, 
-                        0,
-                        0
-                    ));
-                }
+                toModify.IncrementWaste(value);
             }
             else
             {
-                foreach (var subSrc in Src.EnglobedAgentItems)
+                distrib.Add(Src, new BuffDistributionItem(
+                    0,
+                    0,
+                    value,
+                    0,
+                    0,
+                    0
+                ));
+            }
+
+            foreach (var subSrc in Src.EnglobedAgentItems)
+            {
+                long subValue = GetValue(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                if (subValue > 0)
                 {
-                    long subValue = GetValue(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                    if (subValue > 0)
+                    if (distrib.TryGetValue(subSrc, out toModify))
                     {
-                        if (distrib.TryGetValue(subSrc, out var toModify))
-                        {
-                            toModify.IncrementWaste(subValue);
-                        }
-                        else
-                        {
-                            distrib.Add(subSrc, new BuffDistributionItem(
-                                0,
-                                0, 
-                                subValue, 
-                                0, 
-                                0, 
-                                0
-                             ));
-                        }
+                        toModify.IncrementWaste(subValue);
+                    }
+                    else
+                    {
+                        distrib.Add(subSrc, new BuffDistributionItem(
+                            0,
+                            0,
+                            subValue,
+                            0,
+                            0,
+                            0
+                         ));
                     }
                 }
             }
+
         }
         return value;
     }
