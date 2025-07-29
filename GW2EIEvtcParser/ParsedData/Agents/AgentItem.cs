@@ -292,11 +292,11 @@ public class AgentItem
     internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
         //TODO(Rennorb) @perf: find average complexity
-        var downEvents = combatData.GetDownEvents(this);
-        var aliveEvents = combatData.GetAliveEvents(this);
-        var deadEvents = combatData.GetDeadEvents(this);
-        var spawnEvents = combatData.GetSpawnEvents(this);
-        var despawnEvents = combatData.GetDespawnEvents(this);
+        var downEvents = combatData.GetDownEvents(EnglobingAgentItem);
+        var aliveEvents = combatData.GetAliveEvents(EnglobingAgentItem);
+        var deadEvents = combatData.GetDeadEvents(EnglobingAgentItem);
+        var spawnEvents = combatData.GetSpawnEvents(EnglobingAgentItem);
+        var despawnEvents = combatData.GetDespawnEvents(EnglobingAgentItem);
 
         var status = new List<StatusEvent>(
             downEvents.Count +
@@ -346,7 +346,7 @@ public class AgentItem
 
     internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
     {
-        var status = new List<BreakbarStateEvent>(combatData.GetBreakbarStateEvents(this));
+        var status = new List<BreakbarStateEvent>(combatData.GetBreakbarStateEvents(EnglobingAgentItem));
         // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
         if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
         {
@@ -673,6 +673,10 @@ public class AgentItem
     }
     internal void SetEnglobingAgentItem(AgentItem parent, AgentData agentData)
     {
+        if (!IsPlayer)
+        {
+            throw new InvalidOperationException("Englobing agents are only allowed on players");
+        }
         _englobingAgentItem = parent;
         parent.AddEnglobedAgentItem(this, agentData);
     }
