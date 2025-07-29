@@ -282,6 +282,17 @@ partial class CombatData
     {
         return _buffApplyData.GetValueOrEmpty(buffID);
     }
+    public IReadOnlyList<BuffApplyEvent> GetBuffApplyDataByIDBySrc(long buffID, AgentItem src)
+    {
+        if (_buffApplyDataByIDBySrc.TryGetValue(buffID, out var agentDict))
+        {
+            if (agentDict.TryGetValue(src, out var res))
+            {
+                return res;
+            }
+        }
+        return [];
+    }
     /// <summary>
     /// Won't return Buff Extension events
     /// </summary>
@@ -340,7 +351,7 @@ partial class CombatData
     }
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataBySrc(long buffID, AgentItem src)
     {
-        if (_buffRemoveAllDataBySrc.TryGetValue(buffID, out var bySrc))
+        if (_buffRemoveAllDataByIDBySrc.TryGetValue(buffID, out var bySrc))
         {
             return bySrc.GetValueOrEmpty(src);
         }
@@ -349,7 +360,7 @@ partial class CombatData
 
     public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByDst(long buffID, AgentItem dst)
     {
-        if (_buffRemoveAllDataByDst.TryGetValue(buffID, out var byDst))
+        if (_buffRemoveAllDataByIDByDst.TryGetValue(buffID, out var byDst))
         {
             return byDst.GetValueOrEmpty(dst);
         }

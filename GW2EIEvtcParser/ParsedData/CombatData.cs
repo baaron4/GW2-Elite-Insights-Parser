@@ -20,32 +20,44 @@ public partial class CombatData
     private readonly StatusEventsContainer _statusEvents = new();
     private readonly MetaEventsContainer _metaDataEvents = new();
     private readonly HashSet<long> _skillIDs;
+
     private readonly Dictionary<long, List<BuffEvent>> _buffData;
-    private Dictionary<long, List<AbstractBuffApplyEvent>> _buffApplyData;
-    private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
-    private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
-    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataBySrc;
-    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByDst;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataByDst;
     private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
+    private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
+
+    private Dictionary<long, List<AbstractBuffApplyEvent>> _buffApplyData;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffApplyEvent>>> _buffApplyDataByIDBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffApplyEvent>>> _buffApplyDataByIDByDst;
+
+    private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDBySrc;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDByDst;
+
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
-    private readonly Dictionary<AgentItem, List<BreakbarRecoveryEvent>> _breakbarRecoveredData;
-    private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
-    private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
-    private readonly Dictionary<long, List<BreakbarRecoveryEvent>> _breakbarRecoveredDataByID;
-    private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataByID;
     private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
-    private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
-    private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
-    private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
-    private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
-    private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataByID;
-    private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataByID;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageTakenData;
+
+    private readonly Dictionary<AgentItem, List<BreakbarRecoveryEvent>> _breakbarRecoveredData;
+    private readonly Dictionary<long, List<BreakbarRecoveryEvent>> _breakbarRecoveredDataByID;
+
+    private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
+    private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataByID;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
+
+    private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
+    private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataByID;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
+
+    private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
+    private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataByID;
+
+    private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
+    private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataByID;
+
+    private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
+
     private readonly List<RewardEvent> _rewardEvents = [];
     // EXTENSIONS
     public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
@@ -573,7 +585,7 @@ public partial class CombatData
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
         _buffDataByDst = buffEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-        _buffDataBySrc = buffEvents.Where(x => !(x is BuffExtensionEvent)).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+        _buffDataBySrc = buffEvents.Where(x => !(x is BuffExtensionEvent)).GroupBy(x => x.By).ToDictionary(x => x.Key, x => x.ToList());
         _buffData = buffEvents.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
         OffsetBuffExtensionEvents(evtcVersion);
         // damage events
@@ -618,13 +630,13 @@ public partial class CombatData
     private void BuildBuffDependentContainers()
     {
         _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
-        _buffRemoveAllDataBySrc = _buffData.ToDictionary(
+        _buffRemoveAllDataByIDBySrc = _buffData.ToDictionary(
             x => x.Key, 
             x => x.Value.OfType<BuffRemoveAllEvent>()
                 .GroupBy(y => y.CreditedBy)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );
-        _buffRemoveAllDataByDst = _buffData.ToDictionary(
+        _buffRemoveAllDataByIDByDst = _buffData.ToDictionary(
             x => x.Key,
             x => x.Value.OfType<BuffRemoveAllEvent>()
                 .GroupBy(y => y.To)
@@ -632,6 +644,12 @@ public partial class CombatData
         );
         _buffDataByIDByDst = _buffData.ToDictionary(x => x.Key, x => x.Value.GroupBy(y => y.To).ToDictionary(y => y.Key, y => y.ToList()));
         _buffApplyData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<AbstractBuffApplyEvent>().ToList());
+        _buffApplyDataByIDBySrc = _buffData.ToDictionary(
+            x => x.Key,
+            x => x.Value.OfType<BuffApplyEvent>()
+                .GroupBy(y => y.By)
+                .ToDictionary(y => y.Key, y => y.ToList())
+        );
         _buffApplyDataByIDByDst = _buffData.ToDictionary(
             x => x.Key, 
             x => x.Value.OfType<AbstractBuffApplyEvent>()
