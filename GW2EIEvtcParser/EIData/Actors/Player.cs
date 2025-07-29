@@ -97,10 +97,11 @@ public class Player : PlayerActor
         if (CommanderStates == null)
         {
             var useGUIDs = log.LogData.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
-            var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
-            foreach (Player player in log.PlayerList)
+            var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
+            var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
+            foreach (var player in relevantPlayers)
             {
-                IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player.AgentItem);
+                IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
                 //TODO(Rennorb) @perf: find average complexity
                 var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
                 foreach (MarkerEvent markerEvent in markerEvents)
@@ -130,14 +131,14 @@ public class Player : PlayerActor
                 }
             }
 
-            if (!statesByPlayer.ContainsKey(this))
+            if (!statesByPlayer.Any(x => AgentItem.Is(x.Key)))
             {
                 CommanderStates = [];
                 return CommanderStates;
             }
 
             //TODO(Rennorb) @perf: find average complexity
-            var states = new List<(Player p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
+            var states = new List<(AgentItem p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
             foreach (var (player, state) in statesByPlayer)
             {
                 foreach (var segment in state)
@@ -152,20 +153,34 @@ public class Player : PlayerActor
             var (lastPlayer, lastSegment) = states[0];
             foreach (var (player, seg) in states.Skip(1))
             {
-                if (lastPlayer == player && lastSegment.Value == seg.Value)
+                if (lastPlayer.Is(player) && lastSegment.Value == seg.Value)
                 {
                     lastSegment.End = seg.End;
                 }
                 else
                 {
                     //TODO(Rennorb) @correctness: This just seems wrong. what if the players are interleaved?
-                    if(player == this) { CommanderStates.Add(lastSegment); }
+                    if(player.Is(AgentItem)) 
+                    { 
+                        CommanderStates.Add(lastSegment); 
+                    }
 
                     lastPlayer = player;
                     lastSegment = seg;
                 }
             }
-            if(lastPlayer == this) { CommanderStates.Add(lastSegment); }
+            if(lastPlayer.Is(AgentItem)) 
+            { 
+                CommanderStates.Add(lastSegment); 
+            }
+            CommanderStates.ForEach(x =>
+            {
+                x.Start = Math.Max(x.Start, FirstAware);
+                x.End = Math.Min(x.End, LastAware);
+            });
+            CommanderStates.RemoveAll(x => x.IsEmpty());
+            // Clamp to aware times
+
         }
         return CommanderStates;
     }
