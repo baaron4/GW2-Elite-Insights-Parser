@@ -282,9 +282,43 @@ public abstract partial class SingleActor : Actor
         return InitCombatReplay(log).PolledRotations;
     }
 
-    protected virtual void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)
+    protected virtual IReadOnlyList<Segment> GetActiveSegmentsForCRTrim(ParsedEvtcLog log)
     {
-
+        var (_, _, _, actives) = GetStatus(log);
+        return actives;
+    }
+    private void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)
+    {
+        var actives = GetActiveSegmentsForCRTrim(log);
+        long trimStart = FirstAware;
+        long trimEnd = LastAware;
+        long previousActiveEnd = FirstAware;
+        for (int i = 0; i < actives.Count - 1; i++)
+        {
+            if (i == 0)
+            {
+                trimStart = actives[i].Start;
+            }
+            else if (previousActiveEnd != actives[i].Start)
+            {
+                replay.Hidden.Add(new Segment(previousActiveEnd, actives[i].Start));
+            }
+            previousActiveEnd = actives[i].End;
+        }
+        if (actives.Count > 0)
+        {
+            var last = actives[actives.Count - 1];
+            if (actives.Count == 1)
+            {
+                trimStart = actives[0].Start;
+            }
+            else if (previousActiveEnd != last.Start)
+            {
+                replay.Hidden.Add(new Segment(previousActiveEnd, last.Start));
+            }
+            trimEnd = last.End;
+        }
+        replay.Trim(trimStart, trimEnd);
     }
 
     [MemberNotNull(nameof(CombatReplay))]
