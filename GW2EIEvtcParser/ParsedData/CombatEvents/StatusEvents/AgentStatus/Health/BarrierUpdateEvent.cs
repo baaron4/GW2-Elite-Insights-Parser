@@ -24,4 +24,8 @@ public class BarrierUpdateEvent : StatusEvent, IStateable
     {
         return (Time, BarrierPercent);
     }
+    public (long start, double value) ToState(long overridenStart)
+    {
+        return (overridenStart, BarrierPercent);
+    }
 }

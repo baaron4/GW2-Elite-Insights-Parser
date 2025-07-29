@@ -20,4 +20,9 @@ public class BreakbarPercentEvent : StatusEvent, IStateable
     {
         return (Time, BreakbarPercent);
     }
+
+    public (long start, double value) ToState(long overridenStart)
+    {
+        return (overridenStart, BreakbarPercent);
+    }
 }
