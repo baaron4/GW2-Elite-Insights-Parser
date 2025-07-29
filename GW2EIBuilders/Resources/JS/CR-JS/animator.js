@@ -325,6 +325,12 @@ class Animator {
             deadIcon.src = UIIcons.Dead;
             facingIcon.src = UIIcons.Facing;
         }
+        let cur = start;
+        while (cur < end) {
+            this.times.push(cur);
+            cur += PollingRate;
+        }
+        this.reactiveDataStatus.time = start;
     }
 
     attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
@@ -432,12 +438,6 @@ class Animator {
                     ActorClass = PlayerIconDrawable;
                     actorSize = 22;
                     mapToFill = this.playerData;
-                    if (this.times.length === 0) {
-                        for (let j = 0; j < actor.positions.length / 2; j++) {
-                            this.times.push(j * PollingRate);
-                        }
-                        reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
-                    }
                     break;
                 case Types.Target:
                     ActorClass = NPCIconDrawable;
