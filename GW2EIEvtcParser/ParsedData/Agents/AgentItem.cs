@@ -231,7 +231,7 @@ public class AgentItem
         Master = master;
     }
 
-    internal AgentItem? GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
+    internal AgentItem GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
     {
         var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
         return atEvent?.Src ?? this;
