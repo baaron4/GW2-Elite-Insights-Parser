@@ -1,16 +1,17 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class AttackTargetEvent : StatusEvent
+public class AttackTargetEvent : MetaDataEvent
 {
+    public readonly AgentItem Src;
     public readonly AgentItem AttackTarget;
 
-    public readonly bool Targetable;
+    private readonly bool Targetable;
 
     private IReadOnlyList<TargetableEvent>? _targetableEvents;
 
-    internal AttackTargetEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal AttackTargetEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
     {
-        AttackTarget = Src;
+        AttackTarget = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
         Src = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
         Targetable = evtcItem.Value == 1;
     }
