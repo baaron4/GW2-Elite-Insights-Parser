@@ -77,7 +77,7 @@ public class ParsedEvtcLog
             {
                 if (CombatData.GetDamageTakenData(p.AgentItem).Any(x => !x.ToFriendly) ||
                     CombatData.GetDamageData(p.AgentItem).Any(x => !x.ToFriendly) ||
-                    CombatData.GetBuffDataBySrc(p.AgentItem).Any(x => x.To.GetFinalMaster() != p.AgentItem))
+                    CombatData.GetBuffDataBySrc(p.AgentItem).Any(x => x.To.GetFinalMaster() != p.EnglobingAgentItem))
                 {
                     activePlayers.Add(p);
                 }
