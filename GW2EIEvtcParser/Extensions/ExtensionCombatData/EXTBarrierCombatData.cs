@@ -17,11 +17,11 @@ public class EXTBarrierCombatData
 
     public IReadOnlyList<EXTBarrierEvent> GetBarrierData(AgentItem key)
     {
-        return CombatData.GetTimeValueOfEmpty(_barrierData, key);
+        return CombatData.GetTimeValueOrEmpty(_barrierData, key);
     }
     public IReadOnlyList<EXTBarrierEvent> GetBarrierReceivedData(AgentItem key)
     {
-        return CombatData.GetTimeValueOfEmpty(_barrierReceivedData, key);
+        return CombatData.GetTimeValueOrEmpty(_barrierReceivedData, key);
     }
 
     public IReadOnlyList<EXTBarrierEvent> GetBarrierData(long key)

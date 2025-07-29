@@ -14,25 +14,16 @@ partial class CombatData
         return _skillIDs;
     }
 
-    internal static IReadOnlyList<T> GetValueOfEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : MetaDataEvent
+    internal static IReadOnlyList<T> GetValueOrEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : MetaDataEvent
     {
         return dict.GetValueOrEmpty(agent.EnglobingAgentItem);
     }
 
-    internal static IReadOnlyList<T> GetTimeValueOfEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : TimeCombatEvent
+    internal static IReadOnlyList<T> GetTimeValueOrEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : TimeCombatEvent
     {
         if (agent.EnglobingAgentItem != agent)
         {
             return dict.GetValueOrEmpty(agent.EnglobingAgentItem).Where(x => x.Time >= agent.FirstAware && x.Time <= agent.LastAware).ToList();
-        }
-        return dict.GetValueOrEmpty(agent);
-    }
-
-    internal static IReadOnlyList<T> GetTimeNoClampValueOfEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : TimeCombatEvent
-    {
-        if (agent.EnglobingAgentItem != agent)
-        {
-            return dict.GetValueOrEmpty(agent.EnglobingAgentItem);
         }
         return dict.GetValueOrEmpty(agent);
     }
@@ -54,23 +45,39 @@ partial class CombatData
     #region STATUS
     public IReadOnlyList<AliveEvent> GetAliveEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.AliveEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.AliveEvents, src);
     }
     public IReadOnlyList<DeadEvent> GetDeadEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DeadEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.DeadEvents, src);
     }
     public IReadOnlyList<DespawnEvent> GetDespawnEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DespawnEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.DespawnEvents, src);
     }
     public IReadOnlyList<DownEvent> GetDownEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.DownEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.DownEvents, src);
     }
     public IReadOnlyList<SpawnEvent> GetSpawnEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.SpawnEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.SpawnEvents, src);
+    }
+    public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.BreakbarStateEvents, src);
+    }
+    public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.EnterCombatEvents, src);
+    }
+    public IReadOnlyList<ExitCombatEvent> GetExitCombatEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.ExitCombatEvents, src);
+    }
+    public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_statusEvents.TeamChangeEvents, src);
     }
     #endregion STATUS
     #region ATTACKTARGETS
@@ -80,12 +87,12 @@ partial class CombatData
     }
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsBySrc(AgentItem targetedAgent)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.AttackTargetEventsBySrc, targetedAgent);
+        return GetTimeValueOrEmpty(_statusEvents.AttackTargetEventsBySrc, targetedAgent);
     }
 
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.AttackTargetEventsByAttackTarget, attackTarget);
+        return GetTimeValueOrEmpty(_statusEvents.AttackTargetEventsByAttackTarget, attackTarget);
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEvents()
     {
@@ -93,7 +100,7 @@ partial class CombatData
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.TargetableEventsBySrc, attackTarget);
+        return GetTimeValueOrEmpty(_statusEvents.TargetableEventsBySrc, attackTarget);
     }
     #endregion ATTACKTARGETS
     #region DATE
@@ -129,7 +136,7 @@ partial class CombatData
 
     public IReadOnlyList<GuildEvent> GetGuildEvents(AgentItem src)
     {
-        return GetValueOfEmpty(_metaDataEvents.GuildEvents, src);
+        return GetValueOrEmpty(_metaDataEvents.GuildEvents, src);
     }
 
     public PointOfViewEvent? GetPointOfViewEvent()
@@ -187,7 +194,7 @@ partial class CombatData
     /// <returns></returns>
     public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem agent)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MarkerEventsBySrc, agent);
+        return GetTimeValueOrEmpty(_statusEvents.MarkerEventsBySrc, agent);
     }
     /// <summary>
     /// Returns marker events of given marker ID
@@ -233,43 +240,26 @@ partial class CombatData
 
     #endregion MARKERS
     
-    #region STATES
+    #region UPDATES
 
     public IReadOnlyList<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.BarrierUpdateEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.BarrierUpdateEvents, src);
     }
 
     public IReadOnlyList<MaxHealthUpdateEvent> GetMaxHealthUpdateEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.MaxHealthUpdateEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.MaxHealthUpdateEvents, src);
     }
     public IReadOnlyList<HealthUpdateEvent> GetHealthUpdateEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.HealthUpdateEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.HealthUpdateEvents, src);
     }
-    public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem src)
-    {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.BreakbarStateEvents, src);
-    }
-
     public IReadOnlyList<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.BreakbarPercentEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.BreakbarPercentEvents, src);
     }
-    public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem src)
-    {
-        return GetTimeValueOfEmpty(_statusEvents.EnterCombatEvents, src);
-    }
-    public IReadOnlyList<ExitCombatEvent> GetExitCombatEvents(AgentItem src)
-    {
-        return GetTimeValueOfEmpty(_statusEvents.ExitCombatEvents, src);
-    }
-    public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
-    {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.TeamChangeEvents, src);
-    }
-    #endregion STATES
+    #endregion UPDATES
 
     #region INFO
 
@@ -296,7 +286,7 @@ partial class CombatData
 
     public IReadOnlyList<Last90BeforeDownEvent> GetLast90BeforeDownEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.Last90BeforeDownEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.Last90BeforeDownEventsBySrc, src);
     }
     #endregion LAST90
     #region BUFFS
@@ -312,7 +302,7 @@ partial class CombatData
     {
         if (_buffApplyDataByIDBySrc.TryGetValue(buffID, out var agentDict))
         {
-            return GetTimeValueOfEmpty(agentDict, src);
+            return GetTimeValueOrEmpty(agentDict, src);
         }
         return [];
     }
@@ -323,7 +313,7 @@ partial class CombatData
     /// <returns></returns>
     public IReadOnlyList<BuffEvent> GetBuffDataBySrc(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_buffDataBySrc, src);
+        return GetTimeValueOrEmpty(_buffDataBySrc, src);
     }
     /// <summary>
     /// Returns list of buff events applied on agent for given id
@@ -332,7 +322,7 @@ partial class CombatData
     {
         if (_buffDataByIDByDst.TryGetValue(buffID, out var agentDict))
         {
-            return GetTimeValueOfEmpty(agentDict, dst);
+            return GetTimeValueOrEmpty(agentDict, dst);
         }
         return [];
     }
@@ -343,7 +333,7 @@ partial class CombatData
     {
         if (_buffApplyDataByIDByDst.TryGetValue(buffID, out var agentDict))
         {
-            return GetTimeValueOfEmpty(agentDict, dst);
+            return GetTimeValueOrEmpty(agentDict, dst);
         }
         return [];
     }
@@ -367,7 +357,7 @@ partial class CombatData
     {
         if (_buffRemoveAllDataByIDBySrc.TryGetValue(buffID, out var bySrc))
         {
-            return GetTimeValueOfEmpty(bySrc, src);
+            return GetTimeValueOrEmpty(bySrc, src);
         }
         return [];
     }
@@ -376,7 +366,7 @@ partial class CombatData
     {
         if (_buffRemoveAllDataByIDByDst.TryGetValue(buffID, out var byDst))
         {
-            return GetTimeValueOfEmpty(byDst, dst);
+            return GetTimeValueOrEmpty(byDst, dst);
         }
         return [];
     }
@@ -386,7 +376,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<BuffEvent> GetBuffDataByDst(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_buffDataByDst, dst);
+        return GetTimeValueOrEmpty(_buffDataByDst, dst);
     }
     #endregion BUFFS
     #region DAMAGE
@@ -395,7 +385,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<HealthDamageEvent> GetDamageData(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_damageData, src);
+        return GetTimeValueOrEmpty(_damageData, src);
     }
 
     /// <summary>
@@ -403,7 +393,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_breakbarDamageData, src);
+        return GetTimeValueOrEmpty(_breakbarDamageData, src);
     }
     /// <summary>
     /// Returns list of breakbar damage events done by skill id
@@ -424,7 +414,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<HealthDamageEvent> GetDamageTakenData(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_damageTakenData, dst);
+        return GetTimeValueOrEmpty(_damageTakenData, dst);
     }
 
     /// <summary>
@@ -432,7 +422,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_breakbarDamageTakenData, dst);
+        return GetTimeValueOrEmpty(_breakbarDamageTakenData, dst);
     }
     /// <summary>
     /// Returns list of breakbar recover events done by skill id
@@ -446,7 +436,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<BreakbarRecoveryEvent> GetBreakbarRecoveredData(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_breakbarRecoveredData, dst);
+        return GetTimeValueOrEmpty(_breakbarRecoveredData, dst);
     }
     #endregion DAMAGE
     #region CROWDCONTROL
@@ -455,7 +445,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlData(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_crowControlData, src);
+        return GetTimeValueOrEmpty(_crowControlData, src);
     }
     /// <summary>
     /// Returns list of crowd control events done by skill id
@@ -470,12 +460,12 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlData(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_crowControlTakenData, dst);
+        return GetTimeValueOrEmpty(_crowControlTakenData, dst);
     }
 
     public IReadOnlyList<StunBreakEvent> GetStunBreakEvents(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.StunBreakEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.StunBreakEventsBySrc, src);
     }
     #endregion CROWDCONTROL
     #region CAST
@@ -484,7 +474,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastData(AgentItem caster)
     {
-        return GetTimeValueOfEmpty(_animatedCastData, caster);
+        return GetTimeValueOrEmpty(_animatedCastData, caster);
     }
 
     /// <summary>
@@ -492,7 +482,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<InstantCastEvent> GetInstantCastData(AgentItem caster)
     {
-        return GetTimeValueOfEmpty(_instantCastData, caster);
+        return GetTimeValueOrEmpty(_instantCastData, caster);
     }
     /// <summary>
     /// Returns list of instant cast events done by Agent
@@ -507,7 +497,7 @@ partial class CombatData
     /// </summary>
     public IReadOnlyList<WeaponSwapEvent> GetWeaponSwapData(AgentItem caster)
     {
-        return GetTimeValueOfEmpty(_weaponSwapData, caster);
+        return GetTimeValueOrEmpty(_weaponSwapData, caster);
     }
     /// <summary>
     /// Returns list of cast events from skill
@@ -520,22 +510,22 @@ partial class CombatData
     #region MOVEMENTS
     public IReadOnlyList<MovementEvent> GetMovementData(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.MovementEvents, src);
+        return GetTimeValueOrEmpty(_statusEvents.MovementEvents, src);
     }
     public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)
     {
-        return GetTimeNoClampValueOfEmpty(_statusEvents.GliderEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.GliderEventsBySrc, src);
     }
     #endregion MOVEMENTS
     #region EFFECTS
     public IReadOnlyList<EffectEvent> GetEffectEventsBySrc(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.EffectEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.EffectEventsBySrc, src);
     }
 
     public IReadOnlyList<EffectEvent> GetEffectEventsByDst(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_statusEvents.EffectEventsByDst, dst);
+        return GetTimeValueOrEmpty(_statusEvents.EffectEventsByDst, dst);
     }
 
     public IReadOnlyList<EffectEvent> GetEffectEventsByEffectID(long effectID)
@@ -923,7 +913,7 @@ partial class CombatData
     }
     public IReadOnlyList<MissileEvent> GetMissileEventsBySrc(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MissileEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.MissileEventsBySrc, src);
     }
     public IReadOnlyList<MissileEvent> GetMissileEventsBySrcBySkillID(AgentItem src, long skillID)
     {
@@ -954,11 +944,11 @@ partial class CombatData
     }
     public IReadOnlyList<MissileLaunchEvent> GetMissileLaunchEventsByDst(AgentItem dst)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MissileLaunchEventsByDst, dst);
+        return GetTimeValueOrEmpty(_statusEvents.MissileLaunchEventsByDst, dst);
     }
     public IReadOnlyList<MissileEvent> GetMissileDamagingEventsBySrc(AgentItem src)
     {
-        return GetTimeValueOfEmpty(_statusEvents.MissileDamagingEventsBySrc, src);
+        return GetTimeValueOrEmpty(_statusEvents.MissileDamagingEventsBySrc, src);
     }
     #endregion MISSILE
 }

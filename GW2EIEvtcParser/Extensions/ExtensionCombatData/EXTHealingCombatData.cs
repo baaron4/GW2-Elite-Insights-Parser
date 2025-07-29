@@ -24,11 +24,11 @@ public class EXTHealingCombatData
 
     public IReadOnlyList<EXTHealingEvent> GetHealData(AgentItem key)
     {
-        return CombatData.GetTimeValueOfEmpty(_healData, key);
+        return CombatData.GetTimeValueOrEmpty(_healData, key);
     }
     public IReadOnlyList<EXTHealingEvent> GetHealReceivedData(AgentItem key)
     {
-        return CombatData.GetTimeValueOfEmpty(_healReceivedData, key);
+        return CombatData.GetTimeValueOrEmpty(_healReceivedData, key);
     }
 
     public IReadOnlyList<EXTHealingEvent> GetHealData(long key)
