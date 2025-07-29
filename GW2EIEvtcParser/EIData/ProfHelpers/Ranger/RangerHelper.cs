@@ -314,7 +314,7 @@ internal static class RangerHelper
         var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).LastOrDefault(y => y is BuffApplyEvent && y.Time <= x.Time);
         if (effectApply != null)
         {
-            return x.To.Is(effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time));
+            return x.To.Is(effectApply.By.GetMainAgentWhenAttackTarget(log));
         }
         return false;
     }

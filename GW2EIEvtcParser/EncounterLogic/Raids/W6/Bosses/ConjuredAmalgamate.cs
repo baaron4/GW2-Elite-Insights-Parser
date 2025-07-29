@@ -250,8 +250,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 break;
             case (int)TargetID.CABodyAttackTarget:
                 var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
-                var body = log.CombatData.GetAttackTargetEventsByAttackTarget(target.AgentItem).First().Src;
-                var bodyInvulStatus = body.GetBuffStatus(log, CAInvul).Where(x => x.Value == 0);
+                var body = log.CombatData.GetAttackTargetEventByAttackTarget(target.AgentItem)?.Src;
+                var bodyInvulStatus = body?.GetBuffStatus(log, CAInvul).Where(x => x.Value == 0) ?? [];
                 var bodyAtHideStart = log.FightData.FightStart;
                 foreach (var noInvul in bodyInvulStatus)
                 {
@@ -262,8 +262,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 break;
             case (int)TargetID.CALeftArmAttackTarget:
             case (int)TargetID.CARightArmAttackTarget:
-                var armTargetableEvents = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
-                var arm = log.CombatData.GetAttackTargetEventsByAttackTarget(target.AgentItem).First().Src;
+                var armTargetableEvents = log.CombatData.GetAttackTargetEventByAttackTarget(target.AgentItem)?.GetTargetableEvents(log) ?? [];
                 var armAtHideStart = log.FightData.FightStart;
                 foreach (var targetable in armTargetableEvents)
                 {
