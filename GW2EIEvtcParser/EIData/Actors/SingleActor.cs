@@ -56,7 +56,7 @@ public abstract partial class SingleActor : Actor
         if (Health == -2)
         {
             Health = -1;
-            IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
+            IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(EnglobingAgentItem);
             if (maxHpUpdates.Any())
             {
                 HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
@@ -78,75 +78,6 @@ public abstract partial class SingleActor : Actor
     {
         return null;
     }
-
-
-    public bool IsDowned(ParsedEvtcLog log, long time)
-    {
-        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
-        return downs.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDowned(ParsedEvtcLog log, long start, long end)
-    {
-        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
-        return downs.Any(x => x.Intersects(start, end));
-    }
-    public bool IsDead(ParsedEvtcLog log, long time)
-    {
-        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
-        return deads.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDead(ParsedEvtcLog log, long start, long end)
-    {
-        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
-        return deads.Any(x => x.Intersects(start, end));
-    }
-    public bool IsDC(ParsedEvtcLog log, long time)
-    {
-        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
-        return dcs.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDC(ParsedEvtcLog log, long start, long end)
-    {
-        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
-        return dcs.Any(x => x.Intersects(start, end));
-    }
-    public bool IsActive(ParsedEvtcLog log, long time)
-    {
-        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
-        return actives.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsActive(ParsedEvtcLog log, long start, long end)
-    {
-        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
-        return actives.Any(x => x.Intersects(start, end));
-    }
-
-    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
-    {
-        var (nones, actives, immunes, recoverings) = GetBreakbarStatus(log);
-        if (nones.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.None;
-        }
-
-        if (actives.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Active;
-        }
-
-        if (immunes.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Immune;
-        }
-
-        if (recoverings.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Recover;
-        }
-
-        return BreakbarState.None;
-    }
-
 
     /// <summary>
     /// Return the health value at requested %
@@ -282,7 +213,7 @@ public abstract partial class SingleActor : Actor
     #region COMBAT REPLAY
     protected static void SetMovements(ParsedEvtcLog log, SingleActor actor, CombatReplay replay)
     {
-        foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(actor.AgentItem))
+        foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(actor.EnglobingAgentItem))
         {
             movementEvent.AddPoint3D(replay);
         }

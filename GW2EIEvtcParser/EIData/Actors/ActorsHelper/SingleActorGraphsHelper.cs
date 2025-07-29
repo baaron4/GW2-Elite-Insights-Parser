@@ -21,7 +21,7 @@ partial class SingleActor
     {
         if (_healthUpdates == null)
         {
-            var events = log.CombatData.GetHealthUpdateEvents(AgentItem);
+            var events = log.CombatData.GetHealthUpdateEvents(EnglobingAgentItem);
             _healthUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
@@ -32,7 +32,7 @@ partial class SingleActor
     {
         if (_breakbarPercentUpdates == null)
         {
-            var events = log.CombatData.GetBreakbarPercentEvents(AgentItem);
+            var events = log.CombatData.GetBreakbarPercentEvents(EnglobingAgentItem);
             _breakbarPercentUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
@@ -43,7 +43,7 @@ partial class SingleActor
     {
         if (_barrierUpdates == null)
         {
-            var events = log.CombatData.GetBarrierUpdateEvents(AgentItem);
+            var events = log.CombatData.GetBarrierUpdateEvents(EnglobingAgentItem);
             _barrierUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
