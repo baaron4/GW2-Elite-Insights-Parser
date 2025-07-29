@@ -149,6 +149,8 @@ public class EvtcParser
                 friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
                 Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
 
+                var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.EnglobingAgentItem != x.AgentItem);
+
                 _t.Log("Paralell phases");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
@@ -162,29 +164,63 @@ public class EvtcParser
                 _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 _t.Log("friendliesAndTargets GetStatus");
-                /*if (log.CombatData.HasMovementData)
+                if (hasEnglobingAgents)
                 {
-                    // init all positions
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
-                _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                    Parallel.ForEach(friendliesAndTargetsAndMobs.DistinctBy(x => x.EnglobingAgentItem), actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobs.Where(x => x.EnglobingAgentItem != x.AgentItem), actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+                    Parallel.ForEach(friendliesAndTargets.DistinctBy(x => x.EnglobingAgentItem), actor =>
                     {
-                        actor.GetBuffDistribution(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffDistribution");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargets.Where(x => x.EnglobingAgentItem != x.AgentItem), actor =>
                     {
-                        actor.GetBuffPresence(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffPresence");
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+                    Parallel.ForEach(friendliesAndTargets.DistinctBy(x => x.EnglobingAgentItem), actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargets.Where(x => x.EnglobingAgentItem != x.AgentItem), actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+                }
+                else
+                {
+                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+                }
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.Friendlies, actor =>
@@ -233,14 +269,14 @@ public class EvtcParser
         }
         catch (Exception ex)
         {
-            #if DEBUG
+#if DEBUG
             Console.Error.WriteLine(ex);
-            #endif
+#endif
 
             parsingFailureReason = new ParsingFailureReason(ex);
             return null;
         }
-}
+    }
 
     #endregion Main Parse Method
 
@@ -581,14 +617,14 @@ public class EvtcParser
                 discardedCbtEvents++;
                 continue;
             }
-            
+
             if (combatItem.IsStateChange == StateChange.ArcBuild)
             {
                 EvtcVersionEvent oldEvent = _evtcVersion;
                 try
                 {
                     _evtcVersion = new EvtcVersionEvent(combatItem);
-                } 
+                }
                 catch
                 {
                     _evtcVersion = oldEvent;
@@ -596,7 +632,7 @@ public class EvtcParser
 
                 continue;
             }
-            
+
             if (combatItem.HasTime())
             {
                 if (_logStartOffset == long.MinValue)
@@ -618,7 +654,7 @@ public class EvtcParser
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd )
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd)
             {
                 keepOnlyExtensionEvents = true;
             }
@@ -786,7 +822,7 @@ public class EvtcParser
                     if (playerAgent.Type == AgentItem.AgentType.Player)
                     {
                         new Player(playerAgent, noSquads).Anonymize(playerOffset++);
-                    } 
+                    }
                     else
                     {
                         new PlayerNonSquad(playerAgent).Anonymize(playerOffset++);
@@ -939,7 +975,7 @@ public class EvtcParser
         }
 
         _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
-     
+
         if (_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld)
         {
             var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
@@ -989,7 +1025,7 @@ public class EvtcParser
             }
         }
         _agentData.ApplyOffset(offset);
-        
+
         _fightData.ApplyOffset(offset);
     }
 
@@ -1040,18 +1076,18 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<byte>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = buffer.Array[buffer.Length] = reader.ReadByte();
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         // consume remaining length
-        for(; length > sizeof(UInt64); length -= sizeof(UInt64))
+        for (; length > sizeof(UInt64); length -= sizeof(UInt64))
         {
             reader.ReadUInt64();
         }
-        while(length-- > 0)
+        while (length-- > 0)
         {
             reader.ReadByte();
         }
@@ -1069,11 +1105,11 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<char>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = reader.ReadByte();
             buffer.Array[buffer.Length] = (char)b;
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         return buffer;
