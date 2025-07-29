@@ -234,7 +234,7 @@ public class AgentItem
     internal AgentItem? GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
     {
         var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
-        return atEvent != null ? atEvent.Src : this;
+        return atEvent?.Src ?? this;
     }
 
     private static void AddSegment(List<Segment> segments, long start, long end)
