@@ -10,45 +10,54 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
     {
         _seedSrc = buffStackItem.SeedSrc;
     }
+
+    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem seedSrc)
+    {
+        if (distrib.TryGetValue(seedSrc, out var toModify))
+        {
+            toModify.IncrementExtended(value);
+        }
+        else
+        {
+            distrib.Add(seedSrc, new BuffDistributionItem(
+                0,
+                0,
+                0,
+                0,
+                0,
+                value
+            ));
+        }
+    }
+    private static void AddUnknown(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem seedSrc)
+    {
+        if (distrib.TryGetValue(seedSrc, out var toModify))
+        {
+            toModify.IncrementUnknownExtension(value);
+        }
+        else
+        {
+            distrib.Add(seedSrc, new BuffDistributionItem(
+                0,
+                0,
+                0,
+                value,
+                0,
+                0
+            ));
+        }
+    }
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = base.SetBuffDistributionItem(distribs, start, end, buffID);
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-
-            if (distribution.TryGetValue(_seedSrc, out var toModify))
             {
-                toModify.IncrementExtended(cDur);
-            }
-            else
-            {
-                distribution.Add(_seedSrc, new BuffDistributionItem(
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    cDur
-                ));
-            }
-            if (_src.IsUnknown)
-            {
-
-                if (distribution.TryGetValue(_seedSrc, out toModify))
+                Add(distribution, cDur, _seedSrc);
+                if (_src.IsUnknown)
                 {
-                    toModify.IncrementUnknownExtension(cDur);
-                }
-                else
-                {
-                    distribution.Add(_seedSrc, new BuffDistributionItem(
-                        0,
-                        0,
-                        0,
-                        cDur,
-                        0,
-                        0
-                    ));
+                    AddUnknown(distribution, cDur, _seedSrc);
                 }
             }
             foreach (var subSeedSrc in _seedSrc.EnglobedAgentItems)
@@ -56,41 +65,14 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
                 long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
                 if (subcDur > 0)
                 {
-                    if (distribution.TryGetValue(subSeedSrc, out toModify))
-                    {
-                        toModify.IncrementExtended(subcDur);
-                    }
-                    else
-                    {
-                        distribution.Add(subSeedSrc, new BuffDistributionItem(
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            subcDur
-                        ));
-                    }
+                    Add(distribution, subcDur, subSeedSrc);
                     if (_src.IsUnknown)
                     {
-                        if (distribution.TryGetValue(subSeedSrc, out toModify))
-                        {
-                            toModify.IncrementUnknownExtension(subcDur);
-                        }
-                        else
-                        {
-                            distribution.Add(subSeedSrc, new BuffDistributionItem(
-                                0,
-                                0,
-                                0,
-                                subcDur,
-                                0,
-                                0
-                            ));
-                        }
+                        AddUnknown(distribution, subcDur, subSeedSrc);
                     }
                 }
             }
+
         }
         return cDur;
     }
