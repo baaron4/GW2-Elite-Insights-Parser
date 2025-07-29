@@ -66,16 +66,50 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         long cDur = GetClampedDuration(start, end);
         if (cDur > 0)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            if (distribution.TryGetValue(_src, out var toModify))
+            if (_src.EnglobedAgentItems.Count == 0)
             {
-                toModify.IncrementValue(cDur);
-            }
+                Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+                if (distribution.TryGetValue(_src, out var toModify))
+                {
+                    toModify.IncrementValue(cDur);
+                }
+                else
+                {
+                    distribution.Add(_src, new BuffDistributionItem(
+                        cDur,
+                        0, 
+                        0, 
+                        0, 
+                        0, 
+                        0
+                    ));
+                }
+            } 
             else
             {
-                distribution.Add(_src, new BuffDistributionItem(
-                    cDur,
-                    0, 0, 0, 0, 0));
+                foreach (var subSrc in _src.EnglobedAgentItems)
+                {
+                    long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                    if (subcDur > 0)
+                    {
+                        Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+                        if (distribution.TryGetValue(subSrc, out var toModify))
+                        {
+                            toModify.IncrementValue(subcDur);
+                        }
+                        else
+                        {
+                            distribution.Add(subSrc, new BuffDistributionItem(
+                                subcDur,
+                                0, 
+                                0, 
+                                0, 
+                                0,
+                                0
+                            ));
+                        }
+                    }
+                }
             }
         }
 

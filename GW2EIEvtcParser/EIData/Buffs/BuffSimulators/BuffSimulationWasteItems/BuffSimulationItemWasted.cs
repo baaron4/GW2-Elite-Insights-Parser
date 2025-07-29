@@ -15,16 +15,48 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
         long value = GetValue(start, end);
         if (value > 0)
         {
-            AgentItem agent = Src;
-            if (distrib.TryGetValue(agent, out var toModify))
+            if (Src.EnglobedAgentItems.Count == 0)
             {
-                toModify.IncrementWaste(value);
+                if (distrib.TryGetValue(Src, out var toModify))
+                {
+                    toModify.IncrementWaste(value);
+                }
+                else
+                {
+                    distrib.Add(Src, new BuffDistributionItem(
+                        0,
+                        0, 
+                        value, 
+                        0, 
+                        0,
+                        0
+                    ));
+                }
             }
             else
             {
-                distrib.Add(agent, new BuffDistributionItem(
-                    0,
-                    0, value, 0, 0, 0));
+                foreach (var subSrc in Src.EnglobedAgentItems)
+                {
+                    long subValue = GetValue(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                    if (subValue > 0)
+                    {
+                        if (distrib.TryGetValue(subSrc, out var toModify))
+                        {
+                            toModify.IncrementWaste(subValue);
+                        }
+                        else
+                        {
+                            distrib.Add(subSrc, new BuffDistributionItem(
+                                0,
+                                0, 
+                                subValue, 
+                                0, 
+                                0, 
+                                0
+                             ));
+                        }
+                    }
+                }
             }
         }
         return value;

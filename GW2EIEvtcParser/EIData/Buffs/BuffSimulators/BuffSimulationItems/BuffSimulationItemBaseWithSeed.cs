@@ -16,27 +16,93 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            if (distribution.TryGetValue(_seedSrc, out var toModify))
+            if (_seedSrc.EnglobedAgentItems.Count == 0)
             {
-                toModify.IncrementExtended(cDur);
-            }
-            else
-            {
-                distribution.Add(_seedSrc, new BuffDistributionItem(
-                    0,
-                    0, 0, 0, 0, cDur));
-            }
-            if (_src.IsUnknown)
-            {
-                if (distribution.TryGetValue(_seedSrc, out toModify))
+                if (distribution.TryGetValue(_seedSrc, out var toModify))
                 {
-                    toModify.IncrementUnknownExtension(cDur);
+                    toModify.IncrementExtended(cDur);
                 }
                 else
                 {
                     distribution.Add(_seedSrc, new BuffDistributionItem(
                         0,
-                        0, 0, cDur, 0, 0));
+                        0, 
+                        0, 
+                        0, 
+                        0, 
+                        cDur
+                    ));
+                }
+            } 
+            else
+            {
+                foreach (var subSrc in _seedSrc.EnglobedAgentItems)
+                {
+                    long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                    if (subcDur > 0)
+                    {
+                        if (distribution.TryGetValue(subSrc, out var toModify))
+                        {
+                            toModify.IncrementExtended(subcDur);
+                        }
+                        else
+                        {
+                            distribution.Add(subSrc, new BuffDistributionItem(
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                subcDur
+                            ));
+                        }
+                    }
+                }
+            }
+            if (_src.IsUnknown)
+            {
+                if (_src.EnglobedAgentItems.Count == 0)
+                {
+                    if (distribution.TryGetValue(_seedSrc, out var toModify))
+                    {
+                        toModify.IncrementUnknownExtension(cDur);
+                    }
+                    else
+                    {
+                        distribution.Add(_seedSrc, new BuffDistributionItem(
+                            0,
+                            0,
+                            0,
+                            cDur,
+                            0,
+                            0
+                        ));
+                    }
+                } 
+                else
+                {
+                    foreach (var subSrc in _src.EnglobedAgentItems)
+                    {
+                        long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                        if (subcDur > 0)
+                        {
+                            if (distribution.TryGetValue(subSrc, out var toModify))
+                            {
+                                toModify.IncrementUnknownExtension(subcDur);
+                            }
+                            else
+                            {
+                                distribution.Add(subSrc, new BuffDistributionItem(
+                                    0,
+                                    0,
+                                    0,
+                                    subcDur,
+                                    0,
+                                    0
+                                ));
+                            }
+                        }
+                    }
                 }
             }
         }

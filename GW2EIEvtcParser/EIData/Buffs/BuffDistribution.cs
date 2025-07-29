@@ -82,12 +82,25 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
 
     public List<SingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
     {
-        var actors = new List<SingleActor>();
+        var actors = new HashSet<SingleActor>();
         if (_distribution.TryGetValue(buffID, out var buffsByAgent))
         {
-            actors.AddRange(buffsByAgent.Keys.Select(x => log.FindActor(x)));
+            foreach (var agent in buffsByAgent.Keys)
+            {
+                if (agent.EnglobedAgentItems.Count > 0)
+                {
+                    foreach (var subAgent in agent.EnglobedAgentItems)
+                    {
+                        actors.Add(log.FindActor(subAgent));
+                    }
+                } 
+                else
+                {
+                    actors.Add(log.FindActor(agent));
+                }
+            }
         }
-        return actors;
+        return actors.ToList();
     }
 
     private bool TryGetBuffDistribution(long buffID, AgentItem src, [NotNullWhen(returnValue: true)] out BuffDistributionItem? distrib)
