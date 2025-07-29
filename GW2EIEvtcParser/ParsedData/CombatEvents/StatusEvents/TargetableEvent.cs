@@ -9,4 +9,9 @@ public class TargetableEvent : StatusEvent
         Targetable = evtcItem.DstAgent == 1;
     }
 
+    internal TargetableEvent(AgentItem attackTarget, long time, bool targetable) : base(attackTarget, time)
+    {
+        Targetable = targetable;
+    }
+
 }

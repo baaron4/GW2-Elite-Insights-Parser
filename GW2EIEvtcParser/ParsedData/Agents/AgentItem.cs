@@ -231,10 +231,10 @@ public class AgentItem
         Master = master;
     }
 
-    internal AgentItem? GetMainAgentWhenAttackTarget(ParsedEvtcLog log, long time)
+    internal AgentItem? GetMainAgentWhenAttackTarget(ParsedEvtcLog log)
     {
-        var atEvents = log.CombatData.GetAttackTargetEventsByAttackTarget(this);
-        return atEvents.Any() ? atEvents.LastOrDefault(y => time >= y.Time)?.Src : this;
+        var atEvent = log.CombatData.GetAttackTargetEventByAttackTarget(this);
+        return atEvent != null ? atEvent.Src : this;
     }
 
     private static void AddSegment(List<Segment> segments, long start, long end)

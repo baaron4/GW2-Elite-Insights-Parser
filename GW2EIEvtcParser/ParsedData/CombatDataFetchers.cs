@@ -50,20 +50,20 @@ partial class CombatData
     #region ATTACKTARGETS
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents()
     {
-        return _statusEvents.AttackTargetEvents;
+        return _metaDataEvents.AttackTargetEvents;
     }
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsBySrc(AgentItem targetedAgent)
     {
-        return _statusEvents.AttackTargetEventsBySrc.GetValueOrEmpty(targetedAgent);
+        return _metaDataEvents.AttackTargetEventsBySrc.GetValueOrEmpty(targetedAgent);
     }
 
-    public IReadOnlyList<AttackTargetEvent> GetAttackTargetEventsByAttackTarget(AgentItem attackTarget)
+    public AttackTargetEvent? GetAttackTargetEventByAttackTarget(AgentItem attackTarget)
     {
-        return _statusEvents.AttackTargetEventsByAttackTarget.GetValueOrEmpty(attackTarget);
-    }
-    public IReadOnlyList<TargetableEvent> GetTargetableEvents()
-    {
-        return _statusEvents.TargetableEvents;
+        if (_metaDataEvents.AttackTargetEventByAttackTarget.TryGetValue(attackTarget, out var attackTargetEvent)) 
+        {
+            return attackTargetEvent;
+        }
+        return null;
     }
     public IReadOnlyList<TargetableEvent> GetTargetableEventsBySrc(AgentItem attackTarget)
     {

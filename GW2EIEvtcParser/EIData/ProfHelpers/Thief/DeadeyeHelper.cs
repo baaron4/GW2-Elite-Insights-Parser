@@ -24,7 +24,7 @@ internal static class DeadeyeHelper
         var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
         if (effectApply != null)
         {
-            return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+            return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log);
         }
         return false;
     }
@@ -61,7 +61,7 @@ internal static class DeadeyeHelper
         var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, dst).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
         if (effectApply != null)
         {
-            return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
+            return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log);
         }
         return false;
     }
