@@ -231,7 +231,7 @@ partial class CombatData
     {
         if (TryGetMarkerEventsByGUID(marker, out var markers))
         {
-            markerEvents = markers.Where(effect => effect.Src == agent).ToList();
+            markerEvents = markers.Where(effect => effect.Src.Is(agent)).ToList();
             return true;
         }
         markerEvents = null;
@@ -567,12 +567,11 @@ partial class CombatData
         List<EffectEvent> result;
         if (agent.EnglobingAgentItem != agent)
         {
-            var parentAgent = agent.EnglobingAgentItem;
-            result = effects.Where(effect => effect.Src == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+            result = effects.Where(effect => effect.Src.Is(agent) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
         }
         else
         {
-            result = effects.Where(effect => effect.Src == agent).ToList();
+            result = effects.Where(effect => effect.Src.Is(agent)).ToList();
         }
         return result;
     }
@@ -597,12 +596,11 @@ partial class CombatData
         List<EffectEvent> result;
         if (agent.EnglobingAgentItem != agent)
         {
-            var parentAgent = agent.EnglobingAgentItem;
-            result = effects.Where(effect => effect.Dst == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+            result = effects.Where(effect => effect.Dst.Is(agent) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
         }
         else
         {
-            result = effects.Where(effect => effect.Dst == agent).ToList();
+            result = effects.Where(effect => effect.Dst.Is(agent)).ToList();
         }
         return result;
     }

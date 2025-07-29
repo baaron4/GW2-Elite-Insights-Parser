@@ -102,7 +102,7 @@ internal static class MesmerHelper
 
     internal static bool IllusionsChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.From == x.CreditedFrom || x.From.IsAnySpecies(_clones) || x.From.IsAnySpecies(_phantasms);
+        return x.From.Is(x.CreditedFrom) || x.From.IsAnySpecies(_clones) || x.From.IsAnySpecies(_phantasms);
     }
 
     private static bool SuperiorityComplexBonusChecker(HealthDamageEvent x, ParsedEvtcLog log)
@@ -474,7 +474,7 @@ internal static class MesmerHelper
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out var dimensionalApertures))
         {
             var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
-            var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem);
+            var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy.Is(player.AgentItem));
             foreach (EffectEvent effect in dimensionalApertures)
             {
                 // The buff can be quite delayed

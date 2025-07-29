@@ -221,20 +221,20 @@ public class AgentItem
 
     internal void SetMaster(AgentItem master)
     {
-        if (IsPlayer || master == this)
+        if (IsPlayer || master.Is(this))
         {
             return;
         }
-        AgentItem cur = master.EnglobingAgentItem;
+        AgentItem cur = master;
         while (cur.Master != null)
         {
-            cur = cur.Master.EnglobingAgentItem;
-            if (cur == this)
+            cur = cur.Master;
+            if (cur.Is(this))
             {
                 return;
             }
         }
-        Master = master;
+        Master = master.EnglobingAgentItem;
     }
 
     internal AgentItem? GetMainAgentWhenAttackTarget(ParsedEvtcLog log, long time)

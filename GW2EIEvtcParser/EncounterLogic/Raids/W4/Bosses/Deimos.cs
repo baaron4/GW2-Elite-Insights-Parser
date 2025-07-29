@@ -328,7 +328,7 @@ internal class Deimos : BastionOfThePenitent
         var gadgetsAgents = new HashSet<AgentItem>();
         if (firstTargetable != null)
         {
-            var attackTarget = attackTargetEvents.FirstOrDefault(x => x.AttackTarget == firstTargetable.Src);
+            var attackTarget = attackTargetEvents.FirstOrDefault(x => x.AttackTarget.Is(firstTargetable.Src));
             if (attackTarget != null && attackTarget.Src.Type == AgentItem.AgentType.Gadget)
             {
                 attackTarget.AttackTarget.OverrideID(TargetID.DeimosAttackTarget, agentData);
@@ -337,7 +337,7 @@ internal class Deimos : BastionOfThePenitent
                 gadgetsAgents.Add(bodyStruct);
                 long targetableTime = firstTargetable.Time;
 
-                var notTargetable = targetableEvents.FirstOrDefault(x => x.Time >= firstTargetable.Time && x.Src == firstTargetable.Src && !x.Targetable);
+                var notTargetable = targetableEvents.FirstOrDefault(x => x.Time >= firstTargetable.Time && x.Src.Is(firstTargetable.Src) && !x.Targetable);
                 long upperThreshold = notTargetable != null ? notTargetable.Time : fightData.LogEnd;
                 var armStructs = combatData.Where(x => x.Time >= targetableTime && x.Time <= upperThreshold && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0).Select(x => agentData.GetAgent(x.SrcAgent, x.Time));
                 gadgetsAgents.UnionWith(armStructs);

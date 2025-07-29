@@ -38,7 +38,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override int GetStacks(SingleActor actor)
     {
-        return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
+        return GetActiveSources().Any(x => x.Is(actor.AgentItem)) ? 1 : 0;
     }
 
     /*public override IEnumerable<long> GetActualDurationPerStack()

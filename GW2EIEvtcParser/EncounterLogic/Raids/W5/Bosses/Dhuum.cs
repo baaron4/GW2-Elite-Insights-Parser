@@ -32,7 +32,7 @@ internal class Dhuum : HallOfChains
                         return false;
                     }
                     // Greater Death mark check
-                    if (log.CombatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To == br.To)) {
+                    if (log.CombatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - br.Time) < 100 && x.To.Is(br.To))) {
                         return false;
                     }
                     // Spirit transformation check
@@ -116,7 +116,7 @@ internal class Dhuum : HallOfChains
             {
                 bool state = true;
                 // Buff loss caused by the Greather Death Mark
-                if (combatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                if (combatData.GetDamageData(GreaterDeathMark).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To.Is(brae.To)))
                 {
                     state = false;
                 }

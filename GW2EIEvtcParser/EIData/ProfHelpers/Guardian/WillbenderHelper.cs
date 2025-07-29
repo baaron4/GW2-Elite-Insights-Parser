@@ -17,7 +17,7 @@ internal static class WillbenderHelper
     private static bool LethalTempoChecker(DamageEvent x, ParsedEvtcLog log, long threshold)
     {
         AgentItem src = x.From;
-        var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - threshold) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+        var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - threshold) < ServerDelayConstant && bae.By.Is(src)).LastOrDefault(y => y.Time <= x.Time);
         if (effectApply != null)
         {
             return x.Time - effectApply.Time < threshold;

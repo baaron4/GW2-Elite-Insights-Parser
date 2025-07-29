@@ -48,9 +48,8 @@ public class BuffVolumeStatistics
                 {
                     if (abae.Time >= start && abae.Time <= end)
                     {
-                        var creditedBy = abae.CreditedBy.FindEnglobedAgentItem(abae.Time);
                         abae.TryFindSrc(log);
-                        if (creditedBy == srcAgentItem)
+                        if (abae.CreditedBy.Is(srcAgentItem))
                         {
                             if (abae is BuffApplyEvent bae)
                             {
@@ -141,7 +140,6 @@ public class BuffVolumeStatistics
             {
                 if (abae.Time >= start && abae.Time <= end)
                 {
-                    var creditedBy = abae.CreditedBy.FindEnglobedAgentItem(abae.Time);
                     abae.TryFindSrc(log);
                     if (abae is BuffApplyEvent bae)
                     {
@@ -150,7 +148,7 @@ public class BuffVolumeStatistics
                         {
                             continue;
                         }*/
-                        if (creditedBy == dstActor.AgentItem)
+                        if (abae.CreditedBy.Is(dstActor.AgentItem))
                         {
                             totalOutgoing += bae.AppliedDuration;
                         }
@@ -158,12 +156,12 @@ public class BuffVolumeStatistics
                     }
                     if (abae is BuffExtensionEvent bee)
                     {
-                        if (creditedBy == dstActor.AgentItem)
+                        if (abae.CreditedBy.Is(dstActor.AgentItem))
                         {
                             totalOutgoingByExtension += bee.ExtendedDuration;
                         }
                         totalIncomingByExtension += bee.ExtendedDuration;
-                        if (creditedBy.IsUnknown)
+                        if (abae.CreditedBy.IsUnknown)
                         {
                             totalIncomingByUnknownExtension += bee.ExtendedDuration;
                         }

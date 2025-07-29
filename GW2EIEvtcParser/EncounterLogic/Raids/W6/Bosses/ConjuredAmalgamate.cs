@@ -82,7 +82,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         foreach (var positionEvent in attackTargetPositions)
         {
             var position = new PositionEvent(positionEvent, agentData);
-            var attackTargetEvent = attackTargetEvents.First(x => position.Src == x.AttackTarget);
+            var attackTargetEvent = attackTargetEvents.First(x => position.Src.Is(x.AttackTarget));
             var atAgent = attackTargetEvent.AttackTarget;
             var agent = attackTargetEvent.Src;
             var atPos = position.GetPoint3D();
@@ -111,7 +111,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         foreach (var positionEvent in attackTargetPositions)
         {
             var position = new PositionEvent(positionEvent, agentData);
-            var attackTargetEvent = attackTargetEvents.First(x => position.Src == x.AttackTarget);
+            var attackTargetEvent = attackTargetEvents.First(x => position.Src.Is(x.AttackTarget));
             var atAgent = attackTargetEvent.AttackTarget;
             var agent = attackTargetEvent.Src;
             var atPos = position.GetPoint3D();

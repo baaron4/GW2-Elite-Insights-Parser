@@ -151,7 +151,7 @@ public static class AgentManipulationHelper
             ];
         foreach (AgentItem ag in masterRedirectionCandidates)
         {
-            if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+            if (redirectFrom.Is(ag.Master) && to.InAwareTimes(ag.FirstAware))
             {
                 ag.SetMaster(to);
             }

@@ -101,7 +101,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 
     public IEnumerable<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _englobingAgentItem);
+        return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From.Is(_agentItem));
     }
 
     private static int[] ComputeBarrierGraph(IEnumerable<EXTBarrierEvent> dls, long start, long end)

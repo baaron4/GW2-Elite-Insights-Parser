@@ -95,7 +95,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 var damageTaken = log.CombatData.GetDamageTakenData(adhe.To);
-                bool hasExposed = log.CombatData.GetBuffData(ExposedPlayer).Any(x => x is BuffApplyEvent && x.To == adhe.To && Math.Abs(x.Time - adhe.Time) < ServerDelayConstant);
+                bool hasExposed = log.CombatData.GetBuffData(ExposedPlayer).Any(x => x is BuffApplyEvent && x.To.Is(adhe.To) && Math.Abs(x.Time - adhe.Time) < ServerDelayConstant);
 
                 // If you get hit by your own Fluxlance only during the current sequence, keep the achievement
                 // If you get hit by 2 Fluxlance in the current sequence, lose the achievement
@@ -315,7 +315,7 @@ internal class DecimaTheStormsinger : MountBalrior
         // Final phases + Boulder phases
         if (isCM)
         {
-            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To == decima.AgentItem);
+            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem));
             if (finalSeismicJumpEvent != null)
             {
                 var preFinalPhase = new PhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");

@@ -236,7 +236,7 @@ internal class WvWFight : FightLogic
                 InstanceBuffs.Add((log.Buffs.BuffsByIDs[buffID], 1));
             }
             // When buff is missing on a player, they are in PvE mode
-            if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To == x.AgentItem)))
+            if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To.Is(x.AgentItem))))
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIDs[GuildHallPvEMode], 1));
             }

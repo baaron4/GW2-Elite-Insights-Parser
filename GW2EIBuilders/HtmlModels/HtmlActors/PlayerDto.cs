@@ -59,7 +59,7 @@ internal class PlayerDto : ActorDto
         Group = actor.Group;
         Acc = actor.Account;
         Profession = actor.Spec.ToString();
-        IsPoV = log.LogData.PoV == actor.AgentItem;
+        IsPoV = actor.AgentItem.Is(log.LogData.PoV);
         if (actor is Player p)
         {
             IsCommander = p.IsCommander(log);

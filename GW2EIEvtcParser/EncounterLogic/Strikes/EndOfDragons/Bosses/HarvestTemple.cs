@@ -428,7 +428,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
                                 isSuccess = true;
-                                if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                                if (determinedApplies.Count(x => x.To.Is(liffOff.Caster) && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
                                 {
                                     isSuccess = false;
                                     break;
