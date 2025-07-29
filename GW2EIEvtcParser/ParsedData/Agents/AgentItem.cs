@@ -408,6 +408,15 @@ public class AgentItem
         }
     }
 
+    public bool Is(AgentItem? ag)
+    {
+        if (ag == null)
+        {
+            return false;
+        }
+        return EnglobingAgentItem == ag.EnglobingAgentItem;
+    }
+
     public bool IsMaster(AgentItem ag)
     {
         return GetFinalMaster() == ag.EnglobingAgentItem;
