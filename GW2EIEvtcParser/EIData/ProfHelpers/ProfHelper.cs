@@ -283,7 +283,7 @@ internal static class ProfHelper
         {
             // dst must no be a gadget nor a friendly player
             // src must be a masterless gadget
-            if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
+            if (!playerAgents.Any(evt.To.IsMaster) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
             {
                 res.Add(evt.From);
             }

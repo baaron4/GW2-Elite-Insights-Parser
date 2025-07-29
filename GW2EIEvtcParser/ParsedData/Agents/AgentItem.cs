@@ -225,10 +225,10 @@ public class AgentItem
         {
             return;
         }
-        AgentItem cur = master;
+        AgentItem cur = master.EnglobingAgentItem;
         while (cur.Master != null)
         {
-            cur = cur.Master;
+            cur = cur.Master.EnglobingAgentItem;
             if (cur == this)
             {
                 return;
@@ -408,6 +408,14 @@ public class AgentItem
         }
     }
 
+    public bool IsMaster(AgentItem ag)
+    {
+        return GetFinalMaster() == ag.EnglobingAgentItem;
+    }
+    public bool IsMasterOf(AgentItem ag)
+    {
+        return ag.IsMaster(this);
+    }
     public AgentItem GetFinalMaster()
     {
         AgentItem cur = this;

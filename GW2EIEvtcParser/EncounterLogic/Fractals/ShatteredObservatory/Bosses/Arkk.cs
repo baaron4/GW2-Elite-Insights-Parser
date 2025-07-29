@@ -203,15 +203,14 @@ internal class Arkk : ShatteredObservatory
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
-        HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
         // missing buff apply events fallback, some phases will be missing
         // removes should be present
-        if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, Determined762, 10))
+        if (SetSuccessByBuffCount(combatData, fightData, playerAgents, target, Determined762, 10))
         {
             var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>();
             if (invulsRemoveTarget.Count() == 5)
             {
-                SetSuccessByCombatExit([target], combatData, fightData, adjustedPlayers);
+                SetSuccessByCombatExit([target], combatData, fightData, playerAgents);
             }
         }
     }

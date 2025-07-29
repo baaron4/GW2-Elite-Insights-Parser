@@ -583,11 +583,11 @@ partial class CombatData
         if (agent.EnglobingAgentItem != agent)
         {
             var parentAgent = agent.EnglobingAgentItem;
-            result = effects.Where(effect => effect.Src.GetFinalMaster() == parentAgent && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
+            result = effects.Where(effect => parentAgent.IsMasterOf(effect.Src) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
         }
         else
         {
-            result = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
+            result = effects.Where(effect => agent.IsMasterOf(effect.Src)).ToList();
         }
         return result;
     }

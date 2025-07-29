@@ -207,7 +207,7 @@ internal class Deimos : BastionOfThePenitent
             {
                 return;
             }
-            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > percent10Start && playerAgents.Any(x.From.IsMaster) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
                 // This means Deimos received damage after becoming non attackable, that means it did not die

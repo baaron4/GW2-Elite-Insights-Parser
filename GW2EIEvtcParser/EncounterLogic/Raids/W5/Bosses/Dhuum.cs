@@ -312,7 +312,7 @@ internal class Dhuum : HallOfChains
             {
                 soul.OverrideType(AgentItem.AgentType.NPC, agentData);
                 soul.OverrideID(TargetID.YourSoul, agentData);
-                if (soul.GetFinalMaster() != firstApplier)
+                if (!firstApplier.IsMasterOf(soul))
                 {
                     soul.SetMaster(firstApplier);
                 }
@@ -720,7 +720,7 @@ internal class Dhuum : HallOfChains
 
         // Soul split
         var hastenedDemise = p.GetBuffStatus(log, HastenedDemise).Where(x => x.Value == 1);
-        var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
+        var souls = log.AgentData.GetNPCsByID(TargetID.YourSoul).Where(x => p.AgentItem.IsMasterOf(x));
         foreach (AgentItem soul in souls)
         {
             Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - 100);

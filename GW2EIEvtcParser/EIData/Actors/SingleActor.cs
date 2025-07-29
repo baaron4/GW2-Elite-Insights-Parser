@@ -121,7 +121,7 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.GetFinalMaster() == EnglobingAgentItem);
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => AgentItem.IsMasterOf(x));
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
@@ -151,7 +151,7 @@ public abstract partial class SingleActor : Actor
                 }
             }
             // gadget, string based
-            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.GetFinalMaster() == EnglobingAgentItem);
+            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => AgentItem.IsMasterOf(x));
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {

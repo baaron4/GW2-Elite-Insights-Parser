@@ -145,7 +145,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1 and P2 merged
                     if (p1.Start == p2.Start)
                     {
-                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Any(x.From.IsMaster) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p2.OverrideStart(hit.Time);
@@ -167,7 +167,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1 and P2 merged
                     if (p1.Start == p2.Start)
                     {
-                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Any(x.From.IsMaster) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p2.OverrideStart(hit.Time);
@@ -182,7 +182,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1/P2 and P3 are merged
                     if (p1.Start == p3.Start || p2.Start == p3.Start)
                     {
-                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Any(x.From.IsMaster) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p3.OverrideStart(hit.Time);
@@ -202,7 +202,7 @@ internal class TwinLargos : MythwrightGambit
         if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
         {
             PhaseData p1 = phases[0];
-            HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+            HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Any(x.From.IsMaster) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
             if (hit != null)
             {
                 p1.OverrideStart(hit.Time);
