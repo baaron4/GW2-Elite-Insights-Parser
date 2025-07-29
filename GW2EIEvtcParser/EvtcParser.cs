@@ -572,6 +572,7 @@ public class EvtcParser
         int discardedCbtEvents = 0;
         bool keepOnlyExtensionEvents = false;
         bool stopAtLogEnd = _id != (int)TargetID.Instance;
+        var extensionEvents = new List<CombatItem>(5000);
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
@@ -607,6 +608,10 @@ public class EvtcParser
             }
 
             _combatItems.Add(combatItem);
+            if (combatItem.IsExtension)
+            {
+                extensionEvents.Add(combatItem);
+            }
 
             if (combatItem.IsStateChange == StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
             {
@@ -618,6 +623,13 @@ public class EvtcParser
                 keepOnlyExtensionEvents = true;
             }
         }
+        extensionEvents.ForEach(x =>
+        {
+            if (x.HasTime(_enabledExtensions))
+            {
+                x.OverrideTime(x.Time - _logStartOffset);
+            }
+        });
         operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Discarded " + discardedCbtEvents);
         if (_combatItems.Count == 0)
         {
@@ -746,6 +758,10 @@ public class EvtcParser
             var player = new Player(playerAgent, noSquads);
             _playerList.Add(player);
         }
+        if (_playerList.Count == 0)
+        {
+            throw new EvtcAgentException("No valid players");
+        }
         if (_playerList.Exists(x => x.Group == 0))
         {
             _playerList.ForEach(x => x.MakeSquadless());
@@ -872,6 +888,7 @@ public class EvtcParser
         _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
@@ -990,44 +1007,6 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
         OffsetEvtcData();
         operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");
-        operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
-        // Removal of players present before the fight but not during
-        var agentsToRemove = new HashSet<AgentItem>();
-        foreach (Player p in _playerList)
-        {
-            if (p.LastAware < 0)
-            {
-                agentsToRemove.Add(p.AgentItem);
-                operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (gone before fight start)");
-            }
-        }
-        if (!(_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld))
-        {
-            foreach (Player p in _playerList)
-            {
-                // check for players who have spawned after fight start
-                if (p.FirstAware > 100)
-                {
-                    // look for a spawn event close to first aware
-                    CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == StateChange.Spawn
-                        && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
-                    if (spawnEvent != null)
-                    {
-                        var damageEvents = _combatItems.Where(x => x.IsDamage() && (x.SrcMatchesAgent(p.AgentItem) || x.DstMatchesAgent(p.AgentItem)));
-                        if (!damageEvents.Any())
-                        {
-                            agentsToRemove.Add(p.AgentItem);
-                            operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start and did not participate)");
-                        }
-                    }
-                }
-            }
-        }
-        _playerList.RemoveAll(x => agentsToRemove.Contains(x.AgentItem));
-        if (_playerList.Count == 0)
-        {
-            throw new EvtcAgentException("No valid players");
-        }
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
         _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);

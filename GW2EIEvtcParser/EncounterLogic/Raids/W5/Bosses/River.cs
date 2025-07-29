@@ -28,6 +28,7 @@ internal class River : HallOfChains
     public River(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
+        GenericFallBackMethod = FallBackMethod.None;
         ChestID = ChestID.ChestOfSouls;
         Extension = "river";
         Targetless = true;

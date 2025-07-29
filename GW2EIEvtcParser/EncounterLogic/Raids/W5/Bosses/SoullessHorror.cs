@@ -51,6 +51,7 @@ internal class SoullessHorror : HallOfChains
     {
         MechanicList.Add(Mechanics);
         Extension = "sh";
+        GenericFallBackMethod = FallBackMethod.None;
         ChestID = ChestID.ChestOfDesmina;
         Icon = EncounterIconSoullessHorror;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
