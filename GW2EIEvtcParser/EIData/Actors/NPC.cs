@@ -88,7 +88,7 @@ public class NPC : SingleActor
         }
         // Don't put minions of NPC into the minion display system
         AgentItem master = AgentItem.GetFinalMaster();
-        if (master != AgentItem && master.IsPlayer)
+        if (!master.Is(AgentItem) && master.IsPlayer)
         {
             SingleActor masterActor = log.FindActor(master)!;
             // Basic linkage
