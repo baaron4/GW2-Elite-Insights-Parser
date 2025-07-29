@@ -69,18 +69,31 @@ public class ParsedEvtcLog
         List<Player> activePlayers = [];
         foreach (Player p in playerList)
         {
-            if (p.FirstAware < FightData.FightEnd)
+            if (p.LastAware <= FightData.FightStart)
             {
-                activePlayers.Add(p);
+                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - despawned before fight start");
             } 
+            else if (p.FirstAware < FightData.FightEnd)
+            {
+                if (CombatData.GetDamageTakenData(p.AgentItem).Any(x => !x.ToFriendly) ||
+                    CombatData.GetDamageData(p.AgentItem).Any(x => !x.ToFriendly) ||
+                    CombatData.GetBuffDataBySrc(p.AgentItem).Any(x => x.To.GetFinalMaster() != p.AgentItem))
+                {
+                    activePlayers.Add(p);
+                }
+                else
+                {
+                    operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - did not participate");
+                }
+            }
             else
             {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight end)");
+                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - spawned after fight end");
             }
         }
         if (activePlayers.Count == 0)
         {
-            throw new EvtcAgentException("No valid players");
+            throw new EvtcAgentException("No active players");
         }
         PlayerList = activePlayers.OrderBy(a => a.Group).ToList();
         PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
