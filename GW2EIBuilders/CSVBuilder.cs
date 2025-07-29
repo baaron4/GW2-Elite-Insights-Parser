@@ -94,9 +94,9 @@ public class CSVBuilder
         WriteLine(["Boss", _log.FightData.FightName]);
         WriteLine(["Success", _log.FightData.Success.ToString()]);
         WriteLine(["Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString()]);
-        IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
+        var hpUpdates = _legacyTarget.GetHealthUpdates(_log);
         double hpLeft = hpUpdates.Count > 0
-            ? hpUpdates.Last().HealthPercent
+            ? hpUpdates.Last().Value
             : 100.0;
         WriteLine(["Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString()]);
         WriteLine(["Boss Health Burned %", (100.0 - hpLeft).ToString()]);
