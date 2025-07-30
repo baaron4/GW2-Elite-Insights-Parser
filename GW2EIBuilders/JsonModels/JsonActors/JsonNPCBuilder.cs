@@ -20,7 +20,7 @@ internal static class JsonNPCBuilder
         JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         //
-        jsonNPC.Id = npc.ID;  
+        jsonNPC.Id = npc.ID;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;

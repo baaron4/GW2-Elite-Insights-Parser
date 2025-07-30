@@ -85,10 +85,7 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
         var actors = new List<SingleActor>();
         if (_distribution.TryGetValue(buffID, out var buffsByAgent))
         {
-            foreach (var agent in buffsByAgent.Keys)
-            {
-                actors.Add(log.FindActor(agent));
-            }
+            actors.AddRange(buffsByAgent.Keys.Select(x => log.FindActor(x)));
         }
         return actors;
     }

@@ -389,13 +389,7 @@ public abstract class FightLogic
     {
         if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
         {
-            List<ErrorEvent> errorMessages = [new("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations"),           
-                ];
-            if (IsInstance || ParseMode == ParseModeEnum.WvW || ParseMode == ParseModeEnum.OpenWorld)
-            {
-                errorMessages.Add(new("Buffs may be not accurate if specialization or subgroups have changed during the instance."));
-            }
-            return errorMessages;
+            return [new("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations")];
         }
         return [ ];
     }
