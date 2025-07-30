@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Threading.Tasks;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -120,16 +121,15 @@ internal static class EncounterLogicUtils
         int playerDeadOrDCCount = 0;
         foreach (AgentItem playerAgent in playerAgents)
         {
-            var deads = new List<Segment>();
-            var downs = new List<Segment>();
-            var dcs = new List<Segment>();
-            var actives = new List<Segment>();
-            playerAgent.GetAgentStatus(deads, downs, dcs, actives, combatData);
-            if (deads.Any(x => x.ContainsPoint(timeToCheck)))
-            {
-                playerDeadOrDCCount++;
-            }
-            else if (dcs.Any(x => x.ContainsPoint(timeToCheck)))
+            var statusEvents = new List<StatusEvent>();
+            statusEvents.AddRange(combatData.GetAliveEvents(playerAgent));
+            statusEvents.AddRange(combatData.GetDownEvents(playerAgent));
+            statusEvents.AddRange(combatData.GetDeadEvents(playerAgent));
+            statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent));
+            statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent));
+            statusEvents.SortByTime();
+            var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
+            if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
             {
                 playerDeadOrDCCount++;
             }
