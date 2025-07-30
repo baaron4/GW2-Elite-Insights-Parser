@@ -166,17 +166,34 @@ public class EvtcParser
                 _t.Log("friendliesAndTargets GetStatus");
                 if (hasEnglobingAgents)
                 {
-                    Parallel.ForEach(friendliesAndTargetsAndMobs.DistinctBy(x => x.EnglobingAgentItem), actor => actor.SimulateBuffsAndComputeGraphs(log));
-                    Parallel.ForEach(friendliesAndTargetsAndMobs.Where(x => x.AgentItem.IsEnglobedAgent), actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    var friendliesAndTargetsEnglobed = friendliesAndTargets
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsEnglobing = friendliesAndTargetsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsNonEnglobed = friendliesAndTargets
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    var friendliesAndTargetsAndMobsEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsAndMobsEnglobing = friendliesAndTargetsAndMobsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsAndMobsNonEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobing, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobsNonEnglobed, actor => actor.SimulateBuffsAndComputeGraphs(log));
                     _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-                    Parallel.ForEach(friendliesAndTargets.DistinctBy(x => x.EnglobingAgentItem), actor =>
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
                             actor.GetBuffDistribution(log, phase.Start, phase.End);
                         }
                     });
-                    Parallel.ForEach(friendliesAndTargets.Where(x => x.AgentItem.IsEnglobedAgent), actor =>
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
@@ -184,14 +201,15 @@ public class EvtcParser
                         }
                     });
                     _t.Log("friendliesAndTargets GetBuffDistribution");
-                    Parallel.ForEach(friendliesAndTargets.DistinctBy(x => x.EnglobingAgentItem), actor =>
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
                             actor.GetBuffPresence(log, phase.Start, phase.End);
                         }
                     });
-                    Parallel.ForEach(friendliesAndTargets.Where(x => x.AgentItem.IsEnglobedAgent), actor =>
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
@@ -199,11 +217,15 @@ public class EvtcParser
                         }
                     });
                     _t.Log("friendliesAndTargets GetBuffPresence");
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobed, actor => actor.GetBuffGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
                 }
                 else
                 {
                     Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
                     _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
                     Parallel.ForEach(friendliesAndTargets, actor =>
                     {
                         foreach (PhaseData phase in phases)
@@ -212,6 +234,7 @@ public class EvtcParser
                         }
                     });
                     _t.Log("friendliesAndTargets GetBuffDistribution");
+
                     Parallel.ForEach(friendliesAndTargets, actor =>
                     {
                         foreach (PhaseData phase in phases)
