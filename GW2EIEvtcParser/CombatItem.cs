@@ -303,7 +303,7 @@ public class CombatItem
     {
         if (DstIsAgent(extensions))
         {
-            return agentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
+            return agentItem.EnglobingAgentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
         }
         return false;
     }
@@ -312,7 +312,7 @@ public class CombatItem
     {
         if (DstIsAgent())
         {
-            return agentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
+            return agentItem.EnglobingAgentItem.Agent == DstAgent && agentItem.InAwareTimes(Time);
         }
         return false;
     }
@@ -321,7 +321,7 @@ public class CombatItem
     {
         if (SrcIsAgent(extensions))
         {
-            return agentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
+            return agentItem.EnglobingAgentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
         }
         return false;
     }
@@ -330,7 +330,7 @@ public class CombatItem
     {
         if (SrcIsAgent())
         {
-            return agentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
+            return agentItem.EnglobingAgentItem.Agent == SrcAgent && agentItem.InAwareTimes(Time);
         }
         return false;
     }
@@ -371,14 +371,14 @@ public class CombatItem
 
     internal void OverrideSrcAgent(AgentItem agent)
     {
-        SrcAgent = agent.Agent;
-        SrcInstid = agent.InstID;
+        SrcAgent = agent.EnglobingAgentItem.Agent;
+        SrcInstid = agent.EnglobingAgentItem.InstID;
     }
 
     internal void OverrideDstAgent(AgentItem agent)
     {
-        DstAgent = agent.Agent;
-        DstInstid = agent.InstID;
+        DstAgent = agent.EnglobingAgentItem.Agent;
+        DstInstid = agent.EnglobingAgentItem.InstID;
     }
 
     internal void OverrideValue(int value)
