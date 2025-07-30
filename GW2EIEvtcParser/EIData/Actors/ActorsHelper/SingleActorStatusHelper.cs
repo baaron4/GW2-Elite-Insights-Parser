@@ -68,7 +68,6 @@ partial class SingleActor
             AddSegment(actives, cTime, nextTime);
         }
     }
-
     #region STATUS
     internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
@@ -140,7 +139,6 @@ partial class SingleActor
             }
         }
     }
-
     [MemberNotNull(nameof(_downs))]
     [MemberNotNull(nameof(_dcs))]
     [MemberNotNull(nameof(_actives))]
