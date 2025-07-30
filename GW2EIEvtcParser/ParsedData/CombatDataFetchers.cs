@@ -21,7 +21,7 @@ partial class CombatData
 
     internal static IReadOnlyList<T> GetTimeValueOrEmpty<T>(Dictionary<AgentItem, List<T>> dict, AgentItem agent) where T : TimeCombatEvent
     {
-        if (agent.EnglobingAgentItem != agent)
+        if (agent.IsEnglobedAgent)
         {
             return dict.GetValueOrEmpty(agent.EnglobingAgentItem).Where(x => x.Time >= agent.FirstAware && x.Time <= agent.LastAware).ToList();
         }
@@ -565,7 +565,7 @@ partial class CombatData
     private static List<EffectEvent> GetSrcEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
     {
         List<EffectEvent> result;
-        if (agent.EnglobingAgentItem != agent)
+        if (agent.IsEnglobedAgent)
         {
             result = effects.Where(effect => effect.Src.Is(agent) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
         }
@@ -579,7 +579,7 @@ partial class CombatData
     private static List<EffectEvent> GetSrcWithMasterEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
     {
         List<EffectEvent> result;
-        if (agent.EnglobingAgentItem != agent)
+        if (agent.IsEnglobedAgent)
         {
             var parentAgent = agent.EnglobingAgentItem;
             result = effects.Where(effect => parentAgent.IsMasterOf(effect.Src) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
@@ -594,7 +594,7 @@ partial class CombatData
     private static List<EffectEvent> GetDstEffectEventsCheckingParent(AgentItem agent, IReadOnlyList<EffectEvent> effects)
     {
         List<EffectEvent> result;
-        if (agent.EnglobingAgentItem != agent)
+        if (agent.IsEnglobedAgent)
         {
             result = effects.Where(effect => effect.Dst.Is(agent) && effect.Time >= agent.FirstAware && effect.Time <= agent.LastAware).ToList();
         }

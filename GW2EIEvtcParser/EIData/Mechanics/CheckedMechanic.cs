@@ -38,7 +38,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             {
                 timeToUse = _timeClamper(time, log);
             }
-            if (actor.AgentItem.EnglobedAgentItems.Count > 0)
+            if (actor.AgentItem.IsEnglobingAgent)
             {
                 actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
             }

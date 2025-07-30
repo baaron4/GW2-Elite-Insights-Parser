@@ -31,9 +31,11 @@ public class AgentItem
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
     private AgentItem? _englobingAgentItem;
+    public bool IsEnglobedAgent => _englobingAgentItem != null;
     public AgentItem EnglobingAgentItem => _englobingAgentItem ?? this;
     private List<AgentItem>? _englobedAgentItems;
     public IReadOnlyList<AgentItem> EnglobedAgentItems => _englobedAgentItems ?? [];
+    public bool IsEnglobingAgent => _englobedAgentItems != null;
 
     private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
@@ -562,7 +564,7 @@ public class AgentItem
 
     internal AgentItem FindEnglobedAgentItem(long time)
     {
-        if (EnglobedAgentItems.Count == 0)
+        if (!IsEnglobingAgent)
         {
             return this;
         }
