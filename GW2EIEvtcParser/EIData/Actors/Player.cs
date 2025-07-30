@@ -178,14 +178,13 @@ public class Player : PlayerActor
             { 
                 CommanderStates.Add(lastSegment); 
             }
+            // Clamp to aware times
             CommanderStates.ForEach(x =>
             {
                 x.Start = Math.Max(x.Start, FirstAware);
                 x.End = Math.Min(x.End, LastAware);
             });
             CommanderStates.RemoveAll(x => x.IsEmpty());
-            // Clamp to aware times
-
         }
         return CommanderStates;
     }

@@ -199,7 +199,7 @@ public static class AgentManipulationHelper
         var combatDataDict = combatItems.Where(x => x.SrcIsAgent(extensions) || x.DstIsAgent(extensions));
         var srcCombatDataDict = combatDataDict.Where(x => x.SrcIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
         var dstCombatDataDict = combatDataDict.Where(x => x.DstIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.DstAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
-        // NPCS
+        // NPCs
         {
             var npcsBySpeciesIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             foreach (var npcsBySpeciesID in npcsBySpeciesIDs)
@@ -237,7 +237,6 @@ public static class AgentManipulationHelper
             if (nonSquadPlayerAgents.Any())
             {
                 var teamChangeDict = combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-
                 IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
                 ulong greenTeam = ulong.MaxValue;
                 var greenTeams = new List<ulong>();
@@ -257,7 +256,6 @@ public static class AgentManipulationHelper
                 {
                     greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
                 }
-                var uniqueNonSquadPlayers = new List<AgentItem>();
                 foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
                 {
                     if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
