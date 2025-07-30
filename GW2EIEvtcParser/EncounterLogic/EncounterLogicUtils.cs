@@ -120,17 +120,24 @@ internal static class EncounterLogicUtils
         int playerDeadOrDCCount = 0;
         foreach (AgentItem playerAgent in playerAgents)
         {
-            var statusEvents = new List<StatusEvent>();
-            statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
-            statusEvents.AddRange(combatData.GetDownEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
-            statusEvents.AddRange(combatData.GetDeadEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
-            statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
-            statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
-            statusEvents.SortByTime();
-            var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
-            if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
+            if (timeToCheck < playerAgent.FirstAware || timeToCheck > playerAgent.LastAware)
             {
                 playerDeadOrDCCount++;
+            } 
+            else 
+            {
+                var statusEvents = new List<StatusEvent>();
+                statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDownEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDeadEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.SortByTime();
+                var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
+                if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
+                {
+                    playerDeadOrDCCount++;
+                }
             }
         }
         if (playerDeadOrDCCount == playerAgents.Count)
