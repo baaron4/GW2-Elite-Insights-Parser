@@ -123,6 +123,10 @@ public abstract partial class SingleActor : Actor
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
+                if (!agent.InAwareTimes(AgentItem))
+                {
+                    continue;
+                }
                 long id = agent.ID;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
@@ -149,6 +153,10 @@ public abstract partial class SingleActor : Actor
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {
+                if (!agent.InAwareTimes(AgentItem))
+                {
+                    continue;
+                }
                 string id = agent.Name;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
