@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.Metrics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -247,12 +248,29 @@ public class AgentItem
         return this == ag;
     }
 
+    public bool IsMasterOrSelf(AgentItem ag)
+    {
+        return GetFinalMaster().Is(ag);
+    }
+
     public bool IsMaster(AgentItem ag)
     {
-        return GetFinalMaster() == ag;
+        if (ag.Is(this))
+        {
+            return false;
+        }
+        return GetFinalMaster().Is(ag);
+    }
+    public bool IsMasterOfOrSelf(AgentItem ag)
+    {
+        return ag.IsMasterOrSelf(this);
     }
     public bool IsMasterOf(AgentItem ag)
     {
+        if (ag.Is(this))
+        {
+            return false;
+        }
         return ag.IsMaster(this);
     }
     public AgentItem GetFinalMaster()

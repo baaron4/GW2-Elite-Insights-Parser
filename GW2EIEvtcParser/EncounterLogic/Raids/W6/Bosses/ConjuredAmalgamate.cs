@@ -310,14 +310,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 return;
             }
             SpawnEvent? npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
-            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Any(x.From.IsMaster));
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Any(x.From.IsMasterOrSelf));
             if (lastDamageTaken == null)
             {
                 return;
             }
             if (rightArm != null)
             {
-                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMaster));
+                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
@@ -325,7 +325,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             if (leftArm != null)
             {
-                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMaster));
+                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;

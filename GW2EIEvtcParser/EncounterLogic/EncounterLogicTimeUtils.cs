@@ -163,7 +163,7 @@ internal static class EncounterLogicTimeUtils
             {
                 exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault();
             }
-            HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMaster));
+            HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
             if (exitCombat == null || lastDamage == null ||
                 combatData.GetAnimatedCastData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant) ||
                 combatData.GetDamageData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant))
@@ -210,7 +210,7 @@ internal static class EncounterLogicTimeUtils
             {
                 long time = killed.Time;
                 success++;
-                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMaster));
+                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                 if (lastDamageTaken != null)
                 {
                     time = Math.Min(lastDamageTaken.Time, time);
