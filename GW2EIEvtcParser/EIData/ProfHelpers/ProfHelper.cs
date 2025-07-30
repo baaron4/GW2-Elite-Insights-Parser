@@ -130,10 +130,8 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
-            .UsingICD(), // Preventing multi triggers on initial proc from evading
         new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear)
-            .UsingICD(), // Preventing multi triggers on initial cast of a trap
         new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)

@@ -28,7 +28,7 @@ internal class MarkerCastFinder : CheckedCastFinder<MarkerEvent>
     public MarkerCastFinder(long skillID, GUID markerGUID) : base(skillID)
     {
         UsingNotAccurate();
-        UsingEnable((combatData) => combatData.HasEffectData);
+        UsingEnable((combatData) => combatData.HasMarkerData);
         _markerGUID = markerGUID;
     }
 
