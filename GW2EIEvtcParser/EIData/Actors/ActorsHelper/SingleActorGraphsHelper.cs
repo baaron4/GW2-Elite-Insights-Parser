@@ -23,7 +23,7 @@ partial class SingleActor
         if (_healthUpdates == null)
         {
             var events = new List<(long Time, HealthUpdateEvent evt)>(log.CombatData.GetHealthUpdateEvents(AgentItem).Count + 1);
-            if (AgentItem != EnglobingAgentItem)
+            if (AgentItem.IsEnglobedAgent)
             {
                 var firstEvent = log.CombatData.GetHealthUpdateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
                 if (firstEvent != null)
@@ -43,7 +43,7 @@ partial class SingleActor
         if (_breakbarPercentUpdates == null)
         {
             var events = new List<(long Time, BreakbarPercentEvent evt)>(log.CombatData.GetBreakbarPercentEvents(AgentItem).Count + 1);
-            if (AgentItem != EnglobingAgentItem)
+            if (AgentItem.IsEnglobedAgent)
             {
                 var firstEvent = log.CombatData.GetBreakbarPercentEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
                 if (firstEvent != null)
@@ -63,7 +63,7 @@ partial class SingleActor
         if (_barrierUpdates == null)
         {
             var events = new List<(long Time, BarrierUpdateEvent evt)>(log.CombatData.GetBarrierUpdateEvents(AgentItem).Count + 1);
-            if (AgentItem != EnglobingAgentItem)
+            if (AgentItem.IsEnglobedAgent)
             {
                 var firstEvent = log.CombatData.GetBarrierUpdateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
                 if (firstEvent != null)

@@ -26,7 +26,7 @@ partial class SingleActor
     #region DISTRIBUTION
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             return log.FindActor(EnglobingAgentItem).GetBuffDistribution(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
         }
@@ -68,7 +68,7 @@ partial class SingleActor
     #region PRESENCE
     public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
     {
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             return log.FindActor(EnglobingAgentItem).GetBuffPresence(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
         }
@@ -141,7 +141,7 @@ partial class SingleActor
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log)
     {
         SimulateBuffsAndComputeGraphs(log);
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log);
             foreach (var graph in graphs)
@@ -160,7 +160,7 @@ partial class SingleActor
         AgentItem agent = by.AgentItem;
         if (!_buffGraphsPerAgent.TryGetValue(agent, out var result))
         {
-            if (EnglobingAgentItem != AgentItem)
+            if (AgentItem.IsEnglobedAgent)
             {
                 var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log, by);
                 var buffGraphs = new Dictionary<long, BuffGraph>(graphs.Count);
@@ -558,7 +558,7 @@ partial class SingleActor
     #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
     {
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             return log.FindActor(EnglobingAgentItem).GetTrackedBuffs(log);
         }
@@ -572,7 +572,7 @@ partial class SingleActor
     [MemberNotNull(nameof(_trackedBuffs))]
     internal void ComputeBuffMap(ParsedEvtcLog log)
     {
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             log.FindActor(EnglobingAgentItem).ComputeBuffMap(log);
             _buffMap = new BuffDictionary(64, 256, 32, 1);
@@ -616,7 +616,7 @@ partial class SingleActor
     [MemberNotNull(nameof(_buffSimulators))]
     internal void SimulateBuffsAndComputeGraphs(ParsedEvtcLog log)
     {
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
             _buffGraphs = new Dictionary<long, BuffGraph>();

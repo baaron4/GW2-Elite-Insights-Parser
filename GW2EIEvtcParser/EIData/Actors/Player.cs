@@ -32,7 +32,7 @@ public class Player : PlayerActor
         _squadless = noSquad;
         Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         // Make sure to keep the name of the player unique
-        if (EnglobingAgentItem != AgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             Character = $"{Character} ${EnglobingAgentItem.EnglobedAgentItems.IndexOf(AgentItem) + 1}";
         }

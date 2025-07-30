@@ -84,9 +84,9 @@ partial class SingleActor
             deadEvents.Count +
             spawnEvents.Count +
             despawnEvents.Count +
-            (AgentItem != EnglobingAgentItem ? 1 : 0)
+            (AgentItem.IsEnglobedAgent ? 1 : 0)
         );
-        if (AgentItem != EnglobingAgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             List<StatusEvent?> firstEvents = [
                 combatData.GetDownEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
@@ -200,7 +200,7 @@ partial class SingleActor
     internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
     {
         var status = new List<(long Time, BreakbarStateEvent evt)>();
-        if (AgentItem != EnglobingAgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             var firstEvent = combatData.GetBreakbarStateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
             if (firstEvent != null)
@@ -314,7 +314,7 @@ partial class SingleActor
     #endregion BREAKBAR
     public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
     {
-        if (AgentItem != EnglobingAgentItem)
+        if (AgentItem.IsEnglobedAgent)
         {
             return log.FindActor(EnglobingAgentItem).GetTimeSpentInCombat(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
         }

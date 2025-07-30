@@ -149,7 +149,7 @@ public class EvtcParser
                 friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
                 Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
 
-                var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.EnglobingAgentItem != x.AgentItem);
+                var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.AgentItem.IsEnglobedAgent);
 
                 _t.Log("Paralell phases");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
@@ -167,7 +167,7 @@ public class EvtcParser
                 if (hasEnglobingAgents)
                 {
                     Parallel.ForEach(friendliesAndTargetsAndMobs.DistinctBy(x => x.EnglobingAgentItem), actor => actor.SimulateBuffsAndComputeGraphs(log));
-                    Parallel.ForEach(friendliesAndTargetsAndMobs.Where(x => x.EnglobingAgentItem != x.AgentItem), actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobs.Where(x => x.AgentItem.IsEnglobedAgent), actor => actor.SimulateBuffsAndComputeGraphs(log));
                     _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
                     Parallel.ForEach(friendliesAndTargets.DistinctBy(x => x.EnglobingAgentItem), actor =>
                     {
@@ -176,7 +176,7 @@ public class EvtcParser
                             actor.GetBuffDistribution(log, phase.Start, phase.End);
                         }
                     });
-                    Parallel.ForEach(friendliesAndTargets.Where(x => x.EnglobingAgentItem != x.AgentItem), actor =>
+                    Parallel.ForEach(friendliesAndTargets.Where(x => x.AgentItem.IsEnglobedAgent), actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
@@ -191,7 +191,7 @@ public class EvtcParser
                             actor.GetBuffPresence(log, phase.Start, phase.End);
                         }
                     });
-                    Parallel.ForEach(friendliesAndTargets.Where(x => x.EnglobingAgentItem != x.AgentItem), actor =>
+                    Parallel.ForEach(friendliesAndTargets.Where(x => x.AgentItem.IsEnglobedAgent), actor =>
                     {
                         foreach (PhaseData phase in phases)
                         {
