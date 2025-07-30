@@ -27,25 +27,6 @@ internal class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
         }
     }
 
-    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem src)
-    {
-        if (distrib.TryGetValue(src, out var toModify))
-        {
-            toModify.IncrementOverstack(value);
-        }
-        else
-        {
-            distrib.Add(src, new BuffDistributionItem(
-                0,
-                value,
-                0,
-                0,
-                0,
-                0
-            ));
-        }
-    }
-
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long value = GetValue(start, end);

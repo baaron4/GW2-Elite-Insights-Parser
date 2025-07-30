@@ -680,10 +680,6 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-<<<<<<< HEAD
-
-=======
->>>>>>> master
         return GetDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)

@@ -554,10 +554,6 @@ partial class SingleActor
         }
         return (rates, ratesActive);
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     #endregion STATISTICS
     #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)

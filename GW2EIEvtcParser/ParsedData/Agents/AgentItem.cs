@@ -438,15 +438,6 @@ public class AgentItem
         {
             return false;
         }
-        return this == ag;
-    }
-
-    public bool Is(AgentItem? ag)
-    {
-        if (ag == null)
-        {
-            return false;
-        }
         return EnglobingAgentItem == ag.EnglobingAgentItem;
     }
 
