@@ -94,7 +94,7 @@ public class CSVBuilder
         WriteLine(["Boss", _log.FightData.FightName]);
         WriteLine(["Success", _log.FightData.Success.ToString()]);
         WriteLine(["Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString()]);
-        var hpUpdates = _legacyTarget.GetHealthUpdates(_log); ;
+        var hpUpdates = _legacyTarget.GetHealthUpdates(_log);
         double hpLeft = hpUpdates.Count > 0
             ? hpUpdates.Last().Value
             : 100.0;

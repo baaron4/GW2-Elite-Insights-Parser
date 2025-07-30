@@ -26,7 +26,6 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
             ));
         }
     }
-
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long value = GetValue(start, end);

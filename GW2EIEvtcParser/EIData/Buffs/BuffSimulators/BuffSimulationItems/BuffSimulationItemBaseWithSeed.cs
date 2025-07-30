@@ -8,8 +8,9 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
 
     protected internal BuffSimulationItemBaseWithSeed(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        _seedSrc       = buffStackItem.SeedSrc;
+        _seedSrc = buffStackItem.SeedSrc;
     }
+
     private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem seedSrc)
     {
         if (distrib.TryGetValue(seedSrc, out var toModify))
