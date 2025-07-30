@@ -118,7 +118,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && GetAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             }
             return false;
         });
@@ -130,7 +130,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         {
             if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
-                return effectEvents.Any(other => other != evt && GetOtherAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                return effectEvents.Any(other => other != evt && GetOtherAgent(other).Is(GetAgent(evt)) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             }
             return false;
         });

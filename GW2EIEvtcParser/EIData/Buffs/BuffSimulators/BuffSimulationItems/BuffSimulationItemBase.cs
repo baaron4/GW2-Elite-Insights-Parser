@@ -12,7 +12,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         //NOTE(Rennorb): We need to copy these because for some ungodly reason buffsStackItems can change after this initializer runs.
         // this only influences buff uptime values, so it can be difficult to spot.
         // There is a regression test for this in Tests/Regression.cs:BuffUptime.
-        _src           = buffStackItem.Src;
+        _src = buffStackItem.Src;
         //_totalDuration = buffStackItem.TotalDuration;
     }
 
@@ -38,7 +38,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override int GetStacks(SingleActor actor)
     {
-        return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
+        return GetActiveSources().Any(x => x.Is(actor.AgentItem)) ? 1 : 0;
     }
 
     /*public override IEnumerable<long> GetActualDurationPerStack()
@@ -53,12 +53,31 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override IEnumerable<AgentItem> GetSources()
     {
-        return [ _src ];
+        return [_src];
     }
 
     public override IEnumerable<AgentItem> GetActiveSources()
     {
         return GetSources();
+    }
+
+    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem src)
+    {
+        if (distrib.TryGetValue(src, out var toModify))
+        {
+            toModify.IncrementValue(value);
+        }
+        else
+        {
+            distrib.Add(src, new BuffDistributionItem(
+                value,
+                0,
+                0,
+                0,
+                0,
+                0
+            ));
+        }
     }
 
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
@@ -67,16 +86,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            if (distribution.TryGetValue(_src, out var toModify))
-            {
-                toModify.IncrementValue(cDur);
-            }
-            else
-            {
-                distribution.Add(_src, new BuffDistributionItem(
-                    cDur,
-                    0, 0, 0, 0, 0));
-            }
+            Add(distribution, cDur, _src);
         }
 
         return cDur;

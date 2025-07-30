@@ -27,7 +27,7 @@ internal static class ThiefHelper
         new BuffGiveCastFinder(SkaleVenomSkill, SkaleVenomBuff),
         new BuffGiveCastFinder(SoulStoneVenomSkill,SoulStoneVenomBuff),
         new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).
-            UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant)
+            UsingChecker((evt, combatData, agentData, skillData) => !evt.To.Is(evt.By) || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant)
             .UsingNotAccurate(), // same id as leeching venom trait?
         new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE)
             .UsingSrcBaseSpecChecker(Spec.Thief),

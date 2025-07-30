@@ -167,7 +167,7 @@ public class EvtcParser
                     // init all positions
                     Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                 }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
+                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
                 _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
                 Parallel.ForEach(friendliesAndTargets, actor =>
                 {
@@ -996,6 +996,7 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
+        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
         AgentManipulationHelper.RegroupSameInstidNPCs(_agentData, _combatItems, _enabledExtensions);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
@@ -1122,18 +1123,18 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<byte>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = buffer.Array[buffer.Length] = reader.ReadByte();
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         // consume remaining length
-        for(; length > sizeof(UInt64); length -= sizeof(UInt64))
+        for (; length > sizeof(UInt64); length -= sizeof(UInt64))
         {
             reader.ReadUInt64();
         }
-        while(length-- > 0)
+        while (length-- > 0)
         {
             reader.ReadByte();
         }
@@ -1151,11 +1152,11 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<char>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = reader.ReadByte();
             buffer.Array[buffer.Length] = (char)b;
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         return buffer;

@@ -255,7 +255,7 @@ internal static class ProfHelper
                 if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
                 {
                     // more than one candidate, put to unknown and drop the search
-                    if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
+                    if (gadget.Master != null && gadget.GetFinalMaster().Is(castEvent.Caster.GetFinalMaster()))
                     {
                         gadget.SetMaster(_unknownAgent);
                         break;
@@ -283,7 +283,7 @@ internal static class ProfHelper
         {
             // dst must no be a gadget nor a friendly player
             // src must be a masterless gadget
-            if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
+            if (!playerAgents.Any(evt.To.IsMaster) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
             {
                 res.Add(evt.From);
             }

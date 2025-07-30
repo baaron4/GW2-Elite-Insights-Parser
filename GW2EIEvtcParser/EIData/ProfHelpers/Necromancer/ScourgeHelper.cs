@@ -31,7 +31,7 @@ internal static class ScourgeHelper
             .UsingChecker((blcf, combatData, agentData, skillData) =>
             {
                 long sadisticSearingDuration = 10000 - blcf.RemovedDuration;
-                if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom == blcf.To && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time))
+                if (combatData.GetDamageData(ManifestSandShadeShadeHit).Any(x => x.CreditedFrom.Is(blcf.To) && x.Time >= blcf.Time - sadisticSearingDuration && x.Time <= blcf.Time))
                 {
                     return true;
                 }

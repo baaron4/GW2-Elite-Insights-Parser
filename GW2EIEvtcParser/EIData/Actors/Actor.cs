@@ -23,6 +23,7 @@ public abstract class Actor
     public uint HitboxHeight => AgentItem.HitboxHeight;
     public uint HitboxWidth => AgentItem.HitboxWidth;
     public bool IsFakeActor => AgentItem.IsFake;
+    public ushort InstID => AgentItem.InstID;
     // Damage
     protected List<HealthDamageEvent>? DamageEvents;
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageEventByDst;

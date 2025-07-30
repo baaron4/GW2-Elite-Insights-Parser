@@ -23,8 +23,12 @@ public static class AgentManipulationHelper
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null, StateEventProcessing? stateEventProcessing = null)
+    internal static void RedirectNPCEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null, StateEventProcessing? stateEventProcessing = null)
     {
+        if (!(redirectFrom.IsNPC && to.IsNPC))
+        {
+            throw new InvalidOperationException("Expected NPCs in RedirectNPCEventsAndCopyPreviousStates");
+        }
         // Redirect combat events
         foreach (CombatItem evt in combatData)
         {
@@ -146,7 +150,7 @@ public static class AgentManipulationHelper
             ];
         foreach (AgentItem ag in masterRedirectionCandidates)
         {
-            if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+            if (redirectFrom.Is(ag.Master) && to.InAwareTimes(ag.FirstAware))
             {
                 ag.SetMaster(to);
             }

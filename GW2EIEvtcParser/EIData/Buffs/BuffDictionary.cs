@@ -53,7 +53,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         else if (buffEvent is BuffApplyEvent bae && bae.BuffInstance != 0 && bae.Initial)
         {
             var duplicated = log.CombatData.GetBuffDataByInstanceID(bae.BuffID, bae.BuffInstance)
-                .Where(x => x is BuffApplyEvent otherBae && x.To == bae.To && !otherBae.Initial && Math.Abs(otherBae.Time - bae.Time) <= 1)
+                .Where(x => x is BuffApplyEvent otherBae && x.To.Is(bae.To) && !otherBae.Initial && Math.Abs(otherBae.Time - bae.Time) <= 1)
                 .Any();
             if (duplicated)
             {

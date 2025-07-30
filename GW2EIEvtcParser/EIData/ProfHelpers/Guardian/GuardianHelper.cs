@@ -50,7 +50,7 @@ internal static class GuardianHelper
             .UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 return CombatData.FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
-                    .Any(apply => apply.By == evt.Dst && apply.To == evt.Dst && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
+                    .Any(apply => apply.By.Is(evt.Dst) && apply.To.Is(evt.Dst) && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
             }) // identify advance by self-applied 20s to 40s aegis
             .UsingNotAccurate(),
         new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
@@ -58,7 +58,7 @@ internal static class GuardianHelper
             .UsingChecker((evt, combatData, agentData, skillData) =>
             {
                 return 5 <= CombatData.FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
-                    .Count(apply => apply.By == evt.Dst && apply.To == evt.Dst);
+                    .Count(apply => apply.By.Is(evt.Dst) && apply.To.Is(evt.Dst));
             }) // identify stand your ground by self-applied 5+ stacks of stability
             .UsingNotAccurate(),
         // hold the line boons may overlap with save yourselves/pure of voice

@@ -64,7 +64,7 @@ internal class Slothasor : SalvationPass
         var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).Where(x => x.Time <= fightData.FightStart + 5000).FirstOrDefault();
         if (slubTransformApplyAtStart != null)
         {
-            var transformedPlayer = players.FirstOrDefault(x => x.AgentItem == slubTransformApplyAtStart.To);
+            var transformedPlayer = players.FirstOrDefault(x => x.AgentItem.Is(slubTransformApplyAtStart.To));
             if (transformedPlayer != null)
             {
                 var transfoExit = combatData.GetBuffRemoveAllDataBySrc(MagicTransformation, transformedPlayer.AgentItem).FirstOrDefault(x => x.Time >= slubTransformApplyAtStart.Time);
@@ -173,7 +173,7 @@ internal class Slothasor : SalvationPass
                         lastDeadTime = deadEvent.Time;
                     }
                     AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TargetID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                    AgentManipulationHelper.RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
+                    AgentManipulationHelper.RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
                     copyEventsFrom.Add(aliveMushroom);
                 }
             }

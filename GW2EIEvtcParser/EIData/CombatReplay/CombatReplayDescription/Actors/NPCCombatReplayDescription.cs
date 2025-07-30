@@ -10,7 +10,7 @@ public class NPCCombatReplayDescription : SingleActorCombatReplayDescription
     {
         AgentItem master = npc.AgentItem.GetFinalMaster();
         // Don't put minions of NPC or unknown minions into the minion display system
-        if (master != npc.AgentItem && master.IsPlayer && ParserHelper.IsKnownMinionID(npc.AgentItem, master.Spec))
+        if (!master.Is(npc.AgentItem) && master.IsPlayer && ParserHelper.IsKnownMinionID(npc.AgentItem, master.Spec))
         {
             MasterID = master.UniqueID;
         }

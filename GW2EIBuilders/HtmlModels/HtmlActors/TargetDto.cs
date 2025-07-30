@@ -25,15 +25,15 @@ internal class TargetDto : ActorDto
         }
         else
         {
-            IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
+            var hpUpdates = target.GetHealthUpdates(log);
             if (hpUpdates.Count > 0)
             {
-                HpLeftPercent = hpUpdates.Last().HealthPercent;
+                HpLeftPercent = hpUpdates.Last().Value;
             }
-            IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(target.AgentItem);
+            var barrierUpdates = target.GetBarrierUpdates(log);
             if (barrierUpdates.Count > 0)
             {
-                BarrierLeftPercent = barrierUpdates.Last().BarrierPercent;
+                BarrierLeftPercent = barrierUpdates.Last().Value;
             }
         }
         HpLeft = target.GetCurrentHealth(log, HpLeftPercent);

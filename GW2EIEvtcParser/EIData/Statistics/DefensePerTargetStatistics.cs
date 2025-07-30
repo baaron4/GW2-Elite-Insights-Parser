@@ -57,7 +57,9 @@ public class DefensePerTargetStatistics
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    if (from != null && brae.CreditedBy != from.AgentItem || brae.CreditedBy.IsUnknown || (excludeSelf && brae.CreditedBy == actor.AgentItem))
+                    if ((from != null && !from.AgentItem.Is(brae.CreditedBy)) || 
+                        brae.CreditedBy.IsUnknown || 
+                        (excludeSelf && brae.CreditedBy.Is(actor.AgentItem)))
                     {
                         continue;
                     }

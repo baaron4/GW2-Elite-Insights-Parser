@@ -126,6 +126,7 @@ public class AgentItem
         Master = other.Master;
         IsFake = other.IsFake;
         Unamed = other.Unamed;
+        IsNotInSquadFriendlyPlayer = other.IsNotInSquadFriendlyPlayer;
     }
 
     internal AgentItem()
@@ -215,7 +216,7 @@ public class AgentItem
 
     internal void SetMaster(AgentItem master)
     {
-        if (IsPlayer || master == this)
+        if (IsPlayer || master.Is(this))
         {
             return;
         }
@@ -223,7 +224,7 @@ public class AgentItem
         while (cur.Master != null)
         {
             cur = cur.Master;
-            if (cur == this)
+            if (cur.Is(this))
             {
                 return;
             }
@@ -401,7 +402,23 @@ public class AgentItem
 
         }
     }
+    public bool Is(AgentItem? ag)
+    {
+        if (ag == null)
+        {
+            return false;
+        }
+        return this == ag;
+    }
 
+    public bool IsMaster(AgentItem ag)
+    {
+        return GetFinalMaster() == ag;
+    }
+    public bool IsMasterOf(AgentItem ag)
+    {
+        return ag.IsMaster(this);
+    }
     public AgentItem GetFinalMaster()
     {
         AgentItem cur = this;

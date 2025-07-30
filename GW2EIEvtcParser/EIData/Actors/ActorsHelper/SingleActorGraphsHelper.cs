@@ -51,7 +51,7 @@ partial class SingleActor
     }
 
     //TODO(Rennorb) @cleanup
-    static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long min, long max)
+    private static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long fightStart, long fightEnd)
     {
         if (stateCount == 0)
         {
@@ -63,7 +63,7 @@ partial class SingleActor
         double lastValue = states.First().State;
         foreach ((long start, double state) in states)
         {
-            long end = Math.Min(Math.Max(start, min), max);
+            long end = Math.Min(Math.Max(start, fightStart), fightEnd);
             if (res.Count == 0)
             {
                 res.Add(new Segment(0, end, lastValue));
@@ -74,7 +74,7 @@ partial class SingleActor
             }
             lastValue = state;
         }
-        res.Add(new Segment(res.Last().End, max, lastValue));
+        res.Add(new Segment(res.Last().End, fightEnd, lastValue));
         
         //TODO(Rennorb) @perf
         res.RemoveAll(x => x.Start >= x.End);

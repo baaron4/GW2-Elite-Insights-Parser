@@ -88,7 +88,7 @@ internal class Ensolyss : Nightmare
         var targetEnsolyss = FindTargetEnsolyss(agentData, combatData);
         foreach (var ensolyss in agentData.GetNPCsByID(TargetID.Ensolyss))
         {
-            if (ensolyss != targetEnsolyss)
+            if (!ensolyss.Is(targetEnsolyss))
             {
                 ensolyss.OverrideID(IgnoredSpecies, agentData);
             }

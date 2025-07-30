@@ -46,6 +46,22 @@ partial class CombatData
     {
         return _statusEvents.SpawnEvents.GetValueOrEmpty(src);
     }
+    public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem src)
+    {
+        return _statusEvents.BreakbarStateEvents.GetValueOrEmpty(src);
+    }
+    public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem src)
+    {
+        return _statusEvents.EnterCombatEvents.GetValueOrEmpty(src);
+    }
+    public IReadOnlyList<ExitCombatEvent> GetExitCombatEvents(AgentItem src)
+    {
+        return _statusEvents.ExitCombatEvents.GetValueOrEmpty(src);
+    }
+    public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
+    {
+        return _statusEvents.TeamChangeEvents.GetValueOrEmpty(src);
+    }
     #endregion STATUS
     #region ATTACKTARGETS
     public IReadOnlyList<AttackTargetEvent> GetAttackTargetEvents()
@@ -207,7 +223,7 @@ partial class CombatData
 
     #endregion MARKERS
     
-    #region STATES
+    #region UPDATES
 
     public IReadOnlyList<BarrierUpdateEvent> GetBarrierUpdateEvents(AgentItem src)
     {
@@ -222,28 +238,12 @@ partial class CombatData
     {
         return _statusEvents.HealthUpdateEvents.GetValueOrEmpty(src);
     }
-    public IReadOnlyList<BreakbarStateEvent> GetBreakbarStateEvents(AgentItem src)
-    {
-        return _statusEvents.BreakbarStateEvents.GetValueOrEmpty(src);
-    }
 
     public IReadOnlyList<BreakbarPercentEvent> GetBreakbarPercentEvents(AgentItem src)
     {
         return _statusEvents.BreakbarPercentEvents.GetValueOrEmpty(src);
     }
-    public IReadOnlyList<EnterCombatEvent> GetEnterCombatEvents(AgentItem src)
-    {
-        return _statusEvents.EnterCombatEvents.GetValueOrEmpty(src);
-    }
-    public IReadOnlyList<ExitCombatEvent> GetExitCombatEvents(AgentItem src)
-    {
-        return _statusEvents.ExitCombatEvents.GetValueOrEmpty(src);
-    }
-    public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)
-    {
-        return _statusEvents.TeamChangeEvents.GetValueOrEmpty(src);
-    }
-    #endregion STATES
+    #endregion UPDATES
 
     #region INFO
 

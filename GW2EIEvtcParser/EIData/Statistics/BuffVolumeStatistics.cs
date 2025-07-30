@@ -49,7 +49,7 @@ public class BuffVolumeStatistics
                     if (abae.Time >= start && abae.Time <= end)
                     {
                         abae.TryFindSrc(log);
-                        if (abae.CreditedBy == srcAgentItem)
+                        if (abae.CreditedBy.Is(srcAgentItem))
                         {
                             if (abae is BuffApplyEvent bae)
                             {
@@ -148,7 +148,7 @@ public class BuffVolumeStatistics
                         {
                             continue;
                         }*/
-                        if (abae.CreditedBy == dstActor.AgentItem)
+                        if (abae.CreditedBy.Is(dstActor.AgentItem))
                         {
                             totalOutgoing += bae.AppliedDuration;
                         }
@@ -156,7 +156,7 @@ public class BuffVolumeStatistics
                     }
                     if (abae is BuffExtensionEvent bee)
                     {
-                        if (abae.CreditedBy == dstActor.AgentItem)
+                        if (abae.CreditedBy.Is(dstActor.AgentItem))
                         {
                             totalOutgoingByExtension += bee.ExtendedDuration;
                         }

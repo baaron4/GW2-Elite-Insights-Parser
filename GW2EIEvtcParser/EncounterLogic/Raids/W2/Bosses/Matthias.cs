@@ -193,7 +193,7 @@ internal class Matthias : SalvationPass
                 long sacrificeStartTime = sacrificeStartList[i].Time;
                 long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
                 //
-                AgentItem? sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x == agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time));
+                AgentItem? sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x.Is(agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time)));
                 if (sacrifice == null)
                 {
                     continue;

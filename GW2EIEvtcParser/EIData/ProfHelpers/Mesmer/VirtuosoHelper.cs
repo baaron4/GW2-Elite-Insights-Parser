@@ -24,7 +24,7 @@ internal static class VirtuosoHelper
                 {
                     return false;
                 }
-                if (combatData.GetAnimatedCastData(BladeRenewal).Any(castEvt => castEvt.Caster == evt.Src && evt.Time <= castEvt.EndTime && evt.Time >= castEvt.Time)) {
+                if (combatData.GetAnimatedCastData(BladeRenewal).Any(castEvt => castEvt.Caster.Is(evt.Src) && evt.Time <= castEvt.EndTime && evt.Time >= castEvt.Time)) {
                     return false;
                 }
                 return true;
