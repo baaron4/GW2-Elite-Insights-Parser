@@ -47,6 +47,42 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
             ));
         }
     }
+    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem seedSrc)
+    {
+        if (distrib.TryGetValue(seedSrc, out var toModify))
+        {
+            toModify.IncrementExtended(value);
+        }
+        else
+        {
+            distrib.Add(seedSrc, new BuffDistributionItem(
+                0,
+                0,
+                0,
+                0,
+                0,
+                value
+            ));
+        }
+    }
+    private static void AddUnknown(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem seedSrc)
+    {
+        if (distrib.TryGetValue(seedSrc, out var toModify))
+        {
+            toModify.IncrementUnknownExtension(value);
+        }
+        else
+        {
+            distrib.Add(seedSrc, new BuffDistributionItem(
+                0,
+                0,
+                0,
+                value,
+                0,
+                0
+            ));
+        }
+    }
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = base.SetBuffDistributionItem(distribs, start, end, buffID);

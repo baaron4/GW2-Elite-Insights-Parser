@@ -8,6 +8,24 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
     public BuffSimulationItemWasted(AgentItem src, long waste, long time) : base(src, waste, time)
     {
     }
+    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem src)
+    {
+        if (distrib.TryGetValue(src, out var toModify))
+        {
+            toModify.IncrementWaste(value);
+        }
+        else
+        {
+            distrib.Add(src, new BuffDistributionItem(
+                0,
+                0,
+                value,
+                0,
+                0,
+                0
+            ));
+        }
+    }
 
     private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem src)
     {
@@ -34,7 +52,6 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
         if (value > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-
             Add(distrib, value, Src);
             foreach (var subSrc in Src.EnglobedAgentItems)
             {

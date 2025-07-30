@@ -34,11 +34,11 @@ internal static class WarriorHelper
 
     private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
     {
-        return new HashSet<AgentItem>(combatData.GetBuffData(id).Where(x => 
-                        x is BuffApplyEvent && 
-                        x.CreditedBy.Type == AgentItem.AgentType.Gadget && 
-                        x.CreditedBy.Master == null && 
-                        playerAgents.Any(x.To.IsMaster)
+        return new HashSet<AgentItem>(combatData.GetBuffData(id).Where(x =>
+                x is BuffApplyEvent &&
+                x.CreditedBy.Type == AgentItem.AgentType.Gadget &&
+                x.CreditedBy.Master == null &&
+                playerAgents.Any(x.To.IsMaster)
         ).Select(x => x.CreditedBy));
     }
 

@@ -680,7 +680,10 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
         return GetDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
@@ -745,7 +748,7 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != EnglobingAgentItem).ToList();
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => !x.From.Is(AgentItem)).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;

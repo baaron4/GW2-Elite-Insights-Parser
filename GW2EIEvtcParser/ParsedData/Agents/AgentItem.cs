@@ -432,6 +432,14 @@ public class AgentItem
 
         }
     }
+    public bool Is(AgentItem? ag)
+    {
+        if (ag == null)
+        {
+            return false;
+        }
+        return this == ag;
+    }
 
     public bool Is(AgentItem? ag)
     {

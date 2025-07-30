@@ -29,7 +29,7 @@ internal static class JsonActorBuilder
         jsonActor.Condition = actor.Condition;
         jsonActor.HitboxHeight = actor.HitboxHeight;
         jsonActor.HitboxWidth = actor.HitboxWidth;
-        jsonActor.InstanceID = actor.EnglobingAgentItem.InstID;
+        jsonActor.InstanceID = actor.InstID;
         jsonActor.IsFake = actor.IsFakeActor;
         TeamChangeEvent? teamChange = log.CombatData.GetTeamChangeEvents(actor.EnglobingAgentItem).LastOrDefault(x => x.Time <= actor.LastAware);
         if (teamChange != null)

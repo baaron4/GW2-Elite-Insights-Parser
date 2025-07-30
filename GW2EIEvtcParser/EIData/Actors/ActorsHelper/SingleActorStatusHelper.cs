@@ -21,8 +21,6 @@ partial class SingleActor
     //weaponslist
     private WeaponSets? _weaponSets;
 
-
-
     public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(ParsedEvtcLog log)
     {
         if (_deads == null)
@@ -34,6 +32,46 @@ partial class SingleActor
             AgentItem.GetAgentStatus(_deads, _downs, _dcs, _actives, log.CombatData);
         }
         return (_deads, _downs!, _dcs!, _actives!);
+    }
+    public bool IsDowned(ParsedEvtcLog log, long time)
+    {
+        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
+        return downs.Any(x => x.ContainsPoint(time));
+    }
+    public bool IsDowned(ParsedEvtcLog log, long start, long end)
+    {
+        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
+        return downs.Any(x => x.Intersects(start, end));
+    }
+    public bool IsDead(ParsedEvtcLog log, long time)
+    {
+        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
+        return deads.Any(x => x.ContainsPoint(time));
+    }
+    public bool IsDead(ParsedEvtcLog log, long start, long end)
+    {
+        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
+        return deads.Any(x => x.Intersects(start, end));
+    }
+    public bool IsDC(ParsedEvtcLog log, long time)
+    {
+        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
+        return dcs.Any(x => x.ContainsPoint(time));
+    }
+    public bool IsDC(ParsedEvtcLog log, long start, long end)
+    {
+        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
+        return dcs.Any(x => x.Intersects(start, end));
+    }
+    public bool IsActive(ParsedEvtcLog log, long time)
+    {
+        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
+        return actives.Any(x => x.ContainsPoint(time));
+    }
+    public bool IsActive(ParsedEvtcLog log, long start, long end)
+    {
+        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
+        return actives.Any(x => x.Intersects(start, end));
     }
 
 
@@ -91,7 +129,6 @@ partial class SingleActor
         return (_breakbarNones, _breakbarActives!, _breakbarImmunes!, _breakbarRecoverings!);
     }
 
-
     public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
     {
         var (nones, actives, immunes, recoverings) = GetBreakbarStatus(log);
@@ -117,7 +154,6 @@ partial class SingleActor
 
         return BreakbarState.None;
     }
-
 
     public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
     {

@@ -482,7 +482,6 @@ partial class SingleActor
         }
         return value.ActiveVolumes;
     }
-
     public IReadOnlyDictionary<long, BuffByActorStatistics> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
     {
         _buffsDictionary ??= new(log);
@@ -555,6 +554,10 @@ partial class SingleActor
         }
         return (rates, ratesActive);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     #endregion STATISTICS
     #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
@@ -754,7 +757,6 @@ partial class SingleActor
         }
     }
     #endregion COMPUTE
-
     #region CONSUMABLES
     public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
     {
@@ -776,7 +778,7 @@ partial class SingleActor
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(consumable.ID))
             {
-                if (!(c is BuffApplyEvent ba) || !ba.To.Is(AgentItem))
+                if (!(c is BuffApplyEvent ba) || !AgentItem.Is(ba.To))
                 {
                     continue;
                 }
@@ -803,5 +805,4 @@ partial class SingleActor
 
     }
     #endregion CONSUMABLES
-
 }
