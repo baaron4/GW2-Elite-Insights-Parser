@@ -121,17 +121,24 @@ internal static class EncounterLogicUtils
         int playerDeadOrDCCount = 0;
         foreach (AgentItem playerAgent in playerAgents)
         {
-            var statusEvents = new List<StatusEvent>();
-            statusEvents.AddRange(combatData.GetAliveEvents(playerAgent));
-            statusEvents.AddRange(combatData.GetDownEvents(playerAgent));
-            statusEvents.AddRange(combatData.GetDeadEvents(playerAgent));
-            statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent));
-            statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent));
-            statusEvents.SortByTime();
-            var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
-            if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
+            if (timeToCheck < playerAgent.FirstAware || timeToCheck > playerAgent.LastAware)
             {
                 playerDeadOrDCCount++;
+            }
+            else
+            {
+                var statusEvents = new List<StatusEvent>();
+                statusEvents.AddRange(combatData.GetAliveEvents(playerAgent));
+                statusEvents.AddRange(combatData.GetDownEvents(playerAgent));
+                statusEvents.AddRange(combatData.GetDeadEvents(playerAgent));
+                statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent));
+                statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent));
+                statusEvents.SortByTime();
+                var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
+                if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
+                {
+                    playerDeadOrDCCount++;
+                }
             }
         }
         if (playerDeadOrDCCount == playerAgents.Count)
