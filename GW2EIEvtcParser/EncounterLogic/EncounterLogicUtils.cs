@@ -120,16 +120,15 @@ internal static class EncounterLogicUtils
         int playerDeadOrDCCount = 0;
         foreach (AgentItem playerAgent in playerAgents)
         {
-            var deads = new List<Segment>();
-            var downs = new List<Segment>();
-            var dcs = new List<Segment>();
-            var actives = new List<Segment>();
-            playerAgent.GetAgentStatus(deads, downs, dcs, actives, combatData);
-            if (deads.Any(x => x.ContainsPoint(timeToCheck)))
-            {
-                playerDeadOrDCCount++;
-            }
-            else if (dcs.Any(x => x.ContainsPoint(timeToCheck)))
+            var statusEvents = new List<StatusEvent>();
+            statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem));
+            statusEvents.AddRange(combatData.GetDownEvents(playerAgent.EnglobingAgentItem));
+            statusEvents.AddRange(combatData.GetDeadEvents(playerAgent.EnglobingAgentItem));
+            statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent.EnglobingAgentItem));
+            statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent.EnglobingAgentItem));
+            statusEvents.SortByTime();
+            var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
+            if (lastStatus is DeadEvent || lastStatus is DespawnEvent)
             {
                 playerDeadOrDCCount++;
             }
