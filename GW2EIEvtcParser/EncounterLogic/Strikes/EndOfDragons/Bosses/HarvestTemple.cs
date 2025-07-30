@@ -413,7 +413,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 if (targetOffs.Count() == 2)
                 {
-                    HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMaster));
+                    HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
