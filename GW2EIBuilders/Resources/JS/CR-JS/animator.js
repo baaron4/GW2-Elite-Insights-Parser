@@ -458,7 +458,7 @@ class Animator {
                     break;
                 case Types.Friendly:
                     ActorClass = NPCIconDrawable;
-                    actorSize = 20;
+                    actorSize = 22;
                     mapToFill = this.friendlyMobData;
                     break;
                 case Types.FriendlyPlayer:
