@@ -370,7 +370,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var chargeSegments = target.GetBuffStatus(log, ChargeDecima).Where(x => x.Value > 0);
                 foreach (Segment segment in chargeSegments)
                 {
-                    replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
+                    replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 40))));
                 }
 
                 // Mainshock - Pizza Indicator
