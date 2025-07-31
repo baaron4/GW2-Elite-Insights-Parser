@@ -1423,7 +1423,10 @@ class TextDrawable extends MechanicDrawable {
     }
 
     getFontSize() {
-        return this.fontSize;
+        if (this.connectedTo.isScreenSpace) {
+            return this.fontSize;
+        }
+        return this.fontSize / animator.scale;
     }
 
     getSecondaryOffset() {
@@ -1469,10 +1472,9 @@ class TextOverheadDrawable extends TextDrawable {
 
     getSize() {
         if (animator.displaySettings.useActorHitboxWidth) {
-            //TODO
-            return 0;
-        } else {
             return this.fontSize;
+        } else {
+            return this.fontSize / animator.scale;
         }
     }
 
