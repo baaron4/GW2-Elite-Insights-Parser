@@ -1045,10 +1045,10 @@ class Animator {
         {
             ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
 
-            this.friendlyMobData.draw(selectablePickingDraw);
-            this.friendlyPlayerData.draw(selectablePickingDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectablePickingDraw);
+                this.friendlyPlayerData.draw(selectablePickingDraw);
                 this.playerData.draw(selectablePickingDraw);
             }
 
@@ -1059,6 +1059,8 @@ class Animator {
             this.targetData.draw(selectablePickingDraw);
             this.targetPlayerData.draw(selectablePickingDraw);
             if (this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectablePickingDraw);
+                this.friendlyPlayerData.draw(selectablePickingDraw);
                 this.playerData.draw(selectablePickingDraw);
             }
             if (this.selectedActor !== null) {
@@ -1100,10 +1102,10 @@ class Animator {
                 this.skillMechanicActorData.draw(standardDraw);
             }
 
-            this.friendlyMobData.draw(selectableDraw);
-            this.friendlyPlayerData.draw(selectableDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectableDraw);
+                this.friendlyPlayerData.draw(selectableDraw);
                 this.playerData.draw(selectableDraw);
             }
 
@@ -1114,6 +1116,8 @@ class Animator {
             this.targetData.draw(selectableDraw);
             this.targetPlayerData.draw(selectableDraw);
             if (this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectableDraw);
+                this.friendlyPlayerData.draw(selectableDraw);
                 this.playerData.draw(selectableDraw);
             }
             if (this.selectedActor !== null) {
