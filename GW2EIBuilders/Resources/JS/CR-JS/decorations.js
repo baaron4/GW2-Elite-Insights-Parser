@@ -1478,7 +1478,7 @@ class TextOverheadDrawable extends TextDrawable {
 
     getSecondaryOffset() {
         if (!this.master) {
-            console.error('Invalid IconOverhead decoration');
+            console.error('Invalid TextOverhead decoration');
             return null; 
         }
         const masterSize = this.master.getSize();
