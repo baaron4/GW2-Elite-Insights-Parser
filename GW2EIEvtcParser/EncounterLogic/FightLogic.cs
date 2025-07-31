@@ -383,8 +383,7 @@ public abstract class FightLogic
         } 
         else
         {
-            SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-            phases[0].AddTarget(mainTarget, log);
+            phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
         }
         return phases;
     }
