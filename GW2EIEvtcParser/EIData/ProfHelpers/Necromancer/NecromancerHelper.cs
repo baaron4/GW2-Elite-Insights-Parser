@@ -96,8 +96,8 @@ internal static class NecromancerHelper
 
         // Death Magic
         // - Necromantic Corruption
-        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsAnyUndeadMinion(x.From), DamageModifierMode.All)
-            .UsingEarlyExit((a, log) => a.GetMinions(log).Any(x => IsAnyUndeadMinion(x.Value.ReferenceAgentItem))),
+        new DamageLogDamageModifier(Mod_NecromanticCorruption, "Necromantic Corruption", "25% strike damage for minions", DamageSource.PetsOnly, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, TraitImages.NecromanticCorruption, (x, log) => IsUndeadMinion(x.From), DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => a.GetMinions(log).Any(x => IsUndeadMinion(x.Value.ReferenceAgentItem))),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -203,7 +203,7 @@ internal static class NecromancerHelper
     /// <summary>
     /// Checks if a minion is a Necromancer, Reaper or Rune/Relic of the Lich minion.
     /// </summary>
-    internal static bool IsAnyUndeadMinion(AgentItem agentItem)
+    internal static bool IsUndeadMinion(AgentItem agentItem)
     {
         if (agentItem.Type == AgentItem.AgentType.Gadget)
         {
