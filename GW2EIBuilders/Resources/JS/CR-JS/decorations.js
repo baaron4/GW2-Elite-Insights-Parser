@@ -1309,7 +1309,7 @@ class IconMechanicDrawable extends MechanicDrawable {
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        if(!this.canRotate) {
+        if (!this.canRotate) {
             // Don't rotate the icon
             ctx.rotate(-ToRadians(rot + this.rotationOffset));
         }
@@ -1429,7 +1429,7 @@ class TextDrawable extends MechanicDrawable {
         return this.fontSize / animator.scale;
     }
 
-    getSecondaryOffset(upRight) {
+    getSecondaryOffset() {
         return null;
     }
     
@@ -1442,21 +1442,17 @@ class TextDrawable extends MechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        
+        const fontSize = this.getFontSize();
+        pos.y += fontSize / 2;
         const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);     
-        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
-        const upRight = 0.5 < normalizedRot && normalizedRot < 1.5;
-        const secondaryOffset = this.getSecondaryOffset(upRight);
+        const secondaryOffset = this.getSecondaryOffset();
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
-        }
-        if (upRight) {
-            // make sure the text remains upright
-            ctx.rotate(-ToRadians(180));
-        }
-        const fontSize = this.getFontSize();
+        }  
+        // Don't rotate the text
+        ctx.rotate(-ToRadians(rot + this.rotationOffset));
         const font = (this.bold ? "bold " : "") + fontSize + "px " + this.fontType;
         ctx.font = font;
         ctx.fillStyle = this.color;
@@ -1473,13 +1469,13 @@ class TextOverheadDrawable extends TextDrawable {
 
     getFontSize() {
         if (animator.displaySettings.useActorHitboxWidth) {
-            return this.fontSize;
+            return this.fontSize / 5 ;
         } else {
-            return this.fontSize * resolutionMultiplier / animator.scale;
+            return this.fontSize / animator.scale;
         }
     }
 
-    getSecondaryOffset(upRight) {
+    getSecondaryOffset() {
         if (!this.master) {
             console.error('Invalid TextOverhead decoration');
             return null; 
@@ -1490,7 +1486,7 @@ class TextOverheadDrawable extends TextDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize / 3.0 + this.getFontSize() * (upRight ? 3.0 : 1.0)/ 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3.0 + this.getFontSize() / 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
