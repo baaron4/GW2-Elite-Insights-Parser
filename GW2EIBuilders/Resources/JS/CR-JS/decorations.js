@@ -1469,7 +1469,7 @@ class TextOverheadDrawable extends TextDrawable {
 
     getFontSize() {
         if (animator.displaySettings.useActorHitboxWidth) {
-            return this.fontSize / 5 ;
+            return this.fontSize / (resolutionMultiplier * resolutionMultiplier) ;
         } else {
             return this.fontSize / animator.scale;
         }
