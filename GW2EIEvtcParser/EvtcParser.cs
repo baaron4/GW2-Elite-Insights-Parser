@@ -167,7 +167,7 @@ public class EvtcParser
                     // init all positions
                     Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                 }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
+                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
                 _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
                 Parallel.ForEach(friendliesAndTargets, actor =>
                 {
@@ -745,9 +745,8 @@ public class EvtcParser
     /// <param name="operation">Operation object bound to the UI.</param>
     private void CompletePlayers(ParserController operation)
     {
-        var toRemove = new HashSet<AgentItem>();
+        //Create squad players
         var noSquads = _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP;
-        //Handle squad players
         IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem playerAgent in playerAgentList)
         {
@@ -756,27 +755,8 @@ public class EvtcParser
                 operation.UpdateProgressWithCancellationCheck("Parsing: Skipping invalid player");
                 continue;
             }
-            bool skip = false;
             var player = new Player(playerAgent, noSquads);
-            foreach (Player p in _playerList)
-            {
-                if (p.Account == player.Account)// same player
-                {
-                    if (p.Character == player.Character) // same character, can be fused
-                    {
-                        skip = true;
-                        toRemove.Add(playerAgent);
-                        operation.UpdateProgressWithCancellationCheck("Parsing: Merging player " + player.AgentItem.InstID);
-                        AgentManipulationHelper.RedirectAllEvents(_combatItems, _enabledExtensions, _agentData, player.AgentItem, p.AgentItem);
-                        p.AgentItem.OverrideAwareTimes(Math.Min(p.AgentItem.FirstAware, player.AgentItem.FirstAware), Math.Max(p.AgentItem.LastAware, player.AgentItem.LastAware));
-                        break;
-                    }
-                }
-            }
-            if (!skip)
-            {
-                _playerList.Add(player);
-            }
+            _playerList.Add(player);
         }
         if (_playerList.Count == 0)
         {
@@ -805,7 +785,7 @@ public class EvtcParser
                     if (playerAgent.Type == AgentItem.AgentType.Player)
                     {
                         new Player(playerAgent, noSquads).Anonymize(playerOffset++);
-                    } 
+                    }
                     else
                     {
                         new PlayerNonSquad(playerAgent).Anonymize(playerOffset++);
@@ -822,92 +802,6 @@ public class EvtcParser
             {
                 p.AgentItem.OverrideToughness((ushort)Math.Round(10.0 * (p.AgentItem.Toughness - minToughness) / Math.Max(1.0, maxToughness - minToughness)));
             }
-        }
-        // Handle non squad players
-        IReadOnlyList<AgentItem> nonSquadPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-        if (nonSquadPlayerAgents.Any())
-        {
-            var encounteredNonSquadPlayerInstIDs = new HashSet<ushort>();
-            var teamChangeDict = _combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            
-            IReadOnlyList<AgentItem> squadPlayers = _agentData.GetAgentByType(AgentItem.AgentType.Player);
-            ulong greenTeam = ulong.MaxValue;
-            var greenTeams = new List<ulong>();
-            foreach (AgentItem a in squadPlayers)
-            {
-                if (teamChangeDict.TryGetValue(a.Agent, out var teamChangeList))
-                {
-                    greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
-                    if (_evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
-                    {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
-                    }
-                }
-            }
-            greenTeams.RemoveAll(x => x == 0);
-            if (greenTeams.Count != 0)
-            {
-                greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
-            }
-            var playersToMerge = new Dictionary<AgentItem, AgentItem>();
-            var agentsToPlayersToMerge = new Dictionary<ulong, AgentItem>();
-
-            
-            var uniqueNonSquadPlayers = new List<AgentItem>();
-            foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
-            {
-                if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
-                {
-                    var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
-                    if (_evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
-                    {
-                        team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
-                    }
-                    team.RemoveAll(x => x == 0);
-                    nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == greenTeam));
-                }
-                if (!encounteredNonSquadPlayerInstIDs.Contains(nonSquadPlayer.InstID))
-                {
-                    uniqueNonSquadPlayers.Add(nonSquadPlayer);
-                    encounteredNonSquadPlayerInstIDs.Add(nonSquadPlayer.InstID);
-                }
-                else
-                {
-                    // we merge
-                    AgentItem mainPlayer = uniqueNonSquadPlayers.FirstOrDefault(x => x.InstID == nonSquadPlayer.InstID)!;
-                    playersToMerge[nonSquadPlayer] = mainPlayer;
-                    agentsToPlayersToMerge[nonSquadPlayer.Agent] = nonSquadPlayer;
-                }
-            }
-            if (playersToMerge.Count != 0)
-            {
-                foreach (CombatItem c in _combatItems)
-                {
-                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out var nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer, _enabledExtensions))
-                    {
-                        AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideSrcAgent(mainPlayer);
-                    }
-                    if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer, _enabledExtensions))
-                    {
-                        AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideDstAgent(mainPlayer);
-                    }
-                }
-                foreach (KeyValuePair<AgentItem, AgentItem> pair in playersToMerge)
-                {
-                    AgentItem nonSquadPlayer = pair.Key;
-                    AgentItem mainPlayer = pair.Value;
-                    _agentData.SwapMasters(nonSquadPlayer, mainPlayer);
-                    mainPlayer.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
-                    toRemove.Add(nonSquadPlayer);
-                }
-            }
-        }
-        
-        if (toRemove.Count != 0)
-        {
-            _agentData.RemoveAllFrom(toRemove);
         }
     }
 
@@ -996,7 +890,8 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
-        AgentManipulationHelper.RegroupSameInstidNPCs(_agentData, _combatItems, _enabledExtensions);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
+        AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
@@ -1071,7 +966,7 @@ public class EvtcParser
             }
         }
         _agentData.ApplyOffset(offset);
-        
+
         _fightData.ApplyOffset(offset);
     }
 
@@ -1122,18 +1017,18 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<byte>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = buffer.Array[buffer.Length] = reader.ReadByte();
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         // consume remaining length
-        for(; length > sizeof(UInt64); length -= sizeof(UInt64))
+        for (; length > sizeof(UInt64); length -= sizeof(UInt64))
         {
             reader.ReadUInt64();
         }
-        while(length-- > 0)
+        while (length-- > 0)
         {
             reader.ReadByte();
         }
@@ -1151,11 +1046,11 @@ public class EvtcParser
     {
         var buffer = new ArrayPoolReturner<char>(length); // TODO use own reader for direct access 
         buffer.Length = 0; // reuse the length, don't need to remember the original
-        while(length-- > 0)
+        while (length-- > 0)
         {
             var b = reader.ReadByte();
             buffer.Array[buffer.Length] = (char)b;
-            if(nullTerminated && b == 0) { break; }
+            if (nullTerminated && b == 0) { break; }
             buffer.Length++;
         }
         return buffer;

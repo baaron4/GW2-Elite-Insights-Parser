@@ -26,7 +26,7 @@ public struct GenericSegment<T>(long start, long end, T? value)
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool IsEmpty() => Start == End;
+    public readonly bool IsEmpty() => Start >= End;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Intersects(in GenericSegment<T> other) => Intersects(other.Start, other.End);

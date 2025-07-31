@@ -194,10 +194,10 @@ public class AgentData
         return ParserHelper._unknownAgent;
     }
 
-    public bool HasSpawnedMinion(MinionID minion, AgentItem? master, long time, long epsilon = ParserHelper.ServerDelayConstant)
+    public bool HasSpawnedMinion(MinionID minion, AgentItem master, long time, long epsilon = ParserHelper.ServerDelayConstant)
     {
         return GetNPCsByID(minion)
-            .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
+            .Any(agent => master.IsMasterOf(agent) && Math.Abs(agent.FirstAware - time) < epsilon);
     }
 
     internal void ReplaceAgents(IEnumerable<AgentItem> toRemove, IEnumerable<AgentItem> toAdd)
@@ -291,14 +291,14 @@ public class AgentData
     {
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.NPC))
         {
-            if (a.Master != null && froms.Contains(a.Master))
+            if (a.Master != null && froms.Any(a.Is))
             {
                 a.SetMaster(to);
             }
         }
         foreach (AgentItem a in GetAgentByType(AgentItem.AgentType.Gadget))
         {
-            if (a.Master != null && froms.Contains(a.Master))
+            if (a.Master != null && froms.Any(a.Is))
             {
                 a.SetMaster(to);
             }

@@ -47,9 +47,9 @@ internal class Arkk : ShatteredObservatory
                 [
                     new EnemyCastStartMechanic(ArkkBreakbarCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar", "Start Breakbar","CC", 0),
                     new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC.Fail", "Breakbar (Failed CC)","CC Fail", 0)
-                        .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
+                        .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && !log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To.Is(x.Caster) && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
                     new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed", "Breakbar broken","CCed", 0)
-                        .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To == x.Caster && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
+                        .UsingChecker((bae,log) => bae.To.IsSpecies(TargetID.Arkk) && log.CombatData.GetAnimatedCastData(ArkkBreakbarCast).Any(x => bae.To.Is(x.Caster) && x.Time < bae.Time && bae.Time < x.ExpectedEndTime + ServerDelayConstant)),
                 ]
             ),
             new PlayerDstHealthDamageHitMechanic(OverheadSmashArchdiviner, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightRed), "A.Smsh", "Overhead Smash (Arcdiviner)","Smash (Add)", 0),
@@ -203,15 +203,14 @@ internal class Arkk : ShatteredObservatory
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
-        HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
         // missing buff apply events fallback, some phases will be missing
         // removes should be present
-        if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, Determined762, 10))
+        if (SetSuccessByBuffCount(combatData, fightData, playerAgents, target, Determined762, 10))
         {
             var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>();
             if (invulsRemoveTarget.Count() == 5)
             {
-                SetSuccessByCombatExit([target], combatData, fightData, adjustedPlayers);
+                SetSuccessByCombatExit([target], combatData, fightData, playerAgents);
             }
         }
     }

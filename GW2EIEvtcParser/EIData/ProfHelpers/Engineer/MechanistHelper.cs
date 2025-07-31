@@ -63,7 +63,7 @@ internal static class MechanistHelper
 
     private static bool WithMechChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
+        return x.From.Is(x.CreditedFrom) || x.From.IsSpecies(MinionID.JadeMech);
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =

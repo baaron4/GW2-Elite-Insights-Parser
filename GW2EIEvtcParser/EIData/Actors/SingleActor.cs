@@ -77,74 +77,6 @@ public abstract partial class SingleActor : Actor
     }
 
 
-    public bool IsDowned(ParsedEvtcLog log, long time)
-    {
-        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
-        return downs.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDowned(ParsedEvtcLog log, long start, long end)
-    {
-        (_, IReadOnlyList<Segment> downs, _, _) = GetStatus(log);
-        return downs.Any(x => x.Intersects(start, end));
-    }
-    public bool IsDead(ParsedEvtcLog log, long time)
-    {
-        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
-        return deads.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDead(ParsedEvtcLog log, long start, long end)
-    {
-        (IReadOnlyList<Segment> deads, _, _, _) = GetStatus(log);
-        return deads.Any(x => x.Intersects(start, end));
-    }
-    public bool IsDC(ParsedEvtcLog log, long time)
-    {
-        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
-        return dcs.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsDC(ParsedEvtcLog log, long start, long end)
-    {
-        (_, _, IReadOnlyList<Segment> dcs, _) = GetStatus(log);
-        return dcs.Any(x => x.Intersects(start, end));
-    }
-    public bool IsActive(ParsedEvtcLog log, long time)
-    {
-        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
-        return actives.Any(x => x.ContainsPoint(time));
-    }
-    public bool IsActive(ParsedEvtcLog log, long start, long end)
-    {
-        (_, _, _, IReadOnlyList<Segment> actives) = GetStatus(log);
-        return actives.Any(x => x.Intersects(start, end));
-    }
-
-    public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
-    {
-        var (nones, actives, immunes, recoverings) = GetBreakbarStatus(log);
-        if (nones.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.None;
-        }
-
-        if (actives.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Active;
-        }
-
-        if (immunes.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Immune;
-        }
-
-        if (recoverings.Any(x => x.ContainsPoint(time)))
-        {
-            return BreakbarState.Recover;
-        }
-
-        return BreakbarState.None;
-    }
-
-
     /// <summary>
     /// Return the health value at requested %
     /// </summary>
@@ -187,10 +119,14 @@ public abstract partial class SingleActor : Actor
         {
             _minions = [];
             // npcs, species id based
-            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem);
+            var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => AgentItem.IsMasterOf(x));
             var auxMinions = new Dictionary<long, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
+                if (!agent.InAwareTimes(AgentItem))
+                {
+                    continue;
+                }
                 long id = agent.ID;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
@@ -213,10 +149,14 @@ public abstract partial class SingleActor : Actor
                 }
             }
             // gadget, string based
-            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem);
+            var combatGadgetMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => AgentItem.IsMasterOf(x));
             var auxGadgetMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatGadgetMinion)
             {
+                if (!agent.InAwareTimes(AgentItem))
+                {
+                    continue;
+                }
                 string id = agent.Name;
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
@@ -702,7 +642,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
+        return GetDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
@@ -751,7 +691,7 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From == AgentItem).ToList();
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From.Is(AgentItem)).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -766,7 +706,7 @@ public abstract partial class SingleActor : Actor
         }
         if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<HealthDamageEvent>? dls))
         {
-            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => x.From != AgentItem).ToList();
+            dls = GetHitDamageEvents(target, log, start, end, damageType).Where(x => !x.From.Is(AgentItem)).ToList();
             hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
         }
         return dls;
@@ -778,7 +718,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
+        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -855,7 +795,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem);
+        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting

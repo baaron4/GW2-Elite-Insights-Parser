@@ -308,7 +308,7 @@ internal class UraTheSteamshrieker : MountBalrior
         long start = log.FightData.FightStart;
         long end = log.FightData.FightEnd;
 
-        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To == ura.AgentItem);
+        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(ura.AgentItem));
         // Healed CM
         if (hp1 != null)
         {
@@ -316,7 +316,7 @@ internal class UraTheSteamshrieker : MountBalrior
             before1.AddParentPhase(parentPhase);
             before1.AddTarget(ura, log);
             phases.Add(before1);
-            var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == ura.AgentItem && x.Time >= hp1.Time);
+            var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To.Is(ura.AgentItem) && x.Time >= hp1.Time);
             if (determinedLost != null)
             {
                 var after1 = new PhaseData(determinedLost.Time, end, "Healed");
@@ -583,9 +583,9 @@ internal class UraTheSteamshrieker : MountBalrior
 
                 // Blue Tether - Applies Rising Pressure to targets - Skill ID is 75295
                 IEnumerable<AbstractBuffApplyEvent> tethers = log.CombatData.GetBuffApplyData(RisingPressure).Where(x => 
-                    x is BuffApplyEvent && 
-                    x.By == target.AgentItem && 
-                    x.To != target.AgentItem);
+                    x is BuffApplyEvent &&
+                    x.By.Is(target.AgentItem) &&
+                    !x.To.Is(target.AgentItem));
 
                 foreach (BuffEvent tether in tethers)
                 {

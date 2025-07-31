@@ -17,7 +17,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
             for (int i = 0; i < count; i++)
             {
                 var stack = stacks[i];
-                var hasSeed = stack.SeedSrc != stack.Src;
+                var hasSeed = !stack.SeedSrc.Is(stack.Src);
                 var isExtension = stack.IsExtension;
                 Stacks[i] = hasSeed ?
                     (isExtension ? new BuffSimulationItemBaseWithExtensionWithSeed(stack)  : new BuffSimulationItemBaseWithSeed(stack))

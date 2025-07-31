@@ -29,7 +29,7 @@ public class SupportPerAllyStatistics
             {
                 if (brae.Time >= start && brae.Time <= end)
                 {
-                    if (to != null && brae.To != to.AgentItem)
+                    if (to != null && !to.AgentItem.Is(brae.To))
                     {
                         continue;
                     }

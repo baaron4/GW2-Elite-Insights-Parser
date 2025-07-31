@@ -21,8 +21,6 @@ internal static class JsonNPCBuilder
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         //
         jsonNPC.Id = npc.ID;
-        IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
-        IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(npc.AgentItem);
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;
@@ -32,13 +30,15 @@ internal static class JsonNPCBuilder
         }
         else
         {
+            var hpUpdates = npc.GetHealthUpdates(log);
             if (hpUpdates.Count > 0)
             {
-                hpLeft = hpUpdates.Last().HealthPercent;
+                hpLeft = hpUpdates.Last().Value;
             }
+            var barrierUpdates = npc.GetBarrierUpdates(log);
             if (barrierUpdates.Count > 0)
             {
-                barrierLeft = barrierUpdates.Last().BarrierPercent;
+                barrierLeft = barrierUpdates.Last().Value;
             }
         }
         jsonNPC.HealthPercentBurned = 100.0 - hpLeft;

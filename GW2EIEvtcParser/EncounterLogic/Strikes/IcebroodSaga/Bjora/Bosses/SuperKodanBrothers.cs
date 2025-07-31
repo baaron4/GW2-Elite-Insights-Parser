@@ -171,7 +171,7 @@ internal class SuperKodanBrothers : Bjora
         {
             var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
             phase.AddParentPhases(unmergedPhases);
-            phase.AddTarget(claw.AgentItem == enrage.To ? claw : voice, log);
+            phase.AddTarget(claw.AgentItem.Is(enrage.To) ? claw : voice, log);
             phases.Add(phase);
         }
         // Missing final position event

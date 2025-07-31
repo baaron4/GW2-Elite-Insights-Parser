@@ -122,7 +122,7 @@ internal class Artsariiv : ShatteredObservatory
         var targetArtsariiv = FindTargetArtsariiv(agentData);
         foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
         {
-            if (artsariiv != targetArtsariiv)
+            if (!artsariiv.Is(targetArtsariiv))
             {
                 artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
             }
@@ -190,7 +190,7 @@ internal class Artsariiv : ShatteredObservatory
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
-        SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, Determined762, 4);
+        SetSuccessByBuffCount(combatData, fightData, playerAgents, target, Determined762, 4);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

@@ -16,7 +16,7 @@ internal static class MechanicHelper
         {
             if (!regroupedMobs.TryGetValue(a.ID, out var amp))
             {
-                amp = log.FightData.Logic.TrashMobs.First(x => x.AgentItem == a);
+                amp = log.FightData.Logic.TrashMobs.First(x => x.AgentItem.Is(a));
                 regroupedMobs.Add(amp.ID, amp);
             }
             return amp;

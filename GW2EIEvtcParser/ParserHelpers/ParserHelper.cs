@@ -545,92 +545,49 @@ public static class ParserHelper
         }
         int id = minion.ID;
         bool res = ProfHelper.IsKnownMinionID(id);
-        switch (spec)
+        var baseSpec = SpecToBaseSpec(spec);
+        switch (baseSpec)
         {
             //
             case Spec.Elementalist:
-            case Spec.Tempest:
-            case Spec.Weaver:
-            case Spec.Catalyst:
                 res |= ElementalistHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Necromancer:
-            case Spec.Scourge:
-            case Spec.Harbinger:
-                res |= NecromancerHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Reaper:
                 res |= NecromancerHelper.IsKnownMinionID(id);
                 res |= ReaperHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Mesmer:
                 res |= MesmerHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Chronomancer:
-                res |= MesmerHelper.IsKnownMinionID(id);
                 res |= ChronomancerHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Mirage:
-                res |= MesmerHelper.IsKnownMinionID(id);
                 res |= MirageHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Virtuoso:
-                res |= MesmerHelper.IsKnownMinionID(id);
                 res |= VirtuosoHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Thief:
                 res |= ThiefHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Daredevil:
-                res |= ThiefHelper.IsKnownMinionID(id);
                 res |= DaredevilHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Deadeye:
-                res |= ThiefHelper.IsKnownMinionID(id);
                 res |= DeadeyeHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Specter:
-                res |= ThiefHelper.IsKnownMinionID(id);
                 res |= SpecterHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Engineer:
-            case Spec.Holosmith:
-                res |= EngineerHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Scrapper:
                 res |= EngineerHelper.IsKnownMinionID(id);
                 res |= ScrapperHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Mechanist:
-                res |= EngineerHelper.IsKnownMinionID(id);
                 res |= MechanistHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Ranger:
-            case Spec.Druid:
-            case Spec.Soulbeast:
-            case Spec.Untamed:
                 res |= RangerHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Revenant:
-            case Spec.Herald:
-            case Spec.Vindicator:
-                res |= RevenantHelper.IsKnownMinionID(id);
-                break;
-            case Spec.Renegade:
                 res |= RevenantHelper.IsKnownMinionID(id);
                 res |= RenegadeHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Guardian:
-            case Spec.Dragonhunter:
-            case Spec.Firebrand:
-            case Spec.Willbender:
                 res |= GuardianHelper.IsKnownMinionID(id);
                 break;
         }

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.Metrics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -126,6 +127,7 @@ public class AgentItem
         Master = other.Master;
         IsFake = other.IsFake;
         Unamed = other.Unamed;
+        IsNotInSquadFriendlyPlayer = other.IsNotInSquadFriendlyPlayer;
     }
 
     internal AgentItem()
@@ -215,7 +217,7 @@ public class AgentItem
 
     internal void SetMaster(AgentItem master)
     {
-        if (IsPlayer || master == this)
+        if (IsPlayer || master.Is(this))
         {
             return;
         }
@@ -223,7 +225,7 @@ public class AgentItem
         while (cur.Master != null)
         {
             cur = cur.Master;
-            if (cur == this)
+            if (cur.Is(this))
             {
                 return;
             }
@@ -237,171 +239,40 @@ public class AgentItem
         return atEvent?.Src ?? this;
     }
 
-    private static void AddSegment(List<Segment> segments, long start, long end)
+    public bool Is(AgentItem? ag)
     {
-        if (start < end)
+        if (ag == null)
         {
-            segments.Add(new Segment(start, end, 1));
+            return false;
         }
+        return this == ag;
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, StatusEvent cur, long nextTime, long minTime, int index)
+    public bool IsMasterOrSelf(AgentItem ag)
     {
-        long cTime = cur.Time;
-
-        if (cur is DownEvent)
-        {
-            if (index == 0)
-            {
-                AddSegment(actives, minTime, cTime);
-            }
-            AddSegment(down, cTime, nextTime);
-        }
-        else if (cur is DeadEvent)
-        {
-            if (index == 0)
-            {
-                AddSegment(actives, minTime, cTime);
-            }
-            AddSegment(dead, cTime, nextTime);
-        }
-        else if (cur is DespawnEvent)
-        {
-            if (index == 0)
-            {
-                AddSegment(actives, minTime, cTime);
-            }
-            AddSegment(dc, cTime, nextTime);
-        }
-        else
-        {
-            if (index == 0 && cTime - minTime > 50)
-            {
-                AddSegment(dc, minTime, cTime);
-            }
-            AddSegment(actives, cTime, nextTime);
-        }
+        return GetFinalMaster().Is(ag);
     }
 
-    internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
+    public bool IsMaster(AgentItem ag)
     {
-        //TODO(Rennorb) @perf: find average complexity
-        var downEvents = combatData.GetDownEvents(this);
-        var aliveEvents = combatData.GetAliveEvents(this);
-        var deadEvents = combatData.GetDeadEvents(this);
-        var spawnEvents = combatData.GetSpawnEvents(this);
-        var despawnEvents = combatData.GetDespawnEvents(this);
-
-        var status = new List<StatusEvent>(
-            downEvents.Count +
-            aliveEvents.Count +
-            deadEvents.Count +
-            spawnEvents.Count +
-            despawnEvents.Count
-        );
-        status.AddRange(downEvents);
-        status.AddRange(aliveEvents);
-        status.AddRange(deadEvents);
-        status.AddRange(spawnEvents);
-        status.AddRange(despawnEvents);
-        AddSegment(dc, long.MinValue, FirstAware);
-
-        if (status.Count == 0)
+        if (ag.Is(this))
         {
-            AddSegment(actives, FirstAware, LastAware);
-            AddSegment(dc, LastAware, long.MaxValue);
-            return;
+            return false;
         }
-
-        status.SortByTime();
-
-        for (int i = 0; i < status.Count - 1; i++)
-        {
-            StatusEvent cur = status[i];
-            StatusEvent next = status[i + 1];
-            AddValueToStatusList(dead, down, dc, actives, cur, next.Time, FirstAware, i);
-        }
-
-        // check last value
-        if (status.Count > 0)
-        {
-            StatusEvent cur = status.Last();
-            AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1); 
-            if (cur is DeadEvent)
-            {
-                AddSegment(dead, LastAware, long.MaxValue);
-            }
-            else
-            {
-                AddSegment(dc, LastAware, long.MaxValue);
-            }
-        }
+        return GetFinalMaster().Is(ag);
     }
-
-    internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
+    public bool IsMasterOfOrSelf(AgentItem ag)
     {
-        var status = new List<BreakbarStateEvent>(combatData.GetBreakbarStateEvents(this));
-        // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
-        if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
-        {
-            return;
-        }
-
-        if (status.Count == 0)
-        {
-            AddSegment(nones, FirstAware, LastAware);
-            return;
-        }
-        for (int i = 0; i < status.Count - 1; i++)
-        {
-            BreakbarStateEvent cur = status[i];
-            if (i == 0 && cur.Time > FirstAware)
-            {
-                AddSegment(nones, FirstAware, cur.Time);
-            }
-            BreakbarStateEvent next = status[i + 1];
-            switch (cur.State)
-            {
-                case BreakbarState.Active:
-                    AddSegment(actives, cur.Time, next.Time);
-                    break;
-                case BreakbarState.Immune:
-                    AddSegment(immunes, cur.Time, next.Time);
-                    break;
-                case BreakbarState.None:
-                    AddSegment(nones, cur.Time, next.Time);
-                    break;
-                case BreakbarState.Recover:
-                    AddSegment(recovering, cur.Time, next.Time);
-                    break;
-            }
-        }
-        // check last value
-        if (status.Count > 0)
-        {
-            BreakbarStateEvent cur = status.Last();
-            if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
-            {
-                switch (cur.State)
-                {
-                    case BreakbarState.Active:
-                        AddSegment(actives, cur.Time, LastAware);
-                        break;
-                    case BreakbarState.Immune:
-                        AddSegment(immunes, cur.Time, LastAware);
-                        break;
-                    case BreakbarState.None:
-                        AddSegment(nones, cur.Time, LastAware);
-                        break;
-                    case BreakbarState.Recover:
-                        AddSegment(recovering, cur.Time, LastAware);
-                        break;
-                }
-            }
-
-        }
+        return ag.IsMasterOrSelf(this);
     }
-
+    public bool IsMasterOf(AgentItem ag)
+    {
+        if (ag.Is(this))
+        {
+            return false;
+        }
+        return ag.IsMaster(this);
+    }
     public AgentItem GetFinalMaster()
     {
         AgentItem cur = this;

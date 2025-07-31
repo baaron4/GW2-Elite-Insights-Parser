@@ -22,7 +22,7 @@ internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic<BuffRemove
 
     private static bool OnlyMinionsChecker(BuffRemoveAllEvent brae, ParsedEvtcLog log)
     {
-        return brae.To != brae.To.GetFinalMaster();
+        return !brae.To.Is(brae.To.GetFinalMaster());
     }
 
     public PlayerDstBuffRemoveMechanic OnlyMinions(bool onlyMinions)

@@ -16,7 +16,7 @@ internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) :
     }
     public override int GetActiveStacks(SingleActor actor)
     {
-        return (GetSources().First() == actor.AgentItem) ? 1 : 0;
+        return (GetSources().First().Is(actor.AgentItem)) ? 1 : 0;
     }
     public override IEnumerable<AgentItem> GetActiveSources()
     {

@@ -22,7 +22,7 @@ internal static class DragonhunterHelper
 
     private static bool CheckTether(ParsedEvtcLog log, AgentItem src, AgentItem dst, long time)
     {
-        if (!log.CombatData.GetBuffData(JusticeDragonhunter).Any(x => x is BuffApplyEvent bae && bae.By == src && Math.Abs(bae.AppliedDuration - 6000) > ServerDelayConstant))
+        if (!log.CombatData.GetBuffData(JusticeDragonhunter).Any(x => x is BuffApplyEvent bae && bae.By.Is(src) && Math.Abs(bae.AppliedDuration - 6000) > ServerDelayConstant))
         {
             return false;
         }

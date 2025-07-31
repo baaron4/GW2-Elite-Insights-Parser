@@ -413,7 +413,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 if (targetOffs.Count() == 2)
                 {
-                    HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                    HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
@@ -428,7 +428,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
                                 isSuccess = true;
-                                if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                                if (determinedApplies.Count(x => x.To.Is(liffOff.Caster) && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
                                 {
                                     isSuccess = false;
                                     break;
@@ -531,7 +531,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 double lastHPUpdate = 1e6;
                 AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? atAgent.HitboxWidth : 800, atAgent.HitboxHeight);
-                AgentManipulationHelper.RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
+                AgentManipulationHelper.RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                     (evt, from, to) =>
                     {
                         if (evt.IsStateChange == StateChange.HealthUpdate)

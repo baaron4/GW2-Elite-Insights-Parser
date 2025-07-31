@@ -23,8 +23,12 @@ public static class AgentManipulationHelper
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null, StateEventProcessing? stateEventProcessing = null)
+    internal static void RedirectNPCEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null, StateEventProcessing? stateEventProcessing = null)
     {
+        if (!(redirectFrom.IsNPC && to.IsNPC))
+        {
+            throw new InvalidOperationException("Expected NPCs in RedirectNPCEventsAndCopyPreviousStates");
+        }
         // Redirect combat events
         foreach (CombatItem evt in combatData)
         {
@@ -146,7 +150,7 @@ public static class AgentManipulationHelper
             ];
         foreach (AgentItem ag in masterRedirectionCandidates)
         {
-            if (ag.Master == redirectFrom && to.InAwareTimes(ag.FirstAware))
+            if (redirectFrom.Is(ag.Master) && to.InAwareTimes(ag.FirstAware))
             {
                 ag.SetMaster(to);
             }
@@ -155,39 +159,136 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void RegroupSameInstidNPCs(AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RegroupSameAgentsAndDetermineTeams(AgentData agentData, IReadOnlyList<CombatItem> combatItems, EvtcVersionEvent evtcVersion, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var toRemove = new List<AgentItem>(100);
         var toAdd = new List<AgentItem>(30);
-        var npcsBySpeciesIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         var combatDataDict = combatItems.Where(x => x.SrcIsAgent(extensions) || x.DstIsAgent(extensions));
         var srcCombatDataDict = combatDataDict.Where(x => x.SrcIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
         var dstCombatDataDict = combatDataDict.Where(x => x.DstIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.DstAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
-        foreach (var npcsBySpeciesID in npcsBySpeciesIDs)
+        // NPCs
         {
-            var agentsByInstid = npcsBySpeciesID.Value.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var pair in agentsByInstid)
+            var npcsBySpeciesIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var npcsBySpeciesID in npcsBySpeciesIDs)
             {
-                var agents = pair.Value;
+                var agentsByInstid = npcsBySpeciesID.Value.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (var pair in agentsByInstid)
+                {
+                    var agents = pair.Value;
+                    if (agents.Count > 1)
+                    {
+                        AgentItem firstItem = agents.First();
+                        var newTargetAgent = new AgentItem(firstItem);
+                        newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                        foreach (AgentItem agentItem in agents)
+                        {
+                            if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                            {
+                                srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                            }
+                            if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                            {
+                                dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
+                            }
+                            agentData.SwapMasters(agentItem, newTargetAgent);
+                        }
+                        toRemove.AddRange(agents);
+                        toAdd.Add(newTargetAgent);
+                    }
+                }
+            }
+        }
+        // Non squad Players
+        {
+            IReadOnlyList<AgentItem> nonSquadPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
+            if (nonSquadPlayerAgents.Any())
+            {
+                var teamChangeDict = combatItems.Where(x => x.IsStateChange == StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
+                IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                ulong greenTeam = ulong.MaxValue;
+                var greenTeams = new List<ulong>();
+                foreach (AgentItem a in squadPlayers)
+                {
+                    if (teamChangeDict.TryGetValue(a.Agent, out var teamChangeList))
+                    {
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
+                        if (evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
+                        {
+                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
+                        }
+                    }
+                }
+                greenTeams.RemoveAll(x => x == 0);
+                if (greenTeams.Count != 0)
+                {
+                    greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
+                }
+                foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
+                {
+                    if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
+                    {
+                        var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
+                        if (evtcVersion.Build > ArcDPSBuilds.TeamChangeOnDespawn)
+                        {
+                            team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
+                        }
+                        team.RemoveAll(x => x == 0);
+                        nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == greenTeam));
+                    }
+                }
+                var nonSquadPlayersByInstids = nonSquadPlayerAgents.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+                foreach (var nonSquadPlayersByInstid in nonSquadPlayersByInstids)
+                {
+                    var agents = nonSquadPlayersByInstid.Value;
+                    if (agents.Count > 1)
+                    {
+                        AgentItem firstItem = agents.First();
+                        var newPlayerAgent = new AgentItem(firstItem);
+                        newPlayerAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                        foreach (AgentItem agentItem in agents)
+                        {
+                            if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                            {
+                                srcCombatItems.ForEach(x => x.OverrideSrcAgent(newPlayerAgent));
+                            }
+                            if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                            {
+                                dstCombatItems.ForEach(x => x.OverrideDstAgent(newPlayerAgent));
+                            }
+                            agentData.SwapMasters(agentItem, newPlayerAgent);
+                        }
+                        toRemove.AddRange(agents);
+                        toAdd.Add(newPlayerAgent);
+                    }
+                }
+            }
+        }
+        // Players
+        {
+            IReadOnlyList<AgentItem> playerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+            var playerAgentsByNames = playerAgents.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var playerAgentsByName in playerAgentsByNames)
+            {
+                var agents = playerAgentsByName.Value;
                 if (agents.Count > 1)
                 {
                     AgentItem firstItem = agents.First();
-                    var newTargetAgent = new AgentItem(firstItem);
-                    newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                    var newPlayerAgent = new AgentItem(firstItem);
+                    newPlayerAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
                     foreach (AgentItem agentItem in agents)
                     {
                         if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
                         {
-                            srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                            srcCombatItems.ForEach(x => x.OverrideSrcAgent(newPlayerAgent));
                         }
                         if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
                         {
-                            dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
+                            dstCombatItems.ForEach(x => x.OverrideDstAgent(newPlayerAgent));
                         }
-                        agentData.SwapMasters(agentItem, newTargetAgent);
+                        agentData.SwapMasters(agentItem, newPlayerAgent);
                     }
                     toRemove.AddRange(agents);
-                    toAdd.Add(newTargetAgent);
+                    toAdd.Add(newPlayerAgent);
                 }
             }
         }

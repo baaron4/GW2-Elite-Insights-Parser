@@ -128,14 +128,10 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-        //{
-        //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-        //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        //new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-        //{
-        //    return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-        //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
@@ -177,7 +173,7 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfSorrowBuff, EffectGUIDs.RelicOfSorrow3)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
-            .UsingChecker((effectEvent, combatData, agentData, skillData) => 
+            .UsingChecker((effectEvent, combatData, agentData, skillData) =>
             {
                 return combatData.HasLostBuff(RelicOfTheStormsingerBuff, effectEvent.Src, effectEvent.Time);
             })
@@ -255,7 +251,7 @@ internal static class ProfHelper
                 if (gadget.FirstAware >= start && gadget.FirstAware <= end + castEndThreshold)
                 {
                     // more than one candidate, put to unknown and drop the search
-                    if (gadget.Master != null && gadget.GetFinalMaster() != castEvent.Caster.GetFinalMaster())
+                    if (gadget.Master != null && !gadget.GetFinalMaster().Is(castEvent.Caster.GetFinalMaster()))
                     {
                         gadget.SetMaster(_unknownAgent);
                         break;
@@ -283,7 +279,7 @@ internal static class ProfHelper
         {
             // dst must no be a gadget nor a friendly player
             // src must be a masterless gadget
-            if (!playerAgents.Contains(evt.To.GetFinalMaster()) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
+            if (!playerAgents.Any(evt.To.IsMaster) && evt.To.Type != AgentItem.AgentType.Gadget && evt.From.Type == AgentItem.AgentType.Gadget && evt.From.Master == null)
             {
                 res.Add(evt.From);
             }

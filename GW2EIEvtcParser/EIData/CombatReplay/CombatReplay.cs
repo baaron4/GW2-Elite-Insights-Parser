@@ -62,13 +62,13 @@ public class CombatReplay
         List<ParametricPoint3D> positions = Positions;
         if (Positions.Count == 0 && forcePolling)
         {
-            positions = [ new(int.MinValue, int.MinValue, 0, 0) ];
+            positions = [new(int.MinValue, int.MinValue, 0, 0)];
         }
         else if (Positions.Count == 0)
         {
             return;
         }
-        
+
         int positionTableIndex = 0;
         int velocityTableIndex = 0;
 
@@ -313,14 +313,14 @@ public class CombatReplay
                 {
                     color = Colors.Teal;
                     positionConnector = new AgentConnector(dstActor);
-                } 
+                }
                 else
                 {
                     if (dstActor.TryGetCurrentPosition(log, effectEvt.Time, out var position))
                     {
                         color = Colors.DarkBlue;
                         positionConnector = new PositionConnector(position);
-                    } 
+                    }
                     else
                     {
                         continue;
@@ -374,7 +374,7 @@ public class CombatReplay
                     {
                         color = Colors.DarkBlue;
                         positionConnector = new PositionConnector(position);
-                    } 
+                    }
                     else
                     {
                         continue;
@@ -389,7 +389,7 @@ public class CombatReplay
             if (effectEvt.Rotation.Z != 0)
             {
                 decorations.Add(new PieDecoration(DebugRadius, DebugOpeningAngle, lifeSpan, color, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(effectEvt.Rotation.Z)));
-            } 
+            }
             else
             {
                 decorations.Add(new CircleDecoration(DebugRadius, lifeSpan, color, 0.5, positionConnector));

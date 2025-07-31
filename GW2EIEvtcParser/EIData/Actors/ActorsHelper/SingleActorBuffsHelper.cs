@@ -23,9 +23,10 @@ partial class SingleActor
     private CachingCollection<(Dictionary<long, BuffVolumeByActorStatistics> Rates, Dictionary<long, BuffVolumeByActorStatistics> ActiveRates)>? _buffVolumesDictionary;
     private Dictionary<long, AbstractBuffSimulator>? _buffSimulators;
 
+    #region DISTRIBUTION
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
-        ComputeBuffGraphs(log);
+        SimulateBuffsAndComputeGraphs(log);
 
         if (!_buffDistribution.TryGetValue(start, end, out var value))
         {
@@ -60,11 +61,12 @@ partial class SingleActor
 
         return res;
     }
-
+    #endregion DISTRIBUTION
+    #region PRESENCE
     public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
     {
 
-        ComputeBuffGraphs(log);
+        SimulateBuffsAndComputeGraphs(log);
 
         if (!_buffPresence.TryGetValue(start, end, out var value))
         {
@@ -90,17 +92,18 @@ partial class SingleActor
         }
         return buffPresence;
     }
-
+    #endregion PRESENCE
+    #region GRAPHS
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log)
     {
-        ComputeBuffGraphs(log);
+        SimulateBuffsAndComputeGraphs(log);
         return _buffGraphs;
     }
 
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         AgentItem agent = by.AgentItem;
-        ComputeBuffGraphs(log);
+        SimulateBuffsAndComputeGraphs(log);
 
         _buffGraphsPerAgent ??= new(8); //TODO(Rennorb) @perf: find capacity dependencies
         if (!_buffGraphsPerAgent.ContainsKey(agent))
@@ -159,7 +162,8 @@ partial class SingleActor
 
         return _buffGraphsPerAgent[agent];
     }
-
+    #endregion GRAPHS
+    #region BUFF STATUS
     /// <summary>
     /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
@@ -365,7 +369,8 @@ partial class SingleActor
     {
         return GetBuffPresenceStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
     }
-
+    #endregion BUFF STATUS
+    #region STATISTICS
     public IReadOnlyDictionary<long, BuffStatistics> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
         _buffStats ??= new(log, BuffEnum.Self, 4);
@@ -409,7 +414,81 @@ partial class SingleActor
         }
         return value.ActiveVolumes;
     }
+    public IReadOnlyDictionary<long, BuffByActorStatistics> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
+    {
+        _buffsDictionary ??= new(log);
+        if (!_buffsDictionary.TryGetValue(start, end, out var value))
+        {
+            value = ComputeBuffsDictionaries(log, start, end);
+            _buffsDictionary.Set(start, end, value);
+        }
+        return value.Rates;
+    }
 
+    public IReadOnlyDictionary<long, BuffByActorStatistics> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+    {
+        _buffsDictionary ??= new(log);
+        if (!_buffsDictionary.TryGetValue(start, end, out var value))
+        {
+            value = ComputeBuffsDictionaries(log, start, end);
+            _buffsDictionary.Set(start, end, value);
+        }
+        return value.ActiveRates;
+    }
+
+    public IReadOnlyDictionary<long, BuffVolumeByActorStatistics> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+    {
+        _buffVolumesDictionary ??= new(log);
+        if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
+        {
+            value = ComputeBuffVolumesDictionaries(log, start, end);
+            _buffVolumesDictionary.Set(start, end, value);
+        }
+        return value.Rates;
+    }
+    public IReadOnlyDictionary<long, BuffVolumeByActorStatistics> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+    {
+        _buffVolumesDictionary ??= new(log);
+        if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
+        {
+            value = ComputeBuffVolumesDictionaries(log, start, end);
+            _buffVolumesDictionary.Set(start, end, value);
+        }
+        return value.ActiveRates;
+    }
+
+    private (Dictionary<long, BuffByActorStatistics> Rates, Dictionary<long, BuffByActorStatistics> RatesActive) ComputeBuffsDictionaries(ParsedEvtcLog log, long start, long end)
+    {
+        BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
+        var rates = new Dictionary<long, BuffByActorStatistics>();
+        var ratesActive = new Dictionary<long, BuffByActorStatistics>();
+        long duration = end - start;
+        long activeDuration = GetActiveDuration(log, start, end);
+
+        foreach (Buff buff in GetTrackedBuffs(log))
+        {
+            if (buffDistribution.HasBuffID(buff.ID))
+            {
+                (rates[buff.ID], ratesActive[buff.ID]) = BuffByActorStatistics.GetBuffByActor(log, buff, buffDistribution, duration, activeDuration);
+            }
+        }
+        return (rates, ratesActive);
+    }
+
+    private (Dictionary<long, BuffVolumeByActorStatistics> Rates, Dictionary<long, BuffVolumeByActorStatistics> RatesActive) ComputeBuffVolumesDictionaries(ParsedEvtcLog log, long start, long end)
+    {
+        var rates = new Dictionary<long, BuffVolumeByActorStatistics>();
+        var ratesActive = new Dictionary<long, BuffVolumeByActorStatistics>();
+
+        foreach (Buff buff in GetTrackedBuffs(log))
+        {
+            (rates[buff.ID], ratesActive[buff.ID]) = BuffVolumeByActorStatistics.GetBuffVolumeByActor(log, buff, this, start, end);
+        }
+        return (rates, ratesActive);
+    }
+
+    #endregion STATISTICS
+    #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
     {
         if (_trackedBuffs == null)
@@ -458,7 +537,7 @@ partial class SingleActor
     [MemberNotNull(nameof(_buffDistribution))]
     [MemberNotNull(nameof(_buffPresence))]
     [MemberNotNull(nameof(_buffSimulators))]
-    internal void ComputeBuffGraphs(ParsedEvtcLog log)
+    internal void SimulateBuffsAndComputeGraphs(ParsedEvtcLog log)
     {
         if (_buffGraphs != null)
         {
@@ -587,81 +666,8 @@ partial class SingleActor
             _buffGraphs[SkillIDs.NumberOfRangerPets] = numberOfRangerPets;
         }
     }
-
-    public IReadOnlyDictionary<long, BuffByActorStatistics> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
-    {
-        _buffsDictionary ??= new(log);
-        if (!_buffsDictionary.TryGetValue(start, end, out var value))
-        {
-            value = ComputeBuffsDictionaries(log, start, end);
-            _buffsDictionary.Set(start, end, value);
-        }
-        return value.Rates;
-    }
-
-    public IReadOnlyDictionary<long, BuffByActorStatistics> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
-    {
-        _buffsDictionary ??= new(log);
-        if (!_buffsDictionary.TryGetValue(start, end, out var value))
-        {
-            value = ComputeBuffsDictionaries(log, start, end);
-            _buffsDictionary.Set(start, end, value);
-        }
-        return value.ActiveRates;
-    }
-
-    public IReadOnlyDictionary<long, BuffVolumeByActorStatistics> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
-    {
-        _buffVolumesDictionary ??= new(log);
-        if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
-        {
-            value = ComputeBuffVolumesDictionaries(log, start, end);
-            _buffVolumesDictionary.Set(start, end, value);
-        }
-        return value.Rates;
-    }
-    public IReadOnlyDictionary<long, BuffVolumeByActorStatistics> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
-    {
-        _buffVolumesDictionary ??= new(log);
-        if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
-        {
-            value = ComputeBuffVolumesDictionaries(log, start, end);
-            _buffVolumesDictionary.Set(start, end, value);
-        }
-        return value.ActiveRates;
-    }
-
-    private (Dictionary<long, BuffByActorStatistics> Rates, Dictionary<long, BuffByActorStatistics> RatesActive) ComputeBuffsDictionaries(ParsedEvtcLog log, long start, long end)
-    {
-        BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
-        var rates = new Dictionary<long, BuffByActorStatistics>();
-        var ratesActive = new Dictionary<long, BuffByActorStatistics>();
-        long duration = end - start;
-        long activeDuration = GetActiveDuration(log, start, end);
-
-        foreach (Buff buff in GetTrackedBuffs(log))
-        {
-            if (buffDistribution.HasBuffID(buff.ID))
-            {
-                (rates[buff.ID], ratesActive[buff.ID]) = BuffByActorStatistics.GetBuffByActor(log, buff, buffDistribution, duration, activeDuration);
-            }
-        }
-        return (rates, ratesActive);
-    }
-
-    private (Dictionary<long, BuffVolumeByActorStatistics> Rates, Dictionary<long, BuffVolumeByActorStatistics> RatesActive) ComputeBuffVolumesDictionaries(ParsedEvtcLog log, long start, long end)
-    {
-        var rates = new Dictionary<long, BuffVolumeByActorStatistics>();
-        var ratesActive = new Dictionary<long, BuffVolumeByActorStatistics>();
-
-        foreach (Buff buff in GetTrackedBuffs(log))
-        {
-            (rates[buff.ID], ratesActive[buff.ID]) = BuffVolumeByActorStatistics.GetBuffVolumeByActor(log, buff, this, start, end);
-        }
-        return (rates, ratesActive);
-    }
-
-
+    #endregion COMPUTE
+    #region CONSUMABLES
     public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
     {
         if (_consumeList == null)
@@ -682,7 +688,7 @@ partial class SingleActor
         {
             foreach (BuffEvent c in log.CombatData.GetBuffData(consumable.ID))
             {
-                if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
+                if (!(c is BuffApplyEvent ba) || !AgentItem.Is(ba.To))
                 {
                     continue;
                 }
@@ -708,5 +714,5 @@ partial class SingleActor
         _consumeList.Sort((x, y) => x.Time.CompareTo(y.Time));
 
     }
-
+    #endregion CONSUMABLES
 }

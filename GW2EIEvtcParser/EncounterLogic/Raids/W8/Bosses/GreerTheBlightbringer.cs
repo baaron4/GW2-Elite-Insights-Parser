@@ -573,7 +573,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Enfeebling Miasma - Gas Projectiles
-        var enfeeblingMiasmaCloud = log.CombatData.GetMissileEventsBySkillIDs([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4]).Where(x => x.Src == target.AgentItem);
+        var enfeeblingMiasmaCloud = log.CombatData.GetMissileEventsBySkillIDs([EnfeeblingMiasma, EnfeeblingMiasma2, EnfeeblingMiasma3, EnfeeblingMiasma4]).Where(x => x.Src.Is(target.AgentItem));
         replay.Decorations.AddNonHomingMissiles(log, enfeeblingMiasmaCloud, Colors.Purple, 0.2, 150);
     }
 
@@ -588,7 +588,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 lifespan = effect.ComputeLifespan(log, 5000);
                 var offset = new Vector3(700, 0, 0);
-                var arrow = new RectangleDecoration(1400, 50, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                var arrow = new RectangleDecoration(1400, 100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
                 replay.Decorations.Add(arrow);
             }
         }
@@ -635,7 +635,7 @@ internal class GreerTheBlightbringer : MountBalrior
             foreach (EffectEvent effect in cageOfDecayWalls)
             {
                 lifespan = effect.ComputeLifespan(log, 2000);
-                var wall = (RectangleDecoration)new RectangleDecoration(100, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                var wall = (RectangleDecoration)new RectangleDecoration(200, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
         }
@@ -777,8 +777,9 @@ internal class GreerTheBlightbringer : MountBalrior
         // Blob of Blight - Moving Orbs
         // Using the projectile velocity to distinguish between the main orbs and the mini orbs
         // Main orbs have 0.3 and mini orbs have 0.5, once the main orb hits a player, the mini orbs have 0.4
-        var blobOfBlightMainOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.3f));
-        var blobOfBlightMiniOrbs = log.CombatData.GetMissileEventsBySkillIDs([BlobOfBlight, BlobOfBlight2, BlobOfBlight3]).Where(x => x.Src == target.AgentItem && x.LaunchEvents.Any(x => x.Speed == 0.4f || x.Speed == 0.5f));
+        var blobOfBlightOrbs = log.CombatData.GetMissileEventsBySrcBySkillIDs(target.AgentItem, [BlobOfBlight, BlobOfBlight2, BlobOfBlight3]);
+        var blobOfBlightMainOrbs = blobOfBlightOrbs.Where(x => x.LaunchEvents.Any(x => x.Speed == 0.3f));
+        var blobOfBlightMiniOrbs = blobOfBlightOrbs.Where(x => x.LaunchEvents.Any(x => x.Speed == 0.4f || x.Speed == 0.5f));
 
         // Main Orbs
         foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)

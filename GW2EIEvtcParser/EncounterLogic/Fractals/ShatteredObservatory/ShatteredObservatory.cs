@@ -16,17 +16,6 @@ internal abstract class ShatteredObservatory : FractalLogic
         EncounterID |= EncounterIDs.FractalMasks.ShatteredObservatoryMask;
     }
 
-    protected static HashSet<AgentItem> GetParticipatingPlayerAgents(SingleActor target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        if (target == null)
-        {
-            return [];
-        }
-        var participatingPlayerAgents = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
-        participatingPlayerAgents.UnionWith(combatData.GetDamageData(target.AgentItem).Where(x => playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.To.GetFinalMaster()));
-        return participatingPlayerAgents;
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
@@ -42,7 +31,7 @@ internal abstract class ShatteredObservatory : FractalLogic
     /// <summary>
     /// Returns true if the buff count was not reached so that another method can be called, if necessary
     /// </summary>
-    protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, SingleActor target, long buffID, int count)
+    protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, SingleActor target, long buffID, int count)
     {
         if (target == null)
         {
