@@ -892,7 +892,7 @@ class Animator {
         var scale = ctx.scale;
         var _this = this;
         ctx.scale = function (sx, sy) {
-            xform = xform.scaleNonUniform(sx, sy);
+            xform = xform.scale(sx, sy);
             var xAxis = Math.sqrt(xform.a * xform.a + xform.b * xform.b);
             var yAxis = Math.sqrt(xform.c * xform.c + xform.d * xform.d);
             _this.scale = Math.max(xAxis, yAxis) / resolutionMultiplier;
