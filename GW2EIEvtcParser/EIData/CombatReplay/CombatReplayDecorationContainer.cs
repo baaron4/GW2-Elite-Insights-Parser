@@ -125,6 +125,23 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add overhead icon decorations
+    /// </summary>
+    /// <param name="segments">Lifespan intervals</param>
+    /// <param name="actor">actor to which the decoration will be attached to</param>
+    /// <param name="icon">URL of the icon</param>
+    /// <param name="rotation">rotation of the icon</param>
+    /// <param name="pixelSize">Size in pixel of the icon</param>
+    /// <param name="opacity">Opacity of the icon</param>
+    internal void AddRotatedOverheadIcons(IEnumerable<Segment> segments, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
+    {
+        foreach (Segment segment in segments)
+        {
+            AddRotatedOverheadIcon(segment, actor, icon, rotation, pixelSize, opacity);
+        }
+    }
+
+    /// <summary>
     /// Add the decoration twice, the 2nd one being a copy using given extra parameters
     /// </summary>
     /// <param name="decoration"></param>
