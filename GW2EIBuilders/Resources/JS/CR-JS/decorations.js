@@ -1400,7 +1400,7 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3 + this.getSize() / 2 + 3 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
@@ -1482,12 +1482,12 @@ class TextOverheadDrawable extends TextDrawable {
             return null; 
         }
         const masterSize = this.master.getSize();
-        const scale = animator.displaySettings.useActorHitboxWidth ? 1/InchToPixel : animator.scale;
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1 / InchToPixel : animator.scale;
         let offset = {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize / 4 + this.getFontSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3 + this.getFontSize() / 2 + 3 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
