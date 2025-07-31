@@ -756,6 +756,7 @@ class Animator {
         var pickCtx = this.pickContext;
 
         canvas.addEventListener('mousedown', function (evt) {
+            evt.preventDefault();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.mouseDown = {
@@ -766,6 +767,7 @@ class Animator {
         }, false);
 
         canvas.addEventListener('mousemove', function (evt) {
+            evt.preventDefault();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
@@ -800,6 +802,7 @@ class Animator {
         }, false);
 
         var zoom = function (evt) {
+            evt.preventDefault();
             var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
             if (delta) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
@@ -815,7 +818,6 @@ class Animator {
                     animateCanvas(noUpdateTime);
                 }
             }
-            return evt.preventDefault() && false;
         };
 
         canvas.addEventListener('DOMMouseScroll', zoom, false);
