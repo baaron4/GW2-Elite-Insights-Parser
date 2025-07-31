@@ -18,6 +18,12 @@ class TextMetadata extends GenericMetadata{
     }
 }
 
+class TextOverheadMetadata extends TextMetadata {
+    constructor(params) {
+        super(params);
+    }
+}
+
 class GenericAttachedMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
@@ -1405,16 +1411,23 @@ class TextDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);
         this.text = params.text;
-        const bold = !!params.bold;
-        const fontSize = params.fontSize * resolutionMultiplier + "px";
-        const fontType = params.fontType || "Comic Sans MS";
-        this.font  = (bold ? "bold " : "") + fontSize + " " + fontType;
+        this.bold = !!params.bold;
+        this.fontSize = params.fontSize * resolutionMultiplier;
+        this.fontType = params.fontType || "Comic Sans MS";
     }
     get color() {
         return this.metadata.color;
     }
     get backgroundColor() {
         return this.metadata.backgroundColor;
+    }
+
+    getFontSize() {
+        return this.fontSize;
+    }
+
+    getSecondaryOffset() {
+        return null;
     }
     
     draw() {
@@ -1429,16 +1442,52 @@ class TextDrawable extends MechanicDrawable {
         
         const ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, rot);
+        this.moveContext(ctx, pos, rot);     
+        const secondaryOffset = this.getSecondaryOffset();
+        if (secondaryOffset) {        
+            ctx.translate(secondaryOffset.x, secondaryOffset.y);
+        }
         const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
         if (0.5 < normalizedRot && normalizedRot < 1.5) {
             // make sure the text remains upright
             ctx.rotate(-ToRadians(180));
         }
-        ctx.font = this.font;
+        const fontSize = this.getFontSize();
+        const font = (this.bold ? "bold " : "") + fontSize + "px " + this.fontType;
+        ctx.font = font;
         ctx.fillStyle = this.color;
         ctx.textAlign = "center";
         ctx.fillText(this.text, 0, 0);
         ctx.restore();
+    }
+}
+
+class TextOverheadDrawable extends TextDrawable {
+    constructor(params) {
+        super(params);
+    }
+
+    getSize() {
+        if (animator.displaySettings.useActorHitboxWidth) {
+            //TODO
+            return 0;
+        } else {
+            return this.fontSize;
+        }
+    }
+
+    getSecondaryOffset() {
+        if (!this.master) {
+            console.error('Invalid IconOverhead decoration');
+            return null; 
+        }
+        const masterSize = this.master.getSize();
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1/InchToPixel : animator.scale;
+        let offset = {
+            x: 0,
+            y: 0,
+        };
+        offset.y -= masterSize / 4 + this.getFontSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        return offset;
     }
 }

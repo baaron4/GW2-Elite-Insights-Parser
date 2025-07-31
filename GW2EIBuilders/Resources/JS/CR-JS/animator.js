@@ -77,6 +77,7 @@ const Types = {
     TargetPlayer: 19,
     Text: 20,
     Polygon: 21,
+    TextOverhead: 22,
 };
 
 function getDefaultCombatReplayTime() {
@@ -416,6 +417,8 @@ class Animator {
                 case Types.Text:
                     MetadataClass = TextMetadata;
                     break;
+                case Types.TextOverhead:
+                    MetadataClass = TextOverheadMetadata;
                 default:
                     throw "Unknown decoration type " + metadata.type;
             }
@@ -495,6 +498,9 @@ class Animator {
                             continue;
                         }
                         DecorationClass = TextDrawable;
+                        break;
+                    case Types.TextOverhead:
+                        DecorationClass = TextOverheadDrawable;
                         break;
                     case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
