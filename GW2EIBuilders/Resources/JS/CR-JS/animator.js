@@ -419,6 +419,7 @@ class Animator {
                     break;
                 case Types.TextOverhead:
                     MetadataClass = TextOverheadMetadata;
+                    break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
             }
@@ -500,8 +501,8 @@ class Animator {
                         DecorationClass = TextDrawable;
                         break;
                     case Types.TextOverhead:
-                        DecorationClass = TextOverheadDrawable;
-                        break;
+                        this.overheadActorData.add(new TextOverheadDrawable(decorationRendering));
+                        continue;
                     case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
                         break;

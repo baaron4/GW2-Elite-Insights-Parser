@@ -705,9 +705,33 @@ internal static class ProfHelper
         return CommonMinions.Contains(id);
     }
 
-    public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
+    public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
-
+        var quicknessStatus = minion.GetBuffStatus(log, Quickness).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIcons(quicknessStatus, minion, BuffImages.Quickness, 90, 15);
+        var alacStatus = minion.GetBuffStatus(log, Alacrity).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIcons(alacStatus, minion, BuffImages.Alacrity, -90, 15);
+        var mightStatus = minion.GetBuffStatus(log, Might).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIconsWithValueAsText(mightStatus, minion, BuffImages.Might, -180, 15);
+        switch (minion.ID)
+        {
+            case (int)MinionID.JadeMech:
+                var signetForceStatus = minion.GetBuffStatus(log, ForceSignet).Where(x => x.Value > 0);
+                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 40, 15);
+                var signetConductingStatus = minion.GetBuffStatus(log, SuperconductingSignet).Where(x => x.Value > 0);
+                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, -40, 15);
+                break;
+        }
+        if (RangerHelper.IsJuvenilePet(minion.AgentItem))
+        {
+            var sicEmStatus = minion.GetBuffStatus(log, SicEmBuff).Where(x => x.Value > 0);
+            replay.Decorations.AddRotatedOverheadIcons(sicEmStatus, minion, SkillImages.SicEm, 0, 15);
+        }
+        if (MesmerHelper.IsPhantasm(minion.AgentItem))
+        {
+            var phantasmalForceStatus = minion.GetBuffStatus(log, PhantasmalForce).Where(x => x.Value > 0);
+            replay.Decorations.AddRotatedOverheadIconsWithValueAsText(phantasmalForceStatus, minion, TraitImages.PhantasmalForce_Mistrust, 0, 15);
+        }
     }
 
     public static void AdjustMinionName(AgentItem minion)

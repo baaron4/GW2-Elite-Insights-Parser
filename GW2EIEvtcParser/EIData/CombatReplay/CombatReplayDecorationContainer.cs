@@ -95,6 +95,21 @@ internal class CombatReplayDecorationContainer
     }
 
     /// <summary>
+    /// Add an overhead icon decoration
+    /// </summary>
+    /// <param name="segment">Lifespan interval</param>
+    /// <param name="actor">actor to which the decoration will be attached to</param>
+    /// <param name="icon">URL of the icon</param>
+    /// <param name="rotation">rotation of the icon</param>
+    /// <param name="pixelSize">Size in pixel of the icon</param>
+    /// <param name="opacity">Opacity of the icon</param>
+    internal void AddRotatedOverheadIconWithValueAsText(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
+    {
+        Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
+        Add(new TextOverheadDecoration(segment, ((int)segment.Value).ToString(), pixelSize/5, Colors.Black.ToString(), new AgentConnector(actor)).UsingBold(true).UsingRotationConnector(new AngleConnector(rotation)));
+    }
+
+    /// <summary>
     /// Add an overhead squad marker
     /// </summary>
     /// <param name="segment">Lifespan interval</param>
@@ -138,6 +153,23 @@ internal class CombatReplayDecorationContainer
         foreach (Segment segment in segments)
         {
             AddRotatedOverheadIcon(segment, actor, icon, rotation, pixelSize, opacity);
+        }
+    }
+
+    /// <summary>
+    /// Add overhead icon decorations
+    /// </summary>
+    /// <param name="segments">Lifespan intervals</param>
+    /// <param name="actor">actor to which the decoration will be attached to</param>
+    /// <param name="icon">URL of the icon</param>
+    /// <param name="rotation">rotation of the icon</param>
+    /// <param name="pixelSize">Size in pixel of the icon</param>
+    /// <param name="opacity">Opacity of the icon</param>
+    internal void AddRotatedOverheadIconsWithValueAsText(IEnumerable<Segment> segments, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
+    {
+        foreach (Segment segment in segments)
+        {
+            AddRotatedOverheadIconWithValueAsText(segment, actor, icon, rotation, pixelSize, opacity);
         }
     }
 

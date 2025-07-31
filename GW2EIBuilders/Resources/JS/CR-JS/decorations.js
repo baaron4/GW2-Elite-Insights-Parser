@@ -1400,7 +1400,7 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize / 3 + this.getSize() / 2 + 3 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3.0 + this.getSize() / 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
@@ -1412,7 +1412,7 @@ class TextDrawable extends MechanicDrawable {
         super(params);
         this.text = params.text;
         this.bold = !!params.bold;
-        this.fontSize = params.fontSize * resolutionMultiplier;
+        this.fontSize = params.fontSize;
         this.fontType = params.fontType || "Comic Sans MS";
     }
     get color() {
@@ -1424,12 +1424,12 @@ class TextDrawable extends MechanicDrawable {
 
     getFontSize() {
         if (this.connectedTo.isScreenSpace) {
-            return this.fontSize;
+            return this.fontSize * resolutionMultiplier;
         }
         return this.fontSize / animator.scale;
     }
 
-    getSecondaryOffset() {
+    getSecondaryOffset(upRight) {
         return null;
     }
     
@@ -1446,12 +1446,13 @@ class TextDrawable extends MechanicDrawable {
         const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);     
-        const secondaryOffset = this.getSecondaryOffset();
+        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
+        const upRight = 0.5 < normalizedRot && normalizedRot < 1.5;
+        const secondaryOffset = this.getSecondaryOffset(upRight);
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
-        if (0.5 < normalizedRot && normalizedRot < 1.5) {
+        if (upRight) {
             // make sure the text remains upright
             ctx.rotate(-ToRadians(180));
         }
@@ -1470,15 +1471,15 @@ class TextOverheadDrawable extends TextDrawable {
         super(params);
     }
 
-    getSize() {
+    getFontSize() {
         if (animator.displaySettings.useActorHitboxWidth) {
             return this.fontSize;
         } else {
-            return this.fontSize / animator.scale;
+            return this.fontSize * resolutionMultiplier / animator.scale;
         }
     }
 
-    getSecondaryOffset() {
+    getSecondaryOffset(upRight) {
         if (!this.master) {
             console.error('Invalid TextOverhead decoration');
             return null; 
@@ -1489,7 +1490,7 @@ class TextOverheadDrawable extends TextDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize / 3 + this.getFontSize() / 2 + 3 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3.0 + this.getFontSize() * (upRight ? 3.0 : 1.0)/ 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
