@@ -811,6 +811,10 @@ class Animator {
                 bgCtx.translate(pt.x, pt.y);
                 var factor = Math.pow(1.1, delta);
                 ctx.scale(factor, factor);
+                if ((50 / (InchToPixel * _this.scale) < 10)) {            
+                    ctx.scale( 1.0 / factor, 1.0 / factor);
+                    factor = 1.0;
+                }
                 ctx.translate(-pt.x, -pt.y);
                 bgCtx.scale(factor, factor);
                 bgCtx.translate(-pt.x, -pt.y);
