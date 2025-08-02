@@ -148,7 +148,6 @@ public class CombatItem
             || IsStateChange == StateChange.Reward
             || IsStateChange == StateChange.TickRate
             || IsStateChange == StateChange.SquadMarker
-            || IsStateChange == StateChange.InstanceStart
             || IsStateChange == StateChange.SquadCombatStart
             || IsStateChange == StateChange.SquadCombatEnd
             || IsStateChange == StateChange.EffectAgentRemove

@@ -503,7 +503,7 @@ public partial class CombatData
         {
             if (combatItem.IsEssentialMetadata)
             {
-                CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
             }
         }
         foreach (CombatItem combatItem in combatEvents)
@@ -526,7 +526,7 @@ public partial class CombatData
                 else
                 {
                     insertToSkillIDs = combatItem.IsStateChange == StateChange.BuffInitial;
-                    CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                    CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
                 }
 
             }

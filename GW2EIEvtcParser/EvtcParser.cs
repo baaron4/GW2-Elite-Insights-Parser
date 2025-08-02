@@ -960,10 +960,6 @@ public class EvtcParser
             {
                 c.OverrideTime(c.Time - offset);
             }
-            if (c.IsStateChange == StateChange.InstanceStart)
-            {
-                c.OverrideSrcAgent((ulong)(offset - (long)c.SrcAgent));
-            }
         }
         _agentData.ApplyOffset(offset);
 
