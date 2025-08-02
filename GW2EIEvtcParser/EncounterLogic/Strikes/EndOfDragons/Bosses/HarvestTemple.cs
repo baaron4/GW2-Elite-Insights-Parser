@@ -498,6 +498,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
         int index = 0;
         var processedAttackTargets = new HashSet<AgentItem>();
+        long lastLastAware = fightData.FightStart;
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
             AgentItem atAgent = attackTargetEvent.AttackTarget;
@@ -531,6 +532,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
                 double lastHPUpdate = 1e6;
                 AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth > 0 ? atAgent.HitboxWidth : 800, atAgent.HitboxHeight);
+                lastLastAware = extra.LastAware;
                 AgentManipulationHelper.RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                     (evt, from, to) =>
                     {
@@ -554,9 +556,10 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         // Add missing agents
+        int delta = idsToUse.Count - index + 1;
         for (int i = index; i < idsToUse.Count; i++)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart + index, fightData.FightStart + index + 1, "Dragonvoid", Spec.NPC, idsToUse[i], false);
+            agentData.AddCustomNPCAgent(lastLastAware - delta + index, lastLastAware - delta + index + 1, "Dragonvoid", Spec.NPC, idsToUse[i], false);
         }
     }
 
