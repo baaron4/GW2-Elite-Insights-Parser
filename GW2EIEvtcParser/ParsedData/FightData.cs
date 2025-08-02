@@ -335,6 +335,11 @@ public class FightData
             {
                 throw new InvalidOperationException("A phase representing the full log must be present");
             }
+            // Auto add dummy instance if no targets in main phase
+            if (Logic.IsInstance && _phases[0].Targets.Count == 0)
+            {
+                _phases[0].AddTargets(Logic.Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
+            }
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
             if (_phases.Count == 0 && removed > 0)

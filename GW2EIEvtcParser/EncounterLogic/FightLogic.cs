@@ -234,6 +234,10 @@ public abstract class FightLogic
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
         _targets.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(targetIDs) && x.LastAware > 0).Select(a => new NPC(a)));
+        if (IsInstance)
+        {
+            _targets.AddRange(agentData.GetNPCsByID(TargetID.Instance).Select(a => new NPC(a)));
+        }
         //TODO(Rennorb) @perf @cleanup: is this required?
         _targets.SortByFirstAware();
         var targetSortIDs = GetTargetsSortIDs();

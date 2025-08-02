@@ -217,10 +217,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware));
         HandleTwistedCastlePhases(targetsByIDs, log, phases);
         HandleXeraPhases(targetsByIDs, log, phases);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -254,7 +250,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             .. _twistedCastle.GetTargetsIDs(),
             .. _xera.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

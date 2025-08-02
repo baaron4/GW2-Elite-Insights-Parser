@@ -59,8 +59,12 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets, log);
-        SingleActor target = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv])) ?? throw new MissingKeyActorsException("Decima / Greer / Ura not found");
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv])), log);
+        var target = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv]));
+        if (target == null)
+        {
+            return phases;
+        }
         IReadOnlyList<Segment> hpUpdates = target.GetHealthUpdates(log);
 
         // Full Fight Phase
