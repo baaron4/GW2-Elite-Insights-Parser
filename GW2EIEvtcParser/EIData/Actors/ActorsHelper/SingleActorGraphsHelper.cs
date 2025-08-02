@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -21,8 +22,17 @@ partial class SingleActor
     {
         if (_healthUpdates == null)
         {
-            var events = log.CombatData.GetHealthUpdateEvents(AgentItem);
-            _healthUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            var events = new List<(long Time, HealthUpdateEvent evt)>(log.CombatData.GetHealthUpdateEvents(AgentItem).Count + 1);
+            if (AgentItem.IsEnglobedAgent)
+            {
+                var firstEvent = log.CombatData.GetHealthUpdateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
+                if (firstEvent != null)
+                {
+                    events.Add((FirstAware, firstEvent));
+                }
+            }
+            events.AddRange(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => (x.Time, x)));
+            _healthUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
         return _healthUpdates;
@@ -32,8 +42,17 @@ partial class SingleActor
     {
         if (_breakbarPercentUpdates == null)
         {
-            var events = log.CombatData.GetBreakbarPercentEvents(AgentItem);
-            _breakbarPercentUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            var events = new List<(long Time, BreakbarPercentEvent evt)>(log.CombatData.GetBreakbarPercentEvents(AgentItem).Count + 1);
+            if (AgentItem.IsEnglobedAgent)
+            {
+                var firstEvent = log.CombatData.GetBreakbarPercentEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
+                if (firstEvent != null)
+                {
+                    events.Add((FirstAware, firstEvent));
+                }
+            }
+            events.AddRange(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => (x.Time, x)));
+            _breakbarPercentUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
         return _breakbarPercentUpdates;
@@ -43,8 +62,17 @@ partial class SingleActor
     {
         if (_barrierUpdates == null)
         {
-            var events = log.CombatData.GetBarrierUpdateEvents(AgentItem);
-            _barrierUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            var events = new List<(long Time, BarrierUpdateEvent evt)>(log.CombatData.GetBarrierUpdateEvents(AgentItem).Count + 1);
+            if (AgentItem.IsEnglobedAgent)
+            {
+                var firstEvent = log.CombatData.GetBarrierUpdateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
+                if (firstEvent != null)
+                {
+                    events.Add((FirstAware, firstEvent));
+                }
+            }
+            events.AddRange(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => (x.Time, x)));
+            _barrierUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
         return _barrierUpdates;

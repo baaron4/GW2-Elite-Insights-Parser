@@ -31,6 +31,11 @@ public class Player : PlayerActor
         Account = name[1].TrimStart(':');
         _squadless = noSquad;
         Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+        // Make sure to keep the name of the player unique
+        if (AgentItem.IsEnglobedAgent)
+        {
+            Character = $"{Character} ${EnglobingAgentItem.EnglobedAgentItems.IndexOf(AgentItem) + 1}";
+        }
     }
 
 
@@ -98,7 +103,7 @@ public class Player : PlayerActor
         {
             var useGUIDs = log.LogData.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
             var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
-            var relevantPlayers = log.PlayerList.Select(x => x.AgentItem);
+            var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
             foreach (var player in relevantPlayers)
             {
                 IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
@@ -153,7 +158,7 @@ public class Player : PlayerActor
             var (lastPlayer, lastSegment) = states[0];
             foreach (var (player, seg) in states.Skip(1))
             {
-                if (lastPlayer == player && lastSegment.Value == seg.Value)
+                if (lastPlayer.Is(player) && lastSegment.Value == seg.Value)
                 {
                     lastSegment.End = seg.End;
                 }
@@ -173,6 +178,13 @@ public class Player : PlayerActor
             { 
                 CommanderStates.Add(lastSegment); 
             }
+            // Clamp to aware times
+            CommanderStates.ForEach(x =>
+            {
+                x.Start = Math.Max(x.Start, FirstAware);
+                x.End = Math.Min(x.End, LastAware);
+            });
+            CommanderStates.RemoveAll(x => x.IsEmpty());
         }
         return CommanderStates;
     }

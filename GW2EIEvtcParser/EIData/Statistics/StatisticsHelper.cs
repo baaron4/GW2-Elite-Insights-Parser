@@ -184,36 +184,41 @@ public class StatisticsHelper
             positionsPerPlayer.Add(player.GetCombatReplayActivePolledPositions(log));
         }
 
-        var sampleCount = positionsPerPlayer[0].Count;
+        var sampleCount = (int)(log.FightData.FightEnd / ParserHelper.CombatReplayPollingRate);
 
         var centerPositions = new List<ParametricPoint3D?>(sampleCount);
+        var centerVector3Positions = new List<Vector3?>(sampleCount);
+        var activePlayersPerPositions = new List<int>(sampleCount);
+        foreach (var positions in positionsPerPlayer)
+        {
+            foreach(var position in positions)
+            {
+                if (position == null)
+                {
+                    continue;
+                }
+                int index = (int)(position.Value.Time / ParserHelper.CombatReplayPollingRate);
+                while(centerVector3Positions.Count <= index)
+                {
+                    centerVector3Positions.Add(null);
+                    activePlayersPerPositions.Add(0);
+                }
+                var current = centerVector3Positions[index];
+                centerVector3Positions[index] = current != null ? current.Value + position.Value.XYZ : position.Value.XYZ;
+                activePlayersPerPositions[index] += 1;
+            }
+        }
         for (int t = 0; t < sampleCount; t++)
         {
-            int activePlayersThisSample = log.PlayerList.Count;
-            
-            var position = Vector3.Zero;
-            foreach (var positions in positionsPerPlayer)
-            {
-                var pos = positions[t];
-                if (pos != null)
-                {
-                    position += pos.Value.XYZ;
-                }
-                else
-                {
-                    activePlayersThisSample--;
-                }
-
-            }
-
-            if (activePlayersThisSample == 0)
+            var curVector3 = centerVector3Positions[t];
+            if (curVector3 == null)
             {
                 centerPositions.Add(null);
             }
             else
             {
-                position /= activePlayersThisSample;
-                centerPositions.Add(new ParametricPoint3D(position, ParserHelper.CombatReplayPollingRate * t));
+                curVector3 /= activePlayersPerPositions[t];
+                centerPositions.Add(new ParametricPoint3D(curVector3.Value, ParserHelper.CombatReplayPollingRate * t));
             }
         }
 

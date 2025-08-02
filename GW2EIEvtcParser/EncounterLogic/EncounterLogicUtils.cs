@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Threading.Tasks;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -124,15 +123,15 @@ internal static class EncounterLogicUtils
             if (timeToCheck < playerAgent.FirstAware || timeToCheck > playerAgent.LastAware)
             {
                 playerDeadOrDCCount++;
-            }
-            else
+            } 
+            else 
             {
                 var statusEvents = new List<StatusEvent>();
-                statusEvents.AddRange(combatData.GetAliveEvents(playerAgent));
-                statusEvents.AddRange(combatData.GetDownEvents(playerAgent));
-                statusEvents.AddRange(combatData.GetDeadEvents(playerAgent));
-                statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent));
-                statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent));
+                statusEvents.AddRange(combatData.GetAliveEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDownEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDeadEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetSpawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
+                statusEvents.AddRange(combatData.GetDespawnEvents(playerAgent.EnglobingAgentItem).Where(x => x.Time <= playerAgent.LastAware));
                 statusEvents.SortByTime();
                 var lastStatus = statusEvents.LastOrDefault(x => x.Time <= timeToCheck + ServerDelayConstant);
                 if (lastStatus is DeadEvent || lastStatus is DespawnEvent)

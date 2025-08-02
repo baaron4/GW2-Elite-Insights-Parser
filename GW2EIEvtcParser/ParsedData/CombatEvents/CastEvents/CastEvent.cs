@@ -39,7 +39,7 @@ public abstract class CastEvent : TimeCombatEvent
     protected CastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
     {
         Skill = skill;
-        Caster = caster;
+        Caster = caster.EnglobingAgentItem;
     }
     public virtual long GetInterruptedByBuffTime(ParsedEvtcLog log, long buffID)
     {

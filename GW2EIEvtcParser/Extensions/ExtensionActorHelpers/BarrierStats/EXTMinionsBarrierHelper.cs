@@ -7,6 +7,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 {
     private readonly Minions _minions;
     private IReadOnlyList<NPC> _minionList => _minions.MinionList;
+    private SingleActor Master => _minions.Master;
 
     internal EXTMinionsBarrierHelper(Minions minions) : base()
     {
@@ -22,7 +23,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
             BarrierEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log));
+                BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             BarrierEvents.SortByTime();
             BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -36,9 +37,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out var barrierEvents))
+            if (BarrierEventsByDst.TryGetValue(target.EnglobingAgentItem, out var barrierEvents))
             {
-                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return barrierEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -57,7 +60,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
             BarrierReceivedEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
-                BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log));
+                BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, Master.FirstAware, Master.LastAware));
             }
             BarrierReceivedEvents.SortByTime();
             BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -71,9 +74,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out var barrierEvents))
+            if (BarrierReceivedEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var barrierEvents))
             {
-                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return barrierEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {

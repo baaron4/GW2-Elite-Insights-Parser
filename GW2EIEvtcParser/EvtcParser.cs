@@ -149,6 +149,8 @@ public class EvtcParser
                 friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
                 Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
 
+                var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.AgentItem.IsEnglobedAgent);
+
                 _t.Log("Paralell phases");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
@@ -162,29 +164,86 @@ public class EvtcParser
                 _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 _t.Log("friendliesAndTargets GetStatus");
-                /*if (log.CombatData.HasMovementData)
+                if (hasEnglobingAgents)
                 {
-                    // init all positions
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
-                _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                    var friendliesAndTargetsEnglobed = friendliesAndTargets
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsEnglobing = friendliesAndTargetsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsNonEnglobed = friendliesAndTargets
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    var friendliesAndTargetsAndMobsEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsAndMobsEnglobing = friendliesAndTargetsAndMobsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsAndMobsNonEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobing, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobsNonEnglobed, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
-                        actor.GetBuffDistribution(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffDistribution");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
                     {
-                        actor.GetBuffPresence(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffPresence");
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobed, actor => actor.GetBuffGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
+                }
+                else
+                {
+                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+                }
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.Friendlies, actor =>
@@ -233,14 +292,14 @@ public class EvtcParser
         }
         catch (Exception ex)
         {
-            #if DEBUG
+#if DEBUG
             Console.Error.WriteLine(ex);
-            #endif
+#endif
 
             parsingFailureReason = new ParsingFailureReason(ex);
             return null;
         }
-}
+    }
 
     #endregion Main Parse Method
 
@@ -581,14 +640,14 @@ public class EvtcParser
                 discardedCbtEvents++;
                 continue;
             }
-            
+
             if (combatItem.IsStateChange == StateChange.ArcBuild)
             {
                 EvtcVersionEvent oldEvent = _evtcVersion;
                 try
                 {
                     _evtcVersion = new EvtcVersionEvent(combatItem);
-                } 
+                }
                 catch
                 {
                     _evtcVersion = oldEvent;
@@ -596,7 +655,7 @@ public class EvtcParser
 
                 continue;
             }
-            
+
             if (combatItem.HasTime())
             {
                 if (_logStartOffset == long.MinValue)
@@ -618,7 +677,7 @@ public class EvtcParser
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd )
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd)
             {
                 keepOnlyExtensionEvents = true;
             }
@@ -777,6 +836,7 @@ public class EvtcParser
             var allPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
             allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
+            playerAgents.UnionWith(playerAgents.Select(x => x.EnglobingAgentItem));
             int playerOffset = _playerList.Count + 1;
             foreach (AgentItem playerAgent in allPlayerAgents.OrderBy(x => x.InstID))
             {
@@ -938,6 +998,28 @@ public class EvtcParser
         }
 
         _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
+
+        if (_fightData.Logic.IsInstance || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.OpenWorld)
+        {
+            var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
+            {
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
+            }
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting non squad players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
+            {
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
+            }
+        }
+
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating players");
         CompletePlayers(operation);

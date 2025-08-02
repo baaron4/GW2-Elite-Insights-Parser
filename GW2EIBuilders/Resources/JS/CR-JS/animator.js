@@ -281,6 +281,7 @@ class Animator {
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
         this.screenSpaceActorData = new RenderablesRoot(start, end);
+        this.agentDataPerParentID = new Map();
         this.selectedActor = null;
         // maps
         this.backgroundImages = [];
@@ -325,6 +326,12 @@ class Animator {
             deadIcon.src = UIIcons.Dead;
             facingIcon.src = UIIcons.Facing;
         }
+        let cur = start;
+        while (cur < end) {
+            this.times.push(cur);
+            cur += PollingRate;
+        }
+        this.reactiveDataStatus.time = start;
     }
 
     attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
@@ -435,12 +442,6 @@ class Animator {
                     ActorClass = PlayerIconDrawable;
                     actorSize = 22;
                     mapToFill = this.playerData;
-                    if (this.times.length === 0) {
-                        for (let j = 0; j < actor.positions.length / 2; j++) {
-                            this.times.push(j * PollingRate);
-                        }
-                        reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
-                    }
                     break;
                 case Types.Target:
                     ActorClass = NPCIconDrawable;
@@ -470,7 +471,13 @@ class Animator {
                 default:
                     throw "Unknown decoration type " + actor.type;
             }
-            mapToFill.add(new ActorClass(actor, actorSize));
+            const renderable = new ActorClass(actor, actorSize);
+            mapToFill.add(renderable);
+            if (renderable.parentID >= 0) {
+                let array = this.agentDataPerParentID.get(renderable.parentID) ?? [];
+                array.push(renderable);
+                this.agentDataPerParentID.set(renderable.parentID, array);
+            }
         }
         for (let i = 0; i < decorationRenderings.length; i++) {
             const decorationRendering = {};
@@ -1162,6 +1169,13 @@ class Animator {
     draw() {
         if (!this.mainCanvas) {
             return;
+        }    
+        if (this.selectedActor && this.selectedActor.parentID >= 0) {
+            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
+            if (perParentArray) {
+                this.selectedActor = perParentArray.filter(x => x.getPosition() != null)[0] || this.selectedActor;
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
+            }
         }
         //
         //this._drawPickCanvas();

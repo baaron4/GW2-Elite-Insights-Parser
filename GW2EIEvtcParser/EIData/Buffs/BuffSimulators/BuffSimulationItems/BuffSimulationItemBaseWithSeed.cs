@@ -58,6 +58,19 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
             {
                 AddUnknown(distribution, cDur, _seedSrc);
             }
+            foreach (var subSeedSrc in _seedSrc.EnglobedAgentItems)
+            {
+                long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
+                if (subcDur > 0)
+                {
+                    Add(distribution, subcDur, subSeedSrc);
+                    if (_src.IsUnknown)
+                    {
+                        AddUnknown(distribution, subcDur, subSeedSrc);
+                    }
+                }
+            }
+
         }
         return cDur;
     }

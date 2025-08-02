@@ -259,7 +259,7 @@ internal class TwinLargos : MythwrightGambit
             CombatItem lastHPUpdate = hpUpdates.Last();
             if (lastHPUpdate.DstAgent == 10000)
             {
-                lastHPUpdate.OverrideSrcAgent(0);
+                lastHPUpdate.OverrideSrcAgent(ParserHelper._unknownAgent);
             }
         }
     }

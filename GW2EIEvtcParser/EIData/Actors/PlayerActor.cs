@@ -50,7 +50,17 @@ public abstract class PlayerActor : SingleActor
     {
         return !IsFriendlyPlayer && !forceLowResolutionIfApplicable ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
     }
-
+    protected override IReadOnlyList<Segment> GetActiveSegmentsForCRTrim(ParsedEvtcLog log)
+    {
+        var (deads, downs, _, actives) = GetStatus(log);
+        List<Segment> segments = [
+            .. deads,
+            .. downs,
+            .. actives
+            ];
+        segments.Sort((x, y) => x.Start.CompareTo(y.Start));
+        return segments;
+    }
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
         base.InitAdditionalCombatReplayData(log, replay);
