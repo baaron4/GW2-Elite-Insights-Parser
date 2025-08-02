@@ -909,7 +909,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     EmpoweredRageCerus,
                     EmpoweredRegretCerus
                 };
-                if (empoweredBuffs.Count(x => cerus.HasBuff(log, x, log.FightData.LogStart, log.FightData.LogEnd)) == 6)
+                if (empoweredBuffs.Count(x => cerus.GetBuffStatus(log, x).Any(x => x.Value > 0)) == 6)
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1));
                 }
