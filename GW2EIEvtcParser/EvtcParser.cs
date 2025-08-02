@@ -571,17 +571,23 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Count " + cbtItemCount);
         int discardedCbtEvents = 0;
         bool keepOnlyExtensionEvents = false;
-        bool stopAtLogEnd = _id != (int)TargetID.Instance;
+        int stopAtLogEndEvent = _id == (int)TargetID.Instance ? 1 : -1;
         var extensionEvents = new List<CombatItem>(5000);
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
-            if (combatItem.IsStateChange == StateChange.MapID)
+            if (stopAtLogEndEvent == -1 && 
+                combatItem.IsStateChange == StateChange.SquadCombatStart)           
             {
-                if (_id == MapIDEvent.GetMapID(combatItem) && !_allAgentsList.Any(x => x.IsSpecies(_id)))
+                if (SquadCombatStartEvent.GetLogType(combatItem) == LogType.Map)
                 {
+                    _id = 2;
                     operation.UpdateProgressWithCancellationCheck("Parsing: Correcting boss log to instance log");
-                    stopAtLogEnd = false;
+                    stopAtLogEndEvent = 1;
+                } 
+                else
+                {
+                    stopAtLogEndEvent = 0;
                 }
             }
             if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
@@ -626,7 +632,7 @@ public class EvtcParser
                 _gw2Build = GW2BuildEvent.GetBuild(combatItem);
             }
 
-            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEnd )
+            if (combatItem.IsStateChange == StateChange.SquadCombatEnd && stopAtLogEndEvent <= 0 )
             {
                 keepOnlyExtensionEvents = true;
             }
