@@ -22,7 +22,12 @@ internal abstract class BuffSimulationItem : AbstractSimulationItem
 
     public long GetClampedDuration(long start, long end)
     {
+
         Debug.Assert(Start <= End);
+        if (start >= end)
+        {
+            return 0;
+        }
         return Math.Max(0, Math.Clamp(End, start, end) - Math.Clamp(Start, start, end));
     }
 
