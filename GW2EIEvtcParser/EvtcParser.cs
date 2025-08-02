@@ -576,6 +576,14 @@ public class EvtcParser
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
+            if (combatItem.IsStateChange == StateChange.MapID)
+            {
+                if (_id == MapIDEvent.GetMapID(combatItem) && !_allAgentsList.Any(x => x.IsSpecies(_id)))
+                {
+                    operation.UpdateProgressWithCancellationCheck("Parsing: Correcting boss log to instance log");
+                    stopAtLogEnd = false;
+                }
+            }
             if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
             {
                 discardedCbtEvents++;
