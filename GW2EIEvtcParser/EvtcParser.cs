@@ -581,7 +581,7 @@ public class EvtcParser
             {
                 if (SquadCombatStartEvent.GetLogType(combatItem) == LogType.Map)
                 {
-                    _id = 2;
+                    _id = (int)TargetID.Instance;
                     operation.UpdateProgressWithCancellationCheck("Parsing: Correcting boss log to instance log");
                     stopAtLogEndEvent = 1;
                 } 
