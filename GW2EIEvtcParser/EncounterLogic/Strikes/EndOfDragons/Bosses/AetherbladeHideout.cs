@@ -780,8 +780,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
         {
             long time = maiTrin.LastAware - 1;
-            agentData.AddCustomNPCAgent(time, time, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
-            agentData.AddCustomNPCAgent(time, time, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
+            agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
+            agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         SanitizeLastHealthUpdateEvents(Targets, combatData);

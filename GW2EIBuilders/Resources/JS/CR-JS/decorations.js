@@ -18,6 +18,12 @@ class TextMetadata extends GenericMetadata{
     }
 }
 
+class TextOverheadMetadata extends TextMetadata {
+    constructor(params) {
+        super(params);
+    }
+}
+
 class GenericAttachedMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
@@ -1320,7 +1326,7 @@ class IconMechanicDrawable extends MechanicDrawable {
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        if(!this.canRotate) {
+        if (!this.canRotate) {
             // Don't rotate the icon
             ctx.rotate(-ToRadians(rot + this.rotationOffset));
         }
@@ -1411,7 +1417,7 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
+        offset.y -= masterSize / 3.0 + this.getSize() / 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
         return offset;
     }
 }
@@ -1422,16 +1428,26 @@ class TextDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);
         this.text = params.text;
-        const bold = !!params.bold;
-        const fontSize = params.fontSize * resolutionMultiplier + "px";
-        const fontType = params.fontType || "Comic Sans MS";
-        this.font  = (bold ? "bold " : "") + fontSize + " " + fontType;
+        this.bold = !!params.bold;
+        this.fontSize = params.fontSize;
+        this.fontType = params.fontType || "Comic Sans MS";
     }
     get color() {
         return this.metadata.color;
     }
     get backgroundColor() {
         return this.metadata.backgroundColor;
+    }
+
+    getFontSize() {
+        if (this.connectedTo.isScreenSpace) {
+            return this.fontSize * resolutionMultiplier;
+        }
+        return this.fontSize / animator.scale;
+    }
+
+    getSecondaryOffset() {
+        return null;
     }
     
     draw() {
@@ -1443,19 +1459,51 @@ class TextDrawable extends MechanicDrawable {
         if (pos === null || rot === null) {
             return;
         }
-        
+        const fontSize = this.getFontSize();
+        pos.y += fontSize / 2;
         const ctx = animator.mainContext;
         ctx.save();
-        this.moveContext(ctx, pos, rot);
-        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
-        if (0.5 < normalizedRot && normalizedRot < 1.5) {
-            // make sure the text remains upright
-            ctx.rotate(-ToRadians(180));
-        }
-        ctx.font = this.font;
+        this.moveContext(ctx, pos, rot);     
+        const secondaryOffset = this.getSecondaryOffset();
+        if (secondaryOffset) {        
+            ctx.translate(secondaryOffset.x, secondaryOffset.y);
+        }  
+        // Don't rotate the text
+        ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        const font = (this.bold ? "bold " : "") + fontSize + "px " + this.fontType;
+        ctx.font = font;
         ctx.fillStyle = this.color;
         ctx.textAlign = "center";
         ctx.fillText(this.text, 0, 0);
         ctx.restore();
+    }
+}
+
+class TextOverheadDrawable extends TextDrawable {
+    constructor(params) {
+        super(params);
+    }
+
+    getFontSize() {
+        if (animator.displaySettings.useActorHitboxWidth) {
+            return this.fontSize / (resolutionMultiplier * resolutionMultiplier) ;
+        } else {
+            return this.fontSize / animator.scale;
+        }
+    }
+
+    getSecondaryOffset() {
+        if (!this.master) {
+            console.error('Invalid TextOverhead decoration');
+            return null; 
+        }
+        const masterSize = this.master.getSize();
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1 / InchToPixel : animator.scale;
+        let offset = {
+            x: 0,
+            y: 0,
+        };
+        offset.y -= masterSize / 3.0 + this.getFontSize() / 2.0 + 3.0 * overheadAnimationFrame / maxOverheadAnimationFrame / scale;
+        return offset;
     }
 }

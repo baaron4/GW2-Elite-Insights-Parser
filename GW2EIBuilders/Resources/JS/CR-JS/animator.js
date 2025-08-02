@@ -77,6 +77,7 @@ const Types = {
     TargetPlayer: 19,
     Text: 20,
     Polygon: 21,
+    TextOverhead: 22,
 };
 
 function getDefaultCombatReplayTime() {
@@ -423,6 +424,9 @@ class Animator {
                 case Types.Text:
                     MetadataClass = TextMetadata;
                     break;
+                case Types.TextOverhead:
+                    MetadataClass = TextOverheadMetadata;
+                    break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
             }
@@ -456,7 +460,7 @@ class Animator {
                     break;
                 case Types.Friendly:
                     ActorClass = NPCIconDrawable;
-                    actorSize = 20;
+                    actorSize = 22;
                     mapToFill = this.friendlyMobData;
                     break;
                 case Types.FriendlyPlayer:
@@ -503,6 +507,9 @@ class Animator {
                         }
                         DecorationClass = TextDrawable;
                         break;
+                    case Types.TextOverhead:
+                        this.overheadActorData.add(new TextOverheadDrawable(decorationRendering));
+                        continue;
                     case Types.Circle:
                         DecorationClass = CircleMechanicDrawable;
                         break;
@@ -757,6 +764,7 @@ class Animator {
         var pickCtx = this.pickContext;
 
         canvas.addEventListener('mousedown', function (evt) {
+            evt.preventDefault();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.mouseDown = {
@@ -767,6 +775,7 @@ class Animator {
         }, false);
 
         canvas.addEventListener('mousemove', function (evt) {
+            evt.preventDefault();
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
@@ -801,6 +810,7 @@ class Animator {
         }, false);
 
         var zoom = function (evt) {
+            evt.preventDefault();
             var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
             if (delta) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
@@ -808,6 +818,10 @@ class Animator {
                 bgCtx.translate(pt.x, pt.y);
                 var factor = Math.pow(1.1, delta);
                 ctx.scale(factor, factor);
+                if ((50 / (InchToPixel * _this.scale) < 10)) {            
+                    ctx.scale( 1.0 / factor, 1.0 / factor);
+                    factor = 1.0;
+                }
                 ctx.translate(-pt.x, -pt.y);
                 bgCtx.scale(factor, factor);
                 bgCtx.translate(-pt.x, -pt.y);
@@ -816,7 +830,6 @@ class Animator {
                     animateCanvas(noUpdateTime);
                 }
             }
-            return evt.preventDefault() && false;
         };
 
         canvas.addEventListener('DOMMouseScroll', zoom, false);
@@ -886,7 +899,7 @@ class Animator {
         var scale = ctx.scale;
         var _this = this;
         ctx.scale = function (sx, sy) {
-            xform = xform.scaleNonUniform(sx, sy);
+            xform = xform.scale(sx, sy);
             var xAxis = Math.sqrt(xform.a * xform.a + xform.b * xform.b);
             var yAxis = Math.sqrt(xform.c * xform.c + xform.d * xform.d);
             _this.scale = Math.max(xAxis, yAxis) / resolutionMultiplier;
@@ -1039,10 +1052,10 @@ class Animator {
         {
             ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
 
-            this.friendlyMobData.draw(selectablePickingDraw);
-            this.friendlyPlayerData.draw(selectablePickingDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectablePickingDraw);
+                this.friendlyPlayerData.draw(selectablePickingDraw);
                 this.playerData.draw(selectablePickingDraw);
             }
 
@@ -1053,6 +1066,8 @@ class Animator {
             this.targetData.draw(selectablePickingDraw);
             this.targetPlayerData.draw(selectablePickingDraw);
             if (this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectablePickingDraw);
+                this.friendlyPlayerData.draw(selectablePickingDraw);
                 this.playerData.draw(selectablePickingDraw);
             }
             if (this.selectedActor !== null) {
@@ -1094,10 +1109,10 @@ class Animator {
                 this.skillMechanicActorData.draw(standardDraw);
             }
 
-            this.friendlyMobData.draw(selectableDraw);
-            this.friendlyPlayerData.draw(selectableDraw);
 
             if (!this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectableDraw);
+                this.friendlyPlayerData.draw(selectableDraw);
                 this.playerData.draw(selectableDraw);
             }
 
@@ -1108,6 +1123,8 @@ class Animator {
             this.targetData.draw(selectableDraw);
             this.targetPlayerData.draw(selectableDraw);
             if (this.displaySettings.useActorHitboxWidth) {
+                this.friendlyMobData.draw(selectableDraw);
+                this.friendlyPlayerData.draw(selectableDraw);
                 this.playerData.draw(selectableDraw);
             }
             if (this.selectedActor !== null) {

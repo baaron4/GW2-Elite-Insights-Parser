@@ -30,7 +30,8 @@ public abstract class CombatReplayDescription
         Target = 18,
         TargetPlayer = 19,
         Text = 20,
-        Polygon = 21
+        Polygon = 21,
+        TextOverhead = 22
     }
 
     protected CombatReplayDescription()

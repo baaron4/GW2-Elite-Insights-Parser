@@ -129,10 +129,6 @@ internal class SalvationPassInstance : SalvationPass
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
         HandleTrioPhases(targetsByIDs, log, phases);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -164,7 +160,6 @@ internal class SalvationPassInstance : SalvationPass
             .. _banditTrio.GetTargetsIDs(),
             .. _matthias.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

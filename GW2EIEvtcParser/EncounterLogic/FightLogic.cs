@@ -233,13 +233,10 @@ public abstract class FightLogic
         var targetIDs = GetTargetsIDs();
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
-        foreach (TargetID id in targetIDs)
+        _targets.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(targetIDs) && x.LastAware > 0).Select(a => new NPC(a)));
+        if (IsInstance)
         {
-            IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
-            foreach (AgentItem agentItem in agents)
-            {
-                _targets.Add(new NPC(agentItem));
-            }
+            _targets.AddRange(agentData.GetNPCsByID(TargetID.Instance).Select(a => new NPC(a)));
         }
         //TODO(Rennorb) @perf @cleanup: is this required?
         _targets.SortByFirstAware();
@@ -264,7 +261,7 @@ public abstract class FightLogic
                 throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
         }
-        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(trashIDs)).Select(a => new NPC(a)));
+        _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(trashIDs) && x.LastAware > 0).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2
         var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTargetID(x.ID)) && !targetIDs.Contains(GetTargetID(x.ID)) && !x.GetFinalMaster().IsPlayer).ToList();
@@ -279,10 +276,7 @@ public abstract class FightLogic
 
         // Build friendlies
         var friendlyIDs = GetFriendlyNPCIDs();
-        foreach (TargetID id in friendlyIDs)
-        {
-            _nonSquadFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
-        }
+        _nonSquadFriendlies.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.IsAnySpecies(friendlyIDs) && x.LastAware > 0).Select(a => new NPC(a)));
         _nonSquadFriendlies.SortByFirstAware();
         NumericallyRenameSpecies(NonSquadFriendlies, ignoredSpeciesForRenaming);
 
@@ -379,8 +373,7 @@ public abstract class FightLogic
         } 
         else
         {
-            SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-            phases[0].AddTarget(mainTarget, log);
+            phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
         }
         return phases;
     }

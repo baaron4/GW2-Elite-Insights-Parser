@@ -378,6 +378,15 @@ internal static class MesmerHelper
         (int)MinionID.IllusionaryLancer,
     ];
 
+    internal static bool IsPhantasm(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return _phantasms.Contains(agentItem.ID);
+    }
+
     internal static bool IsKnownMinionID(int id)
     {
         return _phantasms.Contains(id) || _clones.Contains(id);

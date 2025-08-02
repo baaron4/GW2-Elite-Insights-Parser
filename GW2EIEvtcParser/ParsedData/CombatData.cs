@@ -72,6 +72,7 @@ public partial class CombatData
     public readonly bool HasBreakbarDamageData = false;
     public readonly bool HasCrowdControlData = false;
     public readonly bool HasEffectData = false;
+    public readonly bool HasMarkerData = false;
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
 
@@ -502,7 +503,7 @@ public partial class CombatData
         {
             if (combatItem.IsEssentialMetadata)
             {
-                CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
             }
         }
         foreach (CombatItem combatItem in combatEvents)
@@ -525,7 +526,7 @@ public partial class CombatData
                 else
                 {
                     insertToSkillIDs = combatItem.IsStateChange == StateChange.BuffInitial;
-                    CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                    CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
                 }
 
             }
@@ -567,6 +568,7 @@ public partial class CombatData
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0 || brkRecoveredData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
+        HasMarkerData = _statusEvents.MarkerEvents.Count != 0;
         HasCrowdControlData = crowdControlData.Count != 0;
         HasSpeciesAndSkillGUIDs = evtcVersion.Build >= ArcDPSBuilds.SpeciesSkillGUIDs;
         HasMissileData = _statusEvents.MissileEvents.Count != 0;

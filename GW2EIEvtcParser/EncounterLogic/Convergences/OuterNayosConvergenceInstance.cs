@@ -66,14 +66,22 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets, log);
-        SingleActor target = Targets.FirstOrDefault(x => x.IsAnySpecies([
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.DemonKnight,
+            TargetID.Sorrow,
+            TargetID.Dreadwing,
+            TargetID.HellSister,
+            TargetID.UmbrielHalberdOfHouseAurkus])), log);
+        var target = Targets.FirstOrDefault(x => x.IsAnySpecies([
             TargetID.DemonKnight,
             TargetID.Sorrow,
             TargetID.Dreadwing,
             TargetID.HellSister,
             TargetID.UmbrielHalberdOfHouseAurkus
-            ])) ?? throw new MissingKeyActorsException("Demon Knight / Sorrow / Dreadwing / Hell Sister / Umbriel not found");
+            ]));
+        if (target == null)
+        {
+            return phases;
+        }
         IReadOnlyList<Segment> hpUpdates = target.GetHealthUpdates(log);
 
         // Full Fight Phase

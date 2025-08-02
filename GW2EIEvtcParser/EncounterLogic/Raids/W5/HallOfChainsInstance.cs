@@ -219,10 +219,6 @@ internal class HallOfChainsInstance : HallOfChains
         HandleStatueOfIcePhases(targetsByIDs, log, phases);
         HandleStatueOfDeathPhases(targetsByIDs, log, phases);
         HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -260,7 +256,6 @@ internal class HallOfChainsInstance : HallOfChains
             .. _statueOfDarkness.GetTargetsIDs(),
             .. _dhuum.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

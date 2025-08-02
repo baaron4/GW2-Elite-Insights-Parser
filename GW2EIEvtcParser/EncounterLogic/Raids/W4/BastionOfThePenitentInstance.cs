@@ -198,10 +198,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], ChestID.RecreationRoomChest, "Mursaat Overseer", (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), ChestID.SamarogChest, "Samarog", (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6);
         HandleDeimosPhases(targetsByIDs, log, phases);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -234,7 +230,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             .. _samarog.GetTargetsIDs(),
             .. _deimos.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

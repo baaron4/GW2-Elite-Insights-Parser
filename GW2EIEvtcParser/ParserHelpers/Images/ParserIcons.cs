@@ -455,6 +455,7 @@ internal static class ParserIcons
     private const string MinionIllusionaryAvenger = "https://i.imgur.com/SmEAtBo.png";
     private const string MinionIllusionaryWhaler = "https://i.imgur.com/vVqpOvR.png";
     private const string MinionIllusionaryMariner = "https://i.imgur.com/2oSj7rI.png";
+    private const string MinionIllusionarySharpShooter = "https://i.imgur.com/6HX5zTh.png";
     private const string MinionJadeMech = "https://i.imgur.com/54evTaq.png";
     private const string MinionEraBreakrazor = "https://i.imgur.com/2X3G3Fl.png";
     private const string MinionKusDarkrazor = "https://i.imgur.com/rJq4Ngh.png";
@@ -1317,6 +1318,7 @@ internal static class ParserIcons
         { MinionID.CloneDaggerTorch, MinionMesmerClone },
         { MinionID.CloneDownstate, MinionMesmerClone },
         { MinionID.CloneUnknown, MinionMesmerClone },
+        { MinionID.CloneRifle, MinionMesmerClone },
         { MinionID.IllusionarySwordsman, MinionIllusionarySwordsman },
         { MinionID.IllusionaryBerserker, MinionIllusionaryBerserker },
         { MinionID.IllusionaryDisenchanter, MinionIllusionaryDisenchanter },
@@ -1329,6 +1331,7 @@ internal static class ParserIcons
         { MinionID.IllusionaryAvenger, MinionIllusionaryAvenger },
         { MinionID.IllusionaryWhaler, MinionIllusionaryWhaler },
         { MinionID.IllusionaryMariner, MinionIllusionaryMariner },
+        { MinionID.IllusionarySharpShooter, MinionIllusionarySharpShooter },
         { MinionID.JadeMech, MinionJadeMech },
         { MinionID.EraBreakrazor, MinionEraBreakrazor },
         { MinionID.KusDarkrazor, MinionKusDarkrazor },

@@ -588,7 +588,7 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 lifespan = effect.ComputeLifespan(log, 5000);
                 var offset = new Vector3(700, 0, 0);
-                var arrow = new RectangleDecoration(1400, 50, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
+                var arrow = new RectangleDecoration(1400, 100, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90));
                 replay.Decorations.Add(arrow);
             }
         }
@@ -635,7 +635,7 @@ internal class GreerTheBlightbringer : MountBalrior
             foreach (EffectEvent effect in cageOfDecayWalls)
             {
                 lifespan = effect.ComputeLifespan(log, 2000);
-                var wall = (RectangleDecoration)new RectangleDecoration(100, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
+                var wall = (RectangleDecoration)new RectangleDecoration(200, 50, lifespan, Colors.GreenishYellow, 0.3, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z));
                 replay.Decorations.AddWithBorder(wall, Colors.Purple, 0.2);
             }
         }

@@ -180,10 +180,6 @@ internal class MountBalriorInstance : MountBalrior
         HandleDecimaPhases(targetsByIDs, log, phases, TargetID.Decima);
         HandleDecimaPhases(targetsByIDs, log, phases, TargetID.DecimaCM);
         HandleUraPhases(targetsByIDs, log, phases);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -213,7 +209,6 @@ internal class MountBalriorInstance : MountBalrior
             .. _decima.GetTargetsIDs(),
             .. _ura.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

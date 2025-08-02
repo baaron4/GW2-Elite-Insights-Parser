@@ -128,14 +128,10 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffGiveCastFinder(RelicOfDagdaHit, RelicOfDagdaBuff)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        //new BuffGainCastFinder(RelicOfIsgarrenTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-        //{
-        //    return combatData.GetBuffData(RelicOfIsgarrenTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-        //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        //new BuffGainCastFinder(RelicOfTheDragonhunterTargetBuff, RelicTargetPlayerBuff).UsingChecker((bae, combatData, agentData, skillData) =>
-        //{
-        //    return combatData.GetBuffData(RelicOfTheDragonhunterTargetBuff).Where(x => x.CreditedBy == bae.To && Math.Abs(x.Time - bae.Time) < ServerDelayConstant).Any();
-        //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfIsgarrenTargetBuff, RelicOfIsgarrenTargetBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new BuffGiveCastFinder(RelicOfTheDragonhunterTargetBuff, RelicOfTheDragonhunterTargetBuff)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
@@ -177,7 +173,7 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfSorrowBuff, EffectGUIDs.RelicOfSorrow3)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
-            .UsingChecker((effectEvent, combatData, agentData, skillData) => 
+            .UsingChecker((effectEvent, combatData, agentData, skillData) =>
             {
                 return combatData.HasLostBuff(RelicOfTheStormsingerBuff, effectEvent.Src, effectEvent.Time);
             })
@@ -709,9 +705,47 @@ internal static class ProfHelper
         return CommonMinions.Contains(id);
     }
 
-    public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
+    private static void AddOffensiveBoonsDecorations(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
+        var quicknessStatus = minion.GetBuffStatus(log, Quickness).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIcons(quicknessStatus, minion, BuffImages.Quickness, -160, 15);
+        var alacStatus = minion.GetBuffStatus(log, Alacrity).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIcons(alacStatus, minion, BuffImages.Alacrity, -115, 15);
+        var mightStatus = minion.GetBuffStatus(log, Might).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIconsWithValueAsText(mightStatus, minion, BuffImages.Might, -70, 15);
+        var furyStatus = minion.GetBuffStatus(log, Fury).Where(x => x.Value > 0);
+        replay.Decorations.AddRotatedOverheadIcons(furyStatus, minion, BuffImages.Fury, -25, 15);
+    }
 
+    public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
+    {
+        
+        switch (minion.ID)
+        {
+            case (int)MinionID.JadeMech:
+                AddOffensiveBoonsDecorations(minion, master, log, replay);
+                var signetForceStatus = minion.GetBuffStatus(log, ForceSignet).Where(x => x.Value > 0);
+                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 40, 15);
+                var signetConductingStatus = minion.GetBuffStatus(log, SuperconductingSignet).Where(x => x.Value > 0);
+                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, 140, 15);
+                break;
+        }
+        if (RangerHelper.IsJuvenilePet(minion.AgentItem))
+        {
+            AddOffensiveBoonsDecorations(minion, master, log, replay);
+            var sicEmStatus = minion.GetBuffStatus(log, SicEmBuff).Where(x => x.Value > 0);
+            replay.Decorations.AddRotatedOverheadIcons(sicEmStatus, minion, SkillImages.SicEm, 90, 15);
+        }
+        if (MesmerHelper.IsPhantasm(minion.AgentItem))
+        {
+            AddOffensiveBoonsDecorations(minion, master, log, replay);
+            var phantasmalForceStatus = minion.GetBuffStatus(log, PhantasmalForce).Where(x => x.Value > 0);
+            replay.Decorations.AddRotatedOverheadIconsWithValueAsText(phantasmalForceStatus, minion, TraitImages.PhantasmalForce_Mistrust, 90, 15);
+        }
+        if (NecromancerHelper.IsUndeadMinion(minion.AgentItem))
+        {
+            AddOffensiveBoonsDecorations(minion, master, log, replay);
+        }
     }
 
     public static void AdjustMinionName(AgentItem minion)

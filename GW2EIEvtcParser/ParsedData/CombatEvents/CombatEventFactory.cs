@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData;
 internal static class CombatEventFactory
 {
 
-    public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion, EvtcParserSettings settings)
+    public static void AddStateChangeEvent(long logStart, CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion, EvtcParserSettings settings)
     {
         switch (stateChangeEvent.IsStateChange)
         {
@@ -48,7 +48,7 @@ internal static class CombatEventFactory
                 Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
                 break;
             case StateChange.InstanceStart:
-                metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent);
+                metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent, logStart);
                 break;
             case StateChange.SquadCombatStart:
                 if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)

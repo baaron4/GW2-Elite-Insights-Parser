@@ -34,6 +34,8 @@ internal class TextDecoration : Decoration
         public readonly uint FontSize;
 
         public readonly Connector ConnectedTo;
+        public RotationConnector? RotationConnectedTo { get; protected set; }
+        public SkillModeDescriptor? SkillMode { get; protected set; }
 
         private TextDecorationRenderingData((long, long) lifespan, string text, uint fontSize) : base(lifespan)
         {
@@ -61,6 +63,20 @@ internal class TextDecoration : Decoration
             Bold = bold;
         }
 
+        public virtual void UsingRotationConnector(RotationConnector? rotationConnectedTo)
+        {
+            RotationConnectedTo = rotationConnectedTo;
+        }
+        /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="skill">Skill information</param>
+         /// <returns></returns>
+        public virtual void UsingSkillMode(SkillModeDescriptor? skill)
+        {
+            SkillMode = skill;
+        }
+
         public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new TextDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
@@ -68,6 +84,9 @@ internal class TextDecoration : Decoration
     }
     private new TextDecorationMetadata DecorationMetadata => (TextDecorationMetadata)base.DecorationMetadata;
     private new TextDecorationRenderingData DecorationRenderingData => (TextDecorationRenderingData)base.DecorationRenderingData;
+    public Connector ConnectedTo => DecorationRenderingData.ConnectedTo;
+    public RotationConnector? RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
+    public SkillModeDescriptor? SkillMode => DecorationRenderingData.SkillMode;
 
     public string Color => DecorationMetadata.Color;
 
@@ -104,6 +123,23 @@ internal class TextDecoration : Decoration
     public TextDecoration UsingBold(bool bold)
     {
         DecorationRenderingData.UsingBold(bold);
+        return this;
+    }
+    public TextDecoration UsingRotationConnector(RotationConnector? rotationConnectedTo)
+    {
+        DecorationRenderingData.UsingRotationConnector(rotationConnectedTo);
+        return this;
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="skill">Skill information</param>
+    /// <returns></returns>
+    public TextDecoration UsingSkillMode(SkillModeDescriptor? skill)
+    {
+        DecorationRenderingData.UsingSkillMode(skill);
         return this;
     }
 

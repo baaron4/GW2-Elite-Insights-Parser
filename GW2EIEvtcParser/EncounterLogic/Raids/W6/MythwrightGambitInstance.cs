@@ -175,10 +175,6 @@ internal class MythwrightGambitInstance : MythwrightGambit
         HandleConjuredAmalgamatePhases(targetsByIDs, log, phases);
         HandleTwinLargosPhases(targetsByIDs, log, phases);
         HandleQadimPhases(targetsByIDs, log, phases);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -208,7 +204,6 @@ internal class MythwrightGambitInstance : MythwrightGambit
             .. _twinLargos.GetTargetsIDs(),
             .. _qadim.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

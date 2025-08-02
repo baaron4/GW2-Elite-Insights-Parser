@@ -6,9 +6,9 @@ public class InstanceStartEvent : MetaDataEvent
 
     public readonly string? InstanceIP = null;
 
-    internal InstanceStartEvent(CombatItem evtcItem) : base(evtcItem)
+    internal InstanceStartEvent(CombatItem evtcItem, long logStart) : base(evtcItem)
     {
-        TimeOffsetFromInstanceCreation = (long)evtcItem.SrcAgent;
+        TimeOffsetFromInstanceCreation = logStart - (long)evtcItem.SrcAgent;
         if (evtcItem.Value != 0)
         {
             // TODO: verify format

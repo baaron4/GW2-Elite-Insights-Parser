@@ -17,6 +17,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonDerivedType(typeof(ProgressBarDecorationMetadataDescription))]
 [JsonDerivedType(typeof(OverheadProgressBarDecorationMetadataDescription))]
 [JsonDerivedType(typeof(TextDecorationMetadataDescription))]
+[JsonDerivedType(typeof(TextOverheadDecorationMetadataDescription))]
 public abstract class CombatReplayDecorationMetadataDescription : CombatReplayDescription
 {
     internal CombatReplayDecorationMetadataDescription() 

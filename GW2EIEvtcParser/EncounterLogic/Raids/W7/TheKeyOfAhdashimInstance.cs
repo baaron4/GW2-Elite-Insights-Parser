@@ -49,10 +49,6 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", (log, adina) => adina.GetHealth(log.CombatData) > 23e6);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6);
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6);
-        if (phases[0].Targets.Count == 0)
-        {
-            phases[0].AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Instance)), log);
-        }
         return phases;
     }
 
@@ -82,7 +78,6 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             .. _sabir.GetTargetsIDs(),
             .. _peerlessQadim.GetTargetsIDs()
         ];
-        targets.Add(TargetID.Instance);
         return targets.Distinct().ToList();
     }
 

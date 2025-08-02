@@ -370,7 +370,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 var chargeSegments = target.GetBuffStatus(log, ChargeDecima).Where(x => x.Value > 0);
                 foreach (Segment segment in chargeSegments)
                 {
-                    replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
+                    replay.Decorations.Add(new TextDecoration(segment.TimeSpan, "Decima Charge(s) " + segment.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 40))));
                 }
 
                 // Mainshock - Pizza Indicator
@@ -729,30 +729,31 @@ internal class DecimaTheStormsinger : MountBalrior
     private static void AddBeam(ParsedEvtcLog log, CombatReplay replay, uint beamWidth, IEnumerable<BuffEvent> beams, Color color)
     {
         int tetherStart = 0;
-        AgentItem src = _unknownAgent;
-        AgentItem dst = _unknownAgent;
+        AgentItem beamEndAgent = _unknownAgent;
+        AgentItem beamStartAgent = _unknownAgent;
         foreach (BuffEvent tether in beams)
         {
             if (tether is BuffApplyEvent)
             {
                 tetherStart = (int)tether.Time;
-                src = tether.By;
-                dst = tether.To;
+                beamEndAgent = tether.By;
+                beamStartAgent = tether.To;
             }
             else if (tether is BuffRemoveAllEvent)
             {
                 int tetherEnd = (int)tether.Time;
-                if (!src.IsUnknown && !dst.IsUnknown)
+                if (!beamEndAgent.IsUnknown && !beamStartAgent.IsUnknown)
                 {
-                    if (src.TryGetCurrentInterpolatedPosition(log, tetherStart, out var posSrc))
+                    // Get the final position for beam end
+                    if (beamEndAgent.TryGetCurrentInterpolatedPosition(log, tetherEnd, out var posSrc))
                     {
-                        // Get the position before movement happened
-                        if (dst.TryGetCurrentInterpolatedPosition(log, tetherStart - 500, out var posDst))
+                        // Get the position before movement happened for beam start
+                        if (beamStartAgent.TryGetCurrentInterpolatedPosition(log, tetherStart - 500, out var posDst))
                         {
                             replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, 0.5, new PositionConnector(posSrc), new PositionConnector(posDst)).WithThickess(beamWidth, true));
                         }
-                        src = _unknownAgent;
-                        dst = _unknownAgent;
+                        beamEndAgent = _unknownAgent;
+                        beamStartAgent = _unknownAgent;
                     }
                 }
             }
