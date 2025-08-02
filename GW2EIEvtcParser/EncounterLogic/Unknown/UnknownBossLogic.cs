@@ -32,17 +32,6 @@ internal class UnknownBossLogic : UnknownFightLogic
         SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)), combatData, fightData, playerAgents, true);
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
-    {
-        CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
-        // Handle potentially wrongly associated logs
-        if (mapIDEvent != null && MapIDEvent.GetMapID(mapIDEvent) == GenericTriggerID && !agentData.GetNPCsByID(GenericTriggerID).Any() && !agentData.GetGadgetsByID(GenericTriggerID).Any())
-        {
-            return new UnknownInstanceLogic((int)TargetID.Instance).AdjustLogic(agentData, combatData, parserSettings);
-        }
-        return base.AdjustLogic(agentData, combatData, parserSettings);
-    }
-
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;

@@ -562,6 +562,10 @@ public abstract class FightLogic
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.Instance, true);
         }
         ComputeFightTargets(agentData, combatData, extensions);
+        if (IsInstance && Targets.Count == Targets.Count(x => x.IsSpecies(TargetID.Instance)))
+        {
+            Targetless = true;
+        }
     }
 
     /// <summary>

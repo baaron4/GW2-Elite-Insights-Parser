@@ -78,7 +78,7 @@ public static class MapIDs
     #endregion
     #region Story
     public const int HeartsAndMinds = 1040; // Mordremoth
-    public const int Empty = 1434; // Ankka
+    public const int XunlaijadeJunkyardStory = 1434; // Ankka
     #endregion
     #region Guild Hall
     public const int GildedHollow1 = 1068;

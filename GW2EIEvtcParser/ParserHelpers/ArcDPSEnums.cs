@@ -259,6 +259,20 @@ public static class ArcDPSEnums
     {
         return bt < (byte)StateChange.Unknown ? (StateChange)bt : StateChange.Unknown;
     }
+    // Log type
+
+    public enum LogType : byte
+    {
+        None = 0,
+        Auto = 1,
+        Map = 2,
+        Generic = 3,
+        Unknown
+    };
+    public static LogType GetLogType(int value)
+    {
+        return value < (int)LogType.Unknown ? (LogType)value : LogType.Unknown;
+    }
     // Breakbar State
 
     public enum BreakbarState : byte
