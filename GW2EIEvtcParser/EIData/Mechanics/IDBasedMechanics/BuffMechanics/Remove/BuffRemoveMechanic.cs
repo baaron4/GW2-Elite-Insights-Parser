@@ -15,6 +15,18 @@ internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : Abs
     {
     }
 
+    internal BuffRemoveMechanic<T> UsingBuffChecker(long buffID, bool isPresent)
+    {
+        if (isPresent)
+        {
+            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+        else
+        {
+            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => !evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+    }
+
     protected abstract AgentItem GetAgentItem(T brae);
     protected abstract bool TryGetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs, [NotNullWhen(true)] out SingleActor? actor);
 
