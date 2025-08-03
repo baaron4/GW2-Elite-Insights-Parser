@@ -23,7 +23,47 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        return "Convergence: Outer Nayos";
+        var mainBoss = Targets.FirstOrDefault(x => x.IsAnySpecies([
+            TargetID.DemonKnight,
+            TargetID.Sorrow,
+            TargetID.Dreadwing,
+            TargetID.HellSister,
+            TargetID.UmbrielHalberdOfHouseAurkus
+            ]));
+        var name = "Convergence: Outer Nayos";
+        if (mainBoss != null)
+        {
+            switch (mainBoss.ID)
+            {
+                case (int)TargetID.DemonKnight:
+                    EncounterID |= 0x000001;
+                    name += " - Demon Knight";
+                    Extension += "dmnknght";
+                    break;
+                case (int)TargetID.Sorrow:
+                    EncounterID |= 0x000002;
+                    name += " - Sorrow";
+                    Extension += "srrw";
+                    break;
+                case (int)TargetID.Dreadwing:
+                    EncounterID |= 0x000003;
+                    name += " - Dreadwing";
+                    Extension += "drdwng";
+                    break;
+                case (int)TargetID.HellSister:
+                    EncounterID |= 0x000004;
+                    name += " - Hell Sister";
+                    Extension += "sister";
+                    break;
+                case (int)TargetID.UmbrielHalberdOfHouseAurkus:
+                    EncounterID |= 0x000005;
+                    name += " - Umbriel";
+                    Extension += "umbriel";
+                    break;
+
+            }
+        }
+        return name;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
