@@ -227,7 +227,7 @@ Medium Golem: 0x08010A
 0xXXX2XX indicates a full instance log.
 
 ## Convergences
-
+Convergences are all full instance logs.
 ### Outer Nayos
 Unknown: 0x090100
 
