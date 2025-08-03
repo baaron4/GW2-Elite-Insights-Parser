@@ -18,11 +18,11 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
     {
         if (isPresent)
         {
-            return (BuffApplyMechanic)UsingChecker((evt, log) => evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (BuffApplyMechanic)UsingChecker((evt, log) => GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
         else
         {
-            return (BuffApplyMechanic)UsingChecker((evt, log) => !evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (BuffApplyMechanic)UsingChecker((evt, log) => !GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
     }
 

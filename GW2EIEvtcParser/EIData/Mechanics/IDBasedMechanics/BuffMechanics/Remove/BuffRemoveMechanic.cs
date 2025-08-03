@@ -19,11 +19,11 @@ internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : Abs
     {
         if (isPresent)
         {
-            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
         else
         {
-            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => !evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (BuffRemoveMechanic<T>)UsingChecker((evt, log) => !GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
     }
 

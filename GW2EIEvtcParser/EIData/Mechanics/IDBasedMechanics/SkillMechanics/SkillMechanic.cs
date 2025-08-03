@@ -31,11 +31,11 @@ internal abstract class SkillMechanic<T> : IDBasedMechanic<T> where T : SkillEve
     {
         if (isPresent)
         {
-            return (SkillMechanic<T>)UsingChecker((evt, log) => evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (SkillMechanic<T>)UsingChecker((evt, log) => GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
         else
         {
-            return (SkillMechanic<T>)UsingChecker((evt, log) => !evt.To.HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+            return (SkillMechanic<T>)UsingChecker((evt, log) => !GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
         }
     }
 
