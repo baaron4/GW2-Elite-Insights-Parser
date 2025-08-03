@@ -77,16 +77,17 @@ internal class HarvestTemple : EndOfDragonsStrike
             // Mordremoth
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(Shockwave, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150)
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(PoisonRoar, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth Poison", "Mordremoth Poison", 150),
             ]),
             // Giants
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(DeathScream, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Grey), "Scream.G.CC", "CC'd by Giant's Death Scream", "Death Scream", 0)
-                    .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", 0),
                 new PlayerDstHealthDamageHitMechanic(Stomp, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Teal), "Stomp.CC", "CC'd by Giant's Stomp", "Stomp", 0)
-                    .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
             ]),
             // Zhaitan
             new MechanicGroup([

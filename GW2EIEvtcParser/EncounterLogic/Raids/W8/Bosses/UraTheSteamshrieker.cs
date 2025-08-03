@@ -79,7 +79,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerDstHealthDamageHitMechanic(ForcedEruption, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "ForcErup.H", "Hit by Forced Eruption (Ventshot Homing Orb)", "Forced Eruption Hit", 0),
                 new PlayerDstHealthDamageHitMechanic(SearingSnipe, new MechanicPlotlySetting(Symbols.StarTriangleUpOpen, Colors.LightBlue), "SearSnipe.H", "Hit by Searing Snipe (Ventshot Projectile)", "Searing Snipe Hit", 0),
                 new PlayerDstHealthDamageHitMechanic(StoneSlamConeKnockback, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Orange), "StnSlam.CC", "CC by Stone Slam (Ventshot Cone)", "Stone Slam CC", 0)
-                    .UsingChecker((hde, log) => hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
             ]),
             new EnemySrcHealthDamageMechanic(Return, new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.White), "Return", "Ura returned to the center", "Return", 100),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),

@@ -27,7 +27,7 @@ internal class Sabir : TheKeyOfAhdashim
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([ DynamicDeterrentNM, DynamicDeterrentCM ], new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0)
-                .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
                 new EnemyCastStartMechanic([ DynamicDeterrentNM, DynamicDeterrentCM ], new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "Dynamic Deterrent", "Casted Dynamic Deterrent", "Cast Dynamic Deterrent", 0),
             ]),
             new PlayerDstHealthDamageHitMechanic([ StormsEdgeLeftHand, StormsEdgeRightHand ], new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Blue), "Storm's Edge", "Hit by Storm's Edge", "Storm's Edge", 0),

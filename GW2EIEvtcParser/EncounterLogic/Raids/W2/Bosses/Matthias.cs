@@ -33,10 +33,12 @@ internal class Matthias : SalvationPass
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
                 new PlayerDstBuffApplyMechanic(Slow, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD", "Knockdown by Icy Patch","Icy Patch KD", 0)
-                    .UsingChecker((br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false)
+                    .UsingChecker((br,log) => br.AppliedDuration == 10000),
                 new PlayerDstHealthDamageHitMechanic(Thunder, new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.Teal), "Storm", "Thunder Storm hit (air phase)","Storm cloud", 0),
                 new PlayerDstBuffRemoveMechanic(Unbalanced, new MechanicPlotlySetting(Symbols.Square,Colors.LightPurple), "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0)
-                    .UsingChecker( (br,log) => br.RemovedDuration > 0 && !br.To.HasBuff(log, Stability, br.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false)
+                    .UsingChecker((br,log) => br.RemovedDuration > 0),
                 new PlayerDstHealthDamageHitMechanic(Surrender, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit", "Surrender (hit by walking Spirit)","Spirit hit", 0)
             ]),
             new PlayerDstBuffApplyMechanic(UnstableBloodMagic, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Well", "Unstable Blood Magic application","Well", 0),
