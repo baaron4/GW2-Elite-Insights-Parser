@@ -29,24 +29,30 @@ internal class DecimaTheStormsinger : MountBalrior
             new PlayerDstHealthDamageHitMechanic([DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", 0),
             new PlayerDstHealthDamageHitMechanic(HarmoniousThunder, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "HarmThun.H", "Hit by Harmonious Thunder", "Harmonious Thunder Hit", 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0)
-                    .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0)
+                    .WithStabilitySubMechanic(
+                        new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0),
+                        false
+                    ),
                 new PlayerDstHealthDamageMechanic(SeismicCrashHitboxDamage, new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0)
                     .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
                 new PlayerDstHealthDamageMechanic(SeismicCrashHitboxDamage, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0)
                     .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed in NM, not logged in CM
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.White), "SeisRepos.H", "Hit by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkWhite), "SeisRepos.CC", "CC by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition CC", 0)
-                    .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.White), "SeisRepos.H", "Hit by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition Hit", 0)
+                    .WithStabilitySubMechanic(
+                        new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkWhite), "SeisRepos.CC", "CC by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition CC", 0),
+                        false
+                    ),
             ]),
             new MechanicGroup([
 
-                new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0),
-                new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0)
-                    .UsingChecker((hde, log) => !hde.To.HasBuff(log, Stability, hde.Time, ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0)
+                    .WithStabilitySubMechanic(
+                        new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0),
+                        false
+                    ),
                 new PlayerDstHealthDamageMechanic(Earthrend, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0)
                     .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time))
                     .WithBuilds(GW2Builds.December2024MountBalriorNerfs),
