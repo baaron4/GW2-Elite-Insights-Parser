@@ -247,6 +247,6 @@ Unknown: 0x090200
 
 Greer, the Blightbringer: 0x090201
 
-Decima, the Stormsinger: 0x090102
+Decima, the Stormsinger: 0x090202
 
-Ura, the Steamshrieker: 0x090103
+Ura, the Steamshrieker: 0x090203
