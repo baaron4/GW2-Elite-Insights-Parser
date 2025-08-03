@@ -103,6 +103,10 @@ public class MechanicData
         CheckConfiguration();
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
+            if (mech.IsASubMechanic)
+            {
+                continue;
+            }
             mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
         }
         Tracing.Trace.TrackAverageStat("_mechanicLogs", _mechanicLogs.Count);
