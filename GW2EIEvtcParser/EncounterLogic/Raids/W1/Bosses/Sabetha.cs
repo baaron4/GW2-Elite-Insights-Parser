@@ -31,7 +31,7 @@ internal class Sabetha : SpiritVale
             new PlayerDstHealthDamageHitMechanic(CannonBarrage, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Cannon", "Cannon Barrage (stood in AoE)","Cannon Shot", 0),
             new PlayerDstHealthDamageHitMechanic(FlameBlast, new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Yellow), "Karde Flame", "Flame Blast (Karde's Flamethrower)","Flamethrower (Karde)", 0),
             new PlayerDstHealthDamageHitMechanic(BanditKick, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Magenta), "Kick", "Kicked by Bandit","Bandit Kick", 0)
-                .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                .UsingBuffChecker(Stability, false),
             new PlayerCastStartMechanic(KickHeavyBomb, new MechanicPlotlySetting(Symbols.Cross, Colors.CobaltBlue), "Kick Bomb", "Kicked Heavy Bomb", "Heavy Bomb Kick", 0)
                 .UsingChecker((ce, log) => !ce.IsInterrupted && !ce.IsUnknown),
             new MechanicGroup([

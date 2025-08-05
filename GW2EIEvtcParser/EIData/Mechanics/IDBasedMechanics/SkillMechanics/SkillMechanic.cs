@@ -25,6 +25,20 @@ internal abstract class SkillMechanic<T> : IDBasedMechanic<T> where T : SkillEve
         return this;
     }
 
+
+
+    internal SkillMechanic<T> UsingBuffChecker(long buffID, bool isPresent)
+    {
+        if (isPresent)
+        {
+            return (SkillMechanic<T>)UsingChecker((evt, log) => GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+        else
+        {
+            return (SkillMechanic<T>)UsingChecker((evt, log) => !GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+    }
+
     protected abstract AgentItem GetAgentItem(T evt);
 
     protected AgentItem GetCreditedAgentItem(T evt)

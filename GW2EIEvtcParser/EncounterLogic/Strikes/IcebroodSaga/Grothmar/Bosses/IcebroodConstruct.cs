@@ -18,18 +18,22 @@ internal class IcebroodConstruct : Grothmar
     {
         MechanicList.Add(new MechanicGroup([   
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.Orange), "A.Swing", "Hit by Ice Arm Swing (Spin)", "Ice Arm Swing", 0),
-                new PlayerDstHealthDamageHitMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "ArmSwing.CC", "Knocked by Ice Arm Swing (Spin)", "Ice Arm Swing", 0)
-                    .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.Orange), "A.Swing", "Hit by Ice Arm Swing (Spin)", "Ice Arm Swing", 0)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.Yellow), "ArmSwing.CC", "Knocked by Ice Arm Swing (Spin)", "Ice Arm Swing", 0),
+                    false
+                ),
                 new EnemyCastEndMechanic(IceArmSwing, new MechanicPlotlySetting(Symbols.Star, Colors.White), "Ice Arm Swing", "Cast Ice Arm Swing (Spin)", "Cast Ice Arm Swing", 0),
             ]),
             new PlayerDstHealthDamageHitMechanic(IceShatter, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink), "Ice Orbs", "Hit by Rotating Ice Shatter (Orbs)", "Ice Shatter (Orbs)", 50),
             new PlayerDstHealthDamageHitMechanic(IceCrystal, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "I.Crystal", "Hit by Ice Crystal (Chill AoE)", "Ice Crystal", 50),
             new PlayerDstHealthDamageHitMechanic(Frostbite, new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "Frostbite.H", "Hit by Frostbite", "Frostbite", 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Flail", "Hit by Ice Flail (Arm Swipe)", "Ice Flail", 50),
-                new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new MechanicPlotlySetting(Symbols.Square, Colors.Yellow), "IceFlail.CC", "Knocked by Ice Flail (Arm Swipe)", "Ice Flail", 50)
-                    .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Flail", "Hit by Ice Flail (Arm Swipe)", "Ice Flail", 50)
+                .WithStabilitySubMechanic(
+                    new PlayerDstHealthDamageHitMechanic([IceFrail1, IceFrail2], new MechanicPlotlySetting(Symbols.Square, Colors.Yellow), "IceFlail.CC", "Knocked by Ice Flail (Arm Swipe)", "Ice Flail", 50),
+                    false
+                )
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(DeadlyIceShockWave, new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "D.IceWave", "Hit by Deadly Ice Shock Wave", "Deadly Ice Shock Wave", 0),

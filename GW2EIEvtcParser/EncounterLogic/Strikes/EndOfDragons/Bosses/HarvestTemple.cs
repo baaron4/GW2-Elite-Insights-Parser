@@ -77,16 +77,17 @@ internal class HarvestTemple : EndOfDragonsStrike
             // Mordremoth
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(Shockwave, new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "ShckWv.H", "Hit by Mordremoth Shockwave", "Mordremoth Shockwave", 150),
-                new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic(Kick, new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Kick.H", "Kicked by Void Skullpiercer", "Skullpiercer Kick", 150)
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(PoisonRoar, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "M.Poison.H", "Hit by Mordremoth Poison", "Mordremoth Poison", 150),
             ]),
             // Giants
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(DeathScream, new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Grey), "Scream.G.CC", "CC'd by Giant's Death Scream", "Death Scream", 0)
-                    .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(RottingBile, new MechanicPlotlySetting(Symbols.Square, Colors.GreenishYellow), "RotBile.H", "Hit by Giant's Rotting Bile", "Rotting Bile", 0),
                 new PlayerDstHealthDamageHitMechanic(Stomp, new MechanicPlotlySetting(Symbols.StarSquare, Colors.Teal), "Stomp.CC", "CC'd by Giant's Stomp", "Stomp", 0)
-                    .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
             ]),
             // Zhaitan
             new MechanicGroup([
@@ -118,17 +119,19 @@ internal class HarvestTemple : EndOfDragonsStrike
                 new MechanicGroup([
                     new PlayerDstHealthDamageHitMechanic(VoidObliteratorFirebomb, new MechanicPlotlySetting(Symbols.TriangleNW, Colors.DarkTeal), "Firebomb.H", "Hit by Firebomb", "Firebomb", 0),
                     new PlayerDstHealthDamageHitMechanic(VoidObliteratorWyvernBreathDamage, new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.Magenta), "WyvBreath.H", "Hit by Wyvern Breath", "Wyvern Breath", 0),
-                    new MechanicGroup([
-                        new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", 0),
-                        new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0)
-                            .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
-                    ]),
+                    new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.Diamond, Colors.Teal), "Charge.H", "Hit by Obliterator's Charge", "Charge Hit", 0)
+                        .WithStabilitySubMechanic(
+                            new PlayerDstHealthDamageHitMechanic(VoidObliteratorCharge, new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Revenant), "Charge.CC", "CC'd by Obliterator's Charge", "Charge CC", 0),
+                            false
+                        ),
                 ]),
                 // Goliath
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0),
-                    new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0)
-                        .UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
+                    new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0)
+                            .WithStabilitySubMechanic(
+                                new PlayerDstHealthDamageHitMechanic(GlacialSlam, new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0),
+                                false
+                            ),
                 ]),
             ]),
             // Purification 4
