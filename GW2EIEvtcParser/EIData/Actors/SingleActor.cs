@@ -317,7 +317,7 @@ public abstract partial class SingleActor : Actor
             }
             trimEnd = last.End;
         }
-        replay.Trim(trimStart, trimEnd);
+        replay.Trim(Math.Max(trimStart, FirstAware), Math.Min(trimEnd, LastAware));
     }
 
     [MemberNotNull(nameof(CombatReplay))]

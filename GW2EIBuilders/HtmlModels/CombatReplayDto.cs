@@ -10,7 +10,6 @@ internal class CombatReplayDto
     public List<CombatReplayDecorationMetadataDescription> DecorationMetadata { get; set; }
     public List<SingleActorCombatReplayDescription> Actors { get; set; }
     public int[] Sizes { get; set; }
-    public long MaxTime { get; set; }
     public float InchToPixel { get; set; }
     public int PollingRate { get; set; }
     public IReadOnlyList<CombatReplayMap.MapItem> Maps { get; set; }
@@ -23,7 +22,6 @@ internal class CombatReplayDto
         (int width, int height) = map.GetPixelMapSize();
         Sizes = [width, height];
         InchToPixel = map.GetInchToPixel();
-        MaxTime = log.PlayerList.First().GetCombatReplayPolledPositions(log).Last().Time;
         PollingRate = ParserHelper.CombatReplayPollingRate;
     }
 
