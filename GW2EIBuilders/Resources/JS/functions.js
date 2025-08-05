@@ -1057,6 +1057,7 @@ function getActivePlayers(start, end) {
             res.push(player);
         }
     }
+    return res;
 }
 
 function getActiveNonFakePlayers(start, end) {
@@ -1069,4 +1070,5 @@ function getActiveNonFakePlayers(start, end) {
             res.push(player);
         }
     }
+    return res;
 }
