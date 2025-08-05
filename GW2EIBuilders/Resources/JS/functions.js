@@ -1046,3 +1046,27 @@ function validateStartPath(path) {
     }
     return setting.startsWith(path);
 }
+
+function getActivePlayers(start, end) {
+    var res = [];
+    for (let i = 0; i < logData.players; i++) {
+        const player = logData.players[i];
+        if (player.lastAware <= start || player.firstAware >= end) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+}
+
+function getActiveNonFakePlayers(start, end) {
+    var res = [];
+    for (let i = 0; i < logData.players; i++) {
+        const player = logData.players[i];
+        if (player.isFake || player.lastAware <= start || player.firstAware >= end) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+}
