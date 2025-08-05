@@ -8,7 +8,7 @@
                 <player-target-component :players="reactiveLogdata.players" :phaseindex="activePhase"></player-target-component>
             </div>
             <div class="ml-5">
-                <player-component :players="reactiveLogdata.players", :phaseindex="activePhase"></player-component>
+                <player-component :players="reactiveLogdata.players" :phaseindex="activePhase"></player-component>
             </div>
         </div>     
         <h6 class="text-center" v-if="!everybodyRunning">Data may be incomplete due to not everybody running the <a href="https://github.com/Krappa322/arcdps_healing_stats/releases">healing stats addon</a>. Make sure to enable its logging features.</h6>
