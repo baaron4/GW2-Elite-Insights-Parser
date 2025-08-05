@@ -708,13 +708,13 @@ internal static class ProfHelper
     private static void AddOffensiveBoonsDecorations(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
     {
         var quicknessStatus = minion.GetBuffStatus(log, Quickness).Where(x => x.Value > 0);
-        replay.Decorations.AddRotatedOverheadIcons(quicknessStatus, minion, BuffImages.Quickness, -160, 15);
+        replay.Decorations.AddRotatedOverheadIcons(quicknessStatus, minion, BuffImages.Quickness, -180, 15);
         var alacStatus = minion.GetBuffStatus(log, Alacrity).Where(x => x.Value > 0);
-        replay.Decorations.AddRotatedOverheadIcons(alacStatus, minion, BuffImages.Alacrity, -115, 15);
+        replay.Decorations.AddRotatedOverheadIcons(alacStatus, minion, BuffImages.Alacrity, -120, 15);
         var mightStatus = minion.GetBuffStatus(log, Might).Where(x => x.Value > 0);
-        replay.Decorations.AddRotatedOverheadIconsWithValueAsText(mightStatus, minion, BuffImages.Might, -70, 15);
+        replay.Decorations.AddRotatedOverheadIconsWithValueAsText(mightStatus, minion, BuffImages.Might, -60, 15);
         var furyStatus = minion.GetBuffStatus(log, Fury).Where(x => x.Value > 0);
-        replay.Decorations.AddRotatedOverheadIcons(furyStatus, minion, BuffImages.Fury, -25, 15);
+        replay.Decorations.AddRotatedOverheadIcons(furyStatus, minion, BuffImages.Fury, 0, 15);
     }
 
     public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay replay)
@@ -725,9 +725,9 @@ internal static class ProfHelper
             case (int)MinionID.JadeMech:
                 AddOffensiveBoonsDecorations(minion, master, log, replay);
                 var signetForceStatus = minion.GetBuffStatus(log, ForceSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 40, 15);
+                replay.Decorations.AddRotatedOverheadIcons(signetForceStatus, minion, SkillImages.ForceSignet, 60, 15);
                 var signetConductingStatus = minion.GetBuffStatus(log, SuperconductingSignet).Where(x => x.Value > 0);
-                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, 140, 15);
+                replay.Decorations.AddRotatedOverheadIcons(signetConductingStatus, minion, SkillImages.SuperconductingSignet, 120, 15);
                 break;
         }
         if (RangerHelper.IsJuvenilePet(minion.AgentItem))

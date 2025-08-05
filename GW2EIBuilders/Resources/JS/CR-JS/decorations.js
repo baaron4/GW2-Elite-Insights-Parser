@@ -1255,6 +1255,7 @@ class IconMechanicDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);
         this.canRotate = false;
+        this.text = params.text;
     }
 
     get image() {
@@ -1317,6 +1318,13 @@ class IconMechanicDrawable extends MechanicDrawable {
         const aspectRatio = this.image.width/this.image.height;
         const sizeW = size * aspectRatio;
         ctx.drawImage(this.image, - sizeW / 2, - size / 2, sizeW, size);
+        if (this.text) {        
+            const font = "bold " + sizeW/1.5 + "px Comic Sans MS";
+            ctx.font = font;
+            ctx.fillStyle = "rgb(0,0,0)";
+            ctx.textAlign = "center";
+            ctx.fillText(this.text, 0, sizeW / 2.5);
+        }
         ctx.restore();
     }
 }
