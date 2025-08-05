@@ -175,7 +175,7 @@ public class StatisticsHelper
     {
         if (!log.CombatData.HasMovementData)
         {
-            return [ ];
+            return [];
         }
 
         var positionsPerPlayer = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
@@ -191,14 +191,14 @@ public class StatisticsHelper
         var activePlayersPerPositions = new List<int>(sampleCount);
         foreach (var positions in positionsPerPlayer)
         {
-            foreach(var position in positions)
+            foreach (var position in positions)
             {
                 if (position == null)
                 {
                     continue;
                 }
                 int index = (int)(position.Value.Time / ParserHelper.CombatReplayPollingRate);
-                while(centerVector3Positions.Count <= index)
+                while (centerVector3Positions.Count <= index)
                 {
                     centerVector3Positions.Add(null);
                     activePlayersPerPositions.Add(0);

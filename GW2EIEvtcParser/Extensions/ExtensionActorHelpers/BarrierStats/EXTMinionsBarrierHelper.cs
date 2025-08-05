@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.Metrics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions;

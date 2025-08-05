@@ -261,7 +261,7 @@ public class Minions : Actor
         CastEvents = new List<CastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (NPC minion in _minionList)
         {
-            CastEvents.AddRange(minion.GetCastEvents(log));
+            CastEvents.AddRange(minion.GetCastEvents(log, Master.FirstAware, Master.LastAware));
         }
         CastEvents.SortByTimeThenSwap();
     }

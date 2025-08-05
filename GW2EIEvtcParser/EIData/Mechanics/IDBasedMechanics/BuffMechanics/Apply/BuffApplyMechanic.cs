@@ -14,7 +14,17 @@ internal abstract class BuffApplyMechanic : IDBasedMechanic<BuffApplyEvent>
     public BuffApplyMechanic(long[] mechanicIDs, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
-
+    internal BuffApplyMechanic UsingBuffChecker(long buffID, bool isPresent)
+    {
+        if (isPresent)
+        {
+            return (BuffApplyMechanic)UsingChecker((evt, log) => GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+        else
+        {
+            return (BuffApplyMechanic)UsingChecker((evt, log) => !GetAgentItem(evt).HasBuff(log, buffID, evt.Time - ParserHelper.ServerDelayConstant));
+        }
+    }
 
 
     protected abstract AgentItem GetAgentItem(BuffApplyEvent ba);

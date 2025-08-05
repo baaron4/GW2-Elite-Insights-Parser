@@ -19,7 +19,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(EnergizedAffliction, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "E.Aff", "Energized Affliction", "Energized Affliction", 0),
                 new PlayerDstHealthDamageHitMechanic(ForceOfRetaliation, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Pushed", "Pushed by Shockwave", "Shockwave Push", 1000)
-                    .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(BatteringBlitz, new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Rush.H", "Hit by Qadim Rush", "Qadim Rush", 500),
                 new PlayerDstHealthDamageHitMechanic(ForceOfHavoc, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Purple), "P.Rect", "Hit by Purple Rectangle", "Purple Rectangle", 0),
                 new PlayerDstHealthDamageHitMechanic(ChaosCalled, new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Purple), "Pattern.H", "Hit by Energy on Pattern", "Pattern Energy Hit", 0),

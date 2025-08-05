@@ -27,9 +27,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 new PlayerDstHealthDamageHitMechanic(ElectricBlast, new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "ElecBlast.H", "Hit by Electric Blast (Echo AoEs)", "Electric Blast Hit", 0),
                 new PlayerDstHealthDamageHitMechanic(ToxicOrb, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Purple), "ToxOrb.H", "Hit by Toxic Orb", "Toxic Orb Hit", 0),
                 new MechanicGroup([
-                    new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.White), "HrtPier.H", "Hit by Heartpiercer", "Heartpiercer Hit", 0),
-                    new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.DarkWhite), "HrtPier.CC", "Knocked Down by Heartpiercer", "Heartpiercer Knockdown", 150)
-                        .UsingChecker((evt, log) => !evt.To.HasBuff(log, Stability, evt.Time - 10)),
+                    new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.White), "HrtPier.H", "Hit by Heartpiercer", "Heartpiercer Hit", 0)
+                        .WithStabilitySubMechanic(
+                            new PlayerDstHealthDamageHitMechanic(Heartpiercer, new MechanicPlotlySetting(Symbols.Octagon, Colors.DarkWhite), "HrtPier.CC", "Knocked Down by Heartpiercer", "Heartpiercer Knockdown", 150),
+                            false
+                        ),
                 ]),
                 new PlayerDstHealthDamageHitMechanic(FissureOfTorment, new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "FissTorm.H", "Hit by Fissure of Torment", "Fissure of Torment Hit", 0),
                 new MechanicGroup([

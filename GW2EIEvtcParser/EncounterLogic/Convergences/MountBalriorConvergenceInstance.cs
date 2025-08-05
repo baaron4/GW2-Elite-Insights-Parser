@@ -24,7 +24,31 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        return "Convergence: Mount Balrior";
+        var mainBoss = Targets.FirstOrDefault(x => x.IsAnySpecies([TargetID.DecimaTheStormsingerConv, TargetID.GreerTheBlightbringerConv, TargetID.UraTheSteamshriekerConv]));
+        var name = "Convergence: Mount Balrior";
+        if (mainBoss != null)
+        {
+            switch (mainBoss.ID)
+            {
+                case (int)TargetID.GreerTheBlightbringerConv:
+                    EncounterID |= 0x000001;
+                    name += " - Greer";
+                    Extension += "greer";
+                    break;
+                case (int)TargetID.DecimaTheStormsingerConv:
+                    EncounterID |= 0x000002;
+                    name += " - Decima";
+                    Extension += "dec";
+                    break;
+                case (int)TargetID.UraTheSteamshriekerConv:
+                    EncounterID |= 0x000003;
+                    name += " - Ura";
+                    Extension += "ura";
+                    break;
+
+            }
+        }
+        return name;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

@@ -24,7 +24,7 @@ internal class Adina : TheKeyOfAhdashim
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(PerilousPulse, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Pink), "Perilous Pulse", "Perilous Pulse", "Perilous Pulse", 0)
-                    .UsingChecker( (de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
+                    .UsingBuffChecker(Stability, false),
                 new PlayerDstHealthDamageHitMechanic(StalagmitesDetonation, new MechanicPlotlySetting(Symbols.Pentagon,Colors.Red), "Mines", "Hit by mines", "Mines", 0),
                 new PlayerDstHealthDamageMechanic([DoubleRotatingEarthRays, TripleRotatingEarthRays], new MechanicPlotlySetting(Symbols.Hourglass,Colors.Brown), "S.Thrower", "Hit by rotating SandThrower", "SandThrower", 0).UsingChecker((de, log) => de.HasKilled),
             ]),

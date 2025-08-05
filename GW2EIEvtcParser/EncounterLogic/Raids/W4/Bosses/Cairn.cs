@@ -16,10 +16,16 @@ internal class Cairn : BastionOfThePenitent
 
             new PlayerDstHealthDamageHitMechanic(CairnDisplacement, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port", "Orange Teleport Field","Orange TP", 0),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0)
-                    .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0)
-                    .UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Std.Green", "Stood in Green Spatial Manipulation Field","Green", 0)
+                    .WithStabilitySubMechanic(
+                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green", "Green Spatial Manipulation Field (lift)","Green (lift)", 0),
+                        false
+                    )
+                    .WithStabilitySubMechanic(
+                        new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0),
+                        true
+                    )
+                ,
             ]),
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic(MeteorSwarm, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB", "Knockback Crystals","KB Crystal", 1000),

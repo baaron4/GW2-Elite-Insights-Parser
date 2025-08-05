@@ -16,9 +16,9 @@ internal class Samarog : BastionOfThePenitent
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(SamarogShockwave, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Schk.Wv", "Shockwave from Spears","Shockwave", 0)
-                .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(PrisonerSweep, new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Swp", "Prisoner Sweep (horizontal)","Sweep", 0)
-                .UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                .UsingBuffChecker(Stability, false),
             new PlayerDstHealthDamageHitMechanic(TramplingRush, new MechanicPlotlySetting(Symbols.TriangleRight,Colors.Red), "Trpl", "Trampling Rush (hit by stampede towards home)","Trampling Rush", 0),
             new PlayerDstHealthDamageHitMechanic(Bludgeon , new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Blue), "Slam", "Bludgeon (vertical Slam)","Slam", 0),
             new MechanicGroup([
