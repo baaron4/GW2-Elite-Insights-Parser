@@ -364,6 +364,16 @@ public class AgentItem
         return log.FindActor(this).IsDownBeforeNext90(log, time);
     }
 
+    public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, IReadOnlyList<Segment> actives) GetStatus(ParsedEvtcLog log)
+    {
+        return log.FindActor(this).GetStatus(log);
+    }
+
+    public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
+    {
+        return log.FindActor(this).GetBreakbarStatus(log);
+    }
+
     /// <summary>
     /// Checks if the agent is downed at given time.
     /// </summary>
