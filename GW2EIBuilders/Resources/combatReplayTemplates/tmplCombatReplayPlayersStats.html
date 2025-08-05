@@ -53,10 +53,10 @@
                 const players = getActivePlayers(this.time * 0.001, (this.time + 1) * 0.001);
                 for (i = 0; i < players.length; i++) {
                     var playerData = players[i];
-                    var crPlayer = animator.getActorData(playerData.uniqueID);
                     if (!playerData) {
                         continue;
                     }
+                    var crPlayer = animator.getActorData(playerData.uniqueID);
                     if (!res[playerData.group]) {
                         res[playerData.group] = [];
                     }
