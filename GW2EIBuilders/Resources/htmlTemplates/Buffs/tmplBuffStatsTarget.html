@@ -42,11 +42,15 @@
                 if (this.cacheCondi.has(this.phaseindex)) {
                     return this.cacheCondi.get(this.phaseindex);
                 }
+                const players = getActivePlayers(this.phase.start, this.phase.end);
                 const res = [];
                 if (this.targetPhaseIndex === -1) {
-                    for (let i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < players.length; i++) {
+                        if (!players[i]) {
+                            continue;
+                        }
                         res.push({
-                            player: logData.players[i],
+                            player: players[i],
                             data: {
                                 avg: 0.0,
                                 data: []
@@ -54,9 +58,12 @@
                         });
                     }
                 } else {
-                    for (let i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < players.length; i++) {
+                        if (!players[i]) {
+                            continue;
+                        }
                         res.push({
-                            player: logData.players[i],
+                            player: players[i],
                             data: this.buffsStatContainer.targetsCondiStats[this.targetPhaseIndex][i]
                         });
                     }

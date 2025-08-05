@@ -45,13 +45,14 @@
                 }
                 const res = [];
                 const activeTimes = this.phase.playerActiveTimes;
-                const activeduration = this.activeduration;
-                for (let i = 0; i < logData.players.length; i++) {
-                    if (activeduration && activeTimes[i] < 1e-6) {
+                const activeduration = this.activeduration;        
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                for (let i = 0; i < players.length; i++) {
+                    if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                         continue;
                     }
                     res.push({
-                        player: logData.players[i],
+                        player: players[i],
                         data: activeduration ? this.buffVolumesStatContainer.boonVolumeActiveDictionaries[this.playerindex][i] : this.buffVolumesStatContainer.boonVolumeDictionaries[this.playerindex][i]
                     });
                 }

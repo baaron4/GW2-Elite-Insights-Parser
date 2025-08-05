@@ -28,6 +28,7 @@
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
                 var getData = function (uptimesStats) {
                     var uptimes = [];                    
                     var avg = [],
@@ -35,9 +36,9 @@
                         totalAvg = [];
                     var groupCount = [],
                         totalCount = 0;
-                    for (var i = 0; i < logData.players.length; i++) {
-                        var player = logData.players[i];
-                        if (player.isFake) {
+                    for (var i = 0; i < players.length; i++) {
+                        var player = players[i];
+                        if (!player) {
                             continue;
                         }
                         uptimes.push({

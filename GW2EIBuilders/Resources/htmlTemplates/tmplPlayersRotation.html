@@ -208,15 +208,17 @@
             },
             players: function () {
                 var res = [];
-                for (var i = 0; i < logData.players.length; i++) {
-                    if (this.selectedPlayers[i].selected) {
-                        res.push(logData.players[i]);
+                const players = getActivePlayers(this.phase.start, this.phase.end);
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i] && this.selectedPlayers[i].selected) {
+                        res.push(players[i]);
                     }
                 }
                 return res;
             },
             _players: function () {
-                return logData.players;
+                const players = getActivePlayers(this.phase.start, this.phase.end);
+                return players;
             },
             graphid: function () {
                 return "playersrotation-" + '-' + this.phaseindex;

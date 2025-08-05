@@ -83,9 +83,10 @@
                 let totalCount = 0;
                 let groupBoonAvg = [];
                 let totalBoonAvg = 0;
-                for (let i = 0; i < logData.players.length; i++) {
-                    const player = logData.players[i];
-                    if (player.isFake) {
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                for (let i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
                         continue;
                     }
                     uptimes.push({

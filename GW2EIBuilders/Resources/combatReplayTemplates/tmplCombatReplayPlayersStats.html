@@ -20,8 +20,8 @@
             <div v-for="(group,id) in groups" v-if="group" class="d-flex flex-row align-items-center ml-2 mt-1">
                 <h5 v-if="!singleGroup" style="width:42px" class="text-center mt-2">Gr.{{id}}</h5>
                 <div class="d-flex flex-row flex-wrap align-items-center ml-1 mr-1" style="width:340px;border: 2px solid #888;">
-                    <div v-for="player in group" class="player-data ml-1" :class="{active: selectedplayerid === player.uniqueID}">
-                        <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
+                    <div v-for="playerData in group" class="player-data ml-1" :class="{active: selectedplayerid === playerData.player.uniqueID}">
+                        <combat-replay-player-stats-component :time="time" :buffs="buffs" :rotation="rotation" :playerindex="playerData.player.id" :buffstoshow="buffsToShow"></combat-replay-player-stats-component>
                     </div>
                 </div>
             </div>
@@ -50,15 +50,21 @@
             groups: function () {
                 var res = [];
                 var i = 0;
+                const players = getActivePlayers(this.time, this.time + 1);
                 for (i = 0; i < logData.players.length; i++) {
                     var playerData = logData.players[i];
-                    if (!animator.getActorData(logData.players[i].uniqueID)) {
+                    var crPlayer = animator.getActorData(playerData.uniqueID);
+                    if (!playerData) {
                         continue;
                     }
                     if (!res[playerData.group]) {
                         res[playerData.group] = [];
                     }
-                    res[playerData.group].push(playerData);
+                    res[playerData.group].push({
+                            player: playerData,
+                            crPlayer: playerData,
+                        }
+                    );
                 }
                 return res;
             }

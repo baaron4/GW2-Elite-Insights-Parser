@@ -87,8 +87,9 @@
             },
             groups: function () {
                 const aux = [];
-                for (let i = 0; i < logData.players.length; i++) {
-                    const playerData = logData.players[i];
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                for (let i = 0; i < players.length; i++) {
+                    const playerData = players[i];
                     if (playerData.isFake) {
                         continue;
                     }

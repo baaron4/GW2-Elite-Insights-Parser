@@ -68,8 +68,9 @@ function compileTemplates() {
         </div>
         `,
         computed: {
-            players: function() {
-                return logData.players;
+            players: function() {          
+                const phase = logData.phases[this.phaseindex];
+                return getActivePlayers(phase.start, phase.end);
             }
         }
     });

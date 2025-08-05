@@ -221,8 +221,12 @@
                     cols.push(target);
                 }
                 const damageArrayToUse = this.damageGraphName;
+                const players = getActivePlayers(this.timeToUse, this.timeToUse + 1)
                 for (let i = 0; i < this.graph.length; i++) {
-                    const player = logData.players[i];
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
                     const graphData = this.graph[i];
                     const dps = [];
                     function doCell(data, index) {

@@ -65,9 +65,13 @@
             // hps
             this.data = [];
             const data = this.data;
-            for (let i = 0; i < logData.players.length; i++) {
+            const players = getActivePlayers(this.phase.start, this.phase.end);
+            for (let i = 0; i < players.length; i++) {
                 const pText = [];
-                const player = logData.players[i];
+                const player = players[i];
+                if (!player) {
+                    continue;
+                }
                 for (let j = 0; j < this.phase.times.length; j++) {
                     pText.push(player.name);
                 }
@@ -213,8 +217,13 @@
                 };
                 incDPS.taken = incDPS.total;
                 const playerHPS = [];
-                for (let i = 0; i < logData.players.length; i++) {
-                    const healData = computePlayerDPS(logData.players[i], this.graphToUse(i), lim, phasebreaks,
+                const players = getActivePlayers(this.phase.start, this.phase.end);
+                for (let i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
+                    const healData = computePlayerDPS(player, this.graphToUse(i), lim, phasebreaks,
                         this.activetargets, cacheID, this.phase.times, this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                     playerHPS.push(healData.dps);
                     maxHPS.total = Math.max(maxHPS.total, healData.maxDPS.total);
@@ -227,7 +236,7 @@
                         allHPS.target[j] = (allHPS.target[j] || 0) + healData.dps.target[j];
                         allHPS.taken[j] = (allHPS.taken[j] || 0) + healData.dps.taken[j];
                     }
-                    const damageData = computePlayerDPS(logData.players[i], this.graph.players[i].damage, lim, phasebreaks,
+                    const damageData = computePlayerDPS(player, this.graph.players[i].damage, lim, phasebreaks,
                         [], cacheID + "incdamage-for-heal", this.phase.times, this.graphhealingdata.graphmode, DamageType.All);
                     for (let j = 0; j < damageData.dps.total.length; j++) {
                         incDPS.total[j] = (incDPS.taken[j] || 0) + damageData.dps.taken[j];
@@ -290,8 +299,9 @@
                 res.push(hpsData.allHPS[attributeToUse]);
                 res.push(hpsData.incDPS[attributeToUse]);
                 const maxHPS = hpsData.maxHPS[attributeToUse];
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
                 for (let i = 0; i < this.graph.players.length; i++) {
-                    if (logData.players[i].isFake) {
+                    if (!players[i]) {
                         continue;
                     }
                     const health = this.graph.players[i].healthStates;

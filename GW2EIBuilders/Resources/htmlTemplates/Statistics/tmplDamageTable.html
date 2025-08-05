@@ -211,7 +211,12 @@
                 var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
+                const players = getActivePlayers(this.phase.start, this.phase.end);
                 for (i = 0; i < this.phase.dpsStats.length; i++) {
+                    var player = players[i];
+                    if (!player) {
+                        continue;
+                    }
                     var dpsStat = this.phase.dpsStats[i];
                     var dpsTargetStat = [0, 0, 0, 0];
                     for (j = 0; j < this.activetargets.length; j++) {
@@ -220,7 +225,6 @@
                             dpsTargetStat[k] += tar[k];
                         }
                     }
-                    var player = logData.players[i];
                     if (!groups[player.group]) {
                         groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                     }

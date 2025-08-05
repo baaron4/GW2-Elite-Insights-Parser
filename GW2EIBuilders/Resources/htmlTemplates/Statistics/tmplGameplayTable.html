@@ -189,10 +189,11 @@
                     commons: [],
                     count: 0
                 };
+                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
                 for (var i = 0; i < this.phase.gameplayStats.length; i++) {
                     var commons = [];
-                    var player = logData.players[i];
-                    if (player.isFake) {
+                    var player = players[i];
+                    if (!player) {
                         continue;
                     }
                     if (!groups[player.group]) {
