@@ -291,19 +291,19 @@ public class Minions : Actor
         {
             return true;
         }
-        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log, Master.FirstAware, Master.LastAware).Any())
+        if (log.CombatData.HasEXTHealing && EXTHealing.GetOutgoingHealEvents(null, log).Any())
         {
             return true;
         }
-        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log, Master.FirstAware, Master.LastAware).Any())
+        if (log.CombatData.HasEXTBarrier && EXTBarrier.GetOutgoingBarrierEvents(null, log).Any())
         {
             return true;
         }
-        if (GetDamageEvents(null, log, Master.FirstAware, Master.LastAware).Any())
+        if (GetDamageEvents(null, log).Any())
         {
             return true;
         }
-        if (GetCastEvents(log, Master.FirstAware, Master.LastAware).Any(x => x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw && x.SkillID != SkillIDs.WeaponSwap && x.SkillID != SkillIDs.MirageCloakDodge))
+        if (GetCastEvents(log).Any(x => x.SkillID != SkillIDs.WeaponStow && x.SkillID != SkillIDs.WeaponDraw && x.SkillID != SkillIDs.WeaponSwap && x.SkillID != SkillIDs.MirageCloakDodge))
         {
             return true;
         }
