@@ -29,9 +29,6 @@
             };
         },
         computed: {
-            phase: function() {
-                return logData.phases[this.phaseindex];
-            },
             data: function () {
 				var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {

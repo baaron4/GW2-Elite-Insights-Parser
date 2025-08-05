@@ -129,7 +129,10 @@ var timeRefreshComponent = {
 
 var buffComponent = {
     props: ["phaseindex"],
-    computed: {         
+    computed: {
+        phase: function () {
+            return logData.phases[this.phaseindex];
+        },
         boons: function () {
             var data = [];
             for (var i = 0; i < logData.boons.length; i++) {
