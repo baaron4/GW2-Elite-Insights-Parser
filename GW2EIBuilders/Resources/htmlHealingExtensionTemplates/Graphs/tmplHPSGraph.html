@@ -114,7 +114,7 @@
         watch: {
             playerindex: {
                 handler: function () {
-                    for (let i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < this.data.length; i++) {
                         this.data[i].line.width = i === this.playerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
@@ -283,7 +283,7 @@
                         attributeToUse = "taken";
                         break;
                 }
-                for (let i = 0; i < logData.players.length; i++) {
+                for (let i = 0; i < hpsData.playerHPS.length; i++) {
                     const pHPS = hpsData.playerHPS[i];
                     res.push(pHPS[attributeToUse]);
                 }

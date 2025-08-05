@@ -134,6 +134,9 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             graphname: function () {
                 let name = getHealingGraphName(this.graphhealingdata.healingmode, this.graphhealingdata.graphmode);
                 switch (this.graphhealingdata.hpsmode) {

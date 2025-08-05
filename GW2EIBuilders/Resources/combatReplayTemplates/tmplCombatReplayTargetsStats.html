@@ -8,8 +8,8 @@
         </ul>
         <div class="mt-1 combat-actor-status-container scrollable-y">
             <div class="d-flex flex-column justify-content-center align-items-center">
-                <div v-for="status in targets" v-if="render(status)" class="target-data ml-1 mr-1" :class="{active: selectedtargetid === status.target.uniqueID}">
-                    <combat-replay-target-stats-component :time="time" :targetindex="status.target.id" :buffstoshow="buffsToShow"/>
+                <div v-for="targetData in targets" v-if="render(targetData)" class="target-data ml-1 mr-1" :class="{active: selectedtargetid === targetData.target.uniqueID}">
+                    <combat-replay-target-stats-component :time="time" :targetindex="targetData.target.id" :buffstoshow="buffsToShow"/>
                 </div>
             </div>
         </div>
@@ -26,8 +26,8 @@
             }
         },
         methods: {
-            render: function (status) {
-                var crTarget = status.crTarget;
+            render: function (targetData) {
+                var crTarget = targetData.crTarget;
                 return crTarget.canDraw() && ((crTarget.start === -1 && crTarget.end === -1) || crTarget.start <= this.time && crTarget.end >= this.time);
             }
         },

@@ -52,7 +52,7 @@
 <script>
 
     Vue.component("player-component", {
-        props: ["players"],
+        props: ["players", "phaseindex"],
         template: `${template}`,
         methods: {
             getIcon: function (path) {
@@ -89,6 +89,9 @@
             }
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             scoreV2: function() {
                 return logData.evtcBuild > 20210800;
             },

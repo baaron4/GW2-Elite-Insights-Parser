@@ -96,7 +96,7 @@
         watch: {
             playerindex: {
                 handler: function () {
-                    for (var i = 0; i < logData.players.length; i++) {
+                    for (var i = 0; i < this.data.length; i++) {
                         this.data[i].line.width = i === this.playerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
@@ -238,7 +238,7 @@
                         attributeToUse = "taken";
                         break;
                 }
-                for (i = 0; i < logData.players.length; i++) {
+                for (i = 0; i < dpsData.playerDPS.length; i++) {
                     var pDPS = dpsData.playerDPS[i];
                     res.push(pDPS[attributeToUse]);
                 }
