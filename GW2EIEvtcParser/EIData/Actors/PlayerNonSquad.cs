@@ -16,10 +16,5 @@ public class PlayerNonSquad : PlayerActor
         Character = Spec.ToString() + " pl-" + AgentItem.InstID;
         Account = "Non Squad Player " + (++NonSquadPlayers);
     }
-    protected override void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)
-    {
-        // Down, Dead, Alive, Spawn and Despawn events are not reliable
-        replay.Trim(FirstAware, LastAware);
-    }
 
 }
