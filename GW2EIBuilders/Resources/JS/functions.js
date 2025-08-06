@@ -1051,7 +1051,7 @@ function getActivePlayers(start, end) {
     var res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.IsEnglobed && (player.lastAware <= start || player.firstAware >= end)) {
+        if (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end)) {
             res.push(null);
         } else {
             res.push(player);
@@ -1064,7 +1064,7 @@ function getActiveNonFakePlayers(start, end) {
     var res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isFake || (player.IsEnglobed && (player.lastAware <= start || player.firstAware >= end))) {
+        if (player.isFake || (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end))) {
             res.push(null);
         } else {
             res.push(player);

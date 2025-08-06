@@ -50,13 +50,13 @@
             groups: function () {
                 var res = [];
                 var i = 0;
-                const players = getActivePlayers(this.time, this.time + 1);
-                for (i = 0; i < logData.players.length; i++) {
-                    var playerData = logData.players[i];
-                    var crPlayer = animator.getActorData(playerData.uniqueID);
+                const players = getActivePlayers(this.time * 0.001, (this.time + 1) * 0.001);
+                for (i = 0; i < players.length; i++) {
+                    var playerData = players[i];
                     if (!playerData) {
                         continue;
                     }
+                    var crPlayer = animator.getActorData(playerData.uniqueID);
                     if (!res[playerData.group]) {
                         res[playerData.group] = [];
                     }

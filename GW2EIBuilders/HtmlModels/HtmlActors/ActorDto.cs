@@ -14,8 +14,8 @@ internal abstract class ActorDto
     public uint Heal;
     public string Icon;
     public long Health;
-    public long FirstAware;
-    public long LastAware;
+    public double FirstAware;
+    public double LastAware;
     public bool IsEnglobed;
     public List<MinionDto> Minions;
     public ActorDetailsDto Details;
@@ -31,8 +31,8 @@ internal abstract class ActorDto
         Tough = actor.Toughness;
         Details = details;
         UniqueID = actor.UniqueID;
-        FirstAware = actor.FirstAware;
-        LastAware = actor.LastAware;
+        FirstAware = actor.FirstAware / 1000.0;
+        LastAware = actor.LastAware / 1000.0;
         IsEnglobed = actor.AgentItem.IsEnglobedAgent;
         var minions = actor.GetMinions(log);
         Minions = new(minions.Count);
