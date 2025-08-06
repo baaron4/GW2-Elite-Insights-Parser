@@ -83,7 +83,7 @@
                 let totalCount = 0;
                 let groupBoonAvg = [];
                 let totalBoonAvg = 0;
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let i = 0; i < players.length; i++) {
                     const player = players[i];
                     if (!player) {

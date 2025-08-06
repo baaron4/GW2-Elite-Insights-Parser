@@ -65,7 +65,7 @@
             // hps
             this.data = [];
             const data = this.data;
-            const players = getActivePlayers(this.phase.start, this.phase.end);
+            const players = getActivePlayersForPhase(this.phase);
             for (let i = 0; i < players.length; i++) {
                 const pText = [];
                 const player = players[i];
@@ -217,7 +217,7 @@
                 };
                 incDPS.taken = incDPS.total;
                 const playerHPS = [];
-                const players = getActivePlayers(this.phase.start, this.phase.end);
+                const players = getActivePlayersForPhase(this.phase);
                 for (let i = 0; i < players.length; i++) {
                     const player = players[i];
                     if (!player) {
@@ -299,7 +299,7 @@
                 res.push(hpsData.allHPS[attributeToUse]);
                 res.push(hpsData.incDPS[attributeToUse]);
                 const maxHPS = hpsData.maxHPS[attributeToUse];
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let i = 0; i < this.graph.players.length; i++) {
                     if (!players[i]) {
                         continue;

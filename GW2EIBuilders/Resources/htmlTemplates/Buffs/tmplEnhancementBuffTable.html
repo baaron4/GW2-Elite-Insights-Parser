@@ -23,7 +23,7 @@
                     return this.cache.get(id);
                 }
 
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var getData = function (stats) {
                     const uptimes = [];
                     for (let i = 0; i < players.length; i++) {

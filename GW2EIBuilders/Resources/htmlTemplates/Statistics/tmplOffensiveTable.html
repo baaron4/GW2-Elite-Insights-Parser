@@ -348,7 +348,7 @@
                     data: new Array(dataLength).fill(0),
                     count: 0
                 };
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = new Array(dataLength).fill(0);
                     var player = players[i];
@@ -403,7 +403,7 @@
                     data: new Array(dataLength).fill(0),
                     count: 0
                 };        
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = new Array(dataLength).fill(0);
                     var player = players[i];

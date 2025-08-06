@@ -86,7 +86,7 @@
                     }
                     return res;
                 }
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < players.length; i++) {
                     if(!players[i]) {
                         continue;

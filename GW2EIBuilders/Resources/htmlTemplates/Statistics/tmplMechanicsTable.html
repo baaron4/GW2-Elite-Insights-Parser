@@ -170,7 +170,7 @@
             playerMechHeader: function () {
                 const allPlayerMechs = playerMechanics();
                 var res = [];   
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let j = 0; j < allPlayerMechs.length; j++) {
                     allPlayerMechs[j]._index = j;
                     for (var i = 0; i < players.length; i++) {
@@ -187,7 +187,7 @@
                 return res;
             },
             playerMechRows: function () {
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var rows = [];
                 for (var i = 0; i < players.length; i++) {
                     var player = players[i];

@@ -155,7 +155,7 @@
                     total.push(0);
                 }
                 const groups = [];
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
                     const player = players[i];
                     if (!player) {

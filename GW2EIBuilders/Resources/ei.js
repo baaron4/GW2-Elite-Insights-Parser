@@ -70,7 +70,7 @@ function compileTemplates() {
         computed: {
             players: function() {          
                 const phase = logData.phases[this.phaseindex];
-                return getActivePlayers(phase.start, phase.end);
+                return getActivePlayersForPhase(phase);
             }
         }
     });
@@ -134,6 +134,20 @@ function mainLoad() {
             active: firstActive === phase,
             focus: -1
         });
+        phase._activityPhase = phase;
+        if (phase.type === PhaseTypes.SUBENCOUNTER) {
+            for (var j = 0; j < logData.phases.length; j++) {
+                var activityPhase = logData.phases[j];
+                if (activityPhase.type !== PhaseTypes.ENCOUNTER) {
+                    continue;
+                }
+                if (phase.start < activityPhase.start || phase.end > activityPhase.end) {
+                    continue;
+                }
+                phase._activityPhase = activityPhase;
+                break;
+            }
+        }
     }
     for (var i = 0; i < logData.targets.length; i++) {
         var target = logData.targets[i];

@@ -83,7 +83,7 @@
                 let groupCount = [];
                 let totalCount = 0;
                 //
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this);
                 for (var i = 0; i < players.length; i++) {
                     const player = players[i];
                     if (!player) {

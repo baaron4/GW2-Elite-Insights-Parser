@@ -25,7 +25,7 @@
                 const activeduration = this.activeduration;
                 const activeTimes = this.phase.playerActiveTimes;
 
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var getData = function (uptimesStats) {
                     var uptimes = [];                    
                     var avg = [],

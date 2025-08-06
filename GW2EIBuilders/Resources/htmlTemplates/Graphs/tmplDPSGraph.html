@@ -53,7 +53,7 @@
             // dps
             this.data = [];
             var data = this.data;
-            const players = getActivePlayers(this.phase.start, this.phase.end);
+            const players = getActivePlayersForPhase(this.phase);
             for (var i = 0; i < players.length; i++) {
                 var pText = [];
                 const player = players[i];
@@ -182,7 +182,7 @@
                 };
                 var playerDPS = [];
                 var damageArrayToUse = this.damageGraphName;              
-                const players = getActivePlayers(this.phase.start, this.phase.end);
+                const players = getActivePlayersForPhase(this.phase);
                 for (var i = 0; i < players.length; i++) {
                     const player = players[i];
                     if (!player) {

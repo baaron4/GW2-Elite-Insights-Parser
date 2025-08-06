@@ -208,7 +208,7 @@
                     total.push(0, 0);
                 }
                 const groups = [];
-                const players = getActivePlayers(this.phase.start, this.phase.end);
+                const players = getActivePlayersForPhase(this.phase);
                 for (let i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
                     const player = players[i];
                     if (!player) {

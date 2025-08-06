@@ -192,7 +192,7 @@ var buffComponent = {
         orderedSpecs: function () {
             var res = [];
             var aux = new Set();
-            const players = getActivePlayers(this.phase.start, this.phase.end);
+            const players = getActivePlayersForPhase(this.phase);
             for (var i = 0; i < specs.length; i++) {
                 var spec = specs[i];
                 var pBySpec = [];

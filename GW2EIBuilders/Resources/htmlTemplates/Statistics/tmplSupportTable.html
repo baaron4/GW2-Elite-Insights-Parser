@@ -159,7 +159,7 @@
                 var sums = [];
                 var total = new Array(dataLength).fill(0);
                 var groups = [];
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.supportStats.length; i++) {
                     var sup = this.phase.supportStats[i];
                     var player = players[i];

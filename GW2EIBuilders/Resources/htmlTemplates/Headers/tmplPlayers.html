@@ -111,7 +111,7 @@
             },
             groups: function () {
                 var aux = [];
-                const players = getActiveNonFakePlayers(this.phase.start, this.phase.end);
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < players.length; i++) {
                     var playerData = players[i];
                     if (!playerData) {
@@ -137,7 +137,7 @@
             runningExtensions: function () {
                 if (logData.usedExtensions) {
                     var res = [];
-                    const players = getActivePlayers(this.phase.start, this.phase.end);
+                    const players = getActiveNonFakePlayersForPhase(this.phase);
                     for (var i = 0; i < players.length; i++) {
                         var playerData = players[i];
                         if (!playerData) {

@@ -94,7 +94,7 @@
         computed: {
             activeInPhasePlayer: function() {
                 const phase = logData.phases[this.phaseindex];
-                const activePlayers = getActivePlayers(phase.start, phase.end);
+                const activePlayers = getActivePlayersForPhase(phase);
                 if (activePlayers.filter(x => x && x.id === this.activeplayer).length > 0) {
                     return this.activeplayer;
                 }

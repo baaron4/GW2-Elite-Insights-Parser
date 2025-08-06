@@ -216,7 +216,7 @@
                 res.push(hpsData.playerHPS.target);
                 res.push(hpsData.playerHPS.cleave);
                 res.push(hpsData.playerHPS.taken);
-                const players = getActivePlayers(this.phase.start, this.phase.end);
+                const players = getActivePlayersForPhase(this.phase);
                 for (let i = 0; i < this.graph.players.length; i++) {
                     if (!players[i]) {
                         continue;
