@@ -19,6 +19,14 @@ public class PhaseData
 
     public bool BreakbarPhase { get; internal set; } = false;
 
+    public PhaseType Type { get; private set; }
+    public enum PhaseType
+    {
+        SubEncounter = 0,
+        Encounter = 1,
+        Instance = 2,
+    };
+
     public enum TargetPriority
     {
         Main = 0,
@@ -39,16 +47,26 @@ public class PhaseData
     public IReadOnlyDictionary<SingleActor, PhaseTargetData> Targets => _targets;
     private readonly Dictionary<SingleActor, PhaseTargetData> _targets = [];
 
-    internal PhaseData(long start, long end)
+    internal PhaseData(long start, long end) : this(start, end, PhaseType.SubEncounter)
+    {
+    }
+
+    internal PhaseData(long start, long end, PhaseType type)
     {
         Start = start;
         End = end;
         DurationInM = (End - Start) / 60000;
         DurationInMS = (End - Start);
         DurationInS = (End - Start) / 1000;
+        Type = type;
     }
 
     internal PhaseData(long start, long end, string name) : this(start, end)
+    {
+        Name = name;
+    }
+
+    internal PhaseData(long start, long end, string name, PhaseType type) : this(start, end, type)
     {
         Name = name;
     }

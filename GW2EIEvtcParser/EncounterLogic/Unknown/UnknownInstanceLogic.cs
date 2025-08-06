@@ -118,6 +118,33 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         fightData.SetSuccess(true, fightData.FightEnd);
     }
 
+    private static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    {
+        phases[0].AddTargets(targets, log);
+        foreach (SingleActor target in targets)
+        {
+            long start = target.FirstAware;
+            long end = target.LastAware;
+            var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+            if (enterCombat != null)
+            {
+                var exitCombat = log.CombatData.GetExitCombatEvents(target.AgentItem).FirstOrDefault(x => x.Time < enterCombat.Time);
+                if (exitCombat == null)
+                {
+                    start = enterCombat.Time;
+                }
+            }
+            var dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+            if (dead != null)
+            {
+                end = dead.Time;
+            }
+            var phase = new PhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, PhaseData.PhaseType.Encounter);
+            phase.AddTarget(target, log);
+            phase.AddParentPhase(phases[0]);
+            phases.Add(phase);
+        }
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases;

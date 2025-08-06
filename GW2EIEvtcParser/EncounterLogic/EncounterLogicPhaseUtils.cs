@@ -8,33 +8,6 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicPhaseUtils
 {
-    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
-    {
-        phases[0].AddTargets(targets, log);
-        foreach (SingleActor target in targets)
-        {
-            long start = target.FirstAware;
-            long end = target.LastAware;
-            var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
-            if (enterCombat != null)
-            {
-                var exitCombat = log.CombatData.GetExitCombatEvents(target.AgentItem).FirstOrDefault(x => x.Time < enterCombat.Time);
-                if (exitCombat == null)
-                {
-                    start = enterCombat.Time;
-                }
-            }
-            var dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
-            if (dead != null)
-            {
-                end = dead.Time;
-            }
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character);
-            phase.AddTarget(target, log);
-            phase.AddParentPhase(phases[0]);
-            phases.Add(phase);
-        }
-    }
     internal static List<PhaseData> GetPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
@@ -44,12 +17,12 @@ internal static class EncounterLogicPhaseUtils
             var logEndEvent = log.CombatData.GetSquadCombatEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
             if (logEndEvent != null)
             {
-                var fightPhase = new PhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++));
+                var fightPhase = new PhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), PhaseData.PhaseType.Encounter);
                 phases.Add(fightPhase);
             }
             else
             {
-                var fightPhase = new PhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++));
+                var fightPhase = new PhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), PhaseData.PhaseType.Encounter);
                 phases.Add(fightPhase);
                 break;
             }
@@ -208,19 +181,19 @@ internal static class EncounterLogicPhaseUtils
         {
             return
             [
-                new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance")
+                new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance", PhaseData.PhaseType.Instance)
             ];
         }
         return
         [
-            new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
+            new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight", PhaseData.PhaseType.Encounter)
         ];
     }
 
     internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData parentPhase, string phaseName, long start, long end, bool success, bool cm, bool lcm = false)
     {
 
-        var phase = new PhaseData(start, end, phaseName);
+        var phase = new PhaseData(start, end, phaseName, PhaseData.PhaseType.Encounter);
         phases.Add(phase);
         encounterPhases.Add(phase);
         if (lcm)

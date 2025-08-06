@@ -366,15 +366,7 @@ public abstract class FightLogic
     internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        if (IsInstance)
-        {
-            phases[0].AddTargets(Targets, log);
-            AddPhasesPerTarget(log, phases, Targets.Where(x => x.LastAware - x.FirstAware > MinimumInCombatDuration));
-        } 
-        else
-        {
-            phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
         return phases;
     }
 

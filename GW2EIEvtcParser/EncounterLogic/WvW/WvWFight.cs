@@ -64,7 +64,7 @@ internal class WvWFight : FightLogic
         }
         if (_detailed)
         {
-            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, _isFromInstance ? "Detailed Full Instance" : "Detailed Full Fight");
+            var detailedPhase = new PhaseData(phases[0].Start, phases[0].End, _isFromInstance ? "Detailed Full Instance" : "Detailed Full Fight", _isFromInstance ? PhaseData.PhaseType.Instance : PhaseData.PhaseType.Encounter);
             detailedPhase.AddTargets(Targets, log);
             if (detailedPhase.Targets.Any())
             {

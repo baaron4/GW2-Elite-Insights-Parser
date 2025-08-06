@@ -261,4 +261,10 @@ const RotationStatus = {
     INSTANT: 4
 };
 
+const PhaseTypes = {
+    SUBENCOUNTER: 0,
+    ENCOUNTER: 1,
+    INSTANCE: 2,
+};
+
 const EIUrlParams = new URLSearchParams(window.location.search);

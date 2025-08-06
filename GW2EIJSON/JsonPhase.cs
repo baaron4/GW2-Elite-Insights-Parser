@@ -50,6 +50,13 @@ public class JsonPhase
     /// </summary>
     /// <seealso cref="JsonLog.Phases"/>
     public IReadOnlyList<int>? SubPhases;
+    /// <summary>
+    /// Type of the phase in: \n
+    /// - "SubEncounter" for phases that a part of an encounter
+    /// - "Encounter" for phases representing a complete encounter
+    /// - "Instance" for phases representing a complete instance
+    /// </summary>
+    public string PhaseType;
 
     /// <summary>
     /// Indicates that the phase is a breakbar phase \n
