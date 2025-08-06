@@ -135,7 +135,7 @@ function mainLoad() {
             focus: -1
         });
         phase._activityPhase = phase;
-        if (phase.type === PhaseTypes.SUBENCOUNTER) {
+        if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
             for (var j = 0; j < logData.phases.length; j++) {
                 var activityPhase = logData.phases[j];
                 if (activityPhase.type !== PhaseTypes.ENCOUNTER) {

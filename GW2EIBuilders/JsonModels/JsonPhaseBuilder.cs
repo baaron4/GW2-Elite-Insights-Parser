@@ -49,8 +49,11 @@ internal static class JsonPhaseBuilder
         jsPhase.TargetPriorities = targetPriorities;
         switch(phase.Type)
         {
-            case PhaseData.PhaseType.SubEncounter:
-                jsPhase.PhaseType = "SubEncounter";
+            case PhaseData.PhaseType.SubPhase:
+                jsPhase.PhaseType = "SubPhase";
+                break;
+            case PhaseData.PhaseType.TimeFrame:
+                jsPhase.PhaseType = "TimeFrame";
                 break;
             case PhaseData.PhaseType.Encounter:
                 jsPhase.PhaseType = "Encounter";

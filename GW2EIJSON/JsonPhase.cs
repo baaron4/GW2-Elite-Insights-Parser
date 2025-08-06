@@ -52,9 +52,10 @@ public class JsonPhase
     public IReadOnlyList<int>? SubPhases;
     /// <summary>
     /// Type of the phase in: \n
-    /// - "SubEncounter" for phases that a part of an encounter
-    /// - "Encounter" for phases representing a complete encounter
-    /// - "Instance" for phases representing a complete instance
+    /// - "SubPhase" for phases that are a part of an encounter \n
+    /// - "TimeFrame" for phases that are a part of an encounter, focusing on a specific time frame of no mechanical bearing \n
+    /// - "Encounter" for phases representing a complete encounter \n
+    /// - "Instance" for phases representing a complete instance \n
     /// </summary>
     public string PhaseType;
 

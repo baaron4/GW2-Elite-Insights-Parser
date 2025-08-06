@@ -15,6 +15,8 @@ public class FightData
     private List<PhaseData> _phases = [];
     public readonly int TriggerID;
     public readonly FightLogic Logic;
+
+    public bool IsInstance => Logic.IsInstance;
     public long FightEnd { get; private set; } = long.MaxValue;
     public readonly long FightStart = 0;
     public long FightDuration => FightEnd;
@@ -336,7 +338,7 @@ public class FightData
                 throw new InvalidOperationException("A phase representing the full log must be present");
             }
             // Auto add dummy instance if no targets in main phase
-            if (Logic.IsInstance && _phases[0].Targets.Count == 0)
+            if (IsInstance && _phases[0].Targets.Count == 0)
             {
                 _phases[0].AddTargets(Logic.Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
             }

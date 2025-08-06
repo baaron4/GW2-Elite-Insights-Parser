@@ -190,7 +190,7 @@ internal static class EncounterLogicPhaseUtils
         ];
     }
 
-    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData parentPhase, string phaseName, long start, long end, bool success, bool cm, bool lcm = false)
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, bool cm, bool lcm = false)
     {
 
         var phase = new PhaseData(start, end, phaseName, PhaseData.PhaseType.Encounter);
@@ -212,11 +212,11 @@ internal static class EncounterLogicPhaseUtils
         {
             phase.Name += " (Failure)";
         }
-        phase.AddParentPhase(parentPhase);
+        phase.AddParentPhase(instancePhase);
         phase.AddTargets(targets, log);
         phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
         phase.AddTargets(nonBlockingBosses, log, PhaseData.TargetPriority.NonBlocking);
-        parentPhase.AddTargets(targets.Where(x => x != null && !x.IsSpecies(TargetID.DummyTarget)), log);
+        instancePhase.AddTargets(targets.Where(x => x != null && !x.IsSpecies(TargetID.DummyTarget)), log);
         return phase;
     }
 
