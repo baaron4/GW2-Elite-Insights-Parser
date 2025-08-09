@@ -367,6 +367,10 @@ public abstract class LogLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
+        if (IsInstance)
+        {
+            AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration));
+        }
         return phases;
     }
 

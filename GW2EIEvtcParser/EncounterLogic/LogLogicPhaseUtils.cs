@@ -8,6 +8,36 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal static class LogLogicPhaseUtils
 {
+
+    internal static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
+    {
+        phases[0].AddTargets(targets, log);
+        foreach (SingleActor target in targets)
+        {
+            long start = target.FirstAware;
+            long end = target.LastAware;
+            var enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+            if (enterCombat != null)
+            {
+                var exitCombat = log.CombatData.GetExitCombatEvents(target.AgentItem).FirstOrDefault(x => x.Time < enterCombat.Time);
+                if (exitCombat == null)
+                {
+                    start = enterCombat.Time;
+                }
+            }
+            var dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+            bool success = false;
+            if (dead != null)
+            {
+                success = true;
+                end = dead.Time;
+            }
+            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.LogMode.Normal);
+            phase.AddTarget(target, log);
+            phase.AddParentPhase(phases[0]);
+            phases.Add(phase);
+        }
+    }
     internal static List<PhaseData> GetPhasesBySquadCombatStartEnd(ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
