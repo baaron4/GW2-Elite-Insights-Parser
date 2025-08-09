@@ -225,3 +225,28 @@ Large Golem: 0x080109
 Medium Golem: 0x08010A
 
 0xXXX2XX indicates a full instance log.
+
+## Convergences
+Convergences are all full instance logs.
+### Outer Nayos
+Unknown: 0x090100
+
+Demon Knight: 0x090101
+
+Sorrow: 0x090102
+
+Dreadwing: 0x090103
+
+Hell Sister: 0x090104
+
+Umbriel: 0x090105
+
+### Mount Balrior
+
+Unknown: 0x090200
+
+Greer, the Blightbringer: 0x090201
+
+Decima, the Stormsinger: 0x090202
+
+Ura, the Steamshrieker: 0x090203
