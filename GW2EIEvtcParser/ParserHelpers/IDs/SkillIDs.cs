@@ -5042,5 +5042,7 @@ public static class SkillIDs
     #endregion
     #region Visions of Eternity
     public const long CosmicWisdomDervishSkill = long.MaxValue;
+    public const long EnterCycloneBow = long.MaxValue;
+    public const long ExitCycloneBow = long.MaxValue;
     #endregion
 }

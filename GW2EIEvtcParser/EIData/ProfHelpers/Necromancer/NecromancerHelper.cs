@@ -182,7 +182,8 @@ internal static class NecromancerHelper
     {
         return IsDeathShroudTransform(id)
             || ReaperHelper.IsReaperShroudTransform(id)
-            || HarbingerHelper.IsHarbingerShroudTransform(id);
+            || HarbingerHelper.IsHarbingerShroudTransform(id)
+            || RitualistHelper.IsRitualistShroudTransform(id);
     }
 
     private static readonly HashSet<int> Minions =

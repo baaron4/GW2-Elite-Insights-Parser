@@ -1483,7 +1483,9 @@ public class SkillItem
         || VindicatorHelper.IsLegendSwap(ID)
         || ConduitHelper.IsLegendSwap(ID)
         || NecromancerHelper.IsDeathShroudTransform(ID)
-        || HarbingerHelper.IsHarbingerShroudTransform(ID);
+        || HarbingerHelper.IsHarbingerShroudTransform(ID)
+        || RitualistHelper.IsRitualistShroudTransform(ID) // TODO: Verify if needed, Reaper doesn't need it
+        || GaleshotHelper.IsCycloneBowTransformation(ID); // TODO: Verify if needed, Druid doesn't need it
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
         || IsAnimatedDodge(skillData);
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID
