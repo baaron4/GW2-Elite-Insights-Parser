@@ -42,46 +42,55 @@ public class BuffsContainer
             HeraldHelper.Buffs,
             RenegadeHelper.Buffs,
             VindicatorHelper.Buffs,
+            ConduitHelper.Buffs,
             //
             WarriorHelper.Buffs,
             BerserkerHelper.Buffs,
             SpellbreakerHelper.Buffs,
             BladeswornHelper.Buffs,
+            ParagonHelper.Buffs,
             //
             GuardianHelper.Buffs,
             DragonhunterHelper.Buffs,
             FirebrandHelper.Buffs,
             WillbenderHelper.Buffs,
+            LuminaryHelper.Buffs,
             //
             RangerHelper.Buffs,
             DruidHelper.Buffs,
             SoulbeastHelper.Buffs,
             UntamedHelper.Buffs,
+            GaleshotHelper.Buffs,
             //
             ThiefHelper.Buffs,
             DaredevilHelper.Buffs,
             DeadeyeHelper.Buffs,
             SpecterHelper.Buffs,
+            AntiquaryHelper.Buffs,
             //
             EngineerHelper.Buffs,
             ScrapperHelper.Buffs,
             HolosmithHelper.Buffs,
             MechanistHelper.Buffs,
+            AmalgamHelper.Buffs,
             //
             MesmerHelper.Buffs,
             ChronomancerHelper.Buffs,
             MirageHelper.Buffs,
             VirtuosoHelper.Buffs,
+            TroubadourHelper.Buffs,
             //
             NecromancerHelper.Buffs,
             ReaperHelper.Buffs,
             ScourgeHelper.Buffs,
             HarbingerHelper.Buffs,
+            RitualistHelper.Buffs,
             //
             ElementalistHelper.Buffs,
             TempestHelper.Buffs,
             WeaverHelper.Buffs,
             CatalystHelper.Buffs,
+            EvokerHelper.Buffs,
         };
         var currentBuffs = new List<Buff>();
         foreach (IReadOnlyList<Buff> buffs in AllBuffs)

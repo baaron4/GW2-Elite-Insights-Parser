@@ -330,6 +330,10 @@ internal static class ProfHelper
                     ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     CatalystHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
+                case Spec.Evoker:
+                    ElementalistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    EvokerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
                 //
                 case Spec.Necromancer:
                     NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -345,6 +349,10 @@ internal static class ProfHelper
                 case Spec.Harbinger:
                     NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     HarbingerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
+                case Spec.Ritualist:
+                    NecromancerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    RitualistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
                 //
                 case Spec.Mesmer:
@@ -362,6 +370,10 @@ internal static class ProfHelper
                     MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     VirtuosoHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
+                case Spec.Troubadour:
+                    MesmerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    TroubadourHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
                 //
                 case Spec.Thief:
                     ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -377,6 +389,10 @@ internal static class ProfHelper
                 case Spec.Specter:
                     ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     SpecterHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
+                case Spec.Antiquary:
+                    ThiefHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    AntiquaryHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
                 //
                 case Spec.Engineer:
@@ -394,6 +410,10 @@ internal static class ProfHelper
                     EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     MechanistHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
+                case Spec.Amalgam:
+                    EngineerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    AmalgamHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
                 //
                 case Spec.Ranger:
                     RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -409,6 +429,10 @@ internal static class ProfHelper
                 case Spec.Untamed:
                     RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     UntamedHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
+                case Spec.Galeshot:
+                    RangerHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    GaleshotHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
                 //
                 case Spec.Revenant:
@@ -426,6 +450,10 @@ internal static class ProfHelper
                     RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     VindicatorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
+                case Spec.Conduit:
+                    RevenantHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    ConduitHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
                 //
                 case Spec.Guardian:
                     GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -442,6 +470,10 @@ internal static class ProfHelper
                     GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     WillbenderHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
+                case Spec.Luminary:
+                    GuardianHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    LuminaryHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
                 //
                 case Spec.Warrior:
                     WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
@@ -457,6 +489,10 @@ internal static class ProfHelper
                 case Spec.Bladesworn:
                     WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     BladeswornHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    break;
+                case Spec.Paragon:
+                    WarriorHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
+                    ParagonHelper.InstantCastFinder.ForEach(x => instantCastFinders.Add(x));
                     break;
             }
         }
@@ -531,6 +567,9 @@ internal static class ProfHelper
                 ElementalistHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 CatalystHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
+            case Spec.Evoker:
+                ElementalistHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                break;
             // Engineer
             case Spec.Engineer:
                 EngineerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
@@ -541,6 +580,7 @@ internal static class ProfHelper
                 break;
             case Spec.Holosmith:
             case Spec.Mechanist:
+            case Spec.Amalgam:
                 EngineerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Guardian
@@ -553,6 +593,7 @@ internal static class ProfHelper
                 FirebrandHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Willbender:
+            case Spec.Luminary:
                 GuardianHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Mesmer
@@ -571,6 +612,9 @@ internal static class ProfHelper
                 MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 VirtuosoHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
+            case Spec.Troubadour:
+                MesmerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                break;
             // Necromancer
             case Spec.Necromancer:
             case Spec.Reaper:
@@ -584,6 +628,9 @@ internal static class ProfHelper
                 NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 HarbingerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
+            case Spec.Ritualist:
+                NecromancerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                break;
             // Ranger
             case Spec.Ranger:
                 RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
@@ -593,9 +640,8 @@ internal static class ProfHelper
                 DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Soulbeast:
-                RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
-                break;
             case Spec.Untamed:
+            case Spec.Galeshot:
                 RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Revenant
@@ -608,6 +654,7 @@ internal static class ProfHelper
                 RenegadeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Vindicator:
+            case Spec.Conduit:
                 RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             // Thief
@@ -620,6 +667,9 @@ internal static class ProfHelper
                 ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 SpecterHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
+            case Spec.Antiquary:
+                ThiefHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                break;
             // Warrior
             case Spec.Warrior:
             case Spec.Berserker:
@@ -628,6 +678,8 @@ internal static class ProfHelper
                 SpellbreakerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                 break;
             case Spec.Bladesworn:
+                break;
+            case Spec.Paragon:
                 break;
             default:
                 break;
@@ -660,6 +712,7 @@ internal static class ProfHelper
         Spec.Druid,
         Spec.Soulbeast,
         Spec.Untamed,
+        Spec.Galeshot,
     ];
 
     internal static bool CanUseRangerPets(Spec spec)

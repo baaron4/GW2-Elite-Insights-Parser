@@ -1481,6 +1481,7 @@ public class SkillItem
         || HeraldHelper.IsLegendSwap(ID)
         || RenegadeHelper.IsLegendSwap(ID)
         || VindicatorHelper.IsLegendSwap(ID)
+        || ConduitHelper.IsLegendSwap(ID)
         || NecromancerHelper.IsDeathShroudTransform(ID)
         || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge

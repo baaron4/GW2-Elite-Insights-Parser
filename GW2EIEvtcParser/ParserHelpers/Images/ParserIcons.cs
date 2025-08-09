@@ -39,76 +39,112 @@ internal static class ParserIcons
     public const string UnknownProfessionIcon = "https://i.imgur.com/UbvyFSt.png";
     public const string GenericGadgetIcon = "https://render.guildwars2.com/file/09AF0498D757B191E229C862F4AA360DA65C4FE1/1012386.png";
     // High Resolution Icons 200px
+    // Ranger
+    private const string HighResGaleshot = "";
     private const string HighResUntamed = "https://i.imgur.com/XpS1uAD.png";
     private const string HighResSoulbeast = "https://i.imgur.com/JbnYkEQ.png";
     private const string HighResDruid = "https://i.imgur.com/5wFMWn4.png";
     private const string HighResRanger = "https://i.imgur.com/RXcEJD8.png";
+    // Engineer
+    private const string HighResAmalgam = "";
     private const string HighResMechanist = "https://i.imgur.com/HlzLb2v.png";
     private const string HighResHolosmith = "https://i.imgur.com/rjspDs0.png";
     private const string HighResScrapper = "https://i.imgur.com/z5kr00B.png";
     private const string HighResEngineer = "https://i.imgur.com/lV62W3O.png";
+    // Thief
+    private const string HighResAntiquary = "";
     private const string HighResSpecter = "https://i.imgur.com/3el5P6G.png";
     private const string HighResDeadeye = "https://i.imgur.com/UOMFo4a.png";
     private const string HighResDaredevil = "https://i.imgur.com/8DzmCRv.png";
     private const string HighResThief = "https://i.imgur.com/ElrzmpL.png";
+    // Elementalist
+    private const string HighResEvoker = "";
     private const string HighResCatalyst = "https://i.imgur.com/uFK7Jun.png";
     private const string HighResWeaver = "https://i.imgur.com/Jf9nxTO.png";
     private const string HighResTempest = "https://i.imgur.com/9nq8itX.png";
     private const string HighResElementalist = "https://i.imgur.com/53NMPGH.png";
+    // Mesmer
+    private const string HighResTroubadour = "";
     private const string HighResVirtuoso = "https://i.imgur.com/0sJrcUI.png";
     private const string HighResMirage = "https://i.imgur.com/Nio5XPX.png";
     private const string HighResChronomancer = "https://i.imgur.com/mNOkkOE.png";
     private const string HighResMesmer = "https://i.imgur.com/Kz9OqpW.png";
+    // Necromancer
+    private const string HighResRitualist = "";
     private const string HighResHarbinger = "https://i.imgur.com/Pwk9rh7.png";
     private const string HighResScourge = "https://i.imgur.com/8aQcxo9.png";
     private const string HighResReaper = "https://i.imgur.com/y0Y5ECT.png";
     private const string HighResNecromancer = "https://i.imgur.com/jvwYgmA.png";
+    // Warrior
+    private const string HighResParagon = "";
     private const string HighResBladesworn = "https://i.imgur.com/90j009t.png";
     private const string HighResSpellbreaker = "https://i.imgur.com/FTh03SH.png";
     private const string HighResBerserker = "https://i.imgur.com/0ijFUUG.png";
     private const string HighResWarrior = "https://i.imgur.com/j82eNjR.png";
+    // Guardian
+    private const string HighResLuminary = "";
     private const string HighResWillbender = "https://i.imgur.com/WhIEbGZ.png";
     private const string HighResFirebrand = "https://i.imgur.com/J5EFywD.png";
     private const string HighResDragonhunter = "https://i.imgur.com/pSVMnVu.png";
     private const string HighResGuardian = "https://i.imgur.com/LN1WJ6x.png";
+    // Revenant
+    private const string HighResConduit = "";
     private const string HighResVindicator = "https://i.imgur.com/5RDwglO.png";
     private const string HighResRenegade = "https://i.imgur.com/CtJvKM0.png";
     private const string HighResHerald = "https://i.imgur.com/wWQn0uI.png";
     private const string HighResRevenant = "https://i.imgur.com/giJtxPu.png";
 
     // Base Resolution Icons 20px
+    // Ranger
+    private const string BaseResGaleshot = "";
     private const string BaseResUntamed = "https://i.imgur.com/u8l36Pw.png";
     private const string BaseResSoulbeast = "https://i.imgur.com/1uDdNtU.png";
     private const string BaseResDruid = "https://i.imgur.com/Glb39dj.png";
     private const string BaseResRanger = "https://i.imgur.com/r7TAcjS.png";
+    // Engineer
+    private const string BaseResAmalgam = "";
     private const string BaseResMechanist = "https://i.imgur.com/1jUOMlX.png";
     private const string BaseResHolosmith = "https://i.imgur.com/Q96yagv.png";
     private const string BaseResScrapper = "https://i.imgur.com/Cd9yD43.png";
     private const string BaseResEngineer = "https://i.imgur.com/hckhnZy.png";
+    // Thief
+    private const string BaseResAntiquary = "";
     private const string BaseResSpecter = "https://i.imgur.com/nVAyYVQ.png";
     private const string BaseResDeadeye = "https://i.imgur.com/kryyJRy.png";
     private const string BaseResDaredevil = "https://i.imgur.com/RiCJalE.png";
     private const string BaseResThief = "https://i.imgur.com/dS8un97.png";
+    // Elementalist
+    private const string BaseResEvoker = "";
     private const string BaseResCatalyst = "https://i.imgur.com/2B73rSk.png";
     private const string BaseResWeaver = "https://i.imgur.com/03RLBaX.png";
     private const string BaseResTempest = "https://i.imgur.com/FnLyZvk.png";
     private const string BaseResElementalist = "https://i.imgur.com/2ybEpCV.png";
+    // Mesmer
+    private const string BaseResTroubadour = "";
     private const string BaseResVirtuoso = "https://i.imgur.com/sncfljQ.png";
     private const string BaseResMirage = "https://i.imgur.com/fL88z7p.png";
     private const string BaseResChronomancer = "https://i.imgur.com/rI1tW64.png";
     private const string BaseResMesmer = "https://i.imgur.com/FXgZQ46.png";
+    // Necromancer
+    private const string BaseResRitualist = "";
     private const string BaseResHarbinger = "https://i.imgur.com/PwhIT4u.png";
     private const string BaseResScourge = "https://i.imgur.com/uVdgw3H.png";
     private const string BaseResReaper = "https://i.imgur.com/X463V90.png";
     private const string BaseResNecromancer = "https://i.imgur.com/kK3l1C1.png";
+    // Warrior
+    private const string BaseResParagon = "";
     private const string BaseResBladesworn = "https://i.imgur.com/mFzTJXv.png";
     private const string BaseResSpellbreaker = "https://i.imgur.com/A6JTWBV.png";
     private const string BaseResBerserker = "https://i.imgur.com/dNY6e8n.png";
     private const string BaseResWarrior = "https://i.imgur.com/ejI5STj.png";
+    // Guardian
+    private const string BaseResLuminary = "";
     private const string BaseResWillbender = "https://i.imgur.com/pIFrNLa.png";
     private const string BaseResFirebrand = "https://i.imgur.com/TOsmJOl.png";
     private const string BaseResDragonhunter = "https://i.imgur.com/GqKocpf.png";
     private const string BaseResGuardian = "https://i.imgur.com/l329bR4.png";
+    // Revenant
+    private const string BaseResConduit = "";
     private const string BaseResVindicator = "https://i.imgur.com/hKBqtWE.png";
     private const string BaseResRenegade = "https://i.imgur.com/whOAxsp.png";
     private const string BaseResHerald = "https://i.imgur.com/O7kekkb.png";
@@ -687,38 +723,56 @@ internal static class ParserIcons
     /// </summary>
     internal readonly static IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
     {
+        // Ranger
+        { Spec.Galeshot, HighResGaleshot },
         { Spec.Untamed, HighResUntamed },
         { Spec.Soulbeast, HighResSoulbeast },
         { Spec.Druid, HighResDruid },
         { Spec.Ranger, HighResRanger },
+        // Engineer
+        { Spec.Amalgam, HighResAmalgam },
         { Spec.Mechanist, HighResMechanist },
         { Spec.Holosmith, HighResHolosmith },
         { Spec.Scrapper, HighResScrapper },
         { Spec.Engineer, HighResEngineer },
+        // Thief
+        { Spec.Antiquary, HighResAntiquary },
         { Spec.Specter, HighResSpecter },
         { Spec.Deadeye, HighResDeadeye },
         { Spec.Daredevil, HighResDaredevil },
         { Spec.Thief, HighResThief },
+        // Elementalist
+        { Spec.Evoker, HighResEvoker },
         { Spec.Catalyst, HighResCatalyst },
         { Spec.Weaver, HighResWeaver },
         { Spec.Tempest, HighResTempest },
         { Spec.Elementalist, HighResElementalist },
+        // Mesmer
+        { Spec.Troubadour, HighResTroubadour },
         { Spec.Virtuoso, HighResVirtuoso },
         { Spec.Mirage, HighResMirage },
         { Spec.Chronomancer, HighResChronomancer },
         { Spec.Mesmer, HighResMesmer },
+        // Necromancer
+        { Spec.Ritualist, HighResRitualist },
         { Spec.Harbinger, HighResHarbinger },
         { Spec.Scourge, HighResScourge },
         { Spec.Reaper, HighResReaper },
         { Spec.Necromancer, HighResNecromancer },
+        // Warrior
+        { Spec.Paragon, HighResParagon },
         { Spec.Bladesworn, HighResBladesworn },
         { Spec.Spellbreaker, HighResSpellbreaker },
         { Spec.Berserker, HighResBerserker },
         { Spec.Warrior, HighResWarrior },
+        // Luminary
+        { Spec.Luminary, HighResLuminary },
         { Spec.Willbender, HighResWillbender },
         { Spec.Firebrand, HighResFirebrand },
         { Spec.Dragonhunter, HighResDragonhunter },
         { Spec.Guardian, HighResGuardian },
+        // Revenant
+        { Spec.Conduit, HighResConduit },
         { Spec.Vindicator, HighResVindicator },
         { Spec.Renegade, HighResRenegade },
         { Spec.Herald, HighResHerald },
@@ -730,38 +784,56 @@ internal static class ParserIcons
     /// </summary>
     internal readonly static IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
     {
+        // Ranger
+        { Spec.Gadget, BaseResGaleshot },
         { Spec.Untamed, BaseResUntamed },
         { Spec.Soulbeast, BaseResSoulbeast },
         { Spec.Druid, BaseResDruid },
         { Spec.Ranger, BaseResRanger },
+        // Engineer
+        { Spec.Amalgam, BaseResAmalgam },
         { Spec.Mechanist, BaseResMechanist },
         { Spec.Holosmith, BaseResHolosmith },
         { Spec.Scrapper, BaseResScrapper },
         { Spec.Engineer, BaseResEngineer },
+        // Thief
+        { Spec.Antiquary, BaseResAntiquary },
         { Spec.Specter, BaseResSpecter },
         { Spec.Deadeye, BaseResDeadeye },
         { Spec.Daredevil, BaseResDaredevil },
         { Spec.Thief, BaseResThief },
+        // Elementalist
+        { Spec.Evoker, BaseResEvoker },
         { Spec.Catalyst, BaseResCatalyst },
         { Spec.Weaver, BaseResWeaver },
         { Spec.Tempest, BaseResTempest },
         { Spec.Elementalist, BaseResElementalist },
+        // Mesmer
+        { Spec.Troubadour, BaseResTroubadour },
         { Spec.Virtuoso, BaseResVirtuoso },
         { Spec.Mirage, BaseResMirage },
         { Spec.Chronomancer, BaseResChronomancer },
         { Spec.Mesmer, BaseResMesmer },
+        // Necromancer
+        { Spec.Ritualist, BaseResRitualist },
         { Spec.Harbinger, BaseResHarbinger },
         { Spec.Scourge, BaseResScourge },
         { Spec.Reaper, BaseResReaper },
         { Spec.Necromancer, BaseResNecromancer },
+        // Warrior
+        { Spec.Paragon, BaseResParagon },
         { Spec.Bladesworn, BaseResBladesworn },
         { Spec.Spellbreaker, BaseResSpellbreaker },
         { Spec.Berserker, BaseResBerserker },
         { Spec.Warrior, BaseResWarrior },
+        // Guardian
+        { Spec.Luminary, BaseResLuminary },
         { Spec.Willbender, BaseResWillbender },
         { Spec.Firebrand, BaseResFirebrand },
         { Spec.Dragonhunter, BaseResDragonhunter },
         { Spec.Guardian, BaseResGuardian },
+        // Revenant
+        { Spec.Conduit, BaseResConduit },
         { Spec.Vindicator, BaseResVindicator },
         { Spec.Renegade, BaseResRenegade },
         { Spec.Herald, BaseResHerald },

@@ -5040,4 +5040,7 @@ public static class SkillIDs
     public const long ChillblainsTransfusion = 76506;
     //
     #endregion
+    #region Visions of Eternity
+    public const long CosmicWisdomDervishSkill = long.MaxValue;
+    #endregion
 }
