@@ -89,7 +89,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         success = true;
                     }
                     lowerThreshold = end;
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end));
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
                 }
             }
         }
@@ -130,7 +130,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         end = chest.FirstAware;
                         success = true;
                     }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut));
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
                 }
             }
         }
@@ -162,7 +162,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, qadim.GetHealth(log.CombatData) > 21e6);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, qadim.GetHealth(log.CombatData) > 21e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);

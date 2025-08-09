@@ -341,6 +341,14 @@ public class FightData
             if (IsInstance && _phases[0].Targets.Count == 0)
             {
                 _phases[0].AddTargets(Logic.Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
+            } 
+            else if (!IsInstance)
+            {
+                var encounterPhases = _phases.Where(x => x.Type == PhaseData.PhaseType.Encounter);
+                if (encounterPhases.Count() != 1)
+                {
+                    throw new InvalidOperationException("Boss logs must have only one encounter phase");
+                }
             }
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);

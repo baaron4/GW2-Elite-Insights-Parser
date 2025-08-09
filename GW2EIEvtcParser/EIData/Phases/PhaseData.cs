@@ -52,7 +52,7 @@ public class PhaseData
     {
     }
 
-    internal PhaseData(long start, long end, PhaseType type)
+    protected PhaseData(long start, long end, PhaseType type)
     {
         Start = start;
         End = end;
@@ -67,7 +67,7 @@ public class PhaseData
         Name = name;
     }
 
-    internal PhaseData(long start, long end, string name, PhaseType type) : this(start, end, type)
+    protected PhaseData(long start, long end, string name, PhaseType type) : this(start, end, type)
     {
         Name = name;
     }

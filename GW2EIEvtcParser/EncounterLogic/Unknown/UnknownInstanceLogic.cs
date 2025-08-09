@@ -135,11 +135,13 @@ internal class UnknownInstanceLogic : UnknownFightLogic
                 }
             }
             var dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+            bool success = false;
             if (dead != null)
             {
+                success = true;
                 end = dead.Time;
             }
-            var phase = new PhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, PhaseData.PhaseType.Encounter);
+            var phase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, success, FightData.EncounterMode.Normal);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
