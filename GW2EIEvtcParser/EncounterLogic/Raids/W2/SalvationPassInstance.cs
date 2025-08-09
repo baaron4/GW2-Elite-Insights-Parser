@@ -117,7 +117,7 @@ internal class SalvationPassInstance : SalvationPass
                 success = true;
                 end = chest.FirstAware;
             }
-            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, false);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success);
         }
         NumericallyRenamePhases(encounterPhases);
     }

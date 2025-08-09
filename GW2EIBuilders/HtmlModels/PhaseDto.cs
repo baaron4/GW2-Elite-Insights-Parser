@@ -107,6 +107,7 @@ internal class PhaseDto
     public long Duration;
     public double Start;
     public double End;
+    public int Type;
     public List<int> Targets;
     public List<int> TargetPriorities;
     public bool BreakbarPhase;
@@ -149,6 +150,7 @@ internal class PhaseDto
         Start         = phase.Start / 1000.0;
         End           = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
+        Type = (int)phase.Type;
 
         var allTargets = phase.Targets;
         Targets          = new(allTargets.Count);

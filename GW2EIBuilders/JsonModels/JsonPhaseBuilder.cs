@@ -47,6 +47,25 @@ internal static class JsonPhaseBuilder
         jsPhase.Targets = targets;
         jsPhase.SecondaryTargets = secondaryTargets;
         jsPhase.TargetPriorities = targetPriorities;
+        switch(phase.Type)
+        {
+            case PhaseData.PhaseType.SubPhase:
+                jsPhase.PhaseType = "SubPhase";
+                break;
+            case PhaseData.PhaseType.TimeFrame:
+                jsPhase.PhaseType = "TimeFrame";
+                break;
+            case PhaseData.PhaseType.Encounter:
+                jsPhase.PhaseType = "Encounter";
+                var encounterPhase = (EncounterPhaseData)phase;
+                jsPhase.Success = encounterPhase.Success;
+                jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
+                jsPhase.IsCM = encounterPhase.IsCM;
+                break;
+            case PhaseData.PhaseType.Instance:
+                jsPhase.PhaseType = "Instance";
+                break;
+        }
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         if (!jsPhase.BreakbarPhase)
         {

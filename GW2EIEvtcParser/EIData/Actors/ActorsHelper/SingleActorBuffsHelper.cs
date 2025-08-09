@@ -102,33 +102,37 @@ partial class SingleActor
     #endregion PRESENCE
     #region GRAPHS
 
-    private BuffGraph BuildBuffGraphInAwareTimesFromEnglobingGraph(ParsedEvtcLog log, BuffGraph buffGraph)
+    private static BuffGraph BuildBuffGraphInAwareTimesFromEnglobingGraph(ParsedEvtcLog log, BuffGraph buffGraph, long firstAware, long lastAware)
     {
+        if (firstAware >= lastAware || buffGraph.Values.Count == 0)
+        {
+            return new BuffGraph(log.Buffs.BuffsByIDs[buffGraph.Buff.ID]);
+        }
         var newGraph = new List<Segment>(buffGraph.Values.Count);
         Segment? prevSegment = null;
         foreach (var segment in buffGraph.Values)
         {
-            var newSeg = new Segment(prevSegment?.Start ?? segment.Start, segment.End, segment.Value);
+            var newSeg = new Segment(prevSegment?.End ?? segment.Start, segment.End, segment.Value);
             if (segment.Value > 0)
             {
                 // if not within aware
-                if (newSeg.End < FirstAware || newSeg.Start > LastAware)
+                if (newSeg.End < firstAware || newSeg.Start > lastAware)
                 {
                     newSeg.Value = 0;
                 }
                 else // intersecting
                 {
-                    if (newSeg.Start < FirstAware)
+                    if (newSeg.Start < firstAware)
                     {
-                        var beforeSeg = new Segment(newSeg.Start, FirstAware, 0);
+                        var beforeSeg = new Segment(newSeg.Start, firstAware, 0);
                         newGraph.Add(beforeSeg);
-                        newSeg = new Segment(FirstAware, newSeg.End, newSeg.Value);
+                        newSeg = new Segment(firstAware, newSeg.End, newSeg.Value);
                     }
-                    if (newSeg.End > LastAware)
+                    if (newSeg.End > lastAware)
                     {
-                        var insideSeg = new Segment(newSeg.Start, LastAware, newSeg.Value);
+                        var insideSeg = new Segment(newSeg.Start, lastAware, newSeg.Value);
                         newGraph.Add(insideSeg);
-                        newSeg = new Segment(LastAware, newSeg.End, 0);
+                        newSeg = new Segment(lastAware, newSeg.End, 0);
                     }
                 }
             }
@@ -147,7 +151,7 @@ partial class SingleActor
             foreach (var graph in graphs)
             {
                 BuffGraph buffGraph = graph.Value;    
-                _buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph);
+                _buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph, FirstAware, LastAware);
             }
         }
         return _buffGraphs;
@@ -160,16 +164,16 @@ partial class SingleActor
         AgentItem agent = by.AgentItem;
         if (!_buffGraphsPerAgent.TryGetValue(agent, out var result))
         {
-            if (AgentItem.IsEnglobedAgent)
+            if (AgentItem.IsEnglobedAgent || by.AgentItem.IsEnglobedAgent)
             {
-                var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log, by);
+                var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log, log.FindActor(by.EnglobingAgentItem));
                 var buffGraphs = new Dictionary<long, BuffGraph>(graphs.Count);
                 _buffGraphsPerAgent[agent] = buffGraphs;
                 result = buffGraphs;
                 foreach (var graph in graphs)
                 {
                     BuffGraph buffGraph = graph.Value;
-                    buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph);
+                    buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph, Math.Max(FirstAware, by.FirstAware), Math.Min(LastAware, by.LastAware));
                 }
             }
             else

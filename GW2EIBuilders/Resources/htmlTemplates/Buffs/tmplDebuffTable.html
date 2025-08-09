@@ -8,7 +8,7 @@
 
 <script>
     Vue.component("debuff-table-component", {
-        props: ['phaseindex', 'playerindex', 'activeduration'],
+        props: ['playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -17,20 +17,18 @@
             };
         },
         computed: {
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
             buffData: function () {
                 const id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
 
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var getData = function (stats) {
                     const uptimes = [];
-                    for (let i = 0; i < logData.players.length; i++) {
-                        const player = logData.players[i];
-                        if (player.isFake) {
+                    for (let i = 0; i < players.length; i++) {
+                        const player = players[i];
+                        if (!player) {
                             continue;
                         }
                         uptimes.push({

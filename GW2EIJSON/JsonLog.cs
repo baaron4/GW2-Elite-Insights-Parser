@@ -201,6 +201,12 @@ public class JsonLog
     /// </summary>
     public int TriggerID;
     /// <summary>
+    /// Indicates that the log represents a full instance log. \n
+    /// In such logs, it is possible for the same player to be present multiple times, that means they either changed specs or subgroups during the instance. \n
+    /// Make sure to only include data for a given player only on phases that intersect their aware times.
+    /// </summary>
+    public bool IsInstanceLog;
+    /// <summary>
     /// The elite insight id of the log, indicates which encounter the log corresponds to. \n
     /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/
     /// </summary>
@@ -319,7 +325,7 @@ public class JsonLog
     /// Type of instance privacy \n
     /// Possible values are "Unknown", "Not Applicable", "Public Instance" and "Private Instance"
     /// </summary>
-    public string InstancePrivacy;
+    public string? InstancePrivacy;
 
     /// <summary>
     /// The success status of the fight

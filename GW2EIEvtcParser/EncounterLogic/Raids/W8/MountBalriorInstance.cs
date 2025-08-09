@@ -69,7 +69,7 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
                 var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -106,13 +106,14 @@ internal class MountBalriorInstance : MountBalrior
                 }
                 var isCM = decimaID == TargetID.DecimaCM;
                 var name = isCM ? "Godsqual Decima" : "Decima, the Stormsinger";
+                var mode = isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
                 if (targetsByIDs.TryGetValue((int)TargetID.TranscendentBoulder, out var boulders))
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, false);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, mode);
                 } 
                 else
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], [], [], mainPhase, name, start, end, success, false);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], [], [], mainPhase, name, start, end, success, mode);
                 }
             }
         }
@@ -166,7 +167,7 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = maxHP > 70e6;
                 var name = isCM ? "Godscream Ura" : "Ura, the Steamshrieker";
                 ura.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, false, maxHP > 100e6);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, isCM ? (maxHP > 100e6 ? FightData.EncounterMode.LegendaryCM : FightData.EncounterMode.CMNoName) : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);

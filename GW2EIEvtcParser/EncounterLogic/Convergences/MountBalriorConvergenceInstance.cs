@@ -105,7 +105,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
                 phaseName = "Full Ura";
                 break;
         }
-        var fullPhase = new PhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName).WithParentPhase(phases[0]);
+        var fullPhase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName, log).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
         if (!requirePhases)
