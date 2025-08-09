@@ -21,6 +21,21 @@ public class JsonPhase
     public string? Name;
 
     /// <summary>
+    /// The success status of the fight, only relevant for Instance logs, will be equal to <see cref="JsonLog.Success"/> otherwise
+    /// </summary>
+    public bool Success;
+
+    /// <summary>
+    /// If the fight is in challenge mode, only relevant for Instance logs, will be equal to <see cref="JsonLog.IsCM"/> otherwise
+    /// </summary>
+    public bool IsCM;
+    /// <summary>
+    /// If the fight is in legendary challenge mode. Only relevant for Instance logs, will be equal to <see cref="JsonLog.IsLegendaryCM"/> otherwise\n
+    /// If this is true, <see cref="IsCM"/> will also be true
+    /// </summary>
+    public bool IsLegendaryCM;
+
+    /// <summary>
     /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
     /// Index of targets tracked during the phase
     /// </summary>

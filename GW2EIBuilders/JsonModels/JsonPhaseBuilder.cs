@@ -57,6 +57,10 @@ internal static class JsonPhaseBuilder
                 break;
             case PhaseData.PhaseType.Encounter:
                 jsPhase.PhaseType = "Encounter";
+                var encounterPhase = (EncounterPhaseData)phase;
+                jsPhase.Success = encounterPhase.Success;
+                jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
+                jsPhase.IsCM = encounterPhase.IsCM;
                 break;
             case PhaseData.PhaseType.Instance:
                 jsPhase.PhaseType = "Instance";
