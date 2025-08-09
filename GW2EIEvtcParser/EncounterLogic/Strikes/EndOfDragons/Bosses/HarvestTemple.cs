@@ -1938,11 +1938,6 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
-    private void AddNoScaleVoidPoolDecorations()
-    {
-
-    }
-
     private SingleActor? FindActiveOrNextDragonVoid(long time)
     {
         var dragonVoidIDs = new List<int> {
