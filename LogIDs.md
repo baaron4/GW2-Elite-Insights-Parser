@@ -1,4 +1,4 @@
-# Encounter Identifiers
+# Log Identifiers
 ## General
 Unknown: 0x0
 
