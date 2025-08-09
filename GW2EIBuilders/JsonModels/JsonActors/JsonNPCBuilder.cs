@@ -24,8 +24,8 @@ internal static class JsonNPCBuilder
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;
-        var targetEncounterPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(npc)) ?? throw new InvalidOperationException("A target must be a part of an encounter/instance phase");
-        if (targetEncounterPhase.Success)
+        var targetEncounterPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(npc));
+        if (targetEncounterPhase != null && targetEncounterPhase.Success)
         {
             hpLeft = 0;
         }
