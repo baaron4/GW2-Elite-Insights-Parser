@@ -141,7 +141,7 @@ internal class UnknownInstanceLogic : UnknownFightLogic
                 success = true;
                 end = dead.Time;
             }
-            var phase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, success, FightData.EncounterMode.Normal);
+            var phase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, success, log.FightData.Logic.Icon, FightData.EncounterMode.Normal);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);

@@ -64,7 +64,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = chest!.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, EncounterIconEscort);
                 if (phase.Targets.Count == 0)
                 {
                     phase.AddTarget(dummy, log);
@@ -130,7 +130,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     success = true;
                     end = reward.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success, EncounterIconTwistedCastle);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -195,7 +195,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = log.FightData.FightEnd;
                 }
             }
-            AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success, EncounterIconXera);
         }
         NumericallyRenamePhases(encounterPhases);
     }
@@ -214,7 +214,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim
         ];
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", EncounterIconKeepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
         HandleTwistedCastlePhases(targetsByIDs, log, phases);
         HandleXeraPhases(targetsByIDs, log, phases);
         return phases;

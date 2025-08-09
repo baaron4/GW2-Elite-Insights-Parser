@@ -117,7 +117,7 @@ internal class SalvationPassInstance : SalvationPass
                 success = true;
                 end = chest.FirstAware;
             }
-            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, EncounterIconBanditTrio);
         }
         NumericallyRenamePhases(encounterPhases);
     }
@@ -126,9 +126,9 @@ internal class SalvationPassInstance : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor", EncounterIconSlothasor);
         HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias");
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias", EncounterIconMatthias);
         return phases;
     }
 

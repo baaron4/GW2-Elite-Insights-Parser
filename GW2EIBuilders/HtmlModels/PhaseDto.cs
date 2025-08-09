@@ -2,6 +2,7 @@
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels;
@@ -108,6 +109,11 @@ internal class PhaseDto
     public double Start;
     public double End;
     public int Type;
+    public string? NameNoMode;
+    public string? Icon;
+    public string? Mode;
+    public bool? Success;
+
     public List<int> Targets;
     public List<int> TargetPriorities;
     public bool BreakbarPhase;
@@ -151,6 +157,34 @@ internal class PhaseDto
         End           = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
         Type = (int)phase.Type;
+        if (phase is EncounterPhaseData encounterPhaseData)
+        {
+            NameNoMode = encounterPhaseData.EncounterName;
+            Icon = encounterPhaseData.Icon;
+            Success = encounterPhaseData.Success;
+            switch (encounterPhaseData.FightMode)
+            {
+                case FightData.EncounterMode.Unknown:
+                    Mode = "Unknown";
+                    break;
+                case FightData.EncounterMode.Story:
+                    Mode = "Story Mode";
+                    break;
+                case FightData.EncounterMode.Normal:
+                    // TODO support emboldened properly
+                    Mode = log.FightData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
+                    break;
+                case FightData.EncounterMode.CM:
+                case FightData.EncounterMode.CMNoName:
+                    Mode = "Challenge Mode";
+                    break;
+                case FightData.EncounterMode.LegendaryCM:
+                    Mode = "Legendary Challenge Mode";
+                    break;
+                default:
+                    break;
+            }
+        }
 
         var allTargets = phase.Targets;
         Targets          = new(allTargets.Count);

@@ -84,7 +84,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], mainPhase, "Cairn", start, end, success, log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], mainPhase, "Cairn", start, end, success, EncounterIconCairn, log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -182,7 +182,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                             end = chest.FirstAware;
                             success = true;
                         }
-                        AddInstanceEncounterPhase(log, phases, encounterPhases, [target], demonicBonds, nonBlockingSubBosses, mainPhase, "Deimos", start, end, success, target.GetHealth(log.CombatData) > 40e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                        AddInstanceEncounterPhase(log, phases, encounterPhases, [target], demonicBonds, nonBlockingSubBosses, mainPhase, "Deimos", start, end, success, EncounterIconDeimos, target.GetHealth(log.CombatData) > 40e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
                     }
                 }
             }
@@ -195,8 +195,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         HandleCairnPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], ChestID.RecreationRoomChest, "Mursaat Overseer", (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), ChestID.SamarogChest, "Samarog", (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], ChestID.RecreationRoomChest, "Mursaat Overseer", EncounterIconMursaatOverseer, (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), ChestID.SamarogChest, "Samarog", EncounterIconSamarog, (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
         HandleDeimosPhases(targetsByIDs, log, phases);
         return phases;
     }

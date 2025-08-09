@@ -46,9 +46,9 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", EncounterIconAdina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", EncounterIconSabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, EncounterIconPeerlessQadim, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
         return phases;
     }
 

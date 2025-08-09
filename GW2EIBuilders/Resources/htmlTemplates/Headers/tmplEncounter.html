@@ -1,7 +1,7 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
-        <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass">{{ encounter.mode }}</h7>
+        <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
@@ -95,6 +95,31 @@
                 }
                 return health + " HP";
             },
+            fightModeColorClass: function (mode) {
+                switch (mode) {
+                    case "Unknown":
+                        return { 'fightModeUnknown-light': this.light, 'fightModeUnknown-dark': !this.light };
+                        break;
+                    case "Story Mode":
+                        return { 'fightModeStory-light': this.light, 'fightModeStory-dark': !this.light };
+                        break;
+                    case "Emboldened Normal Mode":
+                        return { 'fightModeEmboldened-light': this.light, 'fightModeEmboldened-dark': !this.light };
+                        break;
+                    case "Normal Mode":
+                        return { 'fightModeNormal-light': this.light, 'fightModeNormal-dark': !this.light };
+                        break;
+                    case "Challenge Mode":
+                        return { 'fightModeChallenge-light': this.light, 'fightModeChallenge-dark': !this.light };
+                        break;
+                    case "Legendary Challenge Mode":
+                        return { 'fightModeLegendary-light': this.light, 'fightModeLegendary-dark': !this.light };
+                        break;
+                    default:
+                        break;
+                }
+                return;
+            },
         },
         computed: {
             encounter: function () {
@@ -144,31 +169,6 @@
                     res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
                 }
                 return res;
-            },
-            fightModeColorClass: function () {
-                switch (logData.fightMode) {
-                    case "Unknown":
-                        return { 'fightModeUnknown-light': this.light, 'fightModeUnknown-dark': !this.light };
-                        break;
-                    case "Story Mode":
-                        return { 'fightModeStory-light': this.light, 'fightModeStory-dark': !this.light };
-                        break;
-                    case "Emboldened Normal Mode":
-                        return { 'fightModeEmboldened-light': this.light, 'fightModeEmboldened-dark': !this.light };
-                        break;
-                    case "Normal Mode":
-                        return { 'fightModeNormal-light': this.light, 'fightModeNormal-dark': !this.light };
-                        break;
-                    case "Challenge Mode":
-                        return { 'fightModeChallenge-light': this.light, 'fightModeChallenge-dark': !this.light };
-                        break;
-                    case "Legendary Challenge Mode":
-                        return { 'fightModeLegendary-light': this.light, 'fightModeLegendary-dark': !this.light };
-                        break;
-                    default:
-                        break;
-                }
-                return;
             },
         }
     });

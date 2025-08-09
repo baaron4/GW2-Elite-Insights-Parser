@@ -17,12 +17,12 @@ internal static class EncounterLogicPhaseUtils
             var logEndEvent = log.CombatData.GetSquadCombatEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
             if (logEndEvent != null)
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, FightData.EncounterMode.Normal);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, log.FightData.Logic.Icon, FightData.EncounterMode.Normal);
                 phases.Add(fightPhase);
             }
             else
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, FightData.EncounterMode.Normal);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, log.FightData.Logic.Icon, FightData.EncounterMode.Normal);
                 phases.Add(fightPhase);
                 break;
             }
@@ -190,28 +190,12 @@ internal static class EncounterLogicPhaseUtils
         ];
     }
 
-    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, FightData.EncounterMode fightMode = FightData.EncounterMode.Normal)
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, FightData.EncounterMode fightMode = FightData.EncounterMode.Normal)
     {
 
-        var phase = new EncounterPhaseData(start, end, phaseName, success, fightMode);
+        var phase = new EncounterPhaseData(start, end, phaseName, success, icon, fightMode);
         phases.Add(phase);
         encounterPhases.Add(phase);
-        if (fightMode == FightData.EncounterMode.LegendaryCM)
-        {
-            phase.Name += " LCM";
-        } 
-        else if (fightMode == FightData.EncounterMode.CM)
-        {
-            phase.Name += " CM";
-        }
-        if (success)
-        {
-            phase.Name += " (Success)";
-        }
-        else
-        {
-            phase.Name += " (Failure)";
-        }
         phase.AddParentPhase(instancePhase);
         phase.AddTargets(targets, log);
         phase.AddTargets(blockingBosses, log, PhaseData.TargetPriority.Blocking);
@@ -221,7 +205,7 @@ internal static class EncounterLogicPhaseUtils
     }
 
     internal delegate FightData.EncounterMode FightModeChecker(ParsedEvtcLog log, SingleActor target);
-    internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, FightModeChecker? fightModeChecker = null)
+    internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, string icon, FightModeChecker? fightModeChecker = null)
     {
         var mainPhase = phases[0];
         var encounterPhases = new List<PhaseData>();
@@ -243,7 +227,7 @@ internal static class EncounterLogicPhaseUtils
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, fightModeChecker != null ? fightModeChecker(log, target) : FightData.EncounterMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, fightModeChecker != null ? fightModeChecker(log, target) : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
