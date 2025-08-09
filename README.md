@@ -21,7 +21,7 @@ The key for verifying the release's signature can be found on [openpgp](https://
 
 ## Logging
 
-We suggest following [this guide](https://snowcrows.com/guides/arcdps/arcdps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
+We suggest following [this guide](https://snowcrows.com/guides/arcdps/arcdps) written by Snow Crows on how to setup your ArcDPS installation and generate logs.
 
 ## Set Up
 
@@ -84,9 +84,9 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__ParseMultipleLogs__: if true, multiple logs will be parsed in parallel.
 
--__SkipFailedTries__: if true, failed encounters will not be parsed.
+-__SkipFailedTries__: if true, failed logs will not be parsed.
 
--__CustomTooShort__: Customize encounter duration in ms below which logs will not be parsed.
+-__CustomTooShort__: Customize log duration in ms below which logs will not be parsed.
 
 ### GUI only Parser Settings
 
@@ -96,7 +96,7 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__AutoParse__: if true, every added log file will be automatically processed.
 
-### Encounter Settings
+### Log Settings
 
 -__ParsePhases__: if true, phases will be parsed.
 
@@ -170,7 +170,7 @@ The header shows you the status of the fight and lets you swap themes and module
 
 <img src="./docs/Images/footer.PNG" width="60%" height="60%">
 
-On the footer you'll find meta data regarding the encounter and the parser.
+On the footer you'll find meta data regarding the log and the parser.
 
 ### Statistics
 #### Navigation
@@ -279,7 +279,7 @@ Displays damage/DPS in real time. The picture says it all.
 Allows to display or remove specific information from the Combat Replay such as:
 - Group highlights
 - Secondary NPCs
-- Encounter Mechanics
+- Mechanics
 - Player Skills
 - Use in-game hitbox sizes
 - Show all minions
