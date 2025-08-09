@@ -58,7 +58,6 @@ internal class LogDataDto
     public BarrierStatsExtension? BarrierStatsExtension;
     // meta data
     public string EvtcRecordingDuration;
-    public bool Success;
     public bool Wvw;
     public bool HasCommander;
     public bool Targetless;
@@ -132,7 +131,6 @@ internal class LogDataDto
             }
         }
         EvtcRecordingDuration = log.FightData.EvtcRecordingDuration;
-        Success = log.FightData.Success;
         Wvw = log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
         Targetless = log.FightData.Logic.Targetless;
         switch (log.FightData.InstancePrivacy)

@@ -1075,7 +1075,7 @@ public class EvtcParser
         _fightData.Logic.HandleCriticalGadgets(_evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
         operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
         OffsetEvtcData();
-        operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");
+        operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.LogStartOffset) + " ms added");
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
         _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);

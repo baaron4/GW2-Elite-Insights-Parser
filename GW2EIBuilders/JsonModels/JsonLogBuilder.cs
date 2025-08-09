@@ -109,7 +109,7 @@ internal static class JsonLogBuilder
         jsonLog.TimeEndStd = log.LogData.LogEndStd;
         jsonLog.Duration = log.FightData.DurationString;
         jsonLog.DurationMS = log.FightData.FightDuration;
-        jsonLog.LogStartOffset = log.FightData.FightStartOffset;
+        jsonLog.LogStartOffset = log.FightData.LogStartOffset;
         if (log.LogData.LogInstanceStartStd != null )
         {
             jsonLog.InstanceTimeStartStd = log.LogData.LogInstanceStartStd;

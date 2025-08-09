@@ -27,7 +27,7 @@ public class FightData
     public long LogEnd { get; private set; }
     public long LogOffset { get; private set; }
     public string EvtcRecordingDuration { get; private set; }
-    public long FightStartOffset => -LogStart;
+    public long LogStartOffset => -LogStart;
     public string DurationString
     {
         get
@@ -63,6 +63,8 @@ public class FightData
     public EncounterStartStatus FightStartStatus { get; private set; } = EncounterStartStatus.NotSet;
     public bool IsLateStart => FightStartStatus == EncounterStartStatus.Late || MissingPreEvent;
     public bool MissingPreEvent => FightStartStatus == EncounterStartStatus.NoPreEvent;
+
+    private PhaseDataWithMetaData? _phaseDataWithMetaData = null;
 
     public enum InstancePrivacyMode
     {
@@ -323,6 +325,28 @@ public class FightData
             + (MissingPreEvent ? " (No Pre-Event)" : "");
     }
 
+    public PhaseDataWithMetaData GetMainPhase(ParsedEvtcLog log)
+    {
+        if (_phaseDataWithMetaData == null)
+        {
+            var phases = GetPhases(log);
+            PhaseDataWithMetaData? mainPhase;
+            if (IsInstance)
+            {
+                mainPhase = phases.OfType<InstancePhaseData>().FirstOrDefault();
+            } 
+            else
+            {
+                mainPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault();
+            }
+            if (mainPhase == null)
+            {
+                throw new InvalidOperationException("A log must have a main phase");
+            }
+            _phaseDataWithMetaData = mainPhase;
+        }
+        return _phaseDataWithMetaData;
+    }
     public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
     {
 

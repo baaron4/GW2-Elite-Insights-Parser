@@ -1186,7 +1186,7 @@ internal class Qadim : MythwrightGambit
         // Proper skipping of phases (if even possible) is not implemented.
         // Right now transitioning to another state while still moving behaves weirdly.
         // Interpolating to find the position to stop in would be necessary.
-        long startOffset = -log.FightData.FightStartOffset;
+        long startOffset = -log.FightData.LogStartOffset;
         (long start, long duration, (float x, float y, float z, float angle, float opacity)[] platforms)[] movements =
         [
             (

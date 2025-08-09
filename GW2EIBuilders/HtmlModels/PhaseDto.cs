@@ -165,7 +165,7 @@ internal class PhaseDto
             Icon = phaseWithMetaData.Icon;
             Success = phaseWithMetaData.Success;
             EncounterDuration = phaseWithMetaData.DurationString;
-            switch (phaseWithMetaData.FightMode)
+            switch (phaseWithMetaData.Mode)
             {
                 case FightData.EncounterMode.Unknown:
                     Mode = "Unknown";

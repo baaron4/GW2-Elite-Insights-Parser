@@ -141,6 +141,7 @@
 
                 var encounter = {
                     name: mainPhase.nameNoMode,
+                    success: mainPhase.success,
                     icon: mainPhase.icon,
                     duration: mainPhase.encounterDuration,
                     targets: targets,
@@ -158,7 +159,7 @@
                 return logData.instancePrivacy;
             },
             resultStatus: function () {
-                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
+                return this.encounter.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
             },
             instanceBuffs: function () {
                 if (logData.instanceBuffs.length == 0) {
