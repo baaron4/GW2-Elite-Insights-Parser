@@ -1172,33 +1172,60 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         // To be safe
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
-                        double radius = 100.0;
+                        int offset = 0;
+                        double initialRadius = 100.0;
                         double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
-                        for (int i = 0; i < poolEffects.Count - 1; i++)
+                        // To handle same amalgamate handling multiple phases
+                        while (offset < poolEffects.Count)
                         {
-                            EffectEvent curEffect = poolEffects[i];
-                            EffectEvent nextEffect = poolEffects[i + 1];
-                            int start = (int)curEffect.Time;
-                            int end = (int)nextEffect.Time;
-                            replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
-                            radius += radiusIncrement;
+                            double radius = initialRadius - radiusIncrement;
+                            int i = offset;
+                            for (; i < poolEffects.Count - 1; i++)
+                            {
+                                EffectEvent curEffect = poolEffects[i];
+                                EffectEvent nextEffect = poolEffects[i + 1];
+                                int start = (int)curEffect.Time;
+                                int end = (int)nextEffect.Time;
+                                if (end - start > 4000)
+                                {
+                                    break;
+                                }
+                                if (curEffect.IsScaled)
+                                {
+                                    radius = initialRadius * curEffect.Scale;
+                                }
+                                else
+                                {
+                                    radius += radiusIncrement;
+                                }
+                                replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
+                            }
+                            EffectEvent lastEffect = poolEffects[i];
+                            if (lastEffect.IsScaled)
+                            {
+                                radius = initialRadius * lastEffect.Scale;
+                            }
+                            else
+                            {
+                                radius += radiusIncrement;
+                            }
+                            lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
+                            (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
+                            SingleActor? nextPurificationOrb = Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
+                            long nextPurifcationOrbStart = long.MaxValue;
+                            if (nextPurificationOrb != null)
+                            {
+                                nextPurifcationOrbStart = nextPurificationOrb.FirstAware;
+                            }
+                            lifespan.end = Math.Min(nextPurifcationOrbStart, Math.Min(lifespan.end, lifespanPuriOrb.end));
+                            // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
+                            if (lifespan.start == lifespan.end)
+                            {
+                                lifespan.end = lifespan.start + 4000;
+                            }
+                            replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
+                            offset = i + 1;
                         }
-                        EffectEvent lastEffect = poolEffects.Last();
-                        lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
-                        (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
-                        SingleActor? nextPurificationOrb = Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
-                        long nextPurifcationOrbStart = long.MaxValue;
-                        if (nextPurificationOrb != null)
-                        {
-                            nextPurifcationOrbStart = nextPurificationOrb.FirstAware;
-                        }
-                        lifespan.end = Math.Min(nextPurifcationOrbStart, Math.Min(lifespan.end, lifespanPuriOrb.end));
-                        // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
-                        if (lifespan.start == lifespan.end)
-                        {
-                            lifespan.end = lifespan.start + 4000;
-                        }
-                        replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                     }
                 }
                 break;

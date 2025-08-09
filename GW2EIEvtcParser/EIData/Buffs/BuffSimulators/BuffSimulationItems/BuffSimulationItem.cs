@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal abstract class BuffSimulationItem : AbstractSimulationItem
+internal abstract class BuffSimulationItem : SimulationItem
 {
     //NOTE(Rennorb): I changed the element to have start + end instead of start + duration to fix a bug. 
     // Apparently the original arc events have start + duration, so there might be value in returning it to the previous state.

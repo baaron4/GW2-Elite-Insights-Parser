@@ -105,8 +105,10 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">Opacity of the icon</param>
     internal void AddRotatedOverheadIconWithValueAsText(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = CombatReplayOverheadDefaultSizeInPixel, float opacity = CombatReplayOverheadDefaultOpacity)
     {
-        Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
-        Add(new TextOverheadDecoration(segment, ((int)segment.Value).ToString(), pixelSize / 2, Colors.Black.ToString(), new AgentConnector(actor)).UsingBold(true).UsingRotationConnector(new AngleConnector(rotation)));
+        var text = ((int)segment.Value).ToString();
+        Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor))
+                .WithText(text)
+                .UsingRotationConnector(new AngleConnector(rotation)));
     }
 
     /// <summary>

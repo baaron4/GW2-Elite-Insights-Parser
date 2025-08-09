@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
+internal class BuffSimulationItemOverstack : SimulationItemWasted
 {
 
     public BuffSimulationItemOverstack(AgentItem src, long overstack, long time) : base(src, overstack, time)

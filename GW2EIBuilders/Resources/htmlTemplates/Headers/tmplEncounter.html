@@ -27,6 +27,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="wvw" class="mb-1">
+                        <div>Players: {{ encounter.players.length }}</div>
+                        <div>Friendlies: {{ encounter.nonSquadFriendlies.length }}</div>
+                        <div>Enemies: {{ encounter.targets.length }}</div>
+                    </div>
                     <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                     <div class="mb-2" v-if="!!instancePrivacy">{{ instancePrivacy }}</div>
@@ -114,6 +119,8 @@
                     icon: logData.fightIcon,
                     duration: logData.encounterDuration,
                     targets: targets,
+                    players: logData.players.filter(x => !x.notInSquad),
+                    nonSquadFriendlies: logData.players.filter(x => x.notInSquad),
                     mode: logData.fightMode,
                     start: logData.fightStartStatus,
                 };
