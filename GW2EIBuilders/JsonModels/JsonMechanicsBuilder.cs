@@ -41,7 +41,7 @@ internal static class JsonMechanicsBuilder
         foreach (Mechanic mech in presentMechanics)
         {
             var jsonMechanics = new List<JsonMechanic>();
-            foreach (MechanicEvent ml in mechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd))
+            foreach (MechanicEvent ml in mechanicData.GetMechanicLogs(log, mech, log.LogData.LogStart, log.LogData.LogEnd))
             {
                 jsonMechanics.Add(BuildJsonMechanic(ml));
             }

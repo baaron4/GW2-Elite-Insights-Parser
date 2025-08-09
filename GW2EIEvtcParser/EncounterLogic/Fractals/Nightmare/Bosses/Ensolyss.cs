@@ -4,14 +4,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Ensolyss : Nightmare
 {
@@ -46,8 +46,8 @@ internal class Ensolyss : Nightmare
         ]));
         Extension = "ensol";
         Icon = EncounterIconEnsolyss;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -59,9 +59,9 @@ internal class Ensolyss : Nightmare
                         (11804, 4414, 12444, 5054)*/);
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.CMNoName;
+        return LogData.LogMode.CMNoName;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -83,7 +83,7 @@ internal class Ensolyss : Nightmare
         return trashIDs;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var targetEnsolyss = FindTargetEnsolyss(agentData, combatData);
         foreach (var ensolyss in agentData.GetNPCsByID(TargetID.Ensolyss))
@@ -93,7 +93,7 @@ internal class Ensolyss : Nightmare
                 ensolyss.OverrideID(IgnoredSpecies, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     private static AgentItem FindTargetEnsolyss(AgentData agentData, List<CombatItem> combatData)
@@ -110,18 +110,18 @@ internal class Ensolyss : Nightmare
         throw new MissingKeyActorsException("Ensolyss not found");
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // ensolyss spawns with invulnerability
         var ensolyss = FindTargetEnsolyss(agentData, combatData);
-        long start = GetFightOffsetByInvulnStart(fightData, combatData, ensolyss, Determined762);
+        long start = GetLogOffsetByInvulnStart(logData, combatData, ensolyss, Determined762);
 
         // ensolyss exits combat during split phases and reenters after
         // make sure we dont have a late start via caustic explosion, expected to happen 2s after invuln remove in later phases
         var causticExplosion = combatData.FirstOrDefault(x => x.SkillID == CausticExplosionEnsolyss && x.StartCasting() && x.SrcMatchesAgent(ensolyss) && x.Time > start);
         if (causticExplosion != null && causticExplosion.Time <= start + 3000)
         {
-            return GetGenericFightOffset(fightData);
+            return GetGenericLogOffset(logData);
         }
         return start;
     }

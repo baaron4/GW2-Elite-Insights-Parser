@@ -4,14 +4,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class HallOfChainsInstance : HallOfChains
 {
@@ -25,7 +25,7 @@ internal class HallOfChainsInstance : HallOfChains
     private readonly IReadOnlyList<HallOfChains> _subLogics;
     public HallOfChainsInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconHallOfChains;
         Extension = "hallchains";
 
@@ -202,7 +202,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, EncounterIconDhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, EncounterIconDhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -213,7 +213,7 @@ internal class HallOfChainsInstance : HallOfChains
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], ChestID.ChestOfDesmina, "Soulless Horror", EncounterIconSoullessHorror, (log, soullessHorror) => {
-            return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
+            return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
         });
         HandleRiverOfSoulsPhases(targetsByIDs, log, phases);
         HandleStatueOfIcePhases(targetsByIDs, log, phases);
@@ -272,11 +272,11 @@ internal class HallOfChainsInstance : HallOfChains
         return friendlies.Distinct().ToList();
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "River of Souls", Spec.NPC, (int)TargetID.DummyTarget, true);
         Dhuum.HandleYourSouls(agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         foreach (var target in Targets)
         {
             switch (target.ID)

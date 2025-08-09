@@ -17,7 +17,7 @@ internal static class JsonActorBuilder
 
     public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
         jsonActor.FirstAware = (int)actor.FirstAware;
         jsonActor.LastAware = (int)actor.LastAware;

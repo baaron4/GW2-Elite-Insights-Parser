@@ -3,23 +3,23 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class AetherbladeHideoutInstance : EndOfDragonsStrike
 {
     private readonly AetherbladeHideout _aetherbladeHideout;
     public AetherbladeHideoutInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide_map";
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
+        LogCategoryInformation.InSubCategoryOrder = 0;
         _aetherbladeHideout = new AetherbladeHideout(NonIdentifiedSpecies);
         MechanicList.Add(_aetherbladeHideout.Mechanics);
     }
@@ -34,9 +34,9 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         return "Strike Mission: Aetherblade Hideout";
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        fightData.SetSuccess(true, fightData.FightEnd);
+        logData.SetSuccess(true, logData.LogEnd);
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
@@ -59,10 +59,10 @@ internal class AetherbladeHideoutInstance : EndOfDragonsStrike
         return _aetherbladeHideout.GetInstantCastFinders();
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AetherbladeHideout.FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         AetherbladeHideout.SanitizeLastHealthUpdateEvents(Targets, combatData);
         AetherbladeHideout.RenameScarletPhantoms(Targets);
     }

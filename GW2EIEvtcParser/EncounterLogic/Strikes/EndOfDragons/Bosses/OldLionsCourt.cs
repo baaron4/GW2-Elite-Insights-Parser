@@ -3,14 +3,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class OldLionsCourt : EndOfDragonsStrike
 {
@@ -79,8 +79,8 @@ internal class OldLionsCourt : EndOfDragonsStrike
         Icon = EncounterIconOldLionsCourt;
         GenericFallBackMethod = FallBackMethod.None;
         Extension = "lioncourt";
-        EncounterCategoryInformation.InSubCategoryOrder = 4;
-        EncounterID |= 0x000005;
+        LogCategoryInformation.InSubCategoryOrder = 4;
+        LogID |= 0x000005;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -118,38 +118,38 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return [ TargetID.Tribocharge ];
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
-        if (fightData.IsCM)
+        if (logData.IsCM)
         {
-            if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilionCM, fightData.FightStart, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(TargetID.PrototypeIndigoCM, fightData.FightStart, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(TargetID.PrototypeArseniteCM, fightData.FightStart, combatData, Targets))
+            if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilionCM, logData.LogStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(TargetID.PrototypeIndigoCM, logData.LogStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(TargetID.PrototypeArseniteCM, logData.LogStart, combatData, Targets))
             {
-                return FightData.EncounterStartStatus.Late;
+                return LogData.LogStartStatus.Late;
             }
 
         }
         else
         {
-            if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(TargetID.PrototypeIndigo, fightData.FightStart, combatData, Targets) ||
-                TargetHPPercentUnderThreshold(TargetID.PrototypeArsenite, fightData.FightStart, combatData, Targets))
+            if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilion, logData.LogStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(TargetID.PrototypeIndigo, logData.LogStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(TargetID.PrototypeArsenite, logData.LogStart, combatData, Targets))
             {
-                return FightData.EncounterStartStatus.Late;
+                return LogData.LogStartStatus.Late;
             }
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             List<TargetID> idsToCheck;
-            if (fightData.IsCM)
+            if (logData.IsCM)
             {
                 idsToCheck =
                 [
@@ -167,7 +167,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => x.IsAnySpecies(idsToCheck)), combatData, logData, playerAgents, true);
         }
     }
 
@@ -192,15 +192,15 @@ internal class OldLionsCourt : EndOfDragonsStrike
     private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName, PhaseData fullFightPhase)
     {
         DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-        long end = log.FightData.FightEnd;
-        long start = log.FightData.FightStart;
+        long end = log.LogData.LogEnd;
+        long start = log.LogData.LogStart;
         if (dead != null && dead.Time < end)
         {
             end = dead.Time;
         }
         List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, start, end);
         string[] phaseNames;
-        if (log.FightData.IsCM)
+        if (log.LogData.IsCM)
         {
             if (subPhases.Count > 3)
             {
@@ -236,9 +236,9 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return subPhases;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+        long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         AgentItem? vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
         if (vermilion != null)
         {
@@ -300,17 +300,17 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return phases;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = (Vermilion() ?? Indigo() ?? Arsenite()) ?? throw new MissingKeyActorsException("Main target not found");
-        return target.GetHealth(combatData) > 20e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return target.GetHealth(combatData) > 20e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
         }
@@ -669,7 +669,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             // Expansion Timer: 500ms
             uint initialRadius = 100;
             uint timeInterval = 500;
-            uint radiusIncreasePerInterval = (uint)(log.FightData.IsCM ? 15 : 11);
+            uint radiusIncreasePerInterval = (uint)(log.LogData.IsCM ? 15 : 11);
 
             foreach (EffectEvent effect in boilingAetherExpanding)
             {
@@ -694,7 +694,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         {
             // Maximum Radius: 320 (Normal Mode)
             // Maximum Radius: 400 (Challenge Mode)
-            uint radius = (uint)(log.FightData.IsCM ? 400 : 320);
+            uint radius = (uint)(log.LogData.IsCM ? 400 : 320);
 
             foreach (EffectEvent effect in boilingAetherExpanded)
             {
@@ -725,7 +725,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         {
             long start = bae.Time;
             var removal = removals.FirstOrDefault(x => x.Time > start);
-            long end = removal != null ? removal.Time : log.FightData.LogEnd;
+            long end = removal != null ? removal.Time : log.LogData.EvtcLogEnd;
             replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
         }
     }

@@ -3,14 +3,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class CerusAndDeimos : LonelyTower
 {
@@ -21,19 +21,19 @@ internal class CerusAndDeimos : LonelyTower
         ]);
         Extension = "cerdei";
         Icon = EncounterIconCerusAndDeimos;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         if (cerus.GetHealth(combatData) < 5e6 || deimos.GetHealth(combatData) < 5e6)
         {
-            return FightData.EncounterMode.Normal;
+            return LogData.LogMode.Normal;
         }
-        return FightData.EncounterMode.CM;
+        return LogData.LogMode.CM;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -41,10 +41,10 @@ internal class CerusAndDeimos : LonelyTower
         return "Cerus and Deimos";
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // TODO: verify this
-        long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+        long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
         {
             AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
@@ -52,13 +52,13 @@ internal class CerusAndDeimos : LonelyTower
             CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                startToUse = Math.Min(GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
-                        GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
+                startToUse = Math.Min(GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
+                        GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
                 return startToUse;
             }
             CombatItem? initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
                   agentData.GetAgent(x.SrcAgent, x.Time).Is(cerus) || agentData.GetAgent(x.SrcAgent, x.Time).Is(deimos))).FirstOrDefault();
-            long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus), GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
+            long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(logData, agentData, combatData, cerus), GetFirstDamageEventTime(logData, agentData, combatData, deimos));
             if (initialDamageToPlayers != null)
             {
                 return Math.Min(initialDamageToPlayers.Time, initialDamageTimeToTargets);
@@ -73,7 +73,7 @@ internal class CerusAndDeimos : LonelyTower
         return [TargetID.CerusLonelyTower, TargetID.DeimosLonelyTower];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
@@ -81,32 +81,32 @@ internal class CerusAndDeimos : LonelyTower
         BuffApplyEvent? determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
-            fightData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
+            logData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
         } 
         else
         {
-            fightData.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
+            logData.SetSuccess(false, Math.Max(deimos.LastAware, cerus.LastAware));
         }
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (TargetHPPercentUnderThreshold(TargetID.CerusLonelyTower, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.CerusLonelyTower, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        if (TargetHPPercentUnderThreshold(TargetID.DeimosLonelyTower, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.DeimosLonelyTower, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     private static PhaseData GetBossPhase(ParsedEvtcLog log, SingleActor target, string phaseName)
     {
         BuffApplyEvent? determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
-        var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName);
+        var bossPhase = new PhaseData(log.LogData.LogStart, end, phaseName);
         bossPhase.AddTarget(target, log);
         return bossPhase;
     }

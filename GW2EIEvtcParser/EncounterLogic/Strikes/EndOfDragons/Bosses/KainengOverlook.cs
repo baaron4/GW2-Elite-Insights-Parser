@@ -3,14 +3,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class KainengOverlook : EndOfDragonsStrike
 {
@@ -25,7 +25,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new PlayerDstHealthDamageHitMechanic([ DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "Rush.H", "Hit by Rush", "Rush Hit", 150),
                 new PlayerDstHealthDamageHitMechanic([ DragonSlashWaveNM, DragonSlashWaveCM, DragonSlashRushNM1, DragonSlashRushNM2, DragonSlashRush1CM, DragonSlashRush2CM ], new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "TextReflx.Achiv", "Achievement Eligibility: A Test of Your Reflexes", "Achiv Test Reflexes", 150)
                     .UsingAchievementEligibility()
-                    .UsingEnable((log) => log.FightData.IsCM),
+                    .UsingEnable((log) => log.LogData.IsCM),
             ]),
             new MechanicGroup([             
                 // Mindblade
@@ -65,7 +65,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 new EnemyDstBuffApplyMechanic(LethalInspiration, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkGreen), "Pwrd.Up1", "Powered Up (Split 1)", "Powered Up 1", 150),
                 new PlayerDstNoHealthDamageMechanic([ EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill2 ], new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Purple), "MostResi.Achiv", "Achievement Eligibility: The Path of Most Resistance", "Achiv Most Resistance", 150)
                     .UsingAchievementEligibility()
-                    .UsingEnable(x => x.FightData.IsCM),
+                    .UsingEnable(x => x.LogData.IsCM),
             ]),
             new PlayerDstHealthDamageMechanic([ TargetedExpulsion, TargetedExpulsionCM ], new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Bomb.D", "Downed by Bomb", "Bomb Downed", 150).UsingChecker((ahde, log) => ahde.HasDowned),
             new PlayerDstBuffApplyMechanic([ TargetOrder1, TargetOrder2, TargetOrder3, TargetOrder4, TargetOrder5 ], new MechanicPlotlySetting(Symbols.Star, Colors.LightOrange), "Targ.Ord.A", "Received Target Order", "Target Order Application", 0),
@@ -78,8 +78,8 @@ internal class KainengOverlook : EndOfDragonsStrike
         );
         Icon = EncounterIconKainengOverlook;
         Extension = "kaiover";
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -181,7 +181,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             if (cbtEnter != null)
             {
                 BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
-                long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
+                long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.LogData.LogEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets, log);
                 addPhase.AddParentPhase(phases[0]);
@@ -190,22 +190,22 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
-    private SingleActor? GetMinisterLi(FightData fightData)
+    private SingleActor? GetMinisterLi(LogData logData)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
+        return Targets.FirstOrDefault(x => x.IsSpecies(logData.IsCM ? TargetID.MinisterLiCM : TargetID.MinisterLi));
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(log.LogData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi, log);
         //
-        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
-        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
-        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
-        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
-        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheEnforcerCM : TargetID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheMindbladeCM : TargetID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheMechRiderCM : TargetID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheSniperCM : TargetID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.LogData.IsCM ? TargetID.TheRitualistCM : TargetID.TheRitualist));
         //
         phases[0].AddTarget(enforcer, log, PhaseData.TargetPriority.Blocking);
         phases[0].AddTarget(mindblade, log, PhaseData.TargetPriority.Blocking);
@@ -231,24 +231,24 @@ internal class KainengOverlook : EndOfDragonsStrike
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        SingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(logData) ?? throw new MissingKeyActorsException("Minister Li not found");
         var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
         if (buffApplies.Any())
         {
-            fightData.SetSuccess(true, buffApplies.First().Time);
+            logData.SetSuccess(true, buffApplies.First().Time);
         } 
         else
         {
-            fightData.SetSuccess(false, ministerLi.LastAware);
+            logData.SetSuccess(false, ministerLi.LastAware);
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor? ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MinisterLiCM));
-        return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return ministerLiCM != null ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

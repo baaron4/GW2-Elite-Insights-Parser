@@ -4,15 +4,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Sabir : TheKeyOfAhdashim
 {
@@ -55,8 +55,8 @@ internal class Sabir : TheKeyOfAhdashim
         Extension = "sabir";
         Icon = EncounterIconSabir;
         ChestID = ChestID.SabirsChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000002;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
@@ -74,7 +74,7 @@ internal class Sabir : TheKeyOfAhdashim
         ];
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    internal override LogLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
@@ -141,7 +141,7 @@ internal class Sabir : TheKeyOfAhdashim
         }
         if (i > 0)
         {
-            var phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1));
+            var phase = new PhaseData(start, log.LogData.LogEnd, "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
@@ -309,12 +309,12 @@ internal class Sabir : TheKeyOfAhdashim
             }
         }
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindPlateforms(agentData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
         if (!agentData.TryGetFirstAgentItem(TargetID.Sabir, out var sabir))
@@ -327,7 +327,7 @@ internal class Sabir : TheKeyOfAhdashim
             CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate == null)
             {
-                return GetGenericFightOffset(fightData);
+                return GetGenericLogOffset(logData);
             }
             else
             {
@@ -338,16 +338,16 @@ internal class Sabir : TheKeyOfAhdashim
                 }
                 else
                 {
-                    return fightData.LogEnd;
+                    return logData.EvtcLogEnd;
                 }
             }
         }
         return enterCombat.Time;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
-        return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 32e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 }

@@ -1,16 +1,16 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class IcebroodSagaStrike : StrikeMissionLogic
 {
     public IcebroodSagaStrike(int triggerID) : base(triggerID)
     {
-        EncounterID |= EncounterIDs.StrikeMasks.IBSMask;
+        LogID |= LogIDs.StrikeMasks.IBSMask;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var strikeRewardIDs = new HashSet<ulong>
         {
@@ -24,14 +24,14 @@ internal abstract class IcebroodSagaStrike : StrikeMissionLogic
             RewardIDs.BoneskinnerRepeatableChest,
         };
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent? reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID) && x.Time > fightData.FightStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID) && x.Time > logData.LogStart);
         if (reward != null)
         {
-            fightData.SetSuccess(true, reward.Time);
+            logData.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
         }
     }
 }

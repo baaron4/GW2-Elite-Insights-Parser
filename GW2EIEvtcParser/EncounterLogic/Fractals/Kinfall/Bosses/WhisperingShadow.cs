@@ -1,16 +1,16 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
 using GW2EIEvtcParser.ParserHelpers;
 using System;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class WhisperingShadow : Kinfall
 {
@@ -53,7 +53,7 @@ internal class WhisperingShadow : Kinfall
         ]));
         Extension = "whispshadow";
         Icon = EncounterIconWhisperingShadow;
-        EncounterID |= 0x000001;
+        LogID |= 0x000001;
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
@@ -68,13 +68,13 @@ internal class WhisperingShadow : Kinfall
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (combatData.GetBuffApplyData(LifeFireCircleCM).Any())
         {
-            return FightData.EncounterMode.CM;
+            return LogData.LogMode.CM;
         }
-        return FightData.EncounterMode.Normal;
+        return LogData.LogMode.Normal;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -90,7 +90,7 @@ internal class WhisperingShadow : Kinfall
         // guttering light queues up at 80%, 50%, 20%
         // we use the first cast as start and stun/breakbar as end
         int i = 1;
-        var start = log.FightData.FightStart;
+        var start = log.LogData.LogStart;
         bool isFirst = true;
         var breakbarEnds = log.CombatData.GetBreakbarStateEvents(shadow.AgentItem).Where(x => x.State != ArcDPSEnums.BreakbarState.Active);
         var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
@@ -107,7 +107,7 @@ internal class WhisperingShadow : Kinfall
 
                     var stunned = stuns.FirstOrDefault(x => x.Time > phase.End);
                     var broken = breakbarEnds.FirstOrDefault(x => x.Time > phase.End);
-                    var end = Math.Min(stunned?.Time ?? log.FightData.FightEnd, broken?.Time ?? long.MaxValue);
+                    var end = Math.Min(stunned?.Time ?? log.LogData.LogEnd, broken?.Time ?? long.MaxValue);
                     var split = new PhaseData(cast.Time, end, "Darkness " + i);
                     split.AddParentPhase(phases[0]);
                     split.AddTarget(shadow, log);
@@ -123,9 +123,9 @@ internal class WhisperingShadow : Kinfall
                 isFirst = true;
             }
         }
-        if (start < log.FightData.FightEnd)
+        if (start < log.LogData.LogEnd)
         {
-            var lastPhase = new PhaseData(start, log.FightData.FightEnd, "Phase " + i);
+            var lastPhase = new PhaseData(start, log.LogData.LogEnd, "Phase " + i);
             lastPhase.AddParentPhase(phases[0]);
             lastPhase.AddTarget(shadow, log);
             phases.Add(lastPhase);
@@ -315,7 +315,7 @@ internal class WhisperingShadow : Kinfall
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.LogData.Success && log.LogData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
             // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
             // The buff is present only on the players that do not have the achievement yet.
@@ -323,7 +323,7 @@ internal class WhisperingShadow : Kinfall
             // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
             foreach (Player p in log.PlayerList)
             {
-                if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.FightData.FightEnd - ServerDelayConstant))
+                if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.LogData.LogEnd - ServerDelayConstant))
                 {
                     InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
                     break;

@@ -32,13 +32,13 @@ public class CSVBuilder
         _log = log;
         _parserVersion = parserVersion;
         _delimiter = settings.Delimiter;
-        _phases = log.FightData.GetPhases(log);
+        _phases = log.LogData.GetPhases(log);
         _noFakePlayers = log.PlayerList;
 
         _statistics = log.StatisticsHelper;
 
         _uploadResult = uploadResults.ToArray();
-        _legacyTarget = log.FightData.Logic.Targets.OfType<NPC>().FirstOrDefault()!;
+        _legacyTarget = log.LogData.Logic.Targets.OfType<NPC>().FirstOrDefault()!;
         if (_legacyTarget == null)
         {
             throw new InvalidDataException("No Targets found for csv");
@@ -74,11 +74,11 @@ public class CSVBuilder
         //header
         _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
         WriteLine(["Elite Insights", _parserVersion.ToString()]);
-        WriteLine(["ARC Version", _log.LogData.ArcVersion]);
-        WriteLine(["Fight ID", _log.FightData.TriggerID.ToString()]);
-        WriteLine(["Recorded By", _log.LogData.PoVName]);
-        WriteLine(["Time Start", _log.LogData.LogStartStd]);
-        WriteLine(["Time End", _log.LogData.LogEndStd]);
+        WriteLine(["ARC Version", _log.LogMetadata.ArcVersion]);
+        WriteLine(["Fight ID", _log.LogData.TriggerID.ToString()]);
+        WriteLine(["Recorded By", _log.LogMetadata.PoVName]);
+        WriteLine(["Time Start", _log.LogMetadata.LogStartStd]);
+        WriteLine(["Time End", _log.LogMetadata.LogEndStd]);
         if (_uploadResult.Any(x => x != null && x.Length > 0))
         {
             WriteLine(["Links", _uploadResult[0], _uploadResult[1]]);
@@ -91,8 +91,8 @@ public class CSVBuilder
         NewLine();
         NewLine();
         //Boss card
-        WriteLine(["Boss", _log.FightData.FightName]);
-        WriteLine(["Success", _log.FightData.Success.ToString()]);
+        WriteLine(["Boss", _log.LogData.LogName]);
+        WriteLine(["Success", _log.LogData.Success.ToString()]);
         WriteLine(["Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString()]);
         var hpUpdates = _legacyTarget.GetHealthUpdates(_log);
         double hpLeft = hpUpdates.Count > 0
@@ -100,7 +100,7 @@ public class CSVBuilder
             : 100.0;
         WriteLine(["Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString()]);
         WriteLine(["Boss Health Burned %", (100.0 - hpLeft).ToString()]);
-        WriteLine(["Duration", _log.FightData.DurationString]);
+        WriteLine(["Duration", _log.LogData.DurationString]);
 
         //DPSStats
         _log.UpdateProgressWithCancellationCheck("CSV: Building DPS Data");

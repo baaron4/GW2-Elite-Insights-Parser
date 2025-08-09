@@ -1,8 +1,8 @@
-﻿namespace GW2EIEvtcParser.EncounterLogic;
+﻿namespace GW2EIEvtcParser.LogLogic;
 
-public class EncounterCategory
+public class LogCategories
 {
-    internal enum FightCategory
+    internal enum LogCategory
     {
         Fractal,
         Strike,
@@ -16,7 +16,7 @@ public class EncounterCategory
         Unknown,
     };
 
-    internal enum SubFightCategory
+    internal enum SubLogCategory
     {
         //Raids
         SpiritVale,
@@ -64,12 +64,12 @@ public class EncounterCategory
         UnknownEncounter,
         Unknown
     };
-    internal FightCategory Category = FightCategory.Unknown;
-    internal SubFightCategory SubCategory = SubFightCategory.Unknown;
+    internal LogCategory Category = LogCategory.Unknown;
+    internal SubLogCategory SubCategory = SubLogCategory.Unknown;
 
     internal int InSubCategoryOrder = 0;
 
-    public int CompareTo(EncounterCategory other)
+    public int CompareTo(LogCategories other)
     {
         int catCompare = Category.CompareTo(other.Category);
         if (catCompare == 0)
@@ -88,11 +88,11 @@ public class EncounterCategory
     {
         switch (Category)
         {
-            case FightCategory.Strike:
+            case LogCategory.Strike:
                 return "Strike Mission";
-            case FightCategory.WvW:
+            case LogCategory.WvW:
                 return "World vs Word";
-            case FightCategory.UnknownEncounter:
+            case LogCategory.UnknownEncounter:
                 return "Unknown Encounter";
             default:
                 return Category.ToString();
@@ -103,59 +103,59 @@ public class EncounterCategory
     {
         switch (SubCategory)
         {
-            case SubFightCategory.SpiritVale:
+            case SubLogCategory.SpiritVale:
                 return "Spirit Vale";
-            case SubFightCategory.SalvationPass:
+            case SubLogCategory.SalvationPass:
                 return "Salvation Pass";
-            case SubFightCategory.StrongholdOfTheFaithful:
+            case SubLogCategory.StrongholdOfTheFaithful:
                 return "Stronghold of the Faithful";
-            case SubFightCategory.BastionOfThePenitent:
+            case SubLogCategory.BastionOfThePenitent:
                 return "Bastion of the Penitent";
-            case SubFightCategory.HallOfChains:
+            case SubLogCategory.HallOfChains:
                 return "Hall of Chains";
-            case SubFightCategory.MythwrightGambit:
+            case SubLogCategory.MythwrightGambit:
                 return "Mythwright Gambit";
-            case SubFightCategory.TheKeyOfAhdashim:
+            case SubLogCategory.TheKeyOfAhdashim:
                 return "The Key of Ahdashim";
-            case SubFightCategory.MountBalrior:
+            case SubLogCategory.MountBalrior:
                 return "Mount Balrior";
             //
-            case SubFightCategory.CaptainMaiTrinBossFractal:
+            case SubLogCategory.CaptainMaiTrinBossFractal:
                 return "Captain Mai Trin Boss Fractal";
-            case SubFightCategory.ShatteredObservatory:
+            case SubLogCategory.ShatteredObservatory:
                 return "Shattered Observatory";
-            case SubFightCategory.SunquaPeak:
+            case SubLogCategory.SunquaPeak:
                 return "Sunqua Peak";
-            case SubFightCategory.SilentSurf:
+            case SubLogCategory.SilentSurf:
                 return "Silent Surf";
-            case SubFightCategory.LonelyTower:
+            case SubLogCategory.LonelyTower:
                 return "Lonely Tower";
             //
-            case SubFightCategory.UnknownEncounter:
+            case SubLogCategory.UnknownEncounter:
                 return "Unknown Encounter";
             //
-            case SubFightCategory.EternalBattlegrounds:
+            case SubLogCategory.EternalBattlegrounds:
                 return "Eternal Battlegrounds";
-            case SubFightCategory.ObsidianSanctum:
+            case SubLogCategory.ObsidianSanctum:
                 return "Obsidian Sanctum";
-            case SubFightCategory.RedDesertBorderlands:
+            case SubLogCategory.RedDesertBorderlands:
                 return "Red Desert Borderlands";
-            case SubFightCategory.GreenAlpineBorderlands:
+            case SubLogCategory.GreenAlpineBorderlands:
                 return "Green Alpine Borderlands";
-            case SubFightCategory.BlueAlpineBorderlands:
+            case SubLogCategory.BlueAlpineBorderlands:
                 return "Blue Alpine Borderlands";
-            case SubFightCategory.EdgeOfTheMists:
+            case SubLogCategory.EdgeOfTheMists:
                 return "Edge of the Mists";
-            case SubFightCategory.ArmisticeBastion:
+            case SubLogCategory.ArmisticeBastion:
                 return "Armistice Bastion";
             //
-            case SubFightCategory.Grothmar:
+            case SubLogCategory.Grothmar:
                 return "Grothmar Valley";
-            case SubFightCategory.Bjora:
+            case SubLogCategory.Bjora:
                 return "Bjora Marches";
-            case SubFightCategory.Drizzlewood:
+            case SubLogCategory.Drizzlewood:
                 return "Drizzlewood Coast";
-            case SubFightCategory.SotO:
+            case SubLogCategory.SotO:
                 return "Secret of the Obscure";
             default:
                 return SubCategory.ToString();

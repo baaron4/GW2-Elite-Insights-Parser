@@ -20,17 +20,17 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
 
     // Abstract Methods
     /// <summary>
-    /// Make sure the last element does not overflow the fight
+    /// Make sure the last element does not overflow the log
     /// </summary>
-    /// <param name="fightDuration">Duration of the fight</param>
-    private void Trim(long fightDuration)
+    /// <param name="logDuration">Duration of the log</param>
+    private void Trim(long logDuration)
     {
         for (int i = GenerationSimulation.Count - 1; i >= 0; i--)
         {
             BuffSimulationItem data = GenerationSimulation[i];
-            if (data.End > fightDuration)
+            if (data.End > logDuration)
             {
-                data.OverrideEnd(fightDuration);
+                data.OverrideEnd(logDuration);
             }
             else
             {
@@ -41,7 +41,7 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
 
     protected abstract void UpdateSimulator(BuffEvent buffEvent);
 
-    public void Simulate(List<BuffEvent> buffEvents, long fightStart, long fightEnd)
+    public void Simulate(List<BuffEvent> buffEvents, long logStart, long logEnd)
     {
         if (GenerationSimulation.Count != 0)
         {
@@ -49,7 +49,7 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
         }
         GenerationSimulation.Capacity = (int)(buffEvents.Count * 1.2);
         WasteSimulationResult.Capacity = (int)(GenerationSimulation.Capacity / 2);
-        long timePrev = buffEvents.Count > 0 ? Math.Min(buffEvents[0].Time, fightStart) : fightStart;
+        long timePrev = buffEvents.Count > 0 ? Math.Min(buffEvents[0].Time, logStart) : logStart;
         foreach (BuffEvent buffEvent in buffEvents)
         {
             long timeCur = buffEvent.Time;
@@ -59,9 +59,9 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, Buff
             UpdateSimulator(buffEvent);
             timePrev = timeCur;
         }
-        Update(fightEnd - timePrev);
+        Update(logEnd - timePrev);
 
-        Trim(fightEnd);
+        Trim(logEnd);
         GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         AfterSimulate();
     }

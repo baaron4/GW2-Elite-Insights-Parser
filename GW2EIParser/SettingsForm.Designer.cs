@@ -79,7 +79,7 @@ partial class SettingsForm
         this.GroupOutput = new System.Windows.Forms.GroupBox();
         this.ChkAddDuration = new System.Windows.Forms.CheckBox();
         this.ChkAddPoVProf = new System.Windows.Forms.CheckBox();
-        this.GroupEncounter = new System.Windows.Forms.GroupBox();
+        this.GroupLog = new System.Windows.Forms.GroupBox();
         this.TabHTML = new System.Windows.Forms.TabPage();
         this.PictureTheme = new System.Windows.Forms.PictureBox();
         this.PanelHtml = new System.Windows.Forms.Panel();
@@ -111,7 +111,7 @@ partial class SettingsForm
         this.TabGeneral.SuspendLayout();
         this.GroupParsing.SuspendLayout();
         this.GroupOutput.SuspendLayout();
-        this.GroupEncounter.SuspendLayout();
+        this.GroupLog.SuspendLayout();
         this.TabHTML.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)(this.PictureTheme)).BeginInit();
         this.PanelHtml.SuspendLayout();
@@ -188,7 +188,7 @@ partial class SettingsForm
         this.LblCustomTooShort.Name = "LblCustomTooShort";
         this.LblCustomTooShort.Size = new System.Drawing.Size(151, 13);
         this.LblCustomTooShort.TabIndex = 17;
-        this.LblCustomTooShort.Text = "Skip fights shorter than (in ms):";
+        this.LblCustomTooShort.Text = "Skip logs shorter than (in ms):";
         // 
         // NumericMemoryLimit
         // 
@@ -594,7 +594,7 @@ partial class SettingsForm
         // 
         this.TabGeneral.Controls.Add(this.GroupParsing);
         this.TabGeneral.Controls.Add(this.GroupOutput);
-        this.TabGeneral.Controls.Add(this.GroupEncounter);
+        this.TabGeneral.Controls.Add(this.GroupLog);
         this.TabGeneral.Controls.Add(this.LblMemoryLimit);
         this.TabGeneral.Controls.Add(this.NumericMemoryLimit);
         this.TabGeneral.Location = new System.Drawing.Point(4, 22);
@@ -678,7 +678,7 @@ partial class SettingsForm
         this.ChkAddDuration.Name = "ChkAddDuration";
         this.ChkAddDuration.Size = new System.Drawing.Size(194, 17);
         this.ChkAddDuration.TabIndex = 19;
-        this.ChkAddDuration.Text = "Add encounter duration to file name";
+        this.ChkAddDuration.Text = "Add log duration to file name";
         this.ChkAddDuration.UseVisualStyleBackColor = true;
         this.ChkAddDuration.CheckedChanged += new System.EventHandler(this.ChkAddDurationCheckedChanged);
         // 
@@ -695,16 +695,16 @@ partial class SettingsForm
         // 
         // GroupEncounter
         // 
-        this.GroupEncounter.Controls.Add(this.ChkDetailledWvW);
-        this.GroupEncounter.Controls.Add(this.ChkPhaseParsing);
-        this.GroupEncounter.Controls.Add(this.ChkCombatReplay);
-        this.GroupEncounter.Controls.Add(this.ChkDamageMods);
-        this.GroupEncounter.Location = new System.Drawing.Point(12, 8);
-        this.GroupEncounter.Name = "GroupEncounter";
-        this.GroupEncounter.Size = new System.Drawing.Size(187, 160);
-        this.GroupEncounter.TabIndex = 36;
-        this.GroupEncounter.TabStop = false;
-        this.GroupEncounter.Text = "Encounter";
+        this.GroupLog.Controls.Add(this.ChkDetailledWvW);
+        this.GroupLog.Controls.Add(this.ChkPhaseParsing);
+        this.GroupLog.Controls.Add(this.ChkCombatReplay);
+        this.GroupLog.Controls.Add(this.ChkDamageMods);
+        this.GroupLog.Location = new System.Drawing.Point(12, 8);
+        this.GroupLog.Name = "GroupLog";
+        this.GroupLog.Size = new System.Drawing.Size(187, 160);
+        this.GroupLog.TabIndex = 36;
+        this.GroupLog.TabStop = false;
+        this.GroupLog.Text = "Log";
         // 
         // TabHTML
         // 
@@ -997,8 +997,8 @@ partial class SettingsForm
         this.GroupParsing.PerformLayout();
         this.GroupOutput.ResumeLayout(false);
         this.GroupOutput.PerformLayout();
-        this.GroupEncounter.ResumeLayout(false);
-        this.GroupEncounter.PerformLayout();
+        this.GroupLog.ResumeLayout(false);
+        this.GroupLog.PerformLayout();
         this.TabHTML.ResumeLayout(false);
         this.TabHTML.PerformLayout();
         ((System.ComponentModel.ISupportInitialize)(this.PictureTheme)).EndInit();
@@ -1065,7 +1065,7 @@ partial class SettingsForm
     private System.Windows.Forms.TabPage TabAPI;
     private System.Windows.Forms.Button BtnClose;
     private System.Windows.Forms.GroupBox GroupOutput;
-    private System.Windows.Forms.GroupBox GroupEncounter;
+    private System.Windows.Forms.GroupBox GroupLog;
     private System.Windows.Forms.Panel PanelTheme;
     private System.Windows.Forms.RadioButton RadioThemeLight;
     private System.Windows.Forms.RadioButton RadioThemeDark;

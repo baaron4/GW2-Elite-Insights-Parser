@@ -2,13 +2,13 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class MursaatOverseer : BastionOfThePenitent
 {
@@ -23,11 +23,11 @@ internal class MursaatOverseer : BastionOfThePenitent
             new PlayerDstBuffApplyMechanic(Invulnerability757, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect", "Protected by the Protect Shield","Protect Shield",0).UsingChecker((ba, log) => ba.AppliedDuration == 1000),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ProtectBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)", "Took protect","Protect (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
+                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
                 new PlayerDstBuffApplyMechanic(DispelBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)", "Took dispel","Dispel (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
+                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
                 new PlayerDstBuffApplyMechanic(ClaimBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)", "Took claim","Claim (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
+                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(MursaatOverseersShield, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield", "Jade Soldier Shield","Soldier Shield", 0),
@@ -40,8 +40,8 @@ internal class MursaatOverseer : BastionOfThePenitent
         MechanicList.Add(Mechanics);
         Extension = "mo";
         Icon = EncounterIconMursaatOverseer;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
         ChestID = ChestID.RecreationRoomChest;
     }
 
@@ -87,9 +87,9 @@ internal class MursaatOverseer : BastionOfThePenitent
         return phases;
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
     {
-        return base.GetCustomWarningMessages(fightData, evtcVersion)
+        return base.GetCustomWarningMessages(logData, evtcVersion)
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
@@ -153,10 +153,10 @@ internal class MursaatOverseer : BastionOfThePenitent
         replay.Decorations.AddNonHomingMissiles(log, dispels, Colors.Yellow, 0.3, 25);
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
-        return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 25e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)

@@ -2,14 +2,14 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfDarkness : HallOfChains
 {
@@ -36,8 +36,8 @@ internal class StatueOfDarkness : HallOfChains
         MechanicList.Add(Mechanics);
         Extension = "eyes";
         Icon = EncounterIconStatueOfDarkness;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000005;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000005;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -77,19 +77,19 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (TargetHPPercentUnderThreshold(TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(TargetID.EyeOfFate, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.EyeOfJudgement, logData.LogStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.EyeOfFate, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -115,7 +115,7 @@ internal class StatueOfDarkness : HallOfChains
             {
                 if (abe.Value == 0)
                 {
-                    var phase = new PhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, log.FightData.FightEnd))
+                    var phase = new PhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, log.LogData.LogEnd))
                     {
                         Name = eye.Character + " " + (++count)
                     };
@@ -171,10 +171,10 @@ internal class StatueOfDarkness : HallOfChains
         return false;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfFate));
             SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EyeOfJudgement));
@@ -184,7 +184,7 @@ internal class StatueOfDarkness : HallOfChains
             }
             if (HasIntersectingLastGrasps(combatData, eyeFate, eyeJudgement, out var intersectTime))
             {
-                fightData.SetSuccess(true, intersectTime);
+                logData.SetSuccess(true, intersectTime);
             }
         }
     }

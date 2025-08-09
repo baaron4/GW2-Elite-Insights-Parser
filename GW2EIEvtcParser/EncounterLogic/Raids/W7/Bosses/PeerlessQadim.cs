@@ -4,14 +4,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class PeerlessQadim : TheKeyOfAhdashim
 {
@@ -58,8 +58,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         Extension = "prlqadim";
         Icon = EncounterIconPeerlessQadim;
         ChestID = ChestID.QadimThePeerlessChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000003;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -103,10 +103,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         ("(SE)", new(2941.51514f, 9321.848f)),
     ];
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
-        return base.GetEncounterStartStatus(combatData, agentData, fightData);
+        return base.GetLogStartStatus(combatData, agentData, logData);
     }
 
     internal static void RenamePylons(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
@@ -125,9 +125,9 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenamePylons(Targets, combatData);
     }
 
@@ -183,7 +183,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
         // rush to pylon
         phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(BatteringBlitz).Select(x => x.Time));
-        phaseEnds.Add(log.FightData.FightEnd);
+        phaseEnds.Add(log.LogData.LogEnd);
         // tp to middle after pylon destruction
         phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(PeerlessQadimTPCenter).Select(x => x.EndTime));
         // There should be at least as many starts as ends, otherwise skip phases
@@ -201,7 +201,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         // intermission phase never finished, add a "dummy" log end
         if (phaseEnds.Count - 1 == phaseStarts.Count)
         {
-            phaseStarts.Add(log.FightData.FightEnd);
+            phaseStarts.Add(log.LogData.LogEnd);
         }
         // There should be as many ends as starts, otherwise anomaly, skip intermission phases
         if (phaseEnds.Count != phaseStarts.Count)
@@ -212,7 +212,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         bool skipNames = intermissionNames.Length < phaseEnds.Count - 1;
         for (int i = 0; i < phaseEnds.Count - 1; i++)
         {
-            var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.FightData.FightEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
+            var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.LogData.LogEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
@@ -480,7 +480,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         var castsLiftUp = p.GetCastEvents(log).Where(x => x.SkillID == PlayerLiftUpQadimThePeerless);
         foreach (CastEvent cast in castsLiftUp)
         {
-            long liftUpEnd = log.FightData.LogEnd;
+            long liftUpEnd = log.LogData.EvtcLogEnd;
             var unleashCast = castsUnleash.FirstOrDefault(x => x.Time > cast.Time);
             if (unleashCast != null)
             {
@@ -689,17 +689,17 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 }
                 else
                 {
-                    tetherEnd = (int)log.FightData.FightEnd;
+                    tetherEnd = (int)log.LogData.LogEnd;
                 }
                 replay.Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, opacity, new AgentConnector(actor), new AgentConnector(src)));
             }
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
-        return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 48e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
 }

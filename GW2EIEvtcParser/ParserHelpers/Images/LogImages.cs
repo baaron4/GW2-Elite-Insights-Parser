@@ -1,7 +1,7 @@
 ﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 #pragma warning disable CA1823 // Unused field
-internal static class EncounterImages
+internal static class LogImages
 {
     #region GENERICS
 

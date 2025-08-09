@@ -5,14 +5,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
 {
@@ -23,7 +23,7 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     private readonly IReadOnlyList<TheKeyOfAhdashim> _subLogics;
     public TheKeyOfAhdashimInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconTheKeyOfAhdashim;
         Extension = "keyadash"; 
         
@@ -46,9 +46,9 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", EncounterIconAdina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", EncounterIconSabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, EncounterIconPeerlessQadim, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], ChestID.AdinasChest, "Cardinal Adina", EncounterIconAdina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], ChestID.SabirsChest, "Cardinal Sabir", EncounterIconSabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], ChestID.QadimThePeerlessChest, EncounterIconPeerlessQadim, "Qadim the Peerless", (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
         return phases;
     }
 
@@ -99,12 +99,12 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Adina.FindPlatforms(agentData);
-        Adina.FindHands(fightData, agentData, combatData, extensions);
+        Adina.FindHands(logData, agentData, combatData, extensions);
         Sabir.FindPlateforms(agentData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Adina.RenameHands(Targets, combatData);
         PeerlessQadim.RenamePylons(Targets, combatData);
     }

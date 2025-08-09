@@ -2,13 +2,13 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Cairn : BastionOfThePenitent
 {
@@ -53,8 +53,8 @@ internal class Cairn : BastionOfThePenitent
         MechanicList.Add(Mechanics);
         Extension = "cairn";
         Icon = EncounterIconCairn;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
         ChestID = ChestID.CairnChest;
     }
 
@@ -87,14 +87,14 @@ internal class Cairn : BastionOfThePenitent
         BuffApplyEvent? enrageApply = log.CombatData.GetBuffDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
         if (enrageApply != null)
         {
-            var normalPhase = new PhaseData(log.FightData.FightStart, enrageApply.Time)
+            var normalPhase = new PhaseData(log.LogData.LogStart, enrageApply.Time)
             {
                 Name = "Calm"
             };
             normalPhase.AddTarget(cairn, log);
             normalPhase.AddParentPhase(phases[0]);
 
-            var enragePhase = new PhaseData(enrageApply.Time, log.FightData.FightEnd)
+            var enragePhase = new PhaseData(enrageApply.Time, log.LogData.LogEnd)
             {
                 Name = "Angry"
             };
@@ -128,7 +128,7 @@ internal class Cairn : BastionOfThePenitent
             foreach (EffectEvent dashGreen in dashGreenEffects)
             {
                 long dashGreenStart = dashGreen.Time;
-                long dashGreenEnd = log.FightData.FightEnd;
+                long dashGreenEnd = log.LogData.LogEnd;
                 CastEvent? endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                 if (endEvent != null)
                 {
@@ -203,7 +203,7 @@ internal class Cairn : BastionOfThePenitent
         }
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Cairn, out var cairn))
         {
@@ -218,7 +218,7 @@ internal class Cairn : BastionOfThePenitent
         else
         {
             // get first end casting
-            CombatItem? firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(cairn));
+            CombatItem? firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - logData.EvtcLogStart) < 2000 && x.SrcMatchesAgent(cairn));
             // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
             if (firstCastEnd != null && firstCastEnd.SkillID == CairnImpact)
             {
@@ -237,7 +237,7 @@ internal class Cairn : BastionOfThePenitent
                 }
             }
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
@@ -260,9 +260,9 @@ internal class Cairn : BastionOfThePenitent
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetSkills().Contains(Countdown) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetSkills().Contains(Countdown) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

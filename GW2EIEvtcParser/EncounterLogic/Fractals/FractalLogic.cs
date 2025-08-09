@@ -2,16 +2,16 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal abstract class FractalLogic : FightLogic
+internal abstract class FractalLogic : LogLogic
 {
     protected FractalLogic(int triggerID) : base(triggerID)
     {
@@ -45,8 +45,8 @@ internal abstract class FractalLogic : FightLogic
                  */
             ])
         ]));
-        EncounterCategoryInformation.Category = FightCategory.Fractal;
-        EncounterID |= EncounterIDs.EncounterMasks.FractalMask;
+        LogCategoryInformation.Category = LogCategory.Fractal;
+        LogID |= LogIDs.LogMasks.FractalMask;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -57,7 +57,7 @@ internal abstract class FractalLogic : FightLogic
         }
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the log not found");
         phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
@@ -86,26 +86,26 @@ internal abstract class FractalLogic : FightLogic
         ];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         // check reward
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        RewardEvent? reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the log not found");
+        RewardEvent? reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > logData.LogStart);
         HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
         if (lastDamageTaken != null)
         {
             if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 1000)
             {
-                fightData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
+                logData.SetSuccess(true, Math.Min(lastDamageTaken.Time, reward.Time));
             }
             else
             {
-                NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+                NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
             }
         } 
         else
         {
-            fightData.SetSuccess(false, mainTarget.LastAware);
+            logData.SetSuccess(false, mainTarget.LastAware);
         }
     }
 
@@ -156,17 +156,17 @@ internal abstract class FractalLogic : FightLogic
         }
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            return base.GetLogStartStatus(combatData, agentData, logData);
         }
-        if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(GenericTriggerID, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)

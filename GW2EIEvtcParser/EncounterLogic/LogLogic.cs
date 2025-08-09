@@ -6,16 +6,16 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Decoration;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-public abstract class FightLogic
+public abstract class LogLogic
 {
 
     public enum ParseModeEnum { Instanced50, Instanced10, Instanced5, Benchmark, WvW, sPvP, OpenWorld, Unknown };
@@ -37,7 +37,7 @@ public abstract class FightLogic
     public string Extension { get; protected set; } = "";
     public string Icon { get; protected set; } = "";
     private readonly int _basicMechanicsCount;
-    public bool HasNoFightSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
+    public bool HasNoEncounterSpecificMechanics => MechanicList.Count == _basicMechanicsCount;
     public IReadOnlyCollection<AgentItem> TargetAgents { get; protected set; } = [];
     public IReadOnlyCollection<AgentItem> NonSquadFriendlyAgents { get; protected set; } = [];
     public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; } = [];
@@ -63,12 +63,12 @@ public abstract class FightLogic
     public bool Targetless { get; protected set; } = false;
     internal readonly int GenericTriggerID;
 
-    public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
+    public long LogID { get; protected set; } = LogIDs.Unknown;
 
-    public EncounterCategory EncounterCategoryInformation { get; protected set; }
+    public LogCategories LogCategoryInformation { get; protected set; }
     protected FallBackMethod GenericFallBackMethod;
 
-    protected FightLogic(int triggerID)
+    protected LogLogic(int triggerID)
     {
         GenericTriggerID = triggerID;
         MechanicList = [
@@ -105,7 +105,7 @@ public abstract class FightLogic
             ])
         ];
         _basicMechanicsCount = MechanicList.Count;
-        EncounterCategoryInformation = new EncounterCategory();
+        LogCategoryInformation = new LogCategories();
         GenericFallBackMethod = IsInstance ? FallBackMethod.None : FallBackMethod.Death;
     }
 
@@ -147,12 +147,12 @@ public abstract class FightLogic
         }
         if (!IsInstance)
         {
-            long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
+            long end = log.LogData.Success ? log.LogData.LogEnd : (log.LogData.LogEnd + log.LogData.LogStart) / 2;
             int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
                 {
-                    return graph.Values.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
+                    return graph.Values.Where(y => y.Intersects(log.LogData.LogStart, end)).Max(y => y.Value);
                 }
                 else
                 {
@@ -223,7 +223,7 @@ public abstract class FightLogic
         return [];
     }
 
-    private void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    private void ComputeLogTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var ignoredSpeciesForRenaming = IgnoreForAutoNumericalRenaming();
 
@@ -280,13 +280,13 @@ public abstract class FightLogic
         _nonSquadFriendlies.SortByFirstAware();
         NumericallyRenameSpecies(NonSquadFriendlies, ignoredSpeciesForRenaming);
 
-        FinalizeComputeFightTargets();
+        FinalizeComputeLogTargets();
     }
 
-    internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+    internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, LogData logData)
     {
         //
-        long threshold = fightData.FightStart + 5000;
+        long threshold = logData.LogStart + 5000;
         foreach (Player p in players)
         {
             EnterCombatEvent? enterCombat = null;
@@ -306,7 +306,7 @@ public abstract class FightLogic
         }
     }
 
-    protected void FinalizeComputeFightTargets()
+    protected void FinalizeComputeLogTargets()
     {
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
         NonSquadFriendlyAgents = new HashSet<AgentItem>(_nonSquadFriendlies.Select(x => x.AgentItem));
@@ -319,9 +319,9 @@ public abstract class FightLogic
         return [ ];
     }
 
-    internal void InvalidateEncounterID()
+    internal void InvalidateLogID()
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
     }
 
     internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
@@ -350,8 +350,8 @@ public abstract class FightLogic
                     continue;
                 }
 
-                long start = Math.Max(breakbarActive.Start - 2000, log.FightData.FightStart);
-                long end = Math.Min(breakbarActive.End, log.FightData.FightEnd);
+                long start = Math.Max(breakbarActive.Start - 2000, log.LogData.LogStart);
+                long end = Math.Min(breakbarActive.End, log.LogData.LogEnd);
                 var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
                 {
                     BreakbarPhase = true
@@ -370,7 +370,7 @@ public abstract class FightLogic
         return phases;
     }
 
-    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
         {
@@ -454,30 +454,30 @@ public abstract class FightLogic
         return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
-    internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal virtual LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
-            return FightData.EncounterMode.NotApplicable;
+            return LogData.LogMode.NotApplicable;
         }
-        return FightData.EncounterMode.Normal;
+        return LogData.LogMode.Normal;
     }
 
-    internal virtual FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal virtual LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
             InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
             if (evt == null)
             {
-                return FightData.EncounterStartStatus.Normal;
+                return LogData.LogStartStatus.Normal;
             }
             else
             {
-                return evt.TimeOffsetFromInstanceCreation > 10000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+                return evt.TimeOffsetFromInstanceCreation > 10000 ? LogData.LogStartStatus.Late : LogData.LogStartStatus.Normal;
             }
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     protected virtual IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -485,9 +485,9 @@ public abstract class FightLogic
         return [ GetTargetID(GenericTriggerID) ];
     }
 
-    internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
     }
 
     protected IEnumerable<SingleActor> GetSuccessCheckTargets()
@@ -495,41 +495,41 @@ public abstract class FightLogic
         return Targets.Where(x => x.IsAnySpecies(GetSuccessCheckIDs()));
     }
 
-    protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (!fightData.Success && ChestID != ChestID.None)
+        if (!logData.Success && ChestID != ChestID.None)
         {
-            SetSuccessByChestGadget(ChestID, agentData, fightData);
+            SetSuccessByChestGadget(ChestID, agentData, logData);
         }
-        if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.Death) > 0)
+        if (!logData.Success && (GenericFallBackMethod & FallBackMethod.Death) > 0)
         {
-            SetSuccessByDeath(GetSuccessCheckTargets(), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(GetSuccessCheckTargets(), combatData, logData, playerAgents, true);
         }
-        if (!fightData.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
+        if (!logData.Success && (GenericFallBackMethod & FallBackMethod.CombatExit) > 0)
         {
-            SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, fightData, playerAgents);
+            SetSuccessByCombatExit(GetSuccessCheckTargets(), combatData, logData, playerAgents);
         }
-        if (!fightData.Success)
+        if (!logData.Success)
         {
             var targets = GetSuccessCheckTargets();
             if (targets.Any())
             {
-                fightData.SetSuccess(false, targets.Max(x => x.LastAware));
+                logData.SetSuccess(false, targets.Max(x => x.LastAware));
             }
         }
     }
 
     /// <summary>
-    /// To be used in situations where the encounter has been triggered by a gadget and its stabilisation is necessary ASAP
+    /// To be used in situations where the log has been triggered by a gadget and its stabilisation is necessary ASAP
     /// </summary>
-    internal virtual void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal virtual void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
 
     }
 
-    internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal virtual long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         if  (IsInstance)
         {
             return startToUse;
@@ -537,23 +537,23 @@ public abstract class FightLogic
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
         }
         return startToUse;
     }
 
-    internal virtual FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    internal virtual LogLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         return this;
     }
 
-    internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (IsInstance)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance", Spec.NPC, TargetID.Instance, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Dummy Instance", Spec.NPC, TargetID.Instance, true);
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        ComputeLogTargets(agentData, combatData, extensions);
         if (IsInstance && Targets.Count == Targets.Count(x => x.IsSpecies(TargetID.Instance)))
         {
             Targetless = true;
@@ -572,7 +572,7 @@ public abstract class FightLogic
     {
         foreach (Player p in log.PlayerList)
         {
-            if (p.HasBuff(log, buff, log.FightData.FightEnd - ServerDelayConstant))
+            if (p.HasBuff(log, buff, log.LogData.LogEnd - ServerDelayConstant))
             {
                 return (log.Buffs.BuffsByIDs[buff], stack);
             }
@@ -583,8 +583,8 @@ public abstract class FightLogic
     /// <summary>
     /// Determinate the privaty state of an instance.
     /// </summary>
-    internal virtual FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal virtual LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.InstancePrivacyMode.NotApplicable;
+        return LogData.InstancePrivacyMode.NotApplicable;
     }
 }

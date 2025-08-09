@@ -5,14 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class SoullessHorror : HallOfChains
 {
@@ -54,8 +54,8 @@ internal class SoullessHorror : HallOfChains
         GenericFallBackMethod = FallBackMethod.None;
         ChestID = ChestID.ChestOfDesmina;
         Icon = EncounterIconSoullessHorror;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -95,16 +95,16 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
     {
-        return base.GetCustomWarningMessages(fightData, evtcVersion)
+        return base.GetCustomWarningMessages(logData, evtcVersion)
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
@@ -112,7 +112,7 @@ internal class SoullessHorror : HallOfChains
             {
                 if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
                 {
-                    fightData.SetSuccess(true, buffOnDeath.Time);
+                    logData.SetSuccess(true, buffOnDeath.Time);
                 }
             }
         }
@@ -129,16 +129,16 @@ internal class SoullessHorror : HallOfChains
             }
         }
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         phases[0].AddTarget(mainTarget, log);
@@ -147,26 +147,26 @@ internal class SoullessHorror : HallOfChains
             return phases;
         }
         var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillID == HowlingDeath);
+        var howling = mainTarget.GetCastEvents(log, log.LogData.LogStart, logEnd).Where(x => x.SkillID == HowlingDeath);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in howling)
         {
-            var preBreakbarPhase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i);
+            var preBreakbarPhase = new PhaseData(start, Math.Min(c.Time, logEnd), "Pre-Breakbar " + i);
             preBreakbarPhase.AddTarget(mainTarget, log);
             preBreakbarPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
             preBreakbarPhase.AddParentPhase(phases[0]);
             phases.Add(preBreakbarPhase);
-            var howlingDeathPhase = new PhaseData(Math.Min(c.Time, fightEnd), Math.Min(c.EndTime, fightEnd), "Howling Death " + (i++));
+            var howlingDeathPhase = new PhaseData(Math.Min(c.Time, logEnd), Math.Min(c.EndTime, logEnd), "Howling Death " + (i++));
             howlingDeathPhase.AddTarget(mainTarget, log);
             howlingDeathPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
             howlingDeathPhase.AddParentPhase(phases[0]);
             phases.Add(howlingDeathPhase);
             start = c.EndTime;
         }
-        if (fightEnd - start > PhaseTimeLimit)
+        if (logEnd - start > PhaseTimeLimit)
         {
-            var lastPhase = new PhaseData(start, fightEnd, "Final");
+            var lastPhase = new PhaseData(start, logEnd, "Final");
             lastPhase.AddTarget(mainTarget, log);
             lastPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
             lastPhase.AddParentPhase(phases[0]);
@@ -188,7 +188,7 @@ internal class SoullessHorror : HallOfChains
                 // arena reduction
                 var center = new Vector3(-10581, 825, -817);
                 List<(double, uint, uint)> destroyedRings;
-                if (log.FightData.IsCM)
+                if (log.LogData.IsCM)
                 {
                     destroyedRings =
                         [
@@ -401,8 +401,8 @@ internal class SoullessHorror : HallOfChains
         return minDiff < 11000;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {       
-        return HasFastNecrosis(combatData, fightData.FightStart, fightData.FightEnd) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return HasFastNecrosis(combatData, logData.LogStart, logData.LogEnd) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 }

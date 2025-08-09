@@ -3,14 +3,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class SuperKodanBrothers : Bjora
 {
@@ -28,8 +28,8 @@ internal class SuperKodanBrothers : Bjora
         );
         Extension = "supkodbros";
         Icon = EncounterIconKodanBrothers;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -48,19 +48,19 @@ internal class SuperKodanBrothers : Bjora
         ];
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (TargetHPPercentUnderThreshold(TargetID.ClawOfTheFallen, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(TargetID.VoiceOfTheFallen, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.ClawOfTheFallen, logData.LogStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.VoiceOfTheFallen, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+        long startToUse = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -86,7 +86,7 @@ internal class SuperKodanBrothers : Bjora
         phases[0].AddTarget(voice, log);
         phases[0].AddTarget(claw, log);
         phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.VoiceAndClaw)), log, PhaseData.TargetPriority.Blocking);
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         if (!requirePhases)
         {
             return phases;
@@ -116,7 +116,7 @@ internal class SuperKodanBrothers : Bjora
                 phaseStart = voiceAndClaw.FirstAware;
             }
             PhaseData? nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > phaseStart);
-            long phaseEnd = Math.Min(fightEnd, voiceAndClaw.LastAware);
+            long phaseEnd = Math.Min(logEnd, voiceAndClaw.LastAware);
             if (nextUnmergedPhase != null)
             {
                 phaseEnd = nextUnmergedPhase.Start - 1;
@@ -131,7 +131,7 @@ internal class SuperKodanBrothers : Bjora
         long preTPPhaseStart = 0;
         foreach (CastEvent teleport in teleports)
         {
-            long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
+            long preTPPhaseEnd = Math.Min(teleport.Time, log.LogData.LogEnd);
             SingleActor? voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
             if (voiceAndClaw != null)
             {
@@ -169,7 +169,7 @@ internal class SuperKodanBrothers : Bjora
         BuffEvent? enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
         if (enrage != null)
         {
-            var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
+            var phase = new PhaseData(enrage.Time, log.LogData.LogEnd, "Enrage");
             phase.AddParentPhases(unmergedPhases);
             phase.AddTarget(claw.AgentItem.Is(enrage.To) ? claw : voice, log);
             phases.Add(phase);
@@ -178,7 +178,7 @@ internal class SuperKodanBrothers : Bjora
         {
             PhaseData? nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > preTPPhaseStart);
             long finalStart = preTPPhaseStart;
-            long finalPositionEnd = log.FightData.FightEnd;
+            long finalPositionEnd = log.LogData.LogEnd;
             if (nextUnmergedPhase != null)
             {
                 finalStart = nextUnmergedPhase.Start;

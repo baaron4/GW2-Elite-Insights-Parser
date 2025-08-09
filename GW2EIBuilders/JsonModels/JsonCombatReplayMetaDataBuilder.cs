@@ -8,7 +8,7 @@ internal static class JsonCombatReplayMetaDataBuilder
 {
     public static JsonCombatReplayMetaData BuildJsonCombatReplayMetaData(ParsedEvtcLog log, RawFormatSettings settings)
     {
-        CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
+        CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
         var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>(map.Maps.Count);
         var jsonCR = new JsonCombatReplayMetaData()
         {

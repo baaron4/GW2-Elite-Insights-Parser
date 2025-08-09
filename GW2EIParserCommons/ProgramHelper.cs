@@ -137,13 +137,13 @@ public sealed class ProgramHelper : IDisposable
     private Embed BuildEmbed(ParsedEvtcLog log, string dpsReportPermalink)
     {
         EmbedBuilder builder = GetEmbedBuilder();
-        builder.WithThumbnailUrl(log.FightData.Logic.Icon);
+        builder.WithThumbnailUrl(log.LogData.Logic.Icon);
         //
-        builder.AddField("Encounter Duration", log.FightData.DurationString);
+        builder.AddField("Log Duration", log.LogData.DurationString);
         //
-        if (log.FightData.Logic.GetInstanceBuffs(log).Any())
+        if (log.LogData.Logic.GetInstanceBuffs(log).Any())
         {
-            builder.AddField("Instance Buffs", string.Join("\n", log.FightData.Logic.GetInstanceBuffs(log).Select(x => (x.stack > 1 ? x.stack + " " : "") + x.buff.Name)));
+            builder.AddField("Instance Buffs", string.Join("\n", log.LogData.Logic.GetInstanceBuffs(log).Select(x => (x.stack > 1 ? x.stack + " " : "") + x.buff.Name)));
         }
         //
         /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group);
@@ -158,17 +158,17 @@ public sealed class ProgramHelper : IDisposable
             builder.AddField(hasGroups ? "Group " + group.Key : "Party Composition", String.Join("\n", groupField));
         }*/
         //
-        builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);
+        builder.AddField("Game Data", "ARC: " + log.LogMetadata.ArcVersion + " | " + "GW2 Build: " + log.LogMetadata.GW2Build);
         //
-        builder.WithTitle(log.FightData.FightName);
+        builder.WithTitle(log.LogData.LogName);
         //builder.WithTimestamp(DateTime.Now);
-        AgentItem? pov = log.LogData.PoV;
+        AgentItem? pov = log.LogMetadata.PoV;
         if (pov != null)
         {
             SingleActor povActor = log.FindActor(pov);
-            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon(true));
+            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogMetadata.LogStartStd + " / " + log.LogMetadata.LogEndStd, povActor.GetIcon(true));
         }
-        builder.WithColor(log.FightData.Success ? Discord.Color.Green : Discord.Color.Red);
+        builder.WithColor(log.LogData.Success ? Discord.Color.Green : Discord.Color.Red);
         if (dpsReportPermalink.Length > 0)
         {
             builder.WithUrl(dpsReportPermalink);
@@ -211,9 +211,9 @@ public sealed class ProgramHelper : IDisposable
             } 
             else
             {
-                string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : "-";
+                string accName = originalLog.LogMetadata.PoV != null ? originalLog.LogMetadata.PoVAccount : "-";
 
-                if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
+                if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.LogData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {
 #if !DEBUG
                     try
@@ -266,8 +266,8 @@ public sealed class ProgramHelper : IDisposable
 
                         originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing upload");
 
-                        string result = logToUse.FightData.Success ? "kill" : "fail";
-                        WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
+                        string result = logToUse.LogData.Success ? "kill" : "fail";
+                        WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.LogData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                     }
                     catch (Exception e)
                     {
@@ -422,11 +422,11 @@ public sealed class ProgramHelper : IDisposable
 
         DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
 
-        string result = log.FightData.Success ? "kill" : "fail";
-        string encounterLengthTerm = Settings.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
-        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture) : "";
+        string result = log.LogData.Success ? "kill" : "fail";
+        string logLengthTerm = Settings.AddDuration ? "_" + (log.LogData.LogDuration / 1000).ToString() + "s" : "";
+        string PoVClassTerm = Settings.AddPoVProf && log.LogMetadata.PoV != null ? "_" + log.LogMetadata.PoV.Spec.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture) : "";
         string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
-        fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
+        fName = $"{fName}{PoVClassTerm}_{log.LogData.Logic.Extension}{logLengthTerm}_{result}";
 
         var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
         operation.OutLocation = saveDirectory.FullName;
@@ -528,6 +528,6 @@ public sealed class ProgramHelper : IDisposable
                 operation.UpdateProgressWithCancellationCheck("Program: XML created");
             }
         }
-        operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.FightData.Logic.Extension}");
+        operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.LogData.Logic.Extension}");
     }
 }

@@ -1,13 +1,13 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal abstract class StrikeMissionLogic : FightLogic
+internal abstract class StrikeMissionLogic : LogLogic
 {
 
     protected StrikeMissionLogic(int triggerID) : base(triggerID)
@@ -20,20 +20,20 @@ internal abstract class StrikeMissionLogic : FightLogic
         );
         ParseMode = ParseModeEnum.Instanced10;
         SkillMode = SkillModeEnum.PvE;
-        EncounterCategoryInformation.Category = FightCategory.Strike;
-        EncounterID |= EncounterIDs.EncounterMasks.StrikeMask;
+        LogCategoryInformation.Category = LogCategory.Strike;
+        LogID |= LogIDs.LogMasks.StrikeMask;
     }
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            return base.GetLogStartStatus(combatData, agentData, logData);
         }
-        if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(GenericTriggerID, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {

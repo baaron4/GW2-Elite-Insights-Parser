@@ -81,8 +81,8 @@ public class NPC : SingleActor
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
         base.InitAdditionalCombatReplayData(log, replay);
-        log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, replay);
-        if (replay.Rotations.Count != 0 && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
+        log.LogData.Logic.ComputeNPCCombatReplayActors(this, log, replay);
+        if (replay.Rotations.Count != 0 && (log.LogData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
         {
             replay.Decorations.Add(new ActorOrientationDecoration(((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), AgentItem));
         }

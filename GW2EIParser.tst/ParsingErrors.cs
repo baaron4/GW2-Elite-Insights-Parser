@@ -6,11 +6,11 @@ namespace GW2EIParser.tst;
 [TestFixture]
 public class ParsingErrors
 {
-    [TestCase("20231017-143845.zevtc", "Fight is longer than 24h")]
+    [TestCase("20231017-143845.zevtc", "Log is longer than 24h")]
     //TODO(Rennorb) This one doesn't throw? Only reports an error when run in the ui tool for some reason.
     // Probably some parser settings, but I wouldn't know which one should do that, especially since we have the details all turned on for tests.
     [TestCase("20241009-215946.zevtc", "Queue logic based must have a > 1 capacity")]
-    [TestCase("20231214-203704.zevtc", "Fight is too short: 1043 < 2200")]
+    [TestCase("20231214-203704.zevtc", "Log is too short: 1043 < 2200")]
     [TestCase("20240908-224412.zevtc", "Missing Build Event")]
     [TestCase("20220719-200758.zevtc", "Unable to read beyond the end of the stream")]
     [TestCase("20230210-223914.zevtc", "No Targets found")]

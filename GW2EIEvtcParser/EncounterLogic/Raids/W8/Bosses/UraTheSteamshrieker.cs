@@ -5,15 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class UraTheSteamshrieker : MountBalrior
 {
@@ -26,7 +26,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 new PlayerSrcBuffRemoveFromMechanic(HardenedCrust, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.White), "Dispel.Sulf", "Dispelled Sulfuric Geyser (Removed Hardened Crust)", "Dispelled Sulfuric Geyser", 0)
                     .UsingChecker((brae, log) => brae.To.IsSpecies(TargetID.SulfuricGeyser)),
                 new PlayerDstHealthDamageHitMechanic([EruptionVent, SulfuricEruption], new MechanicPlotlySetting(Symbols.TriangleSW, Colors.Pink), "Achiv.Hop", "Achievement Eligibility: Hopscotch Master", "Achiv: Hopscotch Master", 0)
-                    .UsingEnable(log => log.FightData.IsCM || log.FightData.IsLegendaryCM).UsingAchievementEligibility(),
+                    .UsingEnable(log => log.LogData.IsCM || log.LogData.IsLegendaryCM).UsingAchievementEligibility(),
             ]),
             // Titanspawn Geysers
             new MechanicGroup([
@@ -92,8 +92,8 @@ internal class UraTheSteamshrieker : MountBalrior
         Extension = "ura";
         Icon = EncounterIconUra;
         ChestID = ChestID.UrasChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -145,9 +145,9 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -168,7 +168,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     break;
                 }
             }
-            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
             if (activeDeterrences.Count == 2)
             {
                 startToUse = Math.Min(startToUse, activeDeterrences.Values.Max());
@@ -288,11 +288,11 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindGeysers(evtcVersion, agentData, combatData);
         FindBloodstoneShards(evtcVersion, agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameFumarollers(Targets);
     }
 
@@ -306,9 +306,9 @@ internal class UraTheSteamshrieker : MountBalrior
             return phases;
         }
         var parentPhase = phases[0];
-        bool isCm = log.FightData.IsCM || log.FightData.IsLegendaryCM;
-        long start = log.FightData.FightStart;
-        long end = log.FightData.FightEnd;
+        bool isCm = log.LogData.IsCM || log.LogData.IsLegendaryCM;
+        long start = log.LogData.LogStart;
+        long end = log.LogData.LogEnd;
 
         var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(ura.AgentItem));
         // Healed CM
@@ -683,24 +683,24 @@ internal class UraTheSteamshrieker : MountBalrior
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
         var uraHP = target.GetHealth(combatData);
         if (uraHP > 70e6)
         {
             target.OverrideName("Godscream Ura");
-            return uraHP > 100e6 ? FightData.EncounterMode.LegendaryCM : FightData.EncounterMode.CMNoName;
+            return uraHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName;
         }
         target.OverrideName("Ura, the Steamshrieker");
-        return FightData.EncounterMode.Normal;
+        return LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && (log.FightData.IsCM || log.FightData.IsLegendaryCM))
+        if (log.LogData.Success && (log.LogData.IsCM || log.LogData.IsLegendaryCM))
         {
             var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
             bool eligible = true;
@@ -714,7 +714,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     {
                         (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
                         // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
-                        if (Math.Min(end, log.FightData.FightEnd) - start > 30000)
+                        if (Math.Min(end, log.LogData.LogEnd) - start > 30000)
                         {
                             eligible = false;
                             break;

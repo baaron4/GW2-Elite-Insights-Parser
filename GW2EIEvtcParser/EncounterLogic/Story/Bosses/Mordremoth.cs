@@ -1,12 +1,12 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Mordremoth : StoryInstance
 {
@@ -14,8 +14,8 @@ internal class Mordremoth : StoryInstance
     {
         Extension = "mordr";
         Icon = EncounterIconMordremoth;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000201;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000201;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
@@ -73,24 +73,24 @@ internal class Mordremoth : StoryInstance
         ];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
         BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, mordremoth.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (buffApply != null)
         {
-            fightData.SetSuccess(true, mordremoth.LastAware);
+            logData.SetSuccess(true, mordremoth.LastAware);
         } 
         else
         {
-            fightData.SetSuccess(false, mordremoth.LastAware);
+            logData.SetSuccess(false, mordremoth.LastAware);
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
-        return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
+        return (mordremoth.GetHealth(combatData) > 9e6) ? LogData.LogMode.CM : LogData.LogMode.Story;
     }
 
     internal override IReadOnlyList<TargetID>  GetFriendlyNPCIDs()

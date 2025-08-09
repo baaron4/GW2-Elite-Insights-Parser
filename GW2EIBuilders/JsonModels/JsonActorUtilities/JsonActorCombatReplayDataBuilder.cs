@@ -8,7 +8,7 @@ internal static class JsonActorCombatReplayDataBuilder
 {
     public static JsonActorCombatReplayData BuildJsonActorCombatReplayDataBuilder(SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings)
     {
-        CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
+        CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
         SingleActorCombatReplayDescription description = actor.GetCombatReplayDescription(map, log);
         var actorCombatReplayData = new JsonActorCombatReplayData()
         {

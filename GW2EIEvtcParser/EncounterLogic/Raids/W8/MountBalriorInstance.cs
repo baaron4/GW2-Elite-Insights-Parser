@@ -6,14 +6,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class MountBalriorInstance : MountBalrior
 {
@@ -24,7 +24,7 @@ internal class MountBalriorInstance : MountBalrior
     private readonly IReadOnlyList<MountBalrior> _subLogics;
     public MountBalriorInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconMountBalrior;
         Extension = "mntbalr";
 
@@ -69,7 +69,7 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
                 var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, EncounterIconGreer, isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, EncounterIconGreer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -106,7 +106,7 @@ internal class MountBalriorInstance : MountBalrior
                 }
                 var isCM = decimaID == TargetID.DecimaCM;
                 var name = isCM ? "Godsqual Decima" : "Decima, the Stormsinger";
-                var mode = isCM ? FightData.EncounterMode.CMNoName : FightData.EncounterMode.Normal;
+                var mode = isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
                 if (targetsByIDs.TryGetValue((int)TargetID.TranscendentBoulder, out var boulders))
                 {
                     AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, EncounterIconDecima, mode);
@@ -126,7 +126,7 @@ internal class MountBalriorInstance : MountBalrior
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Ura, out var uras))
         {
-            long encounterThreshold = log.FightData.LogStart;
+            long encounterThreshold = log.LogData.EvtcLogStart;
             var deterrences = log.CombatData.GetBuffData(SkillIDs.Deterrence).Where(x => x is BuffApplyEvent || x is BuffRemoveAllEvent);
             var chest = log.AgentData.GetGadgetsByID(ChestID.UrasChest).FirstOrDefault();
             foreach (var ura in uras)
@@ -167,7 +167,7 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = maxHP > 70e6;
                 var name = isCM ? "Godscream Ura" : "Ura, the Steamshrieker";
                 ura.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, EncounterIconUra, isCM ? (maxHP > 100e6 ? FightData.EncounterMode.LegendaryCM : FightData.EncounterMode.CMNoName) : FightData.EncounterMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, EncounterIconUra, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -223,12 +223,12 @@ internal class MountBalriorInstance : MountBalrior
         return friendlies.Distinct().ToList();
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         DecimaTheStormsinger.FindConduits(agentData, combatData);
         UraTheSteamshrieker.FindGeysers(evtcVersion, agentData, combatData);
         UraTheSteamshrieker.FindBloodstoneShards(evtcVersion, agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         GreerTheBlightbringer.RenameProtoGreerlings(Targets);
         UraTheSteamshrieker.RenameFumarollers(Targets);
     }

@@ -5,15 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Arkk : ShatteredObservatory
 {
@@ -69,8 +69,8 @@ internal class Arkk : ShatteredObservatory
         ]));
         Extension = "arkk";
         Icon = EncounterIconArkk;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -98,9 +98,9 @@ internal class Arkk : ShatteredObservatory
         return trashIDs;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.CMNoName;
+        return LogData.LogMode.CMNoName;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -121,7 +121,7 @@ internal class Arkk : ShatteredObservatory
         {
             return;
         }
-        var phaseData = new PhaseData(Math.Max(target.FirstAware, log.FightData.FightStart), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
+        var phaseData = new PhaseData(Math.Max(target.FirstAware, log.LogData.LogStart), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName);
         AddTargetsToPhaseAndFit(phaseData, [targetID], log);
         phases.Add(phaseData);
         phaseData.AddParentPhase(phases[0]);
@@ -172,7 +172,7 @@ internal class Arkk : ShatteredObservatory
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk, log);
             var invulLoss = invuls.FirstOrNull((in Segment x) => x.Start > phase.Start && x.Value == 0);
-            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Start ?? log.FightData.FightEnd));
+            phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Start ?? log.LogData.LogEnd));
         }
         phases.AddRange(bloomPhases);
 
@@ -186,31 +186,31 @@ internal class Arkk : ShatteredObservatory
         return phases;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         var arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault() ?? throw new MissingKeyActorsException("Arkk not found");
-        long start = GetFightOffsetBySpawn(fightData, combatData, arkk);
+        long start = GetLogOffsetBySpawn(logData, combatData, arkk);
         CombatItem? startBuffApply = combatData.FirstOrDefault(x => x.SkillID == ArkkStartBuff && x.SrcMatchesAgent(arkk) && x.IsBuffApply());
-        return startBuffApply?.Time ?? GetFightOffsetBySpawn(fightData, combatData, arkk);
+        return startBuffApply?.Time ?? GetLogOffsetBySpawn(logData, combatData, arkk);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // reward or death worked
-        if (fightData.Success)
+        if (logData.Success)
         {
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         // missing buff apply events fallback, some phases will be missing
         // removes should be present
-        if (SetSuccessByBuffCount(combatData, fightData, playerAgents, target, Determined762, 10))
+        if (SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 10))
         {
             var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>();
             if (invulsRemoveTarget.Count() == 5)
             {
-                SetSuccessByCombatExit([target], combatData, fightData, playerAgents);
+                SetSuccessByCombatExit([target], combatData, logData, playerAgents);
             }
         }
     }
@@ -221,11 +221,11 @@ internal class Arkk : ShatteredObservatory
         IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
         int counter = 0;
 
-        if (beDynamic.Any() && log.FightData.Success)
+        if (beDynamic.Any() && log.LogData.Success)
         {
             foreach (Player p in log.PlayerList)
             {
-                if (p.HasBuff(log, AchievementEligibilityBeDynamic, log.FightData.FightEnd - ServerDelayConstant))
+                if (p.HasBuff(log, AchievementEligibilityBeDynamic, log.LogData.LogEnd - ServerDelayConstant))
                 {
                     counter++;
                 }
@@ -298,7 +298,7 @@ internal class Arkk : ShatteredObservatory
                             var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                             BuffApplyEvent? nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                             BuffApplyEvent? nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                            long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
+                            long cap = Math.Min(nextInvul?.Time ?? log.LogData.LogEnd, nextStun?.Time ?? log.LogData.LogEnd);
                             long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
                             float facing = rotation.Value.XYZ.GetRoundedZRotationDeg();
                             for (int i = 0; i < 5; i++)

@@ -10,7 +10,7 @@ internal static class EXTJsonMinionsHealingStatsBuilder
 
     public static EXTJsonMinionsHealingStats BuildMinionsHealingStats(Minions minions, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var totalHealing = new List<int>(phases.Count);
         var totalAlliedHealing = new List<List<int>>(log.Friendlies.Count);
         var totalIncomingHealing = new List<int>(phases.Count);

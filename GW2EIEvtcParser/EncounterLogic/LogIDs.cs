@@ -1,11 +1,11 @@
-﻿namespace GW2EIEvtcParser.EncounterLogic;
+﻿namespace GW2EIEvtcParser.LogLogic;
 
-internal static class EncounterIDs
+internal static class LogIDs
 {
 
     public const long Unknown = 0x0;
 
-    public static class EncounterMasks
+    public static class LogMasks
     {
         public const long Unsupported = 0x010000;
         public const long RaidMask = 0x020000;

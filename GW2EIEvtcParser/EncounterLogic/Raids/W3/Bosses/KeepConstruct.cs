@@ -4,14 +4,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Trigonometry;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class KeepConstruct : StrongholdOfTheFaithful
 {
@@ -51,8 +51,8 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         MechanicList.Add(Mechanics);
         Extension = "kc";
         Icon = EncounterIconKeepConstruct;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
         ChestID = ChestID.KeepConstructChest;
     }
 
@@ -75,7 +75,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget, log);
@@ -117,7 +117,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
             else if (orbStart != 0)
             {
-                segments.Add(new Segment(orbStart, Math.Min(c.Time, fightEnd), orbCount));
+                segments.Add(new Segment(orbStart, Math.Min(c.Time, logEnd), orbCount));
                 orbCount = 0;
                 orbStart = 0;
             }
@@ -376,9 +376,9 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetSkills().Contains(AchievementEligibilityDownDownDowned) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetSkills().Contains(AchievementEligibilityDownDownDowned) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -430,7 +430,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM)
+        if (log.LogData.Success && log.LogData.IsCM)
         {
             int hasHitKc = 0;
             foreach (Player p in log.PlayerList)

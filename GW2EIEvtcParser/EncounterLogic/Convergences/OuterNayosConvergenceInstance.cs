@@ -2,21 +2,21 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class OuterNayosConvergenceInstance : ConvergenceLogic
 {
     public OuterNayosConvergenceInstance(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.OuterNayosConvergence;
-        EncounterID |= EncounterIDs.ConvergenceMasks.OuterNayosMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.OuterNayosConvergence;
+        LogID |= LogIDs.ConvergenceMasks.OuterNayosMask;
         Icon = InstanceIconOuterNayos;
         Extension = "outnayconv";
     }
@@ -36,27 +36,27 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
             switch (mainBoss.ID)
             {
                 case (int)TargetID.DemonKnight:
-                    EncounterID |= 0x000001;
+                    LogID |= 0x000001;
                     name += " - Demon Knight";
                     Extension += "dmnknght";
                     break;
                 case (int)TargetID.Sorrow:
-                    EncounterID |= 0x000002;
+                    LogID |= 0x000002;
                     name += " - Sorrow";
                     Extension += "srrw";
                     break;
                 case (int)TargetID.Dreadwing:
-                    EncounterID |= 0x000003;
+                    LogID |= 0x000003;
                     name += " - Dreadwing";
                     Extension += "drdwng";
                     break;
                 case (int)TargetID.HellSister:
-                    EncounterID |= 0x000004;
+                    LogID |= 0x000004;
                     name += " - Hell Sister";
                     Extension += "sister";
                     break;
                 case (int)TargetID.UmbrielHalberdOfHouseAurkus:
-                    EncounterID |= 0x000005;
+                    LogID |= 0x000005;
                     name += " - Umbriel";
                     Extension += "umbriel";
                     break;
@@ -93,14 +93,14 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetBuffApplyData(UnstableAttunementSotO).Any(x => x.To.IsPlayer) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.OuterNayosPublicConvergence) ? FightData.InstancePrivacyMode.Public : FightData.InstancePrivacyMode.Private;
+        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.OuterNayosPublicConvergence) ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -144,7 +144,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
                 phaseName = "Full Umbriel";
                 break;
         }
-        var fullPhase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName, log).WithParentPhase(phases[0]);
+        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
 
@@ -158,10 +158,10 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         Segment final = hpUpdates.FirstOrDefault(x => x.Value < 25.0 && x.Start > end25.End);
 
         // 100-75, 75-50, 50-25, 25-0
-        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.FightData.FightEnd), "Phase 1").WithParentPhase(fullPhase);
-        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.FightData.FightEnd), "Phase 2").WithParentPhase(fullPhase);
-        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.FightData.FightEnd), "Phase 3").WithParentPhase(fullPhase);
-        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.FightData.FightEnd), "Phase 4").WithParentPhase(fullPhase);
+        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.LogData.LogEnd), "Phase 1").WithParentPhase(fullPhase);
+        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.LogData.LogEnd), "Phase 2").WithParentPhase(fullPhase);
+        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.LogData.LogEnd), "Phase 3").WithParentPhase(fullPhase);
+        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.LogData.LogEnd), "Phase 4").WithParentPhase(fullPhase);
 
         phase1.AddTarget(target, log);
         phase2.AddTarget(target, log);

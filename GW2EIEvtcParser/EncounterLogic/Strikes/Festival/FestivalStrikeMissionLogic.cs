@@ -1,10 +1,10 @@
-﻿namespace GW2EIEvtcParser.EncounterLogic;
+﻿namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class FestivalStrikeMissionLogic : StrikeMissionLogic
 {
 
     protected FestivalStrikeMissionLogic(int triggerID) : base(triggerID)
     {
-        EncounterID |= EncounterIDs.StrikeMasks.FestivalMask;
+        LogID |= LogIDs.StrikeMasks.FestivalMask;
     }
 }

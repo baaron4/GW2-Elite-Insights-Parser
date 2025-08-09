@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser.EncounterLogic;
+﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -109,12 +109,12 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return false;
     }
 
-    internal virtual bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
+    internal virtual bool Keep(LogLogic.LogLogic.ParseModeEnum parseMode, LogLogic.LogLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
         // Remove approx based damage mods from PvP contexts
         if (Approximate)
         {
-            if (parseMode == FightLogic.ParseModeEnum.WvW || parseMode == FightLogic.ParseModeEnum.sPvP)
+            if (parseMode == LogLogic.LogLogic.ParseModeEnum.WvW || parseMode == LogLogic.LogLogic.ParseModeEnum.sPvP)
             {
                 return false;
             }
@@ -125,15 +125,15 @@ internal abstract class DamageModifierDescriptor : IVersionable
         }
         switch (skillMode)
         {
-            case FightLogic.SkillModeEnum.PvE:
-                if (parseMode == FightLogic.ParseModeEnum.OpenWorld || parseMode == FightLogic.ParseModeEnum.Unknown)
+            case LogLogic.LogLogic.SkillModeEnum.PvE:
+                if (parseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld || parseMode == LogLogic.LogLogic.ParseModeEnum.Unknown)
                 {
                     return !Approximate && (Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEWvW || Mode == DamageModifierMode.PvEsPvP);
                 }
                 return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly || Mode == DamageModifierMode.PvEWvW || Mode == DamageModifierMode.PvEsPvP;
-            case FightLogic.SkillModeEnum.WvW:
+            case LogLogic.LogLogic.SkillModeEnum.WvW:
                 return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEWvW);
-            case FightLogic.SkillModeEnum.sPvP:
+            case LogLogic.LogLogic.SkillModeEnum.sPvP:
                 return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEsPvP;
         }
         return false;

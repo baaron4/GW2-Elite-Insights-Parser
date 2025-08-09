@@ -184,7 +184,7 @@ public class PhaseData
                 }
                 start = Math.Min(start, startTime);
             }
-            OverrideStart(Math.Max(Math.Max(Start, start), log.FightData.FightStart));
+            OverrideStart(Math.Max(Math.Max(Start, start), log.LogData.LogStart));
         }
     }
     /// <summary>
@@ -215,7 +215,7 @@ public class PhaseData
                 }
                 end = Math.Max(end, endTime);
             }
-            OverrideEnd(Math.Min(Math.Min(End, end), log.FightData.FightEnd));
+            OverrideEnd(Math.Min(Math.Min(End, end), log.LogData.LogEnd));
         }
     }
 

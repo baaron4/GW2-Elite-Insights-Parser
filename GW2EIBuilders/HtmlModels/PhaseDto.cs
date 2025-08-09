@@ -167,21 +167,21 @@ internal class PhaseDto
             EncounterDuration = phaseWithMetaData.DurationString;
             switch (phaseWithMetaData.Mode)
             {
-                case FightData.EncounterMode.Unknown:
+                case LogData.LogMode.Unknown:
                     Mode = "Unknown";
                     break;
-                case FightData.EncounterMode.Story:
+                case LogData.LogMode.Story:
                     Mode = "Story Mode";
                     break;
-                case FightData.EncounterMode.Normal:
+                case LogData.LogMode.Normal:
                     // TODO support emboldened properly
-                    Mode = log.FightData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
+                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
                     break;
-                case FightData.EncounterMode.CM:
-                case FightData.EncounterMode.CMNoName:
+                case LogData.LogMode.CM:
+                case LogData.LogMode.CMNoName:
                     Mode = "Challenge Mode";
                     break;
-                case FightData.EncounterMode.LegendaryCM:
+                case LogData.LogMode.LegendaryCM:
                     Mode = "Legendary Challenge Mode";
                     break;
                 default:
@@ -189,14 +189,14 @@ internal class PhaseDto
             }
             switch (phaseWithMetaData.StartStatus)
             {
-                case FightData.EncounterStartStatus.Normal:
+                case LogData.LogStartStatus.Normal:
                     break;
-                case FightData.EncounterStartStatus.NotSet:
+                case LogData.LogStartStatus.NotSet:
                     break;
-                case FightData.EncounterStartStatus.Late:
+                case LogData.LogStartStatus.Late:
                     StartStatus = "Late Start";
                     break;
-                case FightData.EncounterStartStatus.NoPreEvent:
+                case LogData.LogStartStatus.NoPreEvent:
                     StartStatus = "No Pre-Event";
                     break;
                 default:
@@ -210,7 +210,7 @@ internal class PhaseDto
         foreach (var pair in allTargets)
         {
             var target = pair.Key;
-            Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+            Targets.Add(log.LogData.Logic.Targets.IndexOf(target));
             TargetPriorities.Add((int)pair.Value.Priority);
         }
 

@@ -2,17 +2,17 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.SkillIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class Nightmare : FractalLogic
 {
     public Nightmare(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.Nightmare;
-        EncounterID |= EncounterIDs.FractalMasks.NightmareMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.Nightmare;
+        LogID |= LogIDs.FractalMasks.NightmareMask;
     }
 
     protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID guid, uint innerRadius, uint outerRadius)
@@ -38,7 +38,7 @@ internal abstract class Nightmare : FractalLogic
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
         AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -48,6 +48,6 @@ internal abstract class Nightmare : FractalLogic
             ( GW2Builds.September2020SunquaPeakRelease, 98),
             ( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, 97),
         });
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 }

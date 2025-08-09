@@ -7,9 +7,9 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal static class EncounterLogicUtils
+internal static class LogLogicUtils
 {
 
     internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
@@ -115,7 +115,7 @@ internal static class EncounterLogicUtils
         return GetBuffApplyRemoveSequence(combatData, buffIDs, target.AgentItem, beginWithApply, addDummyRemoveAllEventAtEnd);
     }
 
-    internal static bool AtLeastOnePlayerAlive(CombatData combatData, FightData fightData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
+    internal static bool AtLeastOnePlayerAlive(CombatData combatData, LogData logData, long timeToCheck, IReadOnlyCollection<AgentItem> playerAgents)
     {
         int playerDeadOrDCCount = 0;
         foreach (AgentItem playerAgent in playerAgents)

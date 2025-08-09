@@ -5,13 +5,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Matthias : SalvationPass
 {
@@ -71,8 +71,8 @@ internal class Matthias : SalvationPass
         MechanicList.Add(Mechanics);
         Extension = "matt";
         Icon = EncounterIconMatthias;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
         ChestID = ChestID.MatthiasChest;
     }
 
@@ -89,24 +89,24 @@ internal class Matthias : SalvationPass
     {
         base.SetInstanceBuffs(log);
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
-        if (bloodstoneBisque.Any() && log.FightData.Success)
+        if (bloodstoneBisque.Any() && log.LogData.Success)
         {
             int playersWithBisque = 0;
             int expectedPlayersForSuccess = 0;
-            long fightEnd = log.FightData.FightEnd - ServerDelayConstant;
-            long fightStart = log.FightData.FightStart + ServerDelayConstant;
+            long logEnd = log.LogData.LogEnd - ServerDelayConstant;
+            long logStart = log.LogData.LogStart + ServerDelayConstant;
             foreach (Player p in log.PlayerList)
             {
                 IReadOnlyDictionary<long, BuffGraph> graphs = p.GetBuffGraphs(log);
                 if (graphs.TryGetValue(BloodstoneBisque, out var graph))
                 {
-                    if (!graph.Values.Any(x => x.Value == 0 && x.Intersects(fightStart, fightEnd)))
+                    if (!graph.Values.Any(x => x.Value == 0 && x.Intersects(logStart, logEnd)))
                     {
                         playersWithBisque++;
                     }
                 }
                 var (_, _, dcs, _) = p.GetStatus(log);
-                if (!dcs.Any(x => x.ContainsPoint(fightEnd)))
+                if (!dcs.Any(x => x.ContainsPoint(logEnd)))
                 {
                     expectedPlayersForSuccess++;
                 }
@@ -129,7 +129,7 @@ internal class Matthias : SalvationPass
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
         phases[0].AddTarget(mainTarget, log);
@@ -153,22 +153,22 @@ internal class Matthias : SalvationPass
                     BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
                     if (invulRemove != null)
                     {
-                        phases.Add(new PhaseData(invulRemove.Time, fightEnd));
+                        phases.Add(new PhaseData(invulRemove.Time, logEnd));
                     }
                 }
                 else
                 {
-                    phases.Add(new PhaseData(downPour.Time, fightEnd));
+                    phases.Add(new PhaseData(downPour.Time, logEnd));
                 }
             }
             else
             {
-                phases.Add(new PhaseData(heatWave.Time, fightEnd));
+                phases.Add(new PhaseData(heatWave.Time, logEnd));
             }
         }
         else
         {
-            phases.Add(new PhaseData(log.FightData.FightStart, fightEnd));
+            phases.Add(new PhaseData(log.LogData.LogStart, logEnd));
         }
         string[] namesMat = ["Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase"];
         for (int i = 1; i < phases.Count; i++)
@@ -180,7 +180,7 @@ internal class Matthias : SalvationPass
         return phases;
     }
 
-    internal static void FindSacrifices(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindSacrifices(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // has breakbar state into
         if (combatData.Any(x => x.IsStateChange == StateChange.BreakbarState))
@@ -193,7 +193,7 @@ internal class Matthias : SalvationPass
             {
                 //
                 long sacrificeStartTime = sacrificeStartList[i].Time;
-                long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : fightData.FightEnd;
+                long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : logData.LogEnd;
                 //
                 AgentItem? sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x.Is(agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time)));
                 if (sacrifice == null)
@@ -256,10 +256,10 @@ internal class Matthias : SalvationPass
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindSacrifices(fightData, agentData, combatData, extensions);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        FindSacrifices(logData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         ForceSacrificeHealth(Targets);
     }
 

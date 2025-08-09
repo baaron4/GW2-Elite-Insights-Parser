@@ -6,14 +6,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Adina : TheKeyOfAhdashim
 {
@@ -42,8 +42,8 @@ internal class Adina : TheKeyOfAhdashim
         Extension = "adina";
         Icon = EncounterIconAdina;
         ChestID = ChestID.AdinasChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -54,7 +54,7 @@ internal class Adina : TheKeyOfAhdashim
         ];
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    internal override LogLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
@@ -84,7 +84,7 @@ internal class Adina : TheKeyOfAhdashim
         ];
     }
 
-    internal static void FindHands(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindHands(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var attackTargetEvents = combatData
             .Where(x => x.IsStateChange == StateChange.AttackTarget)
@@ -103,7 +103,7 @@ internal class Adina : TheKeyOfAhdashim
             }
             return false;
         }).ToList();
-        long final = fightData.FightEnd;
+        long final = logData.LogEnd;
         var handOfEruptionPositions = new Vector2[] { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
@@ -173,11 +173,11 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindPlatforms(agentData);
-        FindHands(fightData, agentData, combatData, extensions);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        FindHands(logData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameHands(Targets, combatData);
     }
 
@@ -423,7 +423,7 @@ internal class Adina : TheKeyOfAhdashim
         var handIDs = new TargetID[] { TargetID.HandOfErosion, TargetID.HandOfEruption };
         var invuls = adina.GetBuffStatus(log, Determined762);
         var lastInvuln = invuls.LastOrNull();
-        long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
+        long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : log.LogData.EvtcLogEnd; // if log ends with any boss phase, ignore hands after that point
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIDs) && x.FirstAware < lastBossPhaseStart), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
@@ -478,13 +478,13 @@ internal class Adina : TheKeyOfAhdashim
             }
             if (start != mainPhases.Last().Start)
             {
-                mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
+                mainPhases.Add(new PhaseData(start, log.LogData.LogEnd, "Phase " + (phaseIndex + 1)));
             }
         }
         else if (start > 0 && invuls.Count == 0)
         {
             // no split
-            mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));
+            mainPhases.Add(new PhaseData(start, log.LogData.LogEnd, "Phase 1"));
         }
 
         foreach (PhaseData phase in mainPhases)
@@ -535,7 +535,7 @@ internal class Adina : TheKeyOfAhdashim
             var crMaps = new List<string>();
             int mainPhaseIndex = 0;
             int splitPhaseIndex = 0;
-            var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
+            var phases = log.LogData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
             var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
             for (int i = 1; i < phases.Count; i++)
             {
@@ -557,7 +557,7 @@ internal class Adina : TheKeyOfAhdashim
                     crMaps.Add(splitPhasesMap[splitPhaseIndex++]);
                 }
             }
-            map.MatchMapsToPhases(crMaps, phases, log.FightData.FightEnd);
+            map.MatchMapsToPhases(crMaps, phases, log.LogData.LogEnd);
         }
         catch (Exception)
         {
@@ -567,17 +567,17 @@ internal class Adina : TheKeyOfAhdashim
         return map;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
-        return (target.GetHealth(combatData) > 23e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 23e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
         }

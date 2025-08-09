@@ -6,15 +6,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Qadim : MythwrightGambit
 {
@@ -97,8 +97,8 @@ internal class Qadim : MythwrightGambit
         Icon = EncounterIconQadim;
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
         ChestID = ChestID.QadimsChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -238,7 +238,7 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var maxHPUpdates = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
@@ -248,11 +248,11 @@ internal class Qadim : MythwrightGambit
         FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
         FindPyres(gw2Build, agentData, combatData);
         // Pyres
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenamePyres(Targets);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out var qadim))
         {
@@ -264,15 +264,15 @@ internal class Qadim : MythwrightGambit
             var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
             if (!positions.Any(x => (x - qadimInitialPosition).XY().Length() < 150))
             {
-                return FightData.EncounterStartStatus.Late;
+                return LogData.LogStartStatus.Late;
             }
         }
-        if (TargetHPPercentUnderThreshold(TargetID.Qadim, fightData.FightStart, combatData, Targets) ||
-            (Targets.Any(x => x.IsSpecies(TargetID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TargetID.AncientInvokedHydra, fightData.FightStart, combatData, Targets)))
+        if (TargetHPPercentUnderThreshold(TargetID.Qadim, logData.LogStart, combatData, Targets) ||
+            (Targets.Any(x => x.IsSpecies(TargetID.AncientInvokedHydra)) && TargetHPPercentUnderThreshold((int)TargetID.AncientInvokedHydra, logData.LogStart, combatData, Targets)))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -280,7 +280,7 @@ internal class Qadim : MythwrightGambit
         return [new DamageCastFinder(BurningCrucible, BurningCrucible)];
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
         if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out var qadim))
@@ -291,14 +291,14 @@ internal class Qadim : MythwrightGambit
         CombatItem? sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == FlameSlash3 || x.SkillID == FlameSlash || x.SkillID == FlameWave) && x.StartCasting());
         if (startCast == null || sanityCheckCast == null)
         {
-            return fightData.LogStart;
+            return logData.EvtcLogStart;
         }
         // sanity check
         if (sanityCheckCast.Time - startCast.Time > 0)
         {
             return startCast.Time;
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -606,7 +606,7 @@ internal class Qadim : MythwrightGambit
             case "05":
             case "5":
                 bool doNormalPlat5 = true;
-                if (log.FightData.IsCM)
+                if (log.LogData.IsCM)
                 {
                     doNormalPlat5 = false;
                     if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-8.0078125f, 0, 0), HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
@@ -702,7 +702,7 @@ internal class Qadim : MythwrightGambit
                             }
                             if (doNormalPlat10)
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.FightData.IsCM ? NoOpacity : HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.LogData.IsCM ? NoOpacity : HiddenOpacity, velocityIndex, out velocityIndex, 0, 0, HiddenOpacity))
                                 {
                                     AddOpacityUsingVelocity(replay.Velocities, qadimStart, opacities, new(0f, 0f, 0f), VisibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, HiddenOpacity);
                                 }
@@ -1055,10 +1055,10 @@ internal class Qadim : MythwrightGambit
         return false;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-        return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 21e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     private static void ManuallyAnimatePlateforms(SingleActor? qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
@@ -1077,7 +1077,7 @@ internal class Qadim : MythwrightGambit
         const string platformImageUrl = ParserIcons.QadimPlatform;
         const float hiddenOpacity = 0.1f;
 
-        bool isCM = log.FightData.IsCM;
+        bool isCM = log.LogData.IsCM;
 
         const float xLeft = -7975;
         const float xLeftLeft = -8537;
@@ -1148,7 +1148,7 @@ internal class Qadim : MythwrightGambit
         const long lastPhasePreparationDuration = 13000;
 
         // If phase data is not calculated, only the first layout is used
-        var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
+        var phases = log.LogData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
 
         long qadimPhase1Time = phases.Count > 1 ? phases[1].End : long.MaxValue;
         long destroyerPhaseTime = phases.Count > 2 ? phases[2].End : long.MaxValue;
@@ -1186,7 +1186,7 @@ internal class Qadim : MythwrightGambit
         // Proper skipping of phases (if even possible) is not implemented.
         // Right now transitioning to another state while still moving behaves weirdly.
         // Interpolating to find the position to stop in would be necessary.
-        long startOffset = -log.FightData.LogStartOffset;
+        long startOffset = -log.LogData.LogStartOffset;
         (long start, long duration, (float x, float y, float z, float angle, float opacity)[] platforms)[] movements =
         [
             (
@@ -1466,7 +1466,7 @@ internal class Qadim : MythwrightGambit
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success)
+        if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
             {
@@ -1511,7 +1511,7 @@ internal class Qadim : MythwrightGambit
                     entered++;
                 }
 
-                var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.FightData.FightEnd;
+                var end = i < lamps.Count - 1 ? lamps[i + 1].FirstAware : log.LogData.LogEnd;
                 var segment = new Segment(lamps[i].LastAware, end, 1);
 
                 if (exitBuffs.Any(x => segment.ContainsPoint(x.Time)))

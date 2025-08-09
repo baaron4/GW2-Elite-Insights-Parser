@@ -1,12 +1,12 @@
-﻿using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+﻿using static GW2EIEvtcParser.LogLogic.LogCategories;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class CaptainMaiTrinBoss : FractalLogic
 {
     public CaptainMaiTrinBoss(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.CaptainMaiTrinBossFractal;
-        EncounterID = EncounterIDs.Unknown;
+        LogCategoryInformation.SubCategory = SubLogCategory.CaptainMaiTrinBossFractal;
+        LogID = LogIDs.Unknown;
     }
 }

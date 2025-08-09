@@ -2,21 +2,21 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class ShatteredObservatory : FractalLogic
 {
     public ShatteredObservatory(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.ShatteredObservatory;
-        EncounterID |= EncounterIDs.FractalMasks.ShatteredObservatoryMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.ShatteredObservatory;
+        LogID |= LogIDs.FractalMasks.ShatteredObservatoryMask;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
         AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -25,13 +25,13 @@ internal abstract class ShatteredObservatory : FractalLogic
             ( GW2Builds.September2020SunquaPeakRelease, 99),
             ( GW2Builds.June2023BalanceAndSOTOBetaAndSilentSurfNM, 98),
         });
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     /// <summary>
     /// Returns true if the buff count was not reached so that another method can be called, if necessary
     /// </summary>
-    protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, SingleActor target, long buffID, int count)
+    protected static bool SetSuccessByBuffCount(CombatData combatData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents, SingleActor target, long buffID, int count)
     {
         if (target == null)
         {
@@ -43,7 +43,7 @@ internal abstract class ShatteredObservatory : FractalLogic
             BuffEvent last = invulsTarget.Last();
             if (!(last is BuffApplyEvent))
             {
-                SetSuccessByCombatExit(new List<SingleActor> { target }, combatData, fightData, playerAgents);
+                SetSuccessByCombatExit(new List<SingleActor> { target }, combatData, logData, playerAgents);
                 return false;
             }
         }

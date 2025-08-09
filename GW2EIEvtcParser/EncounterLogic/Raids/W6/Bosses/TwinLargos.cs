@@ -4,13 +4,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class TwinLargos : MythwrightGambit
 {
@@ -43,8 +43,8 @@ internal class TwinLargos : MythwrightGambit
         Extension = "twinlargos";
         Icon = EncounterIconTwinLargos;
         ChestID = ChestID.TwinLargosChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -93,7 +93,7 @@ internal class TwinLargos : MythwrightGambit
     {
         long start = 0;
         long end = 0;
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         var targetPhases = new List<PhaseData>();
         var states = new List<TimeCombatEvent>();
         states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
@@ -108,16 +108,16 @@ internal class TwinLargos : MythwrightGambit
                 start = state.Time;
                 if (i == states.Count - 1)
                 {
-                    targetPhases.Add(new PhaseData(start, fightEnd));
+                    targetPhases.Add(new PhaseData(start, logEnd));
                 }
             }
             else
             {
-                end = Math.Min(state.Time, fightEnd);
+                end = Math.Min(state.Time, logEnd);
                 targetPhases.Add(new PhaseData(start, end));
                 if (i == states.Count - 1 && targetPhases.Count < 3)
                 {
-                    targetPhases.Add(new PhaseData(end, fightEnd));
+                    targetPhases.Add(new PhaseData(end, logEnd));
                 }
             }
         }
@@ -241,14 +241,14 @@ internal class TwinLargos : MythwrightGambit
         return phases;
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (TargetHPPercentUnderThreshold(TargetID.Kenut, fightData.FightStart, combatData, Targets) ||
-            TargetHPPercentUnderThreshold(TargetID.Nikare, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.Kenut, logData.LogStart, combatData, Targets) ||
+            TargetHPPercentUnderThreshold(TargetID.Nikare, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     internal static void AdjustFinalHPEvents(List<CombatItem> combatData, AgentItem agentItem)
@@ -264,9 +264,9 @@ internal class TwinLargos : MythwrightGambit
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         // discard hp update events after determined apply
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         AdjustFinalHPEvents(combatData, nikare.AgentItem);
@@ -425,10 +425,10 @@ internal class TwinLargos : MythwrightGambit
         return false;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
-        return HasCastAquaticDomainOrCMHP(combatData, nikare, kenut) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return HasCastAquaticDomainOrCMHP(combatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 }

@@ -22,7 +22,7 @@ internal class FoodDto
 
     public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, Buff> usedBuffs)
     {
-        var consumables = actor.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var consumables = actor.GetConsumablesList(log, log.LogData.LogStart, log.LogData.LogEnd);
         var list = new List<FoodDto>(consumables.Count);
 
         foreach (var consumable in consumables)

@@ -30,17 +30,17 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
             {
                 return Types.Player;
             }
-            if (log.FightData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem))
+            if (log.LogData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem))
             {
                 return Types.FriendlyPlayer;
             }
             return Types.TargetPlayer;
         }
-        if (log.FightData.Logic.TargetAgents.Contains(actor.AgentItem))
+        if (log.LogData.Logic.TargetAgents.Contains(actor.AgentItem))
         {
             return Types.Target;
         }
-        if (log.FightData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
+        if (log.LogData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
         {
             return Types.Friendly;
         }

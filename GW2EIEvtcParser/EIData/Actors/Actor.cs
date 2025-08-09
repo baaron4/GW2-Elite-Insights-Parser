@@ -144,7 +144,7 @@ public abstract class Actor
 
     public IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
@@ -182,43 +182,43 @@ public abstract class Actor
 
     public IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetDamageTakenEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetDamageTakenEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion Damage
     #region BreakbarDamage
     public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
     public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetBreakbarDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBreakbarDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
     public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetBreakbarDamageTakenEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBreakbarDamageTakenEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion BreakbarDamage
     #region CrowdControl
     public abstract IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
     public IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetOutgoingCrowdControlEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetOutgoingCrowdControlEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
     public IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetIncomingCrowdControlEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetIncomingCrowdControlEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion CrowdControl
     #region Cast
     public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
     public IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log)
     {
-        return GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     public abstract IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end);
     public IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log)
     {
-        return GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetIntersectingCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion Cast
     protected static bool KeepIntersectingCastLog(CastEvent evt, long start, long end)

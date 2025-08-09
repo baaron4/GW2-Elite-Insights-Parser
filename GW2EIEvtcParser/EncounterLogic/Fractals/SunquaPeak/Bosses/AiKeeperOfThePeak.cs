@@ -3,15 +3,15 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class AiKeeperOfThePeak : SunquaPeak
 {
@@ -120,17 +120,17 @@ internal class AiKeeperOfThePeak : SunquaPeak
     {
         if (_hasDarkMode && _hasElementalMode)
         {
-            EncounterID |= 0x000001;
+            LogID |= 0x000001;
             return "Ai, Keeper of the Peak";
         }
         else if (_hasDarkMode)
         {
-            EncounterID |= 0x000003;
+            LogID |= 0x000003;
             return "Dark Ai, Keeper of the Peak";
         }
         else
         {
-            EncounterID |= 0x000002;
+            LogID |= 0x000002;
             return "Elemental Ai, Keeper of the Peak";
         }
     }
@@ -170,7 +170,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return trashIDs;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.AiKeeperOfThePeak, out var aiAgent))
         {
@@ -202,7 +202,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         {
             Extension = "elai";
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         // Manually set HP and names
         SingleActor? eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
         SingleActor? darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
@@ -210,11 +210,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
         eleAi?.OverrideName("Elemental Ai");
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // check invulnerability remove for new elemental ai
         var ai = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault() ?? throw new MissingKeyActorsException("Ai not found");
-        var invulnStart = GetFightOffsetByInvulnStart(fightData, combatData, ai, Determined895);
+        var invulnStart = GetLogOffsetByInvulnStart(logData, combatData, ai, Determined895);
         if (invulnStart > ai.FirstAware)
         {
             return invulnStart;
@@ -222,7 +222,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
         // first cast or fallback to regular offset (combat enter) for dark ai
         // old elemental ai will always end up with fallback due to idle time
-        var start = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+        var start = base.GetLogOffset(evtcVersion, logData, agentData, combatData);
         var firstCast = combatData.Where(x => x.StartCasting() && x.SrcMatchesAgent(ai)).FirstOrDefault();
         if (firstCast != null)
         {
@@ -231,28 +231,28 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return start;
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (_hasElementalMode)
         {
-            if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, fightData.FightStart, combatData, Targets))
+            if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak, logData.LogStart, combatData, Targets))
             {
-                return FightData.EncounterStartStatus.Late;
+                return LogData.LogStartStatus.Late;
             }
         }
         else if (_hasDarkMode)
         {
-            if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, fightData.FightStart, combatData, Targets))
+            if (TargetHPPercentUnderThreshold(TargetID.AiKeeperOfThePeak2, logData.LogStart, combatData, Targets))
             {
-                return FightData.EncounterStartStatus.Late;
+                return LogData.LogStartStatus.Late;
             }
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.CMNoName;
+        return LogData.LogMode.CMNoName;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -285,8 +285,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
         if (_hasElementalMode)
         {
             BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
-            long eleStart = Math.Max(elementalAi.FirstAware, log.FightData.FightStart);
-            long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+            long eleStart = Math.Max(elementalAi.FirstAware, log.LogData.LogStart);
+            long eleEnd = invul895Gain != null ? invul895Gain.Time : log.LogData.LogEnd;
             var elePhase = phases[0];
             if (_hasDarkMode)
             {
@@ -299,7 +299,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 // sub phases
                 string[] eleNames = ["Air", "Fire", "Water"];
-                var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.FightData.FightStart, Math.Min(elementalAi.LastAware, log.FightData.FightEnd)).Take(3).ToList();
+                var elementalPhases = GetPhasesByInvul(log, Determined762, elementalAi, false, true, log.LogData.LogStart, Math.Min(elementalAi.LastAware, log.LogData.LogEnd)).Take(3).ToList();
                 for (int i = 0; i < elementalPhases.Count; i++)
                 {
                     PhaseData phase = elementalPhases[i];
@@ -330,8 +330,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
         if (_hasDarkMode)
         {
             BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
-            long darkStart = Math.Max(darkAi.FirstAware, log.FightData.FightStart);
-            long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
+            long darkStart = Math.Max(darkAi.FirstAware, log.LogData.LogStart);
+            long darkEnd = invul895Gain != null ? invul895Gain.Time : log.LogData.LogEnd;
             var darkPhase = phases[0];
             if (_hasElementalMode)
             {
@@ -382,7 +382,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return [TargetID.AiKeeperOfThePeak, TargetID.AiKeeperOfThePeak2];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         int status = 0;
         if (_hasElementalMode)
@@ -401,11 +401,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 BuffApplyEvent? invul895Gain = combatData.GetBuffDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (invul895Gain != null)
                 {
-                    fightData.SetSuccess(true, invul895Gain.Time);
+                    logData.SetSuccess(true, invul895Gain.Time);
                 }
                 else
                 {
-                    fightData.SetSuccess(false, ai.LastAware);
+                    logData.SetSuccess(false, ai.LastAware);
                 }
                 break;
             case 3:
@@ -413,11 +413,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (darkInvul895Gain != null)
                 {
-                    fightData.SetSuccess(true, darkInvul895Gain.Time);
+                    logData.SetSuccess(true, darkInvul895Gain.Time);
                 } 
                 else
                 {
-                    fightData.SetSuccess(false, darkAi.LastAware);
+                    logData.SetSuccess(false, darkAi.LastAware);
                 }
                 break;
             case 0:
@@ -430,14 +430,14 @@ internal class AiKeeperOfThePeak : SunquaPeak
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && _hasDarkMode && _hasElementalMode)
+        if (log.LogData.Success && _hasDarkMode && _hasElementalMode)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Any())
             {
                 int counter = 0;
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.FightData.FightEnd - ServerDelayConstant))
+                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.LogData.LogEnd - ServerDelayConstant))
                     {
                         counter++;
                     }

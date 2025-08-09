@@ -359,7 +359,7 @@ partial class SingleActor
         (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc, _) = GetStatus(log);
 
         // get remaining fight segment
-        var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
+        var remainingLogTime = new Segment(curTime, log.LogData.LogEnd);
 
         // return false if actor currently above 90 or already downed
         if (GetCurrentHealthPercent(log, curTime) > 90 || IsDowned(log, curTime))
@@ -368,7 +368,7 @@ partial class SingleActor
         }
         
         // return false if fight ends before any down events
-        Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingFightTime));
+        Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingLogTime));
         if (nextDown == null)
         {
             return false;
@@ -409,7 +409,7 @@ partial class SingleActor
         }
         var casting = GetCastEvents(log);
         int swapped = WeaponSetIDs.NoSet;
-        long swappedTime = log.FightData.FightStart;
+        long swappedTime = log.LogData.LogStart;
         List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
         {
             return (x.SwappedTo, x.SwappedFrom);

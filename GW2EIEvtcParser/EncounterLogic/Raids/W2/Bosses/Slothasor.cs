@@ -6,13 +6,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Slothasor : SalvationPass
 {
@@ -44,8 +44,8 @@ internal class Slothasor : SalvationPass
         MechanicList.Add(Mechanics);
         Extension = "sloth";
         Icon = EncounterIconSlothasor;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
         ChestID = ChestID.SlothasorChest;
     }
 
@@ -58,10 +58,10 @@ internal class Slothasor : SalvationPass
                         (2688, 11906, 3712, 14210)*/);
     }
 
-    internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+    internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, LogData logData)
     {
-        base.UpdatePlayersSpecAndGroup(players, combatData, fightData);
-        var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).Where(x => x.Time <= fightData.FightStart + 5000).FirstOrDefault();
+        base.UpdatePlayersSpecAndGroup(players, combatData, logData);
+        var slubTransformApplyAtStart = combatData.GetBuffApplyData(MagicTransformation).Where(x => x.Time <= logData.LogStart + 5000).FirstOrDefault();
         if (slubTransformApplyAtStart != null)
         {
             var transformedPlayer = players.FirstOrDefault(x => x.AgentItem.Is(slubTransformApplyAtStart.To));
@@ -85,7 +85,7 @@ internal class Slothasor : SalvationPass
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
         }
@@ -114,7 +114,7 @@ internal class Slothasor : SalvationPass
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
         phases[0].AddTarget(mainTarget, log);
@@ -122,25 +122,25 @@ internal class Slothasor : SalvationPass
         {
             return phases;
         }
-        var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillID == NarcolepsySkill);
+        var sleepy = mainTarget.GetCastEvents(log, log.LogData.LogStart, logEnd).Where(x => x.SkillID == NarcolepsySkill);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in sleepy)
         {
-            var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Phase " + i++);
+            var phase = new PhaseData(start, Math.Min(c.Time, logEnd), "Phase " + i++);
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             start = c.EndTime;
             phases.Add(phase);
         }
-        var lastPhase = new PhaseData(start, fightEnd, "Phase " + i++);
+        var lastPhase = new PhaseData(start, logEnd, "Phase " + i++);
         lastPhase.AddParentPhase(phases[0]);
         lastPhase.AddTarget(mainTarget, log);
         phases.Add(lastPhase);
         return phases;
     }
 
-    internal static void FindMushrooms(FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void FindMushrooms(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
@@ -166,7 +166,7 @@ internal class Slothasor : SalvationPass
                     CombatItem? deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
                     if (deadEvent == null)
                     {
-                        lastDeadTime = Math.Min(fightData.LogEnd, mushroom.LastAware);
+                        lastDeadTime = Math.Min(logData.EvtcLogEnd, mushroom.LastAware);
                     }
                     else
                     {
@@ -180,10 +180,10 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindMushrooms(fightData, agentData, combatData, extensions);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        FindMushrooms(logData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

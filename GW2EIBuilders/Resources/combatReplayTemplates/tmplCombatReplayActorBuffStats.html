@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column justify-content-end" :style="{'height': height}">
-        <div v-if="isPresent('Fight Specifics')">
-            <combat-replay-buff-display :buffarray="data.fightSpecifics"></combat-replay-buff-display>
+        <div v-if="isPresent('Encounter Specifics')">
+            <combat-replay-buff-display :buffarray="data.encounterSecifics"></combat-replay-buff-display>
         </div>
         <div v-if="isPresent('Others')">
             <combat-replay-buff-display :buffarray="data.others"></combat-replay-buff-display>
@@ -67,8 +67,8 @@
                     var buff = findSkill(true, id);
                     if (buff.consumable) {
                         res.add("Consumables");
-                    } else if (buff.fightSpecific) {
-                        res.add("Fight Specifics");
+                    } else if (buff.encounterSpecific) {
+                        res.add("Encounter Specifics");
                     } else if (this.boons.has(id)) {
                         res.add("Boons");
                     } else if (this.offs.has(id)) {
@@ -131,7 +131,7 @@
                     shared: [],
                     boons: [],
                     conditions: [],
-                    fightSpecifics: [],
+                    encounterSpecifics: [],
                     others: [],
                     consumables: []
                 };
@@ -145,9 +145,9 @@
                         if (!this.buffsToShowSet.has("Consumables")) {
                             continue;
                         }
-                    } else if (buff.fightSpecific) {
-                        arrayToFill = res.fightSpecifics;
-                        if (!this.buffsToShowSet.has("Fight Specifics")) {
+                    } else if (buff.encounterSpecific) {
+                        arrayToFill = res.encounterSpecifics;
+                        if (!this.buffsToShowSet.has("Encounter Specifics")) {
                             continue;
                         }
                     } else if (this.boons.has(id)) {

@@ -2,12 +2,12 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfIce : HallOfChains
 {
@@ -29,8 +29,8 @@ internal class StatueOfIce : HallOfChains
         MechanicList.Add(Mechanics);
         Extension = "brokenking";
         Icon = EncounterIconStatueOfIce;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -42,13 +42,13 @@ internal class StatueOfIce : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.BrokenKing, out var brokenKing))
         {
             throw new MissingKeyActorsException("Broken King not found");
         }
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -59,7 +59,7 @@ internal class StatueOfIce : HallOfChains
             }
             else
             {
-                startToUse = GetFirstDamageEventTime(fightData, agentData, combatData, brokenKing);
+                startToUse = GetFirstDamageEventTime(logData, agentData, combatData, brokenKing);
             }
         }
         return startToUse;
@@ -177,9 +177,9 @@ internal class StatueOfIce : HallOfChains
                 .UsingAgentRedirectionIfUnknown((int)TargetID.BrokenKing),
         ];
     }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

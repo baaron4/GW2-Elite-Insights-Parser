@@ -3,13 +3,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic.OpenWorld;
+namespace GW2EIEvtcParser.LogLogic.OpenWorld;
 
 internal class SooWon : OpenWorldLogic
 {
@@ -47,17 +47,17 @@ internal class SooWon : OpenWorldLogic
         ]));
         Extension = "soowon";
         Icon = EncounterIconSooWon;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000401;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000401;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new MissingKeyActorsException("SooWon not found"));
+            return GetFirstDamageEventTime(logData, agentData, combatData, agentData.GetGadgetsByID(TargetID.SooWonOW).FirstOrDefault() ?? throw new MissingKeyActorsException("SooWon not found"));
         }
         return startToUse;
     }
@@ -78,8 +78,8 @@ internal class SooWon : OpenWorldLogic
             return phases;
         }
 
-        phases.AddRange(GetPhasesByInvul(log, new long[] { Invulnerability757, SooWonSpearPhaseInvul }, mainTarget, true, true, log.FightData.FightStart,
-            log.FightData.FightEnd));
+        phases.AddRange(GetPhasesByInvul(log, new long[] { Invulnerability757, SooWonSpearPhaseInvul }, mainTarget, true, true, log.LogData.LogStart,
+            log.LogData.LogEnd));
 
         int phaseOffset = GetPhaseOffset(log, mainTarget);
         InitPhases(phases, mainTarget, tailTarget, log, phaseOffset);
@@ -213,7 +213,7 @@ internal class SooWon : OpenWorldLogic
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData,
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData,
         AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(TargetID.SooWonOW);
@@ -234,16 +234,16 @@ internal class SooWon : OpenWorldLogic
             sooWonTail.OverrideType(AgentItem.AgentType.NPC, agentData);
             sooWonTail.OverrideID(TargetID.SooWonTail, agentData);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData,
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData,
         IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > logData.LogStart);
         if (reward != null)
         {
-            fightData.SetSuccess(true, reward.Time);
+            logData.SetSuccess(true, reward.Time);
         }
     }
 

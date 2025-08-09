@@ -3,16 +3,16 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.MapIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal class UnknownInstanceLogic : UnknownFightLogic
+internal class UnknownInstanceLogic : UnknownEncounterLogic
 {
     private readonly List<TargetID> _targetIDs = [];
     private readonly List<TargetID> _trashIDs = [];
@@ -57,7 +57,7 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         }
     }
 
-    internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
+    internal override LogLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings)
     {
         CombatItem? mapIDEvent = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.MapID);
         // Handle potentially wrongly associated logs, we don't officially support pre-effect logs
@@ -100,7 +100,7 @@ internal class UnknownInstanceLogic : UnknownFightLogic
                 case RedDesertBorderland:
                 case EdgeOfTheMists:
                 case ArmisticeBastion:
-                    return new WvWFight(GenericTriggerID, parserSettings.DetailedWvWParse, true);
+                    return new WvWLogic(GenericTriggerID, parserSettings.DetailedWvWParse, true);
                 // Convergences
                 case OuterNayosPublicConvergence:
                 case OuterNayosPrivateConvergence:
@@ -113,9 +113,9 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         return base.AdjustLogic(agentData, combatData, parserSettings);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        fightData.SetSuccess(true, fightData.FightEnd);
+        logData.SetSuccess(true, logData.LogEnd);
     }
 
     private static void AddPhasesPerTarget(ParsedEvtcLog log, List<PhaseData> phases, IEnumerable<SingleActor> targets)
@@ -141,7 +141,7 @@ internal class UnknownInstanceLogic : UnknownFightLogic
                 success = true;
                 end = dead.Time;
             }
-            var phase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, start), Math.Min(target.LastAware, end), target.Character, success, log.FightData.Logic.Icon, FightData.EncounterMode.Normal);
+            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.LogMode.Normal);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
@@ -170,11 +170,11 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindGenericTargetIDs(agentData, combatData);
         Targetless = _targetIDs.Count == 0;
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
@@ -185,8 +185,8 @@ internal class UnknownInstanceLogic : UnknownFightLogic
         return _trashIDs;
     }
 
-    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.InstancePrivacyMode.Unknown;
+        return LogData.InstancePrivacyMode.Unknown;
     }
 }

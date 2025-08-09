@@ -4,13 +4,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class CosmicObservatory : SecretOfTheObscureStrike
 {
@@ -20,7 +20,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0)
-                    .UsingEnable(x => x.FightData.IsCM)
+                    .UsingEnable(x => x.LogData.IsCM)
                     .UsingAchievementEligibility(),
                 new PlayerDstHealthDamageHitMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkBlue), "Spin.Neb.H", "Spining Nebula Hit (Spin Projectiles)", "Spinning Nebula Hit", 0),
                 new EnemyCastStartMechanic([ SpinningNebulaCentral, SpinningNebulaWithTeleport ], new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "Spinning Nebula", "Spinning Nebula Cast", "Cast Spinning Nebula", 0),
@@ -62,15 +62,15 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.SoulFeast)),
                 new PlayerSrcHealthDamageHitMechanic(PurifyingLight, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Blue), "PurLight.Dagda.C", "Casted Purifying Light (Hit Dagda)", "Purifying Light Hit Dagda", 0)
                     .UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Dagda))
-                    .UsingEnable(x => x.FightData.IsCM),
+                    .UsingEnable(x => x.LogData.IsCM),
             ]),
             new PlayerDstEffectMechanic(EffectGUIDs.CosmicObservatoryDemonicFever, new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "DemFev.T", "Targeted by Demonic Fever (Orange Spread AoEs)", "Demonic Fever Target", 0),
         ])
         );
         Icon = EncounterIconCosmicObservatory;
         Extension = "cosobs";
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -131,7 +131,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
                             // The mechanic gets cancelled during the intermission phases since the CM release.
                             // Before then, the mechanic would continue during the phase and shoot.
-                            if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
+                            if (log.LogMetadata.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
                             {
                                 foreach (CastEvent demonicBlastCast in demonicBlasts)
                                 {
@@ -195,7 +195,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
             // The next application to any player
             BuffApplyEvent? nextApplicationEvent = buffAppliesAll.FirstOrDefault(x => x.Time > buffApply.Time);
-            long endTime = nextApplicationEvent != null ? nextApplicationEvent.Time : log.FightData.LogEnd;
+            long endTime = nextApplicationEvent != null ? nextApplicationEvent.Time : log.LogData.EvtcLogEnd;
 
             foreach (AgentItem agent in agentsToTether)
             {
@@ -321,11 +321,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         environmentDecorations.AddNonHomingMissiles(log, chargingConstellation, Colors.Blue, 0.4, 30);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // Special check since CM release, normal mode broke too, but we always trust reward events
-        if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
+        if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > logData.LogStart) == null)
         {
             SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
@@ -334,13 +334,13 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 HealthDamageEvent? lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                 if (lastDamageEvent != null)
                 {
-                    if (fightData.Success)
+                    if (logData.Success)
                     {
-                        fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
+                        logData.SetSuccess(true, Math.Min(lastDamageEvent.Time, logData.LogEnd));
                     }
                     else
                     {
-                        fightData.SetSuccess(true, lastDamageEvent.Time);
+                        logData.SetSuccess(true, lastDamageEvent.Time);
                     }
                 }
             }
@@ -391,12 +391,12 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             tormentedGroups.Add(group);
         }
         var phaseTimes = new List<(long start, long end)>();
-        long previousStart = log.FightData.FightStart;
+        long previousStart = log.LogData.LogStart;
         for (int i = 0; i < tormentedGroups.Count; i++)
         {
             List<AgentItem> group = tormentedGroups[i];
-            long start = Math.Max(log.FightData.FightStart, group.Min(x => x.FirstAware));
-            long end = Math.Min(log.FightData.FightEnd, group.Max(x =>
+            long start = Math.Max(log.LogData.LogStart, group.Min(x => x.FirstAware));
+            long end = Math.Min(log.LogData.LogEnd, group.Max(x =>
             {
                 long res = x.LastAware;
                 if (log.CombatData.GetDeadEvents(x).Any())
@@ -411,7 +411,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             previousStart = end;
             if (i == tormentedGroups.Count - 1)
             {
-                phaseTimes.Add((end, log.FightData.FightEnd));
+                phaseTimes.Add((end, log.LogData.LogEnd));
             }
         }
         for (int i = 0; i < phaseTimes.Count; i++)
@@ -451,9 +451,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         foreach (SingleActor target in Targets)
         {
             switch (target.ID)
@@ -510,14 +510,14 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         ];
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (combatData.GetGW2BuildEvent().Build < GW2Builds.DagdaNMHPChangedAndCMRelease)
         {
-            return FightData.EncounterMode.Normal;
+            return LogData.LogMode.Normal;
         }
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-        return (dagda.GetHealth(combatData) > 56e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (dagda.GetHealth(combatData) > 56e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -529,7 +529,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM)
+        if (log.LogData.Success && log.LogData.IsCM)
         {
             var check = log.CombatData.GetBuffData(AchievementEligibilityPrecisionAnxiety).Count;
             int buffCounter = 0;

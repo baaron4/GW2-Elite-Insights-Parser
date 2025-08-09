@@ -3,13 +3,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class TwistedCastle : StrongholdOfTheFaithful
 {
@@ -31,8 +31,8 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         GenericFallBackMethod = FallBackMethod.None;
         Targetless = true;
         Icon = EncounterIconTwistedCastle;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000003;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000003;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -44,16 +44,16 @@ internal class TwistedCastle : StrongholdOfTheFaithful
                         (1920, 12160, 2944, 14464)*/);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent? reward = GetOldRaidReward2Event(combatData, fightData.FightStart, fightData.LogEnd); ;
+        RewardEvent? reward = GetOldRaidReward2Event(combatData, logData.LogStart, logData.EvtcLogEnd); ;
         if (reward != null)
         {
-            fightData.SetSuccess(true, reward.Time);
+            logData.SetSuccess(true, reward.Time);
         }
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
@@ -68,21 +68,21 @@ internal class TwistedCastle : StrongholdOfTheFaithful
                     start = Math.Min(start, enterCombat.Time);
                 }
             }
-            return start < long.MaxValue ? start : GetGenericFightOffset(fightData);
+            return start < long.MaxValue ? start : GetGenericLogOffset(logData);
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // To investigate
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()
@@ -148,7 +148,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success)
+        if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
             {

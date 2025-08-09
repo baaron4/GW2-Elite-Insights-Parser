@@ -5,13 +5,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class StatueOfDeath : HallOfChains
 {
@@ -31,8 +31,8 @@ internal class StatueOfDeath : HallOfChains
         MechanicList.Add(Mechanics);
         Extension = "souleater";
         Icon = EncounterIconStatueOfDeath;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000004;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000004;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -63,13 +63,13 @@ internal class StatueOfDeath : HallOfChains
         ];
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.EaterOfSouls, out var eaterOfSouls))
         {
             throw new MissingKeyActorsException("Eater of Souls not found");
         }
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -81,7 +81,7 @@ internal class StatueOfDeath : HallOfChains
             }
             else
             {
-                startToUse = GetFirstDamageEventTime(fightData, agentData, combatData, eaterOfSouls);
+                startToUse = GetFirstDamageEventTime(logData, agentData, combatData, eaterOfSouls);
             }
         }
         return startToUse;
@@ -231,9 +231,9 @@ internal class StatueOfDeath : HallOfChains
         }
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

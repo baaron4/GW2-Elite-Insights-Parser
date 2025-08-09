@@ -4,13 +4,13 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Eparch : LonelyTower
 {
@@ -64,11 +64,11 @@ internal class Eparch : LonelyTower
         ]);
         Extension = "eparch";
         Icon = EncounterIconEparch;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         ulong build = combatData.GetGW2BuildEvent().Build;
         int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
@@ -76,11 +76,11 @@ internal class Eparch : LonelyTower
         SingleActor eparch = GetEparchActor();
         if (build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
         {
-            return FightData.EncounterMode.CM;
+            return LogData.LogMode.CM;
         }
         else
         {
-            return FightData.EncounterMode.Normal;
+            return LogData.LogMode.Normal;
         }
     }
 
@@ -96,7 +96,7 @@ internal class Eparch : LonelyTower
                         (-950, 1040, 2880, 4496)); 
 
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
@@ -107,7 +107,7 @@ internal class Eparch : LonelyTower
             dummyEparch.OverrideID(IgnoredSpecies, agentData);
         }
         //
-        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000);
+        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > logData.LogStart + 5000);
         foreach (var riftAgent in riftAgents)
         {
             riftAgent.OverrideID(TargetID.KryptisRift, agentData);
@@ -115,25 +115,25 @@ internal class Eparch : LonelyTower
         }
         //
 
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-        var cmCheck = fightData.IsCM || IsFakeCM(agentData);
+        var cmCheck = logData.IsCM || IsFakeCM(agentData);
         if (cmCheck && determinedApplies.Count >= 3)
         {
-            fightData.SetSuccess(true, determinedApplies[2].Time);
+            logData.SetSuccess(true, determinedApplies[2].Time);
         }
         else if (!cmCheck && determinedApplies.Count >= 1)
         {
-            fightData.SetSuccess(true, determinedApplies[0].Time);
+            logData.SetSuccess(true, determinedApplies[0].Time);
         } 
         else
         {
-            fightData.SetSuccess(false, eparch.LastAware);
+            logData.SetSuccess(false, eparch.LastAware);
         }
     }
 
@@ -148,7 +148,7 @@ internal class Eparch : LonelyTower
         SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.IncarnationOfCruelty, TargetID.IncarnationOfJudgement])), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases || (!log.FightData.IsCM && !IsFakeCM(log.AgentData)))
+        if (!requirePhases || (!log.LogData.IsCM && !IsFakeCM(log.AgentData)))
         {
             return phases;
         }

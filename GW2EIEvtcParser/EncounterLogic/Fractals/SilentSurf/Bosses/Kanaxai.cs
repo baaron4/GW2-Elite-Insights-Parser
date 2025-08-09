@@ -4,15 +4,15 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Kanaxai : SilentSurf
 {
@@ -79,7 +79,7 @@ internal class Kanaxai : SilentSurf
         ]));
         Extension = "kanaxai";
         Icon = EncounterIconKanaxai;
-        EncounterID |= 0x000001;
+        LogID |= 0x000001;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -115,16 +115,16 @@ internal class Kanaxai : SilentSurf
         };
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.CMNoName;
+        return LogData.LogMode.CMNoName;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // kanaxai spawns with invulnerability
         var kanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).FirstOrDefault() ?? throw new MissingKeyActorsException("Kanaxai not found");
-        return GetFightOffsetByInvulnStart(fightData, combatData, kanaxai, Determined762);
+        return GetLogOffsetByInvulnStart(logData, combatData, kanaxai, Determined762);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -244,24 +244,24 @@ internal class Kanaxai : SilentSurf
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
         BuffApplyEvent? invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
         if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
         {
-            fightData.SetSuccess(true, invul762Gain.Time);
+            logData.SetSuccess(true, invul762Gain.Time);
         }
         else
         {
-            fightData.SetSuccess(false, kanaxai.LastAware);
+            logData.SetSuccess(false, kanaxai.LastAware);
         }
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
-        long maxEnd = log.FightData.FightEnd;
+        long maxEnd = log.LogData.LogEnd;
 
         // Orange Tether from Aspect to player
         IEnumerable<BuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
@@ -457,7 +457,7 @@ internal class Kanaxai : SilentSurf
                     long worldCleaverTime = cast?.Time ?? 0;
 
                     // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
-                    // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
+                    // World Cleaver is the time-limit of when the AoEs reset, in third phase we use LogEnd
                     if (worldCleaverTime != 0)
                     {
                         var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
@@ -466,7 +466,7 @@ internal class Kanaxai : SilentSurf
                     else
                     {
                         var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
-                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd, environmentDecorations);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.LogData.LogEnd, environmentDecorations);
                     }
                 }
             }
@@ -488,7 +488,7 @@ internal class Kanaxai : SilentSurf
     /// <summary>
     /// Adds the Axe AoE decoration.<br></br>
     /// If the next orange AoE <see cref="BuffRemoveAllEvent"/> on players is after <see cref="WorldCleaver"/> cast time or not present,<br></br>
-    /// utilise the <see cref="WorldCleaver"/> cast time or <see cref="FightData.LogEnd"/>.
+    /// utilise the <see cref="WorldCleaver"/> cast time or <see cref="LogData.EvtcLogEnd"/>.
     /// </summary>
     /// <param name="aoe">Effect of the AoE.</param>
     /// <param name="axeBuffRemoval">Buff removal of the orange AoE.</param>

@@ -4,14 +4,14 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Artsariiv : ShatteredObservatory
 {
@@ -31,8 +31,8 @@ internal class Artsariiv : ShatteredObservatory
         ]));
         Extension = "arts";
         Icon = EncounterIconArtsariiv;
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -117,7 +117,7 @@ internal class Artsariiv : ShatteredObservatory
             (int)TargetID.CloneArtsariiv
         ];
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var targetArtsariiv = FindTargetArtsariiv(agentData);
         foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
@@ -127,7 +127,7 @@ internal class Artsariiv : ShatteredObservatory
                 artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         foreach (NPC trashMob in _trashMobs)
         {
             if (trashMob.IsSpecies(TargetID.SmallArtsariiv))
@@ -163,9 +163,9 @@ internal class Artsariiv : ShatteredObservatory
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.CMNoName;
+        return LogData.LogMode.CMNoName;
     }
 
     static private AgentItem FindTargetArtsariiv(AgentData agentData)
@@ -174,23 +174,23 @@ internal class Artsariiv : ShatteredObservatory
         return agentData.GetNPCsByID(TargetID.Artsariiv).MaxBy(x => x.LastAware - x.FirstAware) ?? throw new MissingKeyActorsException("Artsariiv not found");
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // artsarriv starts invulnerable
         var artsariiv = FindTargetArtsariiv(agentData);
-        return GetFightOffsetByInvulnStart(fightData, combatData, artsariiv, Determined762);
+        return GetLogOffsetByInvulnStart(logData, combatData, artsariiv, Determined762);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // reward or death worked
-        if (fightData.Success)
+        if (logData.Success)
         {
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
-        SetSuccessByBuffCount(combatData, fightData, playerAgents, target, Determined762, 4);
+        SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 4);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -227,7 +227,7 @@ internal class Artsariiv : ShatteredObservatory
                                 [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
                             ];
                             uint[] radius = [400, 290, 180, 70];
-                            long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
+                            long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.LogData.LogEnd;
                             for (int i = 0; i < 4; i++)
                             {
                                 long start = lifespan.end + 560 * i;

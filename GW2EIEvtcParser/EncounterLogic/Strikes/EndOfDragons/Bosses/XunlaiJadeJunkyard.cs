@@ -5,14 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 {
@@ -69,14 +69,14 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.LightBlue), "DevVoid.B", "Received Devouring Void", "Devouring Void Applied", 150),
                 new PlayerDstBuffApplyMechanic(DevouringVoid, new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Blue), "Undev.Achiv", "Achievement Eligibility: Undevoured", "Achiv Undevoured", 150)
-                    .UsingAchievementEligibility().UsingEnable(x => x.FightData.IsCM),
+                    .UsingAchievementEligibility().UsingEnable(x => x.LogData.IsCM),
             ]),
         ])
         );
         Icon = EncounterIconXunlaiJadeJunkyard;
         Extension = "xunjadejunk";
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -163,16 +163,16 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         return phases;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-            var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000);
+            var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= logData.LogStart + 5000);
             if (buffApplies.Count() == 3)
             {
-                fightData.SetSuccess(true, buffApplies.Last().Time);
+                logData.SetSuccess(true, buffApplies.Last().Time);
             }
         }
     }
@@ -214,18 +214,18 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         ];
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == MapIDs.XunlaijadeJunkyardStory)
         {
-            return FightData.EncounterMode.Story;
+            return LogData.LogMode.Story;
         }
-        return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return ankka.GetHealth(combatData) > 50e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16);
         foreach (AgentItem sanctuary in sanctuaryPrism)
@@ -233,16 +233,16 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC, agentData);
             sanctuary.OverrideID(TargetID.SanctuaryPrism, agentData);
-            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
+            sanctuary.OverrideAwareTimes(logData.EvtcLogStart, items.Any() ? items.First().Time : logData.EvtcLogEnd);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
+        if (log.LogData.Success && log.LogData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
         {
             InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1));
         }
@@ -356,7 +356,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 1000);
                                 }
                             }
-                            else if (log.FightData.IsCM)
+                            else if (log.LogData.IsCM)
                             {
                                 AddDeathsHandDecoration(replay, deathsHandEffect.Position, deathsHandEffect.Time, 3000, 380, 33000);
                             }
@@ -461,9 +461,9 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 break;
 
             case (int)TargetID.SanctuaryPrism:
-                if (!log.FightData.IsCM)
+                if (!log.LogData.IsCM)
                 {
-                    replay.Trim(log.FightData.LogStart, log.FightData.LogStart);
+                    replay.Trim(log.LogData.EvtcLogStart, log.LogData.EvtcLogStart);
                 }
                 break;
 
@@ -482,8 +482,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 //TODO(Rennorb) @correctnes: there was a null check here, i have no clue why.
                 if (!segment.IsEmpty() && segment.Value == 1)
                 {
-                    uint deathsHandRadius = (uint)(log.FightData.IsCM ? 380 : 300);
-                    int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;
+                    uint deathsHandRadius = (uint)(log.LogData.IsCM ? 380 : 300);
+                    int deathsHandDuration = log.LogData.IsCM ? 33000 : 13000;
                     // AoE on player
                     replay.Decorations.AddWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
                     // Logs without effects, we add the dropped AoE manually

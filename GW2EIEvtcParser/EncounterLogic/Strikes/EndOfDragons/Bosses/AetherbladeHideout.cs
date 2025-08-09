@@ -6,14 +6,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class AetherbladeHideout : EndOfDragonsStrike
 {
@@ -73,8 +73,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         Icon = EncounterIconAetherbladeHideout;
         Extension = "aetherhide";
         GenericFallBackMethod = FallBackMethod.None;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -406,7 +406,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         {
             foreach (EffectEvent effect in leyBreachPuddle)
             {
-                long duration = log.FightData.IsCM ? 30000 : 15000;
+                long duration = log.LogData.IsCM ? 30000 : 15000;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
@@ -525,9 +525,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         environmentDecorations.AddNonHomingMissiles(log, toxicOrbs, Colors.Red, 0.3, 50);
     }
 
-    private SingleActor? GetEchoOfScarletBriar(FightData fightData)
+    private SingleActor? GetEchoOfScarletBriar(LogData logData)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
+        return Targets.FirstOrDefault(x => x.IsSpecies(logData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -535,23 +535,23 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return [TargetID.MaiTrinStrike, TargetID.EchoOfScarletBriarCM, TargetID.EchoOfScarletBriarNM];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
-            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(fightData);
+            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(logData);
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
                 BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
-                    fightData.SetSuccess(true, buffApply.Time);
+                    logData.SetSuccess(true, buffApply.Time);
                 } 
                 else
                 {
-                    fightData.SetSuccess(false, echoOfScarlet.LastAware);
+                    logData.SetSuccess(false, echoOfScarlet.LastAware);
                 }
             }
         }
@@ -562,7 +562,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
         phases[0].AddTarget(maiTrin, log);
-        SingleActor? echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
+        SingleActor? echoOfScarlet = GetEchoOfScarletBriar(log.LogData);
         if (echoOfScarlet != null)
         {
             phases[0].AddTarget(echoOfScarlet, log);
@@ -657,13 +657,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         if (echoOfScarlet != null)
         {
             long echoStart = echoOfScarlet.FirstAware + 10000;
-            var echoPhase = new PhaseData(echoStart, log.FightData.FightEnd, "Echo of Scarlet Briar");
+            var echoPhase = new PhaseData(echoStart, log.LogData.LogEnd, "Echo of Scarlet Briar");
             echoPhase.AddParentPhase(phases[0]);
             echoPhase.AddTarget(echoOfScarlet, log);
             phases.Add(echoPhase);
             var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2]));
             var bombs = Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb));
-            List <PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.FightData.FightEnd);
+            List <PhaseData> echoPhases = GetPhasesByInvul(log, Untargetable, echoOfScarlet, true, true, echoStart, log.LogData.LogEnd);
             for (int i = 0; i < echoPhases.Count; i++)
             {
                 PhaseData subPhase = echoPhases[i];
@@ -775,7 +775,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindFerrousBombsAndCleanMaiTrins(agentData, combatData);
         var maiTrin = agentData.GetNPCsByID(TargetID.MaiTrinStrike).FirstOrDefault() ?? throw new MissingKeyActorsException("Mai Trin not found");
@@ -785,7 +785,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
             agentData.AddCustomNPCAgent(time, time + 1, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         SanitizeLastHealthUpdateEvents(Targets, combatData);
         RenameScarletPhantoms(Targets);
     }
@@ -1048,17 +1048,17 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         decorations.Add(new CircleDecoration(innerRadius, lifespans[2], Colors.White, 0.5, positionConnector).UsingRotationConnector(rotationConnectors[2]));
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
-        return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return maiTrin.GetHealth(combatData) > 8e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success)
+        if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
             {

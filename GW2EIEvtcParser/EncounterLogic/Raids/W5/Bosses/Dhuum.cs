@@ -5,15 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Dhuum : HallOfChains
 {
@@ -94,8 +94,8 @@ internal class Dhuum : HallOfChains
         Extension = "dhuum";
         ChestID = ChestID.DhuumChest;
         Icon = EncounterIconDhuum;
-        EncounterCategoryInformation.InSubCategoryOrder = 3;
-        EncounterID |= 0x000006;
+        LogCategoryInformation.InSubCategoryOrder = 3;
+        LogID |= 0x000006;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -131,7 +131,7 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO(Rennorb) @perf
-    private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long fightDuration, long start, PhaseData mainFightPhase)
+    private static void ComputeFightPhases(List<PhaseData> phases, SingleActor dhuum, IEnumerable<CastEvent> castLogs, ParsedEvtcLog log, long logEnd, long start, PhaseData mainFightPhase)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillID == MajorSoulSplit);
         // Dhuum brought down to 10%
@@ -150,14 +150,14 @@ internal class Dhuum : HallOfChains
                 shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
-                var ritualPhase = new PhaseData(firstDamageable.Time, fightDuration, "Ritual");
+                var ritualPhase = new PhaseData(firstDamageable.Time, logEnd, "Ritual");
                 ritualPhase.AddTarget(dhuum, log);
                 ritualPhase.AddParentPhase(mainFightPhase);
                 phases.Add(ritualPhase);
             }
             else
             {
-                var shieldPhase = new PhaseData(end, fightDuration, "Shielded Dhuum");
+                var shieldPhase = new PhaseData(end, logEnd, "Shielded Dhuum");
                 shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
@@ -204,7 +204,7 @@ internal class Dhuum : HallOfChains
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightDuration = log.FightData.FightEnd;
+        long fightDuration = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
         phases[0].AddTarget(dhuum, log);
@@ -280,9 +280,9 @@ internal class Dhuum : HallOfChains
         ];
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -320,7 +320,7 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
         {
@@ -329,19 +329,19 @@ internal class Dhuum : HallOfChains
         _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
         HandleYourSouls(agentData, combatData);
 
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event in all logs
         if (!_hasPrevent)
         {
-            return FightData.EncounterStartStatus.NoPreEvent;
+            return LogData.LogStartStatus.NoPreEvent;
         }
         else
         {
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            return base.GetLogStartStatus(combatData, agentData, logData);
         }
     }
 
@@ -497,7 +497,7 @@ internal class Dhuum : HallOfChains
                 var scytheSwing = casts.Where(x => x.SkillID == ScytheSwing).ToList();
                 for (int i = 0; i < scytheSwing.Count; i++)
                 {
-                    var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
+                    var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.LogData.LogEnd;
 
                     // AoE Indicator
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out var scytheSwingIndicators))
@@ -867,10 +867,10 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
-        return (target.GetHealth(combatData) > 35e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (target.GetHealth(combatData) > 35e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     /// <summary>

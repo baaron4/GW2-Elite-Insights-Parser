@@ -3,11 +3,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Boneskinner : Bjora
 {
@@ -40,8 +40,8 @@ internal class Boneskinner : Bjora
         );
         Extension = "boneskin";
         Icon = EncounterIconBoneskinner;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000004;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000004;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -74,23 +74,23 @@ internal class Boneskinner : Bjora
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250);
         foreach (AgentItem torch in torches)
         {
             torch.OverrideType(AgentItem.AgentType.NPC, agentData);
             torch.OverrideID(TargetID.Torch, agentData);
-            torch.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
+            torch.OverrideAwareTimes(logData.EvtcLogStart, logData.EvtcLogEnd);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
         }

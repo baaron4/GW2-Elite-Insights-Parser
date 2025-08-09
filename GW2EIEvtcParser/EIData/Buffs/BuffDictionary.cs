@@ -128,7 +128,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
             }
         }
 
-        if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
+        if (agentItem.LastAware < log.LogData.LogEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
         {
             foreach (var pair in _buffIDToEvents)
             {

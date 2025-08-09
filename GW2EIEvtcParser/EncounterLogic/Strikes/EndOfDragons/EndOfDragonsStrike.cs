@@ -1,28 +1,28 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class EndOfDragonsStrike : StrikeMissionLogic
 {
     public EndOfDragonsStrike(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.Cantha;
-        EncounterID |= EncounterIDs.StrikeMasks.EODMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.Cantha;
+        LogID |= LogIDs.StrikeMasks.EODMask;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > logData.LogStart);
         if (reward != null)
         {
-            fightData.SetSuccess(true, reward.Time);
+            logData.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
         }
     }
 }

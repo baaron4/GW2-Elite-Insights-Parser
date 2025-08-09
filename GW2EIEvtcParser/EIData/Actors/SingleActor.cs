@@ -331,11 +331,11 @@ public abstract partial class SingleActor : Actor
         CombatReplay = new CombatReplay(log);
         if (!log.CombatData.HasMovementData)
         {
-            // no combat replay support on fight
+            // no combat replay support on log
             return CombatReplay;
         }
         SetMovements(log, this, CombatReplay);
-        CombatReplay.PollingRate(log.FightData.FightDuration, AgentItem.Type == AgentItem.AgentType.Player);
+        CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
         TrimCombatReplay(log, CombatReplay);
         if (!IsFakeActor)
         {
@@ -507,7 +507,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log)
     {
-        return GetAnimatedCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetAnimatedCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
@@ -517,7 +517,7 @@ public abstract partial class SingleActor : Actor
 
     public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log)
     {
-        return GetInstantCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetInstantCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     protected override void InitCastEvents(ParsedEvtcLog log)
@@ -684,7 +684,7 @@ public abstract partial class SingleActor : Actor
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
-        return GetJustActorDamageEvents(target, log, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetJustActorDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting

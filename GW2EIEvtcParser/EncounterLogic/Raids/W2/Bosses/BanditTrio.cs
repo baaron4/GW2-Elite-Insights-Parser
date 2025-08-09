@@ -5,15 +5,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class BanditTrio : SalvationPass
 {
@@ -51,8 +51,8 @@ internal class BanditTrio : SalvationPass
         GenericFallBackMethod = FallBackMethod.None;
         ChestID = ChestID.ChestOfPrisonCamp;
         Icon = EncounterIconBanditTrio;
-        EncounterCategoryInformation.InSubCategoryOrder = 2;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 2;
+        LogID |= 0x000002;
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -88,9 +88,9 @@ internal class BanditTrio : SalvationPass
                         (2688, 11906, 3712, 14210)*/);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -163,17 +163,17 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindCageAndBombs(agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (TargetHPPercentUnderThreshold(TargetID.Berg, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(TargetID.Berg, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
         if (agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
         {
@@ -184,11 +184,11 @@ internal class BanditTrio : SalvationPass
                 // two minutes
                 if (firstMove.Time < 120000)
                 {
-                    return FightData.EncounterStartStatus.Late;
+                    return LogData.LogStartStatus.Late;
                 }
             }
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
@@ -198,12 +198,12 @@ internal class BanditTrio : SalvationPass
         {
             long start = phaseStart.Time;
             DeadEvent? phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-            long end = log.FightData.FightEnd;
+            long end = log.LogData.LogEnd;
             if (phaseEnd != null)
             {
                 end = phaseEnd.Time;
             }
-            var phase = new PhaseData(start, Math.Min(end, log.FightData.FightEnd));
+            var phase = new PhaseData(start, Math.Min(end, log.LogData.LogEnd));
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(target, log);
             phase.Name = target.ID switch
@@ -347,7 +347,7 @@ internal class BanditTrio : SalvationPass
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
         }

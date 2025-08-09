@@ -1,14 +1,14 @@
 ﻿using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class SilentSurf : FractalLogic
 {
     public SilentSurf(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.SilentSurf;
-        EncounterID |= EncounterIDs.FractalMasks.SilentSurfMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.SilentSurf;
+        LogID |= LogIDs.FractalMasks.SilentSurfMask;
     }
 }

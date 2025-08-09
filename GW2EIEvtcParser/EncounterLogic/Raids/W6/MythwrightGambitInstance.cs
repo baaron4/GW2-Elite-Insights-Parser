@@ -5,14 +5,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class MythwrightGambitInstance : MythwrightGambit
 {
@@ -23,7 +23,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     private readonly IReadOnlyList<MythwrightGambit> _subLogics;
     public MythwrightGambitInstance(int triggerID) : base(triggerID)
     {
-        EncounterID = EncounterIDs.EncounterMasks.Unsupported;
+        LogID = LogIDs.LogMasks.Unsupported;
         Icon = InstanceIconMythwrightGambit;
         Extension = "mythgamb";
 
@@ -89,7 +89,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         success = true;
                     }
                     lowerThreshold = end;
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, EncounterIconConjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, EncounterIconConjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
                 }
             }
         }
@@ -130,7 +130,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         end = chest.FirstAware;
                         success = true;
                     }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, EncounterIconTwinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, EncounterIconTwinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
                 }
             }
         }
@@ -162,7 +162,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, EncounterIconQadim, qadim.GetHealth(log.CombatData) > 21e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, EncounterIconQadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -223,10 +223,10 @@ internal class MythwrightGambitInstance : MythwrightGambit
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ConjuredAmalgamate.HandleCAAgents(agentData, combatData);
-        var sword = ConjuredAmalgamate.CreateCustomSwordAgent(fightData, agentData);
+        var sword = ConjuredAmalgamate.CreateCustomSwordAgent(logData, agentData);
         var maxHPUpdates = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -234,7 +234,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         Qadim.FindPlateforms(evtcVersion, maxHPUpdates, agentData, combatData);
         Qadim.FindLamps(evtcVersion, maxHPUpdates, agentData, combatData);
         Qadim.FindPyres(gw2Build, agentData, combatData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         ConjuredAmalgamate.RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
         Qadim.RenamePyres(Targets);
         foreach (SingleActor actor in Targets)

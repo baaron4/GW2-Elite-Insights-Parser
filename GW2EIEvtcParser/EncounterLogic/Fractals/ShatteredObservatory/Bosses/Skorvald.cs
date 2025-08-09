@@ -4,15 +4,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Skorvald : ShatteredObservatory
 {
@@ -46,8 +46,8 @@ internal class Skorvald : ShatteredObservatory
         ]));
         Extension = "skorv";
         Icon = EncounterIconSkorvald;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -114,7 +114,7 @@ internal class Skorvald : ShatteredObservatory
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var manualFractalScaleSet = false;
         if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
@@ -144,7 +144,7 @@ internal class Skorvald : ShatteredObservatory
                 fluxAnomaly.OverrideID(TargetID.UnknownAnomaly, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         skorvald.OverrideName("Skorvald");
         if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
@@ -179,36 +179,31 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
-            long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
+            long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(logData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
             // Skorvald may spawns with 0% hp
             CombatItem? firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
             CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
-            return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
+            return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericLogOffset(logData);
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
         {
-            // Agent check not reliable, produces false positives and regular false negatives
-            /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())
-            {
-                return FightData.CMStatus.CM;
-            }*/
             // Check some CM skills instead, not perfect but helps, 
             // Solar Bolt is the first thing he tries to cast, that looks very consistent
             // If the phase 1 is super fast to the point skorvald does not cast anything, supernova should be there
             // Otherwise we are looking at a super fast phase 1 (< 7 secondes) where the team ggs just before supernova
-            // Joining the encounter mid fight may also yield a false negative but at that point the log is incomplete already
+            // Joining the encounter mid encounter may also yield a false negative but at that point the log is incomplete already
             // WARNING: Skorvald seems to cast SupernovaCM on T4 regardless of the mode since an unknown amount of time, removing that id check
             // and adding split thrash mob check
             var cmSkills = new HashSet<long>
@@ -222,13 +217,13 @@ internal class Skorvald : ShatteredObservatory
                 agentData.GetNPCsByID(TargetID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
                 agentData.GetNPCsByID(TargetID.FluxAnomalyCM4).Any(x => x.FirstAware >= target.FirstAware))
             {
-                return FightData.EncounterMode.CM;
+                return LogData.LogMode.CM;
             }
-            return FightData.EncounterMode.Normal;
+            return LogData.LogMode.Normal;
         }
         else
         {
-            return (target.GetHealth(combatData) == 5551340) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+            return (target.GetHealth(combatData) == 5551340) ? LogData.LogMode.CM : LogData.LogMode.Normal;
         }
     }
 
@@ -248,11 +243,11 @@ internal class Skorvald : ShatteredObservatory
         ];
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // reward or death worked
-        if (fightData.Success)
+        if (logData.Success)
         {
             return;
         }
@@ -263,7 +258,7 @@ internal class Skorvald : ShatteredObservatory
             BuffApplyEvent? invul895Apply = combatData.GetBuffDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
             if (invul895Apply != null)
             {
-                fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
+                logData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
             }
         }
     }

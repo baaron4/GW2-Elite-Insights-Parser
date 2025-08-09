@@ -3,15 +3,15 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class HarvestTemple : EndOfDragonsStrike
 {
@@ -143,8 +143,8 @@ internal class HarvestTemple : EndOfDragonsStrike
         ChestID = ChestID.GrandStrikeChest;
         GenericFallBackMethod = FallBackMethod.None;
         Extension = "harvsttmpl";
-        EncounterCategoryInformation.InSubCategoryOrder = 3;
-        EncounterID |= 0x000004;
+        LogCategoryInformation.InSubCategoryOrder = 3;
+        LogID |= 0x000004;
     }
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
@@ -161,8 +161,8 @@ internal class HarvestTemple : EndOfDragonsStrike
         var giants = new List<SingleActor>();
         foreach (SingleActor target in Targets)
         {
-            long phaseEnd = Math.Min(target.LastAware, log.FightData.FightEnd);
-            long phaseStart = Math.Max(target.FirstAware, log.FightData.FightStart);
+            long phaseEnd = Math.Min(target.LastAware, log.LogData.LogEnd);
+            long phaseStart = Math.Max(target.FirstAware, log.LogData.LogStart);
             switch (target.ID)
             {
                 case (int)TargetID.KillableVoidAmalgamate:
@@ -212,7 +212,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         foreach (TargetableEvent targetOn in targetOns)
                         {
                             long start = targetOn.Time;
-                            long end = log.FightData.FightEnd;
+                            long end = log.LogData.LogEnd;
                             TargetableEvent? targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                             if (targetOff != null)
                             {
@@ -235,8 +235,8 @@ internal class HarvestTemple : EndOfDragonsStrike
 
         if (giants.Count > 0)
         {
-            long start = log.FightData.FightEnd;
-            long end = log.FightData.FightStart;
+            long start = log.LogData.LogEnd;
+            long end = log.LogData.LogStart;
             foreach (SingleActor giant in giants)
             {
                 start = Math.Min(start, giant.FirstAware);
@@ -264,7 +264,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         var purificationNonBlockings = Targets.Where(x => x.IsSpecies(TargetID.VoidTimeCaster) || x.IsSpecies(TargetID.VoidSaltsprayDragon));
         foreach (SingleActor voidAmal in Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)))
         {
-            var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.FightData.FightStart), voidAmal.LastAware, "Purification " + (++purificationID));
+            var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.LogData.LogStart), voidAmal.LastAware, "Purification " + (++purificationID));
             purificationPhase.AddTarget(voidAmal, log);
             purificationPhase.OverrideEndTime(log);
             purificationPhase.AddTargets(purificationNonBlockings, log, PhaseData.TargetPriority.NonBlocking);
@@ -303,15 +303,15 @@ internal class HarvestTemple : EndOfDragonsStrike
         return phases;
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // To investigate
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
@@ -400,10 +400,10 @@ internal class HarvestTemple : EndOfDragonsStrike
         return "Harvest Temple";
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             // no bouny chest detection, the reward is delayed
             SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.TheDragonVoidSooWon));
@@ -440,7 +440,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         }
                         if (isSuccess)
                         {
-                            fightData.SetSuccess(true, targetOffs.Last().Time);
+                            logData.SetSuccess(true, targetOffs.Last().Time);
                         }
                     }
                 }
@@ -456,7 +456,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         ];
     }
 
-    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var idsToUse = new List<TargetID> {
             TargetID.TheDragonVoidJormag,
@@ -501,7 +501,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         attackTargetEvents = attackTargetEvents.OrderBy(x => attackTargetSortID[x.AttackTarget]);
         int index = 0;
         var processedAttackTargets = new HashSet<AgentItem>();
-        long lastLastAware = fightData.FightStart;
+        long lastLastAware = logData.LogStart;
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
             AgentItem atAgent = attackTargetEvent.AttackTarget;
@@ -566,7 +566,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
         var maxHPEvents = combatData
@@ -636,7 +636,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         //
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         //
         int purificationID = 0;
         bool needRedirect = false;
@@ -832,7 +832,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     bool breakPurification = false;
                     foreach (EffectEvent purificationZoneEffect in purificationZoneEffects.Where(x => x.Time >= target.FirstAware && x.Time <= target.LastAware))
                     {
-                        lifespan = (purificationZoneEffect.Time, log.FightData.FightEnd);
+                        lifespan = (purificationZoneEffect.Time, log.LogData.LogEnd);
                         uint radius = 280;
                         if (voidShellRemovalOffset < voidShellRemovals.Count)
                         {
@@ -997,7 +997,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 var graspOfJormagProjectiles = log.CombatData.GetMissileEventsBySkillID(GraspOfJormag);
                 foreach (MissileEvent grasp in graspOfJormagProjectiles)
                 {
-                    lifespan = (grasp.Time, grasp.RemoveEvent?.Time ?? Math.Min(log.FightData.FightEnd, target.LastAware));
+                    lifespan = (grasp.Time, grasp.RemoveEvent?.Time ?? Math.Min(log.LogData.LogEnd, target.LastAware));
                     for (int i = 0; i < grasp.LaunchEvents.Count; i++)
                     {
                         MissileLaunchEvent? launch = grasp.LaunchEvents[i];
@@ -1012,7 +1012,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 foreach (MissileEvent breath in breathOfJormag)
                 {
                     // The breath is missing MissileRemove events, we compute the removal manually
-                    long beamAgentSpawnTime = log.FightData.FightEnd;
+                    long beamAgentSpawnTime = log.LogData.LogEnd;
                     var beamAgents = log.AgentData.GetNPCsByIDs([TargetID.JormagMovingFrostBeam, TargetID.JormagMovingFrostBeamNorth, TargetID.JormagMovingFrostBeamCenter]);
                     foreach (AgentItem agent in beamAgents)
                     {
@@ -1174,7 +1174,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();
                         int offset = 0;
                         double initialRadius = 100.0;
-                        double radiusIncrement = log.FightData.IsCM ? 35.0 : 35.0 / 2;
+                        double radiusIncrement = log.LogData.IsCM ? 35.0 : 35.0 / 2;
                         // To handle same amalgamate handling multiple phases
                         while (offset < poolEffects.Count)
                         {
@@ -2088,7 +2088,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         var targetIDs = new HashSet<int>()
             {
@@ -2100,7 +2100,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             };
         if (Targets.Where(x => targetIDs.Contains(x.ID)).Any(x => x.GetHealth(combatData) > 16000000))
         {
-            return FightData.EncounterMode.CM;
+            return LogData.LogMode.CM;
         }
         IReadOnlyList<AgentItem> voidMelters = agentData.GetNPCsByID(TargetID.VoidMelter);
         if (voidMelters.Count > 5)
@@ -2108,15 +2108,15 @@ internal class HarvestTemple : EndOfDragonsStrike
             long firstAware = voidMelters[0].FirstAware;
             if (voidMelters.Count(x => Math.Abs(x.FirstAware - firstAware) < ServerDelayConstant) > 5)
             {
-                return FightData.EncounterMode.CM;
+                return LogData.LogMode.CM;
             }
         }
         // fallback for late logs
         if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen).IsValid || agentData.GetNPCsByID(TargetID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
         {
-            return FightData.EncounterMode.CM;
+            return LogData.LogMode.CM;
         }
-        return FightData.EncounterMode.Normal;
+        return LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
@@ -2124,7 +2124,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         base.SetInstanceBuffs(log);
 
         // Added a CM mode check because the eligibility had been bugged for some time and showed up in normal mode.
-        if (log.FightData.Success && log.FightData.IsCM)
+        if (log.LogData.Success && log.LogData.IsCM)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
             {

@@ -6,14 +6,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Xera : StrongholdOfTheFaithful
 {
@@ -56,8 +56,8 @@ internal class Xera : StrongholdOfTheFaithful
         Extension = "xera";
         GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
         Icon = EncounterIconXera;
-        EncounterCategoryInformation.InSubCategoryOrder = 3;
-        EncounterID |= 0x000004;
+        LogCategoryInformation.InSubCategoryOrder = 3;
+        LogID |= 0x000004;
         ChestID = ChestID.XeraChest;
     }
 
@@ -102,7 +102,7 @@ internal class Xera : StrongholdOfTheFaithful
         return xera.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.IsSpecies(TargetID.Xera2))?.Merged;
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var xera = GetMainTarget().AgentItem;
         var mergedXera2 = GetXera2Merge(xera);
@@ -111,14 +111,14 @@ internal class Xera : StrongholdOfTheFaithful
             BuffEvent? invulXera = GetInvulXeraEvent(combatData, xera);
             if (invulXera == null)
             {
-                fightData.SetSuccess(false, xera.LastAware);
+                logData.SetSuccess(false, xera.LastAware);
             }
             return;
         }
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (fightData.Success && fightData.FightEnd < mergedXera2.FirstAware)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (logData.Success && logData.LogEnd < mergedXera2.FirstAware)
         {
-            fightData.SetSuccess(false, mergedXera2.LastAware);
+            logData.SetSuccess(false, mergedXera2.LastAware);
         }
     }
 
@@ -132,12 +132,12 @@ internal class Xera : StrongholdOfTheFaithful
                 return enterCombat.Time;
             }
         }
-        return log.FightData.FightStart;
+        return log.LogData.LogStart;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);
@@ -145,7 +145,7 @@ internal class Xera : StrongholdOfTheFaithful
         {
             long xeraFightStart = GetMainXeraFightStart(log, mainTarget.AgentItem);
             PhaseData? phase100to0 = null;
-            if (xeraFightStart > log.FightData.FightStart)
+            if (xeraFightStart > log.LogData.LogStart)
             {
                 var phasePreEvent = new PhaseData(0, xeraFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
@@ -155,7 +155,7 @@ internal class Xera : StrongholdOfTheFaithful
                     phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 }
                 phases.Add(phasePreEvent);
-                phase100to0 = new PhaseData(xeraFightStart, log.FightData.FightEnd, "Main Fight");
+                phase100to0 = new PhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
                 phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
@@ -176,7 +176,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phase1.AddTarget(mainTarget, log);
                 phases.Add(phase1);
                 var mergedXera2 = GetXera2Merge(mainTarget.AgentItem);
-                long glidingEndTime = fightEnd;
+                long glidingEndTime = logEnd;
                 if (mergedXera2 != null)
                 {
                     var movement = log.CombatData.GetMovementData(mainTarget.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mergedXera2.FirstAware + 500);
@@ -188,7 +188,7 @@ internal class Xera : StrongholdOfTheFaithful
                     {
                         glidingEndTime = mergedXera2.FirstAware;
                     }
-                    var phase2 = new PhaseData(glidingEndTime, fightEnd, "Phase 2");
+                    var phase2 = new PhaseData(glidingEndTime, logEnd, "Phase 2");
                     if (phase100to0 != null)
                     {
                         phase2.AddParentPhase(phase100to0);
@@ -231,7 +231,7 @@ internal class Xera : StrongholdOfTheFaithful
         return GetInvulXeraEvent(combatData, xera.AgentItem);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var xera))
         {
@@ -262,7 +262,7 @@ internal class Xera : StrongholdOfTheFaithful
             }
             return enterCombat.Time;
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
     internal static void FindBloodstones(AgentData agentData, List<CombatItem> combatData)
@@ -338,7 +338,7 @@ internal class Xera : StrongholdOfTheFaithful
         });
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // find target
         if (!agentData.TryGetFirstAgentItem(TargetID.Xera, out var firstXera))
@@ -348,7 +348,7 @@ internal class Xera : StrongholdOfTheFaithful
         FindBloodstones(agentData, combatData);
         if (_hasPreEvent)
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
         // find split
         if (agentData.TryGetFirstAgentItem(TargetID.Xera2, out var secondXera))
@@ -356,22 +356,22 @@ internal class Xera : StrongholdOfTheFaithful
             firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
             AgentManipulationHelper.RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameBloodStones(Targets);
         // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
         SetManualHPForXera(GetMainTarget());
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
         if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
         {
-            return FightData.EncounterStartStatus.NoPreEvent;
+            return LogData.LogStartStatus.NoPreEvent;
         }
         else
         {
-            return FightData.EncounterStartStatus.Normal;
+            return LogData.LogStartStatus.Normal;
         }
     }
 

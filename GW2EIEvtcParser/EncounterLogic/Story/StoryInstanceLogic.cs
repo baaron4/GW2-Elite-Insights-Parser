@@ -1,26 +1,26 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal abstract class StoryInstance : FightLogic
+internal abstract class StoryInstance : LogLogic
 {
     public StoryInstance(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.Category = EncounterCategory.FightCategory.Story;
-        EncounterCategoryInformation.SubCategory = EncounterCategory.SubFightCategory.Story;
-        EncounterID |= EncounterIDs.EncounterMasks.StoryInstanceMask;
+        LogCategoryInformation.Category = LogCategories.LogCategory.Story;
+        LogCategoryInformation.SubCategory = LogCategories.SubLogCategory.Story;
+        LogID |= LogIDs.LogMasks.StoryInstanceMask;
     }
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.Story;
+        return LogData.LogMode.Story;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {

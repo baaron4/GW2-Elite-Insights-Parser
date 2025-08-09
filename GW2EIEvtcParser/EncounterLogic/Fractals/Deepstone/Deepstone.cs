@@ -1,12 +1,12 @@
-﻿using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+﻿using static GW2EIEvtcParser.LogLogic.LogCategories;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class Deepstone : FractalLogic
 {
     public Deepstone(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.Deepstone;
-        EncounterID = EncounterIDs.Unknown;
+        LogCategoryInformation.SubCategory = SubLogCategory.Deepstone;
+        LogID = LogIDs.Unknown;
     }
 }

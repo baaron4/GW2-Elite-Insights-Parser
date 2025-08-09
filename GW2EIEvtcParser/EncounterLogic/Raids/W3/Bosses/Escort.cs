@@ -6,15 +6,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
@@ -39,9 +39,9 @@ internal class Escort : StrongholdOfTheFaithful
         ChestID = ChestID.SiegeChest;
         Extension = "escort";
         Icon = EncounterIconEscort;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
+        LogCategoryInformation.InSubCategoryOrder = 0;
         GenericFallBackMethod = FallBackMethod.None;
-        EncounterID |= 0x000001;
+        LogID |= 0x000001;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -61,8 +61,8 @@ internal class Escort : StrongholdOfTheFaithful
         var phases = new List<PhaseData>();
         //
         DeadEvent? mcLeodDeath = log.CombatData.GetDeadEvents(mcLeod.AgentItem).LastOrDefault();
-        long mcLeodStart = Math.Max(mcLeod.FirstAware, log.FightData.FightStart);
-        long mcLeodEnd = Math.Min(mcLeodDeath != null ? mcLeodDeath.Time : mcLeod.LastAware, log.FightData.FightEnd);
+        long mcLeodStart = Math.Max(mcLeod.FirstAware, log.LogData.LogStart);
+        long mcLeodEnd = Math.Min(mcLeodDeath != null ? mcLeodDeath.Time : mcLeod.LastAware, log.LogData.LogEnd);
         var mainPhase = new PhaseData(mcLeodStart, mcLeodEnd)
         {
             Name = "McLeod The Silent"
@@ -105,7 +105,7 @@ internal class Escort : StrongholdOfTheFaithful
         if (_hasPreEvent)
         {
             var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
-            preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
+            preEventPhase = new PhaseData(log.LogData.LogStart, mcLeod.FirstAware)
             {
                 Name = "Escort",
             };
@@ -123,7 +123,7 @@ internal class Escort : StrongholdOfTheFaithful
         var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
         if (mcLeodWargs.Any())
         {
-            var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "McLeod Wargs");
+            var phase = new PhaseData(log.LogData.LogStart, log.LogData.LogEnd, "McLeod Wargs");
             phase.AddTargets(mcLeodWargs, log);
             phase.AddParentPhase(preEventPhase);
             phase.OverrideTimes(log);
@@ -158,7 +158,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
         {
@@ -178,23 +178,23 @@ internal class Escort : StrongholdOfTheFaithful
         // to keep the pre event as we need targets
         if (_hasPreEvent && !agentData.GetNPCsByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
-            agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
+            agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameSubMcLeods(Targets);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
         {
             throw new MissingKeyActorsException("McLeod not found");
         }
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
+            if (mcLeod.FirstAware - logData.EvtcLogStart > MinimumInCombatDuration)
             {
                 _hasPreEvent = true;
                 // Is this reliable?
@@ -206,13 +206,13 @@ internal class Escort : StrongholdOfTheFaithful
             }
             else
             {
-                startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
+                startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
             }
         }
         return startToUse;
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (_hasPreEvent)
         {
@@ -225,18 +225,18 @@ internal class Escort : StrongholdOfTheFaithful
                 var glennaInitialPosition = new Vector2(9092.697f, 21477.2969f/*, -2946.81885f*/);
                 if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && (pe.GetPointXY() - glennaInitialPosition).Length() < 100))
                 {
-                    return FightData.EncounterStartStatus.Late;
+                    return LogData.LogStartStatus.Late;
                 }
             }
-            return FightData.EncounterStartStatus.Normal;
+            return LogData.LogStartStatus.Normal;
         }
         else if (combatData.GetLogNPCUpdateEvents().Any())
         {
-            return FightData.EncounterStartStatus.NoPreEvent;
+            return LogData.LogStartStatus.NoPreEvent;
         }
         else
         {
-            return FightData.EncounterStartStatus.Normal;
+            return LogData.LogStartStatus.Normal;
         }
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
@@ -283,7 +283,7 @@ internal class Escort : StrongholdOfTheFaithful
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success)
+        if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
             if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }

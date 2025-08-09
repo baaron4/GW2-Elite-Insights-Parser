@@ -90,7 +90,7 @@ public abstract class Mechanic : MechanicContainer
 
     private static bool EligibilityKeeper(ParsedEvtcLog log)
     {
-        return log.FightData.Success;
+        return log.LogData.Success;
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public abstract class Mechanic : MechanicContainer
 
     internal bool KeepIfEmpty(ParsedEvtcLog log)
     {
-        return IsAchievementEligibility && log.FightData.Success;
+        return IsAchievementEligibility && log.LogData.Success;
     }
     public override IReadOnlyList<Mechanic> GetMechanics()
     {

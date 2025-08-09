@@ -49,7 +49,7 @@ public class JsonNPC : JsonActor
     /// <summary>
     /// Array of double[2] that represents the breakbar percent of the actor \n
     /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
-    /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
+    /// If i corresponds to the last element that means the breakbar did not change for the remainder of the log \n
     /// </summary>
     public IReadOnlyList<IReadOnlyList<double>>? BreakbarPercents;
 }

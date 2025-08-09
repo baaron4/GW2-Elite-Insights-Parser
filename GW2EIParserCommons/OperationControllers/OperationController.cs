@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using GW2EIEvtcParser;
-using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.LogLogic;
 
 namespace GW2EIParserCommons;
 
@@ -12,19 +12,19 @@ public abstract class OperationController : ParserController
     {
         public OperationBasicMetaData(ParsedEvtcLog log)
         {
-            FightDuration = log.FightData.DurationString;
-            FightName = log.FightData.FightName;
-            FightSuccess = log.FightData.Success;
-            FightCategory = log.FightData.Logic.EncounterCategoryInformation;
-            Icon = log.FightData.Logic.Icon;
-            LogStart = log.LogData.LogStartStd;
-            LogEnd = log.LogData.LogEndStd;
+            LogDuration = log.LogData.DurationString;
+            LogName = log.LogData.LogName;
+            Success = log.LogData.Success;
+            LogCategory = log.LogData.Logic.LogCategoryInformation;
+            Icon = log.LogData.Logic.Icon;
+            LogStart = log.LogMetadata.LogStartStd;
+            LogEnd = log.LogMetadata.LogEndStd;
         }
 
-        public readonly string FightDuration;
-        public readonly string FightName;
-        public bool FightSuccess { get; set; }
-        public readonly EncounterCategory FightCategory;
+        public readonly string LogDuration;
+        public readonly string LogName;
+        public bool Success { get; set; }
+        public readonly LogCategories LogCategory;
         public readonly string Icon;
         public readonly string LogStart;
         public readonly string LogEnd;

@@ -126,8 +126,8 @@ public class CombatReplayMap
     /// </summary>
     /// <param name="urls"></param>
     /// <param name="phases"></param>
-    /// <param name="fightEnd"></param>
-    internal void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long fightEnd)
+    /// <param name="logEnd"></param>
+    internal void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long logEnd)
     {
         if (phases.Count - 1 > urls.Count)
         {
@@ -145,7 +145,7 @@ public class CombatReplayMap
                 Start = phase.Start
             });
         }
-        _maps.Last().End = fightEnd;
+        _maps.Last().End = logEnd;
         _maps.RemoveAll(x => x.End - x.Start <= 0);
     }
 

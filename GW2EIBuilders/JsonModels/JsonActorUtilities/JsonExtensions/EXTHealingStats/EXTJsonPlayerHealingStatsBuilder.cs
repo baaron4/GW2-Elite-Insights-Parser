@@ -11,7 +11,7 @@ internal static class EXTJsonPlayerHealingStatsBuilder
 
     public static EXTJsonPlayerHealingStats BuildPlayerHealingStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         int phasesCountIfRawFormatRequested = settings.RawFormatTimelineArrays ? phases.Count : 0;
 
         var outgoingHealingAllies = new List<List<EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics>>(log.Friendlies.Count);

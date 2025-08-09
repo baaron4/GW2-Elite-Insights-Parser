@@ -1,11 +1,11 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class ColdWar : Drizzlewood
 {
@@ -22,8 +22,8 @@ internal class ColdWar : Drizzlewood
         );
         Extension = "coldwar";
         Icon = EncounterIconColdWar;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000006;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000006;
     }
 
     /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)

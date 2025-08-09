@@ -5,14 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class ConjuredAmalgamate : MythwrightGambit
 {
@@ -52,8 +52,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
         Extension = "ca";
         GenericFallBackMethod = FallBackMethod.None;
         Icon = EncounterIconConjuredAmalgamate;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
         ChestID = ChestID.CAChest;
     }
 
@@ -131,12 +131,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         HandleCAAgents(agentData, combatData);
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
         var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == StateChange.IDToGUID);
@@ -152,28 +152,28 @@ internal class ConjuredAmalgamate : MythwrightGambit
                     if (logStartNPCUpdate != null)
                     {
                         // we couldn't have hit CA before the initial smash
-                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetNPCsByID(TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
+                        return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(logData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetNPCsByID(TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
                     }
                     else
                     {
                         // Before new logging, log would start when everyone in combat + boss in combat or enters combat
                         // as such the first smash can only happen within the first few seconds of the start
-                        return firstArmSmash.Time - fightData.LogStart > 6000 ? GetGenericFightOffset(fightData) : firstArmSmash.Time;
+                        return firstArmSmash.Time - logData.EvtcLogStart > 6000 ? GetGenericLogOffset(logData) : firstArmSmash.Time;
                     }
                 }
             }
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // Can be improved
-        if (TargetHPPercentUnderThreshold(TargetID.ConjuredAmalgamate, fightData.FightStart, combatData, Targets, 90))
+        if (TargetHPPercentUnderThreshold(TargetID.ConjuredAmalgamate, logData.LogStart, combatData, Targets, 90))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     protected override IReadOnlyList<TargetID> GetSuccessCheckIDs()
@@ -211,9 +211,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    internal static AgentItem CreateCustomSwordAgent(FightData fightData, AgentData agentData)
+    internal static AgentItem CreateCustomSwordAgent(LogData logData, AgentData agentData)
     {    
-        return agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
+        return agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, TargetID.ConjuredPlayerSword, true);
     }
 
     internal static void RedirectSwordDamageToSwordAgent(AgentItem sword, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -227,10 +227,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sword = CreateCustomSwordAgent(fightData, agentData);
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        var sword = CreateCustomSwordAgent(logData, agentData);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RedirectSwordDamageToSwordAgent(sword, combatData, extensions);
     }
 
@@ -253,18 +253,18 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 var bodyTargetableEvent = log.CombatData.GetTargetableEventsBySrc(target.AgentItem);
                 var body = log.CombatData.GetAttackTargetEventByAttackTarget(target.AgentItem)?.Src;
                 var bodyInvulStatus = body?.GetBuffStatus(log, CAInvul).Where(x => x.Value == 0) ?? [];
-                var bodyAtHideStart = log.FightData.FightStart;
+                var bodyAtHideStart = log.LogData.LogStart;
                 foreach (var noInvul in bodyInvulStatus)
                 {
                     replay.Hidden.Add(new Segment(bodyAtHideStart, noInvul.Start));
                     bodyAtHideStart = noInvul.End;
                 }
-                replay.Hidden.Add(new Segment(bodyAtHideStart, log.FightData.FightEnd));
+                replay.Hidden.Add(new Segment(bodyAtHideStart, log.LogData.LogEnd));
                 break;
             case (int)TargetID.CALeftArmAttackTarget:
             case (int)TargetID.CARightArmAttackTarget:
                 var armTargetableEvents = log.CombatData.GetAttackTargetEventByAttackTarget(target.AgentItem)?.GetTargetableEvents(log) ?? [];
-                var armAtHideStart = log.FightData.FightStart;
+                var armAtHideStart = log.LogData.LogStart;
                 foreach (var targetable in armTargetableEvents)
                 {
                     if (targetable.Targetable)
@@ -276,7 +276,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                         armAtHideStart = targetable.Time;
                     }
                 }
-                replay.Hidden.Add(new Segment(armAtHideStart, log.FightData.FightEnd));
+                replay.Hidden.Add(new Segment(armAtHideStart, log.LogData.LogEnd));
                 break;
             case (int)TargetID.ConjuredGreatsword:
                 break;
@@ -293,10 +293,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, fightData, playerAgents);
-        if (!fightData.Success)
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        if (!logData.Success)
         {
             SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate));
             SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
@@ -334,7 +334,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             if (npcSpawn != null)
             {
-                fightData.SetSuccess(true, lastDamageTaken.Time);
+                logData.SetSuccess(true, lastDamageTaken.Time);
             }
         }
     }
@@ -456,10 +456,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetBuffData(LockedOn).Count > 0 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
@@ -479,7 +479,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         // Sword Orbs
         foreach (MissileEvent missileEvent in swordOrbs)
         {
-            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd);
             for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
             {
                 var launch = missileEvent.LaunchEvents[i];
@@ -493,7 +493,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         // Shield Orbs
         foreach (MissileEvent missileEvent in shieldOrbs)
         {
-            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd);
             for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
             {
                 var launch = missileEvent.LaunchEvents[i];

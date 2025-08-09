@@ -2,13 +2,13 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal class UnknownBossLogic : UnknownFightLogic
+internal class UnknownBossLogic : UnknownEncounterLogic
 {
     public UnknownBossLogic(int triggerID) : base(triggerID)
     {
@@ -16,23 +16,23 @@ internal class UnknownBossLogic : UnknownFightLogic
         Icon = EncounterIconGeneric;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem? target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
-            return GetFirstDamageEventTime(fightData, agentData, combatData, target);
+            return GetFirstDamageEventTime(logData, agentData, combatData, target);
         }
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)), combatData, fightData, playerAgents, true);
+        SetSuccessByDeath(Targets.Where(x => x.IsSpecies(GenericTriggerID)), combatData, logData, playerAgents, true);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;
         AgentItem? agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
@@ -50,7 +50,7 @@ internal class UnknownBossLogic : UnknownFightLogic
             _targets.Add(new NPC(agentItem));
         }
         //
-        FinalizeComputeFightTargets();
+        FinalizeComputeLogTargets();
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
@@ -68,8 +68,8 @@ internal class UnknownBossLogic : UnknownFightLogic
         throw new InvalidOperationException("GetTrashMobsIDs not valid for Unknown");
     }
 
-    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.InstancePrivacyMode.Unknown;
+        return LogData.InstancePrivacyMode.Unknown;
     }
 }

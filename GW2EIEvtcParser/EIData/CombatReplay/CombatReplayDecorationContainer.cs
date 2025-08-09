@@ -366,7 +366,7 @@ internal class CombatReplayDecorationContainer
         foreach (BuffApplyEvent buffApply in buffApplies)
         {
             BuffRemoveAllEvent? remove = buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time);
-            long removalTime = remove != null ? remove.Time : log.FightData.LogEnd;
+            long removalTime = remove != null ? remove.Time : log.LogData.EvtcLogEnd;
             (long, long) lifespan = (buffApply.Time, removalTime);
 
             foreach (AgentItem agent in agentsToTether)
@@ -583,7 +583,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="radius"></param>
     internal void AddNonHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
         for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
         {
             var launch = missileEvent.LaunchEvents[i];
@@ -611,7 +611,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="useTargetOrientation"></param>
     internal void AddRotatingAroundTargetMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius, float angleOffset, bool useTargetOrientation = false)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
         for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
         {
             var launch = missileEvent.LaunchEvents[i];
@@ -653,7 +653,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="radius"></param>
     internal void AddHomingMissile(ParsedEvtcLog log, MissileEvent missileEvent, Color color, double opacity, uint radius)
     {
-        long end = missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd;
+        long end = missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd;
         for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
         {
             var launch = missileEvent.LaunchEvents[i];

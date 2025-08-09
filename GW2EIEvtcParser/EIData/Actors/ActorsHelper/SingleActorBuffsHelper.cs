@@ -203,7 +203,7 @@ partial class SingleActor
                             var segment = simul.ToSegment(by);
                             if (graphSegments.Count == 0)
                             {
-                                graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
+                                graphSegments.Add(new Segment(log.LogData.LogStart, segment.Start, 0));
                             }
                             else if (graphSegments.Last().End != segment.Start)
                             {
@@ -214,11 +214,11 @@ partial class SingleActor
                         // Graph object creation
                         if (graphSegments.Count > 0)
                         {
-                            graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
+                            graphSegments.Add(new Segment(graphSegments.Last().End, log.LogData.LogEnd, 0));
                         }
                         else
                         {
-                            graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
+                            graphSegments.Add(new Segment(log.LogData.LogStart, log.LogData.LogEnd, 0));
                         }
                         buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
                         if (updateBoonPresence || updateCondiPresence)
@@ -332,7 +332,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID)
     {
-        return GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <exception cref="InvalidOperationException"></exception>
@@ -346,7 +346,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID)
     {
-        return GetBuffStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, by, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <summary>
@@ -370,7 +370,7 @@ partial class SingleActor
 
     public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs)
     {
-        return GetBuffStatus(log, buffIDs, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, buffIDs, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     private static void FuseConsecutiveNonZeroAndSetTo1(List<Segment> segments)
@@ -423,7 +423,7 @@ partial class SingleActor
 
     public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffID)
     {
-        return GetBuffPresenceStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffPresenceStatus(log, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <exception cref="InvalidOperationException"></exception>
@@ -439,7 +439,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID)
     {
-        return GetBuffPresenceStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffPresenceStatus(log, by, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion BUFF STATUS
     #region STATISTICS
@@ -672,7 +672,7 @@ partial class SingleActor
                     {
                         simulator = buff.CreateSimulator(log, buffStackItemPool, false);
                     }
-                    simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
+                    simulator.Simulate(buffEvents, log.LogData.LogStart, log.LogData.LogEnd);
                 }
                 catch (EIBuffSimulatorIDException e)
                 {
@@ -680,7 +680,7 @@ partial class SingleActor
                     log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + Character + " for " + buff.Name + " because " + e.Message);
                     buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                     simulator = buff.CreateSimulator(log, buffStackItemPool, true);
-                    simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
+                    simulator.Simulate(buffEvents, log.LogData.LogStart, log.LogData.LogEnd);
                 }
                 _buffSimulators[buffID] = simulator;
                 bool updateBoonPresence = boonIDs.Contains(buffID);
@@ -692,7 +692,7 @@ partial class SingleActor
                     var segment = simul.ToSegment();
                     if (graphSegments.Count == 0)
                     {
-                        graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
+                        graphSegments.Add(new Segment(log.LogData.LogStart, segment.Start, 0));
                     }
                     else if (graphSegments.Last().End != segment.Start)
                     {
@@ -703,11 +703,11 @@ partial class SingleActor
                 // Graph object creation
                 if (graphSegments.Count > 0)
                 {
-                    graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
+                    graphSegments.Add(new Segment(graphSegments.Last().End, log.LogData.LogEnd, 0));
                 }
                 else
                 {
-                    graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
+                    graphSegments.Add(new Segment(log.LogData.LogStart, log.LogData.LogEnd, 0));
                 }
 
                 _buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
@@ -787,7 +787,7 @@ partial class SingleActor
                 {
                     time = ba.Time;
                 }
-                if (time <= log.FightData.FightEnd)
+                if (time <= log.LogData.LogEnd)
                 {
                     Consumable? existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
                     if (existing != null)

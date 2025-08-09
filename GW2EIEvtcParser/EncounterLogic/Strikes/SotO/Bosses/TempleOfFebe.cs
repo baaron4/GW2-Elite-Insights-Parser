@@ -4,15 +4,15 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class TempleOfFebe : SecretOfTheObscureStrike
 {
@@ -89,9 +89,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillID) && x.HasHit));
                     IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
                     // In case player is dead but death event did not happen during encounter
-                    if (agentItem.IsDead(log, log.FightData.FightEnd) && !deads.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
+                    if (agentItem.IsDead(log, log.LogData.LogEnd) && !deads.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
                     {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.FightData.FightEnd - 1));
+                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
                     }
                     else
                     {
@@ -99,9 +99,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     IReadOnlyList<DespawnEvent> despawns = log.CombatData.GetDespawnEvents(agentItem);
                     // In case player is DC but DC event did not happen during encounter
-                    if (agentItem.IsDC(log, log.FightData.FightEnd) && !despawns.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
+                    if (agentItem.IsDC(log, log.LogData.LogEnd) && !despawns.Any(x => x.Time >= log.LogData.LogStart && x.Time <= log.LogData.LogEnd))
                     {
-                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.FightData.FightEnd - 1));
+                        eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.LogData.LogEnd - 1));
                     }
                     else
                     {
@@ -110,7 +110,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     eligibilityRemovedEvents.SortByTime();
                     return eligibilityRemovedEvents;
                 })
-                .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)
+                .UsingEnable(x => x.LogData.IsCM || x.LogData.IsLegendaryCM)
                 .UsingAchievementEligibility(),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
@@ -152,8 +152,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         );
         Icon = EncounterIconTempleOfFebe;
         Extension = "tmplfeb";
-        EncounterCategoryInformation.InSubCategoryOrder = 1;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 1;
+        LogID |= 0x000002;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -258,7 +258,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
-            var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
+            var phase = new PhaseData(enragedSmash.Time, log.LogData.LogEnd, "Enraged Smash");
             phase.AddParentPhase(finalPhase);
             phase.AddTarget(cerus, log);
             phases.Add(phase);
@@ -275,13 +275,13 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         return phases;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var enterCombatTime = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+            var enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
             var cerus = agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
             var spawnEvent = combatData.Where(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(cerus)).FirstOrDefault();
             if (spawnEvent != null && enterCombatTime >= spawnEvent.Time)
@@ -293,7 +293,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var embodimentIDs = new List<TargetID>()
         {
@@ -338,7 +338,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 }
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         int[] curEmbodiments = [1, 1, 1, 1, 1, 1];
         foreach (SingleActor target in Targets)
         {
@@ -400,15 +400,15 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         }
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus)) ?? throw new MissingKeyActorsException("Cerus not found");
         var cerusHP = cerus.GetHealth(combatData);
         if (cerusHP > 130e6)
         {
-            return FightData.EncounterMode.LegendaryCM;
+            return LogData.LogMode.LegendaryCM;
         }
-        return (cerusHP > 100e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return (cerusHP > 100e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
 
     }
 
@@ -591,7 +591,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         {
             foreach (EffectEvent effect in poolOfDespair)
             {
-                int duration = log.FightData.IsCM || log.FightData.IsLegendaryCM ? 120000 : 60000;
+                int duration = log.LogData.IsCM || log.LogData.IsLegendaryCM ? 120000 : 60000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                 environmentDecorations.Add(circle);
@@ -623,10 +623,10 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
         var castEvents = target.GetCastEvents(log).Where(x => x.SkillID != WeaponStow && x.SkillID != WeaponSwap && x.SkillID != WeaponDraw);
-        long invisibleStart = log.FightData.LogStart;
+        long invisibleStart = log.LogData.EvtcLogStart;
         bool startTrimmed = false;
 
-        SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        SingleActor? cerus = log.LogData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
         IEnumerable<Segment> invulnsApply = [];
         if (cerus != null)
         {
@@ -647,7 +647,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 }
             }
 
-            // If the Embodiment hasn't been trimmed yet, trim the lifespan to start on first cast and end at the fight end.
+            // If the Embodiment hasn't been trimmed yet, trim the lifespan to start on first cast and end at the log end.
             if (!startTrimmed)
             {
                 replay.Trim(start, replay.TimeOffsets.end);
@@ -822,7 +822,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
             else
             {
-                long end = orb.RemoveEvent?.Time ?? log.FightData.FightEnd;
+                long end = orb.RemoveEvent?.Time ?? log.LogData.LogEnd;
                 for (int i = 0; i < orb.LaunchEvents.Count; i++)
                 {
                     MissileLaunchEvent launch = orb.LaunchEvents[i];
@@ -847,7 +847,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <returns>The computed lifespan.</returns>
     private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(AgentItem target, ParsedEvtcLog log, (long start, long end) lifespan)
     {
-        SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        SingleActor? cerus = log.LogData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
         if (cerus != null)
         {
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
@@ -895,7 +895,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.IsCM || log.FightData.IsLegendaryCM)
+        if (log.LogData.IsCM || log.LogData.IsLegendaryCM)
         {
             AgentItem? cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
             if (cerus != null)

@@ -5,14 +5,14 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
@@ -45,7 +45,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 new PlayerDstHealthDamageHitMechanic([RipplesOfRot, RipplesOfRot2, RipplesOfRotCM, RipplesOfRotCM2], new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
                 new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Red), "PlagueRot", "Received Plague Rot", "Plague Rot", 0),
                 new PlayerDstBuffApplyMechanic(PlagueRot, new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Unplagued.Achiv", "Achievement Eligibility: Guaranteed Plague Free", "Achiv Unplagued", 0)
-                    .UsingEnable(log => log.FightData.IsCM).UsingAchievementEligibility(),
+                    .UsingEnable(log => log.LogData.IsCM).UsingAchievementEligibility(),
             ]),
             new PlayerDstHealthDamageHitMechanic(WaveOfCorruption, new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new MechanicGroup([
@@ -80,8 +80,8 @@ internal class GreerTheBlightbringer : MountBalrior
         Extension = "greer";
         Icon = EncounterIconGreer;
         ChestID = ChestID.GreersChest;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000001;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000001;
     }
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
@@ -122,13 +122,13 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        long startToUse = GetGenericFightOffset(fightData);
+        long startToUse = GetGenericLogOffset(logData);
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, [(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg], logStartNPCUpdate.DstAgent);
+            startToUse = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, [(int)TargetID.Greer, (int)TargetID.Gree, (int)TargetID.Reeg], logStartNPCUpdate.DstAgent);
         }
         return startToUse;
     }
@@ -144,22 +144,22 @@ internal class GreerTheBlightbringer : MountBalrior
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameProtoGreerlings(Targets);
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
         SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
         SingleActor? ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
         if (ereg != null)
         {
             greer.OverrideName("Godspoil Greer");
-            return FightData.EncounterMode.CMNoName;
+            return LogData.LogMode.CMNoName;
         }
-        return FightData.EncounterMode.Normal;
+        return LogData.LogMode.Normal;
     }
 
     private static void SetPhaseNameForHP(PhaseData damageImmunityPhase, double hpPercent)
@@ -284,7 +284,7 @@ internal class GreerTheBlightbringer : MountBalrior
             phases.Remove(lastPhase);
         }
         // Below 20% CM phases handling
-        if (log.FightData.IsCM && damageImmunity3StatusCount > 0)
+        if (log.LogData.IsCM && damageImmunity3StatusCount > 0)
         {
             var finalPhases = GetPhasesByInvul(log, DamageImmunity3, greer, true, true);
             var finalHPPhase = phases.Last();
@@ -784,7 +784,7 @@ internal class GreerTheBlightbringer : MountBalrior
         // Main Orbs
         foreach (MissileEvent missileEvent in blobOfBlightMainOrbs)
         {
-            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.FightData.FightEnd);
+            lifespan = (missileEvent.Time, missileEvent.RemoveEvent?.Time ?? log.LogData.LogEnd);
             for (int i = 0; i < missileEvent.LaunchEvents.Count; i++)
             {
                 MissileLaunchEvent? launch = missileEvent.LaunchEvents[i];
@@ -812,7 +812,7 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.FightData.IsCM)
+        if (log.LogData.Success && log.LogData.IsCM)
         {
             // The buff elegibility remains on players even if Ereg is dead
             AgentItem? ereg = log.AgentData.GetNPCsByID((int)TargetID.Ereg).FirstOrDefault();

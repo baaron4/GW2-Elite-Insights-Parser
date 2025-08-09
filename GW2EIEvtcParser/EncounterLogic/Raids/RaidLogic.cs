@@ -1,21 +1,21 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal abstract class RaidLogic : FightLogic
+internal abstract class RaidLogic : LogLogic
 {
 
     protected RaidLogic(int triggerID) : base(triggerID)
     {
         ParseMode = ParseModeEnum.Instanced10;
         SkillMode = SkillModeEnum.PvE;
-        EncounterCategoryInformation.Category = FightCategory.Raid;
-        EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
+        LogCategoryInformation.Category = LogCategory.Raid;
+        LogID |= LogIDs.LogMasks.RaidMask;
     }
 
     internal static RewardEvent? GetOldRaidReward2Event(CombatData combatData, long start, long end)
@@ -23,12 +23,12 @@ internal abstract class RaidLogic : FightLogic
         return combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward2 && x.Time > start && x.Time < end);
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         if (IsInstance)
         {
             // Raid instances remember last status, killing last boss is not an indication of a successful instance
-            fightData.SetSuccess(true, fightData.FightEnd);
+            logData.SetSuccess(true, logData.LogEnd);
             return;
         }
         var raidRewardsTypes = new HashSet<int>();
@@ -41,28 +41,28 @@ internal abstract class RaidLogic : FightLogic
             raidRewardsTypes = [RewardTypes.CurrentRaidReward];
         }
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent? reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > logData.LogStart);
         if (reward != null)
         {
-            fightData.SetSuccess(true, reward.Time);
+            logData.SetSuccess(true, reward.Time);
         }
         else
         {
-            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+            NoBouncyChestGenericCheckSucess(combatData, agentData, logData, playerAgents);
         }
     }
 
-    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         if (IsInstance)
         {
-            return base.GetEncounterStartStatus(combatData, agentData, fightData);
+            return base.GetLogStartStatus(combatData, agentData, logData);
         }
-        if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+        if (TargetHPPercentUnderThreshold(GenericTriggerID, logData.LogStart, combatData, Targets))
         {
-            return FightData.EncounterStartStatus.Late;
+            return LogData.LogStartStatus.Late;
         }
-        return FightData.EncounterStartStatus.Normal;
+        return LogData.LogStartStatus.Normal;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

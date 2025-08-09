@@ -3,13 +3,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class FraenirOfJormag : Bjora
 {
@@ -45,8 +45,8 @@ internal class FraenirOfJormag : Bjora
         );
         Extension = "fraenir";
         Icon = EncounterIconFraenirOfJormag;
-        EncounterCategoryInformation.InSubCategoryOrder = 0;
-        EncounterID |= 0x000002;
+        LogCategoryInformation.InSubCategoryOrder = 0;
+        LogID |= 0x000002;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -96,7 +96,7 @@ internal class FraenirOfJormag : Bjora
                     BuffEvent? invulApplyIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
                     BuffEvent? invulRemoveIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                     long icebroodStart = enterCombatIce.Time;
-                    long icebroodEnd = log.FightData.FightEnd;
+                    long icebroodEnd = log.LogData.LogEnd;
                     if (invulApplyIce != null && invulRemoveIce != null)
                     {
                         long icebrood2Start = invulRemoveIce.Time;
@@ -115,7 +115,7 @@ internal class FraenirOfJormag : Bjora
                             {
                                 icebroodEnd = invulRemoveFraenir.Time - 1;
                             }
-                            phases.Add(new PhaseData(invulRemoveFraenir.Time, log.FightData.FightEnd, "Fraenir 25-0%").WithParentPhase(phases[0]));
+                            phases.Add(new PhaseData(invulRemoveFraenir.Time, log.LogData.LogEnd, "Fraenir 25-0%").WithParentPhase(phases[0]));
                         }
                         phases.Add(new PhaseData(icebrood2Start, icebroodEnd, "Damaged Construct & Fraenir"));
                         icebroodPhases.Add(phases[^1]);
@@ -162,7 +162,7 @@ internal class FraenirOfJormag : Bjora
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
         IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(TargetID.IcebroodElemental);
@@ -200,14 +200,14 @@ internal class FraenirOfJormag : Bjora
                 }
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
+        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
         {
             InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
         }

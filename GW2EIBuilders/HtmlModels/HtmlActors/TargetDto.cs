@@ -18,7 +18,7 @@ internal class TargetDto : ActorDto
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;
         HpLeftPercent = 100.0;
-        var targetEncounterPhase = log.FightData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target)) ?? throw new InvalidOperationException("A target must be a part of an encounter/instance phase");
+        var targetEncounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target)) ?? throw new InvalidOperationException("A target must be a part of an encounter/instance phase");
         if (targetEncounterPhase.Success)
         {
             HpLeftPercent = 0;
@@ -38,6 +38,6 @@ internal class TargetDto : ActorDto
             }
         }
         HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
-        BarrierLeft = target.GetCurrentBarrier(log, BarrierLeftPercent, log.FightData.FightEnd);
+        BarrierLeft = target.GetCurrentBarrier(log, BarrierLeftPercent, log.LogData.LogEnd);
     }
 }

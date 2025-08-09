@@ -1,11 +1,11 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class WhisperOfJormag : Bjora
 {
@@ -45,8 +45,8 @@ internal class WhisperOfJormag : Bjora
         );
         Extension = "woj";
         Icon = EncounterIconWhisperOfJormag;
-        EncounterCategoryInformation.InSubCategoryOrder = 3;
-        EncounterID |= 0x000005;
+        LogCategoryInformation.InSubCategoryOrder = 3;
+        LogID |= 0x000005;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -99,7 +99,7 @@ internal class WhisperOfJormag : Bjora
             // 25% tp did not happen
             else
             {
-                end = log.FightData.FightEnd;
+                end = log.LogData.LogEnd;
                 tpBackEvents.Clear();
             }
             phases.Add(new PhaseData(start, end, "Pre Doppelganger 2"));
@@ -107,7 +107,7 @@ internal class WhisperOfJormag : Bjora
             if (tpBackEvents.Count > 0)
             {
                 start = tpBackEvents.Min(x => x.Time);
-                phases.Add(new PhaseData(start, log.FightData.FightEnd, "Final"));
+                phases.Add(new PhaseData(start, log.LogData.LogEnd, "Final"));
             }
         }
         for (int i = 1; i < phases.Count; i++)

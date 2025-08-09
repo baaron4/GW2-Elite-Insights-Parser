@@ -2,24 +2,24 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.MapIDs;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
-internal class WvWFight : FightLogic
+internal class WvWLogic : LogLogic
 {
     private readonly string _defaultName;
     private readonly bool _detailed;
     private bool _foundSkillMode;
     private bool _isGuildHall;
     private readonly bool _isFromInstance;
-    public WvWFight(int triggerID, bool detailed, bool full = false) : base(triggerID)
+    public WvWLogic(int triggerID, bool detailed, bool full = false) : base(triggerID)
     {
         ParseMode = ParseModeEnum.WvW;
         SkillMode = SkillModeEnum.WvW;
@@ -33,11 +33,11 @@ internal class WvWFight : FightLogic
             _defaultName += " Full";
         }
         _isFromInstance = full;
-        EncounterCategoryInformation.Category = FightCategory.WvW;
-        EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
+        LogCategoryInformation.Category = LogCategory.WvW;
+        LogID |= LogIDs.LogMasks.WvWMask;
         if (_isFromInstance)
         {
-            EncounterID |= EncounterIDs.WvWMasks.FullInstanceMask;
+            LogID |= LogIDs.WvWMasks.FullInstanceMask;
         }
         MechanicList.Add(new MechanicGroup([
             new PlayerDamageMechanic(new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
@@ -88,13 +88,13 @@ internal class WvWFight : FightLogic
         return phases;
     }
 
-    internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
-        return GetGenericFightOffset(fightData);
+        return GetGenericLogOffset(logData);
     }
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return FightData.EncounterMode.NotApplicable;
+        return LogData.LogMode.NotApplicable;
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -124,37 +124,37 @@ internal class WvWFight : FightLogic
         switch (mapID.MapID)
         {
             case EternalBattleground:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.EternalBattlegrounds;
-                EncounterID |= EncounterIDs.WvWMasks.EternalBattlegroundsMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.EternalBattlegrounds;
+                LogID |= LogIDs.WvWMasks.EternalBattlegroundsMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Eternal Battlegrounds";
             case GreenAlpineBorderland:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.GreenAlpineBorderlands;
-                EncounterID |= EncounterIDs.WvWMasks.GreenAlpineBorderlandsMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.GreenAlpineBorderlands;
+                LogID |= LogIDs.WvWMasks.GreenAlpineBorderlandsMask;
                 Icon = InstanceIconGreenBorderlands;
                 return _defaultName + " - Green Alpine Borderlands";
             case BlueAlpineBorderland:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.BlueAlpineBorderlands;
-                EncounterID |= EncounterIDs.WvWMasks.BlueAlpineBorderlandsMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.BlueAlpineBorderlands;
+                LogID |= LogIDs.WvWMasks.BlueAlpineBorderlandsMask;
                 Icon = InstanceIconBlueBorderlands;
                 return _defaultName + " - Blue Alpine Borderlands";
             case RedDesertBorderland:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.RedDesertBorderlands;
-                EncounterID |= EncounterIDs.WvWMasks.RedDesertBorderlandsMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.RedDesertBorderlands;
+                LogID |= LogIDs.WvWMasks.RedDesertBorderlandsMask;
                 Icon = InstanceIconRedBorderlands;
                 return _defaultName + " - Red Desert Borderlands";
             case ObsidianSanctum:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.ObsidianSanctum;
-                EncounterID |= EncounterIDs.WvWMasks.ObsidianSanctumMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.ObsidianSanctum;
+                LogID |= LogIDs.WvWMasks.ObsidianSanctumMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Obsidian Sanctum";
             case EdgeOfTheMists:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.EdgeOfTheMists;
-                EncounterID |= EncounterIDs.WvWMasks.EdgeOfTheMistsMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.EdgeOfTheMists;
+                LogID |= LogIDs.WvWMasks.EdgeOfTheMistsMask;
                 return _defaultName + " - Edge of the Mists";
             case ArmisticeBastion:
-                EncounterCategoryInformation.SubCategory = SubFightCategory.ArmisticeBastion;
-                EncounterID |= EncounterIDs.WvWMasks.ArmisticeBastionMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.ArmisticeBastion;
+                LogID |= LogIDs.WvWMasks.ArmisticeBastionMask;
                 Icon = InstanceIconEternalBattlegrounds;
                 return _defaultName + " - Armistice Bastion";
             case GildedHollow1:
@@ -163,8 +163,8 @@ internal class WvWFight : FightLogic
             case GildedHollow4:
             case GildedHollow5:
                 _isGuildHall = true;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
-                EncounterID |= EncounterIDs.WvWMasks.GildedHollowMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.GuildHall;
+                LogID |= LogIDs.WvWMasks.GildedHollowMask;
                 Extension = _detailed ? "detailed_gh" : "gh";
                 if (!_foundSkillMode)
                 {
@@ -178,8 +178,8 @@ internal class WvWFight : FightLogic
             case LostPrecipice4:
             case LostPrecipice5:
                 _isGuildHall = true;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
-                EncounterID |= EncounterIDs.WvWMasks.LostPrecipiceMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.GuildHall;
+                LogID |= LogIDs.WvWMasks.LostPrecipiceMask;
                 Extension = _detailed ? "detailed_gh" : "gh";
                 if (!_foundSkillMode)
                 {
@@ -193,8 +193,8 @@ internal class WvWFight : FightLogic
             case WindsweptHaven4:
             case WindsweptHaven5:
                 _isGuildHall = true;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
-                EncounterID |= EncounterIDs.WvWMasks.WindsweptHavenMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.GuildHall;
+                LogID |= LogIDs.WvWMasks.WindsweptHavenMask;
                 Extension = _detailed ? "detailed_gh" : "gh";
                 if (!_foundSkillMode)
                 {
@@ -208,8 +208,8 @@ internal class WvWFight : FightLogic
             case IsleOfReflection4:
             case IsleOfReflection5:
                 _isGuildHall = true;
-                EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
-                EncounterID |= EncounterIDs.WvWMasks.IsleOfReflectionMask;
+                LogCategoryInformation.SubCategory = SubLogCategory.GuildHall;
+                LogID |= LogIDs.WvWMasks.IsleOfReflectionMask;
                 Extension = _detailed ? "detailed_gh" : "gh";
                 if (!_foundSkillMode)
                 {
@@ -243,14 +243,14 @@ internal class WvWFight : FightLogic
         }
     }
 
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        fightData.SetSuccess(true, fightData.FightEnd);
+        logData.SetSuccess(true, logData.LogEnd);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, TargetID.WorldVersusWorld, true);
+        AgentItem dummyAgent = agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, TargetID.WorldVersusWorld, true);
         CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
         if (modeEvent != null)
         {
@@ -268,7 +268,7 @@ internal class WvWFight : FightLogic
                     break;
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         // Handle non squad players
         IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
         //
@@ -319,7 +319,7 @@ internal class WvWFight : FightLogic
         {
             _targets.AddRange(auxTargets.OrderBy(x => (int)x.Spec).ThenBy(x => x.AgentItem.InstID));
         }
-        FinalizeComputeFightTargets();
+        FinalizeComputeLogTargets();
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

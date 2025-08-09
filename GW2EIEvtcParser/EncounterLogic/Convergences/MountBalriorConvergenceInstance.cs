@@ -3,21 +3,21 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
+using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal class MountBalriorConvergenceInstance : ConvergenceLogic
 {
     public MountBalriorConvergenceInstance(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.MountBalriorConvergence;
-        EncounterID |= EncounterIDs.ConvergenceMasks.MountBalriorMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.MountBalriorConvergence;
+        LogID |= LogIDs.ConvergenceMasks.MountBalriorMask;
         Icon = InstanceIconMountBalrior;
         Extension = "mntbalrconv";
     }
@@ -31,17 +31,17 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
             switch (mainBoss.ID)
             {
                 case (int)TargetID.GreerTheBlightbringerConv:
-                    EncounterID |= 0x000001;
+                    LogID |= 0x000001;
                     name += " - Greer";
                     Extension += "greer";
                     break;
                 case (int)TargetID.DecimaTheStormsingerConv:
-                    EncounterID |= 0x000002;
+                    LogID |= 0x000002;
                     name += " - Decima";
                     Extension += "dec";
                     break;
                 case (int)TargetID.UraTheSteamshriekerConv:
-                    EncounterID |= 0x000003;
+                    LogID |= 0x000003;
                     name += " - Ura";
                     Extension += "ura";
                     break;
@@ -70,14 +70,14 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         ];
     }
 
-    internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetBuffApplyData(UnstableAttunementJW).Any(x => x.To.IsPlayer) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        return combatData.GetBuffApplyData(UnstableAttunementJW).Any(x => x.To.IsPlayer) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    internal override FightData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, FightData fightData)
+    internal override LogData.InstancePrivacyMode GetInstancePrivacyMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.MountBalriorPublicConvergence) ? FightData.InstancePrivacyMode.Public : FightData.InstancePrivacyMode.Private;
+        return combatData.GetMapIDEvents().Any(x => x.MapID == MapIDs.MountBalriorPublicConvergence) ? LogData.InstancePrivacyMode.Public : LogData.InstancePrivacyMode.Private;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -105,7 +105,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
                 phaseName = "Full Ura";
                 break;
         }
-        var fullPhase = new EncounterPhaseData(Math.Max(log.FightData.FightStart, target.FirstAware), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName, log).WithParentPhase(phases[0]);
+        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
         if (!requirePhases)
@@ -123,13 +123,13 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         Segment final = hpUpdates.FirstOrDefault(x => x.Value < 25.0 && x.Start > end25.End);
 
         // 100-75, Warclaw, 75-50, Warclaw, 50-25, Warclaw, 25-0
-        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.FightData.FightEnd), "Phase 1").WithParentPhase(fullPhase);
-        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.FightData.FightEnd), "Phase 2").WithParentPhase(fullPhase);
-        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.FightData.FightEnd), "Phase 3").WithParentPhase(fullPhase);
-        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.FightData.FightEnd), "Phase 4").WithParentPhase(fullPhase);
-        var warclaw1 = new PhaseData(end75.Start, Math.Min(start75.Start, log.FightData.FightEnd), "Warclaw 1").WithParentPhase(fullPhase);
-        var warclaw2 = new PhaseData(end50.Start, Math.Min(start50.Start, log.FightData.FightEnd), "Warclaw 2").WithParentPhase(fullPhase);
-        var warclaw3 = new PhaseData(end25.Start, Math.Min(final.Start, log.FightData.FightEnd), "Warclaw 3").WithParentPhase(fullPhase);
+        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.LogData.LogEnd), "Phase 1").WithParentPhase(fullPhase);
+        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.LogData.LogEnd), "Phase 2").WithParentPhase(fullPhase);
+        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.LogData.LogEnd), "Phase 3").WithParentPhase(fullPhase);
+        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.LogData.LogEnd), "Phase 4").WithParentPhase(fullPhase);
+        var warclaw1 = new PhaseData(end75.Start, Math.Min(start75.Start, log.LogData.LogEnd), "Warclaw 1").WithParentPhase(fullPhase);
+        var warclaw2 = new PhaseData(end50.Start, Math.Min(start50.Start, log.LogData.LogEnd), "Warclaw 2").WithParentPhase(fullPhase);
+        var warclaw3 = new PhaseData(end25.Start, Math.Min(final.Start, log.LogData.LogEnd), "Warclaw 3").WithParentPhase(fullPhase);
 
         phase1.AddTarget(target, log);
         phase2.AddTarget(target, log);
@@ -144,9 +144,9 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
 
         SingleActor? ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.UraTheSteamshriekerConv));
         ura?.OverrideName("Ura, the Steamshrieker");

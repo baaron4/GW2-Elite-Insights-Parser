@@ -1,14 +1,14 @@
 ﻿using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 
-namespace GW2EIEvtcParser.EncounterLogic;
+namespace GW2EIEvtcParser.LogLogic;
 
 internal abstract class Kinfall : FractalLogic
 {
     public Kinfall(int triggerID) : base(triggerID)
     {
-        EncounterCategoryInformation.SubCategory = SubFightCategory.Kinfall;
-        EncounterID |= EncounterIDs.FractalMasks.KinfallMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.Kinfall;
+        LogID |= LogIDs.FractalMasks.KinfallMask;
     }
 }

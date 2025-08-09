@@ -12,7 +12,7 @@ internal class HealingStatsExtension
 
     public HealingStatsExtension(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         HealingPhases       = new(phases.Count);
         PlayerHealingCharts = new(phases.Count);
         foreach (PhaseData phase in phases)
