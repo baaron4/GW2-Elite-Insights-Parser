@@ -208,6 +208,11 @@ public class StatisticsHelper
                 activePlayersPerPositions[index] += 1;
             }
         }
+        while (centerVector3Positions.Count < sampleCount)
+        {
+            centerVector3Positions.Add(null);
+            activePlayersPerPositions.Add(0);
+        }
         for (int t = 0; t < sampleCount; t++)
         {
             var curVector3 = centerVector3Positions[t];
