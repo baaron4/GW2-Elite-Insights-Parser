@@ -140,14 +140,14 @@
                 }
 
                 var encounter = {
-                    name: logData.fightNameNoMode,
-                    icon: logData.fightIcon,
-                    duration: logData.encounterDuration,
+                    name: mainPhase.nameNoMode,
+                    icon: mainPhase.icon,
+                    duration: mainPhase.encounterDuration,
                     targets: targets,
                     players: logData.players.filter(x => !x.notInSquad),
                     nonSquadFriendlies: logData.players.filter(x => x.notInSquad),
-                    mode: logData.fightMode,
-                    start: logData.fightStartStatus,
+                    mode: mainPhase.mode,
+                    start: mainPhase.startStatus,
                 };
                 return encounter;
             },

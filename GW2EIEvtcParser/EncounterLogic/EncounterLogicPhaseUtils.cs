@@ -181,7 +181,7 @@ internal static class EncounterLogicPhaseUtils
         {
             return
             [
-                new InstancePhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance")
+                new InstancePhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Instance", log)
             ];
         }
         return

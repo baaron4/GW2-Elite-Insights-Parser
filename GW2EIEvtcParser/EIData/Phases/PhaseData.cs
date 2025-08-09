@@ -7,6 +7,13 @@ public class PhaseData
 {
     public long Start { get; private set; }
     public long End { get; private set; }
+    public string DurationString
+    {
+        get
+        {
+            return ParserHelper.ToDurationString(End - Start);
+        }
+    }
     public long DurationInS { get; private set; }
     public long DurationInMS { get; private set; }
     public long DurationInM { get; private set; }

@@ -112,6 +112,8 @@ internal class PhaseDto
     public string? NameNoMode;
     public string? Icon;
     public string? Mode;
+    public string? EncounterDuration;
+    public string? StartStatus;
     public bool? Success;
 
     public List<int> Targets;
@@ -157,12 +159,13 @@ internal class PhaseDto
         End           = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
         Type = (int)phase.Type;
-        if (phase is EncounterPhaseData encounterPhaseData)
+        if (phase is PhaseDataWithMetaData phaseWithMetaData)
         {
-            NameNoMode = encounterPhaseData.EncounterName;
-            Icon = encounterPhaseData.Icon;
-            Success = encounterPhaseData.Success;
-            switch (encounterPhaseData.FightMode)
+            NameNoMode = phaseWithMetaData.NameNoMode;
+            Icon = phaseWithMetaData.Icon;
+            Success = phaseWithMetaData.Success;
+            EncounterDuration = phaseWithMetaData.DurationString;
+            switch (phaseWithMetaData.FightMode)
             {
                 case FightData.EncounterMode.Unknown:
                     Mode = "Unknown";
@@ -180,6 +183,21 @@ internal class PhaseDto
                     break;
                 case FightData.EncounterMode.LegendaryCM:
                     Mode = "Legendary Challenge Mode";
+                    break;
+                default:
+                    break;
+            }
+            switch (phaseWithMetaData.StartStatus)
+            {
+                case FightData.EncounterStartStatus.Normal:
+                    break;
+                case FightData.EncounterStartStatus.NotSet:
+                    break;
+                case FightData.EncounterStartStatus.Late:
+                    StartStatus = "Late Start";
+                    break;
+                case FightData.EncounterStartStatus.NoPreEvent:
+                    StartStatus = "No Pre-Event";
                     break;
                 default:
                     break;
