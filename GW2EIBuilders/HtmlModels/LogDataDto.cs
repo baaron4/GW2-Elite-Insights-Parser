@@ -88,11 +88,11 @@ internal class LogDataDto
     private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
     {
         log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
-        LogStart = log.LogMetadata.LogStartStd;
-        LogEnd = log.LogMetadata.LogEndStd;
-        if (log.LogMetadata.LogInstanceStartStd != null)
+        LogStart = log.LogMetadata.DateStartStd;
+        LogEnd = log.LogMetadata.DateEndStd;
+        if (log.LogMetadata.DateInstanceStartStd != null)
         {
-            InstanceStart = log.LogMetadata.LogInstanceStartStd;
+            InstanceStart = log.LogMetadata.DateInstanceStartStd;
             InstanceIP = log.LogMetadata.LogInstanceIP;
         }
         var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();

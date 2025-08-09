@@ -17,8 +17,8 @@ public abstract class OperationController : ParserController
             Success = log.LogData.Success;
             LogCategory = log.LogData.Logic.LogCategoryInformation;
             Icon = log.LogData.Logic.Icon;
-            LogStart = log.LogMetadata.LogStartStd;
-            LogEnd = log.LogMetadata.LogEndStd;
+            LogStart = log.LogMetadata.DateStartStd;
+            LogEnd = log.LogMetadata.DateEndStd;
         }
 
         public readonly string LogDuration;

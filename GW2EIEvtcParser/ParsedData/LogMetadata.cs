@@ -20,11 +20,11 @@ public class LogMetadata
     public string PoVName { get; private set; } = "N/A";
     private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
     private readonly string _dateFormatStd = "yyyy-MM-dd HH:mm:ss zzz";
-    public string LogStart { get; private set; } = DefaultTimeValue;
-    public string LogEnd { get; private set; } = DefaultTimeValue;
-    public string LogStartStd { get; private set; } = DefaultTimeValue;
-    public string? LogInstanceStartStd { get; private set; } = null;
-    public string LogEndStd { get; private set; } = DefaultTimeValue;
+    public string DateStart { get; private set; } = DefaultTimeValue;
+    public string DateEnd { get; private set; } = DefaultTimeValue;
+    public string DateStartStd { get; private set; } = DefaultTimeValue;
+    public string? DateInstanceStartStd { get; private set; } = null;
+    public string DateEndStd { get; private set; } = DefaultTimeValue;
     public readonly string? LogInstanceIP = null;
 
     public readonly IReadOnlyList<ExtensionHandler> UsedExtensions;
@@ -66,43 +66,43 @@ public class LogMetadata
         SquadCombatStartEvent? logStr = combatData.GetLogStartEvent();
         if (logStr != null)
         {
-            SetLogStart(logStr.ServerUnixTimeStamp);
-            SetLogStartStd(logStr.ServerUnixTimeStamp);
+            SetDateStart(logStr.ServerUnixTimeStamp);
+            SetDateStartStd(logStr.ServerUnixTimeStamp);
             unixStart = logStr.ServerUnixTimeStamp;
         }
         //
         SquadCombatEndEvent? logEnd = combatData.GetLogEndEvent();
         if (logEnd != null)
         {
-            SetLogEnd(logEnd.ServerUnixTimeStamp);
-            SetLogEndStd(logEnd.ServerUnixTimeStamp);
+            SetDateEnd(logEnd.ServerUnixTimeStamp);
+            SetDateEndStd(logEnd.ServerUnixTimeStamp);
             unixEnd = logEnd.ServerUnixTimeStamp;
         }
         // log end event is missing, log start is present
-        if (LogEnd == DefaultTimeValue && LogStart != DefaultTimeValue)
+        if (DateEnd == DefaultTimeValue && DateStart != DefaultTimeValue)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Missing Log End Event");
             double dur = Math.Round(evtcLogDuration / 1000.0, 3);
-            SetLogEnd(dur + unixStart);
-            SetLogEndStd(dur + unixStart);
+            SetDateEnd(dur + unixStart);
+            SetDateEndStd(dur + unixStart);
             unixEnd = dur + unixStart;
         }
         // log start event is missing, log end is present
-        if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
+        if (DateEnd != DefaultTimeValue && DateStart == DefaultTimeValue)
         {
             operation.UpdateProgressWithCancellationCheck("Parsing: Missing Log Start Event");
             double dur = Math.Round(evtcLogDuration / 1000.0, 3);
-            SetLogStart(unixEnd - dur);
-            SetLogStartStd(unixEnd - dur);
+            SetDateStart(unixEnd - dur);
+            SetDateStartStd(unixEnd - dur);
             unixStart = unixEnd - dur;
         }
-        operation.UpdateProgressWithCancellationCheck("Parsing: Log Start " + LogStartStd);
-        operation.UpdateProgressWithCancellationCheck("Parsing: Log End " + LogEndStd);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Log Start " + DateStartStd);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Log End " + DateEndStd);
         InstanceStartEvent? instanceStart = combatData.GetInstanceStartEvent();
         if (instanceStart != null)
         {
             long instanceStartSeconds = instanceStart.TimeOffsetFromInstanceCreation / 1000;
-            LogInstanceStartStd = GetDateTimeStd(unixStart - instanceStartSeconds);
+            DateInstanceStartStd = GetDateTimeStd(unixStart - instanceStartSeconds);
             LogInstanceIP = instanceStart.InstanceIP;
         }
         //
@@ -141,23 +141,23 @@ public class LogMetadata
         return dtDateTime.ToString(_dateFormatStd);
     }
 
-    private void SetLogStart(double unixSeconds)
+    private void SetDateStart(double unixSeconds)
     {
-        LogStart = GetDateTime(unixSeconds);
+        DateStart = GetDateTime(unixSeconds);
     }
 
-    private void SetLogEnd(double unixSeconds)
+    private void SetDateEnd(double unixSeconds)
     {
-        LogEnd = GetDateTime(unixSeconds);
+        DateEnd = GetDateTime(unixSeconds);
     }
 
-    private void SetLogStartStd(double unixSeconds)
+    private void SetDateStartStd(double unixSeconds)
     {
-        LogStartStd = GetDateTimeStd(unixSeconds);
+        DateStartStd = GetDateTimeStd(unixSeconds);
     }
 
-    private void SetLogEndStd(double unixSeconds)
+    private void SetDateEndStd(double unixSeconds)
     {
-        LogEndStd = GetDateTimeStd(unixSeconds);
+        DateEndStd = GetDateTimeStd(unixSeconds);
     }
 }

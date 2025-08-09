@@ -106,16 +106,16 @@ internal static class JsonLogBuilder
         jsonLog.ArcRevision = log.LogMetadata.EvtcRevision;
         jsonLog.RecordedBy = log.LogMetadata.PoVName;
         jsonLog.RecordedAccountBy = log.LogMetadata.PoVAccount;
-        jsonLog.TimeStart = log.LogMetadata.LogStart;
-        jsonLog.TimeEnd = log.LogMetadata.LogEnd;
-        jsonLog.TimeStartStd = log.LogMetadata.LogStartStd;
-        jsonLog.TimeEndStd = log.LogMetadata.LogEndStd;
+        jsonLog.TimeStart = log.LogMetadata.DateStart;
+        jsonLog.TimeEnd = log.LogMetadata.DateEnd;
+        jsonLog.TimeStartStd = log.LogMetadata.DateStartStd;
+        jsonLog.TimeEndStd = log.LogMetadata.DateEndStd;
         jsonLog.Duration = log.LogData.DurationString;
         jsonLog.DurationMS = log.LogData.LogDuration;
         jsonLog.LogStartOffset = log.LogData.LogStartOffset;
-        if (log.LogMetadata.LogInstanceStartStd != null )
+        if (log.LogMetadata.DateInstanceStartStd != null )
         {
-            jsonLog.InstanceTimeStartStd = log.LogMetadata.LogInstanceStartStd;
+            jsonLog.InstanceTimeStartStd = log.LogMetadata.DateInstanceStartStd;
             jsonLog.InstanceIP = log.LogMetadata.LogInstanceIP;
         } 
         else

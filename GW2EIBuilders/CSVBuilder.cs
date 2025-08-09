@@ -77,8 +77,8 @@ public class CSVBuilder
         WriteLine(["ARC Version", _log.LogMetadata.ArcVersion]);
         WriteLine(["Fight ID", _log.LogData.TriggerID.ToString()]);
         WriteLine(["Recorded By", _log.LogMetadata.PoVName]);
-        WriteLine(["Time Start", _log.LogMetadata.LogStartStd]);
-        WriteLine(["Time End", _log.LogMetadata.LogEndStd]);
+        WriteLine(["Time Start", _log.LogMetadata.DateStartStd]);
+        WriteLine(["Time End", _log.LogMetadata.DateEndStd]);
         if (_uploadResult.Any(x => x != null && x.Length > 0))
         {
             WriteLine(["Links", _uploadResult[0], _uploadResult[1]]);
