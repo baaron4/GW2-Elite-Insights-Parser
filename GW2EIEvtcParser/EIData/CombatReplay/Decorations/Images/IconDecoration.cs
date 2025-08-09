@@ -26,12 +26,18 @@ internal class IconDecoration : ImageDecoration
     public class IconDecorationRenderingData : ImageDecorationRenderingData
     {
         public bool IsSquadMarker { get; private set; }
+
+        public string? Text { get; private set; } = null;
         public IconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
         }
         public void UsingSquadMarker(bool isSquadMarker)
         {
             IsSquadMarker = isSquadMarker;
+        }
+        public void WithText(string? text)
+        {
+            Text = text;
         }
         public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
@@ -67,6 +73,12 @@ internal class IconDecoration : ImageDecoration
     public IconDecoration UsingSquadMarker(bool isSquadMarker)
     {
         DecorationRenderingData.UsingSquadMarker(isSquadMarker);
+        return this;
+    }
+
+    public IconDecoration WithText(string? text)
+    {
+        DecorationRenderingData.WithText(text);
         return this;
     }
     //

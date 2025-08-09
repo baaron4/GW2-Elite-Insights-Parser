@@ -331,7 +331,7 @@ public class FightData
             {
                 throw new InvalidOperationException("At least one phase must be present");
             }
-            if (!_phases.Exists(x => x.Name == "Full Fight" || x.Name == "Full Instance"))
+            if (!_phases.Exists(x => x.Name == "Detailed Full Instance" || x.Name == "Detailed Full Fight" || x.Name == "Full Fight" || x.Name == "Full Instance"))
             {
                 throw new InvalidOperationException("A phase representing the full log must be present");
             }
@@ -346,7 +346,7 @@ public class FightData
             {
                 throw new EvtcAgentException("No valid targets found for phases");
             }
-            if (!_phases.Exists(x => x.Name == "Full Fight" || x.Name == "Full Instance"))
+            if (!_phases.Exists(x => x.Name == "Detailed Full Instance" || x.Name == "Detailed Full Fight" || x.Name == "Full Fight" || x.Name == "Full Instance"))
             {
                 throw new EvtcAgentException("No valid targets found for full log phase");
             }
