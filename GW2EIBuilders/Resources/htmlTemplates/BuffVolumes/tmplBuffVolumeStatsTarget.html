@@ -15,7 +15,7 @@
 
 <script>
     Vue.component("buff-volume-stats-target-component", {
-        props: ['phaseindex', 'playerindex', 'targetindex'],
+        props: ['playerindex', 'targetindex'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -26,9 +26,6 @@
             };
         },
         computed: {
-            phase: function() {
-                return logData.phases[this.phaseindex];
-            },
             target: function() {
                 return logData.targets[this.targetindex];
             },
@@ -42,11 +39,15 @@
                 if (this.cacheCondi.has(this.phaseindex)) {
                     return this.cacheCondi.get(this.phaseindex);
                 }
+                const players = getActivePlayersForPhase(this.phase);
                 const res = [];
                 if (this.targetPhaseIndex === -1) {
-                    for (let i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < players.length; i++) {
+                        if (!players[i]) {
+                            continue;
+                        }
                         res.push({
-                            player: logData.players[i],
+                            player: players[i],
                             data: {
                                 avg: 0.0,
                                 data: []
@@ -54,9 +55,12 @@
                         });
                     }
                 } else {
-                    for (let i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < players.length; i++) {
+                        if (!players[i]) {
+                            continue;
+                        }
                         res.push({
-                            player: logData.players[i],
+                            player: players[i],
                             data: this.buffVolumesStatContainer.targetsCondiVolumeStats[this.targetPhaseIndex][i]
                         });
                     }

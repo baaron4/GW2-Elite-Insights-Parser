@@ -38,9 +38,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out var barrierEvents))
+            if (BarrierEventsByDst.TryGetValue(target.EnglobingAgentItem, out var barrierEvents))
             {
-                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return barrierEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -73,9 +75,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out var barrierEvents))
+            if (BarrierReceivedEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var barrierEvents))
             {
-                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return barrierEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {

@@ -17,7 +17,7 @@
 
 <script>
     Vue.component("personal-buff-table-component", {
-        props: ['phaseindex', 'playerindex', 'activeduration'],
+        props: ['playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -29,9 +29,6 @@
             };
         },
         computed: {
-            phase: function() {
-                return logData.phases[this.phaseindex];
-            },
             data: function () {
 				const id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {

@@ -27,7 +27,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
             _sourceFinderRan = true;
             if (ExtendedDuration > 1)
             {
-                By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance);
+                By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance).EnglobingAgentItem;
             }
         }
     }

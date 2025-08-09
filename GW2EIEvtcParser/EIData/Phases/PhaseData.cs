@@ -18,6 +18,15 @@ public class PhaseData
     private readonly HashSet<PhaseData> CanBeSubPhaseOf = [];
 
     public bool BreakbarPhase { get; internal set; } = false;
+    
+    public PhaseType Type { get; private set; }
+    public enum PhaseType
+    {
+        SubPhase = 0,
+        Encounter = 1,
+        Instance = 2,
+        TimeFrame = 3,
+    };
 
     public enum TargetPriority
     {
@@ -39,16 +48,26 @@ public class PhaseData
     public IReadOnlyDictionary<SingleActor, PhaseTargetData> Targets => _targets;
     private readonly Dictionary<SingleActor, PhaseTargetData> _targets = [];
 
-    internal PhaseData(long start, long end)
+    internal PhaseData(long start, long end) : this(start, end, PhaseType.TimeFrame)
+    {
+    }
+
+    protected PhaseData(long start, long end, PhaseType type)
     {
         Start = start;
         End = end;
         DurationInM = (End - Start) / 60000;
         DurationInMS = (End - Start);
         DurationInS = (End - Start) / 1000;
+        Type = type;
     }
 
     internal PhaseData(long start, long end, string name) : this(start, end)
+    {
+        Name = name;
+    }
+
+    protected PhaseData(long start, long end, string name, PhaseType type) : this(start, end, type)
     {
         Name = name;
     }
@@ -204,6 +223,11 @@ public class PhaseData
         if (phase != null)
         {
             CanBeSubPhaseOf.Add(phase);
+            // Once a parent is provided to a TimeFrame phase, it becomes a subphase
+            if (Type == PhaseType.TimeFrame)
+            {
+                Type = PhaseType.SubPhase;
+            }
         }
     }
 

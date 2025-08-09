@@ -155,14 +155,15 @@
                     total.push(0);
                 }
                 const groups = [];
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let i = 0; i < this.hPhase.incomingHealingStats.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
                     const incomingHeal = this.hPhase.incomingHealingStats[i].slice();
                     if (this.hasBarrier) {
                         incomingHeal.push(...this.bPhase.incomingBarrierStats[i]);
-                    }
-                    const player = logData.players[i];
-                    if (player.isFake) {
-                        continue;
                     }
                     rows.push({
                         player: player,

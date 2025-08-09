@@ -52,7 +52,7 @@
 <script>
 
     Vue.component("player-component", {
-        props: ["players"],
+        props: ["players", "phaseindex"],
         template: `${template}`,
         methods: {
             getIcon: function (path) {
@@ -89,6 +89,9 @@
             }
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             scoreV2: function() {
                 return logData.evtcBuild > 20210800;
             },
@@ -108,9 +111,10 @@
             },
             groups: function () {
                 var aux = [];
-                for (var i = 0; i < logData.players.length; i++) {
-                    var playerData = logData.players[i];
-                    if (playerData.isFake) {
+                const players = getActiveNonFakePlayersForPhase(this.phase);
+                for (var i = 0; i < players.length; i++) {
+                    var playerData = players[i];
+                    if (!playerData) {
                         continue;
                     }
                     if (!aux[playerData.group]) {
@@ -133,8 +137,12 @@
             runningExtensions: function () {
                 if (logData.usedExtensions) {
                     var res = [];
-                    for (var i = 0; i < logData.players.length; i++) {
-                        var playerData = logData.players[i];
+                    const players = getActiveNonFakePlayersForPhase(this.phase);
+                    for (var i = 0; i < players.length; i++) {
+                        var playerData = players[i];
+                        if (!playerData) {
+                            continue;
+                        }
                         var subRes = [];
                         for (var j = 0; j < logData.usedExtensions.length; j++) {
                             var usedExtension = logData.usedExtensions[j];

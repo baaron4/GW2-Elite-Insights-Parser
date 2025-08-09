@@ -24,4 +24,8 @@ public class HealthUpdateEvent : StatusEvent, IStateable
     {
         return (Time, HealthPercent);
     }
+    public (long start, double value) ToState(long overridenStart)
+    {
+        return (overridenStart, HealthPercent);
+    }
 }

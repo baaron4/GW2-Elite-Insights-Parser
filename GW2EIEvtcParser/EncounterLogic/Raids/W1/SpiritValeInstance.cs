@@ -82,7 +82,7 @@ internal class SpiritValeInstance : SpiritVale
                     end = reward.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarriers, [], [], phases[0], "Spirit Race", start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarriers, [], [], phases[0], "Spirit Race", start, end, success);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -142,7 +142,7 @@ internal class SpiritValeInstance : SpiritVale
                     end = reward.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarrierPack, [], [], phases[0], "Spirit Race", start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarrierPack, [], [], phases[0], "Spirit Race", start, end, success);
             }
         }
         NumericallyRenamePhases(encounterPhases);

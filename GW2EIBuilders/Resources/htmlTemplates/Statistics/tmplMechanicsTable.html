@@ -169,13 +169,13 @@
             },
             playerMechHeader: function () {
                 const allPlayerMechs = playerMechanics();
-                var res = [];
-                var players = logData.players;
+                var res = [];   
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (let j = 0; j < allPlayerMechs.length; j++) {
                     allPlayerMechs[j]._index = j;
                     for (var i = 0; i < players.length; i++) {
                         var player = players[i];
-                        if (player.isFake) {
+                        if (!player) {
                             continue;
                         }
                         if (this.phase.mechanicStats[i][j][0] > 0 || allPlayerMechs[j].isAchievementEligibility) {
@@ -187,11 +187,11 @@
                 return res;
             },
             playerMechRows: function () {
-                var players = logData.players;
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var rows = [];
                 for (var i = 0; i < players.length; i++) {
                     var player = players[i];
-                    if (player.isFake) {
+                    if (!player) {
                         continue;
                     }
                     let mechs = [];

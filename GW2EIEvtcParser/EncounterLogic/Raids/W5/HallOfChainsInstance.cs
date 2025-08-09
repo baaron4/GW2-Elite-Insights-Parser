@@ -77,7 +77,7 @@ internal class HallOfChainsInstance : HallOfChains
                         end = chest.FirstAware;
                         success = true;
                     }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "River of Souls", start, end, success, false);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "River of Souls", start, end, success);
                 }
             }
         }
@@ -106,7 +106,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -139,7 +139,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -173,7 +173,7 @@ internal class HallOfChainsInstance : HallOfChains
                     success = true;
                     end = intersectTime;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success, false);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -202,7 +202,7 @@ internal class HallOfChainsInstance : HallOfChains
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, dhuum.GetHealth(log.CombatData) > 35e6);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, dhuum.GetHealth(log.CombatData) > 35e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
@@ -213,7 +213,7 @@ internal class HallOfChainsInstance : HallOfChains
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], ChestID.ChestOfDesmina, "Soulless Horror", (log, soullessHorror) => {
-            return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware);
+            return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
         });
         HandleRiverOfSoulsPhases(targetsByIDs, log, phases);
         HandleStatueOfIcePhases(targetsByIDs, log, phases);

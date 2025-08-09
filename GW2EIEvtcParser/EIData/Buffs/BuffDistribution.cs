@@ -77,6 +77,10 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
 
     public bool HasSrc(long buffID, AgentItem src)
     {
+        if (src.IsEnglobingAgent)
+        {
+            return false;
+        }
         return _distribution.ContainsKey(buffID) && _distribution[buffID].ContainsKey(src);
     }
 
@@ -85,7 +89,7 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
         var actors = new List<SingleActor>();
         if (_distribution.TryGetValue(buffID, out var buffsByAgent))
         {
-            actors.AddRange(buffsByAgent.Keys.Select(x => log.FindActor(x)));
+            actors = buffsByAgent.Keys.Where(x => !x.IsEnglobingAgent).Select(x => log.FindActor(x)).ToList();
         }
         return actors;
     }

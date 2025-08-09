@@ -21,7 +21,7 @@
 
 <script>
     Vue.component("buff-stats-player-component", {
-        props: ['phaseindex', 'playerindex'],
+        props: ['playerindex'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -32,9 +32,6 @@
             };
         },
         computed: {
-            phase: function() {
-                return logData.phases[this.phaseindex];
-            },
             player: function() {
                 return logData.players[this.playerindex];
             },
@@ -46,12 +43,13 @@
                 const res = [];
                 const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;
-                for (let i = 0; i < logData.players.length; i++) {
-                    if (activeduration && activeTimes[i] < 1e-6) {
+                const players = getActivePlayersForPhase(this.phase);
+                for (let i = 0; i < players.length; i++) {
+                    if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                         continue;
                     }
                     res.push({
-                        player: logData.players[i],
+                        player: players[i],
                         data: activeduration ? this.buffsStatContainer.boonActiveDictionaries[this.playerindex][i] : this.buffsStatContainer.boonDictionaries[this.playerindex][i]
                     });
                 }

@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser;
@@ -157,6 +158,38 @@ public static class AgentManipulationHelper
         }
 
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
+    }
+
+    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
+    {
+        var previousPlayerAgent = originalPlayer;
+        var player = new Player(previousPlayerAgent, false);
+        var previousSpec = player.Spec;
+        var previousGroup = player.Group;
+        var firstSplit = true;
+        for (var i = 0; i < enterCombatEvents.Count; i++)
+        {
+            var enterCombat = enterCombatEvents[i];
+            if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
+            {
+                previousSpec = enterCombat.Spec;
+                previousGroup = enterCombat.Subgroup;
+                long start = enterCombat.Time;
+                long end = previousPlayerAgent.LastAware;
+                if (firstSplit)
+                {
+                    firstSplit = false;
+                    previousPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, previousPlayerAgent.FirstAware, start - 1, previousPlayerAgent.Spec);
+                    previousPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
+                }
+
+                var newPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, start, end, enterCombat.Spec);
+                newPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
+
+                previousPlayerAgent.OverrideAwareTimes(previousPlayerAgent.FirstAware, start - 1);
+                previousPlayerAgent = newPlayerAgent;
+            }
+        }
     }
 
     internal static void RegroupSameAgentsAndDetermineTeams(AgentData agentData, IReadOnlyList<CombatItem> combatItems, EvtcVersionEvent evtcVersion, IReadOnlyDictionary<uint, ExtensionHandler> extensions)

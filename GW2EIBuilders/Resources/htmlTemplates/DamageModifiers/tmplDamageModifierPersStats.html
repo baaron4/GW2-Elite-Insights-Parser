@@ -59,11 +59,12 @@
             orderedSpecs: function () {
                 var res = [];
                 var aux = new Set();
+                const players = getActivePlayersForPhase(this.phase);
                 for (var i = 0; i < specs.length; i++) {
                     var spec = specs[i];
                     var pBySpec = [];
-                    for (var j = 0; j < logData.players.length; j++) {
-                        if (logData.players[j].profession === spec && this.dmgModifiersPersStats0[j].data.length > 0) {
+                    for (var j = 0; j < players.length; j++) {
+                        if (players[j] && players[j].profession === spec && this.dmgModifiersPersStats0[j].data.length > 0) {
                             pBySpec.push(j);
                         }
                     }

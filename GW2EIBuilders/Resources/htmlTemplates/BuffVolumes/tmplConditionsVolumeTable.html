@@ -8,7 +8,7 @@
 
 <script>
     Vue.component("conditions-volume-table-component", {
-        props: ['phaseindex', 'playerindex', 'activeduration'],
+        props: ['playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -17,9 +17,6 @@
             };
         },
         computed: {
-            phase: function () {
-                return logData.phases[this.phaseindex];
-            },
             buffData: function () {
                 var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
@@ -28,6 +25,7 @@
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 var getData = function (uptimesStats) {
                     var uptimes = [];                    
                     var avg = [],
@@ -35,9 +33,9 @@
                         totalAvg = [];
                     var groupCount = [],
                         totalCount = 0;
-                    for (var i = 0; i < logData.players.length; i++) {
-                        var player = logData.players[i];
-                        if (player.isFake) {
+                    for (var i = 0; i < players.length; i++) {
+                        var player = players[i];
+                        if (!player) {
                             continue;
                         }
                         uptimes.push({

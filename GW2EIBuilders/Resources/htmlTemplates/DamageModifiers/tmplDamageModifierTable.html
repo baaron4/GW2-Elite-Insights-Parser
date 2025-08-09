@@ -86,7 +86,11 @@
                     }
                     return res;
                 }
-                for (var i = 0; i < logData.players.length; i++) {
+                const players = getActiveNonFakePlayersForPhase(this.phase);
+                for (var i = 0; i < players.length; i++) {
+                    if(!players[i]) {
+                        continue;
+                    }
                     res.push(i);
                 }
                 return res;
@@ -106,9 +110,6 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake) {
-                        continue;
-                    }
                     if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,
@@ -168,9 +169,6 @@
                 for (var i = 0; i < this.indicesToUse.length; i++) {
                     var index = this.indicesToUse[i];
                     var player = logData.players[index];
-                    if (player.isFake) {
-                        continue;
-                    }
                     if (!player.notInSquad && !groups[player.group]) {
                         groups[player.group] = {
                             name: "Group" + player.group,

@@ -15,6 +15,8 @@ public class FightData
     private List<PhaseData> _phases = [];
     public readonly int TriggerID;
     public readonly FightLogic Logic;
+
+    public bool IsInstance => Logic.IsInstance;
     public long FightEnd { get; private set; } = long.MaxValue;
     public readonly long FightStart = 0;
     public long FightDuration => FightEnd;
@@ -331,14 +333,22 @@ public class FightData
             {
                 throw new InvalidOperationException("At least one phase must be present");
             }
-            if (!_phases.Exists(x => x.Name == "Detailed Full Instance" || x.Name == "Detailed Full Fight" || x.Name == "Full Fight" || x.Name == "Full Instance"))
+            if (!_phases.Exists(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
             {
                 throw new InvalidOperationException("A phase representing the full log must be present");
             }
             // Auto add dummy instance if no targets in main phase
-            if (Logic.IsInstance && _phases[0].Targets.Count == 0)
+            if (IsInstance && _phases[0].Targets.Count == 0)
             {
                 _phases[0].AddTargets(Logic.Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
+            } 
+            else if (!IsInstance)
+            {
+                var encounterPhases = _phases.Where(x => x.Type == PhaseData.PhaseType.Encounter);
+                if (encounterPhases.Count() != 1)
+                {
+                    throw new InvalidOperationException("Boss logs must have only one encounter phase");
+                }
             }
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
@@ -346,7 +356,7 @@ public class FightData
             {
                 throw new EvtcAgentException("No valid targets found for phases");
             }
-            if (!_phases.Exists(x => x.Name == "Detailed Full Instance" || x.Name == "Detailed Full Fight" || x.Name == "Full Fight" || x.Name == "Full Instance"))
+            if (!_phases.Exists(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
             {
                 throw new EvtcAgentException("No valid targets found for full log phase");
             }

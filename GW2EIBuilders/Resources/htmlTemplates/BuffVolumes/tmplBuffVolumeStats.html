@@ -51,7 +51,7 @@
 
 <script>
     Vue.component("buff-volume-stats-component", {
-        props: ['type', 'phaseindex', 'playerindex', 'activeduration'],
+        props: ['type','playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
         data: function () {
@@ -83,9 +83,10 @@
                 let groupCount = [];
                 let totalCount = 0;
                 //
-                for (var i = 0; i < logData.players.length; i++) {
-                    const player = logData.players[i];
-                    if (player.isFake) {
+                const players = getActiveNonFakePlayersForPhase(this);
+                for (var i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
                         continue;
                     }
                     incoming.push({
@@ -154,9 +155,6 @@
             },
             singlePlayer: function () {
                 return logData.players.filter(x => !x.notInSquad).length <= 1;
-            },
-            phase: function () {
-                return logData.phases[this.phaseindex];
             },
             buffData: function () {
                 const id = this.phaseindex + '-' + this.activeduration;

@@ -244,10 +244,11 @@
                 var sums = [];
                 var total = new Array(dataLength).fill(0);
                 var groups = [];
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.defStats.length; i++) {
                     var def = this.phase.defStats[i];
-                    var player = logData.players[i];
-                    if (player.isFake) {
+                    var player = players[i];
+                    if (!player) {
                         continue;
                     }
                     rows.push({

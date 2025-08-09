@@ -54,10 +54,23 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
             Add(distribution, cDur, _seedSrc);
-            if (_src.IsUnknown)
+            if (Src.IsUnknown)
             {
                 AddUnknown(distribution, cDur, _seedSrc);
             }
+            foreach (var subSeedSrc in _seedSrc.EnglobedAgentItems)
+            {
+                long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
+                if (subcDur > 0)
+                {
+                    Add(distribution, subcDur, subSeedSrc);
+                    if (Src.IsUnknown)
+                    {
+                        AddUnknown(distribution, subcDur, subSeedSrc);
+                    }
+                }
+            }
+
         }
         return cDur;
     }

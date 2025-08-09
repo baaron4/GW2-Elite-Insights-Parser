@@ -128,7 +128,11 @@ var timeRefreshComponent = {
 };
 
 var buffComponent = {
-    computed: {         
+    props: ["phaseindex"],
+    computed: {
+        phase: function () {
+            return logData.phases[this.phaseindex];
+        },
         boons: function () {
             var data = [];
             for (var i = 0; i < logData.boons.length; i++) {
@@ -188,11 +192,12 @@ var buffComponent = {
         orderedSpecs: function () {
             var res = [];
             var aux = new Set();
+            const players = getActivePlayersForPhase(this.phase);
             for (var i = 0; i < specs.length; i++) {
                 var spec = specs[i];
                 var pBySpec = [];
-                for (var j = 0; j < logData.players.length; j++) {
-                    if (logData.players[j].profession === spec && logData.phases[0].buffsStatContainer.persBuffStats[j].data.length > 0) {
+                for (var j = 0; j < players.length; j++) {
+                    if (players[j] && players[j].profession === spec && logData.phases[0].buffsStatContainer.persBuffStats[j].data.length > 0) {
                         pBySpec.push(j);
                     }
                 }

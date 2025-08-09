@@ -125,7 +125,7 @@ internal class SoullessHorror : HallOfChains
         {
             foreach (var combatEvent in combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time))
             {
-                combatEvent.OverrideSrcAgent(0);
+                combatEvent.OverrideSrcAgent(ParserHelper._unknownAgent);
             }
         }
     }
