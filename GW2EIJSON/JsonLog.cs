@@ -203,7 +203,8 @@ public class JsonLog
     /// <summary>
     /// Indicates that the log represents a full instance log. \n
     /// In such logs, it is possible for the same player to be present multiple times, that means they either changed specs or subgroups during the instance. \n
-    /// Make sure to only include data for a given player only on phases that intersect their aware times.
+    /// Make sure to only include data for a given player only on phases that intersect their aware times. \n
+    /// Individual encounter states (Success, CM, etc) can be checked on phases with <see cref="JsonPhase.PhaseType"/> set to "Encounter".
     /// </summary>
     public bool IsInstanceLog;
     /// <summary>
@@ -321,7 +322,7 @@ public class JsonLog
     public long DurationMS;
 
     /// <summary>
-    /// Offset between fight start and log start
+    /// Offset between log start and evtc log start
     /// </summary>
     public long LogStartOffset;
     /// <summary>
