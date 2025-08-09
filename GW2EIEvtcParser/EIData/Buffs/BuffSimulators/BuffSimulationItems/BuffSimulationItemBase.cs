@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemBase : BuffSimulationItem
 {
-    internal readonly AgentItem _src;
+    public readonly AgentItem Src;
     //internal readonly long _totalDuration;
 
     protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
@@ -12,7 +12,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         //NOTE(Rennorb): We need to copy these because for some ungodly reason buffsStackItems can change after this initializer runs.
         // this only influences buff uptime values, so it can be difficult to spot.
         // There is a regression test for this in Tests/Regression.cs:BuffUptime.
-        _src = buffStackItem.Src;
+        Src = buffStackItem.Src;
         //_totalDuration = buffStackItem.TotalDuration;
     }
 
@@ -53,7 +53,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override IEnumerable<AgentItem> GetSources()
     {
-        return [_src];
+        return [Src];
     }
 
     public override IEnumerable<AgentItem> GetActiveSources()
@@ -86,8 +86,8 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            Add(distribution, cDur, _src);
-            foreach (var subSrc in _src.EnglobedAgentItems)
+            Add(distribution, cDur, Src);
+            foreach (var subSrc in Src.EnglobedAgentItems)
             {
                 long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
                 if (subcDur > 0)
