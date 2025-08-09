@@ -45,15 +45,15 @@ public static class ParserHelper
         Common,
         Item, Gear,
         // professions, sort alphabetically per base spec then add elite spec per expansion
-        Elementalist, Tempest, Weaver, Catalyst,
-        Engineer, Scrapper, Holosmith, Mechanist,
-        Guardian, Dragonhunter, Firebrand, Willbender,
-        Mesmer, Chronomancer, Mirage, Virtuoso,
-        Necromancer, Reaper, Scourge, Harbinger,
-        Ranger, Druid, Soulbeast, Untamed,
-        Revenant, Herald, Renegade, Vindicator,
-        Thief, Daredevil, Deadeye, Specter,
-        Warrior, Berserker, Spellbreaker, Bladesworn,
+        Elementalist, Tempest, Weaver, Catalyst, Evoker,
+        Engineer, Scrapper, Holosmith, Mechanist, Amalgam,
+        Guardian, Dragonhunter, Firebrand, Willbender, Luminary,
+        Mesmer, Chronomancer, Mirage, Virtuoso, Troubadour,
+        Necromancer, Reaper, Scourge, Harbinger, Ritualist,
+        Ranger, Druid, Soulbeast, Untamed, Galeshot,
+        Revenant, Herald, Renegade, Vindicator, Conduit,
+        Thief, Daredevil, Deadeye, Specter, Antiquary,
+        Warrior, Berserker, Spellbreaker, Bladesworn, Paragon,
         //
         PetSpecific,
         FightSpecific,
@@ -64,15 +64,15 @@ public static class ParserHelper
     public enum Spec
     {
         // professions, sort alphabetically per base spec then add elite spec per expansion
-        Elementalist, Tempest, Weaver, Catalyst,
-        Engineer, Scrapper, Holosmith, Mechanist,
-        Guardian, Dragonhunter, Firebrand, Willbender,
-        Mesmer, Chronomancer, Mirage, Virtuoso,
-        Necromancer, Reaper, Scourge, Harbinger,
-        Ranger, Druid, Soulbeast, Untamed,
-        Revenant, Herald, Renegade, Vindicator,
-        Thief, Daredevil, Deadeye, Specter,
-        Warrior, Berserker, Spellbreaker, Bladesworn,
+        Elementalist, Tempest, Weaver, Catalyst, Evoker,
+        Engineer, Scrapper, Holosmith, Mechanist, Amalgam,
+        Guardian, Dragonhunter, Firebrand, Willbender, Luminary,
+        Mesmer, Chronomancer, Mirage, Virtuoso, Troubadour,
+        Necromancer, Reaper, Scourge, Harbinger, Ritualist,
+        Ranger, Druid, Soulbeast, Untamed, Galeshot,
+        Revenant, Herald, Renegade, Vindicator, Conduit,
+        Thief, Daredevil, Deadeye, Specter, Antiquary,
+        Warrior, Berserker, Spellbreaker, Bladesworn, Paragon,
         //
         NPC, Gadget,
         Unknown
@@ -257,42 +257,61 @@ public static class ParserHelper
     {
         { "NPC", Spec.NPC },
         { "GDG", Spec.Gadget },
+        //
+        { "Galeshot", Spec.Galeshot },
         { "Untamed", Spec.Untamed },
         { "Druid", Spec.Druid },
         { "Soulbeast", Spec.Soulbeast },
         { "Ranger", Spec.Ranger },
+        //
+        { "Amalgam", Spec.Amalgam },
         { "Scrapper", Spec.Scrapper },
         { "Holosmith", Spec.Holosmith },
         { "Mechanist", Spec.Mechanist },
         { "Engineer", Spec.Engineer },
+        //
+        { "Antiquary", Spec.Antiquary },
         { "Specter", Spec.Specter },
         { "Daredevil", Spec.Daredevil },
         { "Deadeye", Spec.Deadeye },
         { "Thief", Spec.Thief },
+        //
+        { "Evoker", Spec.Evoker },
         { "Catalyst", Spec.Catalyst },
         { "Weaver", Spec.Weaver },
         { "Tempest", Spec.Tempest },
         { "Elementalist", Spec.Elementalist },
+        //
+        { "Troubadour", Spec.Troubadour },
         { "Virtuoso", Spec.Virtuoso },
         { "Mirage", Spec.Mirage },
         { "Chronomancer", Spec.Chronomancer },
         { "Mesmer", Spec.Mesmer },
+        //
+        { "Ritualist", Spec.Ritualist },
         { "Harbinger", Spec.Harbinger },
         { "Scourge", Spec.Scourge },
         { "Reaper", Spec.Reaper },
         { "Necromancer", Spec.Necromancer },
+        //
+        { "Paragon", Spec.Paragon },
         { "Bladesworn", Spec.Bladesworn },
         { "Spellbreaker", Spec.Spellbreaker },
         { "Berserker", Spec.Berserker },
         { "Warrior", Spec.Warrior },
+        //
+        { "Luminary", Spec.Luminary },
         { "Willbender", Spec.Willbender },
         { "Firebrand", Spec.Firebrand },
         { "Dragonhunter", Spec.Dragonhunter },
         { "Guardian", Spec.Guardian },
+        //
+        { "Conduit", Spec.Conduit },
         { "Vindicator", Spec.Vindicator },
         { "Renegade", Spec.Renegade },
         { "Herald", Spec.Herald },
         { "Revenant", Spec.Revenant },
+        //
         { "", Spec.Unknown },
     };
 
@@ -306,38 +325,55 @@ public static class ParserHelper
     /// </summary>
     private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>()
     {
+        { Spec.Galeshot, Spec.Ranger },
         { Spec.Untamed, Spec.Ranger },
         { Spec.Soulbeast, Spec.Ranger },
         { Spec.Druid, Spec.Ranger },
         { Spec.Ranger, Spec.Ranger },
+        //
+        { Spec.Amalgam, Spec.Engineer },
         { Spec.Mechanist, Spec.Engineer },
         { Spec.Holosmith, Spec.Engineer },
         { Spec.Scrapper, Spec.Engineer },
         { Spec.Engineer, Spec.Engineer },
+        //
+        { Spec.Antiquary, Spec.Thief },
         { Spec.Specter, Spec.Thief },
         { Spec.Deadeye, Spec.Thief },
         { Spec.Daredevil, Spec.Thief },
         { Spec.Thief, Spec.Thief },
+        //
+        { Spec.Evoker, Spec.Elementalist },
         { Spec.Catalyst, Spec.Elementalist },
         { Spec.Weaver, Spec.Elementalist },
         { Spec.Tempest, Spec.Elementalist },
         { Spec.Elementalist, Spec.Elementalist },
+        //
+        { Spec.Troubadour, Spec.Mesmer },
         { Spec.Virtuoso, Spec.Mesmer },
         { Spec.Mirage, Spec.Mesmer },
         { Spec.Chronomancer, Spec.Mesmer },
         { Spec.Mesmer, Spec.Mesmer },
+        //
+        { Spec.Ritualist, Spec.Necromancer },
         { Spec.Harbinger, Spec.Necromancer },
         { Spec.Scourge, Spec.Necromancer },
         { Spec.Reaper, Spec.Necromancer },
         { Spec.Necromancer, Spec.Necromancer },
+        //
+        { Spec.Paragon, Spec.Warrior },
         { Spec.Bladesworn, Spec.Warrior },
         { Spec.Spellbreaker, Spec.Warrior },
         { Spec.Berserker, Spec.Warrior },
         { Spec.Warrior, Spec.Warrior },
+        //
+        { Spec.Luminary, Spec.Guardian },
         { Spec.Willbender, Spec.Guardian },
         { Spec.Firebrand, Spec.Guardian },
         { Spec.Dragonhunter, Spec.Guardian },
         { Spec.Guardian, Spec.Guardian },
+        //
+        { Spec.Conduit, Spec.Revenant },
         { Spec.Vindicator, Spec.Revenant },
         { Spec.Renegade, Spec.Revenant },
         { Spec.Herald, Spec.Revenant },
@@ -354,38 +390,55 @@ public static class ParserHelper
     /// </summary>
     private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>()
     {
+        { Spec.Galeshot, new List<Source> { Source.Ranger, Source.Galeshot } },
         { Spec.Untamed, new List<Source> { Source.Ranger, Source.Untamed } },
         { Spec.Soulbeast, new List<Source> { Source.Ranger, Source.Soulbeast } },
         { Spec.Druid, new List<Source> { Source.Ranger, Source.Druid } },
         { Spec.Ranger, new List<Source> { Source.Ranger } },
+        //
+        { Spec.Amalgam, new List<Source> { Source.Engineer, Source.Amalgam } },
         { Spec.Mechanist, new List<Source> { Source.Engineer, Source.Mechanist } },
         { Spec.Holosmith, new List<Source> { Source.Engineer, Source.Holosmith } },
         { Spec.Scrapper, new List<Source> { Source.Engineer, Source.Scrapper } },
         { Spec.Engineer, new List<Source> { Source.Engineer } },
+        //
+        { Spec.Antiquary, new List<Source> { Source.Thief, Source.Antiquary } },
         { Spec.Specter, new List<Source> { Source.Thief, Source.Specter } },
         { Spec.Deadeye, new List<Source> { Source.Thief, Source.Deadeye } },
         { Spec.Daredevil, new List<Source> { Source.Thief, Source.Daredevil } },
         { Spec.Thief, new List<Source> { Source.Thief } },
+        //
+        { Spec.Evoker, new List<Source> { Source.Elementalist, Source.Evoker } },
         { Spec.Catalyst, new List<Source> { Source.Elementalist, Source.Catalyst } },
         { Spec.Weaver, new List<Source> { Source.Elementalist, Source.Weaver } },
         { Spec.Tempest, new List<Source> { Source.Elementalist, Source.Tempest } },
         { Spec.Elementalist, new List<Source> { Source.Elementalist } },
+        //
+        { Spec.Troubadour, new List<Source> { Source.Mesmer, Source.Troubadour } },
         { Spec.Virtuoso, new List<Source> { Source.Mesmer, Source.Virtuoso } },
         { Spec.Mirage, new List<Source> { Source.Mesmer, Source.Mirage } },
         { Spec.Chronomancer, new List<Source> { Source.Mesmer, Source.Chronomancer } },
         { Spec.Mesmer, new List<Source> { Source.Mesmer } },
+        //
+        { Spec.Ritualist, new List<Source> { Source.Necromancer, Source.Ritualist } },
         { Spec.Harbinger, new List<Source> { Source.Necromancer, Source.Harbinger } },
         { Spec.Scourge, new List<Source> { Source.Necromancer, Source.Scourge } },
         { Spec.Reaper, new List<Source> { Source.Necromancer, Source.Reaper } },
         { Spec.Necromancer, new List<Source> { Source.Necromancer } },
+        //
+        { Spec.Paragon, new List<Source> { Source.Warrior, Source.Paragon } },
         { Spec.Bladesworn, new List<Source> { Source.Warrior, Source.Bladesworn } },
         { Spec.Spellbreaker, new List<Source> { Source.Warrior, Source.Spellbreaker } },
         { Spec.Berserker, new List<Source> { Source.Warrior, Source.Berserker } },
         { Spec.Warrior, new List<Source> { Source.Warrior } },
+        //
+        { Spec.Luminary, new List<Source> { Source.Guardian, Source.Luminary } },
         { Spec.Willbender, new List<Source> { Source.Guardian, Source.Willbender } },
         { Spec.Firebrand, new List<Source> { Source.Guardian, Source.Firebrand } },
         { Spec.Dragonhunter, new List<Source> { Source.Guardian, Source.Dragonhunter } },
         { Spec.Guardian, new List<Source> { Source.Guardian } },
+        //
+        { Spec.Conduit, new List<Source> { Source.Revenant, Source.Conduit } },
         { Spec.Vindicator, new List<Source> { Source.Revenant, Source.Vindicator } },
         { Spec.Renegade, new List<Source> { Source.Revenant, Source.Renegade } },
         { Spec.Herald, new List<Source> { Source.Revenant, Source.Herald } },
@@ -551,11 +604,13 @@ public static class ParserHelper
             //
             case Spec.Elementalist:
                 res |= ElementalistHelper.IsKnownMinionID(id);
+                res |= EvokerHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Necromancer:
                 res |= NecromancerHelper.IsKnownMinionID(id);
                 res |= ReaperHelper.IsKnownMinionID(id);
+                res |= RitualistHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Mesmer:

@@ -146,46 +146,55 @@ const specs = [
     "Berserker",
     "Spellbreaker",
     "Bladesworn",
+    "Paragon",
     //
     "Revenant",
     "Herald",
     "Renegade",
     "Vindicator",
+    "Conduit",
     //
     "Guardian",
     "Dragonhunter",
     "Firebrand",
     "Willbender",
+    "Luminary",
     //
     "Ranger",
     "Druid",
     "Soulbeast",
     "Untamed",
+    "Galeshot",
     //
     "Engineer",
     "Scrapper",
     "Holosmith",
     "Mechanist",
+    "Amalgam",
     //
     "Thief",
     "Daredevil",
     "Deadeye",
     "Specter",
+    "Antiquary",
     //
     "Mesmer",
     "Chronomancer",
     "Mirage",
     "Virtuoso",
+    "Troubadour",
     //
     "Necromancer",
     "Reaper",
     "Scourge",
     "Harbinger",
+    "Ritualist",
     //
     "Elementalist",
     "Tempest",
     "Weaver",
-    "Catalyst"
+    "Catalyst",
+    "Evoker"
 ];
 
 const SpecToBase = {
@@ -193,46 +202,55 @@ const SpecToBase = {
     Berserker: 'Warrior',
     Spellbreaker: 'Warrior',
     Bladesworn: 'Warrior',
+    Paragon: 'Warrior',
     //
     Revenant: "Revenant",
     Herald: "Revenant",
     Renegade: "Revenant",
     Vindicator: "Revenant",
+    Conduit: "Revenant",
     //
     Guardian: "Guardian",
     Dragonhunter: "Guardian",
     Firebrand: "Guardian",
     Willbender: "Guardian",
+    Luminary: "Guardian",
     //
     Ranger: "Ranger",
     Druid: "Ranger",
     Soulbeast: "Ranger",
     Untamed: "Ranger",
+    Galeshot: "Ranger",
     //
     Engineer: "Engineer",
     Scrapper: "Engineer",
     Holosmith: "Engineer",
     Mechanist: "Engineer",
+    Amalgam: "Engineer",
     //
     Thief: "Thief",
     Daredevil: "Thief",
     Deadeye: "Thief",
     Specter: "Thief",
+    Antiquary: "Thief",
     //
     Mesmer: "Mesmer",
     Chronomancer: "Mesmer",
     Mirage: "Mesmer",
     Virtuoso: "Mesmer",
+    Troubadour: "Mesmer",
     //
     Necromancer: "Necromancer",
     Reaper: "Necromancer",
     Scourge: "Necromancer",
     Harbinger: "Necromancer",
+    Ritualist: "Necromancer",
     //
     Elementalist: "Elementalist",
     Tempest: "Elementalist",
     Weaver: "Elementalist",
-    Catalyst: "Elementalist"
+    Catalyst: "Elementalist",
+    Evoker: "Elementalist"
 };
 
 const SkillDecorationCategory = {
