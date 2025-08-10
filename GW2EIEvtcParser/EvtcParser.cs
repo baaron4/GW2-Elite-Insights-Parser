@@ -1024,14 +1024,6 @@ public class EvtcParser
                     AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
                 }
             }
-            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting non squad players per spec and subgroup");
-            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
-            {
-                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
-                {
-                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
-                }
-            }
         }
 
 
