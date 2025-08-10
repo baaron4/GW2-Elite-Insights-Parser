@@ -61,38 +61,19 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return GetSources();
     }
 
-    private static void Add(Dictionary<AgentItem, BuffDistributionItem> distrib, long value, AgentItem src)
-    {
-        if (distrib.TryGetValue(src, out var toModify))
-        {
-            toModify.IncrementValue(value);
-        }
-        else
-        {
-            distrib.Add(src, new BuffDistributionItem(
-                value,
-                0,
-                0,
-                0,
-                0,
-                0
-            ));
-        }
-    }
-
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            Add(distribution, cDur, Src);
+            AddValue(distribution, cDur, Src);
             foreach (var subSrc in Src.EnglobedAgentItems)
             {
                 long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
                 if (subcDur > 0)
                 {
-                    Add(distribution, subcDur, subSrc);
+                    AddValue(distribution, subcDur, subSrc);
                 }
             }
         }
