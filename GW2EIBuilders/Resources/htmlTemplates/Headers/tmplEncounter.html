@@ -1,7 +1,7 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 class="card-header text-center">{{ encounter.name }}</h3>
-        <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass">{{ encounter.mode }}</h7>
+        <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
@@ -95,58 +95,8 @@
                 }
                 return health + " HP";
             },
-        },
-        computed: {
-            encounter: function () {
-                var targets = [];
-                var mainPhase = logData.phases[0];
-                if (!logData.targetless) {
-                    for (var i = 0; i < mainPhase.targets.length; i++) {
-                        if (mainPhase.targetPriorities[i] > 0) {
-                            continue;
-                        }
-                        if (targets.length >= 10) {
-                            break;
-                        }
-                        var targetIndex = mainPhase.targets[i];
-                        var targetData = logData.targets[targetIndex];
-                        targets.push(targetData);
-                    }
-                }
-
-                var encounter = {
-                    name: logData.fightNameNoMode,
-                    icon: logData.fightIcon,
-                    duration: logData.encounterDuration,
-                    targets: targets,
-                    players: logData.players.filter(x => !x.notInSquad),
-                    nonSquadFriendlies: logData.players.filter(x => x.notInSquad),
-                    mode: logData.fightMode,
-                    start: logData.fightStartStatus,
-                };
-                return encounter;
-            },
-            fractalScale: function () {
-                return logData.fractalScale;
-            },
-            instancePrivacy: function () {
-                return logData.instancePrivacy;
-            },
-            resultStatus: function () {
-                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
-            },
-            instanceBuffs: function () {
-                if (logData.instanceBuffs.length == 0) {
-                    return null;
-                }
-                var res = [];
-                for (var i = 0; i < logData.instanceBuffs.length; i++) {
-                    res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
-                }
-                return res;
-            },
-            fightModeColorClass: function () {
-                switch (logData.fightMode) {
+            fightModeColorClass: function (mode) {
+                switch (mode) {
                     case "Unknown":
                         return { 'fightModeUnknown-light': this.light, 'fightModeUnknown-dark': !this.light };
                         break;
@@ -169,6 +119,57 @@
                         break;
                 }
                 return;
+            },
+        },
+        computed: {
+            encounter: function () {
+                var targets = [];
+                var mainPhase = logData.phases[0];
+                if (!logData.targetless) {
+                    for (var i = 0; i < mainPhase.targets.length; i++) {
+                        if (mainPhase.targetPriorities[i] > 0) {
+                            continue;
+                        }
+                        if (targets.length >= 10) {
+                            break;
+                        }
+                        var targetIndex = mainPhase.targets[i];
+                        var targetData = logData.targets[targetIndex];
+                        targets.push(targetData);
+                    }
+                }
+
+                var encounter = {
+                    name: mainPhase.nameNoMode,
+                    success: mainPhase.success,
+                    icon: mainPhase.icon,
+                    duration: mainPhase.encounterDuration,
+                    targets: targets,
+                    players: logData.players.filter(x => !x.notInSquad),
+                    nonSquadFriendlies: logData.players.filter(x => x.notInSquad),
+                    mode: mainPhase.mode,
+                    start: mainPhase.startStatus,
+                };
+                return encounter;
+            },
+            fractalScale: function () {
+                return logData.fractalScale;
+            },
+            instancePrivacy: function () {
+                return logData.instancePrivacy;
+            },
+            resultStatus: function () {
+                return this.encounter.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
+            },
+            instanceBuffs: function () {
+                if (logData.instanceBuffs.length == 0) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < logData.instanceBuffs.length; i++) {
+                    res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
+                }
+                return res;
             },
         }
     });

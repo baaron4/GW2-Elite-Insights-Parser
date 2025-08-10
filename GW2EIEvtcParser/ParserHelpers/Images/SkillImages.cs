@@ -785,7 +785,7 @@ internal static class SkillImages
     public const string SmashBottle = "https://wiki.guildwars2.com/images/b/ba/Smash_%28empty_bottle%29.png";
     public const string ThrowBottle = "https://wiki.guildwars2.com/images/7/75/Throw_%28empty_bottle%29.png";
     #endregion Bundle
-    #region Fight Specific
+    #region Encounter Specific
     public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
     public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
     public const string TossSlubling = "https://assets.gw2dat.com/831481.png";
@@ -794,7 +794,7 @@ internal static class SkillImages
     public const string PacifiedMagicalStorm = "https://wiki.guildwars2.com/images/f/f1/Pacified_Magical_Storm.png";
     public const string WatchfulSpirit = "https://wiki.guildwars2.com/images/9/9f/Watchful_Spirit.png";
     public const string RideTheLeyLine = "https://wiki.guildwars2.com/images/8/84/Ride_the_Ley_Line.png";
-    #endregion Fight Specific
+    #endregion Encounter Specific
 }
 
 #pragma warning restore CA1823 // Unused field

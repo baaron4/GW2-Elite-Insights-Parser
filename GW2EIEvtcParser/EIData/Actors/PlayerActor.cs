@@ -64,8 +64,8 @@ public abstract class PlayerActor : SingleActor
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
         base.InitAdditionalCombatReplayData(log, replay);
-        // Fight related stuff
-        log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, replay);
+        // Logic related stuff
+        log.LogData.Logic.ComputePlayerCombatReplayActors(this, log, replay);
         ProfHelper.ComputeProfessionCombatReplayActors(this, log, replay);
         if (replay.Rotations.Count != 0)
         {

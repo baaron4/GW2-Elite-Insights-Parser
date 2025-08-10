@@ -10,7 +10,7 @@ internal static class EXTJsonMinionsBarrierStatsBuilder
 
     public static EXTJsonMinionsBarrierStats BuildMinionsBarrierStats(Minions minions, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var totalAlliedBarrier = new List<List<int>>(log.Friendlies.Count);
         var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>(log.Friendlies.Count);
         foreach (SingleActor friendly in log.Friendlies)

@@ -7,6 +7,13 @@ public class PhaseData
 {
     public long Start { get; private set; }
     public long End { get; private set; }
+    public string DurationString
+    {
+        get
+        {
+            return ParserHelper.ToDurationString(End - Start);
+        }
+    }
     public long DurationInS { get; private set; }
     public long DurationInMS { get; private set; }
     public long DurationInM { get; private set; }
@@ -177,7 +184,7 @@ public class PhaseData
                 }
                 start = Math.Min(start, startTime);
             }
-            OverrideStart(Math.Max(Math.Max(Start, start), log.FightData.FightStart));
+            OverrideStart(Math.Max(Math.Max(Start, start), log.LogData.LogStart));
         }
     }
     /// <summary>
@@ -208,7 +215,7 @@ public class PhaseData
                 }
                 end = Math.Max(end, endTime);
             }
-            OverrideEnd(Math.Min(Math.Min(End, end), log.FightData.FightEnd));
+            OverrideEnd(Math.Min(Math.Min(End, end), log.LogData.LogEnd));
         }
     }
 

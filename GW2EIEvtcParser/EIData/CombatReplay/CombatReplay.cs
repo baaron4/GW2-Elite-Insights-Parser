@@ -24,10 +24,10 @@ public class CombatReplay
 
     internal CombatReplay(ParsedEvtcLog log)
     {
-        _start = log.FightData.FightStart;
-        _end = log.FightData.FightEnd;
+        _start = log.LogData.LogStart;
+        _end = log.LogData.LogEnd;
         //TODO(Rennorb) @perf: capacity
-        Decorations = new(log.FightData.Logic.DecorationCache);
+        Decorations = new(log.LogData.Logic.DecorationCache);
     }
 
     internal void Trim(long start, long end)
@@ -57,7 +57,7 @@ public class CombatReplay
         return res - 1;
     }
 
-    private void PositionPolling(int rate, long fightDuration, bool forcePolling)
+    private void PositionPolling(int rate, long logDuration, bool forcePolling)
     {
         List<ParametricPoint3D> positions = Positions;
         if (Positions.Count == 0 && forcePolling)
@@ -74,7 +74,7 @@ public class CombatReplay
 
         //TODO(Rennorb) @perf: reserve PolledPositions
 
-        for (long t = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); t < fightDuration; t += rate)
+        for (long t = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); t < logDuration; t += rate)
         {
             ParametricPoint3D pos = positions[positionTableIndex];
             if (t <= pos.Time)
@@ -126,7 +126,7 @@ public class CombatReplay
     /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
     /// in javascript
     /// </summary>
-    private void RotationPolling(int rate, long fightDuration)
+    private void RotationPolling(int rate, long logDuration)
     {
         if (Rotations.Count == 0)
         {
@@ -136,7 +136,7 @@ public class CombatReplay
         //TODO(Rennorb) @perf: reserve PolledPositions
 
         int rotationTableIndex = 0;
-        for (int t = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); t < fightDuration; t += rate)
+        for (int t = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); t < logDuration; t += rate)
         {
             var rot = Rotations[rotationTableIndex];
             if (t <= rot.Time)
@@ -177,10 +177,10 @@ public class CombatReplay
         PolledRotations.RemoveAll(x => x.Time < 0); //TODO(Rennorb) @perf: inline before inserting
     }
 
-    internal void PollingRate(long fightDuration, bool forcePositionPolling)
+    internal void PollingRate(long logDuration, bool forcePositionPolling)
     {
-        PositionPolling(ParserHelper.CombatReplayPollingRate, fightDuration, forcePositionPolling);
-        RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
+        PositionPolling(ParserHelper.CombatReplayPollingRate, logDuration, forcePositionPolling);
+        RotationPolling(ParserHelper.CombatReplayPollingRate, logDuration);
     }
 
 #if DEBUG
@@ -207,7 +207,7 @@ public class CombatReplay
             if (effectEvt.IsAroundDst)
             {
                 var dstActor = log.FindActor(effectEvt.Dst);
-                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
                     color = Colors.Teal;
                     positionConnector = new AgentConnector(dstActor);
@@ -256,7 +256,7 @@ public class CombatReplay
             if (effectEvt.IsAroundDst)
             {
                 var dstActor = log.FindActor(effectEvt.Dst);
-                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
                     color = Colors.GreenishYellow;
                     positionConnector = new AgentConnector(dstActor);
@@ -309,7 +309,7 @@ public class CombatReplay
             if (effectEvt.IsAroundDst)
             {
                 var dstActor = log.FindActor(effectEvt.Dst);
-                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
                     color = Colors.Teal;
                     positionConnector = new AgentConnector(dstActor);
@@ -363,7 +363,7 @@ public class CombatReplay
             if (effectEvt.IsAroundDst)
             {
                 var dstActor = log.FindActor(effectEvt.Dst);
-                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
                     color = Colors.Teal;
                     positionConnector = new AgentConnector(dstActor);
@@ -416,7 +416,7 @@ public class CombatReplay
             if (effectEvt.IsAroundDst)
             {
                 var dstActor = log.FindActor(effectEvt.Dst);
-                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.FightData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
+                if (log.FriendlyAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TargetAgents.Contains(dstActor.AgentItem) || log.LogData.Logic.TrashMobAgents.Contains(dstActor.AgentItem))
                 {
                     color = Colors.Teal;
                     positionConnector = new AgentConnector(dstActor);

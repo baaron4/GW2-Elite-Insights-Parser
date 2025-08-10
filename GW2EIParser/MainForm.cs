@@ -700,7 +700,7 @@ internal sealed partial class MainForm : Form
                 AddTraceMessage("Discord: Sorting logs by category");
                 dpsReportLogs.Sort((x, y) =>
                 {
-                    int categoryCompare = x.BasicMetaData.FightCategory.CompareTo(y.BasicMetaData.FightCategory);
+                    int categoryCompare = x.BasicMetaData.LogCategory.CompareTo(y.BasicMetaData.LogCategory);
                     if (categoryCompare == 0)
                     {
                         return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
@@ -713,8 +713,8 @@ internal sealed partial class MainForm : Form
                 AddTraceMessage("Discord: Building embed body");
                 foreach (FormOperationController controller in dpsReportLogs)
                 {
-                    string subCategory = controller.BasicMetaData.FightCategory.GetSubCategoryName();
-                    string toAdd = "[" + controller.BasicMetaData.FightName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.FightSuccess ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.FightDuration;
+                    string subCategory = controller.BasicMetaData.LogCategory.GetSubCategoryName();
+                    string toAdd = "[" + controller.BasicMetaData.LogName + "](" + controller.DPSReportLink + ") " + (controller.BasicMetaData.Success ? " :white_check_mark: " : " :x: ") + ": " + controller.BasicMetaData.LogDuration;
                     if (subCategory != currentSubCategory)
                     {
                         embedFieldBuilder.WithValue(fieldValue);

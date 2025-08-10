@@ -583,7 +583,7 @@ internal static class RangerHelper
             var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.Cleanse | SkillModeCategory.Heal);
             foreach (EffectEvent effect in healingSpringsActive)
             {
-                long duration = log.LogData.GW2Build < GW2Builds.March2024BalanceAndCerusLegendary ? 10000 : 5000;
+                long duration = log.LogMetadata.GW2Build < GW2Builds.March2024BalanceAndCerusLegendary ? 10000 : 5000;
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectHealingSpring);
             }

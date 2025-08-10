@@ -36,22 +36,22 @@ public class SupportPerAllyStatistics
                     if (brae.ToFriendly)
                     {
                         friendlyCount++;
-                        friendlyTime = Math.Max(friendlyTime + brae.RemovedDuration, log.FightData.FightDuration);
+                        friendlyTime = Math.Max(friendlyTime + brae.RemovedDuration, log.LogData.LogDuration);
                     }
                     else if (brae.ToFoe)
                     {
                         foeCount++;
-                        foeTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
+                        foeTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
                         if (brae.To.IsDownedBeforeNext90(log, brae.Time))
                         {
                             foeDownContributionCount++;
-                            foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
+                            foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
                         }
                     }
                     else
                     {
                         unknownCount++;
-                        unknownTime = Math.Max(unknownTime + brae.RemovedDuration, log.FightData.FightDuration);
+                        unknownTime = Math.Max(unknownTime + brae.RemovedDuration, log.LogData.LogDuration);
                     }
                 }
             }

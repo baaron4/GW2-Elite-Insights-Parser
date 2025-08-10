@@ -15,7 +15,7 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
@@ -45,7 +45,7 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
             HealingDistributions = new (phases.Count),

@@ -117,8 +117,8 @@
         </div>
         <div class="footer">
             <div>
-                Time Start: {{getLogData().encounterStart}} | 
-                Time End: {{getLogData().encounterEnd}} | 
+                Time Start: {{getLogData().logStart}} | 
+                Time End: {{getLogData().logEnd}} | 
                 EVTC Duration: {{ getLogData().evtcRecordingDuration}}
             </div>      
             <div v-if="getLogData().instanceStart">
@@ -129,7 +129,7 @@
                 ARC: {{getLogData().arcVersion}} | 
                 GW2 Build: {{getLogData().gw2Build}} | 
                 Trigger ID: {{getLogData().triggerID}} | 
-                Encounter ID: {{getLogData().encounterID}} | 
+                Log ID: {{getLogData().logID}} | 
                 Map ID: {{getLogData().mapID}} | 
                 {{getLogData().parser}}
             </div>

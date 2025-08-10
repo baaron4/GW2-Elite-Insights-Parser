@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -9,8 +9,8 @@ namespace GW2EIEvtcParser;
 
 public class ParsedEvtcLog
 {
+    public readonly LogMetadata LogMetadata;
     public readonly LogData LogData;
-    public readonly FightData FightData;
     public readonly AgentData AgentData;
     public readonly SkillData SkillData;
     public readonly CombatData CombatData;
@@ -18,7 +18,7 @@ public class ParsedEvtcLog
     public readonly IReadOnlyList<SingleActor> Friendlies;
     public readonly IReadOnlyCollection<AgentItem> PlayerAgents;
     public readonly IReadOnlyCollection<AgentItem> FriendlyAgents;
-    public bool IsBenchmarkMode => FightData.Logic.ParseMode == FightLogic.ParseModeEnum.Benchmark;
+    public bool IsBenchmarkMode => LogData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.Benchmark;
     public readonly IReadOnlyDictionary<ParserHelper.Spec, IReadOnlyList<SingleActor>> FriendliesListBySpec;
     public readonly DamageModifiersContainer DamageModifiers;
     public readonly BuffsContainer Buffs;
@@ -32,35 +32,35 @@ public class ParsedEvtcLog
 
     private Dictionary<AgentItem, SingleActor>? _agentToActorDictionary;
 
-    internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
+    internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, SkillData skillData,
             IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
     {
-        FightData = fightData;
+        LogData = logData;
         AgentData = agentData;
         SkillData = skillData;
         ParserSettings = parserSettings;
         _operation = operation;
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
-        CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings);
+        CombatData = new CombatData(combatItems, LogData, AgentData, SkillData, playerList, operation, extensions, evtcVersion, parserSettings);
         
-        operation.UpdateProgressWithCancellationCheck("Parsing: Checking Encounter Status");
-        FightData.ProcessEncounterStatus(CombatData, AgentData);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Checking Log Status");
+        LogData.ProcessLogStatus(CombatData, AgentData);
 
-        operation.UpdateProgressWithCancellationCheck("Parsing: Setting Fight Name");
-        FightData.CompleteFightName(CombatData, AgentData);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Setting Log Name");
+        LogData.CompleteLogName(CombatData, AgentData);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
-        FightData.Logic.CheckSuccess(CombatData, AgentData, FightData, agentData.GetAgentByType(AgentItem.AgentType.Player));
-        if (FightData.FightDuration <= ParserSettings.TooShortLimit)
+        LogData.Logic.CheckSuccess(CombatData, AgentData, LogData, agentData.GetAgentByType(AgentItem.AgentType.Player));
+        if (LogData.LogDuration <= ParserSettings.TooShortLimit)
         {
-            throw new TooShortException(FightData.FightDuration, ParserSettings.TooShortLimit);
+            throw new TooShortException(LogData.LogDuration, ParserSettings.TooShortLimit);
         }
-        if (FightData.FightEnd > FightData.LogEnd)
+        if (LogData.LogEnd > LogData.EvtcLogEnd)
         {
-            throw new InvalidDataException("FightEnd can't be bigger than LogEnd");
+            throw new InvalidDataException("LogEnd can't be bigger than EvtcLogEnd");
         }
-        if (ParserSettings.SkipFailedTries && !FightData.Success)
+        if (ParserSettings.SkipFailedTries && !LogData.Success)
         {
             throw new SkipException();
         }
@@ -69,11 +69,11 @@ public class ParsedEvtcLog
         List<Player> activePlayers = [];
         foreach (Player p in playerList)
         {
-            if (p.LastAware <= FightData.FightStart)
+            if (p.LastAware <= LogData.LogStart)
             {
-                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - despawned before fight start");
+                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - despawned before Log start");
             } 
-            else if (p.FirstAware < FightData.FightEnd)
+            else if (p.FirstAware < LogData.LogEnd)
             {
                 if (CombatData.GetDamageTakenData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
                     CombatData.GetDamageData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
@@ -88,7 +88,7 @@ public class ParsedEvtcLog
             }
             else
             {
-                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - spawned after fight end");
+                operation.UpdateProgressWithCancellationCheck($"Parsing: Removing player {p.AgentItem.InstID} from player list - spawned after Log end");
             }
         }
         if (activePlayers.Count == 0)
@@ -101,27 +101,27 @@ public class ParsedEvtcLog
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling friendlies");
         var friendlies = new List<SingleActor>();
         friendlies.AddRange(PlayerList);
-        friendlies.AddRange(fightData.Logic.NonSquadFriendlies);
+        friendlies.AddRange(logData.Logic.NonSquadFriendlies);
         Friendlies = friendlies;
         FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
         FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Player count: " + PlayerList.Count);
-        _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + FightData.Logic.NonSquadFriendlies.Count);
-        _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + FightData.Logic.Targets.Count);
-        _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + FightData.Logic.TrashMobs.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Friendlies count: " + LogData.Logic.NonSquadFriendlies.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Targets count: " + LogData.Logic.Targets.Count);
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Trash Mobs count: " + LogData.Logic.TrashMobs.Count);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Log Meta Data");
-        LogData = new LogData(evtcVersion, CombatData, FightData.LogEnd - FightData.LogStart, playerList, extensions, operation);
+        LogMetadata = new LogMetadata(evtcVersion, CombatData, LogData.EvtcLogEnd - LogData.EvtcLogStart, playerList, extensions, operation);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Container");
         Buffs = new BuffsContainer(CombatData, operation);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Modifier Container");
-        DamageModifiers = new DamageModifiersContainer(CombatData, fightData.Logic.ParseMode, fightData.Logic.SkillMode, parserSettings);
+        DamageModifiers = new DamageModifiersContainer(CombatData, logData.Logic.ParseMode, logData.Logic.SkillMode, parserSettings);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Mechanic Data");
-        MechanicData = FightData.Logic.GetMechanicData();
+        MechanicData = LogData.Logic.GetMechanicData();
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
         StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
@@ -154,7 +154,7 @@ public class ParsedEvtcLog
             {
                 AddToDictionary(p);
             }
-            foreach (SingleActor npc in FightData.Logic.Hostiles)
+            foreach (SingleActor npc in LogData.Logic.Hostiles)
             {
                 AddToDictionary(npc);
             }
@@ -208,11 +208,11 @@ public class ParsedEvtcLog
 
     public (List<SingleActorCombatReplayDescription>,List<CombatReplayRenderingDescription>, List<CombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var map = FightData.Logic.GetCombatReplayMap(this);
+        var map = LogData.Logic.GetCombatReplayMap(this);
         var actors = new List<SingleActorCombatReplayDescription>();
         var decorationRenderings = new List<CombatReplayRenderingDescription>();
         var decorationMetadata = new List<CombatReplayDecorationMetadataDescription>();
-        var fromNonFriendliesSet = new HashSet<SingleActor>(FightData.Logic.Hostiles);
+        var fromNonFriendliesSet = new HashSet<SingleActor>(LogData.Logic.Hostiles);
         foreach (SingleActor actor in Friendlies)
         {
             if (actor.IsFakeActor || !actor.HasCombatReplayPositions(this))
@@ -239,8 +239,8 @@ public class ParsedEvtcLog
             decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
 
         }
-        decorationRenderings.AddRange(FightData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
-        foreach (var pair in FightData.Logic.DecorationCache)
+        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+        foreach (var pair in LogData.Logic.DecorationCache)
         {
             decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());
         }

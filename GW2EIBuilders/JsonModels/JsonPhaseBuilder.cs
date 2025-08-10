@@ -25,7 +25,7 @@ internal static class JsonPhaseBuilder
         foreach (var pair in phase.Targets)
         {
             var tar = pair.Key;
-            var tarIndex = log.FightData.Logic.Targets.IndexOf(tar);
+            var tarIndex = log.LogData.Logic.Targets.IndexOf(tar);
             if (pair.Value.IsPrioritary(PhaseData.TargetPriority.Blocking))
             {
                 targets.Add(tarIndex);
@@ -57,16 +57,19 @@ internal static class JsonPhaseBuilder
                 break;
             case PhaseData.PhaseType.Encounter:
                 jsPhase.PhaseType = "Encounter";
-                var encounterPhase = (EncounterPhaseData)phase;
-                jsPhase.Success = encounterPhase.Success;
-                jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
-                jsPhase.IsCM = encounterPhase.IsCM;
+                if (log.LogData.IsInstance)
+                {
+                    var encounterPhase = (EncounterPhaseData)phase;
+                    jsPhase.Success = encounterPhase.Success;
+                    jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
+                    jsPhase.IsCM = encounterPhase.IsCM;
+                }
                 break;
             case PhaseData.PhaseType.Instance:
                 jsPhase.PhaseType = "Instance";
                 break;
         }
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         if (!jsPhase.BreakbarPhase)
         {
             var subPhases = new List<int>();

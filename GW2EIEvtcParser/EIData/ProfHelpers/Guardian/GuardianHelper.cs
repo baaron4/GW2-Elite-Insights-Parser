@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser.EncounterLogic;
+﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -295,7 +295,7 @@ internal static class GuardianHelper
             var skill = new SkillModeDescriptor(player, Spec.Guardian, HuntersWard, SkillModeCategory.CC);
             foreach (EffectEvent effect in huntersWards)
             {
-                long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW ? 3000 : 5000;
+                long duration = log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW ? 3000 : 5000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 140, EffectImages.EffectHuntersWard); // radius approximation
             }

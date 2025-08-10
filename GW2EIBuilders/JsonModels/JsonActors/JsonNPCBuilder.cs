@@ -18,13 +18,14 @@ internal static class JsonNPCBuilder
     {
         var jsonNPC = new JsonNPC();
         JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
         jsonNPC.Id = npc.ID;
         jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
         double hpLeft = 100.0;
         double barrierLeft = 0.0;
-        if (log.FightData.Success)
+        var targetEncounterPhase = phases.OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(npc));
+        if (targetEncounterPhase != null && targetEncounterPhase.Success)
         {
             hpLeft = 0;
         }
@@ -44,7 +45,7 @@ internal static class JsonNPCBuilder
         jsonNPC.HealthPercentBurned = 100.0 - hpLeft;
         jsonNPC.BarrierPercent = barrierLeft;
         jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeft);
-        jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeft, log.FightData.FightEnd);
+        jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeft, log.LogData.LogEnd);
         //
         jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffMap);
         jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, buffMap);
@@ -58,7 +59,7 @@ internal static class JsonNPCBuilder
 
     private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffs = phases.Select(x => npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
         var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var buffDictionaries = phases.Select(x => npc.GetBuffsDictionary(log, x.Start, x.End)).ToList();
@@ -89,7 +90,7 @@ internal static class JsonNPCBuilder
     }
     private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var buffVolumes = phases.Select(x => npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
         var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
         var buffVolumeDictionaries = phases.Select(x => npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();

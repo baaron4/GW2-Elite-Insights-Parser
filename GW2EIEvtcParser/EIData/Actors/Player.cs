@@ -101,7 +101,7 @@ public class Player : PlayerActor
     {
         if (CommanderStates == null)
         {
-            var useGUIDs = log.LogData.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
+            var useGUIDs = log.LogMetadata.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
             var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
             var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
             foreach (var player in relevantPlayers)
@@ -116,7 +116,7 @@ public class Player : PlayerActor
                     {
                         if (marker.IsCommanderTag)
                         {
-                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.ContentGUID));
+                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.LogData.EvtcLogEnd), marker.ContentGUID));
                             if (markerEvent.EndNotSet)
                             {
                                 break;
@@ -126,7 +126,7 @@ public class Player : PlayerActor
                     else if (markerEvent.MarkerID != 0)
                     {
                         commanderMarkerStates.Clear();
-                        commanderMarkerStates.Add(new(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
+                        commanderMarkerStates.Add(new(player.FirstAware, log.LogData.EvtcLogEnd, MarkerGUIDs.BlueCommanderTag));
                         break;
                     }
                 }

@@ -32,7 +32,7 @@ partial class SingleActor
                 }
             }
             events.AddRange(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => (x.Time, x)));
-            _healthUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            _healthUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.LogData.LogStart, log.LogData.LogEnd);
         }
 
         return _healthUpdates;
@@ -52,7 +52,7 @@ partial class SingleActor
                 }
             }
             events.AddRange(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => (x.Time, x)));
-            _breakbarPercentUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            _breakbarPercentUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.LogData.LogStart, log.LogData.LogEnd);
         }
 
         return _breakbarPercentUpdates;
@@ -72,14 +72,14 @@ partial class SingleActor
                 }
             }
             events.AddRange(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => (x.Time, x)));
-            _barrierUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+            _barrierUpdates = ListFromStates(events.Select(x => x.evt.ToState(x.Time)), events.Count, log.LogData.LogStart, log.LogData.LogEnd);
         }
 
         return _barrierUpdates;
     }
 
     //TODO(Rennorb) @cleanup
-    private static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long fightStart, long fightEnd)
+    private static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long logStart, long logEnd)
     {
         if (stateCount == 0)
         {
@@ -91,7 +91,7 @@ partial class SingleActor
         double lastValue = states.First().State;
         foreach ((long start, double state) in states)
         {
-            long end = Math.Min(Math.Max(start, fightStart), fightEnd);
+            long end = Math.Min(Math.Max(start, logStart), logEnd);
             if (res.Count == 0)
             {
                 res.Add(new Segment(0, end, lastValue));
@@ -102,7 +102,7 @@ partial class SingleActor
             }
             lastValue = state;
         }
-        res.Add(new Segment(res.Last().End, fightEnd, lastValue));
+        res.Add(new Segment(res.Last().End, logEnd, lastValue));
         
         //TODO(Rennorb) @perf
         res.RemoveAll(x => x.Start >= x.End);

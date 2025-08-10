@@ -22,10 +22,10 @@ internal class PhaseChartDataDto
         }
         if (addCRData)
         {
-            TargetsHealthStatesForCR = new(log.FightData.Logic.Targets.Count);
-            TargetsBreakbarPercentStatesForCR = new(log.FightData.Logic.Targets.Count);
-            TargetsBarrierStatesForCR = new(log.FightData.Logic.Targets.Count);
-            foreach (SingleActor target in log.FightData.Logic.Targets)
+            TargetsHealthStatesForCR = new(log.LogData.Logic.Targets.Count);
+            TargetsBreakbarPercentStatesForCR = new(log.LogData.Logic.Targets.Count);
+            TargetsBarrierStatesForCR = new(log.LogData.Logic.Targets.Count);
+            foreach (SingleActor target in log.LogData.Logic.Targets)
             {
                 TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));
                 TargetsBreakbarPercentStatesForCR.Add(ChartDataDto.BuildBreakbarPercentStates(log, target, phase));

@@ -21,16 +21,16 @@ public class JsonPhase
     public string? Name;
 
     /// <summary>
-    /// The success status of the fight, only relevant for Instance logs, will be equal to <see cref="JsonLog.Success"/> otherwise
+    /// The success status of the phase, only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.Success"/> otherwise
     /// </summary>
     public bool Success;
 
     /// <summary>
-    /// If the fight is in challenge mode, only relevant for Instance logs, will be equal to <see cref="JsonLog.IsCM"/> otherwise
+    /// If the phase is in challenge mode, only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.IsCM"/> otherwise
     /// </summary>
     public bool IsCM;
     /// <summary>
-    /// If the fight is in legendary challenge mode. Only relevant for Instance logs, will be equal to <see cref="JsonLog.IsLegendaryCM"/> otherwise\n
+    /// If the phase is in legendary challenge mode. Only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.IsLegendaryCM"/> otherwise\n
     /// If this is true, <see cref="IsCM"/> will also be true
     /// </summary>
     public bool IsLegendaryCM;
@@ -68,11 +68,11 @@ public class JsonPhase
     /// <summary>
     /// Type of the phase in: \n
     /// - "SubPhase" for phases that are a part of an encounter \n
-    /// - "TimeFrame" for phases that are a part of an encounter, focusing on a specific time frame of no mechanical bearing \n
+    /// - "TimeFrame" for phases that are a part of a log, focusing on a specific time frame of no mechanical bearing \n
     /// - "Encounter" for phases representing a complete encounter \n
     /// - "Instance" for phases representing a complete instance \n
     /// </summary>
-    public string PhaseType;
+    public string? PhaseType;
 
     /// <summary>
     /// Indicates that the phase is a breakbar phase \n

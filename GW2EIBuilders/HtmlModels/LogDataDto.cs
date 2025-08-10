@@ -7,7 +7,7 @@ using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using Tracing;
@@ -57,24 +57,17 @@ internal class LogDataDto
     public HealingStatsExtension? HealingStatsExtension;
     public BarrierStatsExtension? BarrierStatsExtension;
     // meta data
-    public string EncounterDuration;
     public string EvtcRecordingDuration;
-    public bool Success;
     public bool Wvw;
     public bool HasCommander;
     public bool Targetless;
-    public string FightNameNoMode;
-    public string FightName;
-    public string FightIcon;
-    public string? FightMode;
-    public string FightStartStatus;
     public bool LightTheme;
     public bool NoMechanics;
     public bool SingleGroup;
     public bool HasBreakbarDamage;
     public List<string>? LogErrors;
-    public string EncounterStart;
-    public string EncounterEnd;
+    public string LogStart;
+    public string LogEnd;
     public string? InstanceStart;
     public string? InstanceIP;
     public string InstancePrivacy;
@@ -82,7 +75,7 @@ internal class LogDataDto
     public long EvtcBuild;
     public ulong Gw2Build;
     public long TriggerID;
-    public long EncounterID;
+    public long LogID;
     public long MapID;
     public string Parser;
     public string RecordedBy;
@@ -95,40 +88,40 @@ internal class LogDataDto
     private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
     {
         log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
-        EncounterStart = log.LogData.LogStartStd;
-        EncounterEnd = log.LogData.LogEndStd;
-        if (log.LogData.LogInstanceStartStd != null)
+        LogStart = log.LogMetadata.DateStartStd;
+        LogEnd = log.LogMetadata.DateEndStd;
+        if (log.LogMetadata.DateInstanceStartStd != null)
         {
-            InstanceStart = log.LogData.LogInstanceStartStd;
-            InstanceIP = log.LogData.LogInstanceIP;
+            InstanceStart = log.LogMetadata.DateInstanceStartStd;
+            InstanceIP = log.LogMetadata.LogInstanceIP;
         }
         var mapIDEvent = log.CombatData.GetMapIDEvents().FirstOrDefault();
         if (mapIDEvent != null)
         {
             MapID = mapIDEvent.MapID;
         }
-        ArcVersion = log.LogData.ArcVersion;
-        EvtcBuild = log.LogData.EvtcBuild;
-        Gw2Build = log.LogData.GW2Build;
-        TriggerID = log.FightData.TriggerID;
-        EncounterID = log.FightData.Logic.EncounterID;
+        ArcVersion = log.LogMetadata.ArcVersion;
+        EvtcBuild = log.LogMetadata.EvtcBuild;
+        Gw2Build = log.LogMetadata.GW2Build;
+        TriggerID = log.LogData.TriggerID;
+        LogID = log.LogData.Logic.LogID;
         Parser = "Elite Insights " + parserVersion.ToString();
-        RecordedBy = log.LogData.PoVName;
-        RecordedAccountBy = log.LogData.PoVAccount;
+        RecordedBy = log.LogMetadata.PoVName;
+        RecordedAccountBy = log.LogMetadata.PoVAccount;
         var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
         FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
         UploadLinks = uploadLinks.ToList();
-        if (log.LogData.UsedExtensions.Any())
+        if (log.LogMetadata.UsedExtensions.Any())
         {
             UsedExtensions = [];
             PlayersRunningExtensions = [];
-            foreach (ExtensionHandler extension in log.LogData.UsedExtensions)
+            foreach (ExtensionHandler extension in log.LogMetadata.UsedExtensions)
             {
                 UsedExtensions.Add(extension.Name + " - " + extension.Version);
                 var set = new HashSet<string>();
-                if (log.LogData.PoV != null)
+                if (log.LogMetadata.PoV != null)
                 {
-                    set.Add(log.FindActor(log.LogData.PoV).Character);
+                    set.Add(log.FindActor(log.LogMetadata.PoV).Character);
                     foreach (AgentItem agent in extension.RunningExtension)
                     {
                         set.Add(log.FindActor(agent).Character);
@@ -137,70 +130,28 @@ internal class LogDataDto
                 PlayersRunningExtensions.Add(set.ToList());
             }
         }
-
-        EncounterDuration = log.FightData.DurationString;
-        EvtcRecordingDuration = log.FightData.EvtcRecordingDuration;
-        Success = log.FightData.Success;
-        Wvw = log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
-        Targetless = log.FightData.Logic.Targetless;
-        FightNameNoMode = log.FightData.FightNameNoMode;
-        FightName = log.FightData.FightName;
-        FightIcon = log.FightData.Logic.Icon;
-        switch (log.FightData.FightMode)
+        EvtcRecordingDuration = log.LogData.EvtcRecordingDuration;
+        Wvw = log.LogData.Logic.ParseMode == LogLogic.ParseModeEnum.WvW;
+        Targetless = log.LogData.Logic.Targetless;
+        switch (log.LogData.InstancePrivacy)
         {
-            case FightData.EncounterMode.Unknown:
-                FightMode = "Unknown";
-                break;
-            case FightData.EncounterMode.Story:
-                FightMode = "Story Mode";
-                break;
-            case FightData.EncounterMode.Normal:
-                FightMode = log.FightData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
-                break;
-            case FightData.EncounterMode.CM:
-            case FightData.EncounterMode.CMNoName:
-                FightMode = "Challenge Mode";
-                break;
-            case FightData.EncounterMode.LegendaryCM:
-                FightMode = "Legendary Challenge Mode";
-                break;
-            default:
-                break;
-        }
-        switch (log.FightData.FightStartStatus)
-        {
-            case FightData.EncounterStartStatus.Normal:
-                break;
-            case FightData.EncounterStartStatus.NotSet:
-                break;
-            case FightData.EncounterStartStatus.Late:
-                FightStartStatus = "Late Start";
-                break;
-            case FightData.EncounterStartStatus.NoPreEvent:
-                FightStartStatus = "No Pre-Event";
-                break;
-            default:
-                break;
-        }
-        switch (log.FightData.InstancePrivacy)
-        {
-            case FightData.InstancePrivacyMode.Public:
+            case LogData.InstancePrivacyMode.Public:
                 InstancePrivacy = "Public Instance";
                 break;
-            case FightData.InstancePrivacyMode.Private:
+            case LogData.InstancePrivacyMode.Private:
                 InstancePrivacy = "Private Instance";
                 break;
-            case FightData.InstancePrivacyMode.NotApplicable:
-            case FightData.InstancePrivacyMode.Unknown:
+            case LogData.InstancePrivacyMode.NotApplicable:
+            case LogData.InstancePrivacyMode.Unknown:
                 break;
         }
         LightTheme = light;
         SingleGroup = log.PlayerList.Select(x => x.Group).Distinct().Count() == 1;
         HasBreakbarDamage = log.CombatData.HasBreakbarDamageData;
-        NoMechanics = log.FightData.Logic.HasNoFightSpecificMechanics;
-        if (log.LogData.LogErrors.Count > 0)
+        NoMechanics = log.LogData.Logic.HasNoEncounterSpecificMechanics;
+        if (log.LogMetadata.LogErrors.Count > 0)
         {
-            LogErrors = new List<string>(log.LogData.LogErrors);
+            LogErrors = new List<string>(log.LogMetadata.LogErrors);
         }
     }
 
@@ -215,7 +166,7 @@ internal class LogDataDto
             var boonToUse = new HashSet<Buff>();
             foreach (SingleActor actor in friendlies)
             {
-                foreach (PhaseData phase in log.FightData.GetPhases(log))
+                foreach (PhaseData phase in log.LogData.GetPhases(log))
                 {
                     IReadOnlyDictionary<long, BuffStatistics> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(actor))
@@ -378,7 +329,7 @@ internal class LogDataDto
             OtherConsumables.Add(otherConsumables.ID);
             usedBuffs[otherConsumables.ID] = otherConsumables;
         }
-        var instanceBuffs = log.FightData.Logic.GetInstanceBuffs(log);
+        var instanceBuffs = log.LogData.Logic.GetInstanceBuffs(log);
         InstanceBuffs = new(instanceBuffs.Count);
         foreach ((Buff instanceBuff, int stack) in instanceBuffs)
         {
@@ -406,7 +357,7 @@ internal class LogDataDto
                 }
             }
         }
-        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
+        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.EncounterSpecific, out list))
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
@@ -463,7 +414,7 @@ internal class LogDataDto
                 }
             }
         }
-        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
+        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.EncounterSpecific, out list))
         {
             foreach (IncomingDamageModifier dMod in list)
             {
@@ -533,7 +484,7 @@ internal class LogDataDto
         _t.Log("built player data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
-        var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var enemies = log.MechanicData.GetEnemyList(log, log.LogData.LogStart, log.LogData.LogEnd);
         logData.Enemies = new(enemies.Count);
         foreach (SingleActor enemy in enemies)
         {
@@ -542,8 +493,8 @@ internal class LogDataDto
         _t.Log("built enemy data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Targets");
-        logData.Targets = new(log.FightData.Logic.Targets.Count);
-        foreach (SingleActor target in log.FightData.Logic.Targets)
+        logData.Targets = new(log.LogData.Logic.Targets.Count);
+        foreach (SingleActor target in log.LogData.Logic.Targets)
         {
             var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
             logData.Targets.Add(targetDto);
@@ -568,7 +519,7 @@ internal class LogDataDto
         _t.Log("built modifier dicts");
         
         log.UpdateProgressWithCancellationCheck("HTML: building Phases");
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         logData.Phases = new(phases.Count);
         for (int i = 0; i < phases.Count; i++)
         {
@@ -597,7 +548,7 @@ internal class LogDataDto
         DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
         DamageModDto.AssembleDamageModifiers(usedIncDamageMods, logData.DamageIncModMap);
         BuffDto.AssembleBuffs(usedBuffs.Values, logData.BuffMap, log);
-        MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd), logData.MechanicMap);
+        MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, log.LogData.LogStart, log.LogData.LogEnd), logData.MechanicMap);
 
         Trace.TrackAverageStat("usedBuffs", usedBuffs.Count);
         Trace.TrackAverageStat("usedDamageMods", usedDamageMods.Count);

@@ -18,7 +18,8 @@ internal class TargetDto : ActorDto
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;
         HpLeftPercent = 100.0;
-        if (log.FightData.Success)
+        var targetEncounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.Targets.ContainsKey(target));
+        if (targetEncounterPhase != null && targetEncounterPhase.Success)
         {
             HpLeftPercent = 0;
             BarrierLeftPercent = 0;
@@ -37,6 +38,6 @@ internal class TargetDto : ActorDto
             }
         }
         HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
-        BarrierLeft = target.GetCurrentBarrier(log, BarrierLeftPercent, log.FightData.FightEnd);
+        BarrierLeft = target.GetCurrentBarrier(log, BarrierLeftPercent, log.LogData.LogEnd);
     }
 }

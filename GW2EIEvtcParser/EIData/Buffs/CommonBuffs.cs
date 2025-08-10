@@ -83,7 +83,7 @@ internal static class CommonBuffs
         new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, BuffImages.Unblockable)
             .WithBuilds(GW2Builds.February2020Balance),
         new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
-        new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
+        new Buff("Celeritas Spores", CeleritasSpores, Source.EncounterSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
         new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
         new Buff("Revive Sickness", ReviveSickness, Source.Common, BuffClassification.Other, BuffImages.ReviveSickness),
         new Buff("Portal Interact Cooldown", PortalInteractCooldown, Source.Common, BuffClassification.Other, BuffImages.CooldownNegative),
