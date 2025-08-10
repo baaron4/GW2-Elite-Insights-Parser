@@ -117,7 +117,7 @@ public class EvtcParser
         {
             using BinaryReader reader = CreateReader(evtcStream);
             operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
-            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing fight data");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Parsing log data");
             ParseLogData(reader, operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
             ParseAgentData(reader, operation);
@@ -285,7 +285,7 @@ public class EvtcParser
                         actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
-                _t.Log("FightData.Logic.Targets GetBuffs Self");
+                _t.Log("LogData.Logic.Targets GetBuffs Self");
             }
 
             return log;
@@ -306,14 +306,14 @@ public class EvtcParser
     #region Sub Parse Methods
 
     /// <summary>
-    /// Parses fight related data.
+    /// Parses high level log related data.
     /// </summary>
     /// <param name="reader">Reads binary values from the evtc.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <exception cref="EvtcFileException"></exception>
     private void ParseLogData(BinaryReader reader, ParserController operation)
     {
-        using var _t = new AutoTrace("Fight Data");
+        using var _t = new AutoTrace("Log Data");
         // 12 bytes: arc build version
         using var evtcVersion = GetCharArrayPooled(reader, 12, false);
         if (!MemoryExtensions.StartsWith(evtcVersion, "EVTC".AsSpan()) || !int.TryParse(evtcVersion[4..], out int headerVersion))
@@ -329,7 +329,7 @@ public class EvtcParser
 
         // 2 bytes: log ID
         _id = reader.ReadUInt16();
-        operation.UpdateProgressWithCancellationCheck("Parsing: Fight Instance " + _id);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Trigger ID " + _id);
         // 1 byte: skip
         _ = reader.ReadByte();
     }
