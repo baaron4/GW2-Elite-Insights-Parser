@@ -208,7 +208,12 @@
                     total.push(0, 0);
                 }
                 const groups = [];
+                const players = getActivePlayersForPhase(this.phase);
                 for (let i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
                     const hpsStat = this.hPhase.outgoingHealingStats[i].slice();
                     const hpsTargetStat = [0, 0, 0, 0];
                     for (let j = 0; j < this.activetargets.length; j++) {
@@ -230,7 +235,6 @@
                     }
                     const hps = hpsTargetStat.concat(hpsStat);
                     //
-                    const player = logData.players[i];
                     if (!groups[player.group]) {
                         groups[player.group] = [0, 0, 0, 0, 0, 0, 0, 0];
                         if (this.hasBarrier) {

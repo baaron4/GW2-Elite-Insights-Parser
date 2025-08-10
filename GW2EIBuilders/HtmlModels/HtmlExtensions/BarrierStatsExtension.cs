@@ -14,7 +14,7 @@ internal class BarrierStatsExtension
 
     public BarrierStatsExtension(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         BarrierPhases       = new(phases.Count);
         PlayerBarrierCharts = new(phases.Count);
         foreach (PhaseData phase in phases)

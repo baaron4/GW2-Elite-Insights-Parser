@@ -26,8 +26,12 @@ partial class SingleActor
     #region DISTRIBUTION
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
-        SimulateBuffsAndComputeGraphs(log);
+        if (AgentItem.IsEnglobedAgent)
+        {
+            return log.FindActor(EnglobingAgentItem).GetBuffDistribution(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
+        }
 
+        SimulateBuffsAndComputeGraphs(log);
         if (!_buffDistribution.TryGetValue(start, end, out var value))
         {
             value = ComputeBuffDistribution(_buffSimulators, start, end);
@@ -40,7 +44,6 @@ partial class SingleActor
     private static BuffDistribution ComputeBuffDistribution(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
     {
         var res = new BuffDistribution(buffSimulators.Count, 8); //TODO(Rennorb) @perf: find capacity dependencies
-
         foreach (var (buff, simulator) in buffSimulators)
         {
             foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
@@ -65,6 +68,10 @@ partial class SingleActor
     #region PRESENCE
     public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
     {
+        if (AgentItem.IsEnglobedAgent)
+        {
+            return log.FindActor(EnglobingAgentItem).GetBuffPresence(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
+        }
 
         SimulateBuffsAndComputeGraphs(log);
 
@@ -94,73 +101,138 @@ partial class SingleActor
     }
     #endregion PRESENCE
     #region GRAPHS
+
+    private static BuffGraph BuildBuffGraphInAwareTimesFromEnglobingGraph(ParsedEvtcLog log, BuffGraph buffGraph, long firstAware, long lastAware)
+    {
+        if (firstAware >= lastAware || buffGraph.Values.Count == 0)
+        {
+            return new BuffGraph(log.Buffs.BuffsByIDs[buffGraph.Buff.ID]);
+        }
+        var newGraph = new List<Segment>(buffGraph.Values.Count);
+        Segment? prevSegment = null;
+        foreach (var segment in buffGraph.Values)
+        {
+            var newSeg = new Segment(prevSegment?.End ?? segment.Start, segment.End, segment.Value);
+            if (segment.Value > 0)
+            {
+                // if not within aware
+                if (newSeg.End < firstAware || newSeg.Start > lastAware)
+                {
+                    newSeg.Value = 0;
+                }
+                else // intersecting
+                {
+                    if (newSeg.Start < firstAware)
+                    {
+                        var beforeSeg = new Segment(newSeg.Start, firstAware, 0);
+                        newGraph.Add(beforeSeg);
+                        newSeg = new Segment(firstAware, newSeg.End, newSeg.Value);
+                    }
+                    if (newSeg.End > lastAware)
+                    {
+                        var insideSeg = new Segment(newSeg.Start, lastAware, newSeg.Value);
+                        newGraph.Add(insideSeg);
+                        newSeg = new Segment(lastAware, newSeg.End, 0);
+                    }
+                }
+            }
+            newGraph.Add(newSeg);
+            prevSegment = newSeg;
+        }
+        newGraph.RemoveAll(x => x.IsEmpty());
+        return new BuffGraph(log.Buffs.BuffsByIDs[buffGraph.Buff.ID], newGraph);
+    }
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log)
     {
         SimulateBuffsAndComputeGraphs(log);
+        if (AgentItem.IsEnglobedAgent)
+        {
+            var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log);
+            foreach (var graph in graphs)
+            {
+                BuffGraph buffGraph = graph.Value;    
+                _buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph, FirstAware, LastAware);
+            }
+        }
         return _buffGraphs;
     }
 
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
-        AgentItem agent = by.AgentItem;
         SimulateBuffsAndComputeGraphs(log);
-
         _buffGraphsPerAgent ??= new(8); //TODO(Rennorb) @perf: find capacity dependencies
-        if (!_buffGraphsPerAgent.ContainsKey(agent))
+        AgentItem agent = by.AgentItem;
+        if (!_buffGraphsPerAgent.TryGetValue(agent, out var result))
         {
-            var trackedBuffs = GetTrackedBuffs(log);
-            var buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count);
-            _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
-            var boonIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
-            var condiIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
-            //
-            var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfBoons]);
-            var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfConditions]);
-            //
-            foreach (Buff buff in trackedBuffs)
+            if (AgentItem.IsEnglobedAgent || by.AgentItem.IsEnglobedAgent)
             {
-                long buffID = buff.ID;
-                if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
+                var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log, log.FindActor(by.EnglobingAgentItem));
+                var buffGraphs = new Dictionary<long, BuffGraph>(graphs.Count);
+                _buffGraphsPerAgent[agent] = buffGraphs;
+                result = buffGraphs;
+                foreach (var graph in graphs)
                 {
-                    bool updateBoonPresence = boonIDs.Contains(buffID);
-                    bool updateCondiPresence = condiIDs.Contains(buffID);
-                    var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
-                    foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
-                    {
-                        // Graph
-                        var segment = simul.ToSegment(by);
-                        if (graphSegments.Count == 0)
-                        {
-                            graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
-                        }
-                        else if (graphSegments.Last().End != segment.Start)
-                        {
-                            graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
-                        }
-                        graphSegments.Add(segment);
-                    }
-                    // Graph object creation
-                    if (graphSegments.Count > 0)
-                    {
-                        graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
-                    }
-                    else
-                    {
-                        graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
-                    }
-                    buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
-                    if (updateBoonPresence || updateCondiPresence)
-                    {
-                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].Values);
-                    }
-
+                    BuffGraph buffGraph = graph.Value;
+                    buffGraphs[graph.Key] = BuildBuffGraphInAwareTimesFromEnglobingGraph(log, buffGraph, Math.Max(FirstAware, by.FirstAware), Math.Min(LastAware, by.LastAware));
                 }
             }
-            buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
-            buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-        }
+            else
+            {
+                var trackedBuffs = GetTrackedBuffs(log);
+                var buffGraphs = new Dictionary<long, BuffGraph>(trackedBuffs.Count);
+                _buffGraphsPerAgent[agent] = buffGraphs;
+                result = buffGraphs;
 
-        return _buffGraphsPerAgent[agent];
+                var boonIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+                var condiIDs = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
+                //
+                var boonPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfBoons]);
+                var condiPresenceGraph = new BuffGraph(log.Buffs.BuffsByIDs[SkillIDs.NumberOfConditions]);
+                //
+                foreach (Buff buff in trackedBuffs)
+                {
+                    long buffID = buff.ID;
+                    if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
+                    {
+                        bool updateBoonPresence = boonIDs.Contains(buffID);
+                        bool updateCondiPresence = condiIDs.Contains(buffID);
+                        var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
+                        foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
+                        {
+                            // Graph
+                            var segment = simul.ToSegment(by);
+                            if (graphSegments.Count == 0)
+                            {
+                                graphSegments.Add(new Segment(log.LogData.LogStart, segment.Start, 0));
+                            }
+                            else if (graphSegments.Last().End != segment.Start)
+                            {
+                                graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
+                            }
+                            graphSegments.Add(segment);
+                        }
+                        // Graph object creation
+                        if (graphSegments.Count > 0)
+                        {
+                            graphSegments.Add(new Segment(graphSegments.Last().End, log.LogData.LogEnd, 0));
+                        }
+                        else
+                        {
+                            graphSegments.Add(new Segment(log.LogData.LogStart, log.LogData.LogEnd, 0));
+                        }
+                        buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
+                        if (updateBoonPresence || updateCondiPresence)
+                        {
+                            (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].Values);
+                        }
+
+                    }
+                }
+                buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
+                buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
+            }
+        }
+        return result;
     }
     #endregion GRAPHS
     #region BUFF STATUS
@@ -260,7 +332,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffID)
     {
-        return GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <exception cref="InvalidOperationException"></exception>
@@ -274,7 +346,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffID)
     {
-        return GetBuffStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, by, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <summary>
@@ -298,7 +370,7 @@ partial class SingleActor
 
     public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIDs)
     {
-        return GetBuffStatus(log, buffIDs, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffStatus(log, buffIDs, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     private static void FuseConsecutiveNonZeroAndSetTo1(List<Segment> segments)
@@ -351,7 +423,7 @@ partial class SingleActor
 
     public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, long buffID)
     {
-        return GetBuffPresenceStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffPresenceStatus(log, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
     /// <exception cref="InvalidOperationException"></exception>
@@ -367,7 +439,7 @@ partial class SingleActor
     }
     public IReadOnlyList<Segment> GetBuffPresenceStatus(ParsedEvtcLog log, SingleActor by, long buffID)
     {
-        return GetBuffPresenceStatus(log, by, buffID, log.FightData.FightStart, log.FightData.FightEnd);
+        return GetBuffPresenceStatus(log, by, buffID, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion BUFF STATUS
     #region STATISTICS
@@ -486,22 +558,31 @@ partial class SingleActor
         }
         return (rates, ratesActive);
     }
-
     #endregion STATISTICS
     #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
     {
+        if (AgentItem.IsEnglobedAgent)
+        {
+            return log.FindActor(EnglobingAgentItem).GetTrackedBuffs(log);
+        }
         if (_trackedBuffs == null)
         {
             ComputeBuffMap(log);
         }
         return _trackedBuffs;
     }
-
     [MemberNotNull(nameof(_buffMap))]
     [MemberNotNull(nameof(_trackedBuffs))]
     internal void ComputeBuffMap(ParsedEvtcLog log)
     {
+        if (AgentItem.IsEnglobedAgent)
+        {
+            log.FindActor(EnglobingAgentItem).ComputeBuffMap(log);
+            _buffMap = new BuffDictionary(64, 256, 32, 1);
+            _trackedBuffs = new HashSet<Buff>();
+            return;
+        }
         _buffMap = new BuffDictionary(64, 256, 32, 1);
         if (AgentItem.IsUnknown)
         {
@@ -539,6 +620,15 @@ partial class SingleActor
     [MemberNotNull(nameof(_buffSimulators))]
     internal void SimulateBuffsAndComputeGraphs(ParsedEvtcLog log)
     {
+        if (AgentItem.IsEnglobedAgent)
+        {
+            log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
+            _buffGraphs = new Dictionary<long, BuffGraph>();
+            _buffDistribution = new CachingCollection<BuffDistribution>(log);
+            _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
+            _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
+            return;
+        }
         if (_buffGraphs != null)
         {
 #pragma warning disable CS8774 // must have non null
@@ -582,7 +672,7 @@ partial class SingleActor
                     {
                         simulator = buff.CreateSimulator(log, buffStackItemPool, false);
                     }
-                    simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
+                    simulator.Simulate(buffEvents, log.LogData.LogStart, log.LogData.LogEnd);
                 }
                 catch (EIBuffSimulatorIDException e)
                 {
@@ -590,7 +680,7 @@ partial class SingleActor
                     log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + Character + " for " + buff.Name + " because " + e.Message);
                     buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                     simulator = buff.CreateSimulator(log, buffStackItemPool, true);
-                    simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
+                    simulator.Simulate(buffEvents, log.LogData.LogStart, log.LogData.LogEnd);
                 }
                 _buffSimulators[buffID] = simulator;
                 bool updateBoonPresence = boonIDs.Contains(buffID);
@@ -602,7 +692,7 @@ partial class SingleActor
                     var segment = simul.ToSegment();
                     if (graphSegments.Count == 0)
                     {
-                        graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
+                        graphSegments.Add(new Segment(log.LogData.LogStart, segment.Start, 0));
                     }
                     else if (graphSegments.Last().End != segment.Start)
                     {
@@ -613,11 +703,11 @@ partial class SingleActor
                 // Graph object creation
                 if (graphSegments.Count > 0)
                 {
-                    graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
+                    graphSegments.Add(new Segment(graphSegments.Last().End, log.LogData.LogEnd, 0));
                 }
                 else
                 {
-                    graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
+                    graphSegments.Add(new Segment(log.LogData.LogStart, log.LogData.LogEnd, 0));
                 }
 
                 _buffGraphs[buffID] = new BuffGraph(buff, graphSegments);
@@ -697,7 +787,7 @@ partial class SingleActor
                 {
                     time = ba.Time;
                 }
-                if (time <= log.FightData.FightEnd)
+                if (time <= log.LogData.LogEnd)
                 {
                     Consumable? existing = _consumeList.Find(x => x.Time == time && x.Buff.ID == consumable.ID);
                     if (existing != null)

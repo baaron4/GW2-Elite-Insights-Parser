@@ -281,6 +281,7 @@ class Animator {
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
         this.screenSpaceActorData = new RenderablesRoot(start, end);
+        this.agentDataPerParentID = new Map();
         this.selectedActor = null;
         // maps
         this.backgroundImages = [];
@@ -470,7 +471,13 @@ class Animator {
                 default:
                     throw "Unknown decoration type " + actor.type;
             }
-            mapToFill.add(new ActorClass(actor, actorSize));
+            const renderable = new ActorClass(actor, actorSize);
+            mapToFill.add(renderable);
+            if (renderable.parentID >= 0) {
+                let array = this.agentDataPerParentID.get(renderable.parentID) ?? [];
+                array.push(renderable);
+                this.agentDataPerParentID.set(renderable.parentID, array);
+            }
         }
         for (let i = 0; i < decorationRenderings.length; i++) {
             const decorationRendering = {};
@@ -1162,6 +1169,13 @@ class Animator {
     draw() {
         if (!this.mainCanvas) {
             return;
+        }    
+        if (this.selectedActor && this.selectedActor.parentID >= 0) {
+            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
+            if (perParentArray) {
+                this.selectedActor = perParentArray.filter(x => x.getPosition() != null)[0] || this.selectedActor;
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
+            }
         }
         //
         //this._drawPickCanvas();

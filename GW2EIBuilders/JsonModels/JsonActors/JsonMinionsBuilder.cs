@@ -20,7 +20,7 @@ internal static class JsonMinionsBuilder
         {
             Id = minions.ID
         };
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
         //
         jsonMinions.Name = minions.Character;
@@ -63,12 +63,12 @@ internal static class JsonMinionsBuilder
         jsonMinions.TotalBreakbarDamageTaken = totalBreakbarDamageTaken;
         if (!isEnemyMinion)
         {
-            var totalTargetDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
-            var totalTargetShieldDamage = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count];
-            var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count];
-            for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+            var totalTargetDamage = new IReadOnlyList<int>[log.LogData.Logic.Targets.Count];
+            var totalTargetShieldDamage = new IReadOnlyList<int>[log.LogData.Logic.Targets.Count];
+            var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.LogData.Logic.Targets.Count];
+            for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
             {
-                SingleActor tar = log.FightData.Logic.Targets[i];
+                SingleActor tar = log.LogData.Logic.Targets[i];
                 var totalTarDamage = new List<int>(phases.Count);
                 var totalTarShieldDamage = new List<int>(phases.Count);
                 var totalTarBreakbarDamage = new List<double>(phases.Count);
@@ -125,10 +125,10 @@ internal static class JsonMinionsBuilder
         jsonMinions.TotalDamageTakenDist = totalDamageTakenDist;
         if (!isEnemyMinion)
         {
-            var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
-            for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+            var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.LogData.Logic.Targets.Count][];
+            for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
             {
-                SingleActor target = log.FightData.Logic.Targets[i];
+                SingleActor target = log.LogData.Logic.Targets[i];
                 targetDamageDist[i] = new IReadOnlyList<JsonDamageDist>[phases.Count];
                 for (int j = 0; j < phases.Count; j++)
                 {

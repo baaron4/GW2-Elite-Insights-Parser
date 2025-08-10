@@ -184,7 +184,7 @@ public class StatisticsHelper
             positionsPerPlayer.Add(player.GetCombatReplayActivePolledPositions(log));
         }
 
-        var sampleCount = (int)(log.FightData.FightEnd / ParserHelper.CombatReplayPollingRate);
+        var sampleCount = (int)(log.LogData.LogEnd / ParserHelper.CombatReplayPollingRate);
 
         var centerPositions = new List<ParametricPoint3D?>(sampleCount);
         var centerVector3Positions = new List<Vector3?>(sampleCount);
@@ -250,7 +250,7 @@ public class StatisticsHelper
         }
         commanders.Sort((a, b) => a.Start.CompareTo(b.Start));
 
-        var commanderPositions = new List<ParametricPoint3D?>((int)(log.FightData.FightDuration / ParserHelper.CombatReplayPollingRate));
+        var commanderPositions = new List<ParametricPoint3D?>((int)(log.LogData.LogDuration / ParserHelper.CombatReplayPollingRate));
         long start = long.MinValue;
         foreach (var commanderSegment in commanders) // don't deconstruct, guids are large
         {

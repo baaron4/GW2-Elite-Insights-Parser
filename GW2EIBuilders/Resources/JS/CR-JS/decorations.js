@@ -507,8 +507,11 @@ class MechanicDrawable {
             return false;
         }
         if (this.positionFetcher === masterPositionFetcher || this.positionFetcher === positionToMasterPositionFetcher) {
-            if (this.master === null) {
-                let masterID = this.connectedTo.masterID;
+            const masterID = this.connectedTo.masterID;
+            const perParentArray = animator.agentDataPerParentID.get(masterID);
+            if (perParentArray) {
+                this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+            } else if (this.master === null) {
                 this.master = animator.getActorData(masterID);
             }
             if (!this.master || (!this.master.canDraw() && !this.ownerID )) {
@@ -516,16 +519,23 @@ class MechanicDrawable {
             }
         }
         if (this.rotationFetcher === masterRotationFetcher || this.rotationFetcher === masterToMasterRotationFetcher) {
-            if (this.rotationMaster === null) {
-                let masterID = this.rotationConnectedTo.masterID;
+            const masterID = this.rotationConnectedTo.masterID;
+            const perParentArray = animator.agentDataPerParentID.get(masterID);
+            if (perParentArray) {
+                const time = animator.reactiveDataStatus.time;
+                this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+            } else if (this.rotationMaster === null) {
                 this.rotationMaster = animator.getActorData(masterID);
             }
             if (!this.rotationMaster || (!this.rotationMaster.canDraw() && !this.ownerID)) {
                 return false;
             }
             if (this.rotationFetcher === masterToMasterRotationFetcher) {
-                if (this.dstRotationMaster === null) {
-                    let dstMasterID = this.rotationConnectedTo.dstMasterID;
+                const dstMasterID = this.rotationConnectedTo.dstMasterID;
+                const perParentArray = animator.agentDataPerParentID.get(dstMasterID);
+                if (perParentArray) {       
+                    this.dstRotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+                } else if (this.dstRotationMaster === null) {
                     this.dstRotationMaster = animator.getActorData(dstMasterID);
                 }
                 if (!this.dstRotationMaster || (!this.dstRotationMaster.canDraw() && !this.ownerID)) {
@@ -534,8 +544,12 @@ class MechanicDrawable {
             }
         }
         if (this.ownerID !== null) {
-            if (this.owner === null) {
-                this.owner = animator.getActorData(this.ownerID);
+            const ownerID = this.ownerID;
+            const perParentArray = animator.agentDataPerParentID.get(ownerID);
+            if (perParentArray) {       
+                this.owner = perParentArray.filter(x => x.getPosition() != null)[0];
+            } else if (this.owner === null) {
+                this.owner = animator.getActorData(ownerID);
             }
             if (!this.owner) {
                 return false;
@@ -1055,9 +1069,12 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         if (this.connectedFrom === null) {
             return false;
         }
-        if (this.targetPositionFetcher === masterPositionFetcher) {
-            if (this.endMaster === null) {
-                let masterID = this.connectedFrom.masterID;
+        if (this.targetPositionFetcher === masterPositionFetcher) {      
+            const masterID = this.connectedFrom.masterID;
+            const perParentArray = animator.agentDataPerParentID.get(masterID);
+            if (perParentArray) {       
+                this.endMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+            } else if (this.endMaster === null) {
                 this.endMaster = animator.getActorData(masterID);
             }
             if (!this.endMaster || !this.endMaster.canDraw()) {

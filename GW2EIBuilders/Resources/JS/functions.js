@@ -1046,3 +1046,59 @@ function validateStartPath(path) {
     }
     return setting.startsWith(path);
 }
+
+function getActivePlayers(start, end) {
+    let res = [];
+    for (let i = 0; i < logData.players.length; i++) {
+        const player = logData.players[i];
+        if (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end)) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+    return res;
+}
+
+function getActiveNonFakePlayers(start, end) {
+    let res = [];
+    for (let i = 0; i < logData.players.length; i++) {
+        const player = logData.players[i];
+        if (player.isFake || (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end))) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+    return res;
+}
+
+function getActivePlayersForPhase(phase) {
+    let res = [];
+    const start = phase._activityPhase.start;
+    const end = phase._activityPhase.end;
+    for (let i = 0; i < logData.players.length; i++) {
+        const player = logData.players[i];
+        if ((player.lastAware <= start || player.firstAware >= end)) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+    return res;
+}
+
+function getActiveNonFakePlayersForPhase(phase) {
+    let res = [];
+    const start = phase._activityPhase.start;
+    const end = phase._activityPhase.end;
+    for (let i = 0; i < logData.players.length; i++) {
+        const player = logData.players[i];
+        if (player.isFake || ((player.lastAware <= start || player.firstAware >= end))) {
+            res.push(null);
+        } else {
+            res.push(player);
+        }
+    }
+    return res;
+}

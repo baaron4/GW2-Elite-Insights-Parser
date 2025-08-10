@@ -4,4 +4,7 @@ internal interface IStateable
 {
     (long start, double value) ToState();
 
+
+    (long start, double value) ToState(long overridenStart);
+
 }

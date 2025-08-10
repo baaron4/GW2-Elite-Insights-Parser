@@ -12,11 +12,11 @@ public class MechanicData
     private CachingCollection<HashSet<Mechanic>>? _presentMechanics;
     private CachingCollection<List<SingleActor>>? _enemyList;
 
-    internal MechanicData(List<Mechanic> fightMechanics, bool isIntanceLog)
+    internal MechanicData(List<Mechanic> logMechanics, bool isIntanceLog)
     {
-        _mechanicLogs = new(fightMechanics.Count);
-        Tracing.Trace.TrackAverageStat("fightMechanics", fightMechanics.Count);
-        foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
+        _mechanicLogs = new(logMechanics.Count);
+        Tracing.Trace.TrackAverageStat("logMechanics", logMechanics.Count);
+        foreach (Mechanic m in logMechanics.OrderBy(x => !x.IsAchievementEligibility))
         {
             // Ignore achievement eligibility mechanics in instances for now
             if (isIntanceLog && m.IsAchievementEligibility)
@@ -30,11 +30,11 @@ public class MechanicData
 
     private void CheckConfiguration()
     {
-        var fightMechanics = _mechanicLogs;
+        var logMechanics = _mechanicLogs;
         //TODO(Rennorb) @perf: find average complexity
-        var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(fightMechanics.Count / 2);
-        var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(fightMechanics.Count);
-        foreach (Mechanic m in fightMechanics.Keys)
+        var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(logMechanics.Count / 2);
+        var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(logMechanics.Count);
+        foreach (Mechanic m in logMechanics.Keys)
         {
             {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))

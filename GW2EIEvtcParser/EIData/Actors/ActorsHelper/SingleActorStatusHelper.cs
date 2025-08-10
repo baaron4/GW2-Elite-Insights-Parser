@@ -31,10 +31,11 @@ partial class SingleActor
         }
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, StatusEvent cur, long nextTime, long minTime, int index)
+    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, long nextTime, long minTime, int index)
     {
         long cTime = cur.Time;
-        if (cur is DownEvent)
+        var curEvt = cur.evt;
+        if (curEvt is DownEvent)
         {
             if (index == 0)
             {
@@ -42,7 +43,7 @@ partial class SingleActor
             }
             AddSegment(down, cTime, nextTime);
         }
-        else if (cur is DeadEvent)
+        else if (curEvt is DeadEvent)
         {
             if (index == 0)
             {
@@ -50,7 +51,7 @@ partial class SingleActor
             }
             AddSegment(dead, cTime, nextTime);
         }
-        else if (cur is DespawnEvent)
+        else if (curEvt is DespawnEvent)
         {
             if (index == 0)
             {
@@ -77,18 +78,34 @@ partial class SingleActor
         var spawnEvents = combatData.GetSpawnEvents(AgentItem);
         var despawnEvents = combatData.GetDespawnEvents(AgentItem);
 
-        var status = new List<StatusEvent>(
+        var status = new List<(long Time, StatusEvent evt)>(
             downEvents.Count +
             aliveEvents.Count +
             deadEvents.Count +
             spawnEvents.Count +
-            despawnEvents.Count
+            despawnEvents.Count +
+            (AgentItem.IsEnglobedAgent ? 1 : 0)
         );
-        status.AddRange(downEvents);
-        status.AddRange(aliveEvents);
-        status.AddRange(deadEvents);
-        status.AddRange(spawnEvents);
-        status.AddRange(despawnEvents);
+        if (AgentItem.IsEnglobedAgent)
+        {
+            List<StatusEvent?> firstEvents = [
+                combatData.GetDownEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetAliveEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetDeadEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetSpawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                combatData.GetDespawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+            ];
+            var firstEvent = firstEvents.Where(x => x != null).OrderBy(x => x!.Time).FirstOrDefault();
+            if (firstEvent != null)
+            {
+                status.Add((FirstAware, firstEvent));
+            }
+        }
+        status.AddRange(downEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(aliveEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(deadEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(spawnEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(despawnEvents.Select(x => (x.Time, (StatusEvent)x)));
 
         AddSegment(dc, long.MinValue, FirstAware);
 
@@ -112,7 +129,7 @@ partial class SingleActor
         {
             var cur = status.Last();
             AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1);
-            if (cur is DeadEvent)
+            if (cur.evt is DeadEvent)
             {
                 AddSegment(dead, LastAware, long.MaxValue);
             }
@@ -136,7 +153,7 @@ partial class SingleActor
             _deads = [];
             GetAgentStatus(_deads, _downs, _dcs, _actives, log.CombatData);
         }
-        return (_deads, _downs!, _dcs!, _actives!);
+        return (_deads, _downs, _dcs, _actives);
     }
     public bool IsDowned(ParsedEvtcLog log, long time)
     {
@@ -182,9 +199,18 @@ partial class SingleActor
     #region BREAKBAR
     internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData)
     {
-        var status = combatData.GetBreakbarStateEvents(AgentItem);
+        var status = new List<(long Time, BreakbarStateEvent evt)>();
+        if (AgentItem.IsEnglobedAgent)
+        {
+            var firstEvent = combatData.GetBreakbarStateEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware);
+            if (firstEvent != null)
+            {
+                status.Add((FirstAware, firstEvent));
+            }
+        }
+        status.AddRange(combatData.GetBreakbarStateEvents(AgentItem).Select(x => (x.Time, x)));
         // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
-        if (AgentItem.Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
+        if (AgentItem.Type == AgentType.NonSquadPlayer && !status.Any(x => !x.evt.IsCustom))
         {
             return;
         }
@@ -202,7 +228,7 @@ partial class SingleActor
                 AddSegment(nones, FirstAware, cur.Time);
             }
             var next = status[i + 1];
-            switch (cur.State)
+            switch (cur.evt.State)
             {
                 case BreakbarState.Active:
                     AddSegment(actives, cur.Time, next.Time);
@@ -224,7 +250,7 @@ partial class SingleActor
             var cur = status.Last();
             if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
             {
-                switch (cur.State)
+                switch (cur.evt.State)
                 {
                     case BreakbarState.Active:
                         AddSegment(actives, cur.Time, LastAware);
@@ -257,7 +283,7 @@ partial class SingleActor
             _breakbarNones = [];
             GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData);
         }
-        return (_breakbarNones, _breakbarActives!, _breakbarImmunes!, _breakbarRecoverings!);
+        return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);
     }
 
     public BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
@@ -288,6 +314,10 @@ partial class SingleActor
     #endregion BREAKBAR
     public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
     {
+        if (AgentItem.IsEnglobedAgent)
+        {
+            return log.FindActor(EnglobingAgentItem).GetTimeSpentInCombat(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
+        }
         long timeInCombat = 0;
         foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(AgentItem))
         {
@@ -329,7 +359,7 @@ partial class SingleActor
         (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc, _) = GetStatus(log);
 
         // get remaining fight segment
-        var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
+        var remainingLogTime = new Segment(curTime, log.LogData.LogEnd);
 
         // return false if actor currently above 90 or already downed
         if (GetCurrentHealthPercent(log, curTime) > 90 || IsDowned(log, curTime))
@@ -338,7 +368,7 @@ partial class SingleActor
         }
         
         // return false if fight ends before any down events
-        Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingFightTime));
+        Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingLogTime));
         if (nextDown == null)
         {
             return false;
@@ -379,7 +409,7 @@ partial class SingleActor
         }
         var casting = GetCastEvents(log);
         int swapped = WeaponSetIDs.NoSet;
-        long swappedTime = log.FightData.FightStart;
+        long swappedTime = log.LogData.LogStart;
         List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
         {
             return (x.SwappedTo, x.SwappedFrom);

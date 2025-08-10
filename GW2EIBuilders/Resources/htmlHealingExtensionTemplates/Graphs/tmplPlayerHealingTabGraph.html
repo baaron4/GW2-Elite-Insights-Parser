@@ -134,6 +134,9 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             graphname: function () {
                 let name = getHealingGraphName(this.graphhealingdata.healingmode, this.graphhealingdata.graphmode);
                 switch (this.graphhealingdata.hpsmode) {
@@ -213,8 +216,9 @@
                 res.push(hpsData.playerHPS.target);
                 res.push(hpsData.playerHPS.cleave);
                 res.push(hpsData.playerHPS.taken);
+                const players = getActivePlayersForPhase(this.phase);
                 for (let i = 0; i < this.graph.players.length; i++) {
-                    if (logData.players[i].isFake) {
+                    if (!players[i]) {
                         continue;
                     }
                     addPointsToGraph(res, this.graph.players[i].healthStates, hpsData.maxHPS);

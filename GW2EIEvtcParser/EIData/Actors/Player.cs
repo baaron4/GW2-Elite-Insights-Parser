@@ -31,6 +31,11 @@ public class Player : PlayerActor
         Account = name[1].TrimStart(':');
         _squadless = noSquad;
         Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+        // Make sure to keep the name of the player unique
+        if (AgentItem.IsEnglobedAgent)
+        {
+            Character = $"{Character} ${EnglobingAgentItem.EnglobedAgentItems.IndexOf(AgentItem) + 1}";
+        }
     }
 
 
@@ -96,9 +101,9 @@ public class Player : PlayerActor
     {
         if (CommanderStates == null)
         {
-            var useGUIDs = log.LogData.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
+            var useGUIDs = log.LogMetadata.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
             var statesByPlayer = new Dictionary<AgentItem, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
-            var relevantPlayers = log.PlayerList.Select(x => x.AgentItem);
+            var relevantPlayers = log.PlayerList.DistinctBy(x => x.EnglobingAgentItem).Select(x => x.EnglobingAgentItem);
             foreach (var player in relevantPlayers)
             {
                 IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player);
@@ -111,7 +116,7 @@ public class Player : PlayerActor
                     {
                         if (marker.IsCommanderTag)
                         {
-                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.ContentGUID));
+                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.LogData.EvtcLogEnd), marker.ContentGUID));
                             if (markerEvent.EndNotSet)
                             {
                                 break;
@@ -121,7 +126,7 @@ public class Player : PlayerActor
                     else if (markerEvent.MarkerID != 0)
                     {
                         commanderMarkerStates.Clear();
-                        commanderMarkerStates.Add(new(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
+                        commanderMarkerStates.Add(new(player.FirstAware, log.LogData.EvtcLogEnd, MarkerGUIDs.BlueCommanderTag));
                         break;
                     }
                 }
@@ -153,7 +158,7 @@ public class Player : PlayerActor
             var (lastPlayer, lastSegment) = states[0];
             foreach (var (player, seg) in states.Skip(1))
             {
-                if (lastPlayer == player && lastSegment.Value == seg.Value)
+                if (lastPlayer.Is(player) && lastSegment.Value == seg.Value)
                 {
                     lastSegment.End = seg.End;
                 }
@@ -173,6 +178,13 @@ public class Player : PlayerActor
             { 
                 CommanderStates.Add(lastSegment); 
             }
+            // Clamp to aware times
+            CommanderStates.ForEach(x =>
+            {
+                x.Start = Math.Max(x.Start, FirstAware);
+                x.End = Math.Min(x.End, LastAware);
+            });
+            CommanderStates.RemoveAll(x => x.IsEmpty());
         }
         return CommanderStates;
     }

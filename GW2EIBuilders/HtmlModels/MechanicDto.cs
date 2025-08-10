@@ -26,7 +26,7 @@ internal class MechanicDto
             if (mech.InternalCooldown > 0)
             {
                 long timeFilter = 0;
-                IReadOnlyList<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech, actor, log.FightData.FightStart, log.FightData.FightEnd);
+                IReadOnlyList<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech, actor, log.LogData.LogStart, log.LogData.LogEnd);
                 foreach (MechanicEvent ml in mls)
                 {
                     bool inInterval = phase.InInterval(ml.Time);
@@ -76,18 +76,18 @@ internal class MechanicDto
         var list = new List<List<int[]>>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
-            list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
+            list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.LogData.LogStart, log.LogData.LogEnd), log, actor, phase));
         }
         return list;
     }
 
     public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
     {
-        var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var enemies = log.MechanicData.GetEnemyList(log, log.LogData.LogStart, log.LogData.LogEnd);
         var list = new List<List<int[]>>(enemies.Count);
         foreach (SingleActor enemy in enemies)
         {
-            list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
+            list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.LogData.LogStart, log.LogData.LogEnd), log, enemy, phase));
         }
         return list;
     }

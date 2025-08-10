@@ -8,8 +8,8 @@ public abstract class AbstractCachingCollection<T>
 
     protected AbstractCachingCollection(ParsedEvtcLog log)
     {
-        _start = log.FightData.LogStart;
-        _end = log.FightData.LogEnd;
+        _start = log.LogData.EvtcLogStart;
+        _end = log.LogData.EvtcLogEnd;
     }
 
     protected (long, long) SanitizeTimes(long start, long end)

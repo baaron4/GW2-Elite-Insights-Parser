@@ -44,7 +44,7 @@ internal class ChartDataDto
 
     public ChartDataDto(ParsedEvtcLog log)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var phaseChartData = new List<PhaseChartDataDto>(phases.Count);
         for (int i = 0; i < phases.Count; i++)
         {

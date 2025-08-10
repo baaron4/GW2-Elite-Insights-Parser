@@ -15,7 +15,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
 
     public static EXTBarrierStatsPlayerDetailsDto BuildPlayerBarrierData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
@@ -45,7 +45,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
 
     private static EXTBarrierStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
             BarrierDistributions = new (phases.Count),

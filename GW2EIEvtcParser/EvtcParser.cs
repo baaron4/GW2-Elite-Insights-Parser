@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -19,7 +19,7 @@ public class EvtcParser
 {
 
     //Main data storage after binary parse
-    private FightData _fightData;
+    private LogData _logData;
     private AgentData _agentData;
     private readonly List<AgentItem> _allAgentsList;
     private SkillData _skillData;
@@ -118,7 +118,7 @@ public class EvtcParser
             using BinaryReader reader = CreateReader(evtcStream);
             operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing fight data");
-            ParseFightData(reader, operation);
+            ParseLogData(reader, operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing agent data");
             ParseAgentData(reader, operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Parsing skill data");
@@ -130,24 +130,26 @@ public class EvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
             PreProcessEvtcData(operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
-            var log = new ParsedEvtcLog(_evtcVersion, _fightData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
+            var log = new ParsedEvtcLog(_evtcVersion, _logData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
 
             if (multiThreadAccelerationForBuffs)
             {
                 using var _t = new AutoTrace("Buffs?");
 
-                IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+                IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
                 operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
 
-                var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
+                var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.LogData.Logic.Targets.Count);
                 friendliesAndTargets.AddRange(log.Friendlies);
-                friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+                friendliesAndTargets.AddRange(log.LogData.Logic.Targets);
                 Trace.TrackAverageStat("friendliesAndTargets", friendliesAndTargets.Count);
 
-                var friendliesAndTargetsAndMobs = new List<SingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
-                friendliesAndTargetsAndMobs.AddRange(log.FightData.Logic.TrashMobs);
+                var friendliesAndTargetsAndMobs = new List<SingleActor>(log.LogData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
+                friendliesAndTargetsAndMobs.AddRange(log.LogData.Logic.TrashMobs);
                 friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
                 Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
+
+                var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.AgentItem.IsEnglobedAgent);
 
                 _t.Log("Paralell phases");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
@@ -162,29 +164,86 @@ public class EvtcParser
                 _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 _t.Log("friendliesAndTargets GetStatus");
-                /*if (log.CombatData.HasMovementData)
+                if (hasEnglobingAgents)
                 {
-                    // init all positions
-                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
-                }*/
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
-                _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                    var friendliesAndTargetsEnglobed = friendliesAndTargets
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsEnglobing = friendliesAndTargetsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsNonEnglobed = friendliesAndTargets
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    var friendliesAndTargetsAndMobsEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => x.AgentItem.IsEnglobedAgent);
+                    var friendliesAndTargetsAndMobsEnglobing = friendliesAndTargetsAndMobsEnglobed
+                        .DistinctBy(x => x.EnglobingAgentItem)
+                        .Select(x => log.FindActor(x.EnglobingAgentItem));
+                    var friendliesAndTargetsAndMobsNonEnglobed = friendliesAndTargetsAndMobs
+                        .Where(x => !x.AgentItem.IsEnglobedAgent);
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobing, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    Parallel.ForEach(friendliesAndTargetsAndMobsNonEnglobed, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
-                        actor.GetBuffDistribution(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffDistribution");
-                Parallel.ForEach(friendliesAndTargets, actor =>
-                {
-                    foreach (PhaseData phase in phases)
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
                     {
-                        actor.GetBuffPresence(log, phase.Start, phase.End);
-                    }
-                });
-                _t.Log("friendliesAndTargets GetBuffPresence");
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+
+                    Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+
+                    Parallel.ForEach(friendliesAndTargetsAndMobsEnglobed, actor => actor.GetBuffGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
+                }
+                else
+                {
+                    Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.SimulateBuffsAndComputeGraphs(log));
+                    _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
+
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffDistribution(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffDistribution");
+
+                    Parallel.ForEach(friendliesAndTargets, actor =>
+                    {
+                        foreach (PhaseData phase in phases)
+                        {
+                            actor.GetBuffPresence(log, phase.Start, phase.End);
+                        }
+                    });
+                    _t.Log("friendliesAndTargets GetBuffPresence");
+                }
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.Friendlies, actor =>
@@ -219,7 +278,7 @@ public class EvtcParser
                     }
                 });
                 _t.Log("PlayerList GetBuffs Squad");
-                Parallel.ForEach(log.FightData.Logic.Targets, actor =>
+                Parallel.ForEach(log.LogData.Logic.Targets, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
@@ -233,14 +292,14 @@ public class EvtcParser
         }
         catch (Exception ex)
         {
-            #if DEBUG
+#if DEBUG
             Console.Error.WriteLine(ex);
-            #endif
+#endif
 
             parsingFailureReason = new ParsingFailureReason(ex);
             return null;
         }
-}
+    }
 
     #endregion Main Parse Method
 
@@ -252,7 +311,7 @@ public class EvtcParser
     /// <param name="reader">Reads binary values from the evtc.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <exception cref="EvtcFileException"></exception>
-    private void ParseFightData(BinaryReader reader, ParserController operation)
+    private void ParseLogData(BinaryReader reader, ParserController operation)
     {
         using var _t = new AutoTrace("Fight Data");
         // 12 bytes: arc build version
@@ -268,7 +327,7 @@ public class EvtcParser
         _revision = reader.ReadByte();
         operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Combat Item Revision " + _revision);
 
-        // 2 bytes: fight instance ID
+        // 2 bytes: log ID
         _id = reader.ReadUInt16();
         operation.UpdateProgressWithCancellationCheck("Parsing: Fight Instance " + _id);
         // 1 byte: skip
@@ -595,14 +654,14 @@ public class EvtcParser
                 discardedCbtEvents++;
                 continue;
             }
-            
+
             if (combatItem.IsStateChange == StateChange.ArcBuild)
             {
                 EvtcVersionEvent oldEvent = _evtcVersion;
                 try
                 {
                     _evtcVersion = new EvtcVersionEvent(combatItem);
-                } 
+                }
                 catch
                 {
                     _evtcVersion = oldEvent;
@@ -610,7 +669,7 @@ public class EvtcParser
 
                 continue;
             }
-            
+
             if (combatItem.HasTime())
             {
                 if (_logStartOffset == long.MinValue)
@@ -760,7 +819,7 @@ public class EvtcParser
     private void CompletePlayers(ParserController operation)
     {
         //Create squad players
-        var noSquads = _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.Instanced5 || _fightData.Logic.ParseMode == FightLogic.ParseModeEnum.sPvP;
+        var noSquads = _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.Instanced5 || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.sPvP;
         IReadOnlyList<AgentItem> playerAgentList = _agentData.GetAgentByType(AgentItem.AgentType.Player);
         foreach (AgentItem playerAgent in playerAgentList)
         {
@@ -791,6 +850,7 @@ public class EvtcParser
             var allPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
             allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
+            playerAgents.UnionWith(playerAgents.Select(x => x.EnglobingAgentItem));
             int playerOffset = _playerList.Count + 1;
             foreach (AgentItem playerAgent in allPlayerAgents.OrderBy(x => x.InstID))
             {
@@ -951,7 +1011,29 @@ public class EvtcParser
             }
         }
 
-        _fightData = new FightData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
+        _logData = new LogData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
+
+        if (_logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld)
+        {
+            var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
+            {
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
+            }
+            operation.UpdateProgressWithCancellationCheck("Parsing: Splitting non squad players per spec and subgroup");
+            foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer))
+            {
+                if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                }
+            }
+        }
+
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating players");
         CompletePlayers(operation);
@@ -962,7 +1044,7 @@ public class EvtcParser
     /// </summary>
     private void OffsetEvtcData()
     {
-        long offset = _fightData.Logic.GetFightOffset(_evtcVersion, _fightData, _agentData, _combatItems);
+        long offset = _logData.Logic.GetLogOffset(_evtcVersion, _logData, _agentData, _combatItems);
         if (offset == 0)
         {
             return;
@@ -977,7 +1059,7 @@ public class EvtcParser
         }
         _agentData.ApplyOffset(offset);
 
-        _fightData.ApplyOffset(offset);
+        _logData.ApplyOffset(offset);
     }
 
     /// <summary>
@@ -990,14 +1072,14 @@ public class EvtcParser
     {
         using var _t = new AutoTrace("Prepare Data for output");
         operation.UpdateProgressWithCancellationCheck("Parsing: Identifying critical gadgets");
-        _fightData.Logic.HandleCriticalGadgets(_evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
+        _logData.Logic.HandleCriticalGadgets(_evtcVersion, _logData, _agentData, _combatItems, _enabledExtensions);
         operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
         OffsetEvtcData();
-        operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");
+        operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_logData.LogStartOffset) + " ms added");
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Encounter specific processing");
-        _fightData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _fightData, _agentData, _combatItems, _enabledExtensions);
-        if (!_fightData.Logic.Targets.Any())
+        _logData.Logic.EIEvtcParse(_gw2Build, _evtcVersion, _logData, _agentData, _combatItems, _enabledExtensions);
+        if (!_logData.Logic.Targets.Any())
         {
             throw new MissingKeyActorsException("No Targets found");
         }

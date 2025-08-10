@@ -348,10 +348,11 @@
                     data: new Array(dataLength).fill(0),
                     count: 0
                 };
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = new Array(dataLength).fill(0);
-                    var player = logData.players[i];
-                    if (player.isFake) {
+                    var player = players[i];
+                    if (!player) {
                         continue;
                     }
                     if (!groups[player.group]) {
@@ -401,11 +402,12 @@
                     name: "Total",
                     data: new Array(dataLength).fill(0),
                     count: 0
-                };
+                };        
+                const players = getActiveNonFakePlayersForPhase(this.phase);
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
                     var data = new Array(dataLength).fill(0);
-                    var player = logData.players[i];
-                    if (player.isFake) {
+                    var player = players[i];
+                    if (!player) {
                         continue;
                     }
                     if (!groups[player.group]) {

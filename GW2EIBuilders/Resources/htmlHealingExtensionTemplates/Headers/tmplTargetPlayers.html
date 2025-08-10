@@ -49,7 +49,7 @@
 
 <script>
     Vue.component("player-target-component", {
-        props: ["players"],
+        props: ["players", "phaseindex"],
         template: `${template}`,
         methods: {
             getIcon: function (path) {
@@ -82,10 +82,14 @@
             }
         },
         computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
             groups: function () {
                 const aux = [];
-                for (let i = 0; i < logData.players.length; i++) {
-                    const playerData = logData.players[i];
+                const players = getActiveNonFakePlayersForPhase(this.phase);
+                for (let i = 0; i < players.length; i++) {
+                    const playerData = players[i];
                     if (playerData.isFake) {
                         continue;
                     }

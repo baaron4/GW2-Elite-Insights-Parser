@@ -16,7 +16,7 @@ internal class CombatReplayDto
 
     public CombatReplayDto(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
+        CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
         (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(usedSkills, usedBuffs);
         Maps = map.Maps;
         (int width, int height) = map.GetPixelMapSize();

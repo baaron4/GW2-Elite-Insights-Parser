@@ -118,7 +118,7 @@ public static class BuffImages
     public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
     public const string NoDownedState = "https://wiki.guildwars2.com/images/4/48/No_Downed_State.png";
     #endregion Commons
-    #region Fight Specific
+    #region Encounter Specific
     // Generic
     public const string Emboldened = "https://wiki.guildwars2.com/images/6/69/Emboldened.png";
     public const string Debilitated = "https://wiki.guildwars2.com/images/8/80/Debilitated.png";
@@ -429,7 +429,7 @@ public static class BuffImages
     public const string SeraphMorale09 = "https://wiki.guildwars2.com/images/9/9e/Seraph_Morale_09.png";
     public const string SeraphMorale10 = "https://wiki.guildwars2.com/images/7/7b/Seraph_Morale_10.png";
     public const string LowlandExpertise = "https://wiki.guildwars2.com/images/7/7c/Lowland_Expertise.png";
-    #endregion Fight Specific
+    #endregion Encounter Specific
     #region Mounts
     public const string SiegeAmmoAvailable = "https://wiki.guildwars2.com/images/e/e3/Siege_Ammo_Available.png";
     public const string SteelAndFury = "https://wiki.guildwars2.com/images/c/cb/Steel_and_Fury.png";

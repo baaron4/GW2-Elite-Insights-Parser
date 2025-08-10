@@ -11,6 +11,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
     public long End { get; protected set; }
     public readonly string Img;
     public readonly int ID;
+    public readonly int ParentID;
     public readonly IReadOnlyList<float> Positions;
     public readonly IReadOnlyList<float> Angles;
     public IReadOnlyList<long>? Dead { get; private set; }
@@ -29,17 +30,17 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
             {
                 return Types.Player;
             }
-            if (log.FightData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem))
+            if (log.LogData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem))
             {
                 return Types.FriendlyPlayer;
             }
             return Types.TargetPlayer;
         }
-        if (log.FightData.Logic.TargetAgents.Contains(actor.AgentItem))
+        if (log.LogData.Logic.TargetAgents.Contains(actor.AgentItem))
         {
             return Types.Target;
         }
-        if (log.FightData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
+        if (log.LogData.Logic.NonSquadFriendlyAgents.Contains(actor.AgentItem) || actor.AgentItem.GetFinalMaster().Type == ParsedData.AgentItem.AgentType.Player)
         {
             return Types.Friendly;
         }
@@ -52,6 +53,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         End = replay.TimeOffsets.end;
         Img = actor.GetIcon(true);
         ID = actor.UniqueID;
+        ParentID = actor.AgentItem.IsEnglobedAgent ? actor.EnglobingAgentItem.UniqueID : -1;
         Type = GetActorType(actor, log);
         HitboxWidth = actor.AgentItem.HitboxWidth;
 

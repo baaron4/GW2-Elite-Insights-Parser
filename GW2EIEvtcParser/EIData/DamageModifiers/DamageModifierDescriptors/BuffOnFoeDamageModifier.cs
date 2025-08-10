@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser.EncounterLogic;
+﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -50,10 +50,10 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource!.GetStack(bgmsSource, time)) > 0.0;
     }
 
-    internal override bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
+    internal override bool Keep(LogLogic.LogLogic.ParseModeEnum parseMode, LogLogic.LogLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
         // Remove target  based damage mods from PvP contexts
-        if (parseMode == FightLogic.ParseModeEnum.WvW || parseMode == FightLogic.ParseModeEnum.sPvP)
+        if (parseMode == LogLogic.LogLogic.ParseModeEnum.WvW || parseMode == LogLogic.LogLogic.ParseModeEnum.sPvP)
         {
             return false;
         }

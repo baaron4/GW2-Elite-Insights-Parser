@@ -34,7 +34,7 @@ public class BuffsContainer
             UtilityBuffs.Writs,
             UtilityBuffs.OtherConsumables,
             UtilityBuffs.UtilityProcs,
-            EncounterBuffs.FightSpecific,
+            EncounterBuffs.EncounterSpecific,
             EncounterBuffs.FractalInstabilities,
             WvWBuffs.Commons,
             //

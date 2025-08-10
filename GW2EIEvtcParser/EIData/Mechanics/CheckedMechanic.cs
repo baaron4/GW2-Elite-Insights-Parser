@@ -77,6 +77,10 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             {
                 timeToUse = _timeClamper(time, log);
             }
+            if (actor.AgentItem.IsEnglobingAgent)
+            {
+                actor = log.FindActor(actor.AgentItem.FindEnglobedAgentItem(time));
+            }
             mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
             foreach (var subMechanics in _subMechanics)
             {

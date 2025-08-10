@@ -265,7 +265,7 @@ internal static class NecromancerHelper
             {
                 // The effect doesn't clear up correctly making the effect last 12000ms, only the ring of the AoE disappears.
                 // Duration in PvP is 6000, otherwise 8000.
-                long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.sPvP ? 6000 : 8000;
+                long duration = log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP ? 6000 : 8000;
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectCorrosivePoisonCloud);
             }
@@ -406,7 +406,7 @@ internal static class NecromancerHelper
             var skill = new SkillModeDescriptor(player, Spec.Necromancer, SpectralRing, SkillModeCategory.CC);
             foreach (EffectEvent effect in spectralRings)
             {
-                long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW ? 5000 : 8000;
+                long duration = log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW ? 5000 : 8000;
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, duration);
                 AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 180, 200, EffectImages.EffectSpectralRing);
             }

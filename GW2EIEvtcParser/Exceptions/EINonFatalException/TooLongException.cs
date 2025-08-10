@@ -2,7 +2,7 @@
 
 public class TooLongException : EINonFatalException
 {
-    internal TooLongException() : base("Fight is longer than 24h")
+    internal TooLongException() : base("Log is longer than 24h")
     {
     }
 

@@ -201,24 +201,47 @@ public class JsonLog
     /// </summary>
     public int TriggerID;
     /// <summary>
-    /// The elite insight id of the log, indicates which encounter the log corresponds to. \n
-    /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/
+    /// Indicates that the log represents a full instance log. \n
+    /// In such logs, it is possible for the same player to be present multiple times, that means they either changed specs or subgroups during the instance. \n
+    /// Make sure to only include data for a given player only on phases that intersect their aware times. \n
+    /// Individual encounter states (Success, CM, etc) can be checked on phases with <see cref="JsonPhase.PhaseType"/> set to "Encounter".
+    /// </summary>
+    public bool IsInstanceLog;
+    /// <summary>
+    /// The elite insight id of the log. \n
+    /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/ \n
+    /// Deprecated, use <see cref="EILogID"/> instead
     /// </summary>
     public long EIEncounterID;
+    /// <summary>
+    /// The elite insight id of the log. \n
+    /// see https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/
+    /// </summary>
+    public long EILogID;
     /// <summary>
     /// The GW2API map id.
     /// </summary>
     public long MapID;
 
     /// <summary>
-    /// The name of the fight
+    /// The name of the fight \n
+    /// Deprecated, use <see cref="Name"/> instead
     /// </summary>
     public string? FightName;
+    /// <summary>
+    /// The name of the log
+    /// </summary>
+    public string? Name;
 
     /// <summary>
     /// The icon of the fight
+    /// Deprecated, use <see cref="Icon"/> instead
     /// </summary>
     public string? FightIcon;
+    /// <summary>
+    /// The icon of the log
+    /// </summary>
+    public string? Icon;
 
     /// <summary>
     /// The used arcdps version
@@ -241,7 +264,7 @@ public class JsonLog
     public string? Language;
 
     /// <summary>
-    /// Scale of the fractal, only applicable for fractal encounters. \n
+    /// Scale of the fractal, only applicable for fractal logs. \n
     /// Valued at 0 if missing.
     /// </summary>
     public int FractalScale;
@@ -252,54 +275,54 @@ public class JsonLog
     public byte LanguageID;
 
     /// <summary>
-    /// The player who recorded the fight
+    /// The player who recorded the log
     /// </summary>
     public string? RecordedBy;
 
     /// <summary>
-    /// The account name of the player who recorded the fight
+    /// The account name of the player who recorded the log
     /// </summary>
     public string? RecordedAccountBy;
 
     /// <summary>
     /// DEPRECATED: use TimeStartStd instead \n
-    /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
+    /// The time at which the log started in "yyyy-mm-dd hh:mm:ss zz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
     public string? TimeStart;
 
     /// <summary>
     /// DEPRECATED: use TimeEndStd instead \n
-    /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
+    /// The time at which the log ended in "yyyy-mm-dd hh:mm:ss zz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
     public string? TimeEnd;
 
 
     /// <summary>
-    /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format \n
+    /// The time at which the log started in "yyyy-mm-dd hh:mm:ss zzz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
     public string? TimeStartStd;
 
     /// <summary>
-    /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format \n
+    /// The time at which the log ended in "yyyy-mm-dd hh:mm:ss zzz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
     public string? TimeEndStd;
 
     /// <summary>
-    /// The duration of the fight in "xh xm xs xms" format
+    /// The duration of the log in "xh xm xs xms" format
     /// </summary>
     public string? Duration;
 
     /// <summary>
-    /// The duration of the fight in ms
+    /// The duration of the log in ms
     /// </summary>
     public long DurationMS;
 
     /// <summary>
-    /// Offset between fight start and log start
+    /// Offset between log start and evtc log start
     /// </summary>
     public long LogStartOffset;
     /// <summary>
@@ -319,29 +342,29 @@ public class JsonLog
     /// Type of instance privacy \n
     /// Possible values are "Unknown", "Not Applicable", "Public Instance" and "Private Instance"
     /// </summary>
-    public string InstancePrivacy;
+    public string? InstancePrivacy;
 
     /// <summary>
-    /// The success status of the fight
+    /// The success status of the log
     /// </summary>
     public bool Success;
 
     /// <summary>
-    /// If the fight is in challenge mode
+    /// If the log is in challenge mode
     /// </summary>
     public bool IsCM;
     /// <summary>
-    /// If the fight is in legendary challenge mode. \n
+    /// If the log is in legendary challenge mode. \n
     /// If this is true, <see cref="IsCM"/> will also be true
     /// </summary>
     public bool IsLegendaryCM;
     /// <summary>
-    /// True if EI detected that the encounter started later than expected. \n
-    /// This value being false does not mean the encounter could not have started later than expected.
+    /// True if EI detected that the log started later than expected. \n
+    /// This value being false does not mean the log could not have started later than expected.
     /// </summary>
     public bool IsLateStart;
     /// <summary>
-    /// True if an encounter that is supposed to have a pre-event does not have it.
+    /// True if an log that is supposed to have a pre-event does not have it.
     /// </summary>
     public bool MissingPreEvent;
 

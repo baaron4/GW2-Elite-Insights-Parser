@@ -51,7 +51,7 @@ internal static class JsonBuffsUptimeBuilder
         if (settings.RawFormatTimelineArrays)
         {
             jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]).ToList();
-            IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyDictionary<long, BuffByActorStatistics> buffDicts = actor.GetBuffsDictionary(log, log.LogData.LogStart, log.LogData.LogEnd);
             if (buffDicts.TryGetValue(buffID, out var buffDict))
             {
                 var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<long>>>(buffDict.GeneratedBy.Count);

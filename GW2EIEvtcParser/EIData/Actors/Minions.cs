@@ -53,9 +53,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (DamageEventByDst.TryGetValue(target.AgentItem, out var list))
+            if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -87,9 +89,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (DamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -123,9 +127,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -157,9 +163,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -195,9 +203,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -229,9 +239,11 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                long targetStart = target.FirstAware;
+                long targetEnd = target.LastAware;
+                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -305,7 +317,7 @@ public class Minions : Actor
     internal IReadOnlyList<IReadOnlyList<Segment>> GetLifeSpanSegments(ParsedEvtcLog log)
     {
         var minionsSegments = new List<List<Segment>>();
-        long fightEnd = log.FightData.FightEnd;
+        long logEnd = log.LogData.LogEnd;
         foreach (NPC minion in _minionList)
         {
             var minionSegments = new List<Segment>();
@@ -323,10 +335,10 @@ public class Minions : Actor
                 end = Math.Min(despawn.Time, end);
             }
             //
-            end = Math.Min(end, fightEnd);
-            minionSegments.Add(new Segment(log.FightData.FightStart, start, 0));
+            end = Math.Min(end, logEnd);
+            minionSegments.Add(new Segment(log.LogData.LogStart, start, 0));
             minionSegments.Add(new Segment(start, end, 1));
-            minionSegments.Add(new Segment(end, fightEnd, 0));
+            minionSegments.Add(new Segment(end, logEnd, 0));
             minionSegments.RemoveAll(x => x.Start > x.End);
             minionsSegments.Add(minionSegments);
         }

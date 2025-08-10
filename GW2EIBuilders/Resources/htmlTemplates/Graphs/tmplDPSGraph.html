@@ -53,10 +53,13 @@
             // dps
             this.data = [];
             var data = this.data;
-            var player;
-            for (var i = 0; i < logData.players.length; i++) {
+            const players = getActivePlayersForPhase(this.phase);
+            for (var i = 0; i < players.length; i++) {
                 var pText = [];
-                player = logData.players[i];
+                const player = players[i];
+                if (!player) {
+                    continue;
+                }
                 for (var j = 0; j < this.phase.times.length; j++) {
                     pText.push(player.name);
                 }
@@ -178,9 +181,14 @@
                     taken: [],
                 };
                 var playerDPS = [];
-                var damageArrayToUse = this.damageGraphName;
-                for (var i = 0; i < logData.players.length; i++) {
-                    var data = computePlayerDPS(logData.players[i], this.graph.players[i][damageArrayToUse], lim, phasebreaks,
+                var damageArrayToUse = this.damageGraphName;              
+                const players = getActivePlayersForPhase(this.phase);
+                for (var i = 0; i < players.length; i++) {
+                    const player = players[i];
+                    if (!player) {
+                        continue;
+                    }
+                    var data = computePlayerDPS(player, this.graph.players[i][damageArrayToUse], lim, phasebreaks,
                         this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
                     playerDPS.push(data.dps);
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);

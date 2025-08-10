@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser.EncounterLogic;
+﻿using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -50,7 +50,7 @@ internal static class ScourgeHelper
             .WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
     ];
 
-    public static List<BuffEvent> AddShadeBuffsFromEffects(IReadOnlyList<EffectEvent> shadeEffects, FightData fightData, SkillData skillData, GW2BuildEvent gw2Build, EvtcVersionEvent evtcVersion)
+    public static List<BuffEvent> AddShadeBuffsFromEffects(IReadOnlyList<EffectEvent> shadeEffects, LogData logData, SkillData skillData, GW2BuildEvent gw2Build, EvtcVersionEvent evtcVersion)
     {
         var res = new List<BuffEvent>();
         uint buffInstance = 0;
@@ -63,7 +63,7 @@ internal static class ScourgeHelper
             }
             SkillItem skill = shade.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? skillData.Get(SandSavantSandShadeBuff) : skillData.Get(SandShadeBuff);
             int expectedDuration;
-            if (fightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || fightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP)
+            if (logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || logData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
             {
                 expectedDuration = gw2Build.Build >= GW2Builds.October2019Balance ? 15000 : 10000;
             }
@@ -126,13 +126,13 @@ internal static class ScourgeHelper
             {
                 uint radius = (uint)(effect.GUIDEvent.ContentGUID == EffectGUIDs.ScourgeShadeSandSavant ? 300 : 180);
                 long duration;
-                if (log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW || log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.sPvP)
+                if (log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.WvW || log.LogData.Logic.SkillMode == LogLogic.LogLogic.SkillModeEnum.sPvP)
                 {
-                    duration = log.LogData.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
+                    duration = log.LogMetadata.GW2Build >= GW2Builds.October2019Balance ? 15000 : 10000;
                 }
                 else
                 {
-                    duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
+                    duration = log.LogMetadata.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
                 }
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectShade);

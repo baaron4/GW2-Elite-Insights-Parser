@@ -76,7 +76,7 @@ public partial class CombatData
     public readonly bool HasSpeciesAndSkillGUIDs = false;
     public readonly bool HasMissileData = false;
 
-    private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
+    private void EIBuffParse(IReadOnlyList<AgentItem> players, SkillData skillData, LogData logData, EvtcVersionEvent evtcVersion)
     {
         //TODO(Rennorb) @perf @mem: find average complexity
         var toAdd = new List<BuffEvent>(players.Count * 10);
@@ -92,14 +92,14 @@ public partial class CombatData
             }
             if (p.Spec == Spec.Scourge && TryGetEffectEventsBySrcWithGUIDs(p, [EffectGUIDs.ScourgeShadeSandSavant, EffectGUIDs.ScourgeShade], out var shades))
             {
-                toAdd.AddRange(ScourgeHelper.AddShadeBuffsFromEffects(shades, fightData, skillData, GetGW2BuildEvent(), evtcVersion));
+                toAdd.AddRange(ScourgeHelper.AddShadeBuffsFromEffects(shades, logData, skillData, GetGW2BuildEvent(), evtcVersion));
             }
             if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
             {
                 ElementalistHelper.RemoveDualBuffs(GetBuffDataByDst(p), _buffData, skillData);
             }
         }
-        toAdd.AddRange(fightData.Logic.SpecialBuffEventProcess(this, skillData));
+        toAdd.AddRange(logData.Logic.SpecialBuffEventProcess(this, skillData));
 
         var buffIDsToSort = new HashSet<long>(toAdd.Count);
         var buffDstAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
@@ -141,9 +141,9 @@ public partial class CombatData
         }
     }
 
-    private void EIDamageParse(SkillData skillData, AgentData agentData, FightData fightData)
+    private void EIDamageParse(SkillData skillData, AgentData agentData, LogData logData)
     {
-        var toAdd = fightData.Logic.SpecialDamageEventProcess(this, agentData, skillData);
+        var toAdd = logData.Logic.SpecialDamageEventProcess(this, agentData, skillData);
 
         var idsToSort = new HashSet<long>(toAdd.Count);
         var dstToSort = new HashSet<AgentItem>(toAdd.Count);
@@ -212,9 +212,9 @@ public partial class CombatData
         return res;
     }
 
-    private void EICastParse(IReadOnlyList<AgentItem> players, SkillData skillData, FightData fightData, AgentData agentData)
+    private void EICastParse(IReadOnlyList<AgentItem> players, SkillData skillData, LogData logData, AgentData agentData)
     {
-        List<CastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
+        List<CastEvent> toAdd = logData.Logic.SpecialCastEventProcess(this, skillData);
         ulong gw2Build = GetGW2BuildEvent().Build;
         foreach (AgentItem p in players)
         {
@@ -259,7 +259,7 @@ public partial class CombatData
         }
         // Generic instant cast finders
         var instantCastsFinder = new HashSet<InstantCastFinder>(ProfHelper.GetProfessionInstantCastFinders(players));
-        foreach(var x in fightData.Logic.GetInstantCastFinders()) { instantCastsFinder.Add(x); }
+        foreach(var x in logData.Logic.GetInstantCastFinders()) { instantCastsFinder.Add(x); }
         toAdd.AddRange(ComputeInstantCastEventsFromFinders(agentData, skillData, instantCastsFinder));
 
 
@@ -326,7 +326,7 @@ public partial class CombatData
         }
     }
 
-    private void EIMetaAndStatusParse(FightData fightData, EvtcVersionEvent evtcVersion)
+    private void EIMetaAndStatusParse(LogData logData, EvtcVersionEvent evtcVersion)
     {
         foreach (var (agent, events) in _damageTakenData)
         {
@@ -379,10 +379,10 @@ public partial class CombatData
                 _statusEvents.DownEvents[agent] = agentDowns;
             }
         }
-        _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, evtcVersion));
+        _metaDataEvents.ErrorEvents.AddRange(logData.Logic.GetCustomWarningMessages(logData, evtcVersion));
     }
 
-    private void EIExtraEventProcess(SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, EvtcVersionEvent evtcVersion)
+    private void EIExtraEventProcess(SkillData skillData, AgentData agentData, LogData logData, ParserController operation, EvtcVersionEvent evtcVersion)
     {
         using var _t = new AutoTrace("Process Extra Events");
 
@@ -410,13 +410,13 @@ public partial class CombatData
         ProfHelper.ProcessRacialGadgets(players, this);
         // Custom events
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
-        EIBuffParse(players, skillData, fightData, evtcVersion);
+        EIBuffParse(players, skillData, logData, evtcVersion);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
-        EIDamageParse(skillData, agentData, fightData);
+        EIDamageParse(skillData, agentData, logData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
-        EICastParse(players, skillData, fightData, agentData);
+        EICastParse(players, skillData, logData, agentData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Status Events");
-        EIMetaAndStatusParse(fightData, evtcVersion);
+        EIMetaAndStatusParse(logData, evtcVersion);
     }
 
     private void OffsetBuffExtensionEvents(EvtcVersionEvent evtcVersion)
@@ -479,7 +479,7 @@ public partial class CombatData
         }
     }
 
-    internal CombatData(IReadOnlyList<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion, EvtcParserSettings settings)
+    internal CombatData(IReadOnlyList<CombatItem> allCombatItems, LogData logData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion, EvtcParserSettings settings)
     {
         using var _t = new AutoTrace("CombatData");
         _metaDataEvents.EvtcVersionEvent = evtcVersion;
@@ -503,7 +503,7 @@ public partial class CombatData
         {
             if (combatItem.IsEssentialMetadata)
             {
-                CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
             }
         }
         foreach (CombatItem combatItem in combatEvents)
@@ -526,7 +526,7 @@ public partial class CombatData
                 else
                 {
                     insertToSkillIDs = combatItem.IsStateChange == StateChange.BuffInitial;
-                    CombatEventFactory.AddStateChangeEvent(fightData.LogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
+                    CombatEventFactory.AddStateChangeEvent(logData.EvtcLogOffset, combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion, settings);
                 }
 
             }
@@ -564,7 +564,7 @@ public partial class CombatData
         }
 
         HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
-        UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
+        UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || logData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
         HasMovementData = _statusEvents.MovementEvents.Count > 1;
         HasBreakbarDamageData = brkDamageData.Count != 0 || brkRecoveredData.Count != 0;
         HasEffectData = _statusEvents.EffectEvents.Count != 0;
@@ -577,7 +577,7 @@ public partial class CombatData
         skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Cast Events");
-        List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, fightData);
+        List<AnimatedCastEvent> animatedCastData = CombatEventFactory.CreateCastEvents(castCombatEvents, agentData, skillData, logData);
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO(Rennorb) @perf
@@ -613,10 +613,10 @@ public partial class CombatData
             handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
         }
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting player specs and groups based on Enter Combat events");
-        fightData.Logic.UpdatePlayersSpecAndGroup(players, this, fightData);
+        logData.Logic.UpdatePlayersSpecAndGroup(players, this, logData);
         
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
-        EIExtraEventProcess(skillData, agentData, fightData, operation, evtcVersion);
+        EIExtraEventProcess(skillData, agentData, logData, operation, evtcVersion);
 
 #if DEBUG
         foreach (var effectGUID in _metaDataEvents.EffectGUIDEventsByGUID.Keys)

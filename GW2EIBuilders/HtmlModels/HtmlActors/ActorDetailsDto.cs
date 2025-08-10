@@ -22,7 +22,7 @@ internal class ActorDetailsDto
 
     public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var minions = actor.GetMinions(log);
         var dto = new ActorDetailsDto
         {
@@ -58,7 +58,7 @@ internal class ActorDetailsDto
 
     private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var dto = new ActorDetailsDto
         {
             DmgDistributions        = new(phases.Count),
@@ -87,7 +87,7 @@ internal class ActorDetailsDto
 
     public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var minions = target.GetMinions(log);
         var dto = new ActorDetailsDto
         {

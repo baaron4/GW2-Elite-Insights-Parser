@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
+internal class BuffSimulationItemOverstack : SimulationItemWasted
 {
 
     public BuffSimulationItemOverstack(AgentItem src, long overstack, long time) : base(src, overstack, time)
@@ -34,6 +34,15 @@ internal class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
         {
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
             Add(distrib, value, Src);
+            foreach (var subSrc in Src.EnglobedAgentItems)
+            {
+                long subValue = GetValue(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                if (subValue > 0)
+                {
+                    Add(distrib, subValue, subSrc);
+                }
+            }
+
         }
         return value;
     }

@@ -32,7 +32,16 @@ internal class BuffSimulationItemBaseWithExtension : BuffSimulationItemBase
         if (cDur > 0)
         {
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-            Add(distribution, cDur, _src);
+            Add(distribution, cDur, Src);
+            foreach (var subSrc in Src.EnglobedAgentItems)
+            {
+                long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+                if (subcDur > 0)
+                {
+                    Add(distribution, subcDur, subSrc);
+                }
+
+            }
         }
         return cDur;
     }

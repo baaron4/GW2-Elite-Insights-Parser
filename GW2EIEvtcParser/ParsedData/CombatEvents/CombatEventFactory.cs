@@ -499,7 +499,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, FightData fightData)
+    public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, LogData logData)
     {
         using var _t = new AutoTrace("CreateCastEvents");
         //TODO(Rennorb) @perf
@@ -518,7 +518,7 @@ internal static class CombatEventFactory
                         // missing end
                         if (startItem != null)
                         {
-                            resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
+                            resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, logData.EvtcLogEnd));
                         }
                         startItem = c;
                     }
@@ -534,7 +534,7 @@ internal static class CombatEventFactory
                         {
                             var toCheck = new AnimatedCastEvent(agentData, skillData, c);
                             // we are only interested in animations started before log starts
-                            if (toCheck.Time < fightData.LogStart)
+                            if (toCheck.Time < logData.EvtcLogStart)
                             {
                                 resBySrcAgentBySkillID.Add(toCheck);
                             }
@@ -545,7 +545,7 @@ internal static class CombatEventFactory
                 // missing end
                 if (startItem != null)
                 {
-                    resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, fightData.LogEnd));
+                    resBySrcAgentBySkillID.Add(new AnimatedCastEvent(startItem, agentData, skillData, logData.EvtcLogEnd));
                 }
                 resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                 resBySrcAgent.AddRange(resBySrcAgentBySkillID);

@@ -2,6 +2,7 @@
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels;
@@ -107,6 +108,14 @@ internal class PhaseDto
     public long Duration;
     public double Start;
     public double End;
+    public int Type;
+    public string? NameNoMode;
+    public string? Icon;
+    public string? Mode;
+    public string? EncounterDuration;
+    public string? StartStatus;
+    public bool? Success;
+
     public List<int> Targets;
     public List<int> TargetPriorities;
     public bool BreakbarPhase;
@@ -149,6 +158,51 @@ internal class PhaseDto
         Start         = phase.Start / 1000.0;
         End           = phase.End / 1000.0;
         BreakbarPhase = phase.BreakbarPhase;
+        Type = (int)phase.Type;
+        if (phase is PhaseDataWithMetaData phaseWithMetaData)
+        {
+            NameNoMode = phaseWithMetaData.NameNoMode;
+            Icon = phaseWithMetaData.Icon;
+            Success = phaseWithMetaData.Success;
+            EncounterDuration = phaseWithMetaData.DurationString;
+            switch (phaseWithMetaData.Mode)
+            {
+                case LogData.LogMode.Unknown:
+                    Mode = "Unknown";
+                    break;
+                case LogData.LogMode.Story:
+                    Mode = "Story Mode";
+                    break;
+                case LogData.LogMode.Normal:
+                    // TODO support emboldened properly
+                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
+                    break;
+                case LogData.LogMode.CM:
+                case LogData.LogMode.CMNoName:
+                    Mode = "Challenge Mode";
+                    break;
+                case LogData.LogMode.LegendaryCM:
+                    Mode = "Legendary Challenge Mode";
+                    break;
+                default:
+                    break;
+            }
+            switch (phaseWithMetaData.StartStatus)
+            {
+                case LogData.LogStartStatus.Normal:
+                    break;
+                case LogData.LogStartStatus.NotSet:
+                    break;
+                case LogData.LogStartStatus.Late:
+                    StartStatus = "Late Start";
+                    break;
+                case LogData.LogStartStatus.NoPreEvent:
+                    StartStatus = "No Pre-Event";
+                    break;
+                default:
+                    break;
+            }
+        }
 
         var allTargets = phase.Targets;
         Targets          = new(allTargets.Count);
@@ -156,7 +210,7 @@ internal class PhaseDto
         foreach (var pair in allTargets)
         {
             var target = pair.Key;
-            Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
+            Targets.Add(log.LogData.Logic.Targets.IndexOf(target));
             TargetPriorities.Add((int)pair.Value.Priority);
         }
 

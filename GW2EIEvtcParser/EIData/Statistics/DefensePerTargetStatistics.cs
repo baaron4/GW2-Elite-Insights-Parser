@@ -63,7 +63,7 @@ public class DefensePerTargetStatistics
                     {
                         continue;
                     }
-                    currentBoonStripTime = Math.Max(currentBoonStripTime + brae.RemovedDuration, log.FightData.FightDuration);
+                    currentBoonStripTime = Math.Max(currentBoonStripTime + brae.RemovedDuration, log.LogData.LogDuration);
                     strip++;
                 }
             }

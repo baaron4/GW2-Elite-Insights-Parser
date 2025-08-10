@@ -56,7 +56,7 @@ public static class ParserHelper
         Warrior, Berserker, Spellbreaker, Bladesworn, Paragon,
         //
         PetSpecific,
-        FightSpecific,
+        EncounterSpecific,
         FractalInstability,
         Unknown
     };

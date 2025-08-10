@@ -18,7 +18,7 @@ internal class MechanicChartDataDto
         Symbol = mech.PlotlySetting.Symbol;
         Size = mech.PlotlySetting.Size;
         Visible = !mech.ShowOnTable;
-        Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd), mech.IsEnemyMechanic);
+        Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech, log.LogData.LogStart, log.LogData.LogEnd), mech.IsEnemyMechanic);
     }
 
     private static List<List<object?[]>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
@@ -68,7 +68,7 @@ internal class MechanicChartDataDto
 
     private static List<List<List<object?[]>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
     {
-        var phases = log.FightData.GetPhases(log);
+        var phases = log.LogData.GetPhases(log);
         var list = new List<List<List<object?[]>>>(phases.Count);
         foreach (PhaseData phase in phases)
         {
@@ -79,7 +79,7 @@ internal class MechanicChartDataDto
 
     public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
     {
-        var mechs = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var mechs = log.MechanicData.GetPresentMechanics(log, log.LogData.LogStart, log.LogData.LogEnd);
         var mechanicsChart = new List<MechanicChartDataDto>(mechs.Count);
         foreach (Mechanic mech in mechs)
         {

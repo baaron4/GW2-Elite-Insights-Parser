@@ -24,7 +24,7 @@ internal static class JsonPlayerBuilder
     {
         var jsonPlayer = new JsonPlayer();
         JsonActorBuilder.FillJsonActor(jsonPlayer, player, log, settings, skillMap, buffMap);
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
         jsonPlayer.Account = player.Account;
         jsonPlayer.Weapons = player.GetWeaponSets(log).ToArray();
@@ -45,13 +45,13 @@ internal static class JsonPlayerBuilder
         }
         //
         jsonPlayer.Support = phases.Select(phase => JsonStatisticsBuilder.BuildJsonAllySupport(player.GetToAllySupportStats(log, phase.Start, phase.End))).ToArray();
-        var targetDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
-        var targetPowerDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
-        var targetConditionDamage1S = new IReadOnlyList<int>[log.FightData.Logic.Targets.Count][];
-        var targetBreakbarDamage1S = new IReadOnlyList<double>?[log.FightData.Logic.Targets.Count][];
-        var dpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
-        var statsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
-        var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+        var targetDamage1S = new IReadOnlyList<int>[log.LogData.Logic.Targets.Count][];
+        var targetPowerDamage1S = new IReadOnlyList<int>[log.LogData.Logic.Targets.Count][];
+        var targetConditionDamage1S = new IReadOnlyList<int>[log.LogData.Logic.Targets.Count][];
+        var targetBreakbarDamage1S = new IReadOnlyList<double>?[log.LogData.Logic.Targets.Count][];
+        var dpsTargets = new JsonStatistics.JsonDPS[log.LogData.Logic.Targets.Count][];
+        var statsTargets = new JsonStatistics.JsonGameplayStats[log.LogData.Logic.Targets.Count][];
+        var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.LogData.Logic.Targets.Count][];
 
         if (settings.RawFormatTimelineArrays)
         {
@@ -72,9 +72,9 @@ internal static class JsonPlayerBuilder
             jsonPlayer.ConditionDamageTaken1S = conditionDamageTaken1S;
             jsonPlayer.BreakbarDamageTaken1S = breakbarDamageTaken1S;
         }
-        for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
+        for (int j = 0; j < log.LogData.Logic.Targets.Count; j++)
         {
-            SingleActor target = log.FightData.Logic.Targets[j];
+            SingleActor target = log.LogData.Logic.Targets[j];
             var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
             var graph1SPowerDamageList = new IReadOnlyList<int>[phases.Count];
             var graph1SConditionDamageList = new IReadOnlyList<int>[phases.Count];
@@ -161,7 +161,7 @@ internal static class JsonPlayerBuilder
         jsonPlayer.OffGroupBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End)).ToList(), log, buffMap);
         jsonPlayer.SquadBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, buffMap);
         //
-        IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
+        IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, log.LogData.LogStart, log.LogData.LogEnd);
         if (consumables.Count > 0)
         {
             var consumablesJSON = new List<JsonConsumable>(consumables.Count);
@@ -200,7 +200,7 @@ internal static class JsonPlayerBuilder
     //TODO(Rennorb) @perf
     private static List<JsonPlayerBuffsGeneration>? GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, BuffStatistics>> buffs, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var uptimes = new List<JsonPlayerBuffsGeneration>(buffs[0].Count);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
@@ -247,7 +247,7 @@ internal static class JsonPlayerBuilder
     {
         var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         foreach (KeyValuePair<long, BuffStatistics> pair in buffs[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];
@@ -294,7 +294,7 @@ internal static class JsonPlayerBuilder
     //TODO(Rennorb) @perf
     private static List<JsonPlayerBuffOutgoingVolumes>? GetPlayerBuffOutgoingVolumes(List<IReadOnlyDictionary<long, BuffVolumeStatistics>> buffVolumes, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         var uptimes = new List<JsonPlayerBuffOutgoingVolumes>(buffVolumes[0].Count);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
@@ -341,7 +341,7 @@ internal static class JsonPlayerBuilder
     {
         var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         foreach (KeyValuePair<long, BuffVolumeStatistics> pair in buffVolumes[0])
         {
             Buff buff = log.Buffs.BuffsByIDs[pair.Key];

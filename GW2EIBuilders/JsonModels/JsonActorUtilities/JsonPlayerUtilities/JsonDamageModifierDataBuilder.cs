@@ -136,10 +136,10 @@ internal static class JsonDamageModifierDataBuilder
 
     public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
     {
-        var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
-        for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+        var res = new List<JsonDamageModifierData>[log.LogData.Logic.Targets.Count];
+        for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
         {
-            SingleActor tar = log.FightData.Logic.Targets[i];
+            SingleActor tar = log.LogData.Logic.Targets[i];
             res[i] = GetOutgoingDamageModifiers(player, phases.Select(x => player.GetOutgoingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModMap, personalDamageMods);
         }
         return res;
@@ -147,10 +147,10 @@ internal static class JsonDamageModifierDataBuilder
 
     public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
     {
-        var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
-        for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
+        var res = new List<JsonDamageModifierData>[log.LogData.Logic.Targets.Count];
+        for (int i = 0; i < log.LogData.Logic.Targets.Count; i++)
         {
-            SingleActor tar = log.FightData.Logic.Targets[i];
+            SingleActor tar = log.LogData.Logic.Targets[i];
             res[i] = GetIncomingDamageModifiers(player, phases.Select(x => player.GetIncomingDamageModifierStats(tar, log, x.Start, x.End)).ToList(), log, damageModMap, personalDamageMods);
         }
         return res;
