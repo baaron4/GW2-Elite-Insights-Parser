@@ -130,7 +130,7 @@ function mainLoad() {
             times.push(phase.end - phase.start);
         }
         phase.times = times;
-        simpleLogData.phases.push({
+        reactiveLogdata.phases.push({
             active: firstActive === phase,
             focus: -1
         });
@@ -152,7 +152,7 @@ function mainLoad() {
     for (var i = 0; i < logData.targets.length; i++) {
         var target = logData.targets[i];
         var activeArray = [];
-        simpleLogData.targets.push(activeArray);
+        reactiveLogdata.targets.push(activeArray);
         for (var j = 0; j < logData.phases.length; j++) {
             var phase = logData.phases[j];
             var phaseTarget = phase.targets.indexOf(i);
@@ -165,12 +165,14 @@ function mainLoad() {
         target.id = i;
         target.dpsGraphCache = new Map();
     }
+    let activeFound = false;
     for (var i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
-        simpleLogData.players.push({
-            active: !!playerData.isPoV,
+        reactiveLogdata.players.push({
+            active: !activeFound && !!playerData.isPoV,
             targetActive: !playerData.isFake
         });
+        activeFound = !!playerData.isPoV;
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
     }

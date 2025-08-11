@@ -33,7 +33,7 @@ const GraphType = {
     CenteredDPS: 2
 };
 
-const simpleLogData = {
+const reactiveLogdata = {
     phases: [],
     players: [],
     targets: []
