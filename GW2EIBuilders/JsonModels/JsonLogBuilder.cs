@@ -38,9 +38,46 @@ internal static class JsonLogBuilder
             Name = buff.Name,
             Icon = buff.Link,
             Stacking = buff.Type == Buff.BuffType.Intensity,
-            ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
-            HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
+            ConversionBasedHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased,
+            HybridHealing = log.CombatData.HasEXTHealing && log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid
+
         };
+        switch (buff.Classification)
+        {
+            case Buff.BuffClassification.Condition:
+                buffDesc.Classification = "Condition";
+                break;
+            case Buff.BuffClassification.Boon:
+                buffDesc.Classification = "Boon";
+                break;
+            case Buff.BuffClassification.Offensive:
+                buffDesc.Classification = "Offensive";
+                break;
+            case Buff.BuffClassification.Defensive:
+                buffDesc.Classification = "Defensive";
+                break;
+            case Buff.BuffClassification.Support:
+                buffDesc.Classification = "Support";
+                break;
+            case Buff.BuffClassification.Debuff:
+                buffDesc.Classification = "Debuff";
+                break;
+            case Buff.BuffClassification.OtherConsumable:
+                buffDesc.Classification = "Other Consumable";
+                break;
+            case Buff.BuffClassification.Nourishment:
+                buffDesc.Classification = "Nourishment";
+                break;
+            case Buff.BuffClassification.Enhancement:
+                buffDesc.Classification = "Enhancement";
+                break;
+            case Buff.BuffClassification.Gear:
+                buffDesc.Classification = "Gear";
+                break;
+            case Buff.BuffClassification.Other:
+                buffDesc.Classification = "Other";
+                break;
+        }
         BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
         if (buffInfoEvent != null)
         {

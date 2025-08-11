@@ -96,6 +96,24 @@ public class JsonLog
         public string? Name;
 
         /// <summary>
+        /// EI Classification of the buff in: \n
+        /// - Condition \n
+        /// - Boon \n
+        /// - Offensive \n
+        /// - Defensive \n
+        /// - Support \n
+        /// - Debuff \n
+        /// - Gear \n
+        /// - Other \n
+        /// - Enhancement \n
+        /// - Nourishment \n
+        /// - Other Consumable \n
+        /// This is purely how EI classifies a buff for its distribution on its HTML tables. \n
+        /// May be unstable.
+        /// </summary>
+        public string? Classification;
+
+        /// <summary>
         /// Icon of the buff
         /// </summary>
         public string? Icon;
