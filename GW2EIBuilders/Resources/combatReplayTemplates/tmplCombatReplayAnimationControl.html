@@ -1,11 +1,11 @@
 <template>
-    <div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 750px;">
         <div v-if="showNormalPhases" class="mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center" style="max-width: 700px;">
-                <li class="nav-item" v-for="(phase, id) in reactivePhases"
-                    v-show="!getPhaseData(id).breakbarPhase"
-                    :data-original-title="getPhaseData(id).durationS + ' seconds <br /> Start: ' + getPhaseData(id).start + '<br /> End: ' + getPhaseData(id).end">
-                    <a class="nav-link" @click="updatePhaseTime(id)">{{getPhaseData(id).name}}</a>
+                <li class="nav-item" v-for="(phase, id) in phases"
+                    v-show="!phase.breakbarPhase"
+                    :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
+                    <a class="nav-link" @click="updatePhaseTime(phase)">{{phase.name}}</a>
                 </li>
             </ul>
         </div>
@@ -35,8 +35,8 @@
                         :class="{'btn-dark': !light, 'btn-light': light}">Reset Viewpoint</div>
                 </div>
                 <div class="d-flex justify-content-center slidercontainer mt-1">
-                    <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
-                        :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
+                    <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
+                        :max="maxTime" :value="minTime" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
                     <p style="position: absolute; color: black; pointer-events:none;"
                         :style="{'width': phaseNameWidth}">{{sliderDelimiter.name}}</p>
@@ -66,13 +66,15 @@
                 selectedSpeed: 1,
                 backwards: false,
                 sliderDelimiter: sliderDelimiter,
-                reactivePhases: simpleLogData.phases,
             };
         },
         mounted() {
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
         },
         computed: {
+            phases: function() {
+                return logData.phases;
+            },
             phaseNameWidth: function() {
                 return (this.sliderDelimiter.name.length * 7.7) + 'px';
             },
@@ -90,6 +92,9 @@
             },
             maxTime: function () {
                 return animator.times[animator.times.length - 1];
+            },
+            minTime: function () {
+                return animator.times[0];
             },
             canvasSize: function () {
                 return {
@@ -142,8 +147,7 @@
             updateTime: function (value) {
                 animator.updateTime(value);
             },
-            updatePhaseTime: function (id) {
-                var phase = this.getPhaseData(id);
+            updatePhaseTime: function (phase) {
                 var min = phase.start * 1000;
                 var max = phase.end * 1000;
                 var name = phase.name;
