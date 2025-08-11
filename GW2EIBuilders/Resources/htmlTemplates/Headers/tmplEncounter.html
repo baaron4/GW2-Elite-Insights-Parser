@@ -140,7 +140,7 @@
                 }
 
                 var encounter = {
-                    name: mainPhase.nameNoMode,
+                    name: mainPhase == logData.phases[0] ? logData.logName : mainPhase.nameNoMode,
                     success: mainPhase.success,
                     icon: mainPhase.icon,
                     duration: mainPhase.encounterDuration,

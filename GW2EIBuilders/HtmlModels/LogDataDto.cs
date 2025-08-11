@@ -58,6 +58,7 @@ internal class LogDataDto
     public BarrierStatsExtension? BarrierStatsExtension;
     // meta data
     public string EvtcRecordingDuration;
+    public string LogName;
     public bool Wvw;
     public bool HasCommander;
     public bool Targetless;
@@ -100,6 +101,7 @@ internal class LogDataDto
         {
             MapID = mapIDEvent.MapID;
         }
+        LogName = log.LogData.LogNameNoMode;
         ArcVersion = log.LogMetadata.ArcVersion;
         EvtcBuild = log.LogMetadata.EvtcBuild;
         Gw2Build = log.LogMetadata.GW2Build;
