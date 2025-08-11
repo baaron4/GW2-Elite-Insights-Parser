@@ -108,7 +108,7 @@ public class JsonLog
         /// - Enhancement \n
         /// - Nourishment \n
         /// - Other Consumable \n
-        /// This is purely how EI classifies a buff for its distribution on its HTML tables. \n
+        /// This is purely how EI classifies a buff on its HTML tables. \n
         /// May be unstable.
         /// </summary>
         public string? Classification;
