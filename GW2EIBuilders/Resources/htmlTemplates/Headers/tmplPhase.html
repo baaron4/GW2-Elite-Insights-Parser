@@ -3,7 +3,7 @@
         <ul v-if="showNormalPhases" class="nav nav-pills d-flex flex-row justify-content-center">
             <li class="nav-item" v-for="phase in phasesToUse" v-show="!getPhaseData(phase.index).breakbarPhase"
                 :data-original-title="getPhaseTooltip(phase.index)">
-                <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseData(phase.index).name}}</a>
+                <a class="nav-link" @click="select(phase)" :class="{active: phase.active}">{{getPhaseName(phase.index)}}</a>
             </li>
         </ul>
         <div v-if="hasBreakbarPhases" class="d-flex flex-row justify-content-center align-items-center">
@@ -93,6 +93,10 @@
             },
             getPhaseData: function (id) {
                 return logData.phases[id];
+            },
+            getPhaseName: function (id) {
+                const phase = this.getPhaseData(id);
+                return phase.nameNoMode ?? phase.name;
             },
             getTargetData: function (id) {
                 return logData.targets[id];
