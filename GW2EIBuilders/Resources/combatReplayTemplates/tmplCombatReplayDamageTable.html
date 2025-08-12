@@ -177,7 +177,7 @@
                 return this.phase.targets;
             },
             graph: function () {
-                return graphData.phases[0].players;
+                return graphData.phases[this.phase.id].players;
             },
             graphModeEnum: function () {
                 return GraphType;
