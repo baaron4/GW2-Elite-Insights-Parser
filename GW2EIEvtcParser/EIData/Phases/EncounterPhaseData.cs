@@ -6,15 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class EncounterPhaseData : PhaseDataWithMetaData
 {
-    internal EncounterPhaseData(long start, long end, bool success, string icon, LogMode mode) : base(start, end, success, icon, mode, PhaseType.Encounter)
-    {
-    }
-
     internal EncounterPhaseData(long start, long end, string name, bool success, string icon, LogMode mode) : base(start, end, name, success, icon, mode, PhaseType.Encounter)
-    {
-    }
-
-    internal EncounterPhaseData(long start, long end, ParsedEvtcLog log) : base(start, end, log, PhaseType.Encounter)
     {
     }
 
