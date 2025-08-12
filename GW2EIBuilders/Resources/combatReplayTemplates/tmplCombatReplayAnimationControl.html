@@ -69,6 +69,23 @@
                 sliderDelimiter: sliderDelimiter,
             };
         },
+        watch: {
+            encounters: {
+                handler: function () {
+                    // make sure DOM is attached              
+                    if (animator.mainCanvas) {
+                        const encounter = this.encounters[i];
+                        if (encounter.active) {
+                            const phase = logData.phases[encounter.index];
+                            this.updatePhaseTime(phase);
+                            animator.updateRange(phase);
+                            animator.selectActor(null);
+                        }
+                    }
+                },
+                deep: true
+            },
+        },
         mounted() {
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
         },
@@ -79,12 +96,6 @@
                     if (encounter.active) {
                         const phase = logData.phases[encounter.index];
                         let phases = [];
-                        // make sure DOM is attached
-                        if (animator.mainCanvas) {
-                            this.updatePhaseTime(phase);
-                            animator.updateRange(phase);
-                            animator.selectActor(null);
-                        }
                         if (phase.type === PhaseTypes.INSTANCE) {
                             if (IsMultiEncounterLog) {                          
                                 return [];
@@ -145,7 +156,7 @@
                     startPercent = 0;
                     endPercent = 100;
                 } else {
-                    var max = animator.times[animator.times.length - 1];
+                    var max = this.maxTime;
                     startPercent = this.sliderDelimiter.min / max * 100;
                     endPercent = this.sliderDelimiter.max / max * 100;
                 }

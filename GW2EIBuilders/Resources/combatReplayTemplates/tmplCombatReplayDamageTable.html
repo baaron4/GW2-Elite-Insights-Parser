@@ -97,6 +97,14 @@
                 mouseDownStart: 0,
             };
         },
+        watch: {
+            encounters: {
+                handler: function () {               
+                    this.sortBy("All", -1);
+                },
+                deep: true
+            },
+        },
         methods: {
             tableRound: function (value) {
                 return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
@@ -159,7 +167,6 @@
             phase: function() {
                 for (let i = 0; i < this.encounters.length; i++) {
                     if (this.encounters[i].active) {
-                        this.sortBy("All", -1);
                         return logData.phases[this.encounters[i].index];
                     }
                 }
