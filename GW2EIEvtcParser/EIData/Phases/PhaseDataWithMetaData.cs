@@ -17,7 +17,7 @@ public abstract class PhaseDataWithMetaData : PhaseData
     public readonly string NameNoMode = "";
     public readonly string Icon;
 
-    internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, PhaseType type) : base(start, end)
+    internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, PhaseType type) : base(start, end, type)
     {
         Success = success;
         Mode = mode;
@@ -31,9 +31,9 @@ public abstract class PhaseDataWithMetaData : PhaseData
             + (MissingPreEvent ? " (No Pre-Event)" : ""); ;
     }
 
-    internal PhaseDataWithMetaData(long start, long end, string name, ParsedEvtcLog log, PhaseType type) : this(start, end, name, log.LogData.Success, log.LogData.Logic.Icon, LogMode.NotSet, type)
+    internal PhaseDataWithMetaData(long start, long end, string name, ParsedEvtcLog log, PhaseType type) : this(start, end, name, log.LogData.Success, log.LogData.Logic.Icon, log.LogData.Mode, type)
     {
         StartStatus = log.LogData.StartStatus;
-        Mode = log.LogData.Mode;
+        Name = NameNoMode;
     }
 }
