@@ -36,10 +36,11 @@
                 </div>
                 <div class="d-flex justify-content-center slidercontainer mt-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
-                        :max="maxTime" :value="minTime" class="slider" :id="htmlElementIDs.timeRangeID"
+                        :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
-                    <p style="position: absolute; color: black; pointer-events:none;"
-                        :style="{'width': phaseNameWidth}">{{sliderDelimiter.name}}</p>
+                    <p style="position: absolute; color: black; pointer-events:none;">
+                        {{sliderDelimiter.name}}
+                    </p>
                     <input style="width: 70px; text-align: right;" class="ml-3 mr-1" type="text"
                         :id="htmlElementIDs.timeRangeDisplayID" value="0"
                         @input="updateInputTime($event.target.value);">
@@ -78,17 +79,20 @@
                     if (encounter.active) {
                         const phase = logData.phases[encounter.index];
                         let phases = [];
-                        this.updatePhaseTime(phase);
-                        animator.updateRange(phase);
-                        animator.selectActor(null);
+                        // make sure DOM is attached
+                        if (animator.mainCanvas) {
+                            this.updatePhaseTime(phase);
+                            animator.updateRange(phase);
+                            animator.selectActor(null);
+                        }
                         if (phase.type === PhaseTypes.INSTANCE) {
                             if (IsMultiEncounterLog) {                          
                                 return [];
                             } else {
-                                return this.phases;
+                                return logData.phases;
                             }
                         } else {
-                            for (let j = 0; j < this.phases.length; j++) {
+                            for (let j = 0; j < logData.phases.length; j++) {
                                 const subPhase = logData.phases[j];
                                 if (subPhase._activityPhase === phase) {
                                     phases.push(subPhase);
@@ -99,9 +103,6 @@
                     }
                 }
                 return logData.phases;
-            },
-            phaseNameWidth: function() {
-                return (this.sliderDelimiter.name.length * 7.7) + 'px';
             },
             showNormalPhases: function () {
                 return this.normalPhases.length > 1 || this.hasBreakbarPhases;

@@ -51,14 +51,14 @@
                             for (let j = 0; j < this.phases.length; j++) {
                                 const subPhase = logData.phases[j];
                                 if (subPhase._activityPhase === phase) {
-                                    phases.push(subPhase);
+                                    phases.push(this.phases[j]);
                                 }
                             }
                         }
                         return phases;
                     }
                 }         
-                return logData.phases;
+                return this.phases;
             },
             showNormalPhases: function () {
                 return this.normalPhases.length > 1 || this.hasBreakbarPhases;
