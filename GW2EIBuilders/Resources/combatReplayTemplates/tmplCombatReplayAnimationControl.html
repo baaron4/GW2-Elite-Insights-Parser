@@ -74,13 +74,8 @@
                 handler: function () {
                     // make sure DOM is attached              
                     if (animator.mainCanvas) {
-                        const encounter = this.encounters[i];
-                        if (encounter.active) {
-                            const phase = logData.phases[encounter.index];
-                            this.updatePhaseTime(phase);
-                            animator.updateRange(phase);
-                            animator.selectActor(null);
-                        }
+                        const encounterPhase = this.encounterPhase;
+                        this.updateAnimatorTimes(encounterPhase);
                     }
                 },
                 deep: true
@@ -88,8 +83,20 @@
         },
         mounted() {
             animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
+            const encounterPhase = this.encounterPhase;
+            this.updateAnimatorTimes(encounterPhase);
         },
         computed: {
+            encounterPhase: function() {
+                for (let i = 0; i < this.encounters.length; i++) {
+                    const encounter = this.encounters[i];
+                    if (encounter.active) {
+                        const phase = logData.phases[encounter.index];
+                        return phase;
+                    }
+                }
+                return logData.phases[0];
+            },
             phases: function() {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
@@ -98,7 +105,7 @@
                         let phases = [];
                         if (phase.type === PhaseTypes.INSTANCE) {
                             if (IsMultiEncounterLog) {                          
-                                return [];
+                                return logData.phases.filter(x => x.type === PhaseTypes.ENCOUNTER || x.type === PhaseTypes.INSTANCE);
                             } else {
                                 return logData.phases;
                             }
@@ -128,10 +135,10 @@
                 return [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0];
             },
             maxTime: function () {
-                return this.range.max;
+                return this.range.max - this.range.min;
             },
             minTime: function () {
-                return this.range.min;
+                return 0;
             },
             canvasSize: function () {
                 return {
@@ -150,6 +157,11 @@
             }
         },
         methods: {
+            updateAnimatorTimes(phase) {
+                animator.updateRange(phase);
+                this.updatePhaseTime(phase);
+                animator.selectActor(null);
+            },
             getSliderGradient: function () {
                 var startPercent, endPercent;
                 if (!this.sliderDelimiter || this.sliderDelimiter.min === -1) {
@@ -182,16 +194,18 @@
                 this.selectedSpeed = speed;
             },
             updateTime: function (value) {
-                animator.updateTime(value);
+                const offset = this.range.min;
+                animator.updateTime(parseInt(value) + offset);
             },
             updatePhaseTime: function (phase) {
                 var min = phase.start * 1000;
                 var max = phase.end * 1000;
                 var name = phase.name;
-                this.updateTime(min);
-                this.sliderDelimiter.min = min;
-                this.sliderDelimiter.max = max;
+                const offset = this.range.min;
+                this.sliderDelimiter.min = min - offset;
+                this.sliderDelimiter.max = max - offset;
                 this.sliderDelimiter.name = name;
+                this.updateTime(min - offset);
             },
             updateInputTime: function (value) {
                 animator.updateInputTime(value);

@@ -101,6 +101,7 @@
             encounters: {
                 handler: function () {               
                     this.sortBy("All", -1);
+                    this.sortdata.order = "desc";
                 },
                 deep: true
             },
@@ -203,7 +204,7 @@
                 const cols = [];
                 const sums = [];
                 const total = [];
-                const tS = this.timeToUse / 1000.0;
+                const tS = this.timeToUse / 1000.0 - this.phase.start;
                 const curTime = Math.floor(tS);
                 let nextTime = curTime + 1;
                 const dur = Math.floor(this.phase.end - this.phase.start);

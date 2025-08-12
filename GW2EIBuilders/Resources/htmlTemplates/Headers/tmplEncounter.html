@@ -1,18 +1,22 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
-        <h3 class="card-header text-center">
-            {{ encounter.name }}
-            <ul v-if="isMultiEncounterLog" class="dropdown-menu p-2 font-weight-normal scrollabledropdown" style="min-width: 165px; max-width: 165px;">
+        <h3 v-if="isMultiEncounterLog" class="card-header text-center" >
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Select Encounter">
+                <div :style="getMinWidth()">{{ encounter.name }}</div>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" :style="getMinWidth()" style="max-height: 500px;">
                 <li v-for="(encounterData, index) in encountersData" :key="index" :style="index === 0 ? {'border-bottom': '2px solid #bbb;'} : ''">
-                    <input :id="'encounter-' + index  + '-' + phaseindex" type="checkbox"
-                        @click="select(index)" @click.stop="stopClickEvent" />
-                    <label :for="'encounter-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">         
-                        <img class="icon-ll" :src="encountersData.icon">
-                        {{encountersData.name}}
-                    </label>
+                   <a @click="select(index)" @click.stop="stopClickEvent" href="#" class="dropdown-item"
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">         
+                        <img class="icon-ll" :src="encounterData.icon">
+                        {{encounterData.name}}
+                    </a>
                 </li>
             </ul>
+        </h3>
+        <h3 v-if="!isMultiEncounterLog" class="card-header text-center">
+            {{ encounter.name }}
         </h3>
         <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
@@ -68,6 +72,19 @@
             };
         },
         methods: {
+            getMinWidth: function() {
+                let width = 0;
+                for (let i = 0; i < this.encountersData.length; i++) {
+                    width = Math.max(this.encountersData[i].name.length * 13, width);
+                }
+                width += 40;
+                return {
+                    'min-width': width + "px"
+                };
+            },
+            stopClickEvent: function (event) {
+                event.stopPropagation();
+            },
             select: function(encounterIndex) {
                 for (let i = 0; i < this.encounters.length; i++) {
                     this.encounters[i].active = false;
@@ -78,7 +95,7 @@
                 for (var i = 0; i < reactiveLogdata.phases.length; i++) {
                     reactiveLogdata.phases[i].active = false;
                 }
-                reactiveLogdata.phase[index].active = true;   
+                reactiveLogdata.phases[index].active = true;   
                 // Select an appropriate player
                 const phase = logData.phases[index];
                 const players = getActiveNonFakePlayersForPhase(phase);      

@@ -568,8 +568,8 @@ class Animator {
     updateRange(phase) {
         let min = Math.max(this.times[0], phase.start * 1000);
         let max = Math.min(this.times[this.times.length - 1], phase.end * 1000);
-        this.reactiveDataStatus.min = min;
-        this.reactiveDataStatus.max = max;
+        this.reactiveDataStatus.range.min = min;
+        this.reactiveDataStatus.range.max = max;
     }
 
     updateTime(value) {
@@ -580,7 +580,7 @@ class Animator {
     }
 
     updateTextInput() {
-        this.timeSliderDisplay.value = (this.reactiveDataStatus.time / 1000.0).toFixed(3);
+        this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
     }
 
     updateInputTime(value) {
@@ -1219,7 +1219,7 @@ function animateCanvas(noRequest) {
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
         animator.stopAnimate(true);
     }
-    animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
+    animator.timeSlider.value = (animator.reactiveDataStatus.time - animator.reactiveDataStatus.range.min).toString()
     if (noRequest > updateText) {
         animator.updateTextInput();
     }
