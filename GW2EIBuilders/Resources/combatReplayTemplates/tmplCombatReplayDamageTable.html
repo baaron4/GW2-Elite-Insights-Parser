@@ -238,12 +238,16 @@
                     // targets
                     for (let j = 0; j < this.targets.length; j++) {
                         const activeTargets = [j];
-                        const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
-                        const targetData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.target;
+                        const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, 
+                            this.graphdata.graphmode, activeTargets, this.phase.id, null);
+                        const targetData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, 
+                            activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.target;
                         doCell(targetData, j);
                     }
-                    const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
-                    const allData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps;
+                    const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, 
+                        this.graphdata.graphmode, allTargets, this.phase.id, null);
+                    const allData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, 
+                        allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps;
                     doCell(allData.taken, this.targets.length);
                     doCell(allData.total, this.targets.length + 1);
                     for (let j = 0; j < dps.length; j++) {
