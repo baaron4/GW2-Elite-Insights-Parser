@@ -59,7 +59,7 @@
 
 <script>
     Vue.component("combat-replay-animation-control-component", {
-        props: ["light", "animated"],
+        props: ["light", "animated", "encounters", "range"],
         template: `${template}`,
         data: function () {
             return {
@@ -73,6 +73,31 @@
         },
         computed: {
             phases: function() {
+                for (let i = 0; i < this.encounters.length; i++) {
+                    const encounter = this.encounters[i];
+                    if (encounter.active) {
+                        const phase = logData.phases[encounter.index];
+                        let phases = [];
+                        this.updatePhaseTime(phase);
+                        animator.updateRange(phase);
+                        animator.selectActor(null);
+                        if (phase.type === PhaseTypes.INSTANCE) {
+                            if (IsMultiEncounterLog) {                          
+                                return [];
+                            } else {
+                                return this.phases;
+                            }
+                        } else {
+                            for (let j = 0; j < this.phases.length; j++) {
+                                const subPhase = logData.phases[j];
+                                if (subPhase._activityPhase === phase) {
+                                    phases.push(subPhase);
+                                }
+                            }
+                        }
+                        return phases;
+                    }
+                }
                 return logData.phases;
             },
             phaseNameWidth: function() {
@@ -82,19 +107,19 @@
                 return this.normalPhases.length > 1 || this.hasBreakbarPhases;
             },
             normalPhases: function () {
-                return logData.phases.filter(phase => !phase.breakbarPhase);
+                return this.phases.filter(phase => !phase.breakbarPhase);
             },
             hasBreakbarPhases: function () {
-                return logData.phases.filter(phase => phase.breakbarPhase).length > 0;
+                return this.phases.filter(phase => phase.breakbarPhase).length > 0;
             },
             speeds: function () {
                 return [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0];
             },
             maxTime: function () {
-                return animator.times[animator.times.length - 1];
+                return this.range.max;
             },
             minTime: function () {
-                return animator.times[0];
+                return this.range.min;
             },
             canvasSize: function () {
                 return {

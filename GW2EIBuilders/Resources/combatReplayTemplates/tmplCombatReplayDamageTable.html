@@ -84,7 +84,7 @@
 <script>
     Vue.component("combat-replay-damage-stats-component", {
         mixins: [timeRefreshComponent, numberComponent, sortedTableComponent, colSliderComponent(2), rowSliderComponent(10)],
-        props: ["playerid", "graphdata"],
+        props: ["playerid", "graphdata", "encounters"],
         template: `${template}`,
         data: function () {
             return {
@@ -146,23 +146,6 @@
                 }
             }
         },
-        created() {
-            const allTargets = [];
-            for (let j = 0; j < this.targets.length; j++) {
-                const activeTargets = [j];
-                allTargets.push(j);
-                const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
-                // compute dps for all players
-                for (let i = 0; i < logData.players.length; i++) {
-                    computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
-                }
-            }
-            const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
-            // compute dps for all players
-            for (let i = 0; i < logData.players.length; i++) {
-                computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
-            }
-        },
         computed: {
             colPageCount: function() {
                 return this.tableData.cols.length - this.colStructure.perpage;
@@ -173,7 +156,13 @@
             tableid: function () {
                 return "combat-replay-dps-table";
             },
-            phase: function () {
+            phase: function() {
+                for (let i = 0; i < this.encounters.length; i++) {
+                    if (this.encounters[i].active) {
+                        this.sortBy("All", -1);
+                        return logData.phases[this.encounters[i].index];
+                    }
+                }
                 return logData.phases[0];
             },
             targets: function () {
@@ -221,10 +210,11 @@
                     cols.push(target);
                 }
                 const damageArrayToUse = this.damageGraphName;
+                const encounterPlayers = getActivePlayersForPhase(this.phase);
                 const players = getActivePlayers(this.timeToUse * 0.001, (this.timeToUse + 1) * 0.001);
                 for (let i = 0; i < this.graph.length; i++) {
                     const player = players[i];
-                    if (!player) {
+                    if (!player || ! encounterPlayers[i]) {
                         continue;
                     }
                     const graphData = this.graph[i];

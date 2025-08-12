@@ -168,8 +168,6 @@ public class HTMLAssets
             Properties.Resources.tmplCombatReplayTargetsStats,
             Properties.Resources.tmplCombatReplayPlayersStats,
             Properties.Resources.tmplCombatReplayUI,
-            Properties.Resources.tmplCombatReplayPlayerSelect,
-            Properties.Resources.tmplCombatReplayTargetSelect,
             Properties.Resources.tmplCombatReplayExtraDecorations,
             Properties.Resources.tmplCombatReplayAnimationControl,
             Properties.Resources.tmplCombatReplayMechanicsList

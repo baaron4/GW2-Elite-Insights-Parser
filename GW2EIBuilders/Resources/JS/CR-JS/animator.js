@@ -93,7 +93,11 @@ var animator = null;
 const reactiveAnimationData = {
     time: getDefaultCombatReplayTime(),
     selectedActorID: null,
-    animated: false
+    animated: false,
+    range: {
+        min: 0,
+        max: 1e12
+    }
 };
 
 var sliderDelimiter = {
@@ -332,6 +336,8 @@ class Animator {
             cur += PollingRate;
         }
         this.reactiveDataStatus.time = start;
+        this.reactiveDataStatus.range.min = this.times[0];
+        this.reactiveDataStatus.range.max = this.times[this.times.length - 1];
     }
 
     attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
@@ -559,6 +565,13 @@ class Animator {
         }
     }
 
+    updateRange(phase) {
+        let min = Math.max(this.times[0], phase.start * 1000);
+        let max = Math.min(this.times[this.times.length - 1], phase.end * 1000);
+        this.reactiveDataStatus.min = min;
+        this.reactiveDataStatus.max = max;
+    }
+
     updateTime(value) {
         this.reactiveDataStatus.time = parseInt(value);
         if (this.animation === null) {
@@ -578,7 +591,9 @@ class Animator {
                 return;
             }
             const ms = Math.round(parsedTime * 1000.0);
-            this.reactiveDataStatus.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
+            const min = this.reactiveDataStatus.range.min;
+            const max = this.reactiveDataStatus.range.max;
+            this.reactiveDataStatus.time = Math.min(Math.max(ms, min), max);
             animateCanvas(updateText);
         } catch (error) {
             console.error(error);
@@ -593,8 +608,10 @@ class Animator {
 
     startAnimate(updateReactiveStatus) {
         if (this.animation === null && this.times.length > 0) {
-            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1] && !this.backwards) {
-                this.reactiveDataStatus.time = 0;
+            const max = this.reactiveDataStatus.range.max;
+            const min = this.reactiveDataStatus.range.min;
+            if (this.reactiveDataStatus.time >= max && !this.backwards) {
+                this.reactiveDataStatus.time = min;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);

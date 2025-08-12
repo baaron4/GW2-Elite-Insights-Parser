@@ -116,28 +116,30 @@ function mainLoad() {
     // make some additional variables reactive
     var activePhaseIndex = getDefaultPhase();
     var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
-    for (var i = 0; i < logData.phases.length; i++) {
-        var phase = logData.phases[i];
+    for (let i = 0; i < logData.phases.length; i++) {
+        const phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
-        var times = [];
-        var dur = phase.end - phase.start;
-        var floorDur = Math.floor(dur);
+        const times = [];
+        const dur = phase.end - phase.start;
+        const floorDur = Math.floor(dur);
         phase.needsLastPoint = dur > floorDur + 1e-3;
-        for (var j = 0; j <= floorDur; j++) {
+        for (let j = 0; j <= floorDur; j++) {
             times.push(j);
         }
         if (phase.needsLastPoint) {
             times.push(phase.end - phase.start);
         }
+        phase.id = i;
         phase.times = times;
         reactiveLogdata.phases.push({
             active: firstActive === phase,
+            index: i,
             focus: -1
         });
         phase._activityPhase = phase;
         if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
-            for (var j = 0; j < logData.phases.length; j++) {
-                var activityPhase = logData.phases[j];
+            for (let j = 0; j < logData.phases.length; j++) {
+                const activityPhase = logData.phases[j];
                 if (activityPhase.type !== PhaseTypes.ENCOUNTER) {
                     continue;
                 }
@@ -147,8 +149,14 @@ function mainLoad() {
                 phase._activityPhase = activityPhase;
                 break;
             }
+        } else {
+            reactiveLogdata.encounters.push({
+                active: i === 0,
+                index: i
+            });
         }
     }
+    IsMultiEncounterLog = reactiveLogdata.encounters.length > 2;
     for (var i = 0; i < logData.targets.length; i++) {
         var target = logData.targets[i];
         var activeArray = [];
@@ -159,7 +167,8 @@ function mainLoad() {
             var priority = phase.targetPriorities[phaseTarget];
             activeArray.push({
                 active: typeof priority !== "undefined" && priority < 2,
-                secondary: typeof priority === "undefined" || priority > 0
+                secondary: typeof priority === "undefined" || priority > 0,
+                index: i,
             });
         }
         target.id = i;
@@ -170,6 +179,7 @@ function mainLoad() {
         var playerData = logData.players[i];
         reactiveLogdata.players.push({
             active: !activeFound && !!playerData.isPoV,
+            index: i,
             targetActive: !playerData.isFake
         });
         activeFound = !!playerData.isPoV;
@@ -190,7 +200,8 @@ function mainLoad() {
             mode: getDefaultMainComponent(),
             cr: !!crData,
             healingExtShow: !!healingStatsExtension || logData.evtcBuild >= 20210701,
-            healingExt: !!healingStatsExtension
+            healingExt: !!healingStatsExtension,
+            reactiveLogdata: reactiveLogdata
         },
         methods: {
             switchTheme: function (state) {
