@@ -1015,13 +1015,22 @@ public class EvtcParser
 
         if (_logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld)
         {
-            var enterCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            var enterAndExitCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat);
+            var enterCombatEvents = enterAndExitCombatEvents.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            var exitCombatEvents = enterAndExitCombatEvents.Where(x => x.IsStateChange == StateChange.ExitCombat).Select(x => new ExitCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
             operation.UpdateProgressWithCancellationCheck("Parsing: Splitting players per spec and subgroup");
             foreach (var playerAgentItem in _agentData.GetAgentByType(AgentItem.AgentType.Player))
             {
                 if (enterCombatEvents.TryGetValue(playerAgentItem, out var enterCombatEventsForAgent))
                 {
-                    AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                    if (exitCombatEvents.TryGetValue(playerAgentItem, out var exitCombatEventsForAgent))
+                    {
+
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                    } else 
+                    {    
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem);
+                    }
                 }
             }
         }
