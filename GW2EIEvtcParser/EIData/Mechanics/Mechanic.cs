@@ -48,6 +48,7 @@ public abstract class Mechanic : MechanicContainer
     public readonly string FullName;
     public bool IsEnemyMechanic { get; protected set; }
     public bool ShowOnTable { get; private set; }
+    public bool Ignored { get; private set; }
 
     public bool IsAchievementEligibility { get; private set; }
 
@@ -82,9 +83,15 @@ public abstract class Mechanic : MechanicContainer
 
     internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs);
 
-    internal Mechanic UsingShowOnTable(bool showOnTable)
+    internal Mechanic UsingNoShowOnTable()
     {
-        ShowOnTable = showOnTable;
+        ShowOnTable = false;
+        return this;
+    }
+
+    internal Mechanic UsingIgnored()
+    {
+        Ignored = true;
         return this;
     }
 

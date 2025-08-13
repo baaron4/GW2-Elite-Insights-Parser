@@ -1002,7 +1002,7 @@ public static class SkillIDs
     public const long PowerBlockBuff = 13752;
     public const long StrengthinNumbers = 13796;
     public const long FleshOfTheMaster = 13810;
-    public const long VampiricStrikes2 = 13814;
+    public const long VampiricStrikesPlayer = 13814;
     public const long BloodBank = 13824;
     public const long SpitefulRenewal = 13863;
     public const long LesserSpinalShivers = 13906;
@@ -1635,7 +1635,7 @@ public static class SkillIDs
     public const long GravityWell = 30359;
     public const long ImpairingDaggersSkill = 30369;
     public const long ImpairingDaggersHit2 = 30381;
-    public const long VampiricStrikes = 30398;
+    public const long VampiricStrikesMinion = 30398;
     public const long PalmStrike = 30423;
     public const long FencersFinesse = 30426;
     public const long BerserkSkill = 30435;
@@ -2495,7 +2495,7 @@ public static class SkillIDs
     public const long Chapter2IgnitingBurst = 40635;
     public const long Chapter2RadiantRecovery = 40679;
     public const long HeatTherapy = 40694;
-    public const long SandFlareBuff = 40774;
+    public const long SandFlareSharedBarrier = 40774;
     public const long Chapter1DesertBloomSkill = 40787;
     public const long FalseOasis = 40802;
     public const long NefariousFavorSkill = 40813;
@@ -2605,6 +2605,7 @@ public static class SkillIDs
     public const long BraveStride = 43063;
     public const long SandThroughGlass = 43064;
     public const long SpectrumShieldBuff = 43066;
+    public const long SandFlare = 43148;
     public const long POV_SandShade2 = 43157;
     public const long ImpairingDaggersDaredevilMinionHit2 = 43163;
     public const long FlashSpark = 43176;
@@ -2760,6 +2761,7 @@ public static class SkillIDs
     public const long MantraOfFlameDamage = 46618;
     public const long Diminished = 46668;
     public const long DesertShroudHit = 46726;
+    public const long SandSwellBarrierInteraction = 46757; // The barrier players receive when interacting with the portal
     public const long NefariousFavorShadeHit = 46808;
     public const long GarishPillarShadeHit = 46821;
     public const long SandCascadeShadeHit = 46824;
@@ -3107,7 +3109,7 @@ public static class SkillIDs
     public const long ShredderGyroDamage = 54935;
     public const long NoMountUseWarclaw = 54938;
     public const long WarclawChainPull2 = 54953;
-    public const long SandstormShroudHit = 54958;
+    public const long SandstormShroudDetonation = 54958;
     public const long GlyphOfTheStarsCA = 55026;
     public const long FeelNoPainSavageInstinct = 55030;
     public const long UnyieldingSpirit = 55044;
@@ -3804,6 +3806,7 @@ public static class SkillIDs
     public const long SeveredFromBody = 64056;
     public const long VoidPurge = 64064;
     public const long ZhaitansReachThrashHT1 = 64124;
+    public const long RescueProtocol = 64148;
     public const long TormentOfTheVoid = 64150;
     public const long JadeRicochetCM2 = 64153;
     public const long GraspOfTheVoid = 64161;

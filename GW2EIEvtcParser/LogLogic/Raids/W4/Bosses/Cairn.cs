@@ -25,6 +25,7 @@ internal class Cairn : BastionOfThePenitent
                         new PlayerDstHealthDamageHitMechanic([SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green", "Green Spatial Manipulation Field while affected by stability","Stabilized Green", 0),
                         true
                     )
+                    .UsingIgnored()
                 ,
             ]),
             new MechanicGroup([

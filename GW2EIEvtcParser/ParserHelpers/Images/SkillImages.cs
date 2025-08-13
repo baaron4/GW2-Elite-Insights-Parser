@@ -13,6 +13,7 @@ internal static class SkillImages
     public const string Anchor = "https://wiki.guildwars2.com/images/c/c0/Anchor.png";
     public const string Resurrect = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
     public const string Bandage = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+    public const string RescueProtocol = "https://wiki.guildwars2.com/images/c/cd/Rescue_Protocol_%28skill%29.png";
     #endregion Down
     #region Racial Skills
     // Sylvari
