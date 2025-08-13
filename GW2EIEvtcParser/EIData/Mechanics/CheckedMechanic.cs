@@ -60,7 +60,10 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
     public override IReadOnlyList<Mechanic> GetMechanics()
     {
-        var res = new List<Mechanic>(1 +  _subMechanics.Count);
+        var res = new List<Mechanic>(1 +  _subMechanics.Count) 
+        { 
+            this 
+        };
         foreach (var subMechanics in _subMechanics)
         {
             res.Add(subMechanics.Item1);
