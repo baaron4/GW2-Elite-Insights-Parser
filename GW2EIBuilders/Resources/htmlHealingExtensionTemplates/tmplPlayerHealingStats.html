@@ -54,6 +54,9 @@
                 v-if="player.id === activeplayer" :playerindex="player.id" :tabmode="tabmode"
                 :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-healing-tab-component>
         </keep-alive>
+        <div v-if="activeplayer === -1">
+            <h3 class="text-center">No player selected</h3>
+        </div>
     </div>
 </template>
 
