@@ -42,8 +42,13 @@
                         const phase = logData.phases[encounter.index];
                         let phases = [];
                         if (phase.type === PhaseTypes.INSTANCE) {
-                            if (IsMultiEncounterLog) {                          
-                                return [];
+                            if (IsMultiEncounterLog) {   
+                                for (let j = 0; j < this.phases.length; j++) {
+                                    const subPhase = logData.phases[j];
+                                    if (subPhase.type === PhaseTypes.INSTANCE || subPhase.type === PhaseTypes.ENCOUNTER) {
+                                        phases.push(this.phases[j]);
+                                    }
+                                }           
                             } else {
                                 return this.phases;
                             }
