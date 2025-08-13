@@ -81,7 +81,7 @@ internal class WhisperOfJormag : Bjora
         if (tpOutEvents.Count > 0)
         {
             end = tpOutEvents.Min(x => x.Time);
-            phases.Add(new PhaseData(0, end, "Pre Doppelganger 1"));
+            phases.Add(new SubPhasePhaseData(0, end, "Pre Doppelganger 1"));
             // remove everything related to 75% tp out
             tpOutEvents.RemoveAll(x => x.Time <= end + 1000);
         }
@@ -102,12 +102,12 @@ internal class WhisperOfJormag : Bjora
                 end = log.LogData.LogEnd;
                 tpBackEvents.Clear();
             }
-            phases.Add(new PhaseData(start, end, "Pre Doppelganger 2"));
+            phases.Add(new SubPhasePhaseData(start, end, "Pre Doppelganger 2"));
             // 25% tp finished
             if (tpBackEvents.Count > 0)
             {
                 start = tpBackEvents.Min(x => x.Time);
-                phases.Add(new PhaseData(start, log.LogData.LogEnd, "Final"));
+                phases.Add(new SubPhasePhaseData(start, log.LogData.LogEnd, "Final"));
             }
         }
         for (int i = 1; i < phases.Count; i++)

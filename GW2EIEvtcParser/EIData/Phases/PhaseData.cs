@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class PhaseData
+public abstract class PhaseData
 {
     public long Start { get; private set; }
     public long End { get; private set; }
@@ -24,9 +24,9 @@ public class PhaseData
     public bool DrawLabel { get; internal set; } = true;
     private readonly HashSet<PhaseData> CanBeSubPhaseOf = [];
 
-    public bool BreakbarPhase { get; internal set; } = false;
+    public bool BreakbarPhase { get; protected set; } = false;
     
-    public PhaseType Type { get; private set; }
+    public PhaseType Type { get; protected set; }
     public enum PhaseType
     {
         SubPhase = 0,
@@ -225,16 +225,11 @@ public class PhaseData
         return this;
     }
 
-    internal void AddParentPhase(PhaseData? phase)
+    internal virtual void AddParentPhase(PhaseData? phase)
     {
         if (phase != null)
         {
             CanBeSubPhaseOf.Add(phase);
-            // Once a parent is provided to a TimeFrame phase, it becomes a subphase
-            if (Type == PhaseType.TimeFrame)
-            {
-                Type = PhaseType.SubPhase;
-            }
         }
     }
 

@@ -127,13 +127,13 @@ internal class Slothasor : SalvationPass
         int i = 1;
         foreach (CastEvent c in sleepy)
         {
-            var phase = new PhaseData(start, Math.Min(c.Time, logEnd), "Phase " + i++);
+            var phase = new SubPhasePhaseData(start, Math.Min(c.Time, logEnd), "Phase " + i++);
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             start = c.EndTime;
             phases.Add(phase);
         }
-        var lastPhase = new PhaseData(start, logEnd, "Phase " + i++);
+        var lastPhase = new SubPhasePhaseData(start, logEnd, "Phase " + i++);
         lastPhase.AddParentPhase(phases[0]);
         lastPhase.AddTarget(mainTarget, log);
         phases.Add(lastPhase);

@@ -242,7 +242,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 start = Math.Min(start, giant.FirstAware);
                 end = Math.Max(end, giant.LastAware);
             }
-            var subPhase = new PhaseData(start, end, "Giants");
+            var subPhase = new SubPhasePhaseData(start, end, "Giants");
             subPhase.AddTargets(giants, log);
             subPhase.OverrideEndTime(log);
             phases.Add(subPhase);
@@ -250,7 +250,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         var subPhaseNonBlockings = Targets.Where(x => x.IsSpecies(TargetID.VoidGoliath) || x.IsSpecies(TargetID.VoidObliterator) || x.IsSpecies(TargetID.VoidGiant));
         foreach ((long start, long end, string name, SingleActor target, string? subPhaseOf) in subPhasesData)
         {
-            var subPhase = new PhaseData(start, end, name);
+            var subPhase = new SubPhasePhaseData(start, end, name);
             subPhase.AddTarget(target, log);
             subPhase.OverrideEndTime(log);
             subPhase.AddTargets(subPhaseNonBlockings, log, PhaseData.TargetPriority.NonBlocking);
@@ -264,7 +264,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         var purificationNonBlockings = Targets.Where(x => x.IsSpecies(TargetID.VoidTimeCaster) || x.IsSpecies(TargetID.VoidSaltsprayDragon));
         foreach (SingleActor voidAmal in Targets.Where(x => x.IsSpecies(TargetID.PushableVoidAmalgamate) || x.IsSpecies(TargetID.KillableVoidAmalgamate)))
         {
-            var purificationPhase = new PhaseData(Math.Max(voidAmal.FirstAware, log.LogData.LogStart), voidAmal.LastAware, "Purification " + (++purificationID));
+            var purificationPhase = new SubPhasePhaseData(Math.Max(voidAmal.FirstAware, log.LogData.LogStart), voidAmal.LastAware, "Purification " + (++purificationID));
             purificationPhase.AddTarget(voidAmal, log);
             purificationPhase.OverrideEndTime(log);
             purificationPhase.AddTargets(purificationNonBlockings, log, PhaseData.TargetPriority.NonBlocking);

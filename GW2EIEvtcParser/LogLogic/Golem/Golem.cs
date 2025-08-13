@@ -133,7 +133,7 @@ internal class Golem : LogLogic
                 HealthUpdateEvent? hpUpdate = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[j]);
                 if (hpUpdate != null)
                 {
-                    var phase = new PhaseData(log.LogData.LogStart, hpUpdate.Time, numberNames[j]);
+                    var phase = new SubPhasePhaseData(log.LogData.LogStart, hpUpdate.Time, numberNames[j]);
                     phase.AddTarget(mainTarget, log);
                     phases.Add(phase);
                 }
@@ -153,7 +153,7 @@ internal class Golem : LogLogic
             ExitCombatEvent? firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
             if (firstExitCombat != null && (log.LogData.LogEnd - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
             {
-                var phase = new PhaseData(log.LogData.LogStart, firstExitCombat.Time, "In Combat " + (++combatPhase));
+                var phase = new SubPhasePhaseData(log.LogData.LogStart, firstExitCombat.Time, "In Combat " + (++combatPhase));
                 phase.AddTarget(mainTarget, log);
                 phases.Add(phase);
             }
@@ -161,7 +161,7 @@ internal class Golem : LogLogic
             {
                 ExitCombatEvent? exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                 long phaseEndTime = exce != null ? exce.Time : log.LogData.LogEnd;
-                var phase = new PhaseData(Math.Max(ece.Time, log.LogData.LogStart), Math.Min(phaseEndTime, log.LogData.LogEnd), "PoV in Combat " + (++combatPhase));
+                var phase = new SubPhasePhaseData(Math.Max(ece.Time, log.LogData.LogStart), Math.Min(phaseEndTime, log.LogData.LogEnd), "PoV in Combat " + (++combatPhase));
                 phase.AddTarget(mainTarget, log);
                 phases.Add(phase);
             }

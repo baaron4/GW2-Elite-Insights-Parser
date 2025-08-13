@@ -78,14 +78,14 @@ internal static class LogLogicPhaseUtils
             {
                 break;
             }
-            var phase = new PhaseData(start, Math.Min(evt.Time, logEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
+            var phase = new SubPhasePhaseData(start, Math.Min(evt.Time, logEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
             start = Math.Max(evt.Time, log.LogData.LogStart);
         }
         if (phases.Count > 0 && phases.Count < thresholds.Count)
         {
-            var lastPhase = new PhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
+            var lastPhase = new SubPhasePhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
@@ -107,7 +107,7 @@ internal static class LogLogicPhaseUtils
             if (c is BuffApplyEvent)
             {
                 long curEnd = Math.Min(c.Time, end);
-                phases.Add(new PhaseData(last, curEnd));
+                phases.Add(new SubPhasePhaseData(last, curEnd));
                 last = curEnd;
                 nextToAddIsSkipPhase = true;
             }
@@ -116,7 +116,7 @@ internal static class LogLogicPhaseUtils
                 long curEnd = Math.Min(c.Time, end);
                 if (addSkipPhases)
                 {
-                    phases.Add(new PhaseData(last, curEnd));
+                    phases.Add(new SubPhasePhaseData(last, curEnd));
                 }
                 last = curEnd;
                 nextToAddIsSkipPhase = false;
@@ -124,7 +124,7 @@ internal static class LogLogicPhaseUtils
         }
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
-            phases.Add(new PhaseData(last, end));
+            phases.Add(new SubPhasePhaseData(last, end));
         }
         if (!filterSmallPhases)
         {
@@ -170,24 +170,24 @@ internal static class LogLogicPhaseUtils
             }
             if (mainBetweenCasts)
             {
-                phases.Add(new PhaseData(last, c.Time));
+                phases.Add(new SubPhasePhaseData(last, c.Time));
                 if (addSkipPhases) {
-                    phases.Add(new PhaseData(c.Time, endTime));
+                    phases.Add(new SubPhasePhaseData(c.Time, endTime));
                 }
             } 
             else
             {
                 if (addSkipPhases)
                 {
-                    phases.Add(new PhaseData(last, c.Time));
+                    phases.Add(new SubPhasePhaseData(last, c.Time));
                 }
-                phases.Add(new PhaseData(c.Time, endTime));
+                phases.Add(new SubPhasePhaseData(c.Time, endTime));
             }
             last = endTime;
         }
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
-            phases.Add(new PhaseData(last, end));
+            phases.Add(new SubPhasePhaseData(last, end));
         }
         if (!filterSmallPhases)
         {

@@ -147,7 +147,7 @@ internal class Xera : StrongholdOfTheFaithful
             PhaseData? phase100to0 = null;
             if (xeraFightStart > log.LogData.LogStart)
             {
-                var phasePreEvent = new PhaseData(0, xeraFightStart, "Pre Event");
+                var phasePreEvent = new SubPhasePhaseData(0, xeraFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(phases[0]);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
                 if (phasePreEvent.Targets.Count == 0)
@@ -155,7 +155,7 @@ internal class Xera : StrongholdOfTheFaithful
                     phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 }
                 phases.Add(phasePreEvent);
-                phase100to0 = new PhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
+                phase100to0 = new SubPhasePhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
                 phase100to0.AddParentPhase(phases[0]);
                 phase100to0.AddTarget(mainTarget, log);
                 phases.Add(phase100to0);
@@ -164,7 +164,7 @@ internal class Xera : StrongholdOfTheFaithful
             // split happened
             if (invulXera != null)
             {
-                var phase1 = new PhaseData(xeraFightStart, invulXera.Time, "Phase 1");
+                var phase1 = new SubPhasePhaseData(xeraFightStart, invulXera.Time, "Phase 1");
                 if (phase100to0 != null)
                 {
                     phase1.AddParentPhase(phase100to0);
@@ -188,7 +188,7 @@ internal class Xera : StrongholdOfTheFaithful
                     {
                         glidingEndTime = mergedXera2.FirstAware;
                     }
-                    var phase2 = new PhaseData(glidingEndTime, logEnd, "Phase 2");
+                    var phase2 = new SubPhasePhaseData(glidingEndTime, logEnd, "Phase 2");
                     if (phase100to0 != null)
                     {
                         phase2.AddParentPhase(phase100to0);
@@ -202,7 +202,7 @@ internal class Xera : StrongholdOfTheFaithful
                     //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
                     phases.Add(phase2);
                 }
-                var glidingPhase = new PhaseData(invulXera.Time, glidingEndTime, "Gliding");
+                var glidingPhase = new SubPhasePhaseData(invulXera.Time, glidingEndTime, "Gliding");
                 if (phase100to0 != null)
                 {
                     glidingPhase.AddParentPhase(phase100to0);

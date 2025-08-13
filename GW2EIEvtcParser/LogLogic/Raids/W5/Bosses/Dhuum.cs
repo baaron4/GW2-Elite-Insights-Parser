@@ -138,7 +138,7 @@ internal class Dhuum : HallOfChains
         if (shield != null)
         {
             long end = shield.Time;
-            var dhuumFight = new PhaseData(start, end, "Dhuum Fight");
+            var dhuumFight = new SubPhasePhaseData(start, end, "Dhuum Fight");
             dhuumFight.AddTarget(dhuum, log);
             dhuumFight.AddParentPhase(mainFightPhase);
             phases.Add(dhuumFight);
@@ -146,18 +146,18 @@ internal class Dhuum : HallOfChains
             // ritual started
             if (firstDamageable != null)
             {
-                var shieldPhase = new PhaseData(end, firstDamageable.Time, "Shielded Dhuum");
+                var shieldPhase = new SubPhasePhaseData(end, firstDamageable.Time, "Shielded Dhuum");
                 shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
-                var ritualPhase = new PhaseData(firstDamageable.Time, logEnd, "Ritual");
+                var ritualPhase = new SubPhasePhaseData(firstDamageable.Time, logEnd, "Ritual");
                 ritualPhase.AddTarget(dhuum, log);
                 ritualPhase.AddParentPhase(mainFightPhase);
                 phases.Add(ritualPhase);
             }
             else
             {
-                var shieldPhase = new PhaseData(end, logEnd, "Shielded Dhuum");
+                var shieldPhase = new SubPhasePhaseData(end, logEnd, "Shielded Dhuum");
                 shieldPhase.AddParentPhase(mainFightPhase);
                 shieldPhase.AddTarget(dhuum, log);
                 phases.Add(shieldPhase);
@@ -186,17 +186,17 @@ internal class Dhuum : HallOfChains
             long soulsplitEnd = Math.Min(cataCycle.EndTime, mainEnd);
             ++i;
 
-            var preSoulSplit = new PhaseData(start, end, "Pre-Soulsplit " + i).WithParentPhase(parentPhase);
+            var preSoulSplit = new SubPhasePhaseData(start, end, "Pre-Soulsplit " + i).WithParentPhase(parentPhase);
             preSoulSplit.AddTarget(dhuum, log);
             preSoulSplit.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
             phases.Add(preSoulSplit);
 
-            var soulSplit = new PhaseData(end, soulsplitEnd, "Soulsplit " + i).WithParentPhase(parentPhase);
+            var soulSplit = new SubPhasePhaseData(end, soulsplitEnd, "Soulsplit " + i).WithParentPhase(parentPhase);
             soulSplit.AddTarget(dhuum, log);
             phases.Add(soulSplit);
             start = cataCycle.EndTime;
         }
-        var final = new PhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe").WithParentPhase(parentPhase);
+        var final = new SubPhasePhaseData(start, mainEnd, hasRitual ? "Pre-Ritual" : "Pre-Wipe").WithParentPhase(parentPhase);
         final.AddTarget(dhuum, log);
         phases.Add(final);
         return phases;
@@ -230,12 +230,12 @@ internal class Dhuum : HallOfChains
             if (invulDhuum != null)
             {
                 long end = invulDhuum.Time;
-                var preEvent = new PhaseData(0, end, "Pre Event").WithParentPhase(phases[0]);
+                var preEvent = new SubPhasePhaseData(0, end, "Pre Event").WithParentPhase(phases[0]);
                 preEvent.AddTarget(dhuum, log);
                 preEvent.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(preEvent);
 
-                mainFight = new PhaseData(end, fightDuration, "Main Fight");
+                mainFight = new SubPhasePhaseData(end, fightDuration, "Main Fight");
                 mainFight.AddTarget(dhuum, log);
                 phases.Add(mainFight.WithParentPhase(phases[0]));
                 ComputeFightPhases(phases, dhuum, castLogs, log, fightDuration, end, mainFight);

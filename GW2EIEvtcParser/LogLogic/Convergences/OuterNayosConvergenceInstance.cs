@@ -158,10 +158,10 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
         Segment final = hpUpdates.FirstOrDefault(x => x.Value < 25.0 && x.Start > end25.End);
 
         // 100-75, 75-50, 50-25, 25-0
-        var phase1 = new PhaseData(start.Start, Math.Min(end75.Start, log.LogData.LogEnd), "Phase 1").WithParentPhase(fullPhase);
-        var phase2 = new PhaseData(start75.Start, Math.Min(end50.Start, log.LogData.LogEnd), "Phase 2").WithParentPhase(fullPhase);
-        var phase3 = new PhaseData(start50.Start, Math.Min(end25.Start, log.LogData.LogEnd), "Phase 3").WithParentPhase(fullPhase);
-        var phase4 = new PhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.LogData.LogEnd), "Phase 4").WithParentPhase(fullPhase);
+        var phase1 = new SubPhasePhaseData(start.Start, Math.Min(end75.Start, log.LogData.LogEnd), "Phase 1").WithParentPhase(fullPhase);
+        var phase2 = new SubPhasePhaseData(start75.Start, Math.Min(end50.Start, log.LogData.LogEnd), "Phase 2").WithParentPhase(fullPhase);
+        var phase3 = new SubPhasePhaseData(start50.Start, Math.Min(end25.Start, log.LogData.LogEnd), "Phase 3").WithParentPhase(fullPhase);
+        var phase4 = new SubPhasePhaseData(final.Start, Math.Min(target.AgentItem.LastAware, log.LogData.LogEnd), "Phase 4").WithParentPhase(fullPhase);
 
         phase1.AddTarget(target, log);
         phase2.AddTarget(target, log);
