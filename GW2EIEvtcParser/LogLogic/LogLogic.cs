@@ -326,7 +326,7 @@ public abstract class LogLogic
 
     internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        if (!requirePhases || IsInstance)
+        if (!requirePhases)
         {
             return [ ];
         }
@@ -350,7 +350,7 @@ public abstract class LogLogic
                     continue;
                 }
 
-                long start = Math.Max(breakbarActive.Start - 2000, log.LogData.LogStart);
+                long start = Math.Max(breakbarActive.Start - BreakbarPhaseTimeBuildup, log.LogData.LogStart);
                 long end = Math.Min(breakbarActive.End, log.LogData.LogEnd);
                 var phase = new BreakbarPhaseData(start, end, target.Character + " Breakbar " + ++i);
                 phase.AddTarget(target, log);

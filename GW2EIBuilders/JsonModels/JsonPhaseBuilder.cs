@@ -52,6 +52,11 @@ internal static class JsonPhaseBuilder
             case PhaseData.PhaseType.SubPhase:
             case PhaseData.PhaseType.TimeFrame:
                 jsPhase.PhaseType = phase.Type == PhaseData.PhaseType.SubPhase ? "SubPhase" : "TimeFrame";
+                var subPhase = (SubPhasePhaseData)phase;
+                if (subPhase.EncounterPhase != null)
+                {
+                    jsPhase.EncounterPhase = log.LogData.GetPhases(log).IndexOf(subPhase.EncounterPhase);
+                }
                 break;
             case PhaseData.PhaseType.Encounter:
                 jsPhase.PhaseType = "Encounter";

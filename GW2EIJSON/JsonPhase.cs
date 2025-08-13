@@ -45,6 +45,14 @@ public class JsonPhase
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public long? EIEncounterID;
+    /// <summary>
+    /// Index of the encounter phase this phase is attached to. Only relevant for Time Frame and Sub Phase type phases. \n
+    /// Will be -1 if the phase is not a part of an encounter.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? EncounterPhase;
+
+    /// <summary>
     /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
     /// Index of targets tracked during the phase
     /// </summary>

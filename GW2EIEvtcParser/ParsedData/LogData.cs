@@ -368,8 +368,7 @@ public class LogData
             } 
             else if (!IsInstance)
             {
-                var encounterPhases = _phases.Where(x => x.Type == PhaseData.PhaseType.Encounter);
-                if (encounterPhases.Count() != 1)
+                if (_phases.Where(x => x.Type == PhaseData.PhaseType.Encounter).Count() != 1)
                 {
                     throw new InvalidOperationException("Boss logs must have only one encounter phase");
                 }
@@ -402,6 +401,31 @@ public class LogData
                 }
                 return startCompare;
             });
+            // Attach encounter phases
+            var subPhases = _phases.OfType<SubPhasePhaseData>().ToList();
+            var encounterPhases = _phases.OfType<EncounterPhaseData>();
+            int offset = 0;
+            foreach (var encounterPhase in encounterPhases)
+            {
+                for (; offset < subPhases.Count; offset++)
+                {
+                    var subPhase = subPhases[offset];
+                    long start = subPhase.BreakbarPhase ? Math.Max(subPhase.Start - ParserHelper.BreakbarPhaseTimeBuildup, log.LogData.LogStart) : subPhase.Start;
+                    if (encounterPhase.InInterval(start))
+                    {
+                        // subphase completely inside
+                        if (encounterPhase.InInterval(subPhase.End))
+                        {
+                            subPhase.AttachToEncounter(encounterPhase);
+                        }
+                    } 
+                    // Phases are time sorted
+                    else if (subPhase.Start > encounterPhase.End)
+                    {
+                        break;
+                    }
+                }
+            }
         }
         return _phases;
     }

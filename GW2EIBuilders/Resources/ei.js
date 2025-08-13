@@ -136,24 +136,16 @@ function mainLoad() {
             index: i,
             focus: -1
         });
-        phase._activityPhase = phase;
-        if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
-            for (let j = 0; j < logData.phases.length; j++) {
-                const activityPhase = logData.phases[j];
-                if (activityPhase.type !== PhaseTypes.ENCOUNTER) {
-                    continue;
-                }
-                if (phase.start < activityPhase.start || phase.end > activityPhase.end) {
-                    continue;
-                }
-                phase._activityPhase = activityPhase;
-                break;
-            }
-        } else {
+        phase._activityPhase = phase.encounterPhase >= 0 ? logData.phases[phase.encounterPhase] : phase;
+        if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {    
             reactiveLogdata.encounters.push({
                 active: i === 0,
                 index: i
             });
+        } 
+        // use instance/main encounter phase as activityPhase for orphan logs
+        else if (phase._activityPhase === phase) {
+            phase._activityPhase = logData.phases[0];
         }
     }
     IsMultiEncounterLog = reactiveLogdata.encounters.length > 2;

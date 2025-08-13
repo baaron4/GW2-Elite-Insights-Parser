@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class SubPhasePhaseData : PhaseData
 {
-    public PhaseDataWithMetaData? AttachedPhase { get; private set; }
+    public EncounterPhaseData? EncounterPhase { get; private set; }
 
     internal SubPhasePhaseData(long start, long end) : base(start, end, PhaseType.TimeFrame)
     {
@@ -16,9 +16,9 @@ public class SubPhasePhaseData : PhaseData
         Name = name;
     }
 
-    internal void AttachToPhase(PhaseDataWithMetaData attachedPhase)
+    internal void AttachToEncounter(EncounterPhaseData encounterPhase)
     {
-        AttachedPhase = attachedPhase;
+        EncounterPhase = encounterPhase;
     }
 
     internal override void AddParentPhase(PhaseData? phase)

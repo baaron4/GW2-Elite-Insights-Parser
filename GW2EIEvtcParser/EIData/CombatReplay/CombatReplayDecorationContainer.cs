@@ -15,7 +15,7 @@ internal class CombatReplayDecorationContainer
     private readonly Dictionary<string, _DecorationMetadata> DecorationCache;
     private readonly List<(_DecorationMetadata metadata, _DecorationRenderingData renderingData)> Decorations;
 
-    internal CombatReplayDecorationContainer(Dictionary<string, _DecorationMetadata> cache, int capacity = 0)
+    internal CombatReplayDecorationContainer(Dictionary<string, _DecorationMetadata> cache, int capacity = 100)
     {
         DecorationCache = cache;
         Decorations = new(capacity);
@@ -35,6 +35,7 @@ internal class CombatReplayDecorationContainer
             cachedMetadata = constantPart;
             DecorationCache[id] = constantPart;
         }
+        ReserveAdditionalCapacity(1);
         Decorations.Add((cachedMetadata, decoration.DecorationRenderingData));
     }
 
