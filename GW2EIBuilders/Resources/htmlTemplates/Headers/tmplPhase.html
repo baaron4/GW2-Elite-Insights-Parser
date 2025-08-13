@@ -54,11 +54,15 @@
                                 return this.phases;
                             }
                         } else {
-                            for (let j = 0; j < this.phases.length; j++) {
-                                const subPhase = logData.phases[j];
-                                if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
-                                    phases.push(this.phases[j]);
-                                }
+                            if (IsMultiEncounterLog) {
+                                for (let j = 0; j < this.phases.length; j++) {
+                                    const subPhase = logData.phases[j];
+                                    if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
+                                        phases.push(this.phases[j]);
+                                    }
+                                }   
+                            } else {
+                                return this.phases;
                             }
                         }
                         return phases;
