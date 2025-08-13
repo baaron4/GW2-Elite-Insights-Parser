@@ -83,8 +83,8 @@
 
 <script>
     Vue.component("combat-replay-damage-stats-component", {
-        mixins: [timeRefreshComponent, numberComponent, sortedTableComponent, colSliderComponent(2), rowSliderComponent(10)],
-        props: ["playerid", "graphdata", "encounters"],
+        mixins: [encounterPhaseComponent, timeRefreshComponent, numberComponent, sortedTableComponent, colSliderComponent(2), rowSliderComponent(10)],
+        props: ["playerid", "graphdata"],
         template: `${template}`,
         data: function () {
             return {
@@ -165,19 +165,11 @@
             tableid: function () {
                 return "combat-replay-dps-table";
             },
-            phase: function() {
-                for (let i = 0; i < this.encounters.length; i++) {
-                    if (this.encounters[i].active) {
-                        return logData.phases[this.encounters[i].index];
-                    }
-                }
-                return logData.phases[0];
-            },
             targets: function () {
-                return this.phase.targets;
+                return this.encounterPhase.targets;
             },
             graph: function () {
-                return graphData.phases[this.phase.id].players;
+                return graphData.phases[this.encounterPhase.id].players;
             },
             graphModeEnum: function () {
                 return GraphType;
@@ -204,12 +196,12 @@
                 const cols = [];
                 const sums = [];
                 const total = [];
-                const tS = this.timeToUse / 1000.0 - this.phase.start;
+                const tS = this.timeToUse / 1000.0 - this.encounterPhase.start;
                 const curTime = Math.floor(tS);
                 let nextTime = curTime + 1;
-                const dur = Math.floor(this.phase.end - this.phase.start);
-                if (nextTime == dur + 1 && this.phase.needsLastPoint) {
-                    nextTime = this.phase.end - this.phase.start;
+                const dur = Math.floor(this.encounterPhase.end - this.encounterPhase.start);
+                if (nextTime == dur + 1 && this.encounterPhase.needsLastPoint) {
+                    nextTime = this.encounterPhase.end - this.encounterPhase.start;
                 }
                 const allTargets = [];
                 for (let j = 0; j < this.targets.length; j++) {
@@ -218,7 +210,7 @@
                     cols.push(target);
                 }
                 const damageArrayToUse = this.damageGraphName;
-                const encounterPlayers = getActivePlayersForPhase(this.phase);
+                const encounterPlayers = getActivePlayersForPhase(this.encounterPhase);
                 const players = getActivePlayers(this.timeToUse * 0.001, (this.timeToUse + 1) * 0.001);
                 for (let i = 0; i < this.graph.length; i++) {
                     const player = players[i];

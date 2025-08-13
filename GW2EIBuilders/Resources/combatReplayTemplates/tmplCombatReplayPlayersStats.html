@@ -31,7 +31,8 @@
 
 <script>
     Vue.component("combat-replay-players-stats-component", {
-        props: ["time", "selectedplayerid", "encounters"],
+        props: ["time", "selectedplayerid"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -41,14 +42,6 @@
             };
         },
         computed: {         
-            phase: function() {
-                for (let i = 0; i < this.encounters.length; i++) {
-                    if (this.encounters[i].active) {
-                        return logData.phases[this.encounters[i].index];
-                    }
-                }
-                return logData.phases[0];
-            },
             singleGroup: function () {
                 return logData.singleGroup;
             },
@@ -58,7 +51,7 @@
             groups: function () {
                 var res = [];
                 var i = 0;
-                const encounterPlayers = getActivePlayersForPhase(this.phase);
+                const encounterPlayers = getActivePlayersForPhase(this.encounterPhase);
                 const players = getActivePlayers(this.time * 0.001, (this.time + 1) * 0.001);
                 for (i = 0; i < players.length; i++) {
                     var playerData = players[i];

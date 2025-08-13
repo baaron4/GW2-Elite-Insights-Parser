@@ -14,7 +14,7 @@
     Vue.component("player-healing-graph-tab-component", {
         props: ["playerindex", "phaseindex", "activetargets", "light"],
         template: `${template}`,
-        mixins: [graphComponent, healingGraphComponent],
+        mixins: [graphComponent, healingGraphComponent, encounterPhaseComponent],
         data: function () {
             return {
                 playerOffset: 0,
@@ -43,68 +43,16 @@
                     }
                     this.layout.datarevision = new Date().getTime();
                 }
+            },
+            encounters: {
+                deep: true,
+                handler: function() {
+                    this.computeLayout();
+                }
             }
         },
         created: function () {
-            const images = [];
-            this.data = [];
-            this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
-            const oldOffset = this.playerOffset;
-            this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
-            const hasBuffs = oldOffset !== this.playerOffset;
-            this.graphOffset = this.playerOffset;
-            this.playerOffset += computePlayersHealingGraphData(this.graph, this.data, 'y3');
-            this.data.push({
-                x: this.phase.times,
-                y: [],
-                mode: 'lines',
-                line: {
-                    shape: 'spline',
-                    color: this.player.colTotal,
-                },
-                yaxis: 'y5',
-                hoverinfo: 'name+y+x',
-                name: 'Received',
-            });
-            this.data.push({
-                x: this.phase.times,
-                y: [],
-                mode: 'lines',
-                line: {
-                    shape: 'spline',
-                    color: this.player.colCleave,
-                },
-                yaxis: 'y3',
-                hoverinfo: 'name+y+x',
-                name: 'Cleave'
-            });
-            this.data.push({
-                x: this.phase.times,
-                y: [],
-                mode: 'lines',
-                line: {
-                    shape: 'spline',
-                    color: this.player.colTarget,
-                },
-                yaxis: 'y3',
-                hoverinfo: 'name+y+x',
-                name: 'Target'
-            });
-            this.data.push({
-                x: this.phase.times,
-                y: [],
-                mode: 'lines',
-                line: {
-                    shape: 'spline',
-                    color: this.player.colCleave,
-                },
-                yaxis: 'y3',
-                hoverinfo: 'name+y+x',
-                name: 'Total'
-            });
-            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, false);
-            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
-            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            this.computeLayout();
         },
         activated: function () {
             const div = document.getElementById(this.graphid);
@@ -169,6 +117,67 @@
             }
         },
         methods: {
+            computeLayout() {
+                const images = [];
+                this.data = [];
+                this.playerOffset += computeRotationData(this.player.details.rotation[this.phaseindex], images, this.data, this.phase, this.player, 1);
+                const oldOffset = this.playerOffset;
+                this.playerOffset += computeBuffData(this.player.details.boonGraph[this.phaseindex], this.data);
+                const hasBuffs = oldOffset !== this.playerOffset;
+                this.graphOffset = this.playerOffset;
+                this.playerOffset += computePlayersHealingGraphData(this.graph, this.data, 'y3');
+                this.data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: this.player.colTotal,
+                    },
+                    yaxis: 'y5',
+                    hoverinfo: 'name+y+x',
+                    name: 'Received',
+                });
+                this.data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: this.player.colCleave,
+                    },
+                    yaxis: 'y3',
+                    hoverinfo: 'name+y+x',
+                    name: 'Cleave'
+                });
+                this.data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: this.player.colTarget,
+                    },
+                    yaxis: 'y3',
+                    hoverinfo: 'name+y+x',
+                    name: 'Target'
+                });
+                this.data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: this.player.colCleave,
+                    },
+                    yaxis: 'y3',
+                    hoverinfo: 'name+y+x',
+                    name: 'Total'
+                });
+                this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, false);
+                computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+                this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+            },
             graphToUse: function () {
                 switch (this.graphhealingdata.healingmode) {
                     case HealingType.All:
@@ -189,8 +198,9 @@
             },
             computeDPSData: function () {
                 const cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
-                if (this.dpsCache.has(cacheID)) {
-                    return this.dpsCache.get(cacheID);
+                const internalCacheID = this.encounterPhase.id + '-' + cacheID;
+                if (this.dpsCache.has(internalCacheID)) {
+                    return this.dpsCache.get(internalCacheID);
                 }
                 let data;
                 if (this.graphhealingdata.hpsmode >= 0) {
@@ -202,11 +212,11 @@
                     maxHPS: data.maxDPS.total,
                     playerHPS: data.dps
                 };
-                this.dpsCache.set(cacheID, res);
+                this.dpsCache.set(internalCacheID, res);
                 return res;
             },
             computeHPSRelatedData: function () {
-                const cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
+                const cacheID = this.encounterPhase.id + '-' + getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
@@ -216,7 +226,7 @@
                 res.push(hpsData.playerHPS.target);
                 res.push(hpsData.playerHPS.cleave);
                 res.push(hpsData.playerHPS.taken);
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 for (let i = 0; i < this.graph.players.length; i++) {
                     if (!players[i]) {
                         continue;

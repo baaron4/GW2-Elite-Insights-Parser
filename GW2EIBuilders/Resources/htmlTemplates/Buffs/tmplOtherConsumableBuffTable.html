@@ -9,7 +9,7 @@
 <script>
     Vue.component("otherconsumable-buff-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {

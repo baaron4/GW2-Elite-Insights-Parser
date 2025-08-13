@@ -50,6 +50,7 @@
 <script>
     Vue.component("player-target-component", {
         props: ["players", "phaseindex"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         methods: {
             getIcon: function (path) {
@@ -87,7 +88,7 @@
             },
             groups: function () {
                 const aux = [];
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (let i = 0; i < players.length; i++) {
                     const playerData = players[i];
                     if (playerData.isFake) {

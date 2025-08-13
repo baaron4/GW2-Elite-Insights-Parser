@@ -31,6 +31,7 @@
     }
     Vue.component("dmgmodifier-persstats-component", {
         props: ['phaseindex', 'playerindex', 'activetargets', 'mode', 'incoming'],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -59,7 +60,7 @@
             orderedSpecs: function () {
                 var res = [];
                 var aux = new Set();
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < specs.length; i++) {
                     var spec = specs[i];
                     var pBySpec = [];

@@ -60,8 +60,9 @@
 
 <script>
     Vue.component("combat-replay-animation-control-component", {
-        props: ["light", "animated", "encounters", "range"],
+        props: ["light", "animated", "range"],
         template: `${template}`,
+        mixins: [encounterPhaseComponent],
         data: function () {
             return {
                 selectedSpeed: 1,
@@ -87,16 +88,6 @@
             this.updateAnimatorTimes(encounterPhase);
         },
         computed: {
-            encounterPhase: function() {
-                for (let i = 0; i < this.encounters.length; i++) {
-                    const encounter = this.encounters[i];
-                    if (encounter.active) {
-                        const phase = logData.phases[encounter.index];
-                        return phase;
-                    }
-                }
-                return logData.phases[0];
-            },
             phases: function() {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
@@ -112,7 +103,7 @@
                         } else {
                             for (let j = 0; j < logData.phases.length; j++) {
                                 const subPhase = logData.phases[j];
-                                if (subPhase._activityPhase === phase) {
+                                if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
                                     phases.push(subPhase);
                                 }
                             }

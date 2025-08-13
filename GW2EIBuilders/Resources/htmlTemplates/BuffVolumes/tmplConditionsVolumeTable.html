@@ -9,7 +9,7 @@
 <script>
     Vue.component("conditions-volume-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,14 +18,14 @@
         },
         computed: {
             buffData: function () {
-                var id = this.phaseindex + '-' + this.activeduration;
-                if (this.cache.has(id)) {
-                    return this.cache.get(id);
+                const cacheID = this.encounterPhase.id + '-' +  this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(cacheID)) {
+                    return this.cache.get(cacheID);
                 }
                 var activeduration = this.activeduration;
                 var activeTimes = this.phase.playerActiveTimes;
 
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 var getData = function (uptimesStats) {
                     var uptimes = [];                    
                     var avg = [],
@@ -87,7 +87,7 @@
                 } else {
                     res = getData(this.buffVolumesStatContainer.conditionsVolumeStats);
                 }
-                this.cache.set(id, res);
+                this.cache.set(cacheID, res);
                 return res;
             }
         },

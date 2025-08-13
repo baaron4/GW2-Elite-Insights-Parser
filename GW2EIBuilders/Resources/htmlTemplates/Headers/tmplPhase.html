@@ -32,7 +32,8 @@
 
 <script>
     Vue.component("phase-component", {
-        props: ["phases", "encounters"],
+        props: ["phases"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         computed: {
             phasesToUse: function() {
@@ -45,7 +46,7 @@
                             if (IsMultiEncounterLog) {   
                                 for (let j = 0; j < this.phases.length; j++) {
                                     const subPhase = logData.phases[j];
-                                    if (subPhase.type === PhaseTypes.INSTANCE || subPhase.type === PhaseTypes.ENCOUNTER) {
+                                    if (subPhase === phase || subPhase.type === PhaseTypes.ENCOUNTER) {
                                         phases.push(this.phases[j]);
                                     }
                                 }           
@@ -55,7 +56,7 @@
                         } else {
                             for (let j = 0; j < this.phases.length; j++) {
                                 const subPhase = logData.phases[j];
-                                if (subPhase._activityPhase === phase) {
+                                if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
                                     phases.push(this.phases[j]);
                                 }
                             }

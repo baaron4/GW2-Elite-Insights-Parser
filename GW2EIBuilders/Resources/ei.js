@@ -57,6 +57,7 @@ function compileTemplates() {
     });
     Vue.component("targetperplayer-graphs-tab-component", {
         props: ["targetindex", "phaseindex", 'light', 'playerindex'],
+        mixins: [encounterPhaseComponent],
         template : `      
         <div>            
             <keep-alive>  
@@ -69,8 +70,7 @@ function compileTemplates() {
         `,
         computed: {
             players: function() {          
-                const phase = logData.phases[this.phaseindex];
-                return getActivePlayersForPhase(phase);
+                return getActivePlayersForPhase(this.encounterPhase);
             }
         }
     });
@@ -136,16 +136,11 @@ function mainLoad() {
             index: i,
             focus: -1
         });
-        phase._activityPhase = phase.encounterPhase >= 0 ? logData.phases[phase.encounterPhase] : phase;
         if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {    
             reactiveLogdata.encounters.push({
                 active: i === 0,
                 index: i
             });
-        } 
-        // use instance/main encounter phase as activityPhase for orphan logs
-        else if (phase._activityPhase === phase) {
-            phase._activityPhase = logData.phases[0];
         }
     }
     IsMultiEncounterLog = reactiveLogdata.encounters.length > 2;

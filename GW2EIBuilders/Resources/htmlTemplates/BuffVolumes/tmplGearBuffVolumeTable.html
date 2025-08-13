@@ -9,7 +9,7 @@
 <script>
     Vue.component("gear-buff-volume-table-component", {
         props: [ 'playerindex', 'activeduration'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,12 +18,12 @@
         },
         computed: {
             buffData: function () {
-                var id = this.phaseindex;
-                if (this.cache.has(id)) {
-                    return this.cache.get(id);
+                const cacheID = this.encounterPhase.id + '-' +  this.phaseindex;
+                if (this.cache.has(cacheID)) {
+                    return this.cache.get(cacheID);
                 }
 
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 var getData = function (stats) {
                     var uptimes = [];
                     var i;
@@ -45,7 +45,7 @@
                 } else {
                     res = getData(this.buffVolumesStatContainer.gearBuffVolumeStats);
                 }
-                this.cache.set(id, res);
+                this.cache.set(cacheID, res);
                 return res;
             }
         },

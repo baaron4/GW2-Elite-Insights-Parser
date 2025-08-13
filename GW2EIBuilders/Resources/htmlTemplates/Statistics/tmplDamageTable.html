@@ -113,7 +113,7 @@
     Vue.component("damage-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
         data: function () {
             return {
                 targetless: logData.targetless,
@@ -201,7 +201,7 @@
                 return logData.hasBreakbarDamage;
             },
             tableData: function () {
-                var cacheID = this.phaseindex + '-';
+                var cacheID = this.encounterPhase.id + '-' + this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
@@ -211,7 +211,7 @@
                 var total = [0, 0, 0, 0, 0, 0, 0, 0];
                 var groups = [];
                 var i, j;
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 for (i = 0; i < this.phase.dpsStats.length; i++) {
                     var player = players[i];
                     if (!player) {
