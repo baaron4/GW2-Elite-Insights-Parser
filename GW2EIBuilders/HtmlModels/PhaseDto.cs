@@ -115,6 +115,7 @@ internal class PhaseDto
     public string? EncounterDuration;
     public string? StartStatus;
     public bool? Success;
+    public int EncounterPhase = -1;
 
     public List<int> Targets;
     public List<int> TargetPriorities;
@@ -201,6 +202,14 @@ internal class PhaseDto
                     break;
                 default:
                     break;
+            }
+        } 
+        else
+        {
+            var subPhase = (SubPhasePhaseData)phase;
+            if (subPhase.EncounterPhase != null)
+            {
+                EncounterPhase = phases.IndexOf(subPhase.EncounterPhase);
             }
         }
 

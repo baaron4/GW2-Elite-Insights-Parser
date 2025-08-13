@@ -432,7 +432,7 @@ var rowSliderComponent = function (perpage) {
     };
   };
 
-// Requires graphComponent, damageGraphComponent and encounterPhaseComponent
+// Requires graphComponent and damageGraphComponent
 var targetTabGraphComponent = {   
     data: function () {
         return {
@@ -456,12 +456,6 @@ var targetTabGraphComponent = {
                     this.layout.shapes[i].line.color = textColor;
                 }
                 this.layout.datarevision = new Date().getTime();
-            }
-        },
-        encounters: {
-            deep: true,
-            handler: function() {
-                this.computeLayout();
             }
         }
     },
@@ -568,9 +562,8 @@ var targetTabGraphComponent = {
         },
         computeDPSData: function () {
             const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
-            const internalCacheID = this.encounterPhase.id + '-' + cacheID;
-            if (this.dpsCache.has(internalCacheID)) {
-                return this.dpsCache.get(internalCacheID);
+            if (this.dpsCache.has(cacheID)) {
+                return this.dpsCache.get(cacheID);
             }
             //var before = performance.now();
             var res;
@@ -580,11 +573,11 @@ var targetTabGraphComponent = {
             } else {
                 res = computeTargetDPS(this.target, damageData, 0, this.computePhaseBreaks, cacheID, this.phase.times, this.graphdata.graphmode);
             }
-            this.dpsCache.set(internalCacheID, res);
+            this.dpsCache.set(cacheID, res);
             return res;
         },
         computeDPSRelatedData: function () {
-            var cacheID = this.encounterPhase.id + '-' + getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
+            var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
             if (this.dataCache.has(cacheID)) {
                 return this.dataCache.get(cacheID);
             }

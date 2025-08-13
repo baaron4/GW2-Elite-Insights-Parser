@@ -410,7 +410,7 @@ public class LogData
                 for (; offset < subPhases.Count; offset++)
                 {
                     var subPhase = subPhases[offset];
-                    long start = subPhase.BreakbarPhase ? Math.Max(subPhase.Start - ParserHelper.BreakbarPhaseTimeBuildup, log.LogData.LogStart) : subPhase.Start;
+                    long start = subPhase.BreakbarPhase ? subPhase.Start + ParserHelper.BreakbarPhaseTimeBuildup : subPhase.Start;
                     if (encounterPhase.InInterval(start))
                     {
                         // subphase completely inside

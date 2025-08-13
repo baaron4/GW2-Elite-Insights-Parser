@@ -78,7 +78,10 @@
             breakbarPhasesPerTarget: function () {
                 var res = [];
                 for (var targetId = 0; targetId < logData.targets.length; targetId++) {
-                    var brPhases = this.phasesToUse.filter(phase => phase.breakbarPhase && phase.targets.indexOf(targetId) > -1);
+                    var brPhases = this.phasesToUse.filter(phase => {
+                        const logPhase = logData.phases[phase.index];
+                        return logPhase.breakbarPhase && logPhase.targets.indexOf(targetId) > -1
+                    });
                     var phases = [];
                     for (var brPhaseId = 0; brPhaseId < brPhases.length; brPhaseId++) {
                         phases.push(brPhases[brPhaseId]);

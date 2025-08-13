@@ -90,10 +90,10 @@
         watch: {
             encounters: {
                 deep: true,
-                handler() {
-                    this.sortEData.key = "Name";
-                    this.sortEData.order = "asc";
-                    this.sortEData.index = -1;
+                handler: function() {
+                    this.sortPdata.key = "Sub";
+                    this.sortPdata.order = "asc";
+                    this.sortPdata.index = -1;
                 }
             }
         },
