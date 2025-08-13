@@ -157,7 +157,8 @@ internal static class NecromancerHelper
         new Buff("Flesh of the Master", FleshOfTheMaster, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.FleshOfTheMaster)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new Buff("Vampiric Aura", VampiricAura, Source.Necromancer, BuffClassification.Defensive, TraitImages.VampiricPresence),
-        new Buff("Vampiric Strikes", VampiricStrikes, Source.Necromancer, BuffClassification.Other, TraitImages.VampiricPresence),
+        new Buff("Vampiric Strikes (Player)", VampiricStrikesPlayer, Source.Necromancer, BuffClassification.Other, TraitImages.Vampiric),
+        new Buff("Vampiric Strikes (Minion)", VampiricStrikesMinion, Source.Necromancer, BuffClassification.Other, TraitImages.Vampiric),
         new Buff("Last Rites", LastRites, Source.Necromancer, BuffClassification.Defensive, TraitImages.LastRites),
         new Buff("Soul Barbs", SoulBarbs, Source.Necromancer, BuffClassification.Other, TraitImages.SoulBarbs),
         new Buff("Taste For Blood", TasteForBlood, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Support, TraitImages.OverflowingThirst),

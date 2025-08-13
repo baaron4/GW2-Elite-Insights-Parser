@@ -84,6 +84,7 @@ public class SkillItem
         { SmashBottle, "Smash (Bottle)" },
         { ThrowBottle, "Throw (Bottle)" },
         { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
+        { RescueProtocol, "Rescue Protocol" },
         #region Mounts
         // Mounts
         { BondOfLifeSkill, "Bond of Life" },
@@ -180,6 +181,11 @@ public class SkillItem
         { SadisticSearingActivation, "Sadistic Searing (Activation)" },
         { MarkOfBloodOrChillblainsTrigger, "Mark of Blood / Chillblains" },
         { ChillblainsTransfusion, "Chillblains (Transfusion)" },
+        { VampiricStrikesPlayer, "Vampiric Strikes (Player)" },
+        { VampiricStrikesMinion, "Vampiric Strikes (Minion)" },
+        { SandSwellBarrierInteraction, "Sand Swell (Barrier Interact Port)" },
+        { SandFlareSharedBarrier, "Sand Flare (Shared Barrier)" },
+        { SandstormShroudDetonation, "Sandstorm Shroud (Detonation)" },
         #endregion Necromancer
         #region Ranger
         { WindborneNotes, "Windborne Notes" },
@@ -421,6 +427,7 @@ public class SkillItem
         { Immobile, BuffImages.Immobile },
         { Slow, BuffImages.Slow },
         { ShockingAura, BuffImages.ShockingAura },
+        { RescueProtocol, SkillImages.RescueProtocol },
         #region ComboIcons
         // Combos
         { WaterBlastCombo1, ParserIcons.Healing },
@@ -763,8 +770,8 @@ public class SkillItem
             { GarishPillarHit, SkillImages.GarishPillars },
             { GarishPillarShadeHit, SkillImages.GarishPillars },
             { DesertShroudHit, SkillImages.DesertShroud },
-            { SandstormShroudHit, SkillImages.SandstormShroud },
-            { SandFlareBuff, SkillImages.SandFlare },
+            { SandstormShroudDetonation, SkillImages.SandstormShroud },
+            { SandFlareSharedBarrier, SkillImages.SandFlare },
             { DesertEmpowerment, TraitImages.DesertEmpowerment },
             { CascadingCorruption, TraitImages.CascadingCorruption },
             { DeathlyHaste, TraitImages.DeathlyHaste },
@@ -780,14 +787,14 @@ public class SkillItem
             { LifeTransferSomething, SkillImages.LifeTransfer },
             { MarkOfBloodOrChillblainsTrigger, SkillImages.MarkOfBloodOrChillblains },
             { ChillblainsTransfusion, SkillImages.Chillblains },
-            { VampiricStrikes, TraitImages.VampiricPresence },
+            { VampiricStrikesPlayer, TraitImages.Vampiric },
+            { VampiricStrikesMinion, TraitImages.Vampiric },
             { LifeBlast, SkillImages.LifeBlast },
             { FiendLeechWvW, SkillImages.SummonBloodFiend },
             { BoneSlashJaggedHorror, SkillImages.BoneSlash },
             { NecroticBite1, SkillImages.NecroticBite },
             { NecroticBite2, SkillImages.NecroticBite },
             { UnholyFeastSomething, SkillImages.UnholyFeast },
-            { VampiricStrikes2, TraitImages.Vampiric },
             { TaintedShacklesTicks, SkillImages.TaintedShackles },
             { BloodBank, TraitImages.BloodBank },
             { ShamblingSlash, SkillImages.ShamblingSlash },
@@ -800,6 +807,7 @@ public class SkillItem
             { SlashShadowFiend, SkillImages.SlashShadowFiend },
             { BoneShardBoneFiend1, SkillImages.BoneShardBoneFiend },
             { BoneShardBoneFiend2, SkillImages.BoneShardBoneFiend },
+            { SandSwellBarrierInteraction, SkillImages.SandSwell },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
