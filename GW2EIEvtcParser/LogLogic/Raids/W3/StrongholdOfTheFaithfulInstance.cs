@@ -53,7 +53,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         foreach (var surveilledApply in surveilledAppliesPerGlenna)
         {
             var glenna = surveilledApply.To;
-            var chest = log.AgentData.GetGadgetsByID(ChestID.SiegeChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_escort.ChestID).FirstOrDefault();
             if (surveilledApply != null)
             {
                 long start = surveilledApply.Time;
@@ -148,7 +148,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         var mainPhase = phases[0];
         var fakeXeras = log.AgentData.GetNPCsByID(TargetID.FakeXera);
         var xeras = log.AgentData.GetNPCsByID(TargetID.Xera);
-        var chest = log.AgentData.GetGadgetsByID(ChestID.XeraChest).FirstOrDefault();
+        var chest = log.AgentData.GetGadgetsByID(_xera.ChestID).FirstOrDefault();
         for (int i = 0; i < fakeXeras.Count; i++) 
         {
             var fakeXera = fakeXeras[i];
@@ -217,7 +217,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim
         ];
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
         HandleTwistedCastlePhases(targetsByIDs, log, phases);
         HandleXeraPhases(targetsByIDs, log, phases);
         return phases;

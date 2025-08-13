@@ -61,7 +61,7 @@ internal class HallOfChainsInstance : HallOfChains
             if (dummy != null)
             {
                 var enervators = log.AgentData.GetNPCsByID(TargetID.Enervator);
-                var chest = log.AgentData.GetGadgetsByID(ChestID.ChestOfSouls).FirstOrDefault();
+                var chest = log.AgentData.GetGadgetsByID(_river.ChestID).FirstOrDefault();
                 foreach (var desmina in desminas)
                 {
                     var currentEnervators = enervators.Where(x => x.InAwareTimes(desmina));
@@ -190,7 +190,7 @@ internal class HallOfChainsInstance : HallOfChains
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {
             var messengers = log.AgentData.GetNPCsByID(TargetID.Messenger);
-            var chest = log.AgentData.GetGadgetsByID(ChestID.DhuumChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
             foreach (var dhuum in dhuums)
             {
                 var currentMessengers = messengers.Where(x => x.InAwareTimes(dhuum));
@@ -217,7 +217,7 @@ internal class HallOfChainsInstance : HallOfChains
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], ChestID.ChestOfDesmina, "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
             return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
         });
         HandleRiverOfSoulsPhases(targetsByIDs, log, phases);

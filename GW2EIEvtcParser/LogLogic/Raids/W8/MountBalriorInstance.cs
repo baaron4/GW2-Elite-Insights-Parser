@@ -49,7 +49,7 @@ internal class MountBalriorInstance : MountBalrior
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Greer, out var greers))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.GreersChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_greer.ChestID).FirstOrDefault();
             foreach (var greer in greers)
             {
                 // TBC
@@ -82,7 +82,7 @@ internal class MountBalriorInstance : MountBalrior
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)decimaID, out var decimas))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.DecimasChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_decima.ChestID).FirstOrDefault();
             foreach (var decima in decimas)
             {
                 long start = decima.FirstAware;
@@ -130,7 +130,7 @@ internal class MountBalriorInstance : MountBalrior
         {
             long encounterThreshold = log.LogData.EvtcLogStart;
             var deterrences = log.CombatData.GetBuffData(SkillIDs.Deterrence).Where(x => x is BuffApplyEvent || x is BuffRemoveAllEvent);
-            var chest = log.AgentData.GetGadgetsByID(ChestID.UrasChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
             foreach (var ura in uras)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(ura.AgentItem).FirstOrDefault();

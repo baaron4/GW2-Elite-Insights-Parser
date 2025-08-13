@@ -126,11 +126,8 @@ internal static class LogLogicPhaseUtils
         {
             phases.Add(new SubPhasePhaseData(last, end));
         }
-        if (!filterSmallPhases)
-        {
-            return phases;
-        }
-        return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
+        long filterThreshold = filterSmallPhases ? 100 : 0;
+        return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
 
@@ -189,11 +186,8 @@ internal static class LogLogicPhaseUtils
         {
             phases.Add(new SubPhasePhaseData(last, end));
         }
-        if (!filterSmallPhases)
-        {
-            return phases;
-        }
-        return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
+        long filterThreshold = filterSmallPhases ? 100 : 0;
+        return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
     internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, long start, long end, bool filterSmallPhases = true)
@@ -243,6 +237,10 @@ internal static class LogLogicPhaseUtils
     internal delegate LogData.LogMode LogModeChecker(ParsedEvtcLog log, SingleActor target);
     internal static List<PhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, string icon, long encounterID, LogModeChecker? fightModeChecker = null)
     {
+        if (chestID == ChestID.None)
+        {
+            throw new InvalidOperationException("ProcessGenericEncounterPhasesForInstance requires a chest ID");
+        }
         var mainPhase = phases[0];
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
@@ -270,9 +268,9 @@ internal static class LogLogicPhaseUtils
         return encounterPhases;
     }
 
-    internal static List<PhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, LogLogic encounterLogic, LogModeChecker? fightModeChecker = null)
+    internal static List<PhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, string phaseName, LogLogic encounterLogic, LogModeChecker? fightModeChecker = null)
     {
-        return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, chestID, phaseName, encounterLogic.Icon, encounterLogic.LogID, fightModeChecker);
+        return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, encounterLogic.ChestID, phaseName, encounterLogic.Icon, encounterLogic.LogID, fightModeChecker);
     }
 
     internal static void NumericallyRenamePhases(IReadOnlyList<PhaseData> phases)

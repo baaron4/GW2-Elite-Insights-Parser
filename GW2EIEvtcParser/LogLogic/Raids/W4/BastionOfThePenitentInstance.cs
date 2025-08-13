@@ -51,7 +51,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.CairnChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_cairn.ChestID).FirstOrDefault();
             foreach (var cairn in cairns)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(cairn.AgentItem).FirstOrDefault();
@@ -100,7 +100,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
             if (deimosDummy != null)
             {
-                var chest = log.AgentData.GetGadgetsByID(ChestID.SaulsTreasureChest).FirstOrDefault();
+                var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
                 var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
                 long encounterStartThreshold = 0;
                 var greenApplies = log.CombatData.GetBuffApplyData(SkillIDs.GreenTeleport);
@@ -197,8 +197,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         HandleCairnPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], ChestID.RecreationRoomChest, "Mursaat Overseer", _mursaatOverseer, (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), ChestID.SamarogChest, "Samarog", _samarog, (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], "Mursaat Overseer", _mursaatOverseer, (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), "Samarog", _samarog, (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
         HandleDeimosPhases(targetsByIDs, log, phases);
         return phases;
     }

@@ -50,7 +50,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
             targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) && 
             log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CAArmSmash, out var armSmashes))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.CAChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_conjuredAmalgamate.ChestID).FirstOrDefault();
             long lowerThreshold = 0;
             foreach (var armSmash in armSmashes)
             {
@@ -104,7 +104,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         if (targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts) &&
             targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.TwinLargosChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_twinLargos.ChestID).FirstOrDefault();
             foreach (var nikare in nikares)
             {
                 var kenut = kenuts.FirstOrDefault(x => x.InAwareTimes(nikare));
@@ -145,7 +145,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.QadimsChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_qadim.ChestID).FirstOrDefault();
             var subBosses = Targets.Where(x => x.IsAnySpecies([TargetID.AncientInvokedHydra, TargetID.ApocalypseBringer, TargetID.WyvernPatriarch, TargetID.WyvernMatriarch]));
             foreach (var qadim in qadims)
             {

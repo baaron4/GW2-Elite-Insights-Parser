@@ -98,7 +98,7 @@ internal class SalvationPassInstance : SalvationPass
         }
         //
         var lastPack = packedTrios.Last();
-        var chest = log.AgentData.GetGadgetsByID(ChestID.ChestOfPrisonCamp).FirstOrDefault();
+        var chest = log.AgentData.GetGadgetsByID(_banditTrio.ChestID).FirstOrDefault();
         var encounterPhases = new List<PhaseData>();
         foreach (var pack in packedTrios)
         {
@@ -127,9 +127,9 @@ internal class SalvationPassInstance : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor", _slothasor);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], "Slothasor", _slothasor);
         HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias", _matthias);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), "Matthias", _matthias);
         return phases;
     }
 

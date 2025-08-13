@@ -56,7 +56,7 @@ public abstract class LogLogic
 
     private CombatReplayDecorationContainer EnvironmentDecorations;
 
-    protected ChestID ChestID = ChestID.None;
+    public ChestID ChestID { get; protected set; } = ChestID.None;
 
     protected List<(Buff buff, int stack)>? InstanceBuffs { get; private set; } = null;
 
