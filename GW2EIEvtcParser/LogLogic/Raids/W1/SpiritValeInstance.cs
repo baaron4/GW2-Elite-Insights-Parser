@@ -154,11 +154,34 @@ internal class SpiritValeInstance : SpiritVale
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), ChestID.GuardianChest, "Vale Guardian", _valeGuardian);
-        // To be tested, gadgets
-        //ProcessSpiritRacePhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval", _gorseval);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha", _sabetha);
+        {
+            var valeGuardianPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), "Vale Guardian", _valeGuardian);
+            foreach (var valeGuardianPhase in valeGuardianPhases)
+            {
+                var valeGuardian = valeGuardianPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.ValeGuardian));
+                phases.AddRange(ValeGuardian.ComputePhases(log, valeGuardian, Targets, valeGuardianPhase, requirePhases));
+            }
+        }
+        {
+            // To be tested, gadgets
+            //ProcessSpiritRacePhases(targetsByIDs, log, phases);
+        }
+        {
+            var gorsevalPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), "Gorseval", _gorseval);
+            foreach (var gorsevalPhase in gorsevalPhases)
+            {
+                var gorseval = gorsevalPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Gorseval));
+                phases.AddRange(Gorseval.ComputePhases(log, gorseval, Targets, gorsevalPhase, requirePhases));
+            }
+        }
+        { 
+            var sabethaPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), "Sabetha", _sabetha);
+            foreach (var sabethaPhase in sabethaPhases)
+            {
+                var sabetha = sabethaPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Sabetha));
+                phases.AddRange(Sabetha.ComputePhases(log, sabetha, Targets, sabethaPhase, requirePhases));
+            }
+        }
         return phases;
     }
 

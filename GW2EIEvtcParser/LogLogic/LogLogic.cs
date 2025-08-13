@@ -392,6 +392,23 @@ public abstract class LogLogic
         }
     }
 
+    protected static void AddTargetsToPhaseAndFit(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    {
+        AddTargetsToPhase(phase, targets, ids, log, priority);
+        phase.OverrideTimes(log);
+    }
+
+    protected static void AddTargetsToPhase(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    {
+        foreach (SingleActor target in targets)
+        {
+            if (target.IsAnySpecies(ids))
+            {
+                phase.AddTarget(target, log, priority);
+            }
+        }
+    }
+
     protected void AddTargetsToPhaseAndFit(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         AddTargetsToPhase(phase, ids, log, priority);
