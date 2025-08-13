@@ -42,7 +42,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         return "Stronghold Of The Faithful";
     }
-    private static void HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -64,7 +64,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = chest!.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, EncounterIconEscort);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, _escort);
                 if (phase.Targets.Count == 0)
                 {
                     phase.AddTarget(dummy, log);
@@ -73,9 +73,10 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
         mainPhase.AddTargets(mcLeods, log);
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues))
@@ -83,7 +84,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Twisted Castle");
             if (dummy == null)
             {
-                return;
+                return encounterPhases;
             }
             var mainPhase = phases[0];
             var packedStatus = new List<List<SingleActor>>();
@@ -130,17 +131,18 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     success = true;
                     end = reward.Time;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success, EncounterIconTwistedCastle);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success, _twistedCastle);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
-    private static void HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event");
         if (dummy == null)
         {
-            return;
+            return [];
         }
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -195,9 +197,10 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     end = log.LogData.LogEnd;
                 }
             }
-            AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success, EncounterIconXera);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success, _xera);
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -214,7 +217,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Galletta,
             TargetID.Ianim
         ];
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", EncounterIconKeepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), ChestID.KeepConstructChest, "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
         HandleTwistedCastlePhases(targetsByIDs, log, phases);
         HandleXeraPhases(targetsByIDs, log, phases);
         return phases;

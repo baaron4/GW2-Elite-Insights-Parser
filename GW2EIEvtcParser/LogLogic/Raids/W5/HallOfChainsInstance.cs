@@ -50,7 +50,7 @@ internal class HallOfChainsInstance : HallOfChains
         return "Hall Of Chains";
     }
 
-    private static void HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -77,14 +77,15 @@ internal class HallOfChainsInstance : HallOfChains
                         end = chest.FirstAware;
                         success = true;
                     }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "River of Souls", start, end, success, EncounterIconRiver);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "River of Souls", start, end, success, _river);
                 }
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleStatueOfIcePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleStatueOfIcePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -106,12 +107,13 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success, EncounterIconStatueOfIce);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success, _statueOfIce);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
-    private static void HandleStatueOfDeathPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleStatueOfDeathPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -139,13 +141,14 @@ internal class HallOfChainsInstance : HallOfChains
                     end = deadEvent.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success, EncounterIconStatueOfDeath);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success, _statueOfDeath);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleStatueOfDarknessPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleStatueOfDarknessPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -173,13 +176,14 @@ internal class HallOfChainsInstance : HallOfChains
                     success = true;
                     end = intersectTime;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success, EncounterIconStatueOfDarkness);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success, _statueOfDarkness);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleDhuumPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleDhuumPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -202,17 +206,18 @@ internal class HallOfChainsInstance : HallOfChains
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, EncounterIconDhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], ChestID.ChestOfDesmina, "Soulless Horror", EncounterIconSoullessHorror, (log, soullessHorror) => {
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], ChestID.ChestOfDesmina, "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
             return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
         });
         HandleRiverOfSoulsPhases(targetsByIDs, log, phases);

@@ -1,4 +1,6 @@
-﻿namespace GW2EIJSON;
+﻿using System.Text.Json.Serialization;
+
+namespace GW2EIJSON;
 
 /// <summary>
 /// Class corresponding to a phase
@@ -21,21 +23,28 @@ public class JsonPhase
     public string? Name;
 
     /// <summary>
-    /// The success status of the phase, only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.Success"/> otherwise
+    /// The success status of the phase, only relevant in Instance logs and for Encounter type phases
     /// </summary>
-    public bool Success;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? Success;
 
     /// <summary>
-    /// If the phase is in challenge mode, only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.IsCM"/> otherwise
+    /// If the phase is in challenge mode, only relevant in Instance logs and for Encounter type phases.
     /// </summary>
-    public bool IsCM;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? IsCM;
     /// <summary>
-    /// If the phase is in legendary challenge mode. Only relevant for Instance logs and Encounter type phases, will be equal to <see cref="JsonLog.IsLegendaryCM"/> otherwise\n
+    /// If the phase is in legendary challenge mode. Only relevant in Instance logs and for Encounter type phases. \n
     /// If this is true, <see cref="IsCM"/> will also be true
     /// </summary>
-    public bool IsLegendaryCM;
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? IsLegendaryCM;
 
     /// <summary>
+    /// Encounter ID of the phase, only relevant in Instance logs and for Encounter type phases.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public long? EIEncounterID;
     /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
     /// Index of targets tracked during the phase
     /// </summary>

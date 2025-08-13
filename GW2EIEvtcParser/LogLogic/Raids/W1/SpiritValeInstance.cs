@@ -43,7 +43,7 @@ internal class SpiritValeInstance : SpiritVale
         return "Spirit Vale";
     }
 
-    private static void ProcessSpiritRacePhases_SingleGadgetInstances(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> ProcessSpiritRacePhases_SingleGadgetInstances(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
@@ -82,13 +82,14 @@ internal class SpiritValeInstance : SpiritVale
                     end = reward.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarriers, [], [], phases[0], "Spirit Race", start, end, success, EncounterIconSpiritRace);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarriers, [], [], phases[0], "Spirit Race", start, end, success, _spiritRace);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
@@ -142,21 +143,22 @@ internal class SpiritValeInstance : SpiritVale
                     end = reward.Time;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarrierPack, [], [], phases[0], "Spirit Race", start, end, success, EncounterIconSpiritRace);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarrierPack, [], [], phases[0], "Spirit Race", start, end, success, _spiritRace);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), ChestID.GuardianChest, "Vale Guardian", EncounterIconValeGuardian);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.ValeGuardian, Targets.Where(x => x.IsAnySpecies([TargetID.RedGuardian, TargetID.BlueGuardian, TargetID.GreenGuardian])), ChestID.GuardianChest, "Vale Guardian", _valeGuardian);
         // To be tested, gadgets
         //ProcessSpiritRacePhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval", EncounterIconGorseval);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha", EncounterIconSabetha);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), ChestID.GorsevalChest, "Gorseval", _gorseval);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabetha, Targets.Where(x => x.IsAnySpecies([TargetID.Karde, TargetID.Knuckles, TargetID.Kernan])), ChestID.SabethaChest, "Sabetha", _sabetha);
         return phases;
     }
 
