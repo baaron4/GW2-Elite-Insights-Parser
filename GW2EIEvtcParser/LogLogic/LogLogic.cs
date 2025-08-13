@@ -76,21 +76,21 @@ public abstract class LogLogic
                 new MechanicGroup(
                     [
                         new PlayerStatusMechanic<DeadEvent>(new MechanicPlotlySetting(Symbols.X, Colors.Black), "Dead", "Dead", "Dead", 0, (log, a) => log.CombatData.GetDeadEvents(a))
-                            .UsingShowOnTable(false),
+                            .UsingNoShowOnTable(),
                         new PlayerStatusMechanic<DownEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Red), "Downed", "Downed", "Downed", 0, (log, a) => log.CombatData.GetDownEvents(a))
-                            .UsingShowOnTable(false),
+                            .UsingNoShowOnTable(),
                         new PlayerStatusMechanic<AliveEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.Green), "Got up", "Got up", "Got up", 0, (log, a) => log.CombatData.GetAliveEvents(a))
-                            .UsingShowOnTable(false),
+                            .UsingNoShowOnTable(),
                     ]
                 ),
                 new PlayerCastStartMechanic(SkillIDs.Resurrect, new MechanicPlotlySetting(Symbols.CrossOpen,Colors.Teal), "Res", "Res", "Res", 0)
-                    .UsingShowOnTable(false),
+                    .UsingNoShowOnTable(),
                 new MechanicGroup(
                     [
                         new PlayerStatusMechanic<DespawnEvent>(new MechanicPlotlySetting(Symbols.X, Colors.LightGrey), "DC", "DC", "DC", 0, (log, a) => log.CombatData.GetDespawnEvents(a))
-                            .UsingShowOnTable(false),
+                            .UsingNoShowOnTable(),
                         new PlayerStatusMechanic<SpawnEvent>(new MechanicPlotlySetting(Symbols.Cross, Colors.LightBlue), "Resp", "Resp", "Resp", 0, (log, a) => log.CombatData.GetSpawnEvents(a))
-                            .UsingShowOnTable(false)
+                            .UsingNoShowOnTable()
                     ]
                 ),
                 new MechanicGroup(
