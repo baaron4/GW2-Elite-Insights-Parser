@@ -66,7 +66,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         };
         foreach (var subMechanics in _subMechanics)
         {
-            res.Add(subMechanics.Item1);
+            res.AddRange(subMechanics.Item1.GetMechanics());
         }
         return res;
     }
