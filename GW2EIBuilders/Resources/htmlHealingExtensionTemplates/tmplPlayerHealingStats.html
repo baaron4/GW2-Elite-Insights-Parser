@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h3 v-for="player in players" :key="player.id" v-show="player.id === activeInPhasePlayer"
+        <h3 v-for="player in players" :key="player.id" v-show="player.id === activeplayer"
             class="text-center mt-2"><img :alt="player.profession" class="icon" :src="player.icon">{{player.name}}</h3>
-        <ul class="nav nav-tabs" v-show="activeInPhasePlayer > -1">
+        <ul class="nav nav-tabs" v-show="activeplayer > -1">
             <li>
                 <a class="nav-link" :class="{active: tabmode === 0}" @click="tabmode = 0">
                     Outgoing Healing
@@ -51,12 +51,9 @@
         </ul>
         <keep-alive>
             <player-healing-tab-component v-for="player in players" :key="'healing' + player.id"
-                v-if="player.id === activeInPhasePlayer" :playerindex="player.id" :tabmode="tabmode"
+                v-if="player.id === activeplayer" :playerindex="player.id" :tabmode="tabmode"
                 :phaseindex="phaseindex" :activetargets="activetargets" :light="light"></player-healing-tab-component>
         </keep-alive>
-        <div v-if="activeInPhasePlayer === -1">
-            <h3 class="text-center">Selected player is not present in current phase</h3>
-        </div>
     </div>
 </template>
 
@@ -98,14 +95,6 @@
             };
         },
         computed: {   
-            activeInPhasePlayer: function() {
-                const phase = logData.phases[this.phaseindex];
-                const activePlayers = getActivePlayersForPhase(phase);
-                if (activePlayers.filter(x => x && x.id === this.activeplayer).length > 0) {
-                    return this.activeplayer;
-                }
-                return -1;
-            },
             players: function () {
                 return logData.players;
             },
