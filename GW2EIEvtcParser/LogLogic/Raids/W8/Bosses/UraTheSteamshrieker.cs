@@ -299,7 +299,7 @@ internal class UraTheSteamshrieker : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found"); ;
+        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
         phases[0].AddTarget(ura, log);
         if (!requirePhases)
         {
@@ -330,8 +330,8 @@ internal class UraTheSteamshrieker : MountBalrior
         }
         // HP based phases
         var hpUpdates = ura.GetHealthUpdates(log);
-        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
-        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
+        var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70 && x.Value != 0);
+        var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40 && x.Value != 0);
         // 100-70
         var before70 = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
         before70.AddParentPhase(parentPhase);
