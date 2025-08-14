@@ -143,7 +143,7 @@ function mainLoad() {
             });
         }
     }
-    IsMultiEncounterLog = reactiveLogdata.encounters.length > 2;
+    IsMultiEncounterLog = reactiveLogdata.encounters.length > 1;
     for (var i = 0; i < logData.targets.length; i++) {
         var target = logData.targets[i];
         var activeArray = [];
