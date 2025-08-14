@@ -39,10 +39,10 @@
                     }
                     this.layout.datarevision = new Date().getTime();
                 }
-            },      
+            },
             encounters: {
                 deep: true,
-                handler: function() {
+                handler: function () {
                     this.computeLayout();
                 }
             },
@@ -265,7 +265,7 @@
                 };
             },
             computeHPSData: function () {
-                const cacheID = this.encounterPhase.id + '-' + getHPSGraphCacheID(this.encounterPhase.id, this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, this.mode);
+                const cacheID = getHPSGraphCacheID(this.encounterPhase.id, this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, this.mode);
                 const internalCacheID = this.encounterPhase.id + '-' + cacheID;
                 if (this.dpsCache.has(internalCacheID)) {
                     return this.dpsCache.get(internalCacheID);

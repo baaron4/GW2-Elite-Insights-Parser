@@ -136,7 +136,6 @@ function mainLoad() {
             index: i,
             focus: -1
         });
-        phase._activityPhase = phase;
         if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {
             reactiveLogdata.encounters.push({
                 active: i === 0,

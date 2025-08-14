@@ -13,7 +13,7 @@
                 class="d-flex flex-row flex-nowrap  align-items-center mr-1 ml-1">
                 <img class="icon-sl mr-2" :src="getTargetData(data.targetId).icon"
                     :alt="getTargetData(data.targetId).name" :data-original-title="getTargetData(data.targetId).name"
-                    v-if="breakbarPhasesPerTarget.length > 1">
+                    >
                 <ul class="nav nav-pills d-flex flex-row flex-nowrap">
                     <li class="nav-item" v-for="(phase, id) in data.phases"
                         v-show="getPhaseData(phase.index).breakbarPhase"

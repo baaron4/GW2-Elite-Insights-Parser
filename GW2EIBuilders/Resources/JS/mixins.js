@@ -36,6 +36,18 @@ var numberComponent = {
     }
 };
 
+var damageGraphComponent = {
+    data: function() {
+        return {
+            graphdata: {
+                dpsmode: 0,
+                graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
+                damagemode: DamageType.All,
+            }
+        };
+    },
+};
+
 var encounterPhaseComponent = {
     data: function () {
         return {
@@ -55,18 +67,6 @@ var encounterPhaseComponent = {
         },
     }
 }
-
-var damageGraphComponent = {
-    data: function() {
-        return {
-            graphdata: {
-                dpsmode: 0,
-                graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
-                damagemode: DamageType.All,
-            }
-        };
-    },
-};
 
 var graphComponent = {
     data: function () {
