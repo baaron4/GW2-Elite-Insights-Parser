@@ -14,6 +14,9 @@ partial class SingleActor
     private List<Segment>? _dcs;
     private List<Segment>? _actives;
 
+
+    private CachingCollection<long>? _activeDurations;
+
     private List<DeathRecap>? _deathRecaps;
 
     private List<Segment>? _breakbarNones;
@@ -348,10 +351,16 @@ partial class SingleActor
 
     public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
     {
-        var (dead, down, dc, _) = GetStatus(log);
-        return (end - start) -
-            (long)dead.Sum(x => x.IntersectingArea(start, end)) -
-            (long)dc.Sum(x => x.IntersectingArea(start, end));
+        _activeDurations ??= new CachingCollection<long>(log);
+        if (!_activeDurations.TryGetValue(start, end, out var activeDuration))
+        {
+            var (dead, down, dc, _) = GetStatus(log);
+            activeDuration = (end - start) -
+                (long)dead.Sum(x => x.IntersectingArea(start, end)) -
+                (long)dc.Sum(x => x.IntersectingArea(start, end));
+            _activeDurations.Set(start, end, activeDuration);
+        }
+        return activeDuration;
     }
 
     public bool IsDownBeforeNext90(ParsedEvtcLog log, long curTime)

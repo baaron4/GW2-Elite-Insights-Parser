@@ -14,7 +14,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
 
     internal delegate bool SingleActorChecker(long time, SingleActor actor, ParsedEvtcLog log);
-    private readonly List<(CheckedMechanic<Checkable>, SingleActorChecker)> _subMechanics = [];
+    private readonly List<(CheckedMechanic<Checkable> Mechanic, SingleActorChecker Checker)> _subMechanics = [];
 
     protected CheckedMechanic(MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -64,9 +64,9 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         { 
             this 
         };
-        foreach (var subMechanics in _subMechanics)
+        foreach (var subMechanic in _subMechanics)
         {
-            res.Add(subMechanics.Item1);
+            res.AddRange(subMechanic.Mechanic.GetMechanics());
         }
         return res;
     }
@@ -77,11 +77,11 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         {
             mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
         }
-        foreach (var subMechanics in _subMechanics)
+        foreach (var subMechanic in _subMechanics)
         {
-            if (subMechanics.Item2(time, actor, log))
+            if (subMechanic.Checker(time, actor, log))
             {
-                subMechanics.Item1.InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
+                subMechanic.Mechanic.InsertMechanicWithSubMechanics(log, mechanicLogs, time, timeToUse, actor);
             }
         }
     }

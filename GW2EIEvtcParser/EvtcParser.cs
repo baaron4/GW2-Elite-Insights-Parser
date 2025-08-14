@@ -253,12 +253,28 @@ public class EvtcParser
                         actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
+                Parallel.ForEach(log.Friendlies, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        // To create the caches
+                        actor.GetBuffApplyEventsByID(log, phase.Start, phase.End, 0);
+                        actor.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
+                    }
+                });
                 _t.Log("Friendlies GetBuffs Self");
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
                         actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffVolumes(BuffEnum.Group, log, phase.Start, phase.End);
                     }
                 });
                 _t.Log("PlayerList GetBuffs Group");
@@ -269,12 +285,26 @@ public class EvtcParser
                         actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
                     }
                 });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffVolumes(BuffEnum.OffGroup, log, phase.Start, phase.End);
+                    }
+                });
                 _t.Log("PlayerList GetBuffs OffGroup");
                 Parallel.ForEach(log.PlayerList, actor =>
                 {
                     foreach (PhaseData phase in phases)
                     {
                         actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
+                    }
+                });
+                Parallel.ForEach(log.PlayerList, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End);
                     }
                 });
                 _t.Log("PlayerList GetBuffs Squad");
