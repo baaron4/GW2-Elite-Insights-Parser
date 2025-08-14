@@ -118,7 +118,7 @@
     Vue.component("outgoing-healing-stats-component", {
         props: ["activetargets", "playerindex", "phaseindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
         data: function () {
             return {
                 showHealing: logData.wvw,
@@ -196,7 +196,7 @@
                 return barrierStatsExtension.barrierPhases[this.phaseindex];
             },
             tableData: function () {
-                let cacheID = this.phaseindex + '-';
+                let cacheID = this.encounterPhase.id + '-' + this.phaseindex + '-';
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
@@ -208,7 +208,7 @@
                     total.push(0, 0);
                 }
                 const groups = [];
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 for (let i = 0; i < this.hPhase.outgoingHealingStats.length; i++) {
                     const player = players[i];
                     if (!player) {

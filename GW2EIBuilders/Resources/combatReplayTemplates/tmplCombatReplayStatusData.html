@@ -13,7 +13,7 @@
         </ul>
         <div class="squad-details">
             <keep-alive>
-                <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :encounters="reactiveLogdata.encounters":time="time" :selectedplayerid="selectedactorid"></combat-replay-players-stats-component>
+                <combat-replay-players-stats-component v-if="mode === 0" :key="'players-cr-details'" :time="time" :selectedplayerid="selectedactorid"></combat-replay-players-stats-component>
                 <combat-replay-targets-stats-component v-if="mode === 1" :key="'targets-cr-details'" :time="time" :selectedtargetid="selectedactorid"></combat-replay-targets-stats-component>
                 <combat-replay-mechanics-list-component v-if="mode === 2" :key="'mechanics-cr-details'" :selectedplayerid="selectedactorid"></combat-replay-mechanics-list-component>
             </keep-alive>
@@ -28,8 +28,7 @@
         data: function() {
             return {
                 targetless: logData.targetless,
-                mode: 0,
-                reactiveLogdata: reactiveLogdata,
+                mode: 0
             };
         }
     });

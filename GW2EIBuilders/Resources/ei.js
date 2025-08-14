@@ -57,6 +57,7 @@ function compileTemplates() {
     });
     Vue.component("targetperplayer-graphs-tab-component", {
         props: ["targetindex", "phaseindex", 'light', 'playerindex'],
+        mixins: [encounterPhaseComponent],
         template : `      
         <div>            
             <keep-alive>  
@@ -69,8 +70,7 @@ function compileTemplates() {
         `,
         computed: {
             players: function() {          
-                const phase = logData.phases[this.phaseindex];
-                return getActivePlayersForPhase(phase);
+                return getActivePlayersForPhase(this.encounterPhase);
             }
         }
     });
@@ -137,19 +137,7 @@ function mainLoad() {
             focus: -1
         });
         phase._activityPhase = phase;
-        if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
-            for (let j = 0; j < logData.phases.length; j++) {
-                const activityPhase = logData.phases[j];
-                if (activityPhase.type !== PhaseTypes.ENCOUNTER) {
-                    continue;
-                }
-                if (phase.start < activityPhase.start || phase.end > activityPhase.end) {
-                    continue;
-                }
-                phase._activityPhase = activityPhase;
-                break;
-            }
-        } else {
+        if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {
             reactiveLogdata.encounters.push({
                 active: i === 0,
                 index: i

@@ -1074,9 +1074,12 @@ function getActiveNonFakePlayers(start, end) {
 }
 
 function getActivePlayersForPhase(phase) {
+    if (phase.type !== PhaseTypes.INSTANCE && phase.type !== PhaseTypes.ENCOUNTER) {
+        throw "Expected an instance or encounter phase";
+    }
     let res = [];
-    const start = phase._activityPhase.start;
-    const end = phase._activityPhase.end;
+    const start = phase.start;
+    const end = phase.end;
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
         if ((player.lastAware <= start || player.firstAware >= end)) {
@@ -1089,9 +1092,12 @@ function getActivePlayersForPhase(phase) {
 }
 
 function getActiveNonFakePlayersForPhase(phase) {
+    if (phase.type !== PhaseTypes.INSTANCE && phase.type !== PhaseTypes.ENCOUNTER) {
+        throw "Expected an instance or encounter phase";
+    }
     let res = [];
-    const start = phase._activityPhase.start;
-    const end = phase._activityPhase.end;
+    const start = phase.start;
+    const end = phase.end;
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
         if (player.isFake || ((player.lastAware <= start || player.firstAware >= end))) {
