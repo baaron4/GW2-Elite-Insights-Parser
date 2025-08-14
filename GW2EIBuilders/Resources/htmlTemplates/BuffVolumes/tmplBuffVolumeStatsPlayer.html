@@ -22,7 +22,7 @@
 <script>
     Vue.component("buff-volume-stats-player-component", {
         props: ['playerindex'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -36,14 +36,14 @@
                 return logData.players[this.playerindex];
             },
             boonData: function () {
-                const id = this.phaseindex + '-' + this.activeduration;
+                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
                 const res = [];
                 const activeTimes = this.phase.playerActiveTimes;
                 const activeduration = this.activeduration;        
-                const players = getActiveNonFakePlayersForPhase(this);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (let i = 0; i < players.length; i++) {
                     if (!players[i] || (activeduration && activeTimes[i] < 1e-6)) {
                         continue;

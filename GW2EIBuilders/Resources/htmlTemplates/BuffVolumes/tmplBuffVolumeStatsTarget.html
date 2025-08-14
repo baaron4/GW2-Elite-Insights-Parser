@@ -16,7 +16,7 @@
 <script>
     Vue.component("buff-volume-stats-target-component", {
         props: ['playerindex', 'targetindex'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -36,10 +36,11 @@
                 return this.buffVolumesStatContainer.targetsBoonIncomingVolumeTotals[this.targetPhaseIndex].avg > 0;
             },
             condiData: function () {
-                if (this.cacheCondi.has(this.phaseindex)) {
-                    return this.cacheCondi.get(this.phaseindex);
+                const cacheID = this.encounterPhase.id + '-' + this.phaseindex;
+                if (this.cacheCondi.has(cacheID)) {
+                    return this.cacheCondi.get(cacheID);
                 }
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 const res = [];
                 if (this.targetPhaseIndex === -1) {
                     for (let i = 0; i < players.length; i++) {
@@ -65,12 +66,13 @@
                         });
                     }
                 }
-                this.cacheCondi.set(this.phaseindex, res);
+                this.cacheCondi.set(cacheID, res);
                 return res;
             },
             condiSums: function () {
-                if (this.cacheCondiSums.has(this.phaseindex)) {
-                    return this.cacheCondiSums.get(this.phaseindex);
+                const cacheID = this.phaseindex;
+                if (this.cacheCondiSums.has(cacheID)) {
+                    return this.cacheCondiSums.get(cacheID);
                 }
                 const res = [];
                 if (this.targetPhaseIndex === -1) {
@@ -93,8 +95,9 @@
                 return res;
             },
             boonData: function () {
-                if (this.cacheBoon.has(this.phaseindex)) {
-                    return this.cacheBoon.get(this.phaseindex);
+                const cacheID = this.phaseindex;
+                if (this.cacheBoon.has(cacheID)) {
+                    return this.cacheBoon.get(cacheID);
                 }
                 const res = [];
                 if (this.targetPhaseIndex === -1 || !this.hasBoons) {
@@ -112,7 +115,7 @@
                         data: targetData
                     });
                 }
-                this.cacheBoon.set(this.phaseindex, res);
+                this.cacheBoon.set(cacheID, res);
                 return res;
             }
         }
