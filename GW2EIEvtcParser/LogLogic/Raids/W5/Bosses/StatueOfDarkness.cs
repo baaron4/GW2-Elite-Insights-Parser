@@ -118,7 +118,7 @@ internal class StatueOfDarkness : HallOfChains
                     string name = eye.IsSpecies(TargetID.EyeOfJudgement) ? "Eye of Judgement" : "Eye of Fate";
                     var phase = new SubPhasePhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, log.LogData.LogEnd))
                     {
-                        Name = eye.Character + " " + (++count)
+                        Name = name + " " + (++count)
                     };
                     phase.AddParentPhase(mainPhase);
                     phase.AddTarget(eye, log);
