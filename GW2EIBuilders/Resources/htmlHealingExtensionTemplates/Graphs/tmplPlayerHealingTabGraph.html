@@ -212,7 +212,7 @@
                     maxHPS: data.maxDPS.total,
                     playerHPS: data.dps
                 };
-                this.dpsCache.set(cacheID, res);
+                this.dpsCache.set(internalCacheID, res);
                 return res;
             },
             computeHPSRelatedData: function () {
