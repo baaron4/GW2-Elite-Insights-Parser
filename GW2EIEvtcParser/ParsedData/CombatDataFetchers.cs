@@ -337,6 +337,13 @@ partial class CombatData
         }
         return [];
     }
+    /// <summary>
+    /// Returns list of buff apply events applied on agent 
+    /// </summary>
+    public IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyDataByDst(AgentItem dst)
+    {
+        return GetTimeValueOrEmpty(_buffApplyDataByDst, dst);
+    }
     public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
     {
         if (instanceID == 0)

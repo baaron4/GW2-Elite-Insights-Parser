@@ -23,6 +23,25 @@ partial class SingleActor
     private CachingCollection<(Dictionary<long, BuffVolumeByActorStatistics> Rates, Dictionary<long, BuffVolumeByActorStatistics> ActiveRates)>? _buffVolumesDictionary;
     private Dictionary<long, AbstractBuffSimulator>? _buffSimulators;
 
+    #region ACCELERATORS
+    private CachingCollection<Dictionary<long, List<AbstractBuffApplyEvent>>>? _buffApplyByIDAccelerator;
+
+    internal IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyEventsByID(ParsedEvtcLog log, long start, long end, long buffID)
+    {
+        _buffApplyByIDAccelerator ??= new CachingCollection<Dictionary<long, List<AbstractBuffApplyEvent>>>(log);
+        if (!_buffApplyByIDAccelerator.TryGetValue(start, end, out var dict)) {
+            dict = log.CombatData.GetBuffApplyDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
+            _buffApplyByIDAccelerator.Set(start, end, dict);
+        }
+        if (dict.TryGetValue(buffID, out var list))
+        {
+            return list;
+        }
+        return [];
+    }
+
+    #endregion ACCELERATORS
+
     #region DISTRIBUTION
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
