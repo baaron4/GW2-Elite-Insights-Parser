@@ -44,33 +44,30 @@ public class BuffVolumeStatistics
                 {
                     activePlayerCount++;
                 }
-                foreach (BuffEvent abae in log.CombatData.GetBuffApplyDataByIDByDst(buff.ID, p.AgentItem))
+                foreach (BuffEvent abae in p.GetBuffApplyEventsByID(log, start, end, buff.ID))
                 {
-                    if (abae.Time >= start && abae.Time <= end)
+                    abae.TryFindSrc(log);
+                    if (abae.CreditedBy.Is(srcAgentItem))
                     {
-                        abae.TryFindSrc(log);
-                        if (abae.CreditedBy.Is(srcAgentItem))
+                        if (abae is BuffApplyEvent bae)
                         {
-                            if (abae is BuffApplyEvent bae)
+                            // We ignore infinite duration buffs
+                            /*if (bae.AppliedDuration >= int.MaxValue)
                             {
-                                // We ignore infinite duration buffs
-                                /*if (bae.AppliedDuration >= int.MaxValue)
-                                {
-                                    continue;
-                                }*/
-                                totalOutgoing += bae.AppliedDuration;
-                                if (playerActiveDuration > 0)
-                                {
-                                    totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
-                                }
+                                continue;
+                            }*/
+                            totalOutgoing += bae.AppliedDuration;
+                            if (playerActiveDuration > 0)
+                            {
+                                totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
                             }
-                            if (abae is BuffExtensionEvent bee)
+                        }
+                        if (abae is BuffExtensionEvent bee)
+                        {
+                            totalOutgoingByExtension += bee.ExtendedDuration;
+                            if (playerActiveDuration > 0)
                             {
-                                totalOutgoingByExtension += bee.ExtendedDuration;
-                                if (playerActiveDuration > 0)
-                                {
-                                    totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
-                                }
+                                totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
                             }
                         }
                     }
