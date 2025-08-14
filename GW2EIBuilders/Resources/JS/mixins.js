@@ -36,26 +36,6 @@ var numberComponent = {
     }
 };
 
-var encounterPhaseComponent = {
-    data: function () {
-        return {
-            encounters: reactiveLogdata.encounters
-        }
-    },
-    computed: {
-        encounterPhase: function () {
-            const encounters = this.encounters;
-            for (let i = 0; i < encounters.length; i++) {
-                const encounter = encounters[i];
-                if (encounter.active) {
-                    return logData.phases[encounter.index];
-                }
-            }
-            return logData.phases[0];
-        },
-    }
-}
-
 var damageGraphComponent = {
     data: function() {
         return {
