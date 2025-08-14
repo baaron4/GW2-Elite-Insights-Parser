@@ -9,7 +9,7 @@
 <script>
     Vue.component("conditions-table-component", {
         props: ['playerindex', 'activeduration'],
-        mixins: [buffComponent],
+        mixins: [buffComponent, encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,14 +18,14 @@
         },
         computed: {
             buffData: function () {
-                const id = this.phaseindex + '-' + this.activeduration;
+                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
                 const activeduration = this.activeduration;
                 const activeTimes = this.phase.playerActiveTimes;
 
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 var getData = function (uptimesStats) {
                     var uptimes = [];                    
                     var avg = [],
