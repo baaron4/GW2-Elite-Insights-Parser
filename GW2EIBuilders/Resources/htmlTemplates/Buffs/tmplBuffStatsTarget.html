@@ -35,9 +35,6 @@
             hasBoons: function () {
                 return this.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex].avg > 0;
             },
-            cacheID: function() {
-                return this.encounterPhase.id + '-' + this.phaseindex;
-            },
             condiData: function () {
                 const cacheID = this.encounterPhase.id + '-' + this.phaseindex;
                 if (this.cacheCondi.has(cacheID)) {

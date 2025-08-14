@@ -57,7 +57,7 @@
                 return res;
             },
             boonSums: function () {
-                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
+                const id = this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
