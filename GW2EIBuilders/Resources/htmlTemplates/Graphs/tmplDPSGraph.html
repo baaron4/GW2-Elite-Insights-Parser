@@ -233,7 +233,7 @@
                 return res;
             },
             computeDPSRelatedData: function () {
-                const cacheID = this.encounterPhase.id + '-' +getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, this.mode);
+                const cacheID = this.encounterPhase.id + '-' + getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, this.mode);
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
