@@ -52,7 +52,7 @@
                 var res = [];
                 var i = 0;
                 const encounterPlayers = getActivePlayersForPhase(this.encounterPhase);
-                const players = getActivePlayers(this.time * 0.001, (this.time + 1) * 0.001);
+                const players = getActivePlayers(this.time * 0.001);
                 for (i = 0; i < players.length; i++) {
                     var playerData = players[i];
                     if (!playerData || !encounterPlayers[i]) {

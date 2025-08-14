@@ -155,7 +155,7 @@
             updateAnimatorTimes(phase) {
                 animator.updateRange(phase);
                 this.updatePhaseTime(phase);
-                animator.selectActor(null);
+                animator._reselectIfEnglobed();
             },
             getSliderGradient: function () {
                 var startPercent, endPercent;

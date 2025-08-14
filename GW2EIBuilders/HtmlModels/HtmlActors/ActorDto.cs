@@ -17,6 +17,8 @@ internal abstract class ActorDto
     public double FirstAware;
     public double LastAware;
     public bool IsEnglobed;
+    public bool IsFirstEnglobed;
+    public bool IsLastEnglobed;
     public List<MinionDto> Minions;
     public ActorDetailsDto Details;
 
@@ -34,6 +36,11 @@ internal abstract class ActorDto
         FirstAware = actor.FirstAware / 1000.0;
         LastAware = actor.LastAware / 1000.0;
         IsEnglobed = actor.AgentItem.IsEnglobedAgent;
+        if (IsEnglobed)
+        {
+            IsFirstEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.First() == actor.AgentItem;
+            IsLastEnglobed = actor.EnglobingAgentItem.EnglobedAgentItems.Last() == actor.AgentItem;
+        }
         var minions = actor.GetMinions(log);
         Minions = new(minions.Count);
         foreach (KeyValuePair<long, Minions> pair in minions)

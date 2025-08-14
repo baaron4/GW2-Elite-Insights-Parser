@@ -1047,11 +1047,16 @@ function validateStartPath(path) {
     return setting.startsWith(path);
 }
 
-function getActivePlayers(start, end) {
+function getActivePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end)) {
+        if (player.isEnglobed && 
+            (
+                (!player.isFirstEnglobed && player.firstAware > time) ||
+                (!player.isLastEnglobed && player.lastAware < time)
+            )
+        ) {
             res.push(null);
         } else {
             res.push(player);
@@ -1060,11 +1065,19 @@ function getActivePlayers(start, end) {
     return res;
 }
 
-function getActiveNonFakePlayers(start, end) {
+function getActiveNonFakePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isFake || (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end))) {
+        if (player.isFake || 
+            (
+                player.isEnglobed && 
+                (            
+                    (!player.isFirstEnglobed && player.firstAware > time) ||
+                    (!player.isLastEnglobed && player.lastAware < time)
+                )
+            )
+        ) {
             res.push(null);
         } else {
             res.push(player);

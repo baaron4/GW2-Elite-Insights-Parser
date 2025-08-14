@@ -663,6 +663,37 @@ class Animator {
             animateCanvas(noUpdateTime);
         }
     }
+    
+    _reselectIfEnglobed() {     
+        if (this.selectedActor && this.selectedActor.parentID >= 0) {
+            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
+            if (perParentArray) {
+                let actor = perParentArray.filter(x => x.getPosition() != null)[0];
+                if (!actor) {
+                    const time = this.reactiveDataStatus.time;
+                    // check for first in interval
+                    let candidates = perParentArray.filter(x => x.start <= time && x.end >= time);
+                    if (candidates.length) {
+                        actor = candidates[0];
+                    } else {
+                        // first
+                        candidates = perParentArray.filter(x => x.start >= time);
+                        if (candidates.length) {
+                            actor = candidates[0];
+                        } else {
+                            // last
+                            candidates = perParentArray.filter(x => x.end <= time);
+                            if (candidates.length) {
+                                actor = candidates[candidates.length - 1];
+                            }
+                        }
+                    }
+                }
+                this.selectedActor = actor || this.selectedActor;
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;             
+            }
+        }
+    }
 
     getSelectableActorData(actorId) {
         return animator.targetData.get(actorId) || animator.playerData.get(actorId) || 
@@ -1182,18 +1213,11 @@ class Animator {
             }
         }
     }
-
     draw() {
         if (!this.mainCanvas) {
             return;
         }    
-        if (this.selectedActor && this.selectedActor.parentID >= 0) {
-            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
-            if (perParentArray) {
-                this.selectedActor = perParentArray.filter(x => x.getPosition() != null)[0] || this.selectedActor;
-                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
-            }
-        }
+        this._reselectIfEnglobed();
         //
         //this._drawPickCanvas();
         this._drawBGCanvas();
