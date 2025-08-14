@@ -36,7 +36,7 @@
                 </div>
                 <div class="d-flex justify-content-center slidercontainer mt-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" :min="minTime"
-                        :max="maxTime" :value="minTime" class="slider" :id="htmlElementIDs.timeRangeID"
+                        :max="maxTime" value="0" class="slider" :id="htmlElementIDs.timeRangeID"
                         :style="{'background': getSliderGradient()}">
                     <p style="position: absolute; color: black; pointer-events:none;"
                         :style="{'width': phaseNameWidth}">{{sliderDelimiter.name}}</p>
