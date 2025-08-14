@@ -185,8 +185,11 @@ public static class AgentManipulationHelper
                 if (firstSplit)
                 {
                     firstSplit = false;
-                    // we don't know when exactly the change happened, take half of the aware time
-                    start = (previousPlayerAgent.FirstAware + start) / 2;
+                    if (previousCombatExit == null)
+                    {
+                        // we don't know when exactly the change happened, take half of the aware time
+                        start = (previousPlayerAgent.FirstAware + start) / 2;
+                    }
                     previousPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, previousPlayerAgent.FirstAware, start - 1, previousPlayerAgent.Spec);
                     previousPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
                 }
