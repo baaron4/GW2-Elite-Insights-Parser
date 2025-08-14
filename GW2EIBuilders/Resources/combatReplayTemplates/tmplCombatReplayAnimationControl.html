@@ -101,11 +101,15 @@
                                 return logData.phases;
                             }
                         } else {
-                            for (let j = 0; j < logData.phases.length; j++) {
-                                const subPhase = logData.phases[j];
-                                if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
-                                    phases.push(subPhase);
-                                }
+                            if (IsMultiEncounterLog) {    
+                                for (let j = 0; j < logData.phases.length; j++) {
+                                    const subPhase = logData.phases[j];
+                                    if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
+                                        phases.push(subPhase);
+                                    }
+                                }                      
+                            } else {
+                                return logData.phases;
                             }
                         }
                         return phases;

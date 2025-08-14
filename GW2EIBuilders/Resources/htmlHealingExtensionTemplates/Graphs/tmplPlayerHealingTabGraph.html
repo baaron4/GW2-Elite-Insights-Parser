@@ -196,7 +196,7 @@
                         throw new Error("unknown enum in healing graph name");
                 }
             },
-            computeDPSData: function () {
+            computeHPSData: function () {
                 const cacheID = getHPSGraphCacheID(this.graphhealingdata.hpsmode, this.graphhealingdata.healingmode, this.graphhealingdata.graphmode, this.activetargets, this.phaseindex, null);
                 const internalCacheID = this.encounterPhase.id + '-' + cacheID;
                 if (this.dpsCache.has(internalCacheID)) {
@@ -220,7 +220,7 @@
                 if (this.dataCache.has(cacheID)) {
                     return this.dataCache.get(cacheID);
                 }
-                const hpsData = this.computeDPSData();
+                const hpsData = this.computeHPSData();
                 const res = [];
                 res.push(hpsData.playerHPS.total);
                 res.push(hpsData.playerHPS.target);

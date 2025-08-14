@@ -18,7 +18,7 @@
         },
         computed: {
             buffData: function () {
-                const cacheID = this.encounterPhase.id + '-' +  this.phaseindex;
+                const cacheID = this.encounterPhase.id + '-' + this.phaseindex;
                 if (this.cache.has(cacheID)) {
                     return this.cache.get(cacheID);
                 }

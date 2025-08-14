@@ -142,6 +142,7 @@
                     for (var i = 0; i < players.length; i++) {
                         var playerData = players[i];
                         if (!playerData) {
+                            res.push(null);
                             continue;
                         }
                         var subRes = [];

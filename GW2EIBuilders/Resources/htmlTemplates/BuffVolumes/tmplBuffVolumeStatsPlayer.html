@@ -35,8 +35,8 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
-            boonData: function () {     
-                const id = this.encounterPhase.id + '-' +  this.phaseindex + '-' + this.activeduration;
+            boonData: function () {
+                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }

@@ -157,7 +157,7 @@
                 return logData.players.filter(x => !x.notInSquad).length <= 1;
             },
             buffData: function () {
-                const id = this.encounterPhase.id + '-' +  this.phaseindex + '-' + this.activeduration;
+                const id = this.encounterPhase.id + '-' + this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }

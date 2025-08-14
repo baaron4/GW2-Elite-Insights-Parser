@@ -39,8 +39,9 @@
                 return this.encounterPhase.id + '-' + this.phaseindex;
             },
             condiData: function () {
-                if (this.cacheCondi.has(this.cacheID)) {
-                    return this.cacheCondi.get(this.cacheID);
+                const cacheID = this.encounterPhase.id + '-' + this.phaseindex;
+                if (this.cacheCondi.has(cacheID)) {
+                    return this.cacheCondi.get(cacheID);
                 }
                 const players = getActivePlayersForPhase(this.encounterPhase);
                 const res = [];
@@ -68,12 +69,13 @@
                         });
                     }
                 }
-                this.cacheCondi.set(this.cacheID, res);
+                this.cacheCondi.set(cacheID, res);
                 return res;
             },
             condiSums: function () {
-                if (this.cacheCondiSums.has(this.cacheID)) {
-                    return this.cacheCondiSums.get(this.cacheID);
+                const cacheID = this.phaseindex;
+                if (this.cacheCondiSums.has(cacheID)) {
+                    return this.cacheCondiSums.get(cacheID);
                 }
                 const res = [];
                 if (this.targetPhaseIndex === -1) {
@@ -92,12 +94,13 @@
                         data: targetData.data
                     });
                 }
-                this.cacheCondiSums.set(this.cacheID, res);
+                this.cacheCondiSums.set(cacheID, res);
                 return res;
             },
             boonData: function () {
-                if (this.cacheBoon.has(this.cacheID)) {
-                    return this.cacheBoon.get(this.cacheID);
+                const cacheID = this.phaseindex;
+                if (this.cacheBoon.has(cacheID)) {
+                    return this.cacheBoon.get(cacheID);
                 }
                 const res = [];
                 if (this.targetPhaseIndex === -1 || !this.hasBoons) {
@@ -115,7 +118,7 @@
                         data: targetData
                     });
                 }
-                this.cacheBoon.set(this.phaseindex, res);
+                this.cacheBoon.set(cacheID, res);
                 return res;
             }
         }
