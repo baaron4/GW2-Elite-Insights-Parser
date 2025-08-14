@@ -53,6 +53,7 @@
 
     Vue.component("player-component", {
         props: ["players", "phaseindex"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         methods: {
             getIcon: function (path) {
@@ -111,7 +112,7 @@
             },
             groups: function () {
                 var aux = [];
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < players.length; i++) {
                     var playerData = players[i];
                     if (!playerData) {
@@ -137,10 +138,11 @@
             runningExtensions: function () {
                 if (logData.usedExtensions) {
                     var res = [];
-                    const players = getActiveNonFakePlayersForPhase(this.phase);
+                    const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                     for (var i = 0; i < players.length; i++) {
                         var playerData = players[i];
                         if (!playerData) {
+                            res.push(null);
                             continue;
                         }
                         var subRes = [];

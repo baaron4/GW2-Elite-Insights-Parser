@@ -32,7 +32,8 @@
 
 <script>
     Vue.component("phase-component", {
-        props: ["phases", "encounters"],
+        props: ["phases"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         computed: {
             phasesToUse: function() {
@@ -45,7 +46,7 @@
                             if (IsMultiEncounterLog) {   
                                 for (let j = 0; j < this.phases.length; j++) {
                                     const subPhase = logData.phases[j];
-                                    if (subPhase.type === PhaseTypes.INSTANCE || subPhase.type === PhaseTypes.ENCOUNTER) {
+                                    if (subPhase === phase || subPhase.type === PhaseTypes.ENCOUNTER) {
                                         phases.push(this.phases[j]);
                                     }
                                 }           
@@ -53,11 +54,15 @@
                                 return this.phases;
                             }
                         } else {
-                            for (let j = 0; j < this.phases.length; j++) {
-                                const subPhase = logData.phases[j];
-                                if (subPhase._activityPhase === phase) {
-                                    phases.push(this.phases[j]);
-                                }
+                            if (IsMultiEncounterLog) {
+                                for (let j = 0; j < this.phases.length; j++) {
+                                    const subPhase = logData.phases[j];
+                                    if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
+                                        phases.push(this.phases[j]);
+                                    }
+                                }   
+                            } else {
+                                return this.phases;
                             }
                         }
                         return phases;
@@ -77,7 +82,10 @@
             breakbarPhasesPerTarget: function () {
                 var res = [];
                 for (var targetId = 0; targetId < logData.targets.length; targetId++) {
-                    var brPhases = this.phasesToUse.filter(phase => phase.breakbarPhase && phase.targets.indexOf(targetId) > -1);
+                    var brPhases = this.phasesToUse.filter(phase => {
+                        const logPhase = logData.phases[phase.index];
+                        return logPhase.breakbarPhase && logPhase.targets.indexOf(targetId) > -1;
+                    });
                     var phases = [];
                     for (var brPhaseId = 0; brPhaseId < brPhases.length; brPhaseId++) {
                         phases.push(brPhases[brPhaseId]);

@@ -72,23 +72,51 @@
     Vue.component("mechanics-table-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxMechColumns, ["player", "enemy"])],
+        mixins: [encounterPhaseComponent, numberComponent, sortedTableComponent, colSliderComponent(maxMechColumns, ["player", "enemy"])],
         data: function () {
             return {
                 sortEdata: {
                     order: "asc",
                     index: -1,
                     key: "Name",
+                    mechIndex: -1,
                 },
                 sortPdata: {
                     order: "asc",
                     index: -1,
                     key: "Sub",
+                    mechIndex: -1,
                 }
             };
         },
+        watch: {
+            encounters: {
+                deep: true,
+                handler: function () {
+                    const mechIndex = this.sortPdata.mechIndex;
+                    if (mechIndex >= 0) {
+                        const mech = this.playerMechHeader.filter(x => x._index === mechIndex)[0];
+                        if (!mech) {
+                            // Reset sort if mechanic is gone
+                            this.sortPdata.key = "Sub";
+                            this.sortPdata.order = "asc";
+                            this.sortPdata.index = -1;
+                            this.sortPdata.mechIndex = -1;
+                        } else {
+                            // Otherwise sort by its new position
+                            this.sortPdata.index = this.playerMechHeader.indexOf(mech);
+                        }
+                    }
+                }
+            }
+        },
         methods: {
             sortPlayerBy: function(key, index) {
+                if (key === "Data" && index >= 0) {
+                    this.sortPdata.mechIndex = this.playerMechHeader[index]._index;
+                } else {
+                    this.sortPdata.mechIndex = -1;
+                }
                 this.sortByBase(this.sortPdata, key, index);
             },
             getPlayerHeaderClass: function(key, index) {
@@ -120,7 +148,12 @@
                 }
                 return rows;
             },
-            sortEnemyBy: function(key, index) {
+            sortEnemyBy: function(key, index) {      
+                if (key === "Data" && index >= 0) {
+                    this.sortEdata.mechIndex = this.enemyMechHeader[index]._index;
+                } else {
+                    this.sortEdata.mechIndex = -1;
+                }
                 this.sortByBase(this.sortEdata, key, index);
             },
             getEnemyHeaderClass: function(key, index) {
@@ -170,7 +203,7 @@
             playerMechHeader: function () {
                 const allPlayerMechs = playerMechanics();
                 var res = [];   
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (let j = 0; j < allPlayerMechs.length; j++) {
                     allPlayerMechs[j]._index = j;
                     for (var i = 0; i < players.length; i++) {
@@ -187,7 +220,7 @@
                 return res;
             },
             playerMechRows: function () {
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 var rows = [];
                 for (var i = 0; i < players.length; i++) {
                     var player = players[i];

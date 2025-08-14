@@ -89,7 +89,7 @@
     Vue.component("player-rotations-component", {
         props: ["phaseindex", "light", "playerindex"],
         template: `${template}`,
-        mixins: [graphComponent],
+        mixins: [graphComponent, encounterPhaseComponent],
         data: function () {
             var selectedPlayers = [];
             for (var i = 0; i < logData.players.length; i++) {
@@ -137,6 +137,12 @@
                 }
             },
             selectedPlayers: {
+                deep: true,
+                handler: function () {
+                    this.computeLayout();
+                }
+            },
+            encounters: {
                 deep: true,
                 handler: function () {
                     this.computeLayout();
@@ -208,7 +214,7 @@
             },
             players: function () {
                 var res = [];
-                const players = getActivePlayersForPhase(this.phase);
+                const players = getActivePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < players.length; i++) {
                     if (players[i] && this.selectedPlayers[i].selected) {
                         res.push(players[i]);
@@ -217,8 +223,8 @@
                 return res;
             },
             _players: function () {
-                const players = getActivePlayersForPhase(this.phase);
-                return players;
+                const players = getActivePlayersForPhase(this.encounterPhase);
+                return players.filter(x => !!x);
             },
             graphid: function () {
                 return "playersrotation-" + '-' + this.phaseindex;
