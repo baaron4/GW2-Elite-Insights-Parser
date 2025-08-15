@@ -292,7 +292,7 @@ public abstract class LogLogic
             EnterCombatEvent? enterCombat = null;
             if (p.FirstAware > threshold)
             {
-                enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault(x => x.Spec != Spec.Unknown);
+                enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault(x => x.Spec != Spec.Unknown && x.Subgroup != 0);
             } 
             else
             {
