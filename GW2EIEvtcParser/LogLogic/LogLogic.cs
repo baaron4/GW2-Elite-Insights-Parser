@@ -296,7 +296,7 @@ public abstract class LogLogic
             } 
             else
             {
-                enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault(x => x.Spec != Spec.Unknown);
+                enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault(x => x.Spec != Spec.Unknown && x.Subgroup != 0);
             }
             if (enterCombat != null)
             {
