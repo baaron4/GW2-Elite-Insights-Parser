@@ -72,27 +72,32 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Skills" style="font-size: 1.1em;">
                 Skills <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" style="min-width: 165px; max-width: 165px;">
-                <li>
-                    <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">
-                        Select all
-                    </button>
-                </li>
-                <li class="mb-1">
-                    <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">
-                        Deselect all
-                    </button>
-                </li>
-                <li v-for="(skill, index) in skillList" :key="index">
-                    <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
-                           v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
-                    <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                           style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">
-                        <img class="icon" :src="getSkill(skill.id).icon">
-                        {{skill.name}}
-                    </label>
+            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" style="min-width: 165px;">
+                <div class="d-flex flex-column justify-content-center align-items-center mb-1"
+                    style="border-bottom: 2px solid #bbb;">
+                    <li>
+                        <button style="width:160px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                                @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">
+                            Select all
+                        </button>
+                    </li>
+                    <li class="mb-1">
+                        <button style="width:160px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                                @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">
+                            Deselect all
+                        </button>
+                    </li>
+                </div>
+                <li v-for="(skill, index) in skillList" :key="index">               
+                    <div style="width: max-content;">
+                        <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
+                            v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
+                        <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
+                            style="font-size: 1.0em; white-space: nowrap;margin-top: 2px;">
+                            <img class="icon" :src="getSkill(skill.id).icon">
+                            {{skill.name}}
+                        </label>
+                    </div>
                 </li>
             </ul>
         </div>
