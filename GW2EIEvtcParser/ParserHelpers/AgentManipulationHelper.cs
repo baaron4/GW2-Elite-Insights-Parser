@@ -167,9 +167,14 @@ public static class AgentManipulationHelper
         var previousSpec = player.Spec;
         var previousGroup = player.Group;
         var firstSplit = true;
+        bool ignore0Subgroups = originalPlayer.Type == AgentItem.AgentType.Player;
         for (var i = 0; i < enterCombatEvents.Count; i++)
         {
             var enterCombat = enterCombatEvents[i];
+            if (ignore0Subgroups && enterCombat.Subgroup == 0)
+            {
+                continue;
+            }
             if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
             {
                 previousSpec = enterCombat.Spec;

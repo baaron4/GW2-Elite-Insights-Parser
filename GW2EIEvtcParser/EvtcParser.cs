@@ -1057,7 +1057,8 @@ public class EvtcParser
                     {
 
                         AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
-                    } else 
+                    } 
+                    else 
                     {    
                         AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem);
                     }
