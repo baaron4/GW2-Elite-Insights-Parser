@@ -38,6 +38,7 @@ public static class ParserHelper
     public const long MinimumInCombatDuration = 2200;
 
     internal const int PhaseTimeLimit = 1000;
+    internal const int BreakbarPhaseTimeBuildup = 2000;
 
 
     public enum Source

@@ -96,39 +96,46 @@ internal class ValeGuardian : SpiritVale
         };
     }
 
+    private static readonly List<TargetID> SplitGuardianIDs = new List<TargetID>
+    {
+        TargetID.BlueGuardian,
+        TargetID.GreenGuardian,
+        TargetID.RedGuardian
+    };
+
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor valeGuardian, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = GetPhasesByInvul(log, Invulnerability757, valeGuardian, true, true, encounterPhase.Start, encounterPhase.End);
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int index = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (i % 2 == 0)
+            {
+                phase.Name = "Split " + (index) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, SplitGuardianIDs, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(valeGuardian, log);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget, log);
-        var splitGuardianIDs = new List<TargetID>
-        {
-            TargetID.BlueGuardian,
-            TargetID.GreenGuardian,
-            TargetID.RedGuardian
-        };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIDs)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        // Invul check
-        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + (i) / 2;
-                AddTargetsToPhaseAndFit(phase, splitGuardianIDs, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget, log);
-            }
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SplitGuardianIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
         return phases;
     }
 

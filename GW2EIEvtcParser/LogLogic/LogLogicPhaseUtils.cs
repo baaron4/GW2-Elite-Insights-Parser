@@ -32,7 +32,7 @@ internal static class LogLogicPhaseUtils
                 success = true;
                 end = dead.Time;
             }
-            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.LogMode.Normal);
+            var phase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, start), Math.Min(target.LastAware, end), target.Character, success, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
             phase.AddTarget(target, log);
             phase.AddParentPhase(phases[0]);
             phases.Add(phase);
@@ -47,12 +47,12 @@ internal static class LogLogicPhaseUtils
             var logEndEvent = log.CombatData.GetSquadCombatEndEvents().FirstOrDefault(x => x.ServerUnixTimeStamp >= startEvent.ServerUnixTimeStamp);
             if (logEndEvent != null)
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, logEndEvent.Time, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
                 phases.Add(fightPhase);
             }
             else
             {
-                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal);
+                var fightPhase = new EncounterPhaseData(startEvent.Time, phases[0].End, "Fight " + (sequence++), true, log.LogData.Logic.Icon, LogData.LogMode.Normal, log.LogData.Logic.LogID);
                 phases.Add(fightPhase);
                 break;
             }
@@ -78,14 +78,14 @@ internal static class LogLogicPhaseUtils
             {
                 break;
             }
-            var phase = new PhaseData(start, Math.Min(evt.Time, logEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
+            var phase = new SubPhasePhaseData(start, Math.Min(evt.Time, logEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
             start = Math.Max(evt.Time, log.LogData.LogStart);
         }
         if (phases.Count > 0 && phases.Count < thresholds.Count)
         {
-            var lastPhase = new PhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
+            var lastPhase = new SubPhasePhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
@@ -107,7 +107,7 @@ internal static class LogLogicPhaseUtils
             if (c is BuffApplyEvent)
             {
                 long curEnd = Math.Min(c.Time, end);
-                phases.Add(new PhaseData(last, curEnd));
+                phases.Add(new SubPhasePhaseData(last, curEnd));
                 last = curEnd;
                 nextToAddIsSkipPhase = true;
             }
@@ -116,7 +116,7 @@ internal static class LogLogicPhaseUtils
                 long curEnd = Math.Min(c.Time, end);
                 if (addSkipPhases)
                 {
-                    phases.Add(new PhaseData(last, curEnd));
+                    phases.Add(new SubPhasePhaseData(last, curEnd));
                 }
                 last = curEnd;
                 nextToAddIsSkipPhase = false;
@@ -124,13 +124,10 @@ internal static class LogLogicPhaseUtils
         }
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
-            phases.Add(new PhaseData(last, end));
+            phases.Add(new SubPhasePhaseData(last, end));
         }
-        if (!filterSmallPhases)
-        {
-            return phases;
-        }
-        return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
+        long filterThreshold = filterSmallPhases ? 100 : 0;
+        return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
 
@@ -170,30 +167,27 @@ internal static class LogLogicPhaseUtils
             }
             if (mainBetweenCasts)
             {
-                phases.Add(new PhaseData(last, c.Time));
+                phases.Add(new SubPhasePhaseData(last, c.Time));
                 if (addSkipPhases) {
-                    phases.Add(new PhaseData(c.Time, endTime));
+                    phases.Add(new SubPhasePhaseData(c.Time, endTime));
                 }
             } 
             else
             {
                 if (addSkipPhases)
                 {
-                    phases.Add(new PhaseData(last, c.Time));
+                    phases.Add(new SubPhasePhaseData(last, c.Time));
                 }
-                phases.Add(new PhaseData(c.Time, endTime));
+                phases.Add(new SubPhasePhaseData(c.Time, endTime));
             }
             last = endTime;
         }
         if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
         {
-            phases.Add(new PhaseData(last, end));
+            phases.Add(new SubPhasePhaseData(last, end));
         }
-        if (!filterSmallPhases)
-        {
-            return phases;
-        }
-        return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
+        long filterThreshold = filterSmallPhases ? 100 : 0;
+        return phases.Where(x => x.DurationInMS > filterThreshold).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
     internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, long start, long end, bool filterSmallPhases = true)
@@ -220,10 +214,16 @@ internal static class LogLogicPhaseUtils
         ];
     }
 
-    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, LogData.LogMode logMode = LogData.LogMode.Normal)
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, LogLogic encounterLogic, LogData.LogMode logMode = LogData.LogMode.Normal)
     {
 
-        var phase = new EncounterPhaseData(start, end, phaseName, success, icon, logMode);
+        return AddInstanceEncounterPhase(log, phases, encounterPhases, targets, blockingBosses, nonBlockingBosses, instancePhase, phaseName, start, end, success, encounterLogic.Icon, encounterLogic.LogID, logMode);
+    }
+
+    internal static PhaseData AddInstanceEncounterPhase(ParsedEvtcLog log, List<PhaseData> phases, List<PhaseData> encounterPhases, IEnumerable<SingleActor?> targets, IEnumerable<SingleActor?> blockingBosses, IEnumerable<SingleActor?> nonBlockingBosses, PhaseData instancePhase, string phaseName, long start, long end, bool success, string icon, long encounterID, LogData.LogMode logMode = LogData.LogMode.Normal)
+    {
+
+        var phase = new EncounterPhaseData(start, end, phaseName, success, icon, logMode, encounterID);
         phases.Add(phase);
         encounterPhases.Add(phase);
         phase.AddParentPhase(instancePhase);
@@ -235,8 +235,12 @@ internal static class LogLogicPhaseUtils
     }
 
     internal delegate LogData.LogMode LogModeChecker(ParsedEvtcLog log, SingleActor target);
-    internal static void ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, string icon, LogModeChecker? fightModeChecker = null)
+    internal static List<PhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, string icon, long encounterID, LogModeChecker? fightModeChecker = null)
     {
+        if (chestID == ChestID.None)
+        {
+            throw new InvalidOperationException("ProcessGenericEncounterPhasesForInstance requires a chest ID");
+        }
         var mainPhase = phases[0];
         var encounterPhases = new List<PhaseData>();
         if (targetsByIDs.TryGetValue((int)targetID, out var targets))
@@ -257,10 +261,16 @@ internal static class LogLogicPhaseUtils
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, fightModeChecker != null ? fightModeChecker(log, target) : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, encounterID, fightModeChecker != null ? fightModeChecker(log, target) : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
+    }
+
+    internal static List<PhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, string phaseName, LogLogic encounterLogic, LogModeChecker? fightModeChecker = null)
+    {
+        return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, encounterLogic.ChestID, phaseName, encounterLogic.Icon, encounterLogic.LogID, fightModeChecker);
     }
 
     internal static void NumericallyRenamePhases(IReadOnlyList<PhaseData> phases)

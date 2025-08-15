@@ -108,16 +108,16 @@ internal class TwinLargos : MythwrightGambit
                 start = state.Time;
                 if (i == states.Count - 1)
                 {
-                    targetPhases.Add(new PhaseData(start, logEnd));
+                    targetPhases.Add(new SubPhasePhaseData(start, logEnd));
                 }
             }
             else
             {
                 end = Math.Min(state.Time, logEnd);
-                targetPhases.Add(new PhaseData(start, end));
+                targetPhases.Add(new SubPhasePhaseData(start, end));
                 if (i == states.Count - 1 && targetPhases.Count < 3)
                 {
-                    targetPhases.Add(new PhaseData(end, logEnd));
+                    targetPhases.Add(new SubPhasePhaseData(end, logEnd));
                 }
             }
         }

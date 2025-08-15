@@ -160,7 +160,7 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
+    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
     {
         var previousPlayerAgent = originalPlayer;
         var player = new Player(previousPlayerAgent, false);
@@ -175,10 +175,21 @@ public static class AgentManipulationHelper
                 previousSpec = enterCombat.Spec;
                 previousGroup = enterCombat.Subgroup;
                 long start = enterCombat.Time;
+                var previousCombatExit = exitCombatEvents.LastOrDefault(x => x.Time < start);
+                if (previousCombatExit != null)
+                {
+                    // we don't know when exactly the change happened, it was between previous exit and current start
+                    start = previousCombatExit.Time + 1;
+                }
                 long end = previousPlayerAgent.LastAware;
                 if (firstSplit)
                 {
                     firstSplit = false;
+                    if (previousCombatExit == null)
+                    {
+                        // we don't know when exactly the change happened, take half of the aware time
+                        start = (previousPlayerAgent.FirstAware + start) / 2;
+                    }
                     previousPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, previousPlayerAgent.FirstAware, start - 1, previousPlayerAgent.Spec);
                     previousPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
                 }

@@ -193,7 +193,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
         for (int i = 0; i < phaseStarts.Count; i++)
         {
-            var phase = new PhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
+            var phase = new SubPhasePhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
@@ -212,7 +212,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         bool skipNames = intermissionNames.Length < phaseEnds.Count - 1;
         for (int i = 0; i < phaseEnds.Count - 1; i++)
         {
-            var phase = new PhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.LogData.LogEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
+            var phase = new SubPhasePhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.LogData.LogEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);

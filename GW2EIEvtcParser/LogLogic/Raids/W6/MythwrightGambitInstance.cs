@@ -41,7 +41,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         return "Mythwright Gambit";
     }
-    private static void HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -50,7 +50,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
             targetsByIDs.TryGetValue((int)TargetID.CARightArm, out var rightArms) && 
             log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CAArmSmash, out var armSmashes))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.CAChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_conjuredAmalgamate.ChestID).FirstOrDefault();
             long lowerThreshold = 0;
             foreach (var armSmash in armSmashes)
             {
@@ -89,21 +89,22 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         success = true;
                     }
                     lowerThreshold = end;
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, EncounterIconConjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [conjuredAmalgamate], [leftArm, rightArm], [], mainPhase, "Conjured Amalgamate", start, end, success, _conjuredAmalgamate, log.CombatData.GetBuffApplyData(SkillIDs.LockedOn).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
                 }
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts) &&
             targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.TwinLargosChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_twinLargos.ChestID).FirstOrDefault();
             foreach (var nikare in nikares)
             {
                 var kenut = kenuts.FirstOrDefault(x => x.InAwareTimes(nikare));
@@ -130,20 +131,21 @@ internal class MythwrightGambitInstance : MythwrightGambit
                         end = chest.FirstAware;
                         success = true;
                     }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, EncounterIconTwinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, _twinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
                 }
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private void HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.QadimsChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_qadim.ChestID).FirstOrDefault();
             var subBosses = Targets.Where(x => x.IsAnySpecies([TargetID.AncientInvokedHydra, TargetID.ApocalypseBringer, TargetID.WyvernPatriarch, TargetID.WyvernMatriarch]));
             foreach (var qadim in qadims)
             {
@@ -162,10 +164,11 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, EncounterIconQadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, _qadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

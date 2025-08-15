@@ -56,7 +56,7 @@ public abstract class LogLogic
 
     private CombatReplayDecorationContainer EnvironmentDecorations;
 
-    protected ChestID ChestID = ChestID.None;
+    public ChestID ChestID { get; protected set; } = ChestID.None;
 
     protected List<(Buff buff, int stack)>? InstanceBuffs { get; private set; } = null;
 
@@ -286,6 +286,20 @@ public abstract class LogLogic
     internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, LogData logData)
     {
         //
+        if (IsInstance || ParseMode == ParseModeEnum.WvW)
+        {
+            foreach (Player p in players)
+            {
+                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault(x => x.Spec != Spec.Unknown);
+                if (enterCombat != null && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+            return;
+        }
         long threshold = logData.LogStart + 5000;
         foreach (Player p in players)
         {
@@ -326,7 +340,7 @@ public abstract class LogLogic
 
     internal List<PhaseData> GetBreakbarPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        if (!requirePhases || IsInstance)
+        if (!requirePhases)
         {
             return [ ];
         }
@@ -350,12 +364,9 @@ public abstract class LogLogic
                     continue;
                 }
 
-                long start = Math.Max(breakbarActive.Start - 2000, log.LogData.LogStart);
+                long start = Math.Max(breakbarActive.Start - BreakbarPhaseTimeBuildup, log.LogData.LogStart);
                 long end = Math.Min(breakbarActive.End, log.LogData.LogEnd);
-                var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
-                {
-                    BreakbarPhase = true
-                };
+                var phase = new BreakbarPhaseData(start, end, target.Character + " Breakbar " + ++i);
                 phase.AddTarget(target, log);
                 breakbarPhases.Add(phase);
             }
@@ -367,6 +378,7 @@ public abstract class LogLogic
     {
         List<PhaseData> phases = GetInitialPhase(log);
         phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
+        // TODO: To be removed once all specific instance logics are implemented
         if (IsInstance)
         {
             AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration));
@@ -386,6 +398,23 @@ public abstract class LogLogic
     protected void AddTargetsToPhase(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         foreach (SingleActor target in Targets)
+        {
+            if (target.IsAnySpecies(ids))
+            {
+                phase.AddTarget(target, log, priority);
+            }
+        }
+    }
+
+    protected static void AddTargetsToPhaseAndFit(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    {
+        AddTargetsToPhase(phase, targets, ids, log, priority);
+        phase.OverrideTimes(log);
+    }
+
+    protected static void AddTargetsToPhase(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    {
+        foreach (SingleActor target in targets)
         {
             if (target.IsAnySpecies(ids))
             {

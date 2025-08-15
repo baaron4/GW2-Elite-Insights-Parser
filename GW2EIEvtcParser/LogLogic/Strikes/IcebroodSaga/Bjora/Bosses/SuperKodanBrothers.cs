@@ -121,7 +121,7 @@ internal class SuperKodanBrothers : Bjora
             {
                 phaseEnd = nextUnmergedPhase.Start - 1;
             }
-            var phase = new PhaseData(phaseStart, phaseEnd, "Voice and Claw " + ++voiceAndClawCount);
+            var phase = new SubPhasePhaseData(phaseStart, phaseEnd, "Voice and Claw " + ++voiceAndClawCount);
             phase.AddTarget(voiceAndClaw, log);
             phases.Add(phase);
         }
@@ -145,7 +145,7 @@ internal class SuperKodanBrothers : Bjora
                     {
                         long postMergedStart = nextUnmergedPhase.Start + 1;
                         long postMergedEnd = oldEnd;
-                        var phase = new PhaseData(postMergedStart, postMergedEnd, "Position " + (++tpCount));
+                        var phase = new SubPhasePhaseData(postMergedStart, postMergedEnd, "Position " + (++tpCount));
                         phase.AddParentPhases(unmergedPhases);
                         phase.AddTarget(claw, log);
                         phase.AddTarget(voice, log);
@@ -156,7 +156,7 @@ internal class SuperKodanBrothers : Bjora
             }
             if (preTPPhaseEnd - preTPPhaseStart > 2000)
             {
-                var phase = new PhaseData(preTPPhaseStart, preTPPhaseEnd, "Position " + (++tpCount));
+                var phase = new SubPhasePhaseData(preTPPhaseStart, preTPPhaseEnd, "Position " + (++tpCount));
                 phase.AddParentPhases(unmergedPhases);
                 phase.AddTarget(claw, log);
                 phase.AddTarget(voice, log);
@@ -169,7 +169,7 @@ internal class SuperKodanBrothers : Bjora
         BuffEvent? enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
         if (enrage != null)
         {
-            var phase = new PhaseData(enrage.Time, log.LogData.LogEnd, "Enrage");
+            var phase = new SubPhasePhaseData(enrage.Time, log.LogData.LogEnd, "Enrage");
             phase.AddParentPhases(unmergedPhases);
             phase.AddTarget(claw.AgentItem.Is(enrage.To) ? claw : voice, log);
             phases.Add(phase);
@@ -189,7 +189,7 @@ internal class SuperKodanBrothers : Bjora
             }
             if (finalPositionEnd - finalStart > 2000)
             {
-                var phase = new PhaseData(finalStart, finalPositionEnd, "Position " + (++tpCount));
+                var phase = new SubPhasePhaseData(finalStart, finalPositionEnd, "Position " + (++tpCount));
                 phase.AddParentPhases(unmergedPhases);
                 phase.AddTarget(claw, log);
                 phase.AddTarget(voice, log);

@@ -258,7 +258,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         if (enragedSmash != null)
         {
             var finalPhase = phases[^1];
-            var phase = new PhaseData(enragedSmash.Time, log.LogData.LogEnd, "Enraged Smash");
+            var phase = new SubPhasePhaseData(enragedSmash.Time, log.LogData.LogEnd, "Enraged Smash");
             phase.AddParentPhase(finalPhase);
             phase.AddTarget(cerus, log);
             phases.Add(phase);
@@ -266,7 +266,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             PhaseData? phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
             if (phase3 != null)
             {
-                var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
+                var phase50_10 = new SubPhasePhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
                 phase50_10.AddParentPhase(finalPhase);
                 phase50_10.AddTarget(cerus, log);
                 phases.Add(phase50_10);

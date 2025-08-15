@@ -86,35 +86,32 @@ internal class Sabetha : SpiritVale
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    private static readonly List<TargetID> BanditBossIDs = new List<TargetID>
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
-        phases[0].AddTarget(sabetha, log);
-        var miniBossIDs = new List<TargetID>
-        {
-             TargetID.Karde, // reverse order for mini boss phase detection
-             TargetID.Knuckles,
-             TargetID.Kernan,
-        };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(miniBossIDs)), log, PhaseData.TargetPriority.Blocking);
+        TargetID.Karde, // reverse order for mini boss phase detection
+        TargetID.Knuckles,
+        TargetID.Kernan,
+    };
+
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabetha, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        // Invul check
-        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, sabetha, true, true));
-        for (int i = 1; i < phases.Count; i++)
+        var phases = GetPhasesByInvul(log, Invulnerability757, sabetha, true, true, encounterPhase.Start, encounterPhase.End);
+        for (int i = 0; i < phases.Count; i++)
         {
+            int index = i + 1;
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
             {
-                int phaseID = i / 2;
+                int phaseID = index / 2;
                 phase.Name = "Unknown";
-                foreach (var miniBossID in miniBossIDs)
+                foreach (var miniBossID in BanditBossIDs)
                 {
-                    AddTargetsToPhaseAndFit(phase, [miniBossID], log);
+                    AddTargetsToPhaseAndFit(phase, targets, [miniBossID], log);
                     if (phase.Targets.Count > 0)
                     {
                         SingleActor phaseTarget = phase.Targets.Keys.First();
@@ -125,16 +122,25 @@ internal class Sabetha : SpiritVale
                         break; // we found our main target
                     }
                 }
-                AddTargetsToPhase(phase, miniBossIDs, log, PhaseData.TargetPriority.NonBlocking);
+                AddTargetsToPhase(phase, targets, BanditBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
-                int phaseID = (i + 1) / 2;
+                int phaseID = (index + 1) / 2;
                 phase.Name = "Phase " + phaseID;
                 phase.AddTarget(sabetha, log);
-                AddTargetsToPhase(phase, miniBossIDs, log, PhaseData.TargetPriority.NonBlocking);
+                AddTargetsToPhase(phase, targets, BanditBossIDs, log, PhaseData.TargetPriority.NonBlocking);
             }
         }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
+        phases[0].AddTarget(sabetha, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(BanditBossIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, sabetha, Targets, phases[0], requirePhases));
         return phases;
     }
 
@@ -357,7 +363,7 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
+    private static readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
     {
         { (int)TargetID.Kernan, "Kernan" },
         { (int)TargetID.Karde, "Karde" },

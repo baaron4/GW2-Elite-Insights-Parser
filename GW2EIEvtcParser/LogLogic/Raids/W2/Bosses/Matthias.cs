@@ -141,34 +141,34 @@ internal class Matthias : SalvationPass
         BuffEvent? heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
         if (heatWave != null)
         {
-            phases.Add(new PhaseData(0, heatWave.Time));
+            phases.Add(new SubPhasePhaseData(0, heatWave.Time));
             BuffEvent? downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
             if (downPour != null)
             {
-                phases.Add(new PhaseData(heatWave.Time, downPour.Time));
+                phases.Add(new SubPhasePhaseData(heatWave.Time, downPour.Time));
                 BuffEvent? abo = log.CombatData.GetBuffData(Unstable).FirstOrDefault();
                 if (abo != null)
                 {
-                    phases.Add(new PhaseData(downPour.Time, abo.Time));
+                    phases.Add(new SubPhasePhaseData(downPour.Time, abo.Time));
                     BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
                     if (invulRemove != null)
                     {
-                        phases.Add(new PhaseData(invulRemove.Time, logEnd));
+                        phases.Add(new SubPhasePhaseData(invulRemove.Time, logEnd));
                     }
                 }
                 else
                 {
-                    phases.Add(new PhaseData(downPour.Time, logEnd));
+                    phases.Add(new SubPhasePhaseData(downPour.Time, logEnd));
                 }
             }
             else
             {
-                phases.Add(new PhaseData(heatWave.Time, logEnd));
+                phases.Add(new SubPhasePhaseData(heatWave.Time, logEnd));
             }
         }
         else
         {
-            phases.Add(new PhaseData(log.LogData.LogStart, logEnd));
+            phases.Add(new SubPhasePhaseData(log.LogData.LogStart, logEnd));
         }
         string[] namesMat = ["Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase"];
         for (int i = 1; i < phases.Count; i++)

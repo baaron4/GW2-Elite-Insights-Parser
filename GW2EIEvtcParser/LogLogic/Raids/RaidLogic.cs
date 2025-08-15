@@ -27,7 +27,6 @@ internal abstract class RaidLogic : LogLogic
     {
         if (IsInstance)
         {
-            // Raid instances remember last status, killing last boss is not an indication of a successful instance
             logData.SetSuccess(true, logData.LogEnd);
             return;
         }

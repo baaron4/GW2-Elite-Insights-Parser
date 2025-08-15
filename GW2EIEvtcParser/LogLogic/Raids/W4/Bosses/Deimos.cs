@@ -453,20 +453,20 @@ internal class Deimos : BastionOfThePenitent
             var deimosMainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
             if (deimosMainFightStart > log.LogData.LogStart)
             {
-                var phasePreEvent = new PhaseData(0, deimosMainFightStart, "Pre Event");
+                var phasePreEvent = new SubPhasePhaseData(0, deimosMainFightStart, "Pre Event");
                 phasePreEvent.AddParentPhase(fullFight);
                 phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.DemonicBond)), log);
                 phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
                 phases.Add(phasePreEvent);
 
-                phase100to0 = new PhaseData(deimosMainFightStart, log.LogData.LogEnd, "Main Fight");
+                phase100to0 = new SubPhasePhaseData(deimosMainFightStart, log.LogData.LogEnd, "Main Fight");
                 phase100to0.AddParentPhase(fullFight);
                 phase100to0.AddTarget(mainTarget, log);
                 phase100to0.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(phase100to0);
             }
             var phase100to10 = AddBossPhases(phases, log, mainTarget, phase100to0);
-            AddAddPhases(phases, log, mainTarget, [phase100to10]);
+            AddAddPhases(phases, log, mainTarget);
             AddBurstPhases(phases, log, mainTarget, [phase100to0, phase100to10]);
         }
 
@@ -488,14 +488,14 @@ internal class Deimos : BastionOfThePenitent
                 npcDeimosEnd = invulDei.Time;
             }
             var mainFightStart = GetMainFightStart(log, mainTarget.AgentItem);
-            phase100to10 = new PhaseData(mainFightStart, npcDeimosEnd, mainDeimosPhaseName);
+            phase100to10 = new SubPhasePhaseData(mainFightStart, npcDeimosEnd, mainDeimosPhaseName);
             phase100to10.AddTarget(mainTarget, log);
             phase100to10.AddParentPhase(mainFightPhase);
             phases.Add(phase100to10);
 
             if (percent10Start > 0 && log.LogData.LogEnd - percent10Start > PhaseTimeLimit)
             {
-                var phase10to0 = new PhaseData(percent10Start, log.LogData.LogEnd, "10% - 0%");
+                var phase10to0 = new SubPhasePhaseData(percent10Start, log.LogData.LogEnd, "10% - 0%");
                 phase10to0.AddTarget(mainTarget, log);
                 phase10to0.AddParentPhase(mainFightPhase);
                 phases.Add(phase10to0);
@@ -506,18 +506,29 @@ internal class Deimos : BastionOfThePenitent
         return phase100to10;
     }
 
-    private void AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases)
+    private void AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
             {
-                var addPhase = new PhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.LogData.LogEnd), target.Character);
+                var addPhase = new SubPhasePhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.LogData.LogEnd));
+                switch(target.ID)
+                {
+                    case (int)TargetID.Thief:
+                        addPhase.Name = "Thief";
+                        break;
+                    case (int)TargetID.Drunkard:
+                        addPhase.Name = "Drunkard";
+                        break;
+                    case (int)TargetID.Gambler:
+                        addPhase.Name = "Gambler";
+                        break;
+                }
                 addPhase.AddTarget(target, log);
                 addPhase.OverrideTimes(log);
                 // override first then add Deimos so that it does not disturb the override process
                 addPhase.AddTarget(mainTarget, log);
-                addPhase.AddParentPhases(parentPhases);
                 phases.Add(addPhase);
             }
         }
@@ -531,7 +542,7 @@ internal class Deimos : BastionOfThePenitent
         {
             long sigStart = Math.Max(signet.Start, log.LogData.LogStart);
             long sigEnd = Math.Min(signet.End, log.LogData.LogEnd);
-            var burstPhase = new PhaseData(sigStart, sigEnd, "Burst " + burstID++);
+            var burstPhase = new SubPhasePhaseData(sigStart, sigEnd, "Burst " + burstID++);
             burstPhase.AddTarget(mainTarget, log);
             burstPhase.AddParentPhases(parentPhases);
             phases.Add(burstPhase);

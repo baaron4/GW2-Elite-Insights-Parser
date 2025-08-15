@@ -121,7 +121,7 @@ internal class Arkk : ShatteredObservatory
         {
             return;
         }
-        var phaseData = new PhaseData(Math.Max(target.FirstAware, log.LogData.LogStart), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName);
+        var phaseData = new SubPhasePhaseData(Math.Max(target.FirstAware, log.LogData.LogStart), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName);
         AddTargetsToPhaseAndFit(phaseData, [targetID], log);
         phases.Add(phaseData);
         phaseData.AddParentPhase(phases[0]);
@@ -161,7 +161,7 @@ internal class Arkk : ShatteredObservatory
             }
             else
             {
-                bloomPhases.Add(new PhaseData(start, end));
+                bloomPhases.Add(new SubPhasePhaseData(start, end));
             }
         }
         var invuls = arkk.GetBuffStatus(log, Determined762);

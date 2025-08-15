@@ -84,7 +84,7 @@ internal class FraenirOfJormag : Bjora
         if (invulApplyFraenir != null)
         {
             // split happened
-            phases.Add(new PhaseData(0, invulApplyFraenir.Time, "Fraenir 100-75%").WithParentPhase(phases[0]));
+            phases.Add(new SubPhasePhaseData(0, invulApplyFraenir.Time, "Fraenir 100-75%").WithParentPhase(phases[0]));
             if (icebrood != null)
             {
                 // icebrood enters combat
@@ -100,7 +100,7 @@ internal class FraenirOfJormag : Bjora
                     if (invulApplyIce != null && invulRemoveIce != null)
                     {
                         long icebrood2Start = invulRemoveIce.Time;
-                        phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
+                        phases.Add(new SubPhasePhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
                         icebroodPhases.Add(phases[^1]);
                         BuffEvent? invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                         if (invulRemoveFraenir != null)
@@ -115,12 +115,12 @@ internal class FraenirOfJormag : Bjora
                             {
                                 icebroodEnd = invulRemoveFraenir.Time - 1;
                             }
-                            phases.Add(new PhaseData(invulRemoveFraenir.Time, log.LogData.LogEnd, "Fraenir 25-0%").WithParentPhase(phases[0]));
+                            phases.Add(new SubPhasePhaseData(invulRemoveFraenir.Time, log.LogData.LogEnd, "Fraenir 25-0%").WithParentPhase(phases[0]));
                         }
-                        phases.Add(new PhaseData(icebrood2Start, icebroodEnd, "Damaged Construct & Fraenir"));
+                        phases.Add(new SubPhasePhaseData(icebrood2Start, icebroodEnd, "Damaged Construct & Fraenir"));
                         icebroodPhases.Add(phases[^1]);
                     }
-                    phases.Add(new PhaseData(icebroodStart, icebroodEnd, "Icebrood Construct").WithParentPhase(phases[0]));
+                    phases.Add(new SubPhasePhaseData(icebroodStart, icebroodEnd, "Icebrood Construct").WithParentPhase(phases[0]));
                     foreach (var icebroodPhase in icebroodPhases)
                     {
                         icebroodPhase.AddParentPhase(phases[^1]);

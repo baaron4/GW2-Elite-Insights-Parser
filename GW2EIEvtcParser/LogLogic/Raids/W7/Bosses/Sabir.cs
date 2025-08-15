@@ -126,7 +126,7 @@ internal class Sabir : TheKeyOfAhdashim
         int i = 0;
         foreach (var wallopingWind in wallopingWinds)
         {
-            var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
+            var phase = new SubPhasePhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
@@ -141,7 +141,7 @@ internal class Sabir : TheKeyOfAhdashim
         }
         if (i > 0)
         {
-            var phase = new PhaseData(start, log.LogData.LogEnd, "Phase " + (i + 1));
+            var phase = new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + (i + 1));
             phase.AddParentPhase(phases[0]);
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);

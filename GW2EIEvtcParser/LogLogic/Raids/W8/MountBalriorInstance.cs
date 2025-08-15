@@ -43,13 +43,13 @@ internal class MountBalriorInstance : MountBalrior
         return "Mount Balrior";
     }
 
-    private static void HandleGreerPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleGreerPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Greer, out var greers))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.GreersChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_greer.ChestID).FirstOrDefault();
             foreach (var greer in greers)
             {
                 // TBC
@@ -69,19 +69,20 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
                 var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, EncounterIconGreer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleDecimaPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID decimaID)
+    private List<PhaseData> HandleDecimaPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID decimaID)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)decimaID, out var decimas))
         {
-            var chest = log.AgentData.GetGadgetsByID(ChestID.DecimasChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_decima.ChestID).FirstOrDefault();
             foreach (var decima in decimas)
             {
                 long start = decima.FirstAware;
@@ -109,18 +110,19 @@ internal class MountBalriorInstance : MountBalrior
                 var mode = isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
                 if (targetsByIDs.TryGetValue((int)TargetID.TranscendentBoulder, out var boulders))
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, EncounterIconDecima, mode);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], boulders, [], mainPhase, name, start, end, success, _decima, mode);
                 } 
                 else
                 {
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], [], [], mainPhase, name, start, end, success, EncounterIconDecima, mode);
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [decima], [], [], mainPhase, name, start, end, success, _decima, mode);
                 }
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
-    private static void HandleUraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleUraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
@@ -128,7 +130,7 @@ internal class MountBalriorInstance : MountBalrior
         {
             long encounterThreshold = log.LogData.EvtcLogStart;
             var deterrences = log.CombatData.GetBuffData(SkillIDs.Deterrence).Where(x => x is BuffApplyEvent || x is BuffRemoveAllEvent);
-            var chest = log.AgentData.GetGadgetsByID(ChestID.UrasChest).FirstOrDefault();
+            var chest = log.AgentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
             foreach (var ura in uras)
             {
                 var enterCombat = log.CombatData.GetEnterCombatEvents(ura.AgentItem).FirstOrDefault();
@@ -167,10 +169,11 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = maxHP > 70e6;
                 var name = isCM ? "Godscream Ura" : "Ura, the Steamshrieker";
                 ura.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, EncounterIconUra, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

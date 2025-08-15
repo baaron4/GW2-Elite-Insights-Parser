@@ -260,7 +260,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 } 
                 else
                 {
-                    var beforeShieldPhase = new PhaseData(damageImmunityPhase.Start, currentMainPhase.End);
+                    var beforeShieldPhase = new SubPhasePhaseData(damageImmunityPhase.Start, currentMainPhase.End);
                     beforeShieldPhase.AddParentPhases(mainPhases);
                     SetPhaseNameForHP(beforeShieldPhase, hpAtStart);
                     AddMainTitansToPhase(beforeShieldPhase, greer, subTitans, ereg, log);
@@ -268,7 +268,7 @@ internal class GreerTheBlightbringer : MountBalrior
                     var nextMainPhase = phases.FirstOrDefault(x => x.Start >= damageImmunityPhase.Start && x.Name.Contains("Phase"));
                     if (nextMainPhase != null)
                     {
-                        var afterShieldPhase = new PhaseData(nextMainPhase.Start, damageImmunityPhase.End);
+                        var afterShieldPhase = new SubPhasePhaseData(nextMainPhase.Start, damageImmunityPhase.End);
                         afterShieldPhase.AddParentPhases(mainPhases);
                         SetPhaseNameForHP(afterShieldPhase, greer.GetCurrentHealthPercent(log, afterShieldPhase.Start));
                         AddMainTitansToPhase(afterShieldPhase, greer, subTitans, ereg, log);

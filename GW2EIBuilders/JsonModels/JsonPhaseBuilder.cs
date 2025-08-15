@@ -50,10 +50,13 @@ internal static class JsonPhaseBuilder
         switch(phase.Type)
         {
             case PhaseData.PhaseType.SubPhase:
-                jsPhase.PhaseType = "SubPhase";
-                break;
             case PhaseData.PhaseType.TimeFrame:
-                jsPhase.PhaseType = "TimeFrame";
+                jsPhase.PhaseType = phase.Type == PhaseData.PhaseType.SubPhase ? "SubPhase" : "TimeFrame";
+                var subPhase = (SubPhasePhaseData)phase;
+                if (subPhase.EncounterPhase != null)
+                {
+                    jsPhase.EncounterPhase = log.LogData.GetPhases(log).IndexOf(subPhase.EncounterPhase);
+                }
                 break;
             case PhaseData.PhaseType.Encounter:
                 jsPhase.PhaseType = "Encounter";
@@ -63,6 +66,7 @@ internal static class JsonPhaseBuilder
                     jsPhase.Success = encounterPhase.Success;
                     jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
                     jsPhase.IsCM = encounterPhase.IsCM;
+                    jsPhase.EIEncounterID = encounterPhase.LogID;
                 }
                 break;
             case PhaseData.PhaseType.Instance:

@@ -57,36 +57,44 @@ internal class Gorseval : SpiritVale
             new DamageCastFinder(HauntingAura, HauntingAura),
         ];
     }
+
+    private static readonly List<TargetID> ChargedSoulIDs = new List<TargetID>
+    {
+        TargetID.ChargedSoul
+    };
+
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = GetPhasesByInvul(log, ProtectiveShadow, gorseval, true, true, encounterPhase.Start, encounterPhase.End);
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int index = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(phases[0]);
+            if (index % 2 == 1)
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(gorseval, log);
+            }
+            else
+            {
+                phase.Name = "Split " + (index) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, ChargedSoulIDs, log);
+            }
+        }
+        return phases;
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
         phases[0].AddTarget(mainTarget, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, ProtectiveShadow, mainTarget, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 1)
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget, log);
-            }
-            else
-            {
-                phase.Name = "Split " + (i) / 2;
-                var ids = new List<TargetID>
-                {
-                   TargetID.ChargedSoul
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
-            }
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(ChargedSoulIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
         return phases;
     }
 

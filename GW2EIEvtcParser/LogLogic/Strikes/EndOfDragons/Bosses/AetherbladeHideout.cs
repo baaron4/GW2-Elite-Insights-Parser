@@ -586,7 +586,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
                 var scarletPhantoms = TrashMobs.Where(x => x.IsSpecies(TargetID.ScarletPhantom) && x.LastAware < maiTrinEnd && !eliteScarletPhantoms.Any(y => y.AgentItem.InAwareTimes(x.AgentItem))).ToList();
 
-                var maiTrinPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
+                var maiTrinPhase = new SubPhasePhaseData(0, maiTrinEnd, "Mai Trin");
                 maiTrinPhase.AddParentPhase(phases[0]);
                 maiTrinPhase.AddTarget(maiTrin, log);
                 phases.Add(maiTrinPhase);
@@ -647,7 +647,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 //
                 if (randomUntargetableStart != long.MaxValue)
                 {
-                    var scarletPhantomPhase = new PhaseData(randomUntargetableStart, randomUntargetableEnd, "Mai Tri Random Untargetable");
+                    var scarletPhantomPhase = new SubPhasePhaseData(randomUntargetableStart, randomUntargetableEnd, "Mai Tri Random Untargetable");
                     scarletPhantomPhase.AddParentPhase(maiTrinPhase);
                     scarletPhantomPhase.AddTarget(maiTrin, log);
                     phases.Add(scarletPhantomPhase);
@@ -657,7 +657,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         if (echoOfScarlet != null)
         {
             long echoStart = echoOfScarlet.FirstAware + 10000;
-            var echoPhase = new PhaseData(echoStart, log.LogData.LogEnd, "Echo of Scarlet Briar");
+            var echoPhase = new SubPhasePhaseData(echoStart, log.LogData.LogEnd, "Echo of Scarlet Briar");
             echoPhase.AddParentPhase(phases[0]);
             echoPhase.AddTarget(echoOfScarlet, log);
             phases.Add(echoPhase);
@@ -677,7 +677,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     {
                         var prePuzzleStart = subPhase.Start;
                         var prePuzzleEnd = beamNPCs.Where(x => subPhase.IntersectsWindow(x.FirstAware, x.LastAware)).Min(x => x.FirstAware);
-                        var prePuzzlePhase = new PhaseData(prePuzzleStart, prePuzzleEnd, "Pre-Puzzle Phase " + (phaseID - 1));
+                        var prePuzzlePhase = new SubPhasePhaseData(prePuzzleStart, prePuzzleEnd, "Pre-Puzzle Phase " + (phaseID - 1));
                         prePuzzlePhase.AddParentPhase(subPhase);
                         prePuzzlePhase.AddTarget(echoOfScarlet, log);
                         phases.Add(prePuzzlePhase);
@@ -690,7 +690,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                                 puzzleEnd = circlesDetonations.First(x => subPhase.InInterval(x.Time)).Time;
                                 var postPuzzleStart = puzzleEnd;
                                 var postPuzzleEnd = subPhase.End;
-                                var postPuzzlePhase = new PhaseData(postPuzzleStart, postPuzzleEnd, "Post-Puzzle Phase " + (phaseID - 1));
+                                var postPuzzlePhase = new SubPhasePhaseData(postPuzzleStart, postPuzzleEnd, "Post-Puzzle Phase " + (phaseID - 1));
                                 postPuzzlePhase.AddParentPhase(subPhase);
                                 postPuzzlePhase.AddTarget(echoOfScarlet, log);
                                 phases.Add(postPuzzlePhase);
@@ -704,7 +704,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                         {
                             puzzleEnd = subPhase.End;
                         }
-                        var puzzlePhase = new PhaseData(puzzleStart, puzzleEnd, "Puzzle Phase " + (phaseID - 1));
+                        var puzzlePhase = new SubPhasePhaseData(puzzleStart, puzzleEnd, "Puzzle Phase " + (phaseID - 1));
                         puzzlePhase.AddParentPhase(subPhase);
                         puzzlePhase.AddTargets(bombs, log);
                         phases.Add(puzzlePhase);
