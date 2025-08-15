@@ -590,32 +590,36 @@ internal class DecimaTheStormsinger : MountBalrior
                 );
                 break;
             case (int)TargetID.EnlightenedConduit:
-                AddThunderAoE(target, log, replay);
+                AddThunderAoE(target, log, replay, target.AgentItem);
                 AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuffCM, DecimaConduitWallBuff);
                     break;
             case (int)TargetID.EnlightenedConduitCM:
                 AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuffCM1, DecimaConduitWallWarningBuff, DecimaConduitWallBuffCM);
                 break;
             case (int)TargetID.EnlightenedConduitGadget:
-                var gadgetConnectorAgent = target.AgentItem.GetFinalMaster();
-                var gadgetEffectConnector = new AgentConnector(gadgetConnectorAgent);
+                AgentConnector gadgetEffectConnector;
                 List<long> chargeTierBuffs = [EnlightenedConduitGadgetChargeTier1Buff, EnlightenedConduitGadgetChargeTier2Buff, EnlightenedConduitGadgetChargeTier3Buff];
                 List<uint> chargeRadius = [100, 200, 400];
                 List<string> chargeIcons = [ParserIcons.TargetOrder1Overhead, ParserIcons.TargetOrder2Overhead, ParserIcons.TargetOrder3Overhead];
                 if (target.AgentItem.Master != null)
                 {
+                    gadgetEffectConnector = new AgentConnector(target.AgentItem.Master);
                     chargeTierBuffs = [EnlightenedConduitGadgetChargeTier1BuffCM, EnlightenedConduitGadgetChargeTier2BuffCM, EnlightenedConduitGadgetChargeTier3BuffCM];
                     // Chorus of Thunder / Discordant Thunder - Orange AoE
-                    AddThunderAoE(target, log, replay);
+                    AddThunderAoE(target, log, replay, target.AgentItem.Master);
+                }
+                else
+                {
+                    gadgetEffectConnector = new AgentConnector(target.AgentItem);
                 }
                 // Fulgent Aura - Tier Charges
-                for (int i = 0; i <  chargeTierBuffs.Count; i++)
+                for (int i = 0; i < chargeTierBuffs.Count; i++)
                 {
                     var tier = target.GetBuffStatus(log, chargeTierBuffs[i]);
                     foreach (var segment in tier.Where(x => x.Value > 0))
                     {
                         replay.Decorations.AddWithBorder(new CircleDecoration(chargeRadius[i], segment.TimeSpan, Colors.DarkPurple, 0.4, gadgetEffectConnector), Colors.Red, 0.4);
-                        replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetConnectorAgent, chargeIcons[i]);
+                        replay.Decorations.AddOverheadIcon(segment.TimeSpan, gadgetEffectConnector.Agent, chargeIcons[i]);
                     }
                 }
                 break;
@@ -809,23 +813,23 @@ internal class DecimaTheStormsinger : MountBalrior
         replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
 
         // Chorus of Thunder / Discordant Thunder - Orange AoE
-        AddThunderAoE(player, log, replay);
+        AddThunderAoE(player, log, replay, player.AgentItem);
     }
 
     /// <summary>
     /// Chorus of Thunder / Discordant Thunder - Orange spread AoE on players or on Conduits.
     /// </summary>
-    private static void AddThunderAoE(SingleActor actor, ParsedEvtcLog log, CombatReplay replay)
+    private static void AddThunderAoE(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, AgentItem decorationOn)
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
-            AgentItem dst = (actor.AgentItem.Master != null ? actor.AgentItem.Master : actor.AgentItem);
+            var conenctor = new AgentConnector(decorationOn);
             foreach (var effect in thunders)
             {
                 long duration = 5000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(dst)), growing);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, conenctor), growing);
             }
         }
     }
