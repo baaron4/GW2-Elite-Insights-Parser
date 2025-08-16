@@ -91,7 +91,7 @@
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (let i = 0; i < players.length; i++) {
                     const playerData = players[i];
-                    if (playerData.isFake) {
+                    if (!playerData) {
                         continue;
                     }
                     if (!aux[playerData.group]) {
