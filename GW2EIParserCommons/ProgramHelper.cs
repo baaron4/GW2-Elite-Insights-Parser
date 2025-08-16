@@ -445,7 +445,7 @@ public sealed class ProgramHelper : IDisposable
                         Settings.HtmlExternalScripts,
                         Settings.HtmlExternalScriptsPath,
                         Settings.HtmlExternalScriptsCdn,
-                        Settings.HtmlCompressJson
+                        Settings.HtmlCompressJson || log.LogData.IsInstance
                     ), htmlAssets, ParserVersion, uploadResults);
                 builder.CreateHTML(sw, saveDirectory.FullName);
             }
@@ -477,7 +477,7 @@ public sealed class ProgramHelper : IDisposable
                 operation.UpdateProgressWithCancellationCheck("Program: Creating JSON");
                 string outputFile = Path.Combine(saveDirectory.FullName, $"{fName}.json");
                 
-                using Stream str = Settings.CompressRaw 
+                using Stream str = Settings.CompressRaw || log.LogData.IsInstance
                     ? new MemoryStream()
                     : new FileStream(outputFile, FileMode.Create, FileAccess.Write);
 
@@ -504,7 +504,7 @@ public sealed class ProgramHelper : IDisposable
                     $"{fName}.xml"
                 );
                 Stream str;
-                if (Settings.CompressRaw)
+                if (Settings.CompressRaw || log.LogData.IsInstance)
                 {
                     str = new MemoryStream();
                 }
