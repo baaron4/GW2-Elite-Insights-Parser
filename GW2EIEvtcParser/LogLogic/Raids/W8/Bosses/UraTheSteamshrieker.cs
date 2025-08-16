@@ -314,14 +314,14 @@ internal class UraTheSteamshrieker : MountBalrior
         // Healed CM
         if (hp1 != null)
         {
-            var before1 = new PhaseData(start, hp1.Time, "100% - 1%");
+            var before1 = new SubPhasePhaseData(start, hp1.Time, "100% - 1%");
             before1.AddParentPhase(parentPhase);
             before1.AddTarget(ura, log);
             phases.Add(before1);
             var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To.Is(ura.AgentItem) && x.Time >= hp1.Time);
             if (determinedLost != null)
             {
-                var after1 = new PhaseData(determinedLost.Time, end, "Healed");
+                var after1 = new SubPhasePhaseData(determinedLost.Time, end, "Healed");
                 after1.AddParentPhase(parentPhase);
                 after1.AddTarget(ura, log);
                 phases.Add(after1);
@@ -333,7 +333,7 @@ internal class UraTheSteamshrieker : MountBalrior
         var hp70 = hpUpdates.FirstOrDefault(x => x.Value < 70);
         var hp40 = hpUpdates.FirstOrDefault(x => x.Value < 40);
         // 100-70
-        var before70 = new PhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
+        var before70 = new SubPhasePhaseData(start, hp70.Value > 0 ? hp70.Start : end, "100% - 70%");
         before70.AddParentPhase(parentPhase);
         before70.AddTarget(ura, log);
         phases.Add(before70);
@@ -343,15 +343,15 @@ internal class UraTheSteamshrieker : MountBalrior
             // 40 - 1 CM / 40 - 0 NM
             if (!hp40.IsEmpty())
             {
-                var after70before40 = new PhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
+                var after70before40 = new SubPhasePhaseData(hp70.Start, Math.Min(hp40.Start, end), "70% - 40%");
                 after70before40.AddTarget(ura, log);
                 phases.Add(after70before40);
 
-                var after40 = isCm ? new PhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new PhaseData(hp40.Start, end, "40% - 0%");
+                var after40 = isCm ? new SubPhasePhaseData(hp40.Start, hp1 != null ? Math.Min(hp1.Time, end) : end, "40% - 1%") : new SubPhasePhaseData(hp40.Start, end, "40% - 0%");
                 after40.AddTarget(ura, log);
                 phases.Add(after40);
 
-                var after70 = new PhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
+                var after70 = new SubPhasePhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
                 after70.AddParentPhase(parentPhase);
                 after70.AddTarget(ura, log);
                 phases.Add(after70);
@@ -361,7 +361,7 @@ internal class UraTheSteamshrieker : MountBalrior
             } 
             else
             {
-                var after70 = new PhaseData(hp70.Start, end, "70% - 40%");
+                var after70 = new SubPhasePhaseData(hp70.Start, end, "70% - 40%");
                 after70.AddTarget(ura, log);
                 phases.Add(after70);
                 after70.AddParentPhase(parentPhase);

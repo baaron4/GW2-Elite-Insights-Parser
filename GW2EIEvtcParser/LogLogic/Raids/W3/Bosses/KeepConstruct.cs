@@ -91,7 +91,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         {
             if (c.Value == 0)
             {
-                var mainPhase = new PhaseData(c.Start, c.End, "Phase " + (mainPhaseCount++));
+                var mainPhase = new SubPhasePhaseData(c.Start, c.End, "Phase " + (mainPhaseCount++));
                 mainPhase.AddParentPhase(phases[0]);
                 mainPhase.AddTarget(mainTarget, log);
                 mainPhases.Add(mainPhase);
@@ -125,7 +125,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         int burnCount = 1;
         foreach (Segment seg in segments)
         {
-            var phase = new PhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
+            var phase = new SubPhasePhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
             phase.AddTarget(mainTarget, log);
             phase.AddParentPhases(mainPhases);
             phases.Add(phase);
@@ -146,7 +146,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     long preBurnStart = (prevPhase.End >= preBurnEnd ? prevPhase.Start : prevPhase.End) + 1;
                     if (preBurnEnd - preBurnStart > PhaseTimeLimit)
                     {
-                        var phase = new PhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
+                        var phase = new SubPhasePhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
                         phase.AddParentPhases(mainPhases);
                         phase.AddTarget(mainTarget, log);
                         preBurnPhase.Add(phase);
@@ -173,7 +173,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 {
                     if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
                     {
-                        var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
+                        var leftOverPhase = new SubPhasePhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                         leftOverPhase.AddParentPhases(mainPhases);
                         leftOverPhase.AddTarget(mainTarget, log);
                         leftOverPhases.Add(leftOverPhase);

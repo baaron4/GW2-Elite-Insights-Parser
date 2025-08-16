@@ -51,7 +51,7 @@
 <script>
     Vue.component("dmgmodifier-table-component", {
         props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
-        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns)],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(maxBuffColumns), encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -86,7 +86,7 @@
                     }
                     return res;
                 }
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < players.length; i++) {
                     if(!players[i]) {
                         continue;
@@ -96,8 +96,9 @@
                 return res;
             },
             tableData: function () {
-                if (this.cache.has(this.phaseindex)) {
-                    return this.cache.get(this.phaseindex);
+                const cacheID = this.encounterPhase.id + '-' + this.phaseindex;
+                if (this.cache.has(cacheID)) {
+                    return this.cache.get(cacheID);
                 }
                 var rows = [];
                 var sums = [];
@@ -149,11 +150,11 @@
                     rows: rows,
                     sums: sums
                 };
-                this.cache.set(this.phaseindex, res);
+                this.cache.set(cacheID, res);
                 return res;
             },
             tableDataTarget: function () {
-                var cacheID = this.phaseindex + '-';
+                let cacheID = this.encounterPhase.id + '-' + this.phaseindex;
                 cacheID += getTargetCacheID(this.activetargets);
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);

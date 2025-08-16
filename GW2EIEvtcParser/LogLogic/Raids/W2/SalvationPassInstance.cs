@@ -40,7 +40,7 @@ internal class SalvationPassInstance : SalvationPass
         return "Salvation Pass";
     }
 
-    internal static void HandleTrioPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleTrioPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var packedTrios = new List<List<SingleActor>>();
         if (targetsByIDs.TryGetValue((int)TargetID.Narella, out var narellas))
@@ -98,7 +98,7 @@ internal class SalvationPassInstance : SalvationPass
         }
         //
         var lastPack = packedTrios.Last();
-        var chest = log.AgentData.GetGadgetsByID(ChestID.ChestOfPrisonCamp).FirstOrDefault();
+        var chest = log.AgentData.GetGadgetsByID(_banditTrio.ChestID).FirstOrDefault();
         var encounterPhases = new List<PhaseData>();
         foreach (var pack in packedTrios)
         {
@@ -117,18 +117,19 @@ internal class SalvationPassInstance : SalvationPass
                 success = true;
                 end = chest.FirstAware;
             }
-            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, EncounterIconBanditTrio);
+            AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, _banditTrio);
         }
         NumericallyRenamePhases(encounterPhases);
+        return encounterPhases;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], ChestID.SlothasorChest, "Slothasor", EncounterIconSlothasor);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], "Slothasor", _slothasor);
         HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), ChestID.MatthiasChest, "Matthias", EncounterIconMatthias);
+        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), "Matthias", _matthias);
         return phases;
     }
 

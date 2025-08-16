@@ -48,6 +48,26 @@ var damageGraphComponent = {
     },
 };
 
+var encounterPhaseComponent = {
+    data: function () {
+        return {
+            encounters: reactiveLogdata.encounters
+        }
+    },
+    computed: {
+        encounterPhase: function () {
+            const encounters = this.encounters;
+            for (let i = 0; i < encounters.length; i++) {
+                const encounter = encounters[i];
+                if (encounter.active) {
+                    return logData.phases[encounter.index];
+                }
+            }
+            return logData.phases[0];
+        },
+    }
+}
+
 var graphComponent = {
     data: function () {
         return {
@@ -126,7 +146,7 @@ var timeRefreshComponent = {
         },
     },
 };
-
+// Depends on encounter phase component
 var buffComponent = {
     props: ["phaseindex"],
     computed: {
@@ -192,7 +212,7 @@ var buffComponent = {
         orderedSpecs: function () {
             var res = [];
             var aux = new Set();
-            const players = getActivePlayersForPhase(this.phase);
+            const players = getActivePlayersForPhase(this.encounterPhase);
             for (var i = 0; i < specs.length; i++) {
                 var spec = specs[i];
                 var pBySpec = [];
@@ -440,29 +460,7 @@ var targetTabGraphComponent = {
         }
     },
     created: function () {
-        var images = [];
-        this.data = [];
-        this.targetOffset += computeRotationData(this.rotationData, images, this.data, this.phase, this.target, 1);
-        var oldOffset = this.targetOffset;
-        this.targetOffset += computeBuffData(this.boonGraph, this.data);
-        var hasBuffs = oldOffset !== this.targetOffset;
-        this.targetOffset += addTargetLayout(this.data, this.target, this.breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
-        this.targetOffset += addTargetLayout(this.data, this.target, this.barrierStates, "barrier", "barrier", false);
-        this.targetOffset += addTargetLayout(this.data, this.target, this.healthStates, "hp", "health", true);
-        this.data.push({
-            x: this.phase.times,
-            y: [],
-            mode: 'lines',
-            line: {
-                shape: 'spline'
-            },
-            yaxis: 'y3',
-            hoverinfo: 'name+y+x',
-            name: 'Total'
-        });
-        this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, true);
-        computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
-        this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+        this.computeLayout();
     },
     activated: function () {
         var div = document.getElementById(this.graphid);
@@ -537,8 +535,33 @@ var targetTabGraphComponent = {
         }
     },
     methods: {
+        computeLayout() {        
+            var images = [];
+            this.data = [];
+            this.targetOffset += computeRotationData(this.rotationData, images, this.data, this.phase, this.target, 1);
+            var oldOffset = this.targetOffset;
+            this.targetOffset += computeBuffData(this.boonGraph, this.data);
+            var hasBuffs = oldOffset !== this.targetOffset;
+            this.targetOffset += addTargetLayout(this.data, this.target, this.breakbarStates, "breakbar", "breakbar", this.phase.breakbarPhase);
+            this.targetOffset += addTargetLayout(this.data, this.target, this.barrierStates, "barrier", "barrier", false);
+            this.targetOffset += addTargetLayout(this.data, this.target, this.healthStates, "hp", "health", true);
+            this.data.push({
+                x: this.phase.times,
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline'
+                },
+                yaxis: 'y3',
+                hoverinfo: 'name+y+x',
+                name: 'Total'
+            });
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, true);
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
+            this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
+        },
         computeDPSData: function () {
-            var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
+            const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, [], this.phaseindex, null);
             if (this.dpsCache.has(cacheID)) {
                 return this.dpsCache.get(cacheID);
             }

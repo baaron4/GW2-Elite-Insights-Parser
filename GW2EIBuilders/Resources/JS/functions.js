@@ -1047,11 +1047,16 @@ function validateStartPath(path) {
     return setting.startsWith(path);
 }
 
-function getActivePlayers(start, end) {
+function getActivePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end)) {
+        if (player.isEnglobed && 
+            (
+                (!player.isFirstEnglobed && player.firstAware > time) ||
+                (!player.isLastEnglobed && player.lastAware < time)
+            )
+        ) {
             res.push(null);
         } else {
             res.push(player);
@@ -1060,11 +1065,19 @@ function getActivePlayers(start, end) {
     return res;
 }
 
-function getActiveNonFakePlayers(start, end) {
+function getActiveNonFakePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isFake || (player.isEnglobed && (player.lastAware <= start || player.firstAware >= end))) {
+        if (player.isFake || 
+            (
+                player.isEnglobed && 
+                (            
+                    (!player.isFirstEnglobed && player.firstAware > time) ||
+                    (!player.isLastEnglobed && player.lastAware < time)
+                )
+            )
+        ) {
             res.push(null);
         } else {
             res.push(player);
@@ -1074,9 +1087,12 @@ function getActiveNonFakePlayers(start, end) {
 }
 
 function getActivePlayersForPhase(phase) {
+    if (phase.type !== PhaseTypes.INSTANCE && phase.type !== PhaseTypes.ENCOUNTER) {
+        throw "Expected an instance or encounter phase";
+    }
     let res = [];
-    const start = phase._activityPhase.start;
-    const end = phase._activityPhase.end;
+    const start = phase.start;
+    const end = phase.end;
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
         if ((player.lastAware <= start || player.firstAware >= end)) {
@@ -1089,9 +1105,12 @@ function getActivePlayersForPhase(phase) {
 }
 
 function getActiveNonFakePlayersForPhase(phase) {
+    if (phase.type !== PhaseTypes.INSTANCE && phase.type !== PhaseTypes.ENCOUNTER) {
+        throw "Expected an instance or encounter phase";
+    }
     let res = [];
-    const start = phase._activityPhase.start;
-    const end = phase._activityPhase.end;
+    const start = phase.start;
+    const end = phase.end;
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
         if (player.isFake || ((player.lastAware <= start || player.firstAware >= end))) {
@@ -1101,4 +1120,39 @@ function getActiveNonFakePlayersForPhase(phase) {
         }
     }
     return res;
+}
+
+function getPhasesForSelectedEncounter(phases, encounters) {
+    for (let i = 0; i < encounters.length; i++) {
+        const encounter = encounters[i];
+        if (encounter.active) {
+            const phase = logData.phases[encounter.index];
+            let resPhases = [];
+            if (phase.type === PhaseTypes.INSTANCE) {
+                if (IsMultiEncounterLog) {
+                    for (let j = 0; j < phases.length; j++) {
+                        const subPhase = logData.phases[j];
+                        if (subPhase === phase || subPhase.type === PhaseTypes.ENCOUNTER) {
+                            resPhases.push(phases[j]);
+                        }
+                    }
+                } else {
+                    return phases;
+                }
+            } else {
+                if (IsMultiEncounterLog) {
+                    for (let j = 0; j < phases.length; j++) {
+                        const subPhase = logData.phases[j];
+                        if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
+                            resPhases.push(phases[j]);
+                        }
+                    }
+                } else {
+                    return phases;
+                }
+            }
+            return resPhases;
+        }
+    }
+    return phases;
 }

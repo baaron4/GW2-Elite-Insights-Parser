@@ -12,6 +12,11 @@ internal abstract class IcebroodSagaStrike : StrikeMissionLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        if (IsInstance)
+        {
+            logData.SetSuccess(true, logData.LogEnd);
+            return;
+        }
         var strikeRewardIDs = new HashSet<ulong>
         {
             RewardIDs.ShiverpeaksPassChests,

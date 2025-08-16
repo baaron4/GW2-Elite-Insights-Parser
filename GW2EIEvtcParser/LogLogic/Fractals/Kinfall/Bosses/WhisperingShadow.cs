@@ -100,7 +100,7 @@ internal class WhisperingShadow : Kinfall
             {
                 if (isFirst)
                 {
-                    var phase = new PhaseData(start, cast.Time, "Phase " + i);
+                    var phase = new SubPhasePhaseData(start, cast.Time, "Phase " + i);
                     phase.AddParentPhase(phases[0]);
                     phase.AddTarget(shadow, log);
                     phases.Add(phase);
@@ -108,7 +108,7 @@ internal class WhisperingShadow : Kinfall
                     var stunned = stuns.FirstOrDefault(x => x.Time > phase.End);
                     var broken = breakbarEnds.FirstOrDefault(x => x.Time > phase.End);
                     var end = Math.Min(stunned?.Time ?? log.LogData.LogEnd, broken?.Time ?? long.MaxValue);
-                    var split = new PhaseData(cast.Time, end, "Darkness " + i);
+                    var split = new SubPhasePhaseData(cast.Time, end, "Darkness " + i);
                     split.AddParentPhase(phases[0]);
                     split.AddTarget(shadow, log);
                     phases.Add(split);
@@ -125,7 +125,7 @@ internal class WhisperingShadow : Kinfall
         }
         if (start < log.LogData.LogEnd)
         {
-            var lastPhase = new PhaseData(start, log.LogData.LogEnd, "Phase " + i);
+            var lastPhase = new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + i);
             lastPhase.AddParentPhase(phases[0]);
             lastPhase.AddTarget(shadow, log);
             phases.Add(lastPhase);

@@ -1,6 +1,23 @@
 <template>
     <div class="card fight-summary" style="min-width: 350px;">
-        <h3 class="card-header text-center">{{ encounter.name }}</h3>
+        <h3 v-if="isMultiEncounterLog" class="card-header text-center" >
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Select Encounter">
+                <div :style="getMinWidth()">{{ encounter.name }}</div>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" :style="getMinWidth()" style="max-height: 500px;">
+                <li v-for="(encounterData, index) in encountersData" :key="index" :style="index === 0 ? {'border-bottom': '2px solid #bbb;'} : ''">
+                   <a @click="select(index)" @click.stop="stopClickEvent" href="#" class="dropdown-item"
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">         
+                        <img class="icon-ll" :src="encounterData.icon">
+                        {{encounterData.name}}
+                    </a>
+                </li>
+            </ul>
+        </h3>
+        <h3 v-if="!isMultiEncounterLog" class="card-header text-center">
+            {{ encounter.name }}
+        </h3>
         <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
@@ -15,7 +32,7 @@
                     <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
                 </div>
                 <div class="ml-1 d-flex flex-column justify-content-center">
-                    <div v-if="!wvw" class="mb-1" v-for="target in encounter.targets">
+                    <div v-if="!encounter.hideTargets" class="mb-1" v-for="target in encounter.targets">
                         <div class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
@@ -27,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="wvw" class="mb-1">
+                    <div v-if="encounter.hideTargets" class="mb-1">
                         <div>Players: {{ encounter.players.length }}</div>
                         <div>Friendlies: {{ encounter.nonSquadFriendlies.length }}</div>
                         <div>Enemies: {{ encounter.targets.length }}</div>
@@ -36,7 +53,7 @@
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                     <div class="mb-2" v-if="!!instancePrivacy">{{ instancePrivacy }}</div>
                     <div class="mb-2 text-warning" v-if="encounter.start"> {{ encounter.start }}</div>
-                    <div v-if="!wvw" class="text" :class="resultStatus.class">
+                    <div v-if="!encounter.hideResult" class="text" :class="resultStatus.class">
                         Result: {{resultStatus.text}}
                     </div>
                 </div>
@@ -47,14 +64,76 @@
 
 <script>
     Vue.component("encounter-component", {
-        props: ["light"],
+        props: ["light", "encounters"],
         template: `${template}`,
         data: function () {
             return {
-                wvw: logData.wvw
+                isMultiEncounterLog: IsMultiEncounterLog,
             };
         },
         methods: {
+            getMinWidth: function() {
+                let width = 0;
+                for (let i = 0; i < this.encountersData.length; i++) {
+                    width = Math.max(this.encountersData[i].name.length * 13, width);
+                }
+                width += 40;
+                return {
+                    'min-width': width + "px"
+                };
+            },
+            stopClickEvent: function (event) {
+                event.stopPropagation();
+            },
+            select: function(encounterIndex) {
+                for (let i = 0; i < this.encounters.length; i++) {
+                    this.encounters[i].active = false;
+                }
+                this.encounters[encounterIndex].active = true;
+                const index = this.encounters[encounterIndex].index;
+                // Select main phase
+                for (var i = 0; i < reactiveLogdata.phases.length; i++) {
+                    reactiveLogdata.phases[i].active = false;
+                }
+                reactiveLogdata.phases[index].active = true;   
+                // Select an appropriate player
+                const phase = logData.phases[index];
+                const players = getActiveNonFakePlayersForPhase(phase);      
+                let selectedPlayerIndex = 0; 
+                for (let i = 0; i < reactiveLogdata.players.length; i++) {
+                    if (reactiveLogdata.players[i].active) {
+                        selectedPlayerIndex = i;
+                    }
+                    reactiveLogdata.players[i].active = false;
+                }
+                if (players[selectedPlayerIndex]) {
+                    reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                } else {
+                    const originalPlayer = logData.players[selectedPlayerIndex];
+                    selectedPlayerIndex = -1;
+                    // Look for the same player that is active in that encounter
+                    for (let i = 0; i < logData.players.length; i++) {
+                        const curPlayer = logData.players[i];
+                        if (curPlayer.acc === originalPlayer.acc && players[i]) {
+                            selectedPlayerIndex = i;
+                            break;
+                        }
+                    }
+                    if (selectedPlayerIndex >= 0) {           
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    } else {
+                        // Default to pov player active in that encounter
+                        for (let i = 0; i < logData.players.length; i++) {
+                            const curPlayer = logData.players[i];
+                            if (curPlayer.isPoV && players[i]) {
+                                selectedPlayerIndex = i;
+                                break;
+                            }
+                        }
+                        reactiveLogdata.players[selectedPlayerIndex].active = true;   
+                    }
+                }
+            },
             getGradient: function (target) {
                 var hpLeftPercent = target.hpLeftPercent;
                 var healthAndBarrier = hpLeftPercent + target.barrierLeftPercent;
@@ -122,35 +201,55 @@
             },
         },
         computed: {
-            encounter: function () {
-                var targets = [];
-                var mainPhase = logData.phases[0];
-                if (!logData.targetless) {
-                    for (var i = 0; i < mainPhase.targets.length; i++) {
-                        if (mainPhase.targetPriorities[i] > 0) {
-                            continue;
+            encountersData: function () {
+                let res = [];
+                for (let j = 0; j < logData.phases.length; j++) {
+                    const phase = logData.phases[j];
+                    if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
+                        continue;
+                    }
+                    var targets = [];
+                    const noTargets = logData.targetless;
+                    if (!noTargets) {
+                        for (var i = 0; i < phase.targets.length; i++) {
+                            if (phase.targetPriorities[i] > 0) {
+                                continue;
+                            }
+                            if (targets.length >= 10) {
+                                break;
+                            }
+                            var targetIndex = phase.targets[i];
+                            var targetData = logData.targets[targetIndex];
+                            targets.push(targetData);
                         }
-                        if (targets.length >= 10) {
-                            break;
-                        }
-                        var targetIndex = mainPhase.targets[i];
-                        var targetData = logData.targets[targetIndex];
-                        targets.push(targetData);
+                    }
+                    const players = getActiveNonFakePlayersForPhase(phase);
+                    const hideTargets = logData.wvw || (phase.type === PhaseTypes.INSTANCE && this.isMultiEncounterLog);
+                    var encounter = {
+                        name: phase == logData.phases[0] ? logData.logName : phase.nameNoMode,
+                        success: phase.success,
+                        icon: phase.icon,
+                        duration: phase.encounterDuration,
+                        targets: targets,
+                        players: players.filter(x => x && !x.notInSquad),
+                        nonSquadFriendlies: players.filter(x => x && x.notInSquad),
+                        mode: phase.mode,
+                        start: phase.startStatus,
+                        hideTargets: hideTargets,
+                        hideResult: hideTargets
+                    };
+                    res.push(encounter);
+                }
+                return res;
+            },
+            encounter: function() {
+                for (let i = 0; i < this.encounters.length; i++) {
+                    const encounter = this.encounters[i];
+                    if (encounter.active) {
+                        return this.encountersData[i];
                     }
                 }
-
-                var encounter = {
-                    name: mainPhase == logData.phases[0] ? logData.logName : mainPhase.nameNoMode,
-                    success: mainPhase.success,
-                    icon: mainPhase.icon,
-                    duration: mainPhase.encounterDuration,
-                    targets: targets,
-                    players: logData.players.filter(x => !x.notInSquad),
-                    nonSquadFriendlies: logData.players.filter(x => x.notInSquad),
-                    mode: mainPhase.mode,
-                    start: mainPhase.startStatus,
-                };
-                return encounter;
+                return this.encountersData[0];
             },
             fractalScale: function () {
                 return logData.fractalScale;

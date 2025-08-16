@@ -269,7 +269,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 end = Math.Max(boulder.LastAware, end);
             }
         }
-        var phase = new PhaseData(start, end, name);
+        var phase = new SubPhasePhaseData(start, end, name);
         phase.AddTargets(boulders, log);
         phase.AddTarget(decima, log, PhaseData.TargetPriority.Blocking);
         return phase;
@@ -324,14 +324,14 @@ internal class DecimaTheStormsinger : MountBalrior
             var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem));
             if (finalSeismicJumpEvent != null)
             {
-                var preFinalPhase = new PhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
+                var preFinalPhase = new SubPhasePhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
                 preFinalPhase.AddParentPhases(mainPhases);
                 preFinalPhase.AddTarget(Decima, log);
                 phases.Add(preFinalPhase);
                 var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault();
                 if (finalPhaseStartEvent != null)
                 {
-                    var finalPhase = new PhaseData(finalPhaseStartEvent.Time, log.LogData.LogEnd, "10% - 0%");
+                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, log.LogData.LogEnd, "10% - 0%");
                     finalPhase.AddParentPhases(mainPhases);
                     finalPhase.AddTarget(Decima, log);
                     phases.Add(finalPhase);

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParsedData.LogData;
 
@@ -14,11 +15,14 @@ public abstract class PhaseDataWithMetaData : PhaseData
     public bool IsCM => Mode == LogMode.CMNoName || Mode == LogMode.CM;
     public bool IsLegendaryCM => Mode == LogMode.LegendaryCM;
 
+    public readonly long LogID = LogIDs.Unknown;
+
     public readonly string NameNoMode = "";
     public readonly string Icon;
 
-    internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, PhaseType type) : base(start, end, type)
+    internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, long logID, PhaseType type) : base(start, end, type)
     {
+        LogID = logID;
         Success = success;
         Mode = mode;
         Icon = icon;
@@ -31,7 +35,7 @@ public abstract class PhaseDataWithMetaData : PhaseData
             + (MissingPreEvent ? " (No Pre-Event)" : ""); ;
     }
 
-    internal PhaseDataWithMetaData(long start, long end, string name, ParsedEvtcLog log, PhaseType type) : this(start, end, name, log.LogData.Success, log.LogData.Logic.Icon, log.LogData.Mode, type)
+    internal PhaseDataWithMetaData(long start, long end, string name, ParsedEvtcLog log, PhaseType type) : this(start, end, name, log.LogData.Success, log.LogData.Logic.Icon, log.LogData.Mode, log.LogData.Logic.LogID, type)
     {
         StartStatus = log.LogData.StartStatus;
         Name = NameNoMode;

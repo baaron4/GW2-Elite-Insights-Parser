@@ -180,7 +180,7 @@
     Vue.component("defense-stats-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
-        mixins: [numberComponent, sortedTableComponent],
+        mixins: [numberComponent, sortedTableComponent, encounterPhaseComponent],
         data: function () {
             return {
                 cache: new Map(),
@@ -236,15 +236,16 @@
                 return logData.phases[this.phaseindex];
             },
             tableData: function () {
-                if (this.cache.has(this.phaseindex)) {
-                    return this.cache.get(this.phaseindex);
+                const cacheID = this.encounterPhase.id + '-' +  this.phaseindex;
+                if (this.cache.has(cacheID)) {
+                    return this.cache.get(cacheID);
                 }
                 const dataLength = this.phase.defStats[0].length;
                 var rows = [];
                 var sums = [];
                 var total = new Array(dataLength).fill(0);
                 var groups = [];
-                const players = getActiveNonFakePlayersForPhase(this.phase);
+                const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
                 for (var i = 0; i < this.phase.defStats.length; i++) {
                     var def = this.phase.defStats[i];
                     var player = players[i];
@@ -282,7 +283,7 @@
                     rows: rows,
                     sums: sums
                 };
-                this.cache.set(this.phaseindex, res);
+                this.cache.set(cacheID, res);
                 return res;
             },
             UIIcons: function() {

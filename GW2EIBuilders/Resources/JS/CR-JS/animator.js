@@ -93,7 +93,11 @@ var animator = null;
 const reactiveAnimationData = {
     time: getDefaultCombatReplayTime(),
     selectedActorID: null,
-    animated: false
+    animated: false,
+    range: {
+        min: 0,
+        max: 1e12
+    }
 };
 
 var sliderDelimiter = {
@@ -332,6 +336,8 @@ class Animator {
             cur += PollingRate;
         }
         this.reactiveDataStatus.time = start;
+        this.reactiveDataStatus.range.min = this.times[0];
+        this.reactiveDataStatus.range.max = this.times[this.times.length - 1];
     }
 
     attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
@@ -559,6 +565,13 @@ class Animator {
         }
     }
 
+    updateRange(phase) {
+        let min = Math.max(this.times[0], phase.start * 1000);
+        let max = Math.min(this.times[this.times.length - 1], phase.end * 1000);
+        this.reactiveDataStatus.range.min = min;
+        this.reactiveDataStatus.range.max = max;
+    }
+
     updateTime(value) {
         this.reactiveDataStatus.time = parseInt(value);
         if (this.animation === null) {
@@ -567,7 +580,7 @@ class Animator {
     }
 
     updateTextInput() {
-        this.timeSliderDisplay.value = (this.reactiveDataStatus.time / 1000.0).toFixed(3);
+        this.timeSliderDisplay.value = ((this.reactiveDataStatus.time - this.reactiveDataStatus.range.min) / 1000.0).toFixed(3);
     }
 
     updateInputTime(value) {
@@ -578,7 +591,9 @@ class Animator {
                 return;
             }
             const ms = Math.round(parsedTime * 1000.0);
-            this.reactiveDataStatus.time = Math.min(Math.max(ms, 0), this.times[this.times.length - 1]);
+            const min = this.reactiveDataStatus.range.min;
+            const max = this.reactiveDataStatus.range.max;
+            this.reactiveDataStatus.time = Math.min(Math.max(ms, min), max);
             animateCanvas(updateText);
         } catch (error) {
             console.error(error);
@@ -593,8 +608,10 @@ class Animator {
 
     startAnimate(updateReactiveStatus) {
         if (this.animation === null && this.times.length > 0) {
-            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1] && !this.backwards) {
-                this.reactiveDataStatus.time = 0;
+            const max = this.reactiveDataStatus.range.max;
+            const min = this.reactiveDataStatus.range.min;
+            if (this.reactiveDataStatus.time >= max && !this.backwards) {
+                this.reactiveDataStatus.time = min;
             }
             this.prevTime = new Date().getTime();
             this.animation = requestAnimationFrame(animateCanvas);
@@ -644,6 +661,37 @@ class Animator {
         }
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
+        }
+    }
+    
+    _reselectIfEnglobed() {     
+        if (this.selectedActor && this.selectedActor.parentID >= 0) {
+            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
+            if (perParentArray) {
+                let actor = perParentArray.filter(x => x.getPosition() != null)[0];
+                if (!actor) {
+                    const time = this.reactiveDataStatus.time;
+                    // check for first in interval
+                    let candidates = perParentArray.filter(x => x.start <= time && x.end >= time);
+                    if (candidates.length) {
+                        actor = candidates[0];
+                    } else {
+                        // first
+                        candidates = perParentArray.filter(x => x.start >= time);
+                        if (candidates.length) {
+                            actor = candidates[0];
+                        } else {
+                            // last
+                            candidates = perParentArray.filter(x => x.end <= time);
+                            if (candidates.length) {
+                                actor = candidates[candidates.length - 1];
+                            }
+                        }
+                    }
+                }
+                this.selectedActor = actor || this.selectedActor;
+                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;             
+            }
         }
     }
 
@@ -1165,18 +1213,11 @@ class Animator {
             }
         }
     }
-
     draw() {
         if (!this.mainCanvas) {
             return;
         }    
-        if (this.selectedActor && this.selectedActor.parentID >= 0) {
-            const perParentArray = this.agentDataPerParentID.get(this.selectedActor.parentID);
-            if (perParentArray) {
-                this.selectedActor = perParentArray.filter(x => x.getPosition() != null)[0] || this.selectedActor;
-                this.reactiveDataStatus.selectedActorID = this.selectedActor.id;
-            }
-        }
+        this._reselectIfEnglobed();
         //
         //this._drawPickCanvas();
         this._drawBGCanvas();
@@ -1202,7 +1243,7 @@ function animateCanvas(noRequest) {
     if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
         animator.stopAnimate(true);
     }
-    animator.timeSlider.value = animator.reactiveDataStatus.time.toString();
+    animator.timeSlider.value = (animator.reactiveDataStatus.time - animator.reactiveDataStatus.range.min).toString()
     if (noRequest > updateText) {
         animator.updateTextInput();
     }

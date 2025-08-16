@@ -32,6 +32,7 @@
 <script>
     Vue.component("combat-replay-players-stats-component", {
         props: ["time", "selectedplayerid"],
+        mixins: [encounterPhaseComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -50,10 +51,11 @@
             groups: function () {
                 var res = [];
                 var i = 0;
-                const players = getActivePlayers(this.time * 0.001, (this.time + 1) * 0.001);
+                const encounterPlayers = getActivePlayersForPhase(this.encounterPhase);
+                const players = getActivePlayers(this.time * 0.001);
                 for (i = 0; i < players.length; i++) {
                     var playerData = players[i];
-                    if (!playerData) {
+                    if (!playerData || !encounterPlayers[i]) {
                         continue;
                     }
                     var crPlayer = animator.getActorData(playerData.uniqueID);

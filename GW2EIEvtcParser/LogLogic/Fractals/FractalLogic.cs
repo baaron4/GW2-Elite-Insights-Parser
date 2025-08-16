@@ -88,6 +88,11 @@ internal abstract class FractalLogic : LogLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        if (IsInstance)
+        {
+            logData.SetSuccess(true, logData.LogEnd);
+            return;
+        }
         // check reward
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the log not found");
         RewardEvent? reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > logData.LogStart);

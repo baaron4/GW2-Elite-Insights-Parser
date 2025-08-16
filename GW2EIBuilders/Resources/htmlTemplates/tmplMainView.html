@@ -125,7 +125,8 @@
                 return -1;
             },
             name: function () {
-                return this.phase.name + " Summary";
+                const phase = this.phase;
+                return (phase.nameNoMode ?? phase.name) + " Summary";
             },
             activePhaseTargets: function () {
                 var res = [];

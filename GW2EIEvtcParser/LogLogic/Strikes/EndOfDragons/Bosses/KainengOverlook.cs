@@ -182,7 +182,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.LogData.LogEnd;
-                var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
+                var addPhase = new SubPhasePhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets, log);
                 addPhase.AddParentPhase(phases[0]);
                 phases.Add(addPhase);

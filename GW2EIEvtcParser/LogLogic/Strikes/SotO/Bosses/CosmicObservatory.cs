@@ -420,7 +420,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             PhaseData phase;
             if (i % 2 == 1)
             {
-                phase = new PhaseData(start, end)
+                phase = new SubPhasePhaseData(start, end)
                 {
                     Name = "Tormenteds " + (i + 1) / 2
                 };
@@ -439,7 +439,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 {
                     start = phasingBuffLoss.Time;
                 }
-                phase = new PhaseData(start, end)
+                phase = new SubPhasePhaseData(start, end)
                 {
                     Name = "Phase " + (i + 2) / 2
                 };

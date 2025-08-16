@@ -437,7 +437,7 @@ internal class Adina : TheKeyOfAhdashim
             var invul = invuls[i];
             if (invul.Value > 0)
             {
-                var splitPhase = new PhaseData(invul.Start, invul.End, "Split " + (i / 2 + 1));
+                var splitPhase = new SubPhasePhaseData(invul.Start, invul.End, "Split " + (i / 2 + 1));
                 splitPhase.AddParentPhase(phases[0]);
                 splitPhaseEnds.Add(invul.End);
                 AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
@@ -474,17 +474,17 @@ internal class Adina : TheKeyOfAhdashim
                     start = nextPhaseStart;
                     phaseIndex = splitPhaseEnds.IndexOf(start) + 1;
                 }
-                mainPhases.Add(new PhaseData(curPhaseStart, quantumQake, "Phase " + phaseIndex));
+                mainPhases.Add(new SubPhasePhaseData(curPhaseStart, quantumQake, "Phase " + phaseIndex));
             }
             if (start != mainPhases.Last().Start)
             {
-                mainPhases.Add(new PhaseData(start, log.LogData.LogEnd, "Phase " + (phaseIndex + 1)));
+                mainPhases.Add(new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + (phaseIndex + 1)));
             }
         }
         else if (start > 0 && invuls.Count == 0)
         {
             // no split
-            mainPhases.Add(new PhaseData(start, log.LogData.LogEnd, "Phase 1"));
+            mainPhases.Add(new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase 1"));
         }
 
         foreach (PhaseData phase in mainPhases)
