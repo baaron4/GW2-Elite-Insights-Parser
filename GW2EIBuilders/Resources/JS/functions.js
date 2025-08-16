@@ -1121,3 +1121,38 @@ function getActiveNonFakePlayersForPhase(phase) {
     }
     return res;
 }
+
+function getPhasesForSelectedEncounter(phases, encounters) {
+    for (let i = 0; i < encounters.length; i++) {
+        const encounter = encounters[i];
+        if (encounter.active) {
+            const phase = logData.phases[encounter.index];
+            let resPhases = [];
+            if (phase.type === PhaseTypes.INSTANCE) {
+                if (IsMultiEncounterLog) {
+                    for (let j = 0; j < phases.length; j++) {
+                        const subPhase = logData.phases[j];
+                        if (subPhase === phase || subPhase.type === PhaseTypes.ENCOUNTER) {
+                            resPhases.push(phases[j]);
+                        }
+                    }
+                } else {
+                    return phases;
+                }
+            } else {
+                if (IsMultiEncounterLog) {
+                    for (let j = 0; j < phases.length; j++) {
+                        const subPhase = logData.phases[j];
+                        if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
+                            resPhases.push(phases[j]);
+                        }
+                    }
+                } else {
+                    return phases;
+                }
+            }
+            return resPhases;
+        }
+    }
+    return phases;
+}

@@ -14,7 +14,7 @@ function compileTemplates() {
         methods: {
             isNumber: function (evt) {
                 evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                const charCode = (evt.which) ? evt.which : evt.keyCode;
                 if ((charCode > 31 && charCode < 48) || charCode > 57) {
                     return false;
                 }
@@ -23,8 +23,8 @@ function compileTemplates() {
         },
         mounted() {
             $("#" + this.id).on("input ", function () {
-                var max = parseInt($(this).attr('max')) || 1e12;
-                var min = parseInt($(this).attr('min'));
+                const max = parseInt($(this).attr('max')) || 1e12;
+                const min = parseInt($(this).attr('min'));
                 if ($(this).val() > max) {
                     $(this).val(max);
                 } else if ($(this).val() < min) {
@@ -46,7 +46,7 @@ function compileTemplates() {
                 this.pagestructure.offset = parseInt(value);
             },
             getStyle: function() {
-                var res = {
+                const res = {
                     width: this.width,
                     height: this.height,
                     transform: this.transform
@@ -104,6 +104,14 @@ function getDefaultPhase() {
     return parseInt(setting);
 }
 
+function getDefaultEncounter() {
+    const setting = EIUrlParams.get("encounter");
+    if (!setting || !IsMultiEncounterLog) {
+        return 0;
+    }
+    return parseInt(setting);
+}
+
 function mainLoad() {
     if (!apiRenderServiceOkay) {
         for (let key in WeaponIcons) {
@@ -114,8 +122,6 @@ function mainLoad() {
         }
     }
     // make some additional variables reactive
-    var activePhaseIndex = getDefaultPhase();
-    var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
     for (let i = 0; i < logData.phases.length; i++) {
         const phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -132,26 +138,38 @@ function mainLoad() {
         phase.id = i;
         phase.times = times;
         reactiveLogdata.phases.push({
-            active: firstActive === phase,
+            active: false,
             index: i,
             focus: -1
         });
         if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {
             reactiveLogdata.encounters.push({
-                active: i === 0,
+                active: false,
                 index: i
             });
         }
     }
     IsMultiEncounterLog = reactiveLogdata.encounters.length > 1;
-    for (var i = 0; i < logData.targets.length; i++) {
-        var target = logData.targets[i];
-        var activeArray = [];
+    const activeEncounterIndex = getDefaultEncounter();
+    for (let i = 0; i < reactiveLogdata.encounters.length; i++) {
+        reactiveLogdata.encounters[i].active = i === activeEncounterIndex;
+    }
+    let encounterPhases = getPhasesForSelectedEncounter(reactiveLogdata.phases, reactiveLogdata.encounters).filter(x => {
+        const logPhase = logData.phases[x.index];
+        return !logPhase.breakbarPhase;
+    });
+    const activePhaseIndex = getDefaultPhase();
+    for (let i = 0; i < encounterPhases.length; i++) {
+        encounterPhases[i].active = i === activePhaseIndex;
+    }
+    for (let i = 0; i < logData.targets.length; i++) {
+        const target = logData.targets[i];
+        const activeArray = [];
         reactiveLogdata.targets.push(activeArray);
-        for (var j = 0; j < logData.phases.length; j++) {
-            var phase = logData.phases[j];
-            var phaseTarget = phase.targets.indexOf(i);
-            var priority = phase.targetPriorities[phaseTarget];
+        for (let j = 0; j < logData.phases.length; j++) {
+            const phase = logData.phases[j];
+            const phaseTarget = phase.targets.indexOf(i);
+            const priority = phase.targetPriorities[phaseTarget];
             activeArray.push({
                 active: typeof priority !== "undefined" && priority < 2,
                 secondary: typeof priority === "undefined" || priority > 0,
@@ -162,8 +180,8 @@ function mainLoad() {
         target.dpsGraphCache = new Map();
     }
     let activeFound = false;
-    for (var i = 0; i < logData.players.length; i++) {
-        var playerData = logData.players[i];
+    for (let i = 0; i < logData.players.length; i++) {
+        const playerData = logData.players[i];
         reactiveLogdata.players.push({
             active: !activeFound && !!playerData.isPoV,
             index: i,
@@ -195,13 +213,13 @@ function mainLoad() {
                 if (state === this.light) {
                     return;
                 }
-                var style = this.light ? 'yeti' : 'slate';
+                const style = this.light ? 'yeti' : 'slate';
                 this.light = state;
-                var newStyle = this.light ? 'yeti' : 'slate';
+                const newStyle = this.light ? 'yeti' : 'slate';
                 document.body.classList.remove("theme-" + style);
                 document.body.classList.add("theme-" + newStyle);
                 if (storeTheme) storeTheme(newStyle);
-                var theme = document.getElementById('theme');
+                const theme = document.getElementById('theme');
                 theme.href = themes[newStyle];
             },
             getLogData: function () {
@@ -213,7 +231,7 @@ function mainLoad() {
                 return logData.logErrors;
             },
             uploadLinks: function () {
-                var res = [
+                const res = [
                     { 
                         key: "DPS Reports Link (EI)", 
                         url: "" 
@@ -223,9 +241,9 @@ function mainLoad() {
                         url: "" 
                     }
                 ];
-                var hasAny = false;
-                for (var i = 0; i < logData.uploadLinks.length; i++) {
-                    var link = logData.uploadLinks[i];
+                let hasAny = false;
+                for (let i = 0; i < logData.uploadLinks.length; i++) {
+                    const link = logData.uploadLinks[i];
                     if (link.length > 0) {
                         hasAny = true;
                         res[i].url = link;
@@ -244,7 +262,7 @@ function mainLoad() {
             }
         },
         mounted() {
-            var element = document.getElementById("loading");
+            const element = document.getElementById("loading");
             element.parentNode.removeChild(element);
         }
     });
@@ -258,7 +276,7 @@ function mainLoad() {
 window.onload = function () {
     Vue.config.devtools = true;
     // trick from
-    var imgOfficialAPI = document.createElement("img");
+    const imgOfficialAPI = document.createElement("img");
     imgOfficialAPI.style.display = "none";
     document.body.appendChild(imgOfficialAPI);
     imgOfficialAPI.onload = function () {
@@ -269,7 +287,7 @@ window.onload = function () {
     imgOfficialAPI.onerror = function () {
         apiRenderServiceOkay = false;      
         document.body.removeChild(imgOfficialAPI);
-        var imgDarthmaim = document.createElement("img");
+        const imgDarthmaim = document.createElement("img");
         imgDarthmaim.style.display = "none";
         imgDarthmaim.onload = function () {
             console.warn("Warning: GW2 Render service unavailable, switching to https://icons-gw2.darthmaim-cdn.com");

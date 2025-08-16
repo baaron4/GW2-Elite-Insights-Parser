@@ -7,6 +7,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 internal abstract class ActorDto
 {
     public int UniqueID;
+    public int InstID;
     public string Name;
     public uint Tough;
     public uint Condi;
@@ -33,6 +34,7 @@ internal abstract class ActorDto
         Tough = actor.Toughness;
         Details = details;
         UniqueID = actor.UniqueID;
+        InstID = actor.InstID;
         FirstAware = actor.FirstAware / 1000.0;
         LastAware = actor.LastAware / 1000.0;
         IsEnglobed = actor.AgentItem.IsEnglobedAgent;

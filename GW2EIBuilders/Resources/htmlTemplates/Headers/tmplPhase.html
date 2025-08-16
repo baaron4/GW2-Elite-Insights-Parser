@@ -37,38 +37,7 @@
         template: `${template}`,
         computed: {
             phasesToUse: function() {
-                for (let i = 0; i < this.encounters.length; i++) {
-                    const encounter = this.encounters[i];
-                    if (encounter.active) {
-                        const phase = logData.phases[encounter.index];
-                        let phases = [];
-                        if (phase.type === PhaseTypes.INSTANCE) {
-                            if (IsMultiEncounterLog) {   
-                                for (let j = 0; j < this.phases.length; j++) {
-                                    const subPhase = logData.phases[j];
-                                    if (subPhase === phase || subPhase.type === PhaseTypes.ENCOUNTER) {
-                                        phases.push(this.phases[j]);
-                                    }
-                                }           
-                            } else {
-                                return this.phases;
-                            }
-                        } else {
-                            if (IsMultiEncounterLog) {
-                                for (let j = 0; j < this.phases.length; j++) {
-                                    const subPhase = logData.phases[j];
-                                    if (subPhase === phase || subPhase.encounterPhase === encounter.index) {
-                                        phases.push(this.phases[j]);
-                                    }
-                                }   
-                            } else {
-                                return this.phases;
-                            }
-                        }
-                        return phases;
-                    }
-                }         
-                return this.phases;
+                return getPhasesForSelectedEncounter(this.phases, this.encounters);
             },
             showNormalPhases: function () {
                 return this.normalPhases.length > 1 || this.hasBreakbarPhases;
