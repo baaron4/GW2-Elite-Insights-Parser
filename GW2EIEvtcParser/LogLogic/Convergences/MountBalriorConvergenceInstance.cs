@@ -93,19 +93,23 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
 
         // Full Fight Phase
         string phaseName = "";
+        string icon = "";
         switch (target.ID)
         {
             case (int)TargetID.DecimaTheStormsingerConv:
                 phaseName = "Full Decima";
+                icon = EncounterIconDecima;
                 break;
             case (int)TargetID.GreerTheBlightbringerConv:
                 phaseName = "Full Greer";
+                icon = EncounterIconGreer;
                 break;
             case (int)TargetID.UraTheSteamshriekerConv:
                 phaseName = "Full Ura";
+                icon = EncounterIconUra;
                 break;
         }
-        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log).WithParentPhase(phases[0]);
+        var fullPhase = new EncounterPhaseData(Math.Max(log.LogData.LogStart, target.FirstAware), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName, log.LogData.Success, icon, log.LogData.Mode, log.LogData.Logic.LogID).WithParentPhase(phases[0]);
         fullPhase.AddTarget(target, log);
         phases.Add(fullPhase);
         if (!requirePhases)
