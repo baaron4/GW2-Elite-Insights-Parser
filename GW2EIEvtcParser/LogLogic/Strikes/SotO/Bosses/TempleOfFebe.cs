@@ -282,7 +282,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         if (logStartNPCUpdate != null)
         {
             var enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
-            var cerus = agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
+            AgentItem cerus = GetCerusItem(agentData);
             var spawnEvent = combatData.Where(x => x.IsStateChange == StateChange.Spawn && x.SrcMatchesAgent(cerus)).FirstOrDefault();
             if (spawnEvent != null && enterCombatTime >= spawnEvent.Time)
             {
@@ -304,7 +304,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             TargetID.EmbodimentOfRage,
             TargetID.EmbodimentOfRegret,
         };
-        var cerus = agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
+        AgentItem cerus = GetCerusItem(agentData);
         foreach (TargetID embodimentID in embodimentIDs)
         {
             foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
@@ -626,7 +626,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         long invisibleStart = log.LogData.EvtcLogStart;
         bool startTrimmed = false;
 
-        SingleActor? cerus = log.LogData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        AgentItem cerus = GetCerusItem(log.AgentData);
         IEnumerable<Segment> invulnsApply = [];
         if (cerus != null)
         {
@@ -732,12 +732,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         uint width = 2200;
 
         var enviousGaze = casts.Where(x => x.SkillID == EnviousGazeNM || x.SkillID == EnviousGazeEmpoweredNM || x.SkillID == EnviousGazeCM || x.SkillID == EnviousGazeEmpoweredCM);
+
+        var isCerus = target.IsSpecies(TargetID.Cerus);
+        var isKillableEmbodiment = target.IsSpecies(TargetID.EmbodimentOfEnvy);
+
         foreach (CastEvent cast in enviousGaze)
         {
-            if (cast.IsUnknown)
-            {
-                continue;
-            }
             bool isEmpowered = cast.SkillID == EnviousGazeEmpoweredNM || cast.SkillID == EnviousGazeEmpoweredCM;
             long indicatorDuration = 1500;
             (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
@@ -774,6 +774,23 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     continue;
                 }
 
+                // At 10%, if the embodiment is casting the indicator but the wall hasn't spawend yet and Cerus' bar is broken, the wall is interrupted and doesn't spawn.
+                if (!isCerus)
+                {
+                    IReadOnlyList<HealthUpdateEvent> health = log.CombatData.GetHealthUpdateEvents(GetCerusItem(log.AgentData));
+                    HealthUpdateEvent? hp11 = health.FirstOrDefault(x => x.HealthPercent < 11);
+                    var petrify = log.CombatData.GetAnimatedCastData(PetrifySkill);
+                    if (hp11 != null)
+                    {
+                        AnimatedCastEvent? pet = petrify.FirstOrDefault(x => x.Time > hp11.Time);
+                        // If petrify at 10% finishes casting before the end of the envy indicator, we don't show the rotating beams.
+                        if (pet != null && Math.Abs(lifespanIndicator.start - pet.Time) < 5000 && pet.EndTime < lifespanIndicator.end + 950)
+                        {
+                            continue;
+                        }
+                    }
+                }
+
                 // Frontal Damage Beam
                 (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
                 (long start, long end) lifespanDamageCancelled = lifespanDamage;
@@ -787,14 +804,31 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 {
                     // Opposite Damage Beam
                     (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
-                    (long start, long end) lifespanDamageOppositeCancelled = lifespanDamage;
-                    lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
+                    (long start, long end) lifespanDamageOppositeCancelled = lifespanDamageOpposite;
+                    // In game bug, when ending the 80% and 50% split phases and transitioning back to Cerus, the back wall of the empowered envy does not despawn.
+                    // If this gets fixed in game, add a game build versioning check.
+                    if (!isKillableEmbodiment)
+                    {
+                        lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
+                    }
                     double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                     double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
                     var rotation3 = new SpinningConnector(facing, (float)degreedRotatedOpposite);
-                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
-                    var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
-                    replay.Decorations.Add(rectangle3);
+                    
+                    // The bug makes the beam continue while the embodiment has despawned, so we use the agent position for a PositionConnector instead of AgentConnector.
+                    ParametricPoint3D? position = target.GetCombatReplayActivePolledPositions(log).FirstOrDefault(x => x.Value.Time > lifespanDamage.start && x.Value.Time <= lifespanDamage.end);
+                    if (position != null)
+                    {
+                        var connector = new PositionConnector(position.Value.XYZ).WithOffset(new(-(width / 2), 0, 0), true);
+                        var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, connector).UsingRotationConnector(rotation3);
+                        replay.Decorations.Add(rectangle3);
+                    }
+                    else
+                    {
+                        // Fallback for security
+                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
+                        var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
+                    }
                 }
             }
         }
@@ -847,7 +881,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <returns>The computed lifespan.</returns>
     private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(AgentItem target, ParsedEvtcLog log, (long start, long end) lifespan)
     {
-        SingleActor? cerus = log.LogData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        SingleActor? cerus = log.LogData.GetMainTargets(log).FirstOrDefault(x => x.IsSpecies(TargetID.Cerus));
         if (cerus != null)
         {
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
@@ -897,7 +931,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
         if (log.LogData.IsCM || log.LogData.IsLegendaryCM)
         {
-            AgentItem? cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
+            AgentItem cerus = GetCerusItem(log.AgentData);
             if (cerus != null)
             {
                 var empoweredBuffs = new List<long>()
@@ -915,5 +949,10 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 }
             }
         }
+    }
+
+    private static AgentItem GetCerusItem(AgentData agentData)
+    {
+        return agentData.GetNPCsByID(TargetID.Cerus).FirstOrDefault()! ?? throw new MissingKeyActorsException("Cerus not found");
     }
 }
