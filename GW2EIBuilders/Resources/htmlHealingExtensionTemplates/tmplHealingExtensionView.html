@@ -106,7 +106,8 @@
                 return -1;
             },
             name: function () {
-                return this.phase.name + " Healing Summary";
+                const phase = this.phase;
+                return (phase.nameNoMode ?? phase.name) + " Healing Summary";
             },
             activePlayerTargets: function () {
                 const res = [];

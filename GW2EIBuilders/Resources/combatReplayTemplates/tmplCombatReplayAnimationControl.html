@@ -5,7 +5,7 @@
                 <li class="nav-item" v-for="(phase, id) in phases"
                     v-show="!phase.breakbarPhase"
                     :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
-                    <a class="nav-link" @click="updatePhaseTime(phase)">{{phase.name}}</a>
+                    <a class="nav-link" @click="updatePhaseTime(phase)">{{phase.nameNoMode ?? phase.name}}</a>
                 </li>
             </ul>
         </div>
