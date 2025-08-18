@@ -28,7 +28,7 @@ public class MechanicData
 
     }
 
-    private void CheckConfiguration()
+    private void CheckConfiguration(ParsedEvtcLog log)
     {
         var logMechanics = _mechanicLogs;
         //TODO(Rennorb) @perf: find average complexity
@@ -36,6 +36,7 @@ public class MechanicData
         var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(logMechanics.Count);
         foreach (Mechanic m in logMechanics.Keys)
         {
+            if (!log.LogData.IsInstance)
             {
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                 {
@@ -100,7 +101,7 @@ public class MechanicData
         { 
             _mechanicLogs.Remove(x); 
         }
-        CheckConfiguration();
+        CheckConfiguration(log);
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
             if (mech.IsASubMechanic)
