@@ -274,7 +274,7 @@
                     var breakbar = this.graph.targets[i].breakbarPercentStates;
                     addPointsToGraph(res, breakbar, maxDPS);
                 }
-                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxDPS);
+                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, getActivePlayersForPhase(this.encounterPhase), maxDPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },

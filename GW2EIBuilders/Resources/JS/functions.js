@@ -162,7 +162,7 @@ function addMechanicsToGraph(data, phase, phaseIndex) {
     }
 }
 
-function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, max) {
+function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, activePlayers, max) {
     for (var i = 0; i < graphData.mechanics.length; i++) {
         var mech = graphData.mechanics[i];
         var mechData = logData.mechanicMap[i];
@@ -184,15 +184,20 @@ function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, max) {
                 }
             }
         } else {
+            let indexInGraph = 0;
             for (var j = 0; j < mech.points[phaseIndex].length; j++) {
+                if (!activePlayers[j]) {
+                    continue;
+                }
                 var pts = mech.points[phaseIndex][j];
                 for (var k = 0; k < pts.length; k++) {
                     var time = pts[k][0];
                     var ftime = Math.floor(time);
-                    var y = res[j][ftime];
-                    var yp1 = res[j][ftime + 1];
+                    var y = res[indexInGraph][ftime];
+                    var yp1 = res[indexInGraph][ftime + 1];
                     chart.push(interpolatePoint(ftime, ftime + 1, y, yp1, time));
                 }
+                indexInGraph++;
             }
         }
     }

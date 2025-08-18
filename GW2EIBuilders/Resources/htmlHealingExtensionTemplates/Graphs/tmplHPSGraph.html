@@ -318,7 +318,7 @@
                     addPointsToGraph(res, health, maxHPS);
                     addPointsToGraph(res, barrier, maxHPS);
                 }
-                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxHPS);
+                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, getActivePlayersForPhase(this.encounterPhase), maxHPS);
                 this.dataCache.set(cacheID, res);
                 return res;
             },
