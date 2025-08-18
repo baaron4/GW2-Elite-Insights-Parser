@@ -78,7 +78,7 @@
             },
             getPhaseName: function (id) {
                 const phase = this.getPhaseData(id);
-                return phase.nameNoMode ?? phase.name;
+                return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
             },
             getTargetData: function (id) {
                 return logData.targets[id];

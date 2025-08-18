@@ -5,7 +5,7 @@
                 <li class="nav-item" v-for="(phase, id) in phases"
                     v-show="!phase.breakbarPhase"
                     :data-original-title="phase.durationS + ' seconds <br /> Start: ' + phase.start + '<br /> End: ' + phase.end">
-                    <a class="nav-link" @click="updatePhaseTime(phase)">{{phase.nameNoMode ?? phase.name}}</a>
+                    <a class="nav-link" @click="updatePhaseTime(phase)">{{getPhaseName(phase)}}</a>
                 </li>
             </ul>
         </div>
@@ -192,10 +192,13 @@
                 const offset = this.range.min;
                 animator.updateTime(parseInt(value) + offset);
             },
+            getPhaseName: function(phase) {
+                return phase === this.encounterPhase ? phase.nameNoMode : phase.name;
+            },
             updatePhaseTime: function (phase) {
                 var min = phase.start * 1000;
                 var max = phase.end * 1000;
-                var name = phase.name;
+                var name = this.getPhaseName(phase);
                 const offset = this.range.min;
                 this.sliderDelimiter.min = min - offset;
                 this.sliderDelimiter.max = max - offset;

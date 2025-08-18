@@ -2,7 +2,7 @@
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 v-if="isMultiEncounterLog" class="card-header text-center" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Select Encounter">
-                <div :style="getMinWidth()">{{ encounter.name }}</div>
+                <div :style="getMinWidth()">{{ encounter.nameNoMode }}</div>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" :style="getMinWidth()" style="max-height: 500px;">
@@ -16,7 +16,7 @@
             </ul>
         </h3>
         <h3 v-if="!isMultiEncounterLog" class="card-header text-center">
-            {{ encounter.name }}
+            {{ encounter.nameNoMode }}
         </h3>
         <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
         <div class="card-body card-body-encounter container">
@@ -29,7 +29,7 @@
                                  :src="instanceBuff.buff.icon" class="icon icon-hover" />
                         </span>
                     </div>
-                    <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
+                    <img class="encounter-icon" :src="encounter.icon" :alt="encounter.nameNoMode">
                 </div>
                 <div class="ml-1 d-flex flex-column justify-content-center">
                     <div v-if="!encounter.hideTargets" class="mb-1" v-for="target in encounter.targets">
@@ -75,7 +75,7 @@
             getMinWidth: function() {
                 let width = 0;
                 for (let i = 0; i < this.encountersData.length; i++) {
-                    width = Math.max(this.encountersData[i].name.length * 13, width);
+                    width = Math.max(this.encountersData[i].nameNoMode.length * 13, width);
                 }
                 width += 40;
                 return {
@@ -226,7 +226,8 @@
                     const players = getActiveNonFakePlayersForPhase(phase);
                     const hideTargets = logData.wvw || (phase.type === PhaseTypes.INSTANCE && this.isMultiEncounterLog);
                     var encounter = {
-                        name: phase == logData.phases[0] ? logData.logName : phase.nameNoMode,
+                        nameNoMode: phase == logData.phases[0] ? logData.logName : phase.nameNoMode,
+                        name: phase == logData.phases[0] ? logData.logName : phase.name,
                         success: phase.success,
                         icon: phase.icon,
                         duration: phase.encounterDuration,
