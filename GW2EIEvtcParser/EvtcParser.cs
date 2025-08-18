@@ -880,7 +880,7 @@ public class EvtcParser
             var allPlayerAgents = _agentData.GetAgentByType(AgentItem.AgentType.Player).ToList();
             allPlayerAgents.AddRange(_agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer));
             var playerAgents = new HashSet<AgentItem>(_playerList.Select(x => x.AgentItem));
-            playerAgents.UnionWith(playerAgents.Select(x => x.EnglobingAgentItem));
+            playerAgents.UnionWith(playerAgents.Select(x => x.EnglobingAgentItem).ToList());
             int playerOffset = _playerList.Count + 1;
             foreach (AgentItem playerAgent in allPlayerAgents.OrderBy(x => x.InstID))
             {
