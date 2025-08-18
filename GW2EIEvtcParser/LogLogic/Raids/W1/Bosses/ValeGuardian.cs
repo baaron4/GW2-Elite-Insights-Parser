@@ -115,7 +115,7 @@ internal class ValeGuardian : SpiritVale
             int index = i + 1;
             PhaseData phase = phases[i];
             phase.AddParentPhase(encounterPhase);
-            if (i % 2 == 0)
+            if (index % 2 == 0)
             {
                 phase.Name = "Split " + (index) / 2;
                 AddTargetsToPhaseAndFit(phase, targets, SplitGuardianIDs, log);
