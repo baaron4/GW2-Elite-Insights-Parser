@@ -17,7 +17,7 @@ public abstract class PhaseDataWithMetaData : PhaseData
 
     public readonly long LogID = LogIDs.Unknown;
 
-    public readonly string NameNoMode = "";
+    public string NameNoMode { get; internal set; } = "";
     public readonly string Icon;
 
     internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, long logID, PhaseType type) : base(start, end, type)

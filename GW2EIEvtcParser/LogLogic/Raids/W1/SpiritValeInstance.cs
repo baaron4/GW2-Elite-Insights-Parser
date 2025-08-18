@@ -85,7 +85,7 @@ internal class SpiritValeInstance : SpiritVale
                 AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarriers, [], [], phases[0], "Spirit Race", start, end, success, _spiritRace);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -146,7 +146,7 @@ internal class SpiritValeInstance : SpiritVale
                 AddInstanceEncounterPhase(log, phases, encounterPhases, etherealBarrierPack, [], [], phases[0], "Spirit Race", start, end, success, _spiritRace);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 

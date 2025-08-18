@@ -264,7 +264,7 @@ internal static class LogLogicPhaseUtils
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [target], blockingBosses, [], mainPhase, phaseName, start, end, success, icon, encounterID, fightModeChecker != null ? fightModeChecker(log, target) : LogData.LogMode.Normal);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -273,14 +273,19 @@ internal static class LogLogicPhaseUtils
         return ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, targetID, blockingBosses, encounterLogic.ChestID, phaseName, encounterLogic.Icon, encounterLogic.LogID, fightModeChecker);
     }
 
-    internal static void NumericallyRenamePhases(IReadOnlyList<PhaseData> phases)
+    internal static void NumericallyRenameEncounterPhases(IReadOnlyList<EncounterPhaseData> phases)
     {
         if (phases.Count > 1)
         {
             for (int i = 0; i < phases.Count; i++)
             {
                 phases[i].Name += " " + (i + 1);
+                phases[i].NameNoMode += " " + (i + 1);
             }
         }
+    }
+    internal static void NumericallyRenameEncounterPhases(IReadOnlyList<PhaseData> phases)
+    {
+        NumericallyRenameEncounterPhases(phases.OfType<EncounterPhaseData>().ToList());
     }
 }

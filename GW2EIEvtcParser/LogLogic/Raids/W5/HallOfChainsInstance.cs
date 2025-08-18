@@ -81,7 +81,7 @@ internal class HallOfChainsInstance : HallOfChains
                 }
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -110,7 +110,7 @@ internal class HallOfChainsInstance : HallOfChains
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [brokenKing], [], [], mainPhase, "Statue of Ice", start, end, success, _statueOfIce);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
     private List<PhaseData> HandleStatueOfDeathPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
@@ -144,7 +144,7 @@ internal class HallOfChainsInstance : HallOfChains
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [eaterOfSoul], [], [], mainPhase, "Statue of Death", start, end, success, _statueOfDeath);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -179,7 +179,7 @@ internal class HallOfChainsInstance : HallOfChains
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [eyeOfFate, eyeOfJudgement], [], [], mainPhase, "Statue of Darkness", start, end, success, _statueOfDarkness);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -209,7 +209,7 @@ internal class HallOfChainsInstance : HallOfChains
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 

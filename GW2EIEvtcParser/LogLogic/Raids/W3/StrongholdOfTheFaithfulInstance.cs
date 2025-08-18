@@ -72,7 +72,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             }
         }
         mainPhase.AddTargets(mcLeods, log);
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -134,7 +134,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [dummy], [], [], mainPhase, "Twisted Castle", start, end, success, _twistedCastle);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
     private List<PhaseData> HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
@@ -199,7 +199,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             }
             AddInstanceEncounterPhase(log, phases, encounterPhases, [xera != null ? log.FindActor(xera) : dummy], [], [], mainPhase, "Xera", start, end, success, _xera);
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

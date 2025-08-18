@@ -87,7 +87,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [cairn], [], [], mainPhase, "Cairn", start, end, success, _cairn, log.CombatData.GetBuffApplyData(SkillIDs.Countdown).Any(x => x.Time >= start && x.Time <= end) ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -188,7 +188,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 

@@ -119,7 +119,7 @@ internal class SalvationPassInstance : SalvationPass
             }
             AddInstanceEncounterPhase(log, phases, encounterPhases, pack, [], [], phases[0], "Bandit Trio", start, end, success, _banditTrio);
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 

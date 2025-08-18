@@ -72,7 +72,7 @@ internal class MountBalriorInstance : MountBalrior
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -118,7 +118,7 @@ internal class MountBalriorInstance : MountBalrior
                 }
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
@@ -172,7 +172,7 @@ internal class MountBalriorInstance : MountBalrior
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
         }
-        NumericallyRenamePhases(encounterPhases);
+        NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
