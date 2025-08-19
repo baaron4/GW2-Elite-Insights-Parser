@@ -5,8 +5,7 @@
 "use strict";
 //// ACTORS
 
-function IsPresentInArray(array) {
-    var time = animator.reactiveDataStatus.time;
+function IsPresentInArray(array, time) {
     for (let i = 0; i < array.length; i += 2) {
         if (array[i] <= time && array[i + 1] >= time) {
             return true;
@@ -53,28 +52,32 @@ class IconDrawable {
         if (this.dead === null || this.dead.length === 0) {
             return false;
         }
-        return IsPresentInArray(this.dead);
+        return IsPresentInArray(this.dead, animator.reactiveDataStatus.time);
     }
 
     downed() {
         if (this.down === null || this.down.length === 0) {
             return false;
         }
-        return IsPresentInArray(this.down);
+        return IsPresentInArray(this.down, animator.reactiveDataStatus.time);
     }
 
     disconnected() {
+        return this._disconnected(animator.reactiveDataStatus.time);
+    }
+
+    _disconnected(time) {
         if (this.dc === null || this.dc.length === 0) {
             return false;
         }
-        return IsPresentInArray(this.dc);
+        return IsPresentInArray(this.dc, time);
     }
 
     isBreakbarActive() {
         if (this.breakbarActive === null || this.breakbarActive.length === 0) {
             return false;
         }
-        return IsPresentInArray(this.breakbarActive);
+        return IsPresentInArray(this.breakbarActive, animator.reactiveDataStatus.time);
     }
 
     _isFriendly() {
@@ -142,7 +145,7 @@ class IconDrawable {
     }
 
     canDraw() {
-        if (this.hide && this.hide.length > 0 && IsPresentInArray(this.hide)) {        
+        if (this.hide && this.hide.length > 0 && IsPresentInArray(this.hide, animator.reactiveDataStatus.time)) {        
             return false;
         }
         return true;
@@ -166,7 +169,7 @@ class IconDrawable {
     }
 
     _getPosition(time) {
-        if (this.positions === null || this.positions.length === 0 || this.disconnected()) {
+        if (this.positions === null || this.positions.length === 0 || this._disconnected(time)) {
             return null;
         }
         if (this.start !== -1 && (this.start > time || this.end < time)) {

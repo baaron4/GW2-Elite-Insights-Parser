@@ -510,7 +510,7 @@ class MechanicDrawable {
             const masterID = this.connectedTo.masterID;
             const perParentArray = animator.agentDataPerParentID.get(masterID);
             if (perParentArray) {
-                this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+                this.master = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.master === null) {
                 this.master = animator.getActorData(masterID);
             }
@@ -522,7 +522,6 @@ class MechanicDrawable {
             const masterID = this.rotationConnectedTo.masterID;
             const perParentArray = animator.agentDataPerParentID.get(masterID);
             if (perParentArray) {
-                const time = animator.reactiveDataStatus.time;
                 this.rotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
             } else if (this.rotationMaster === null) {
                 this.rotationMaster = animator.getActorData(masterID);
@@ -532,9 +531,9 @@ class MechanicDrawable {
             }
             if (this.rotationFetcher === masterToMasterRotationFetcher) {
                 const dstMasterID = this.rotationConnectedTo.dstMasterID;
-                const perParentArray = animator.agentDataPerParentID.get(dstMasterID);
-                if (perParentArray) {       
-                    this.dstRotationMaster = perParentArray.filter(x => x.getPosition() != null)[0];
+                const perDstParentArray = animator.agentDataPerParentID.get(dstMasterID);
+                if (perDstParentArray) {       
+                    this.dstRotationMaster = perDstParentArray.filter(x => x.getPosition() != null)[0];
                 } else if (this.dstRotationMaster === null) {
                     this.dstRotationMaster = animator.getActorData(dstMasterID);
                 }
@@ -569,7 +568,7 @@ class MechanicDrawable {
 
 }
 //// FACING
-class FacingMechanicDrawable extends MechanicDrawable {
+class ActorOrientationDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);
     }

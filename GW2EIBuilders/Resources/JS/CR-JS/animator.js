@@ -492,7 +492,21 @@ class Animator {
             if (!decorationRendering.isMechanicOrSkill) {
                 switch (decorationRendering.type) {
                     case Types.ActorOrientation:
-                        this.actorOrientationData.set(decorationRendering.connectedTo.masterID, new FacingMechanicDrawable(decorationRendering));
+                        let orientationID = decorationRendering.connectedTo.masterID;
+                        var orientationDrawable = new ActorOrientationDrawable(decorationRendering);
+                        if (this.agentDataPerParentID.has(orientationID)) {
+                            let halfTime = (orientationDrawable.start + orientationDrawable.end) / 2;
+                            let agents = this.agentDataPerParentID.get(orientationID);
+                            for (let i = 0; i < agents.length; i++) {
+                                let agent = agents[i];
+                                if (agent.start <= halfTime && agent.end >= halfTime) {
+                                    this.actorOrientationData.set(agents[i].id, orientationDrawable);
+                                    break;
+                                }
+                            }
+                        } else {
+                            this.actorOrientationData.set(orientationID, orientationDrawable);
+                        }
                         break;
                     case Types.MovingPlatform:
                         this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
