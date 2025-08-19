@@ -34,7 +34,7 @@ partial class SingleActor
         }
     }
 
-    private static void AddValueToStatusList(ParsedEvtcLog log, List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, (long Time, StatusEvent? evt) next, long minTime, int index)
+    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, (long Time, StatusEvent? evt) next, long minTime, int index)
     {
         long cTime = cur.Time;
         var curEvt = cur.evt;
@@ -59,17 +59,6 @@ partial class SingleActor
             if (index == 0)
             {
                 AddSegment(actives, minTime, cTime);
-            }
-            // Back to back despawn, a spawn must have happened somewhere
-            if (next.evt == null || next.evt is DespawnEvent)
-            {
-                var firstMovement = log.CombatData.GetMovementData(curEvt.Src).FirstOrDefault(x => x.Time >= cTime + 1000 && x.Time <= next.Time);
-                if (firstMovement != null)
-                {
-                    AddSegment(dc, cTime, firstMovement.Time);
-                    AddSegment(actives, firstMovement.Time, next.Time);
-                }
-                return;
             }
             AddSegment(dc, cTime, next.Time);
         }
@@ -135,14 +124,14 @@ partial class SingleActor
         {
             var cur = status[i];
             var next = status[i + 1];
-            AddValueToStatusList(log, dead, down, dc, actives, cur, next, FirstAware, i);
+            AddValueToStatusList(dead, down, dc, actives, cur, next, FirstAware, i);
         }
 
         // check last value
         if (status.Count > 0)
         {
             var cur = status.Last();
-            AddValueToStatusList(log, dead, down, dc, actives, cur, (LastAware, null), FirstAware, status.Count - 1);
+            AddValueToStatusList(dead, down, dc, actives, cur, (LastAware, null), FirstAware, status.Count - 1);
             if (cur.evt is DeadEvent)
             {
                 AddSegment(dead, LastAware, long.MaxValue);
