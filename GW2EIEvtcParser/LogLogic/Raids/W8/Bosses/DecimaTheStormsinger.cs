@@ -28,35 +28,36 @@ internal class DecimaTheStormsinger : MountBalrior
             ]),
             new PlayerDstHealthDamageHitMechanic([DiscordantThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "DiscThun.H", "Hit by Discordant Thunder", "Discordant Thunder Hit", 0),
             new PlayerDstHealthDamageHitMechanic(HarmoniousThunder, new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "HarmThun.H", "Hit by Harmonious Thunder", "Harmonious Thunder Hit", 0),
+            // TODO: Seismic Crash needs to be fully verified again in both modes
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0)
+                new PlayerDstHealthDamageHitMechanic([SeismicCrashNM, SeismicCrashCM, SeismicCrashCM2, SeismicCrashCM3, SeismicCrashCM4, SeismicCrashCM5, SeismicCrashCM6], new MechanicPlotlySetting(Symbols.Hourglass, Colors.White), "SeisCrash.H", "Hit by Seismic Crash (Concentric Rings)", "Seismic Crash Hit", 0)
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic([SeismicCrashDamage, SeismicCrashDamageCM, SeismicCrashDamageCM2], new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0),
+                        new PlayerDstHealthDamageHitMechanic([SeismicCrashNM, SeismicCrashCM, SeismicCrashCM2, SeismicCrashCM4, SeismicCrashCM5, SeismicCrashCM6], new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkWhite), "SeisCrash.CC", "CC by Seismic Crash (Concentric Rings)", "Seismic Crash CC", 0),
                         false
                     ),
                 new PlayerDstHealthDamageMechanic(SeismicCrashHitboxDamage, new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0)
-                    .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)).WithBuilds(GW2Builds.December2024MountBalriorNerfs),
+                    .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time))
+                    .WithBuilds(GW2Builds.December2024MountBalriorNerfs),
                 new PlayerDstHealthDamageMechanic(SeismicCrashHitboxDamage, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0)
                     .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed in NM, not logged in CM
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.White), "SeisRepos.H", "Hit by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition Hit", 0)
+                new PlayerDstHealthDamageHitMechanic([SeismicReposition_80_50, SeismicReposition_70_40, SeismicReposition_40_TO_10, SeismicReposition_10], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.White), "SeisRepos.H", "Hit by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition Hit", 0)
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic([SeismicReposition, SeismicReposition2, SeismicReposition3], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkWhite), "SeisRepos.CC", "CC by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition CC", 0),
+                        new PlayerDstHealthDamageHitMechanic([SeismicReposition_80_50, SeismicReposition_70_40, SeismicReposition_40_TO_10, SeismicReposition_10], new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.DarkWhite), "SeisRepos.CC", "CC by Seismic Reposition (Concentric Rings Leap)", "Seismic Reposition CC", 0),
                         false
                     ),
             ]),
             new MechanicGroup([
-
-                new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0)
+                new PlayerDstHealthDamageHitMechanic([EarthrendCastAndOuterRingDamageNM, EarthrendCastAndOuterRingDamageCM], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Blue), "Earthrend.H", "Hit by Earthrend (Outer Doughnut)", "Earthrend Hit", 0)
                     .WithStabilitySubMechanic(
-                        new PlayerDstHealthDamageHitMechanic([Earthrend, EarthrendCM, EarthrendCM2], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0),
+                        new PlayerDstHealthDamageHitMechanic([EarthrendCastAndOuterRingDamageNM, EarthrendCastAndOuterRingDamageCM], new MechanicPlotlySetting(Symbols.CircleOpen, Colors.DarkBlue), "Earthrend.CC", "CC by Earthrend (Outer Doughnut)", "Earthrend CC", 0),
                         false
                     ),
-                new PlayerDstHealthDamageMechanic(Earthrend, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0)
+                new PlayerDstHealthDamageMechanic(EarthrendInnerHitboxDamageNM, new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0)
                     .UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time))
                     .WithBuilds(GW2Builds.December2024MountBalriorNerfs),
-                new PlayerDstHealthDamageMechanic([Earthrend], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0)
+                new PlayerDstHealthDamageMechanic([EarthrendInnerHitboxDamageNM, EarthrendInnerHitboxDamageCM], new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0)
                     .UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // If a player is already in downstate they get killed in NM, not logged in CM
             ]),
             new MechanicGroup([
@@ -451,8 +452,9 @@ internal class DecimaTheStormsinger : MountBalrior
                         uint outer = 3000;
                         int lineAngle = 45;
                         var offset = new Vector3(0, inner + (outer - inner) / 2, 0);
-                        lifespan = group[0].ComputeLifespan(log, 2800);
 
+                        // Unlike Seismic Crash, the indicator effect end and the damage effect are only ~5ms apart
+                        lifespan = group[0].ComputeLifespan(log, 2800);
                         if (target.TryGetCurrentFacingDirection(log, group[0].Time, out Vector3 facing, 100))
                         {
                             for (int i = 0; i < 360; i += lineAngle)
@@ -468,25 +470,27 @@ internal class DecimaTheStormsinger : MountBalrior
                     }
                 }
 
-                // Seismic Crash - Jump with rings
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaSeismicCrashRings, out var seismicCrash))
+                // Seismic Crash & Seismic Reposition - Jump with rings
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaSeismicCrashRings, out var seismicCrashReposition))
                 {
-                    foreach (var effect in seismicCrash)
+                    foreach (var effect in seismicCrashReposition)
                     {
-                        lifespan = effect.ComputeLifespan(log, 3000);
+                        // The effect lasts ~1110ms longer than the hit of damage, so we use the damage as end time.
+                        lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.DecimaSeismicCrashHit);
                         replay.Decorations.AddContrenticRings(300, 140, lifespan, effect.Position, Colors.LightOrange, 0.30f, 6, false);
                     }
                 }
 
-                // Jump Death Zone
+                // Death zones - Earthrend, Seismic Crash and Seismic Reposition
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaJumpAoEUnderneath, out var deathZone))
                 {
-                    foreach (var effect in deathZone)
+                    foreach (EffectEvent effect in deathZone)
                     {
-                        // Logged effect has 2 durations depending on attack - 3000 and 2500
-                        lifespan = effect.ComputeLifespan(log, effect.Duration);
+                        // Effect duration lasting longer than necessay
+                        // Depending on the mechanic the difference between logged duration and the damage effect is ~300ms to ~1120ms.
+                        lifespan = effect.ComputeLifespanWithSecondaryEffects(log, [EffectGUIDs.DecimaEarthrendHit1, EffectGUIDs.DecimaSeismicCrashHit]);
                         var zone = new CircleDecoration(300, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddWithGrowing(zone, effect.Time + effect.Duration);
+                        replay.Decorations.AddWithGrowing(zone, lifespan.end);
                     }
                 }
 
@@ -592,7 +596,7 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)TargetID.EnlightenedConduit:
                 AddThunderAoE(target, log, replay, target.AgentItem);
                 AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuff1, DecimaConduitWallWarningBuffCM, DecimaConduitWallBuff);
-                    break;
+                break;
             case (int)TargetID.EnlightenedConduitCM:
                 AddEnlightenedConduitDecorations(log, target, replay, FluxlanceTargetBuffCM1, DecimaConduitWallWarningBuff, DecimaConduitWallBuffCM);
                 break;

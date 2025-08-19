@@ -193,6 +193,29 @@ public abstract class EffectEvent : StatusEvent
 
     /// <summary>
     /// Computes the lifespan of an effect.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the first effect in <paramref name="secondaryEffects"/> found as end.<br></br>
+    /// Checks the matching effects Src.
+    /// </summary>
+    /// <param name="secondaryEffects"><see cref="EffectGUIDs"/> of the secondary effects.</param>
+    /// <returns>The computed start and end times.</returns>
+    public (long start, long end) ComputeLifespanWithSecondaryEffects(ParsedEvtcLog log, GUID[] secondaryEffects)
+    {
+        long start = Time;
+        long end = start + Duration;
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(Src, secondaryEffects, out var effects))
+        {
+            effects.SortByTime();
+            EffectEvent? firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
+            if (firstEffect != null)
+            {
+                end = firstEffect.Time;
+            }
+        }
+        return (start, end);
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.<br></br>
     /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
     /// </summary>
     /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
@@ -232,7 +255,6 @@ public abstract class EffectEvent : StatusEvent
         }
         return (start, end);
     }
-
 
     /// <summary>
     /// Computes the lifespan of an effect.<br></br>

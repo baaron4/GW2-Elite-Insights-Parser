@@ -779,8 +779,12 @@ public static class EffectGUIDs
     public static readonly GUID DecimaForeshockRightCM = new("81329C36EA5536489ECBA5EDBB7D9C31"); // 3000 duration - Src Godsquall Decima
     public static readonly GUID DecimaForeshockFrontalCM = new("086C0135CC2B7C45ADBE2C947B178986"); // 5100 duration - Src Godsquall Decima
     public static readonly GUID DecimaEarthrendDoughnutSlice = new("88A721E87033E34C88143D116DBA9120"); // 2800 duration - Src Decima
-    public static readonly GUID DecimaJumpAoEUnderneath = new("D8F954A4C2D5DB48A4E2951958C33FAE"); // 3000 duration - Src Decima
+    public static readonly GUID DecimaEarthrendHit1 = new("C9D6405FC6A68245B8A27A514349FB7A"); // 0 duration - Src Decima
+    public static readonly GUID DecimaEarthrendHit2 = new("66ABD756CD618A4F84F4028D2D2851F5"); // 0 duration - Src Decima
+    public static readonly GUID DecimaEarthrendHit3 = new("A318FA9A8D582E4ABFB023FBF78B8580"); // 0 duration - Src Decima
+    public static readonly GUID DecimaJumpAoEUnderneath = new("D8F954A4C2D5DB48A4E2951958C33FAE"); // 2500 Earthrend / 3000 Seismic Crash duration - Src Decima
     public static readonly GUID DecimaSeismicCrashRings = new("E10DD1D759499749B880B99945C823B5"); // 3000 duration - Src Decima
+    public static readonly GUID DecimaSeismicCrashHit = new("081A650BFDEE7147ADD301C334D8C66A"); // 4333 duration - Src Decima - Seismic Crash landing hit effect
     public static readonly GUID DecimaAftershockAoE = new("FBABC6679768DC439AD844BFB94D9C74"); // 1500 duration - Src Decima
     public static readonly GUID DecimaAftershockAoECM = new("B438122328E462488F5B1BD417653C42"); // 1500 duration - Src Godsquall Decima
     public static readonly GUID DecimaSparkingReverberation = new("9CF7F3E43A32774E82F650A2EE9BF756"); // 30000 duration - Has end event - Src Transcendent Boulder
@@ -1007,7 +1011,7 @@ public static class EffectGUIDs
     public static readonly GUID TempleOfFebeEnviousGaze1 = new("246ECEBC28173B498B9A6886D7937D59"); // Duration 12500
     public static readonly GUID TempleOfFebeEnviousGaze2 = new("DA42718917F2304FBA10AF6898217788"); // Duration 12500
     public static readonly GUID TempleOfFebeEnviousGaze3 = new("B77A06C842511949889877EDC1448D49"); // Duration 11000
-    public static readonly GUID TempleOfFebeEnviousGaze4 = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000
+    public static readonly GUID TempleOfFebeEnviousGaze4 = new("0D2192849D53B4469F56B1C74542DBE9"); // Duration 11000 - Red circle AoE underneath Cerus - Conflics with other encounters
     public static readonly GUID TempleOfFebeMaliciousIntentTether = new("518369328A12B74EAC49702A785FBA19"); // Duration 0
     #endregion
 }
