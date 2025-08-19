@@ -214,6 +214,7 @@ internal static class TraitImages
     public const string SoothingBastion = "https://wiki.guildwars2.com/images/0/04/Soothing_Bastion.png";
     public const string ForerunnerOfDeath = "https://render.guildwars2.com/file/2864D963D3FC9156E6F52FA95DD34C2DE30306BE/2491537.png";
     public const string SaintOfZuHeltzer = "https://render.guildwars2.com/file/42D514BF15A3F84ECECBACC7E05F95CAE03EBF6D/2491539.png";
+    public const string VassalsOfTheEmpire = "https://render.guildwars2.com/file/955F334FAA12550A15127A6200CB7BDE4D41BD0A/2491538.png";
     public const string SwiftTermination = "https://render.guildwars2.com/file/B0A7D5466C0E20764CB5CA305BD21F35BEE96303/1029961.png";
     public const string UnyieldingDevotion = "https://render.guildwars2.com/file/11404242F05CA14C5ED90B3A0B74CDE8E3D8154C/2128014.png";
     public const string AssassinsPresence = "https://render.guildwars2.com/file/54C625037513112F94A93C6F1553447504C5AF60/1029955.png";

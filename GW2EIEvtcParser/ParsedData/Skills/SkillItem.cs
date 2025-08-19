@@ -950,9 +950,9 @@ public class SkillItem
             { KallaSummonsSaluteAnimationSkill, BuffImages.RoyalDecree },
             { KallaSummonsDespawnSkill, BuffImages.Downed },
             { PhantomsOnslaughtDamage, SkillImages.PhantomsOnslaught },
-            { DeathDropDodge, SkillImages.Dodge },
-            { SaintsShieldDodge, SkillImages.Dodge },
-            { ImperialImpactDodge, SkillImages.Dodge },
+            { DeathDropDodge, TraitImages.ForerunnerOfDeath },
+            { SaintsShieldDodge, TraitImages.SaintOfZuHeltzer },
+            { ImperialImpactDodge, TraitImages.VassalsOfTheEmpire },
             { LesserBanishEnchantment, SkillImages.BanishEnchantement },
             { BalanceInDiscord, TraitImages.BalanceInDiscord },
             { HealersGift, TraitImages.HealersGift },
@@ -1496,8 +1496,7 @@ public class SkillItem
         || GaleshotHelper.IsCycloneBowTransformation(ID); // TODO: Verify if needed, Druid doesn't need it
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
         || IsAnimatedDodge(skillData);
-    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID
-        || VindicatorHelper.IsVindicatorDodge(ID);
+    public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID;
     public bool IsAutoAttack(ParsedEvtcLog log) => AA
         || FirebrandHelper.IsAutoAttack(log, ID)
         || BladeswornHelper.IsAutoAttack(log, ID);
