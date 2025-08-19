@@ -816,7 +816,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     var rotation3 = new SpinningConnector(facing, (float)degreedRotatedOpposite);
                     
                     // The bug makes the beam continue while the embodiment has despawned, so we use the agent position for a PositionConnector instead of AgentConnector.
-                    ParametricPoint3D? position = target.GetCombatReplayActivePolledPositions(log).FirstOrDefault(x => x.Value.Time > lifespanDamage.start && x.Value.Time <= lifespanDamage.end);
+                    ParametricPoint3D? position = target.GetCombatReplayActivePolledPositions(log).FirstOrDefault(x => x!= null && x.Value.Time > lifespanDamage.start && x.Value.Time <= lifespanDamage.end);
                     if (position != null)
                     {
                         var connector = new PositionConnector(position.Value.XYZ).WithOffset(new(-(width / 2), 0, 0), true);
