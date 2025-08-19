@@ -184,7 +184,7 @@ public static class AgentManipulationHelper
                 if (previousCombatExit != null)
                 {
                     // we don't know when exactly the change happened, it was between previous exit and current start
-                    start = previousCombatExit.Time + 1;
+                    start = (previousCombatExit.Time + 1 + enterCombat.Time) / 2;
                 }
                 long end = previousPlayerAgent.LastAware;
                 if (firstSplit)
