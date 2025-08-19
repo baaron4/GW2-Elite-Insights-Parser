@@ -240,6 +240,7 @@ public static class AgentManipulationHelper
                                 dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
                             }
                             agentData.SwapMasters(agentItem, newTargetAgent);
+                            newTargetAgent.AddRegroupedFrom(agentItem);
                         }
                         toRemove.AddRange(agents);
                         toAdd.Add(newTargetAgent);
@@ -305,6 +306,7 @@ public static class AgentManipulationHelper
                                 dstCombatItems.ForEach(x => x.OverrideDstAgent(newPlayerAgent));
                             }
                             agentData.SwapMasters(agentItem, newPlayerAgent);
+                            newPlayerAgent.AddRegroupedFrom(agentItem);
                         }
                         toRemove.AddRange(agents);
                         toAdd.Add(newPlayerAgent);
@@ -335,6 +337,7 @@ public static class AgentManipulationHelper
                             dstCombatItems.ForEach(x => x.OverrideDstAgent(newPlayerAgent));
                         }
                         agentData.SwapMasters(agentItem, newPlayerAgent);
+                        newPlayerAgent.AddRegroupedFrom(agentItem);
                     }
                     toRemove.AddRange(agents);
                     toAdd.Add(newPlayerAgent);

@@ -30,6 +30,9 @@ public class AgentItem
     private List<MergedAgentItem>? _merges;
     public IReadOnlyList<MergedAgentItem> Merges => _merges ?? [];
 
+    private List<MergedAgentItem>? _regrouped;
+    public IReadOnlyList<MergedAgentItem> Regrouped => _regrouped ?? [];
+
     private AgentItem? _englobingAgentItem;
     public bool IsEnglobedAgent => _englobingAgentItem != null;
     public AgentItem EnglobingAgentItem => _englobingAgentItem ?? this;
@@ -487,7 +490,7 @@ public class AgentItem
         {
             return false;
         }
-        return IsUnknown || IsSpecies(NonIdentifiedSpecies);
+        return IsUnknown || IsAnySpecies([NonIdentifiedSpecies, TargetID.WorldVersusWorld, TargetID.Environment, TargetID.Instance, TargetID.DummyTarget]);
     }
 
     public bool IsSpecies(int id)
@@ -536,11 +539,14 @@ public class AgentItem
     }
     internal void AddMergeFrom(AgentItem mergedFrom, long start, long end)
     {
-        if (_merges == null)
-        {
-            _merges = [];
-        }
+        _merges ??= [];
         _merges.Add(new MergedAgentItem(mergedFrom, start, end));
+    }
+
+    internal void AddRegroupedFrom(AgentItem regroupedFrom)
+    {
+        _regrouped ??= [];
+        _regrouped.Add(new MergedAgentItem(regroupedFrom, regroupedFrom.FirstAware, regroupedFrom.LastAware));
     }
 
     private void AddEnglobedAgentItem(AgentItem child, AgentData agentData)
