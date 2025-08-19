@@ -14,11 +14,13 @@ public abstract class JsonActor
     /// </summary>
     public string? Name;
     /// <summary>
-    /// Time at which actor started being tracked
+    /// Time at which actor started being tracked. \n
+    /// For players, this and <see cref="JsonActor.LastAware"/> should be used to determine in which phases given player was active.
     /// </summary>
     public int FirstAware;
     /// <summary>
-    /// Time at which target ended being tracked
+    /// Time at which target ended being tracked. \n
+    /// For players, this and <see cref="JsonActor.FirstAware"/> should be used to determine in which phases given player was active.
     /// </summary>
     public int LastAware;
     /// <summary>

@@ -32,6 +32,7 @@ internal static class JsonPlayerBuilder
         jsonPlayer.Profession = player.Spec.ToString();
         jsonPlayer.FriendlyNPC = player is NPC;
         jsonPlayer.NotInSquad = player is PlayerNonSquad;
+        jsonPlayer.IsEnglobed = player.AgentItem.IsEnglobedAgent;
         GuildEvent? guildEvent = log.CombatData.GetGuildEvents(player.AgentItem).FirstOrDefault();
         if (guildEvent != null)
         {

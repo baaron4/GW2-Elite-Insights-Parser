@@ -48,6 +48,12 @@ public class JsonPlayer : JsonActor
     public string? GuildID;
 
     /// <summary>
+    /// Only relevant for instance logs. \n
+    /// If true, indicates that the player has changed subgroups or specs during the log. A JsonPlayer representing each time frame will be present in the Json. Each instance will also have the same <see cref="JsonActor.InstanceID"/>
+    /// </summary>
+    public bool IsEnglobed;
+
+    /// <summary>
     /// Weapons of the player \n
     /// 0-1 are the first land set, 1-2 are the second land set \n
     /// 3-4 are the first aquatic set, 5-6 are the second aquatic set \n
