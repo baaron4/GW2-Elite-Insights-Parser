@@ -292,6 +292,7 @@ public class LogData
                 {
                     // Raids
                     case TargetID.EtherealBarrierGadget:
+                    case TargetID.EtherealBarrierGadget_CHINA:
                         return new SpiritRace(id);
                     case TargetID.ConjuredAmalgamate:
                     case TargetID.ConjuredAmalgamate_CHINA:

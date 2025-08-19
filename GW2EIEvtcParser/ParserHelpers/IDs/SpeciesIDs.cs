@@ -26,6 +26,7 @@ public static class SpeciesIDs
         _EtherealBarrier3 = SpeciesIDs.EtherealBarrier3,
         _EtherealBarrier4 = SpeciesIDs.EtherealBarrier4,
         EtherealBarrierGadget = 47188, // Gadget
+        EtherealBarrierGadget_CHINA = 48133, // Gadget
         WallOfGhosts = 15415,
         AngeredSpiritSR = 15389,
         AngeredSpiritSR2 = 15409,
