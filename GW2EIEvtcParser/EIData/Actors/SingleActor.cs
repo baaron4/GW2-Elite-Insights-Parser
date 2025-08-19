@@ -211,13 +211,6 @@ public abstract partial class SingleActor : Actor
     #endregion BUFFS
 
     #region COMBAT REPLAY
-    protected static void SetMovements(ParsedEvtcLog log, SingleActor actor, CombatReplay replay)
-    {
-        foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(actor.EnglobingAgentItem))
-        {
-            movementEvent.AddPoint3D(replay);
-        }
-    }
 
     public bool HasPositions(ParsedEvtcLog log)
     {
@@ -334,10 +327,25 @@ public abstract partial class SingleActor : Actor
             // no combat replay support on log
             return CombatReplay;
         }
-        SetMovements(log, this, CombatReplay);
-        CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
+        if (AgentItem.IsEnglobedAgent)
+        {
+            // Use position data from englobing
+            var parentActor = log.FindActor(AgentItem.EnglobingAgentItem);
+            CombatReplay.Positions.AddRange(parentActor.GetCombatReplayNonPolledPositions(log));
+            CombatReplay.PolledPositions.AddRange(parentActor.GetCombatReplayPolledPositions(log));
+            CombatReplay.Rotations.AddRange(parentActor.GetCombatReplayNonPolledRotations(log));
+            CombatReplay.PolledRotations.AddRange(parentActor.GetCombatReplayPolledRotations(log));
+        } 
+        else
+        {
+            foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
+            {
+                movementEvent.AddPoint3D(CombatReplay);
+            }
+            CombatReplay.PollingRate(log.LogData.LogDuration, AgentItem.Type == AgentItem.AgentType.Player);
+        }
         TrimCombatReplay(log, CombatReplay);
-        if (!IsFakeActor)
+        if (!IsFakeActor && !AgentItem.IsEnglobingAgent)
         {
             InitAdditionalCombatReplayData(log, CombatReplay);
         }
