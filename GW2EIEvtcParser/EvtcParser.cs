@@ -1,9 +1,11 @@
 ﻿using System.IO.Compression;
+using System.Linq;
+using System.Numerics;
 using System.Text;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
@@ -914,6 +916,34 @@ public class EvtcParser
                     else
                     {
                         new PlayerNonSquad(playerAgent).Anonymize(playerOffset++);
+                    }
+                }
+                foreach (var regrouped in playerAgent.Regrouped)
+                {
+                    if (!playerAgents.Contains(regrouped.Merged))
+                    {
+                        if (regrouped.Merged.Type == AgentItem.AgentType.Player)
+                        {
+                            new Player(regrouped.Merged, noSquads).Anonymize(playerOffset++);
+                        }
+                        else
+                        {
+                            new PlayerNonSquad(regrouped.Merged).Anonymize(playerOffset++);
+                        }
+                    }
+                }
+                foreach (var merge in playerAgent.Merges)
+                {
+                    if (!playerAgents.Contains(merge.Merged))
+                    {
+                        if (merge.Merged.Type == AgentItem.AgentType.Player)
+                        {
+                            new Player(merge.Merged, noSquads).Anonymize(playerOffset++);
+                        }
+                        else
+                        {
+                            new PlayerNonSquad(merge.Merged).Anonymize(playerOffset++);
+                        }
                     }
                 }
             }
