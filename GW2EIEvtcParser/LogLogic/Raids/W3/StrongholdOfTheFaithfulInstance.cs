@@ -65,7 +65,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
                     success = true;
                 }
                 var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, _escort);
-                if (phase.Targets.Count == 0)
+                if (phase?.Targets.Count == 0)
                 {
                     phase.AddTarget(dummy, log);
                 }

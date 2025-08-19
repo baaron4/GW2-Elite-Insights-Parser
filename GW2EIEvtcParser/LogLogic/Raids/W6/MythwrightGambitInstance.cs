@@ -164,7 +164,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = chest.FirstAware;
                     success = true;
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, _qadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [qadim], subBosses, [], mainPhase, "Qadim", start, end, success, _qadim, qadim.GetHealth(log.CombatData) > 21e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
