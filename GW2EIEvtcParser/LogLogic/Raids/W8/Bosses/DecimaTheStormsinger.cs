@@ -453,9 +453,8 @@ internal class DecimaTheStormsinger : MountBalrior
                         int lineAngle = 45;
                         var offset = new Vector3(0, inner + (outer - inner) / 2, 0);
 
-                        // The effect lasts longer than the hit of damage
-                        lifespan = group[0].ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DecimaEarthrendHit1);
-
+                        // Unlike Seismic Crash, the indicator effect end and the damage effect are only ~5ms apart
+                        lifespan = group[0].ComputeLifespan(log, 2800);
                         if (target.TryGetCurrentFacingDirection(log, group[0].Time, out Vector3 facing, 100))
                         {
                             for (int i = 0; i < 360; i += lineAngle)
@@ -468,9 +467,6 @@ internal class DecimaTheStormsinger : MountBalrior
 
                         var doughnut = new DoughnutDecoration(inner, outer, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
                         replay.Decorations.AddWithBorder(doughnut, Colors.LightOrange, 0.6);
-
-                        // Death zone underneath Decima
-                        AddDeathZone(target, log, replay, group[0].Time, true);
                     }
                 }
 
@@ -479,13 +475,22 @@ internal class DecimaTheStormsinger : MountBalrior
                 {
                     foreach (var effect in seismicCrashReposition)
                     {
-                        // The effect lasts longer than the hit of damage
-                        lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DecimaSeismicCrashHit);
-
+                        // The effect lasts ~1110ms longer than the hit of damage, so we use the damage as end time.
+                        lifespan = effect.ComputeLifespanWithSecondaryEffect(log, EffectGUIDs.DecimaSeismicCrashHit);
                         replay.Decorations.AddContrenticRings(300, 140, lifespan, effect.Position, Colors.LightOrange, 0.30f, 6, false);
+                    }
+                }
 
-                        // Death zone underneath Decima
-                        AddDeathZone(target, log, replay, effect.Time, false);
+                // Death zones - Earthrend, Seismic Crash and Seismic Reposition
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaJumpAoEUnderneath, out var deathZone))
+                {
+                    foreach (EffectEvent effect in deathZone)
+                    {
+                        // Effect duration lasting longer than necessay
+                        // Depending on the mechanic the difference between logged duration and the damage effect is ~300ms to ~1120ms.
+                        lifespan = effect.ComputeLifespanWithSecondaryEffects(log, [EffectGUIDs.DecimaEarthrendHit1, EffectGUIDs.DecimaSeismicCrashHit]);
+                        var zone = new CircleDecoration(300, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                        replay.Decorations.AddWithGrowing(zone, lifespan.end);
                     }
                 }
 
@@ -825,35 +830,6 @@ internal class DecimaTheStormsinger : MountBalrior
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(dst)), growing);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Red death zone underneath Decima during Earthrend, Seismic Crash and Seismic Reposition.
-    /// </summary>
-    /// <param name="time">Time at which the other mechanic effect plays.</param>
-    /// <param name="isEarthrend">Wether the mechanic is Earthrend of a Seismic.</param>
-    private static void AddDeathZone(NPC target, ParsedEvtcLog log, CombatReplay replay, long time, bool isEarthrend)
-    {
-        (long start, long end) lifespan;
-
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaJumpAoEUnderneath, out var deathZone))
-        {
-            EffectEvent effect = deathZone.FirstOrDefault(x => Math.Abs(x.Time - time) < ServerDelayConstant)!;
-            if (effect != null)
-            {
-                if (isEarthrend)
-                {
-                    lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DecimaEarthrendHit1);
-                }
-                else
-                {
-                    lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.DecimaSeismicCrashHit);
-                }
-
-                var zone = new CircleDecoration(300, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                replay.Decorations.AddWithGrowing(zone, lifespan.end);
             }
         }
     }
