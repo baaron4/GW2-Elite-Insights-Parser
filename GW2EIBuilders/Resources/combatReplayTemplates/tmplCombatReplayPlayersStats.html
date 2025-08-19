@@ -51,8 +51,8 @@
             groups: function () {
                 var res = [];
                 var i = 0;
-                const encounterPlayers = getActivePlayersForPhase(this.encounterPhase);
-                const players = getActivePlayers(this.time * 0.001);
+                const encounterPlayers = getActiveNonFakePlayersForPhase(this.encounterPhase);
+                const players = getActiveNonFakePlayers(this.time * 0.001);
                 for (i = 0; i < players.length; i++) {
                     var playerData = players[i];
                     if (!playerData || !encounterPlayers[i]) {
