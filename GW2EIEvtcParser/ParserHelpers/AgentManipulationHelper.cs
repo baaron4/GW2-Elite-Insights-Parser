@@ -160,14 +160,17 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer)
+    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer, bool force)
     {
-        var previousPlayerAgent = originalPlayer;
-        var player = new Player(previousPlayerAgent, false);
+        if (!force && originalPlayer.Regrouped.Count == 0)
+        {
+            return;
+        }
+        var player = new Player(originalPlayer, false);
         var previousSpec = player.Spec;
         var previousGroup = player.Group;
-        var firstSplit = true;
         bool ignore0Subgroups = originalPlayer.Type == AgentItem.AgentType.Player;
+        var list = new List<(long start, AgentItem from, Spec spec, int group, bool checkExit)>();
         for (var i = 0; i < enterCombatEvents.Count; i++)
         {
             var enterCombat = enterCombatEvents[i];
@@ -180,17 +183,56 @@ public static class AgentManipulationHelper
                 previousSpec = enterCombat.Spec;
                 previousGroup = enterCombat.Subgroup;
                 long start = enterCombat.Time;
-                var previousCombatExit = exitCombatEvents.LastOrDefault(x => x.Time < start);
+                if (originalPlayer.Regrouped.Count > 0)
+                {
+                    var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.InAwareTimes(start));
+                    if (copyFrom != null)
+                    {
+                        list.Add((start, copyFrom.Value.Merged, enterCombat.Spec, enterCombat.Subgroup, true));
+                    }
+                    else
+                    {
+                        list.Add((start, originalPlayer, enterCombat.Spec, enterCombat.Subgroup, true));
+                    }
+                }
+                else
+                {
+                    list.Add((start, originalPlayer, enterCombat.Spec, enterCombat.Subgroup, true));
+                }
+            }
+        }
+        foreach (var regrouped in originalPlayer.Regrouped)
+        {
+            if (regrouped.MergeStart == originalPlayer.FirstAware)
+            {
+                continue;
+            }
+            list.Add((regrouped.MergeStart, regrouped.Merged, regrouped.Merged.Spec, new Player(regrouped.Merged, false).Group, false));
+        }
+        list = list.OrderBy(x => x.start).ToList();
+        var previousPlayerAgent = originalPlayer;
+        var firstSplit = true;
+        previousSpec = player.Spec;
+        previousGroup = player.Group;
+        long previousStart = 0;
+        foreach (var couple in list)
+        {
+            if (couple.spec != previousSpec || couple.group != previousGroup)
+            {
+                previousSpec = couple.spec;
+                previousGroup = couple.group;
+                long start = couple.start;
+                var previousCombatExit = couple.checkExit ? exitCombatEvents.LastOrDefault(x => x.Time < start && x.Time > previousStart) : null;
                 if (previousCombatExit != null)
                 {
                     // we don't know when exactly the change happened, it was between previous exit and current start
-                    start = (previousCombatExit.Time + 1 + enterCombat.Time) / 2;
+                    start = (previousCombatExit.Time + 1 + start) / 2;
                 }
                 long end = previousPlayerAgent.LastAware;
                 if (firstSplit)
                 {
                     firstSplit = false;
-                    if (previousCombatExit == null)
+                    if (couple.checkExit && previousCombatExit == null)
                     {
                         // we don't know when exactly the change happened, take half of the aware time
                         start = (previousPlayerAgent.FirstAware + start) / 2;
@@ -199,11 +241,12 @@ public static class AgentManipulationHelper
                     previousPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
                 }
 
-                var newPlayerAgent = agentData.AddCustomAgentFrom(previousPlayerAgent, start, end, enterCombat.Spec);
+                var newPlayerAgent = agentData.AddCustomAgentFrom(couple.from, start, end, couple.spec);
                 newPlayerAgent.SetEnglobingAgentItem(originalPlayer, agentData);
 
                 previousPlayerAgent.OverrideAwareTimes(previousPlayerAgent.FirstAware, start - 1);
                 previousPlayerAgent = newPlayerAgent;
+                previousStart = start;
             }
         }
     }
@@ -316,30 +359,30 @@ public static class AgentManipulationHelper
         }
         // Players
         {
-            IReadOnlyList<AgentItem> playerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-            var playerAgentsByNames = playerAgents.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var playerAgentsByName in playerAgentsByNames)
+            IReadOnlyList<Player> playerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player).Select(x => new Player(x, false)).ToList();
+            var playersByAccounts = playerAgents.GroupBy(x => x.Account).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var playersByAccount in playersByAccounts)
             {
-                var agents = playerAgentsByName.Value;
-                if (agents.Count > 1)
+                var players = playersByAccount.Value;
+                if (players.Count > 1)
                 {
-                    AgentItem firstItem = agents.First();
-                    var newPlayerAgent = new AgentItem(firstItem);
-                    newPlayerAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                    foreach (AgentItem agentItem in agents)
+                    var firstItem = players.First();
+                    var newPlayerAgent = new AgentItem(firstItem.AgentItem);
+                    newPlayerAgent.OverrideAwareTimes(players.Min(x => x.FirstAware), players.Max(x => x.LastAware));
+                    foreach (var player in players)
                     {
-                        if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                        if (srcCombatDataDict.TryGetValue(player.AgentItem, out var srcCombatItems))
                         {
                             srcCombatItems.ForEach(x => x.OverrideSrcAgent(newPlayerAgent));
                         }
-                        if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                        if (dstCombatDataDict.TryGetValue(player.AgentItem, out var dstCombatItems))
                         {
                             dstCombatItems.ForEach(x => x.OverrideDstAgent(newPlayerAgent));
                         }
-                        agentData.SwapMasters(agentItem, newPlayerAgent);
-                        newPlayerAgent.AddRegroupedFrom(agentItem);
+                        agentData.SwapMasters(player.AgentItem, newPlayerAgent);
+                        newPlayerAgent.AddRegroupedFrom(player.AgentItem);
                     }
-                    toRemove.AddRange(agents);
+                    toRemove.AddRange(players.Select(x => x.AgentItem));
                     toAdd.Add(newPlayerAgent);
                 }
             }

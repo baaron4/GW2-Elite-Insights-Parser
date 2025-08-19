@@ -195,7 +195,7 @@ public class EvtcParser
                             foreach (var englobed in englobeds)
                             {
                                 englobed.GetBuffDistribution(log, phase.Start, phase.End);
-                        }
+                            }
                         }
                     });
                     Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
@@ -216,7 +216,7 @@ public class EvtcParser
                             foreach (var englobed in englobeds)
                             {
                                 englobed.GetBuffPresence(log, phase.Start, phase.End);
-                        }
+                            }
                         }
                     });
                     Parallel.ForEach(friendliesAndTargetsNonEnglobed, actor =>
@@ -1063,8 +1063,8 @@ public class EvtcParser
         }
 
         _logData = new LogData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
-
-        if (_logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld)
+        bool forceSplit = _logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld;
+        if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Any(x => x.Regrouped.Count > 0) || forceSplit)
         {
             var enterAndExitCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat);
             var enterCombatEvents = enterAndExitCombatEvents.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
@@ -1076,12 +1076,11 @@ public class EvtcParser
                 {
                     if (exitCombatEvents.TryGetValue(playerAgentItem, out var exitCombatEventsForAgent))
                     {
-
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem);
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, forceSplit);
                     } 
                     else 
                     {    
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem);
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, forceSplit);
                     }
                 }
             }
