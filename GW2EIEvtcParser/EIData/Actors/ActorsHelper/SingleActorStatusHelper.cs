@@ -34,7 +34,7 @@ partial class SingleActor
         }
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, long nextTime, long minTime, int index)
+    private static void AddValueToStatusList(ParsedEvtcLog log, List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, (long Time, StatusEvent evt) cur, (long Time, StatusEvent? evt) next, long minTime, int index)
     {
         long cTime = cur.Time;
         var curEvt = cur.evt;
@@ -44,7 +44,7 @@ partial class SingleActor
             {
                 AddSegment(actives, minTime, cTime);
             }
-            AddSegment(down, cTime, nextTime);
+            AddSegment(down, cTime, next.Time);
         }
         else if (curEvt is DeadEvent)
         {
@@ -52,7 +52,7 @@ partial class SingleActor
             {
                 AddSegment(actives, minTime, cTime);
             }
-            AddSegment(dead, cTime, nextTime);
+            AddSegment(dead, cTime, next.Time);
         }
         else if (curEvt is DespawnEvent)
         {
@@ -60,7 +60,18 @@ partial class SingleActor
             {
                 AddSegment(actives, minTime, cTime);
             }
-            AddSegment(dc, cTime, nextTime);
+            // Back to back despawn, a spawn must have happened somewhere
+            if (next.evt == null || next.evt is DespawnEvent)
+            {
+                var firstMovement = log.CombatData.GetMovementData(curEvt.Src).FirstOrDefault(x => x.Time >= cTime + 1000 && x.Time <= next.Time);
+                if (firstMovement != null)
+                {
+                    AddSegment(dc, cTime, firstMovement.Time);
+                    AddSegment(actives, firstMovement.Time, next.Time);
+                }
+                return;
+            }
+            AddSegment(dc, cTime, next.Time);
         }
         else
         {
@@ -68,11 +79,11 @@ partial class SingleActor
             {
                 AddSegment(dc, minTime, cTime);
             }
-            AddSegment(actives, cTime, nextTime);
+            AddSegment(actives, cTime, next.Time);
         }
     }
     #region STATUS
-    internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
+    private void GetAgentStatus(ParsedEvtcLog log, List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
         //TODO(Rennorb) @perf: find average complexity
         var downEvents = combatData.GetDownEvents(AgentItem);
@@ -124,14 +135,14 @@ partial class SingleActor
         {
             var cur = status[i];
             var next = status[i + 1];
-            AddValueToStatusList(dead, down, dc, actives, cur, next.Time, FirstAware, i);
+            AddValueToStatusList(log, dead, down, dc, actives, cur, next, FirstAware, i);
         }
 
         // check last value
         if (status.Count > 0)
         {
             var cur = status.Last();
-            AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1);
+            AddValueToStatusList(log, dead, down, dc, actives, cur, (LastAware, null), FirstAware, status.Count - 1);
             if (cur.evt is DeadEvent)
             {
                 AddSegment(dead, LastAware, long.MaxValue);
@@ -154,7 +165,7 @@ partial class SingleActor
         if (_deads == null)
         {
             _deads = [];
-            GetAgentStatus(_deads, _downs, _dcs, _actives, log.CombatData);
+            GetAgentStatus(log, _deads, _downs, _dcs, _actives, log.CombatData);
         }
         return (_deads, _downs, _dcs, _actives);
     }

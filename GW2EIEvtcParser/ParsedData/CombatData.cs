@@ -331,7 +331,7 @@ public partial class CombatData
     {
         foreach (var (agent, events) in _damageTakenData)
         {
-            if (agent.IsSpecies(TargetID.WorldVersusWorld))
+            if (agent.IsNonIdentifiedSpecies())
             {
                 continue;
             }
@@ -340,14 +340,12 @@ public partial class CombatData
             if (!_statusEvents.DeadEvents.TryGetValue(agent, out var agentDeaths))
             {
                 agentDeaths = [];
-                setDeads = true;
             }
 
             bool setDowns = false;
             if (!_statusEvents.DownEvents.TryGetValue(agent, out var agentDowns))
             {
                 agentDowns = [];
-                setDowns = true;
             }
 
             foreach (HealthDamageEvent evt in events)
@@ -356,6 +354,7 @@ public partial class CombatData
                 {
                     if (!agentDeaths.Exists(x => Math.Abs(x.Time - evt.Time) < 500))
                     {
+                        setDeads = true;
                         agentDeaths.Add(new DeadEvent(agent, evt.Time));
                     }
                 }
@@ -363,18 +362,19 @@ public partial class CombatData
                 {
                     if (!agentDowns.Exists(x => Math.Abs(x.Time - evt.Time) < 500))
                     {
+                        setDowns = true;
                         agentDowns.Add(new DownEvent(agent, evt.Time));
                     }
                 }
             }
 
-            if (setDeads && agentDeaths.Count > 0)
+            if (setDeads)
             {
                 agentDeaths.SortByTime();
                 _statusEvents.DeadEvents[agent] = agentDeaths;
             }
 
-            if (setDowns && agentDowns.Count > 0)
+            if (setDowns)
             {
                 agentDowns.SortByTime();
                 _statusEvents.DownEvents[agent] = agentDowns;
