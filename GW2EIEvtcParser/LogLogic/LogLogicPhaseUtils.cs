@@ -85,7 +85,7 @@ internal static class LogLogicPhaseUtils
         }
         if (phases.Count > 0 && phases.Count < thresholds.Count)
         {
-            var lastPhase = new SubPhasePhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% -" + thresholds[phases.Count] + "%");
+            var lastPhase = new SubPhasePhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% - " + thresholds[phases.Count] + "%");
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
