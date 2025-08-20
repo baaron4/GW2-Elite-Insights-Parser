@@ -59,6 +59,9 @@
                         continue;
                     }
                     var crPlayer = animator.getActorData(playerData.uniqueID);
+                    if (!crPlayer) {
+                        continue;
+                    }
                     if (!res[playerData.group]) {
                         res[playerData.group] = [];
                     }
