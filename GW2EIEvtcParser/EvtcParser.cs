@@ -347,10 +347,6 @@ public class EvtcParser
                     type = AgentItem.AgentType.Gadget;
                     break;
 
-                // Filter unknowns out
-                case Spec.Unknown:
-                    continue;
-
                 default:
                     type = AgentItem.AgentType.Player;
                     break;
