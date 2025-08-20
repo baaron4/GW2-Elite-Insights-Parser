@@ -26,6 +26,7 @@ public class EvtcParser
     private readonly List<AgentItem> _allAgentsList;
     private SkillData _skillData;
     private readonly List<CombatItem> _combatItems;
+    private readonly Dictionary<ulong, ulong> ArcDPSAgentRedirection = [];
     private List<Player> _playerList;
     private byte _revision;
     private ushort _id;
@@ -698,6 +699,10 @@ public class EvtcParser
                     stopAtLogEndEvent = 0;
                 }
             }
+            if (combatItem.IsStateChange == StateChange.AgentChange)
+            {
+                ArcDPSAgentRedirection[combatItem.SrcAgent] = combatItem.DstAgent;
+            }
             if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
             {
                 discardedCbtEvents++;
@@ -987,6 +992,10 @@ public class EvtcParser
         {
             if (c.SrcIsAgent())
             {
+                if (ArcDPSAgentRedirection.TryGetValue(c.SrcAgent, out ulong newAgent))
+                {
+                    c.OverrideSrcAgent(newAgent);
+                }
                 if (agentsLookup.TryGetValue(c.SrcAgent, out var agents))
                 {
                     bool updatedAgent = false;
@@ -1007,6 +1016,10 @@ public class EvtcParser
             }
             if (c.DstIsAgent())
             {
+                if (ArcDPSAgentRedirection.TryGetValue(c.DstAgent, out ulong newAgent))
+                {
+                    c.OverrideDstAgent(newAgent);
+                }
                 if (agentsLookup.TryGetValue(c.DstAgent, out var agents))
                 {
                     bool updatedAgent = false;
