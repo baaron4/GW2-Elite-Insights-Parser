@@ -40,55 +40,55 @@ internal static class ParserIcons
     public const string GenericGadgetIcon = "https://render.guildwars2.com/file/09AF0498D757B191E229C862F4AA360DA65C4FE1/1012386.png";
     // High Resolution Icons 200px
     // Ranger
-    private const string HighResGaleshot = UnknownProfessionIcon;
+    private const string HighResGaleshot = "https://i.imgur.com/wTst1RK.png";
     private const string HighResUntamed = "https://i.imgur.com/XpS1uAD.png";
     private const string HighResSoulbeast = "https://i.imgur.com/JbnYkEQ.png";
     private const string HighResDruid = "https://i.imgur.com/5wFMWn4.png";
     private const string HighResRanger = "https://i.imgur.com/RXcEJD8.png";
     // Engineer
-    private const string HighResAmalgam = UnknownProfessionIcon;
+    private const string HighResAmalgam = "https://i.imgur.com/jmTU0Ir.png";
     private const string HighResMechanist = "https://i.imgur.com/HlzLb2v.png";
     private const string HighResHolosmith = "https://i.imgur.com/rjspDs0.png";
     private const string HighResScrapper = "https://i.imgur.com/z5kr00B.png";
     private const string HighResEngineer = "https://i.imgur.com/lV62W3O.png";
     // Thief
-    private const string HighResAntiquary = UnknownProfessionIcon;
+    private const string HighResAntiquary = "https://i.imgur.com/ithzoW0.png";
     private const string HighResSpecter = "https://i.imgur.com/3el5P6G.png";
     private const string HighResDeadeye = "https://i.imgur.com/UOMFo4a.png";
     private const string HighResDaredevil = "https://i.imgur.com/8DzmCRv.png";
     private const string HighResThief = "https://i.imgur.com/ElrzmpL.png";
     // Elementalist
-    private const string HighResEvoker = UnknownProfessionIcon;
+    private const string HighResEvoker = "https://i.imgur.com/peuQUB6.png";
     private const string HighResCatalyst = "https://i.imgur.com/uFK7Jun.png";
     private const string HighResWeaver = "https://i.imgur.com/Jf9nxTO.png";
     private const string HighResTempest = "https://i.imgur.com/9nq8itX.png";
     private const string HighResElementalist = "https://i.imgur.com/53NMPGH.png";
     // Mesmer
-    private const string HighResTroubadour = UnknownProfessionIcon;
+    private const string HighResTroubadour = "https://i.imgur.com/33hG5Lr.png";
     private const string HighResVirtuoso = "https://i.imgur.com/0sJrcUI.png";
     private const string HighResMirage = "https://i.imgur.com/Nio5XPX.png";
     private const string HighResChronomancer = "https://i.imgur.com/mNOkkOE.png";
     private const string HighResMesmer = "https://i.imgur.com/Kz9OqpW.png";
     // Necromancer
-    private const string HighResRitualist = UnknownProfessionIcon;
+    private const string HighResRitualist = "https://i.imgur.com/gi5JSey.png";
     private const string HighResHarbinger = "https://i.imgur.com/Pwk9rh7.png";
     private const string HighResScourge = "https://i.imgur.com/8aQcxo9.png";
     private const string HighResReaper = "https://i.imgur.com/y0Y5ECT.png";
     private const string HighResNecromancer = "https://i.imgur.com/jvwYgmA.png";
     // Warrior
-    private const string HighResParagon = UnknownProfessionIcon;
+    private const string HighResParagon = "https://i.imgur.com/tNanHxp.png";
     private const string HighResBladesworn = "https://i.imgur.com/90j009t.png";
     private const string HighResSpellbreaker = "https://i.imgur.com/FTh03SH.png";
     private const string HighResBerserker = "https://i.imgur.com/0ijFUUG.png";
     private const string HighResWarrior = "https://i.imgur.com/j82eNjR.png";
     // Guardian
-    private const string HighResLuminary = UnknownProfessionIcon;
+    private const string HighResLuminary = "https://i.imgur.com/pzh1ZZb.png";
     private const string HighResWillbender = "https://i.imgur.com/WhIEbGZ.png";
     private const string HighResFirebrand = "https://i.imgur.com/J5EFywD.png";
     private const string HighResDragonhunter = "https://i.imgur.com/pSVMnVu.png";
     private const string HighResGuardian = "https://i.imgur.com/LN1WJ6x.png";
     // Revenant
-    private const string HighResConduit = UnknownProfessionIcon;
+    private const string HighResConduit = "https://i.imgur.com/Qeep1YF.png";
     private const string HighResVindicator = "https://i.imgur.com/5RDwglO.png";
     private const string HighResRenegade = "https://i.imgur.com/CtJvKM0.png";
     private const string HighResHerald = "https://i.imgur.com/wWQn0uI.png";
@@ -96,55 +96,55 @@ internal static class ParserIcons
 
     // Base Resolution Icons 20px
     // Ranger
-    private const string BaseResGaleshot = UnknownProfessionIcon;
+    private const string BaseResGaleshot = "https://i.imgur.com/4wTs28o.png";
     private const string BaseResUntamed = "https://i.imgur.com/u8l36Pw.png";
     private const string BaseResSoulbeast = "https://i.imgur.com/1uDdNtU.png";
     private const string BaseResDruid = "https://i.imgur.com/Glb39dj.png";
     private const string BaseResRanger = "https://i.imgur.com/r7TAcjS.png";
     // Engineer
-    private const string BaseResAmalgam = UnknownProfessionIcon;
+    private const string BaseResAmalgam = "https://i.imgur.com/SjSb5yJ.png";
     private const string BaseResMechanist = "https://i.imgur.com/1jUOMlX.png";
     private const string BaseResHolosmith = "https://i.imgur.com/Q96yagv.png";
     private const string BaseResScrapper = "https://i.imgur.com/Cd9yD43.png";
     private const string BaseResEngineer = "https://i.imgur.com/hckhnZy.png";
     // Thief
-    private const string BaseResAntiquary = UnknownProfessionIcon;
+    private const string BaseResAntiquary = "https://i.imgur.com/wJBMKe2.png";
     private const string BaseResSpecter = "https://i.imgur.com/nVAyYVQ.png";
     private const string BaseResDeadeye = "https://i.imgur.com/kryyJRy.png";
     private const string BaseResDaredevil = "https://i.imgur.com/RiCJalE.png";
     private const string BaseResThief = "https://i.imgur.com/dS8un97.png";
     // Elementalist
-    private const string BaseResEvoker = UnknownProfessionIcon;
+    private const string BaseResEvoker = "https://i.imgur.com/ZxL3JTh.png";
     private const string BaseResCatalyst = "https://i.imgur.com/2B73rSk.png";
     private const string BaseResWeaver = "https://i.imgur.com/03RLBaX.png";
     private const string BaseResTempest = "https://i.imgur.com/FnLyZvk.png";
     private const string BaseResElementalist = "https://i.imgur.com/2ybEpCV.png";
     // Mesmer
-    private const string BaseResTroubadour = UnknownProfessionIcon;
+    private const string BaseResTroubadour = "https://i.imgur.com/EzBnOIM.png";
     private const string BaseResVirtuoso = "https://i.imgur.com/sncfljQ.png";
     private const string BaseResMirage = "https://i.imgur.com/fL88z7p.png";
     private const string BaseResChronomancer = "https://i.imgur.com/rI1tW64.png";
     private const string BaseResMesmer = "https://i.imgur.com/FXgZQ46.png";
     // Necromancer
-    private const string BaseResRitualist = UnknownProfessionIcon;
+    private const string BaseResRitualist = "https://i.imgur.com/S8msdHU.png";
     private const string BaseResHarbinger = "https://i.imgur.com/PwhIT4u.png";
     private const string BaseResScourge = "https://i.imgur.com/uVdgw3H.png";
     private const string BaseResReaper = "https://i.imgur.com/X463V90.png";
     private const string BaseResNecromancer = "https://i.imgur.com/kK3l1C1.png";
     // Warrior
-    private const string BaseResParagon = UnknownProfessionIcon;
+    private const string BaseResParagon = "https://i.imgur.com/nBVDz0s.png";
     private const string BaseResBladesworn = "https://i.imgur.com/mFzTJXv.png";
     private const string BaseResSpellbreaker = "https://i.imgur.com/A6JTWBV.png";
     private const string BaseResBerserker = "https://i.imgur.com/dNY6e8n.png";
     private const string BaseResWarrior = "https://i.imgur.com/ejI5STj.png";
     // Guardian
-    private const string BaseResLuminary = UnknownProfessionIcon;
+    private const string BaseResLuminary = "https://i.imgur.com/FEisoxQ.png";
     private const string BaseResWillbender = "https://i.imgur.com/pIFrNLa.png";
     private const string BaseResFirebrand = "https://i.imgur.com/TOsmJOl.png";
     private const string BaseResDragonhunter = "https://i.imgur.com/GqKocpf.png";
     private const string BaseResGuardian = "https://i.imgur.com/l329bR4.png";
     // Revenant
-    private const string BaseResConduit = UnknownProfessionIcon;
+    private const string BaseResConduit = "https://i.imgur.com/qaXHsQU.png";
     private const string BaseResVindicator = "https://i.imgur.com/hKBqtWE.png";
     private const string BaseResRenegade = "https://i.imgur.com/whOAxsp.png";
     private const string BaseResHerald = "https://i.imgur.com/O7kekkb.png";
