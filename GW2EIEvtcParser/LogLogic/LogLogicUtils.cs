@@ -225,8 +225,8 @@ internal static class LogLogicUtils
 
     internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
     {
-        var positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == StateChange.Position);
-        if (positionEvt != null)
+        var positionEvts = combatData.Where(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == StateChange.Position).Take(5);
+        foreach (var positionEvt in positionEvts)
         {
             var position = MovementEvent.GetPoint3D(positionEvt).XY();
             foreach (var (suffix, expectedPosition) in positionData)
