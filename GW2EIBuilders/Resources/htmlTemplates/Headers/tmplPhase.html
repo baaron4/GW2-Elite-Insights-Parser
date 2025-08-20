@@ -69,9 +69,13 @@
         methods: {
             select: function (phase) {
                 for (var i = 0; i < this.phases.length; i++) {
-                    this.phases[i].active = false;
+                    if (this.phases[i] === phase) {
+                        reactiveLogdata.activeEncounterPhaseData[this.encounterPhase.encounterID].phase = i;
+                        this.phases[i].active = true;
+                    } else {
+                        this.phases[i].active = false;
+                    }
                 }
-                phase.active = true;        
             },
             getPhaseData: function (id) {
                 return logData.phases[id];

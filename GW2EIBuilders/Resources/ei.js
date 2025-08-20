@@ -136,6 +136,7 @@ function mainLoad() {
             times.push(phase.end - phase.start);
         }
         phase.id = i;
+        phase.encounterID = -1;
         phase.times = times;
         reactiveLogdata.phases.push({
             active: false,
@@ -143,9 +144,14 @@ function mainLoad() {
             focus: -1
         });
         if (phase.type === PhaseTypes.INSTANCE || phase.type === PhaseTypes.ENCOUNTER) {
+            phase.encounterID = reactiveLogdata.encounters.length;
             reactiveLogdata.encounters.push({
                 active: false,
                 index: i
+            });
+            reactiveLogdata.activeEncounterPhaseData.push({
+                phase: i,
+                player: -1,
             });
         }
     }
@@ -161,6 +167,9 @@ function mainLoad() {
     const activePhaseIndex = getDefaultPhase();
     for (let i = 0; i < encounterPhases.length; i++) {
         encounterPhases[i].active = i === activePhaseIndex;
+        if (encounterPhases[i].active) {
+            reactiveLogdata.activeEncounterPhaseData[activeEncounterIndex].phase = encounterPhases[i].index;
+        }
     }
     for (let i = 0; i < logData.targets.length; i++) {
         const target = logData.targets[i];
@@ -182,12 +191,18 @@ function mainLoad() {
     let activeFound = false;
     for (let i = 0; i < logData.players.length; i++) {
         const playerData = logData.players[i];
+        const active = !activeFound && !!playerData.isPoV;
         reactiveLogdata.players.push({
-            active: !activeFound && !!playerData.isPoV,
+            active: active,
             index: i,
             targetActive: !playerData.isFake
         });
-        activeFound = !!playerData.isPoV;
+        if (active) {
+            activeFound = true;
+            for (let j = 0; j < reactiveLogdata.encounters.length; j++) {
+                reactiveLogdata.activeEncounterPhaseData[j].player = i;
+            }
+        }
         playerData.dpsGraphCache = new Map();
         playerData.id = i;
     }

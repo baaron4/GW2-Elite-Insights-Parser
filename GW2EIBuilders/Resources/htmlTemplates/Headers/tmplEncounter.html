@@ -90,20 +90,17 @@
                     this.encounters[i].active = false;
                 }
                 this.encounters[encounterIndex].active = true;
-                const index = this.encounters[encounterIndex].index;
-                // Select main phase
+                const index = reactiveLogdata.activeEncounterPhaseData[encounterIndex].phase;
+                // Select phase
                 for (var i = 0; i < reactiveLogdata.phases.length; i++) {
                     reactiveLogdata.phases[i].active = false;
                 }
                 reactiveLogdata.phases[index].active = true;   
                 // Select an appropriate player
-                const phase = logData.phases[index];
-                const players = getActiveNonFakePlayersForPhase(phase);      
-                let selectedPlayerIndex = 0; 
+                const encounterPhase = logData.phases[this.encounters[encounterIndex].index];
+                const players = getActiveNonFakePlayersForPhase(encounterPhase);      
+                let selectedPlayerIndex = reactiveLogdata.activeEncounterPhaseData[encounterIndex].player; 
                 for (let i = 0; i < reactiveLogdata.players.length; i++) {
-                    if (reactiveLogdata.players[i].active) {
-                        selectedPlayerIndex = i;
-                    }
                     reactiveLogdata.players[i].active = false;
                 }
                 if (players[selectedPlayerIndex]) {
@@ -132,6 +129,7 @@
                         }
                         reactiveLogdata.players[selectedPlayerIndex].active = true;   
                     }
+                    reactiveLogdata.activeEncounterPhaseData[encounterIndex].player = selectedPlayerIndex;
                 }
             },
             getGradient: function (target) {
