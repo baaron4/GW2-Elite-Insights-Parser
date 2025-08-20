@@ -1045,6 +1045,23 @@ public class EvtcParser
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
         _agentData.AddCustomNPCAgent(0, _logEndTime, "Environment", Spec.NPC, TargetID.Environment, true);
 
+        // Adjust extension events if needed
+        if (_enabledExtensions.Count != 0)
+        {
+            operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting extension events");
+            foreach (CombatItem combatItem in _combatItems)
+            {
+                if (combatItem.IsExtension)
+                {
+                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out var handler))
+                    {
+                        handler.AdjustCombatEvent(combatItem, _agentData);
+                    }
+                }
+
+            }
+        }
+
         operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
         AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
 
@@ -1075,26 +1092,9 @@ public class EvtcParser
             }
         }
 
-        // Adjust extension events if needed
-        if (_enabledExtensions.Count != 0)
-        {
-            operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting extension events");
-            foreach (CombatItem combatItem in _combatItems)
-            {
-                if (combatItem.IsExtension)
-                {
-                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out var handler))
-                    {
-                        handler.AdjustCombatEvent(combatItem, _agentData);
-                    }
-                }
-
-            }
-        }
-
         _logData = new LogData(_id, _agentData, _combatItems, _parserSettings, _logStartOffset, _logEndTime, _evtcVersion);
-        bool forceSplit = _logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld;
-        if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Any(x => x.Regrouped.Count > 0) || forceSplit)
+        bool splitByEnterCombatEvents = _logData.Logic.IsInstance || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.WvW || _logData.Logic.ParseMode == LogLogic.LogLogic.ParseModeEnum.OpenWorld;
+        if (splitByEnterCombatEvents || _agentData.GetAgentByType(AgentItem.AgentType.Player).Any(x => x.Regrouped.Count > 0))
         {
             var enterAndExitCombatEvents = _combatItems.Where(x => x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat);
             var enterCombatEvents = enterAndExitCombatEvents.Where(x => x.IsStateChange == StateChange.EnterCombat).Select(x => new EnterCombatEvent(x, _agentData)).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
@@ -1106,11 +1106,11 @@ public class EvtcParser
                 {
                     if (exitCombatEvents.TryGetValue(playerAgentItem, out var exitCombatEventsForAgent))
                     {
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, forceSplit);
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                     } 
                     else 
                     {    
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, forceSplit);
+                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                     }
                 }
             }

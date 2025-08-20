@@ -38,6 +38,7 @@ const reactiveLogdata = {
     players: [],
     targets: [],
     encounters: [],
+    activeEncounterPhaseData: [],
 };
 let IsMultiEncounterLog = false;
 const mainComponentWidth =  Math.max(Math.min(0.9 * window.screen.width, 1600), 1450);

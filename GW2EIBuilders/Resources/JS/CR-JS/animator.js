@@ -650,7 +650,7 @@ class Animator {
     }
 
     restartAnimate() {
-        this.reactiveDataStatus.time = 0;
+        this.reactiveDataStatus.time = this.reactiveDataStatus.range.min;
         if (this.animation === null) {
             animateCanvas(noUpdateTime);
         }
@@ -1247,14 +1247,15 @@ function animateCanvas(noRequest) {
     if (animator == null) {
         return;
     }
-    let lastTime = animator.times[animator.times.length - 1];
+    let lastTime = animator.reactiveDataStatus.range.max;
+    let firstTime = animator.reactiveDataStatus.range.min;
     if (noRequest > noUpdateTime && animator.animation !== null) {
         let curTime = new Date().getTime();
         let timeOffset = curTime - animator.prevTime;
         animator.prevTime = curTime;
         animator.reactiveDataStatus.time = Math.round(Math.max(Math.min(animator.reactiveDataStatus.time + animator.getSpeed() * timeOffset, lastTime), 0));
     }
-    if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === 0 && animator.backwards)) {
+    if ((animator.reactiveDataStatus.time === lastTime && !animator.backwards) || (animator.reactiveDataStatus.time === firstTime && animator.backwards)) {
         animator.stopAnimate(true);
     }
     animator.timeSlider.value = (animator.reactiveDataStatus.time - animator.reactiveDataStatus.range.min).toString()

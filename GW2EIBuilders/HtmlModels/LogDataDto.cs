@@ -490,7 +490,7 @@ internal class LogDataDto
         logData.Enemies = new(enemies.Count);
         foreach (SingleActor enemy in enemies)
         {
-            logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
+            logData.Enemies.Add(new EnemyDto() { Name = enemy.Character, FirstAware = enemy.FirstAware / 1000.0, LastAware = enemy.LastAware / 1000.0  });
         }
         _t.Log("built enemy data");
 

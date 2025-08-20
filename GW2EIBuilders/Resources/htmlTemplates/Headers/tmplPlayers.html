@@ -61,9 +61,13 @@
             },
             select: function (id) {
                 for (var i = 0; i < this.players.length; i++) {
-                    this.players[i].active = false;
+                    if (id === i) {
+                        reactiveLogdata.activeEncounterPhaseData[this.encounterPhase.encounterID].player = i;
+                        this.players[i].active = true;
+                    } else {
+                        this.players[i].active = false;
+                    }
                 }
-                this.players[id].active = true;
             },
             getCommanderTooltip: function(player) {
                 if (!player.isCommander) {

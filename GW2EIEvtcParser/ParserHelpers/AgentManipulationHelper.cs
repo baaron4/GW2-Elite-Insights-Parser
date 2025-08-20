@@ -160,56 +160,51 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer, bool force)
+    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer, bool splitByEnterCombat)
     {
-        if (!force && originalPlayer.Regrouped.Count == 0)
-        {
-            return;
-        }
         var player = new Player(originalPlayer, false);
         var previousSpec = player.Spec;
         var previousGroup = player.Group;
-        bool ignore0Subgroups = originalPlayer.Type == AgentItem.AgentType.Player;
         var list = new List<(long start, AgentItem from, Spec spec, int group, bool checkExit)>();
-        for (var i = 0; i < enterCombatEvents.Count; i++)
+        if (splitByEnterCombat)
         {
-            var enterCombat = enterCombatEvents[i];
-            if (ignore0Subgroups && enterCombat.Subgroup == 0)
+            bool ignore0Subgroups = originalPlayer.Type == AgentItem.AgentType.Player;
+            for (var i = 0; i < enterCombatEvents.Count; i++)
             {
-                continue;
-            }
-            if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
-            {
-                previousSpec = enterCombat.Spec;
-                previousGroup = enterCombat.Subgroup;
-                long start = enterCombat.Time;
-                if (originalPlayer.Regrouped.Count > 0)
+                var enterCombat = enterCombatEvents[i];
+                if (ignore0Subgroups && enterCombat.Subgroup == 0)
                 {
-                    var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.InAwareTimes(start));
-                    if (copyFrom != null)
+                    continue;
+                }
+                if (enterCombat.Spec != previousSpec || enterCombat.Subgroup != previousGroup)
+                {
+                    previousSpec = enterCombat.Spec;
+                    previousGroup = enterCombat.Subgroup;
+                    long start = enterCombat.Time;
+                    if (originalPlayer.Regrouped.Count > 0)
                     {
-                        list.Add((start, copyFrom.Value.Merged, enterCombat.Spec, enterCombat.Subgroup, true));
+                        var copyFrom = originalPlayer.Regrouped.LastOrNull((in AgentItem.MergedAgentItem x) => x.Merged.InAwareTimes(start));
+                        if (copyFrom != null)
+                        {
+                            list.Add((start, copyFrom.Value.Merged, enterCombat.Spec, enterCombat.Subgroup, true));
+                        }
+                        else
+                        {
+                            list.Add((start, originalPlayer, enterCombat.Spec, enterCombat.Subgroup, true));
+                        }
                     }
                     else
                     {
                         list.Add((start, originalPlayer, enterCombat.Spec, enterCombat.Subgroup, true));
                     }
                 }
-                else
-                {
-                    list.Add((start, originalPlayer, enterCombat.Spec, enterCombat.Subgroup, true));
-                }
             }
         }
         foreach (var regrouped in originalPlayer.Regrouped)
         {
-            if (regrouped.MergeStart == originalPlayer.FirstAware)
-            {
-                continue;
-            }
             list.Add((regrouped.MergeStart, regrouped.Merged, regrouped.Merged.Spec, new Player(regrouped.Merged, false).Group, false));
         }
-        list = list.OrderBy(x => x.start).ToList();
+        list.Sort((x,y) => x.start.CompareTo(y.start));
         var previousPlayerAgent = originalPlayer;
         var firstSplit = true;
         previousSpec = player.Spec;

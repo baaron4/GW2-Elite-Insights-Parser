@@ -93,18 +93,32 @@
             encounters: {
                 deep: true,
                 handler: function () {
-                    const mechIndex = this.sortPdata.mechIndex;
-                    if (mechIndex >= 0) {
-                        const mech = this.playerMechHeader.filter(x => x._index === mechIndex)[0];
+                    const mechPIndex = this.sortPdata.mechIndex;
+                    if (mechPIndex >= 0) {
+                        const mech = this.playerMechHeader.filter(x => x._index === mechPIndex)[0];
                         if (!mech) {
                             // Reset sort if mechanic is gone
-                            this.sortPdata.key = "Sub";
                             this.sortPdata.order = "asc";
                             this.sortPdata.index = -1;
+                            this.sortPdata.key = "Sub";
                             this.sortPdata.mechIndex = -1;
                         } else {
                             // Otherwise sort by its new position
                             this.sortPdata.index = this.playerMechHeader.indexOf(mech);
+                        }
+                    }
+                    const mechEIndex = this.sortEdata.mechIndex;
+                    if (mechEIndex >= 0) {
+                        const mech = this.enemyMechHeader.filter(x => x._index === mechEIndex)[0];
+                        if (!mech) {
+                            // Reset sort if mechanic is gone
+                            this.sortEdata.order = "asc";
+                            this.sortEdata.index = -1;
+                            this.sortEdata.key = "Name";
+                            this.sortEdata.mechIndex = -1;
+                        } else {
+                            // Otherwise sort by its new position
+                            this.sortEdata.index = this.enemyMechHeader.indexOf(mech);
                         }
                     }
                 }
@@ -243,10 +257,14 @@
                 const allEnemyMechs = enemyMechanics();
                 var res = [];
                 var enemies = logData.enemies;
+                let encounterPhase = this.encounterPhase;
                 for (let j = 0; j < allEnemyMechs.length; j++) {
                     allEnemyMechs[j]._index = j;
                     for (var i = 0; i < enemies.length; i++) {
                         var enemy = enemies[i];
+                        if (enemy.firstAware >= encounterPhase.end || enemy.lastAware <=  encounterPhase.start) {
+                            continue;
+                        }
                         if (this.phase.enemyMechanicStats[i][j][0] > 0 || allEnemyMechs[j].isAchievementEligibility) {
                             res.push(allEnemyMechs[j]);
                             break;
@@ -258,8 +276,12 @@
             enemyMechRows: function () {
                 var enemies = logData.enemies;
                 var rows = [];
+                let encounterPhase = this.encounterPhase;
                 for (var i = 0; i < enemies.length; i++) {
                     var enemy = enemies[i];
+                    if (enemy.firstAware >= encounterPhase.end || enemy.lastAware <= encounterPhase.start) {
+                        continue;
+                    }
                     let mechs = [];
                     for (let j = 0; j < this.enemyMechHeader.length; j++) {
                         let mechIndex = this.enemyMechHeader[j]._index;
