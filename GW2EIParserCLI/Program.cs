@@ -29,6 +29,13 @@ internal static class Program
                 return 0;
             }
 
+            if (args.Contains("-cache"))
+            {
+                ProgramHelper.APIController.WriteAPISkillsToFile(ProgramHelper.SkillAPICacheLocation);
+                ProgramHelper.APIController.WriteAPITraitsToFile(ProgramHelper.TraitAPICacheLocation);
+                ProgramHelper.APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
+            }
+
             if (args.Contains("-c"))
             {
                 if (args.Length - parserArgOffset >= 2)
@@ -74,5 +81,6 @@ internal static class Program
         Console.WriteLine("");
         Console.WriteLine("-c [config path] : use another config file");
         Console.WriteLine("-h : help");
+        Console.WriteLine("-cache : will update the API caches");
     }
 }
