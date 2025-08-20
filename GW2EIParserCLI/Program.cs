@@ -34,6 +34,7 @@ internal static class Program
                 ProgramHelper.APIController.WriteAPISkillsToFile(ProgramHelper.SkillAPICacheLocation);
                 ProgramHelper.APIController.WriteAPITraitsToFile(ProgramHelper.TraitAPICacheLocation);
                 ProgramHelper.APIController.WriteAPISpecsToFile(ProgramHelper.SpecAPICacheLocation);
+                parserArgOffset += 1;
             }
 
             if (args.Contains("-c"))
