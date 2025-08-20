@@ -827,13 +827,13 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(actor.AgentItem, EffectGUIDs.DecimaChorusOfThunderAoE, out var thunders))
         {
-            var conenctor = new AgentConnector(decorationOn);
+            var connector = new AgentConnector(decorationOn);
             foreach (var effect in thunders)
             {
                 long duration = 5000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, conenctor), growing);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, connector), growing);
             }
         }
     }
