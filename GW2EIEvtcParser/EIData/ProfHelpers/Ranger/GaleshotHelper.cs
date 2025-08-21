@@ -10,7 +10,15 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class GaleshotHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = [];
+    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    [
+        new EffectCastFinder(SummonCycloneBow, EffectGUIDs.GaleshotSummonCycloneBow)
+            .UsingDstSpecChecker(Spec.Galeshot)
+            .UsingBeforeWeaponSwap(),
+        new EffectCastFinderByDst(DismissCycloneBow, EffectGUIDs.GaleshotDismissCycloneBow)
+            .UsingDstSpecChecker(Spec.Galeshot)
+            .UsingBeforeWeaponSwap(),
+    ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
@@ -20,7 +28,7 @@ internal static class GaleshotHelper
 
     private static readonly HashSet<long> _cycloneBows =
     [
-        EnterCycloneBow, ExitCycloneBow
+        SummonCycloneBow, DismissCycloneBow
     ];
 
     public static bool IsCycloneBowTransformation(long id)

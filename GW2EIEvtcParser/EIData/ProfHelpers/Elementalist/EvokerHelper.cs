@@ -23,23 +23,40 @@ internal static class EvokerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Elemental Balance
-        // TODO Verify behaviour https://wiki.guildwars2.com/wiki/Elemental_Balance
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5, "Elemental balance", "5% if hp <= 50%", DamageSource.All, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All),
-        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10, "Elemental balance", "10% if hp >= 50%", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5, "Elemental balance (Outgoing)", "5% if hp < 50%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50.0, DamageModifierMode.All)
+            .UsingApproximate(),
+        new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10, "Elemental balance (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+            .UsingApproximate(),
         // Familiar's Prowess
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFox, FamiliarsProwessFox, "Familiar's Prowess (Fox)", "10% condi after familiar skill", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessHare, FamiliarsProwessHare, "Familiar's Prowess (Hare)", "10% strike after familiar skill", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFox, FamiliarsProwessFox, "Familiar's Prowess (Fox)", "10% condition damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessHare, FamiliarsProwessHare, "Familiar's Prowess (Hare)", "10% strike damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        // Zap
+        new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.All)
+            .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
+            .UsingChecker((hde, log) =>
+            {
+                if (hde.HasCrit)
+                {
+                    var src = log.FindActor(hde.From);
+                    var dst = log.FindActor(hde.To);
+                    return dst.HasBuff(log, src, ZapBuffPlayerToTarget, hde.Time);
+                }
+                return false;
+            })
+            .UsingApproximate(),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
     [
         // Elemental Balance
-        // TODO Verify behaviour https://wiki.guildwars2.com/wiki/Elemental_Balance
-        new DamageLogDamageModifier(Mod_ElementalBalanceIncoming5, "Elemental balance", "-5% if hp >= 50%", DamageSource.Incoming, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All),
-        new DamageLogDamageModifier(Mod_ElementalBalanceIncoming10, "Elemental balance", "-10% if hp <= 50%", DamageSource.Incoming, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_ElementalBalanceIncoming5, "Elemental balance (Incoming)", "-5% if hp > 50%", DamageSource.Incoming, -5.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) > 50.0, DamageModifierMode.All)
+            .UsingApproximate(),
+        new DamageLogDamageModifier(Mod_ElementalBalanceIncoming10, "Elemental balance (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
+            .UsingApproximate(),
         // Familiar's Prowess
         // TODO Verify strike and condi if accurate
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        // TODO Add Familiar's Focus https://wiki.guildwars2.com/wiki/Familiar%27s_Focus
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
@@ -48,15 +65,15 @@ internal static class EvokerHelper
         new Buff("Familiar's Prowess (Otter)", FamiliarsProwessOtter, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
         new Buff("Familiar's Prowess (Hare)", FamiliarsProwessHare, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
         new Buff("Familiar's Prowess (Toad)", FamiliarsProwessToad, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
-        new Buff("Familiar's Focus", FamiliarsFocus, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Familiar's Focus", FamiliarsFocus, Source.Evoker, BuffClassification.Other, TraitImages.FamiliarsFocus), // TODO Verify if there are more buffs on other elements
         new Buff("Evoker's Stone Spirit Aura (1)", EvokerStoneSpiritAura1, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (2)", EvokerStoneSpiritAura2, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (3)", EvokerStoneSpiritAura3, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (4)", EvokerStoneSpiritAura4, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (5)", EvokerStoneSpiritAura5, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Hare's Agility", HaresAgilityBuff, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Zap (1)", ZapBuff1, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
-        new Buff("Zap (2)", ZapBuff2, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
+        new Buff("Zap (To Target)", ZapBuffPlayerToTarget, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
+        new Buff("Zap (To Player)", ZapBuffTargetToPlayer, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
     ];
 
     private static readonly HashSet<int> Minions = 

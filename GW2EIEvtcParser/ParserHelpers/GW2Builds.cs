@@ -216,10 +216,15 @@ public static class GW2Builds
 
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-05-06
     public const ulong May2025BalanceHotFix = 180154;
+
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-06-24
     public const ulong June2025Balance = 182824;
+
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-07-01
     public const ulong July2025BalanceHotFix = 183275;
+
+    // https://wiki.guildwars2.com/wiki/Game_updates/2025-08-19
+    public const ulong August2025VoEBeta = 186019;
 
     public const ulong EndOfLife = ulong.MaxValue;
 }

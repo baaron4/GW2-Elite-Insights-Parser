@@ -17,16 +17,15 @@ internal static class RitualistHelper
             .UsingBeforeWeaponSwap(),
         new BuffLossCastFinder(ExitRitualistsShroud, RitualistsShroud)
             .UsingBeforeWeaponSwap(),
-        new BuffGainCastFinder(WeaponOfWarding, WeaponOfWardingBuff),
-        new BuffGainCastFinder(WeaponOfRemedy, WeaponOfRemedyBuff),
-        new BuffGainCastFinder(XinraeWeapon, XinraesWeaponBuff),
-        new DamageCastFinder(ExplosiveGrowth, ExplosiveGrowth)
-            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+        new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingBuff),
+        new BuffGiveCastFinder(WeaponOfRemedy, WeaponOfRemedyBuff),
+        new BuffGiveCastFinder(XinraeWeapon, XinraesWeaponBuff),
+        new DamageCastFinder(ExplosiveGrowth, ExplosiveGrowth) // TODO check if can be done via effects
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
-        // TODO Check how to add Spirit's Strength https://wiki.guildwars2.com/wiki/Spirit%27s_Strength
         // TODO Check how to add Painful Bond from Anguish https://wiki.guildwars2.com/wiki/Anguish
     ];
 
@@ -41,9 +40,9 @@ internal static class RitualistHelper
     [
         new Buff("Ritualist Shroud", RitualistsShroud, Source.Ritualist, BuffClassification.Other, SkillImages.RitualistShroud),
         new Buff("Painful Bond", PainfulBond, Source.Ritualist, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Anguish),
-        new Buff("Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Ritualist's Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Weapon of Remedy", WeaponOfRemedyBuff, Source.Ritualist, BuffClassification.Other, SkillImages.WeaponOfRemedy), // TODO Check buff stack type, no evtc at hand
         new Buff("Weapon of Warding", WeaponOfWardingBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.WeaponOfWarding),
         new Buff("Nightmare Weapon", NightmareWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.NightmareWeapon),

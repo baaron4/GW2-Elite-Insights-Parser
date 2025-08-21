@@ -37,6 +37,7 @@ internal static class TraitImages
     public const string ElementalSurge = "https://render.guildwars2.com/file/005807D4EACC2FC562FAF2C6BABC3E38E33FC070/1012289.png";
     public const string ElementalBalance = "https://render.guildwars2.com/file/6B625B190E65062542F7CCF9B1565D2AF403C2C6/3679935.png";
     public const string FamiliarsProwess = "https://render.guildwars2.com/file/18964AD8371C1FB3160A7779D0AA0120B9FFABBB/3679942.png";
+    public const string FamiliarsFocus = "https://render.guildwars2.com/file/F9FE2E9559AD4700D0737EACCF3608CED3E50BA6/3679937.png";
     #endregion
     #region Engineer
     public const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
@@ -119,6 +120,10 @@ internal static class TraitImages
     public const string EmpoweredIllusions = "https://render.guildwars2.com/file/4337F2F9DCC4F7A6022997409400423F7A1BB946/1012487.png";
     public const string SuperiorityComplex = "https://render.guildwars2.com/file/AAD25BD0F7753D5B447E9654A4AE6A35057B2932/1012504.png";
     public const string PhantomPain = "https://render.guildwars2.com/file/3999015BF80BA211F8AD463C50BEBD0826DC1D12/1769956.png";
+    public const string AlteredChord = "https://render.guildwars2.com/file/57FB13067F3039331F0C03A63B0D07242F0C72C4/3679975.png";
+    public const string ReverberatingLute = "https://render.guildwars2.com/file/4CAA3750145A55B7E73D5EB9917590EC45657BE7/3680159.png";
+    public const string Harmonize = "https://render.guildwars2.com/file/4BE6ED63233DEB2D5801D5D66BB202E202A6A27F/3679977.png";
+    public const string Shredding = "https://render.guildwars2.com/file/EF2D16FDF29BDCFEEC96503E0145BE1A9846F04C/3679970.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://render.guildwars2.com/file/22B370D754AC1D69A8FE66DCCB36BE940455E5EA/1012539.png";

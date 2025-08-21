@@ -320,6 +320,11 @@ internal static class SkillImages
     public const string JabMesmerSpear = "https://render.guildwars2.com/file/BBEF48C50DEB9CD79747FD515958A6FC1129EE7D/103778.png";
     public const string StabMesmerSpear = "https://render.guildwars2.com/file/42066E7EE4A3770FE5D4550BD8EDA8237A0DB769/103777.png";
     public const string PhantasmalSwordsman = "https://render.guildwars2.com/file/755CAC115104F0AA0630DCEB472D0678B62A916E/103723.png";
+    // Troubadour
+    public const string TaleOfTheSecondScion = "https://render.guildwars2.com/file/F12BF59E070FB12D2EAAA209596C52C4D76C4E97/3680158.png";
+    public const string HarmoniousHarp = "https://render.guildwars2.com/file/C1BCF465DE1DAB00E00B0F1494ABDB2D7F57BECA/3680162.png";
+    public const string DeafeningDrum = "https://render.guildwars2.com/file/E061ECE20A34DC281C0E3EB8FB90094549E87941/3680161.png";
+    public const string FlusteringFlute = "https://render.guildwars2.com/file/CFE30B5052A2AA67D9A8AE5FC1FBA0A56C64584C/3680160.png";
     #endregion Mesmer
     #region Necromancer
     // Shrouds

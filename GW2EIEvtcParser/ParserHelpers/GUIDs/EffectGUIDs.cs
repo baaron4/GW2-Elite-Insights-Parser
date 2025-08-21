@@ -122,6 +122,8 @@ public static class EffectGUIDs
     public static readonly GUID MesmerRifleAbstraction = new("6E2B9CF3E5C95846B15BBD1EAA9B3E98"); // 3300 Default Duration - Src Mesmer - Ground Effect
     public static readonly GUID MesmerRifleAbstraction2 = new("593E668A006AB24D84999AED68F2E4C4"); // 2000 Default Duration - Src Mesmer - Ground Effect
     // public static readonly GUID MesmerTrail = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
+    public static readonly GUID TroubadourTaleOfTheSoulkeeper = new("FF116F5E112DA042B238469590A1FCD8"); // 3833 duration
+    public static readonly GUID TroubadourTaleOfTheValiantMarshal = new("EBC45B862D299143B4D63CB6CAEC26ED"); // 3833 duration
     #endregion
 
     #region Necromancer
@@ -406,6 +408,8 @@ public static class EffectGUIDs
     public static readonly GUID UntamedVenomousOutburst = new("60BE4692A455B140A05AD794BF4753F6");
     public static readonly GUID UntamedRendingVines = new("2C40B0741111444F98895A658A7F978F");
     public static readonly GUID UntamedEnvelopingHaze = new("F2B1B61970FC59418AC049BF3A07FFD4");
+    public static readonly GUID GaleshotSummonCycloneBow = new("C1F1E386CC1E0B448435269DBBFB34D7"); // Duration 2333 - IsAroundDst
+    public static readonly GUID GaleshotDismissCycloneBow = new("9242D10B4F04274EB6E9EBCDB2262181"); // Duration 0 - IsAroundDst
     #endregion
 
     #region Thief

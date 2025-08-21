@@ -36,7 +36,7 @@ public static class DamageModifierIDs
     public const int Mod_FarsightedClose = 23;
     public const int Mod_FarsightedFar = 24;
     public const int Mod_HuntersTactics = 25;
-    public const int Mod_SurvivalInstincts = 26;
+    public const int Mod_SurvivalInstincts = 26; // Unused
     public const int Mod_OppressiveSuperiority = 27;
     public const int Mod_RisingTide = 28;
     public const int Mod_UnsuspectingStrikes = 29;
@@ -367,5 +367,13 @@ public static class DamageModifierIDs
     public const int Mod_FamiliarsProwessFox = 354;
     public const int Mod_FamiliarsProwessHare = 355;
     public const int Mod_FamiliarsProwessToad = 356;
+    public const int Mod_Zap = 357;
+    public const int Mod_SurvivalInstinctsOutgoing5 = 358;
+    public const int Mod_SurvivalInstinctsOutgoing10 = 359;
+    public const int Mod_SurvivalInstinctsIncoming5 = 360;
+    public const int Mod_SurvivalInstinctsIncoming10 = 361;
+    public const int Mod_LutePlaying = 362;
+    public const int Mod_AlteredChord = 363;
+    public const int Mod_Harmonize = 364;
+    public const int Mod_Shredding = 365;
 }
-
