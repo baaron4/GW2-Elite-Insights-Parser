@@ -25,10 +25,13 @@ internal static class DragonhunterHelper
         // Verify dst has justice from src
         if (log.FindActor(dst).HasBuff(log, log.FindActor(src), JusticeDragonhunter, time))
         {
-            var lastAppliedStackToDst = log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src)
-                    .LastOrDefault(x => x.Time <= time && x.Time >= time - BigGameHunterJusticeDuration - ServerDelayConstant && x.To.Is(dst));
-            // verify that the applied stack is a big game hunter one
-            return lastAppliedStackToDst != null && Math.Abs(lastAppliedStackToDst.OriginalAppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant;
+            var lastBigGameHunterApplyOnDst = log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src)
+                    .LastOrDefault(bae => bae.Time <= time && bae.To.Is(dst) && Math.Abs(bae.AppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant);
+            if (lastBigGameHunterApplyOnDst != null)
+            {
+                // Check that last applied stack did not run out
+                return time - lastBigGameHunterApplyOnDst.Time < BigGameHunterJusticeDuration + ServerDelayConstant;
+            }
         }
         return false;
     }
@@ -36,7 +39,8 @@ internal static class DragonhunterHelper
     private static bool TetherEarlyExit(SingleActor src, ParsedEvtcLog log)
     {
         // verify if trait was active at one point
-        return !log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src.AgentItem).Any(bae => Math.Abs(bae.OriginalAppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant);
+        return !log.CombatData.GetBuffApplyDataByIDBySrc(JusticeDragonhunter, src.AgentItem)
+            .Any(bae => Math.Abs(bae.AppliedDuration - BigGameHunterJusticeDuration) < ServerDelayConstant);
     }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
