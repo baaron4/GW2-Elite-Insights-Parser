@@ -785,7 +785,7 @@ internal static class ParserIcons
     internal readonly static IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
     {
         // Ranger
-        { Spec.Gadget, BaseResGaleshot },
+        { Spec.Galeshot, BaseResGaleshot },
         { Spec.Untamed, BaseResUntamed },
         { Spec.Soulbeast, BaseResSoulbeast },
         { Spec.Druid, BaseResDruid },

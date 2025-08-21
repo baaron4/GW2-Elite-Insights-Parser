@@ -480,6 +480,7 @@ public static class BuffImages
     #region Revenant
     #endregion
     #region Thief
+    public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/CE22E9489B9754A65A750A2F07351222FDCAA17B/3680053.png";
     #endregion
     #region Warrior
     #endregion

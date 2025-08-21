@@ -35,6 +35,8 @@ internal static class TraitImages
     public const string BountifulPower = "https://render.guildwars2.com/file/F0C7F54A6FC70D079E1628FFE871980CAEBFD70D/1012290.png";
     public const string Stormsoul = "https://render.guildwars2.com/file/4505D3D02606283B02124C3304697304E663ECAE/1012275.png";
     public const string ElementalSurge = "https://render.guildwars2.com/file/005807D4EACC2FC562FAF2C6BABC3E38E33FC070/1012289.png";
+    public const string ElementalBalance = "https://render.guildwars2.com/file/6B625B190E65062542F7CCF9B1565D2AF403C2C6/3679935.png";
+    public const string FamiliarsProwess = "https://render.guildwars2.com/file/18964AD8371C1FB3160A7779D0AA0120B9FFABBB/3679942.png";
     #endregion
     #region Engineer
     public const string AdaptiveArmor = "https://wiki.guildwars2.com/images/b/b3/Adaptive_Armor.png";
@@ -153,6 +155,7 @@ internal static class TraitImages
     public const string BloodAsSand = "https://render.guildwars2.com/file/BE75E965AB68DC0E5BFE5F3EA3A69C23CC01D5CC/1769974.png";
     public const string PlagueSending = "https://render.guildwars2.com/file/F004E33D079E4B5762EEF51F94CA493B64FFC4A2/1012547.png";
     public const string ImplacableFoe = "https://render.guildwars2.com/file/E3ABCC0E40170F08B0BDE72378D200BC06D1AF13/2479341.png";
+    public const string LingeringSpirits = "https://render.guildwars2.com/file/A14721D00D6A034E9EB60BB00F7B1414C118CA06/3679986.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://render.guildwars2.com/file/4ED02272F05D430FECBB55DBAEBE2B3F776F3E1C/1012657.png";
@@ -254,6 +257,7 @@ internal static class TraitImages
     public const string TraversingDusk = "https://render.guildwars2.com/file/DCA50F003BB8C0C5AC302A990BEEFF4D380E5071/2503649.png";
     public const string ShadowSavior = "https://render.guildwars2.com/file/D3070EE4956FF44628AD3ED06FD60C7D94F20296/2175055.png";
     public const string ShieldingRestoration = "https://render.guildwars2.com/file/3B7C573FBF124EC43F4102D530DE5E333F31014F/1012750.png";
+    public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/08475BFD2DA578D96933C0D42FB33770AF68A454/3680020.png";
     #endregion
     #region Warrior
     public const string RousingResilience = "https://render.guildwars2.com/file/630279C914D8BF414C2358281F1A37EDF86B203B/1012794.png";

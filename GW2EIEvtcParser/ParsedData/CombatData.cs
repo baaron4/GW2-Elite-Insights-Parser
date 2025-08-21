@@ -407,6 +407,8 @@ public partial class CombatData
         RangerHelper.ProcessGadgets(players, this);
         operation.UpdateProgressWithCancellationCheck("Parsing: Processing Revenant Gadgets");
         RevenantHelper.ProcessGadgets(players, this, agentData);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Processing Antiquary Gadgets");
+        AntiquaryHelper.ProcessGadgets(players, this, agentData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Processing Racial Gadget");
         ProfHelper.ProcessRacialGadgets(players, this);
         // Custom events

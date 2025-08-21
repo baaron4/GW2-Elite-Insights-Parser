@@ -358,5 +358,14 @@ public static class DamageModifierIDs
     public const int Mod_Brutality = 345;
     public const int Mod_PowerBlock = 346;
     public const int Mod_PhantomPain = 347;
+    public const int Mod_ExhilaratingEphemera = 348;
+    public const int Mod_RitualistsShroud = 349;
+    public const int Mod_ElementalBalanceOutgoing5 = 350;
+    public const int Mod_ElementalBalanceOutgoing10 = 351;
+    public const int Mod_ElementalBalanceIncoming5 = 352;
+    public const int Mod_ElementalBalanceIncoming10 = 353;
+    public const int Mod_FamiliarsProwessFox = 354;
+    public const int Mod_FamiliarsProwessHare = 355;
+    public const int Mod_FamiliarsProwessToad = 356;
 }
 

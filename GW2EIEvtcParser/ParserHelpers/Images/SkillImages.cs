@@ -133,6 +133,9 @@ internal static class SkillImages
     public const string RingOfFire = "https://render.guildwars2.com/file/CD08FDC23B56EBB19C90B909C65D9EE4D9FFF8C8/103183.png";
     public const string DebrisTornado = "https://render.guildwars2.com/file/F20A7D6B7FB71D520B4643CF120AF6A50DF7A2B0/102914.png";
     public const string LavaFont = "https://render.guildwars2.com/file/CFA80DB42022C240001D249CED6235CEF70C9042/103135.png";
+    public const string Ignite = "https://render.guildwars2.com/file/3C20D2FF75DA624828651AD5CEB463AC90A01207/3680117.png";
+    public const string LightningBlitz = "https://render.guildwars2.com/file/CF99A0354E3667FDE3702CAEA4C3B6AFB2D6ACFD/3680113.png";
+    public const string Zap = "https://wiki.guildwars2.com/images/a/a0/Zap_%28skill%29.png";
     #endregion Elementalist
     #region Engineer
     // Signets
@@ -323,6 +326,7 @@ internal static class SkillImages
     public const string DeathShroud = "https://render.guildwars2.com/file/01B603B6CE41416CD0582AAC1D3A33DE3E086BFA/103298.png";
     public const string ReapersShroud = "https://render.guildwars2.com/file/795CD8A855B81908E6D37DFE039DE25762DAAAE9/1012930.png";
     public const string HarbingerShroud = "https://render.guildwars2.com/file/C9CA706909A104A509F594AADA150D680AA948BC/2479400.png";
+    public const string RitualistShroud = "https://render.guildwars2.com/file/1B55FB1EE2799643B06A68E3C419D6166A9554AA/3680176.png";
     // Signets
     public const string SignetOfVampirism = "https://render.guildwars2.com/file/F62121A2D713A4CD5FDA3E5C734408EF3306BED4/699529.png";
     public const string PlagueSignet = "https://render.guildwars2.com/file/7BA4196DCAD2BED2D4E7EF23B1CB4806DABC0C56/103812.png";
@@ -365,6 +369,14 @@ internal static class SkillImages
     public const string PutridExplosionBoneMinion = "https://render.guildwars2.com/file/E65DF0D89D5FF85CD772F8542A070737EAE457A1/102782.png";
     public const string SlashShadowFiend = "https://wiki.guildwars2.com/images/3/3f/Slash_%28Shadow_Fiend%29.png";
     public const string BoneShardBoneFiend = "https://wiki.guildwars2.com/images/c/cb/Bone_Shard_%28skill%29.png";
+    // Ritualist
+    public const string ResilientWeapon = "https://render.guildwars2.com/file/53691A78554BFDCB132CA93F3D3639CC3E4EB2D6/3680169.png";
+    public const string SplinterWeapon = "https://render.guildwars2.com/file/04294CE6BE3BBB314032BD430A631BC614D1E279/3680182.png";
+    public const string NightmareWeapon = "https://render.guildwars2.com/file/B3CF370B0E35DA07C023A4BFAA791809C6A67437/3680180.png";
+    public const string WeaponOfRemedy = "https://render.guildwars2.com/file/B9991DBC4C14A5062CB206E062402A645627E704/3680181.png";
+    public const string WeaponOfWarding = "https://render.guildwars2.com/file/3D185FB008E701F359D3E5FCDE9477309C5C3530/3680183.png";
+    public const string XinraesWeapon = "https://render.guildwars2.com/file/1AC290EA0B56F4B1141A53F062140F0AFB65D6CE/3680168.png";
+    public const string Anguish = "https://render.guildwars2.com/file/9CA8D4479BEE9A28C810CCB0E234BAC7712104A0/3680170.png";
     #endregion Necromancer
     #region Ranger
     // Signets
@@ -623,6 +635,10 @@ internal static class SkillImages
     public const string DebilitatingArc = "https://render.guildwars2.com/file/5AC578E641FC79E9B2F11F43EAF857140F937CF3/1058626.png";
     public const string ThousandNeedles = "https://render.guildwars2.com/file/2E9B1FD2687F76E4CDF00ADF04B6AB07CE7CD880/2175069.png";
     public const string ThrowLavaRock = "https://wiki.guildwars2.com/images/e/ed/Throw_Lava_Rock.png";
+    // Antiquary
+    public const string MetalLegionGuitar = "https://render.guildwars2.com/file/02727B1807CF0FEF31037FD9E307BABB2055AE3C/3680214.png";
+    public const string InquestPortalDevice = "https://render.guildwars2.com/file/99210D96EB449F7A975920410C4EAEEECB41BC06/3680221.png";
+    public const string HoloDancerDecoy = "https://render.guildwars2.com/file/CEE6340604724A060D7C570709C4B05DFAD56617/3680212.png";
     #endregion Thief
     #region Warrior
     // Signets

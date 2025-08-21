@@ -625,6 +625,8 @@ public class SkillItem
         { FlowLikeWaterHealing, TraitImages.FlowLikeWater },
         { DebrisTornado, SkillImages.DebrisTornado },
         { LesserLavaFont, SkillImages.LavaFont },
+        { IgniteDamage, SkillImages.Ignite },
+        { LightningBlitzDamage, SkillImages.LightningBlitz },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -1027,6 +1029,9 @@ public class SkillItem
             { ThousandNeedlesDamage, SkillImages.ThousandNeedles },
             { ThrowLavaRock, SkillImages.ThrowLavaRock },
             { ImpalingLotusDamage, TraitImages.LotusTraining },
+            { MetalLegionGuitar2, SkillImages.MetalLegionGuitar },
+            { InquestPortalDevice1, SkillImages.InquestPortalDevice },
+            { HoloDancerDecoy2, SkillImages.HoloDancerDecoy },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },

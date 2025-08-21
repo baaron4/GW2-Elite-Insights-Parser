@@ -626,6 +626,7 @@ public static class ParserHelper
                 res |= DaredevilHelper.IsKnownMinionID(id);
                 res |= DeadeyeHelper.IsKnownMinionID(id);
                 res |= SpecterHelper.IsKnownMinionID(id);
+                res |= AntiquaryHelper.IsKnownMinionID(id);
                 break;
             //
             case Spec.Engineer:
