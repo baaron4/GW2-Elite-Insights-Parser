@@ -100,9 +100,19 @@ internal static class MesmerHelper
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
     ];
 
+    internal static bool IllusionsWithMesmerChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        return x.From.Is(x.CreditedFrom) || IsIllusion(x.From);
+    }
+
     internal static bool IllusionsChecker(DamageEvent x, ParsedEvtcLog log)
     {
-        return x.From.Is(x.CreditedFrom) || x.From.IsAnySpecies(_clones) || x.From.IsAnySpecies(_phantasms);
+        return IsIllusion(x.From);
+    }
+
+    internal static bool PhantasmsChecker(DamageEvent x, ParsedEvtcLog log)
+    {
+        return IsPhantasm(x.From);
     }
 
     private static bool SuperiorityComplexBonusChecker(HealthDamageEvent x, ParsedEvtcLog log)
@@ -137,13 +147,14 @@ internal static class MesmerHelper
     [
         // Domination
         // - Empowered Illusions
-        new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "Illusions deal 15% increased strike damage", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, IllusionsChecker, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "Illusions deal 15% increased strike damage", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, IllusionsChecker, DamageModifierMode.All)
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsIllusion(x.Value.ReferenceAgentItem))),
         // - Vicious Expression
         new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
-            .UsingChecker(IllusionsChecker)
+            .UsingChecker(IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
         new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "15% on boonless target", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All)
-            .UsingChecker(IllusionsChecker)
+            .UsingChecker(IllusionsWithMesmerChecker)
             .WithBuilds(GW2Builds.February2020Balance2),
         // - Egotism
         new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, SelfHigherHPChecker, DamageModifierMode.PvE)
@@ -181,7 +192,8 @@ internal static class MesmerHelper
             .WithBuilds(GW2Builds.November2023Balance),
         // - Phantasmal Force
         new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
-            .UsingChecker(IllusionsChecker),
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsPhantasm(x.Value.ReferenceAgentItem)))
+            .UsingChecker(PhantasmsChecker),
         
         // Chaos
         // - Illusionary Membrane
@@ -385,6 +397,15 @@ internal static class MesmerHelper
             return false;
         }
         return _phantasms.Contains(agentItem.ID);
+    }
+
+    internal static bool IsIllusion(AgentItem agentItem)
+    {
+        if (agentItem.Type == AgentItem.AgentType.Gadget)
+        {
+            return false;
+        }
+        return _clones.Contains(agentItem.ID) || _phantasms.Contains(agentItem.ID);
     }
 
     internal static bool IsKnownMinionID(int id)
