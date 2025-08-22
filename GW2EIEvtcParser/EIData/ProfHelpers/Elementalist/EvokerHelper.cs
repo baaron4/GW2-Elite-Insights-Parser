@@ -27,21 +27,16 @@ internal static class EvokerHelper
             .UsingApproximate(),
         new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing10, "Elemental balance (Outgoing)", "10% if hp >= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .UsingApproximate(),
-
         // Familiar's Prowess (Fox)
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFox, FamiliarsProwessFox, "Familiar's Prowess (Fox)", "10% condition damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
-        
         // Familiar's Prowess + Familiar's Focus (Fox)
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "25% condition damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusFox, FamiliarsProwessFox, "Familiar's Prowess + Focus (Fox)", "20% condition damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
-
         // Familiar's Prowess (Hare)
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessHare, FamiliarsProwessHare, "Familiar's Prowess (Hare)", "10% strike damage after familiar skill", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
-        
         // Familiar's Prowess + Familiar's Focus (Hare)
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "25% strike damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusHare, FamiliarsProwessHare, "Familiar's Prowess + Focus (Hare)", "20% strike damage after familiar skill (Familiar's Focus)", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
-
         // Zap
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.PvE)
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
@@ -78,11 +73,9 @@ internal static class EvokerHelper
             .UsingApproximate(),
         new DamageLogDamageModifier(Mod_ElementalBalanceIncoming10, "Elemental balance (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
             .UsingApproximate(),
-        
         // Familiar's Prowess (Toad)
         // TODO Verify strike and condi if accurate
         new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
-
         // Familiar's Prowess + Familiar's Focus (Toad)
         // TODO Add this
     ];
@@ -99,7 +92,7 @@ internal static class EvokerHelper
         new Buff("Evoker's Stone Spirit Aura (3)", EvokerStoneSpiritAura3, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (4)", EvokerStoneSpiritAura4, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (5)", EvokerStoneSpiritAura5, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Hare's Agility", HaresAgilityBuff, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unknown),
+        new Buff("Hare's Agility", HaresAgilityBuff, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
         new Buff("Zap (To Target)", ZapBuffPlayerToTarget, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Zap (To Player)", ZapBuffTargetToPlayer, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
     ];

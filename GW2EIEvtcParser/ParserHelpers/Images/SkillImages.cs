@@ -133,9 +133,11 @@ internal static class SkillImages
     public const string RingOfFire = "https://render.guildwars2.com/file/CD08FDC23B56EBB19C90B909C65D9EE4D9FFF8C8/103183.png";
     public const string DebrisTornado = "https://render.guildwars2.com/file/F20A7D6B7FB71D520B4643CF120AF6A50DF7A2B0/102914.png";
     public const string LavaFont = "https://render.guildwars2.com/file/CFA80DB42022C240001D249CED6235CEF70C9042/103135.png";
+    // Evoker
     public const string Ignite = "https://render.guildwars2.com/file/3C20D2FF75DA624828651AD5CEB463AC90A01207/3680117.png";
     public const string LightningBlitz = "https://render.guildwars2.com/file/CF99A0354E3667FDE3702CAEA4C3B6AFB2D6ACFD/3680113.png";
     public const string Zap = "https://wiki.guildwars2.com/images/a/a0/Zap_%28skill%29.png";
+    public const string HaresAgility = "https://render.guildwars2.com/file/CD54CEBF6BD8D37902E2EF0565BE0A9FF3CB9414/3680122.png";
     #endregion Elementalist
     #region Engineer
     // Signets
@@ -191,6 +193,16 @@ internal static class SkillImages
     public const string ThumperTurret = "https://render.guildwars2.com/file/EA2452FCE71C0F0B9755517324A47680BF45E79E/103201.png";
     public const string Overheat = "https://render.guildwars2.com/file/5DC4E10CE03E4D78EFACEEDB6F5FCF4F206BA7E3/1770392.png";
     public const string GlueBomb = "https://wiki.guildwars2.com/images/4/42/Glue_Bomb.png";
+    // Amalgam
+    public const string DefensiveProtocolCleanse = "https://render.guildwars2.com/file/71A2EA9B60E691E61521C2B621E665146BF1D1DD/3680127.png";
+    public const string DefensiveProtocolThorns = "https://render.guildwars2.com/file/5B565BA46C111902EE65AB4592590442A5A6E754/3680135.png";
+    public const string OffensiveProtocolObliterate = "https://render.guildwars2.com/file/569A167830C12BFC730095C72F1D095A7323DC3D/3680130.png";
+    public const string OffensiveProtocolDemolish = "https://render.guildwars2.com/file/337E150FB638D080A5A845A73D06B3E3ED7494C7/3680128.png";
+    public const string OffensiveProtocolShred = "https://render.guildwars2.com/file/09A6184ADE9313765B0620780A27B23F4DF31D1A/3680134.png";
+    public const string MitoticState = "https://render.guildwars2.com/file/69ACD1030C55270FE69099A95FEDA716EFE64F5C/3680126.png";
+    public const string SolidState = "https://render.guildwars2.com/file/FD0857ECCA025A02E2E7BB00DB0E65FFBA551661/3680139.png";
+    public const string GaseousState = "https://render.guildwars2.com/file/D2AF4AF313802004B8A333D9D6E6983CED7C7F64/3680136.png";
+    public const string PlasmaticState = "https://render.guildwars2.com/file/2AA6D1CCEE723B7415B60DBDBAB55275EA562D29/3680138.png";
     #endregion Engineer
     #region Guardian
     // Guardian F Skills
@@ -724,6 +736,12 @@ internal static class SkillImages
     public const string WildThrow = "https://render.guildwars2.com/file/0B79EB6203654C703FF9DCBEDF2A4BDAB54D35FC/3379204.png";
     public const string SpearmarshalsSupport = "https://render.guildwars2.com/file/43132DEC934F072272F14B19FC03FB62111502FB/3379203.png";
     public const string Kick = "https://render.guildwars2.com/file/E578C9070BCA270818F56304CBE2800CD4691350/103001.png";
+    public const string Counterblow = "https://render.guildwars2.com/file/92C19D3798F16AC716CAC7A5C044E4CFC251E4A2/102986.png";
+    // Paragon
+    public const string ChantOfAction = "https://render.guildwars2.com/file/A4D0D740CF360E0840EF76282843109C759C63A8/3680225.png";
+    public const string ChantOfRecuperation = "https://render.guildwars2.com/file/2D4B0C67FACAADD8612746BD6F5C6BE9A828C9A3/3680227.png";
+    public const string ChantOfFreedom = "https://render.guildwars2.com/file/52720B9628A24FE1034815E10F0AFACF5365F3C4/3680226.png";
+    public const string WeWillNeverYield = "https://render.guildwars2.com/file/C5740F0D6446CA01FCAA302D352D7F453E6A0709/3680223.png";
     #endregion Warrior
     #region WvW
     public const string TurnLeft = "https://wiki.guildwars2.com/images/4/4c/Turn_Left.png";

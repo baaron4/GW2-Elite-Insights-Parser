@@ -383,4 +383,8 @@ public static class DamageModifierIDs
     public const int Mod_GaleForce = 370;
     public const int Mod_EmpoweredArmaments = 371;
     public const int Mod_LuminarysBlessing = 372;
+    public const int Mod_ChantOfAction = 373;
+    public const int Mod_ChantOfRecuperation = 374;
+    public const int Mod_WillingHost = 375;
+    public const int Mod_PlasmaticState = 376;
 }

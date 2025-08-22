@@ -163,6 +163,7 @@ public class SkillItem
         { FireJurisdictionLevel2, "Fire Jurisdiction (Level 2)" },
         { FireJurisdictionLevel3, "Fire Jurisdiction (Level 3)" },
         { DetonateJurisdiction, "Detonate Jurisdiction" },
+        { EffulgentStanceDamage, "Effulgent Stance (Damage)" },
         #endregion Guardian
         #region Mesmer
         { PowerReturn, "Power Return" },
@@ -426,6 +427,7 @@ public class SkillItem
         { Weakness, BuffImages.Weakness },
         { Immobile, BuffImages.Immobile },
         { Slow, BuffImages.Slow },
+        { Vulnerability, BuffImages.Vulnerability },
         { ShockingAura, BuffImages.ShockingAura },
         { RescueProtocol, SkillImages.RescueProtocol },
         #region ComboIcons
@@ -662,6 +664,14 @@ public class SkillItem
         { SystemShockerBarrier, TraitImages.SystemShocker },
         { ExigencyProtocol, TraitImages.ExigencyProtocol },
         { GlueBomb, SkillImages.GlueBomb },
+        { OffensiveProtocolDemolish1, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolDemolish2, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolDemolish4, SkillImages.OffensiveProtocolDemolish },
+        { DefensiveProtocolThorns2, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolShred3, SkillImages.OffensiveProtocolShred },
+        { PlasmaticStateSkill2, SkillImages.PlasmaticState },
+        { Thorns, SkillImages.DefensiveProtocolThorns },
+        { RapaciousStrain, SkillImages.DefensiveProtocolThorns },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
@@ -712,6 +722,8 @@ public class SkillItem
             { ReceiveTheLightPulse, SkillImages.ReceiveTheLight },
             { SolarStormIlluminatedHealing, SkillImages.SolarStorm },
             { HammerOfWisdom, SkillImages.HammerOfWisdom },
+            { EffulgentStanceDamage, SkillImages.EffulgentStance },
+            { DaringAdvanceBuff, SkillImages.DaringAdvance },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, TraitImages.HealingPrism },
@@ -1084,6 +1096,7 @@ public class SkillItem
             { Inspire, SkillImages.Inspire },
             { FuriousRally, SkillImages.BannerOfDiscipline },
             { PlantStandard, SkillImages.PlantStandard },
+            { CounterblowDamage, SkillImages.Counterblow },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },
