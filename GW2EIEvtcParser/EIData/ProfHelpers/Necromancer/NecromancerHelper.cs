@@ -166,7 +166,7 @@ internal static class NecromancerHelper
         new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Extirpate),
         new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.SoulShards),
         new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, SkillImages.Distress),
-        new Buff("Dark Stalker (Spear)", DarkStalker, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Dark Stalker (Spear)", DarkStalkerSpear, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.MonsterSkill),
     ];
 
     private static readonly HashSet<long> _shroudTransform =

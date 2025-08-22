@@ -95,6 +95,8 @@ internal static class TraitImages
     public const string GlacialHeart = "https://render.guildwars2.com/file/B6B838104E585313E2FA34481FEDBD9F1B6F07B4/1012443.png";
     public const string ShatteredAegis = "https://render.guildwars2.com/file/5D0BC6DF96B62BF5FBA1B41BEC064BD9D4E421F2/1012457.png";
     public const string SelflessDaring = "https://render.guildwars2.com/file/32BAB20860259FF3E8214E784E6BE7521213089C/1012412.png";
+    public const string LightsGift = "https://render.guildwars2.com/file/6C920751304B14ADFFB6A70CACEA1B80D2ABFC59/3679965.png";
+    public const string EmpoweredArmaments = "https://render.guildwars2.com/file/37424E9DD0A3ADC61DD56BB180C96201DB61099C/3679960.png";
     #endregion
     #region Mesmer
     public const string PsychicRiposte = "https://render.guildwars2.com/file/E89F2604C2E51F79E760F6DDB83E43E77078C13B/2479332.png";
@@ -202,6 +204,7 @@ internal static class TraitImages
     public const string EvasivePurity = "https://render.guildwars2.com/file/C374B3F2C1BCFCB0B164FF0567FB6CC1B31B9651/1012633.png";
     public const string RestorativeStrikesAndBiorythm = "https://render.guildwars2.com/file/44B8970EAEBCFC14E11A910C5B5D0FC512FEEBE5/2503639.png";
     public const string GaleForce = "https://render.guildwars2.com/file/206A95E4F6F236D824F80CF2495B4E6553ABFF34/3679998.png";
+    public const string WutheringWind = "https://render.guildwars2.com/file/BE5F0405E79D13C89F0D9EF13B1B11479D0C3805/3679993.png";
     #endregion Ranger
     #region Revenant
     public const string CloseQuarters = "https://render.guildwars2.com/file/4DD75C0C7D64F2A80F24955E0CAE031530554AF7/1012690.png";

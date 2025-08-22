@@ -269,6 +269,13 @@ internal static class SkillImages
     public const string SpearOfLight = "https://render.guildwars2.com/file/77931F01AE91A00998BD286BA2930DCE1A354318/103677.png";
     public const string HuntersWard = "https://render.guildwars2.com/file/BA2C3116B20CF142F70D18394E377A043D3E0E96/1012873.png";
     public const string HammerOfWisdom = "https://render.guildwars2.com/file/99430A49F97BA45EF101E611A69193D57BF70A7D/103655.png";
+    // Luminary
+    public const string ResoluteStance = "https://render.guildwars2.com/file/C0267DCD064328C6C4CF33CF08714FB1DC1171BC/3680141.png";
+    public const string StalwartStance = "https://render.guildwars2.com/file/4770DFB6241311A7969E587B0B02BD672875F934/3680153.png";
+    public const string ValorousStance = "https://render.guildwars2.com/file/7D246678672DAF3F941930A50EBCDB54A91C7D0F/3680155.png";
+    public const string EffulgentStance = "https://render.guildwars2.com/file/59A7E145B5D6DC4CB9642F80007644791D302FA2/3680156.png";
+    public const string PiercingStance = "https://render.guildwars2.com/file/E5805F3477ED5618E348043475FFA442C7C791E3/3680154.png";
+    public const string DaringAdvance = "https://render.guildwars2.com/file/2E24D2089501C663801BF7CC567E1CC0F5714AD7/3680140.png";
     #endregion Guardian
     #region Mesmer
     // Signets
