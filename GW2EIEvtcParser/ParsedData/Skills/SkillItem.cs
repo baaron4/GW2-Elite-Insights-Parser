@@ -924,6 +924,7 @@ public class SkillItem
             { CripplingThrow, SkillImages.CripplingThrow },
             { GlyphOfEmpowermentSkill, SkillImages.GlyphOfTheStars },
             { GlyphOfEmpowermentSkillCA, SkillImages.GlyphOfTheStarsCelestialAvatar },
+            { MistralDamage, SkillImages.Mistral },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },

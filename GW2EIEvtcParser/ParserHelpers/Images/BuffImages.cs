@@ -476,6 +476,8 @@ public static class BuffImages
     public const string NaturesStrength = "https://render.guildwars2.com/file/B8D91BDCD577469CF7C74FC498E708E193135FBE/3256319.png";
     public const string ForceOfNature = "https://render.guildwars2.com/file/4016A1FF035FC6F8A95809B5ABDAF50A92BC029B/3256318.png";
     public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
+    // Galeshot
+    public const string WindForce = "https://render.guildwars2.com/file/CF44234EA9D65ADAF8667CE40DCC9EF392F377DA/3680044.png";
     #endregion
     #region Revenant
     #endregion
