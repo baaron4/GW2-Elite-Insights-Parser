@@ -5052,7 +5052,11 @@ public static class SkillIDs
     public const long MagneticBombEngineer = 76530;
     #endregion
     #region Visions of Eternity
-    public const long CosmicWisdomDervishSkill = long.MaxValue;
+    public const long ShieldingHandsBuff = 999993; // TODO Find this ID
+    public const long FormOfTheWarrior = 999994; // TODO Find this ID
+    public const long FormOfTheAssassin = 999995; // TODO Find this ID
+    public const long FormOfTheMonk = 999996; // TODO Find this ID
+    public const long FormOfTheMesmer = 999997; // TODO Find this ID
     public const long FamiliarsProwessOtter = 999998; // TODO Find this ID
     public const long FamiliarsProwessToad = 999999; // TODO Find this ID - Might be 77391
     public const long SplinterWeaponSkill = 76549;
@@ -5069,6 +5073,7 @@ public static class SkillIDs
     public const long ScionsReprieve = 76595;
     public const long MetalLegionGuitar2 = 76596;
     public const long SorrowAutoattack = 76598;
+    public const long LegendaryEntityStanceSkill = 76610;
     public const long SymbioticShielding = 76613;
     public const long ExitRadiantShroud = 76616;
     public const long LightningBlitz_PlayerSkill = 76618;
@@ -5078,8 +5083,10 @@ public static class SkillIDs
     public const long ForgedSurferDash = 76633;
     public const long Rejuvenate = 76634;
     public const long FamiliarsProwessHare = 76639;
+    public const long CosmicWisdomMesmer = 76641;
     public const long Evolve = 76642;
     public const long IgniteSkill = 76643;
+    public const long COsmicWisdomDervish = 76644;
     public const long Hawkeye = 76664;
     public const long BerserkerStrain = 76667;
     public const long MistralDamage = 76672;
@@ -5124,6 +5131,7 @@ public static class SkillIDs
     public const long DefensiveProtocolCleanse = 76798;
     public const long ZapDamage = 76803;
     public const long RadiantArmamentsBuff2 = 76804;
+    public const long BeguilingHaze1 = 76805;
     public const long OffensiveProtocolObliterate = 76806;
     public const long QuarrysPeril = 76807;
     public const long InquestPortalDevice2 = 76808;
@@ -5148,6 +5156,7 @@ public static class SkillIDs
     public const long WillingHost = 76885;
     public const long AntivenomDraught = 76886;
     public const long RapaciousStrain = 76888;
+    public const long FormOfTheDervish = 76896;
     public const long RitualistCallLightning = 76903;
     public const long WutheringWindSkill = 76905;
     public const long DetonateAnguish = 76906;
@@ -5155,6 +5164,7 @@ public static class SkillIDs
     public const long UnstableSkrittBomb = 76909;
     public const long ShiningSPin = 76910;
     public const long LightningBlitzDamage = 76914;
+    public const long BeguilingHaze2 = 76917;
     public const long LingeringSpirits = 76920;
     public const long HaresAgilityBuff = 76922;
     public const long NightmareWeaponBuff = 76923;
@@ -5171,6 +5181,7 @@ public static class SkillIDs
     public const long RitualistsShroud = 76958;
     public const long DefensiveProtocolProtect = 76959;
     public const long Wanterlust1 = 76961;
+    public const long TwinMoonSweep1 = 76968;
     public const long TakeOfTheAugustQueen = 76971;
     public const long ChantOfFreedomBuff = 76972;
     public const long SplinterWeaponSkill2 = 76975;
@@ -5180,6 +5191,7 @@ public static class SkillIDs
     public const long GlaringBurst = 76982;
     public const long EvokerStoneSpiritAura2 = 76991; // Reused buff from Stone Spirit for Evoker's Pets
     public const long FluxState = 76993;
+    public const long TwinMoonSweep2 = 77001;
     public const long Evolved = 77008;
     public const long WeaponOfWardingBuff = 77011;
     public const long FleetingZephyr = 77012;
@@ -5193,6 +5205,7 @@ public static class SkillIDs
     public const long HaresAgilitySkill2 = 77038;
     public const long FindTheirWeakness = 77040;
     public const long RitualistStormSpiritAura3 = 77042; // Reused buff from Storm Spirit for Ritualist's Spirits
+    public const long ShieldingHandsSkill = 77043;
     public const long RuptureAnguish = 77050;
     public const long PlasmaticStateBuff = 77052;
     public const long EssenceBLast = 77061;
@@ -5214,11 +5227,13 @@ public static class SkillIDs
     public const long ZapBuffPlayerToTarget = 77123; // Buff applied from the player to the target
     public const long PainfulBond = 77128;
     public const long RestorativeGlowSkill = 77136;
+    public const long BeguilingHaze3 = 77141;
     public const long RadiantShroud = 77142;
     public const long PiercingStanceBuff = 77143;
     public const long Mayhem = 77148;
     public const long KryptisTurretBuff2 = 77150; // Buff applied by Antiquary to Kryptis Turret minion gadget
     public const long ChantOfFreedomSkill = 77155;
+    public const long BeguilingHaze4 = 77159;
     public const long RestorativeGlowBuff2 = 77162;
     public const long DefensiveProtocolThorns1 = 77163;
     public const long SovereignOfLight = 77164;
@@ -5239,9 +5254,12 @@ public static class SkillIDs
     public const long CalcifySkill = 77226;
     public const long AnguishAutoattack = 77231;
     public const long ReplicatingStrain = 77232;
+    public const long LegendaryEntityStanceBuff = 77234;
     public const long EnterRitualistsShroud = 77238;
     public const long WeWillNeverYieldBuff = 77242;
+    public const long HexEaterVortex = 77243;
     public const long WutheringWindBuff = 77244;
+    public const long CosmicWisdomAssassin1 = 77251;
     public const long SkrittScuffle = 77255;
     public const long FamiliarsFocus = 77256;
     public const long ResilientWeaponSkill = 77259;
@@ -5253,11 +5271,13 @@ public static class SkillIDs
     public const long MistburnMortar = 77277;
     public const long FoxsFury2 = 77282;
     public const long Thorns = 77283;
+    public const long GladiatorsDefense = 77291;
     public const long RestorativeGlowBuff3 = 77292;
     public const long LutePlaying = 77297;
     public const long ValorousStanceSkill = 77300;
     public const long EvokerStoneSpiritAura4 = 77301; // Reused buff from Stone Spirit for Evoker's Pets
     public const long PlasmaticStateSkill2 = 77307;
+    public const long CosmicWisdomAssassin2 = 77312;
     public const long Bluster = 77319;
     public const long StalwartStanceSkill = 77321;
     public const long GaleForce = 77330;
@@ -5268,10 +5288,13 @@ public static class SkillIDs
     public const long RadiantArmamentsBuff8 = 77360;
     public const long GaseousStateBuff = 77362;
     public const long LucentThrust = 77366;
+    public const long ChannelFormOfTheWarrior1 = 77368;
     public const long ZapSkill = 77370;
+    public const long CosmicWisdomMonk = 77371;
     public const long ChantOfRecuperationBuff = 77378;
     public const long EvokerStoneSpiritAura5 = 77382; // Reused buff from Stone Spirit for Evoker's Pets
     public const long HaresAgilitySkill3 = 77387;
+    public const long ChannelFormOfTheWarrior2 = 77389;
     public const long SkrittSwipe = 77397;
     #endregion
 }

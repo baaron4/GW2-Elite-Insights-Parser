@@ -551,6 +551,7 @@ internal static class SkillImages
     public const string LegendaryDragonStance = "https://render.guildwars2.com/file/27B5D1D4127A2EE73866E54F5A43E9102618B90B/1058605.png";
     public const string LegendaryRenegadeStance = "https://render.guildwars2.com/file/6B3205EF5ED0802DB74BBF7F0CAE04FAA2089B74/1770592.png";
     public const string LegendaryAllianceStance = "https://render.guildwars2.com/file/E1910F4C5C74E0B00AB262D2D3DBA3FB51BE90CA/2491626.png";
+    public const string LegendaryEntityStance = "https://render.guildwars2.com/file/3FEE4B97282956F1F3654BE36119A0030E08C1D7/3680200.png";
     // Assassin
     public const string EnchantedDaggers = "https://render.guildwars2.com/file/A01907F923B160E6261174BEF5975D070D4D6511/1012989.png";
     public const string PhaseTraversal = "https://render.guildwars2.com/file/6C9F184D04E3590AC3F4061327BF0A68904D7DED/1013016.png";
@@ -575,6 +576,8 @@ internal static class SkillImages
     public const string IcerazorsIre = "https://render.guildwars2.com/file/F151D74719642E34672C0837BB0C4071B1E3B4A7/1770605.png";
     // Alliance
     public const string UrnOfSaintViktor = "https://render.guildwars2.com/file/317EB806A8487B77040BC0C673A59096F396EEE4/2491625.png";
+    // Entity
+    public const string ShieldingHands = "https://render.guildwars2.com/file/274EEBFD624D0DA55A0C7F7566D41A060E48B4BA/3680199.png";
     // Axe
     public const string FrigidBlitz = "https://render.guildwars2.com/file/CF6305B8CDF2C70DDAC7709919A75C3554B09169/961462.png";
     // Greatsword

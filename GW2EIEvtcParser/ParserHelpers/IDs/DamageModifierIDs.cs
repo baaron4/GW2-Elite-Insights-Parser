@@ -387,4 +387,5 @@ public static class DamageModifierIDs
     public const int Mod_ChantOfRecuperation = 374;
     public const int Mod_WillingHost = 375;
     public const int Mod_PlasmaticState = 376;
+    public const int Mod_ShieldingHands = 377;
 }
