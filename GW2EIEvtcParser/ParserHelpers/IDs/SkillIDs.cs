@@ -5056,7 +5056,6 @@ public static class SkillIDs
     public const long FormOfTheWarrior = 999994; // TODO Find this ID
     public const long FormOfTheAssassin = 999995; // TODO Find this ID
     public const long FormOfTheMonk = 999996; // TODO Find this ID
-    public const long FormOfTheMesmer = 999997; // TODO Find this ID
     public const long FamiliarsProwessOtter = 999998; // TODO Find this ID
     public const long FamiliarsProwessToad = 999999; // TODO Find this ID - Might be 77391
     public const long SplinterWeaponSkill = 76549;
@@ -5108,6 +5107,7 @@ public static class SkillIDs
     public const long DrumPlaying = 76719;
     public const long Pelt = 76722;
     public const long StoneSummitCannon = 76725;
+    public const long TwinMoonSweep3 = 76726;
     public const long EffulgentStanceDamage = 76730;
     public const long DetonateSorrow = 76731;
     public const long ValorousStanceBuff = 76736;
@@ -5139,6 +5139,7 @@ public static class SkillIDs
     public const long EffulgentStanceSkill = 76813;
     public const long OffensiveProtocolPierce = 76815;
     public const long ChakShield = 76816;
+    public const long FormOfTheDervishSkill1 = 76818;
     public const long MitoticStateBuff = 76837;
     public const long RitualistStormSpiritAura2 = 76839; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ElementalProcession = 76841;
@@ -5156,10 +5157,11 @@ public static class SkillIDs
     public const long WillingHost = 76885;
     public const long AntivenomDraught = 76886;
     public const long RapaciousStrain = 76888;
-    public const long FormOfTheDervish = 76896;
+    public const long FormOfTheDervishBuff1 = 76896;
     public const long RitualistCallLightning = 76903;
     public const long WutheringWindSkill = 76905;
     public const long DetonateAnguish = 76906;
+    public const long FormOfTheMesmer1 = 76907;
     public const long LiquidState = 76908;
     public const long UnstableSkrittBomb = 76909;
     public const long ShiningSPin = 76910;
@@ -5216,12 +5218,14 @@ public static class SkillIDs
     public const long HarmoniousHarp = 77077;
     public const long PiercingStanceSkill = 77078;
     public const long DeafeningDrum = 77079;
+    public const long FormOfTheMesmer2 = 77085;
     public const long RadiantArmamentsBuff5 = 77088;
     public const long LightningBlitz2 = 77089;
     public const long DaringAdvanceBuff = 77094;
     public const long EffulgentStanceStackGainBuff = 77095;
     public const long OffensiveProtocolShred2 = 77103;
     public const long DefensiveProtocolThorns2 = 77104;
+    public const long FormOfTheDervishSkill2 = 77116;
     public const long FlutePlaying = 77118;
     public const long Wanterlust2 = 77120;
     public const long ZapBuffPlayerToTarget = 77123; // Buff applied from the player to the target
@@ -5284,6 +5288,8 @@ public static class SkillIDs
     public const long LuminarysBlessing = 77333;
     public const long DazzlingHammer = 77339;
     public const long ChantOfActionSkill = 77342;
+    public const long BeguilingHaze5 = 77353;
+    public const long FormOfTheDervishBuff2 = 77356;
     public const long BuoyantDeluge = 77357;
     public const long RadiantArmamentsBuff8 = 77360;
     public const long GaseousStateBuff = 77362;

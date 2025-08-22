@@ -603,7 +603,7 @@ internal static class EncounterBuffs
             new Buff("Lethal Coalescence", LethalCoalescenceBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Windfall),
             new Buff("Achievement Eligibility: Reflections in the Ice", AchievementEligibilityReflectionsInTheIce, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Slither-less", AchievementEligibilitySlitherLess, Source.EncounterSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.EncounterSpecific, BuffStackType.Force, 25, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: Vortex, Interrupted", AchievementEligibilityVortexInterrupted, Source.EncounterSpecific, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.AchievementEffect),
             // Freezie
             new Buff("Icy Barrier", IcyBarrier, Source.EncounterSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShieldOfIce),
             new Buff("Aurora Beam Target", AuroraBeamTargetBuff, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),

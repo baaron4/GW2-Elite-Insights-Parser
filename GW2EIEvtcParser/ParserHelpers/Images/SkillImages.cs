@@ -578,6 +578,8 @@ internal static class SkillImages
     public const string UrnOfSaintViktor = "https://render.guildwars2.com/file/317EB806A8487B77040BC0C673A59096F396EEE4/2491625.png";
     // Entity
     public const string ShieldingHands = "https://render.guildwars2.com/file/274EEBFD624D0DA55A0C7F7566D41A060E48B4BA/3680199.png";
+    public const string BeguilingHaze = "https://render.guildwars2.com/file/93F823A8E8CD7EA9E579D1A8E32505D5DEB9DD53/3680203.png";
+    public const string TwinMoonSweep = "https://render.guildwars2.com/file/7092333DE604FB98B3DEF024E01ABDCFFD967DDA/3680198.png";
     // Axe
     public const string FrigidBlitz = "https://render.guildwars2.com/file/CF6305B8CDF2C70DDAC7709919A75C3554B09169/961462.png";
     // Greatsword

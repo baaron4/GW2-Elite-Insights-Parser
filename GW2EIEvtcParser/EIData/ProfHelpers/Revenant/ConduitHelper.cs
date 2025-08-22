@@ -27,8 +27,10 @@ internal static class ConduitHelper
     [
         new Buff("Legendary Entity Stance", LegendaryEntityStanceBuff, Source.Conduit, BuffClassification.Other, SkillImages.LegendaryEntityStance),
         new Buff("Form of the Assassin", FormOfTheAssassin, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
-        new Buff("Form of the Dervish", FormOfTheDervish, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
-        new Buff("Form of the Mesmer", FormOfTheMesmer, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
+        new Buff("Form of the Dervish (1)", FormOfTheDervishBuff1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
+        new Buff("Form of the Dervish (2)", FormOfTheDervishBuff2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
+        new Buff("Form of the Mesmer (1)", FormOfTheMesmer1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
+        new Buff("Form of the Mesmer (2)", FormOfTheMesmer2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
         new Buff("Form of the Monk", FormOfTheMonk, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMonk),
         new Buff("Form of the Warrior", FormOfTheWarrior, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
         new Buff("Shielding Hands", ShieldingHandsBuff, Source.Conduit, BuffClassification.Other, SkillImages.ShieldingHands),

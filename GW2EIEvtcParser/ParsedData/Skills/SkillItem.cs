@@ -989,6 +989,10 @@ public class SkillItem
             { BlitzMinesDrop, SkillImages.BlitzMines },
             { RedemptorsSermonHeal, TraitImages.RedemptorsSermon },
             { ManiacalPulse, TraitImages.ManiacalPersistence },
+            { BeguilingHaze5, SkillImages.BeguilingHaze },
+            { TwinMoonSweep3, SkillImages.TwinMoonSweep },
+            { FormOfTheDervishSkill1, BuffImages.FormOfTheDervish },
+            { FormOfTheDervishSkill2, BuffImages.FormOfTheDervish },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
