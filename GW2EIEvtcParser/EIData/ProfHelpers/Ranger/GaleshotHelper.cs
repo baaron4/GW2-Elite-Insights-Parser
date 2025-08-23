@@ -24,8 +24,8 @@ internal static class GaleshotHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Wind Force
-        new BuffOnActorDamageModifier(Mod_WindForce, WindForce, "Wind Force", "3% stacking", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByMultipliyingStack, BuffImages.WindForce, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_WindForce, WindForce, "Wind Force", "2% stacking", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByMultipliyingStack, BuffImages.WindForce, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_WindForce, WindForce, "Wind Force", "3% stacking", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByStack, BuffImages.WindForce, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_WindForce, WindForce, "Wind Force", "2% stacking", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByStack, BuffImages.WindForce, DamageModifierMode.sPvPWvW),
         // Gale Force
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_GaleForce, GaleForce, "Gale Force", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Galeshot, ByPresence, TraitImages.GaleForce, DamageModifierMode.sPvPWvW),

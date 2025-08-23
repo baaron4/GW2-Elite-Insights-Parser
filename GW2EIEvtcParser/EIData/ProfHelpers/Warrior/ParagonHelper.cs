@@ -18,7 +18,7 @@ internal static class ParagonHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Chant of Action
-        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20% strike and condition damage", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
     ];
 

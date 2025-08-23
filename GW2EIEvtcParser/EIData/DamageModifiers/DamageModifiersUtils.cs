@@ -12,10 +12,25 @@ internal static class DamageModifiersUtils
     internal delegate bool DamageLogChecker(HealthDamageEvent dl, ParsedEvtcLog log);
     internal delegate bool ActorChecker(SingleActor actor, ParsedEvtcLog log);
 
+    /// <summary>
+    /// When the modifier is active based on the presence of a buff. Stacks amount don't count. Additive.
+    /// </summary>
     internal static readonly GainComputerByPresence ByPresence = new();
+    /// <summary>
+    /// When the modifier is active based on the presence of multiple buffs. Additive.
+    /// </summary>
     internal static readonly GainComputerByMultiPresence ByMultiPresence = new();
+    /// <summary>
+    /// When the modifier is increased by each stack of buff. Additive.
+    /// </summary>
     internal static readonly GainComputerByStack ByStack = new();
+    /// <summary>
+    /// When the modifier is increased by each stack of buff. Multiplicative.
+    /// </summary>
     internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new();
+    /// <summary>
+    /// When the modifier is active based on a missing buff.
+    /// </summary>
     internal static readonly GainComputerByAbsence ByAbsence = new();
 
     internal static double VulnerabilityAdjuster(HealthDamageEvent dl, ParsedEvtcLog log)
