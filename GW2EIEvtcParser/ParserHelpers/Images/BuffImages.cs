@@ -450,10 +450,15 @@ public static class BuffImages
     public const string HeatLvl1 = "https://i.imgur.com/nNQEVpb.png";
     public const string HeatLvl2 = "https://i.imgur.com/LgfmRM4.png";
     public const string HeatLvl3 = "https://i.imgur.com/Ti4NWys.png";
+    public const string Evolved = "https://wiki.guildwars2.com/images/8/8d/Evolved.png";
     #endregion
     #region Guardian
     // Spear
     public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
+    public const string RadiantArmamentsHammer = "https://render.guildwars2.com/file/4ECA0C916F5D54C3C12AC135AB5A1E2D4BC792E5/3680142.png";
+    public const string RadiantArmamentsStaff = "https://render.guildwars2.com/file/06BD9362B2F9FAE403181D0F9BE96A12664C22CA/3680148.png";
+    public const string RadiantArmamentsSword = "https://render.guildwars2.com/file/79B0DCC5E4A0A8BBE04AC0024D01A0F36D0B0C79/3680151.png";
+    public const string RadiantArmamentsShield = "https://render.guildwars2.com/file/06735858B4DE086359A7DB1D4B2B650F97D7DD03/3680144.png";
     #endregion
     #region Mesmer
     // Mimic
@@ -476,10 +481,18 @@ public static class BuffImages
     public const string NaturesStrength = "https://render.guildwars2.com/file/B8D91BDCD577469CF7C74FC498E708E193135FBE/3256319.png";
     public const string ForceOfNature = "https://render.guildwars2.com/file/4016A1FF035FC6F8A95809B5ABDAF50A92BC029B/3256318.png";
     public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
+    // Galeshot
+    public const string WindForce = "https://render.guildwars2.com/file/CF44234EA9D65ADAF8667CE40DCC9EF392F377DA/3680044.png";
     #endregion
     #region Revenant
+    public const string FormOfTheDervish = "https://render.guildwars2.com/file/0CB866CA45E05F72B3B9CEDED5CAA1563FBD6B4A/3680046.png";
+    public const string FormOfTheMesmer = "https://render.guildwars2.com/file/FD11F430ACFE322E077AC1C503C9D11A42F8CB20/3680047.png";
+    public const string FormOfTheMonk = "https://render.guildwars2.com/file/43E1C29C447FFFFE067DB83CE53E099D3C091D2A/3680048.png";
+    public const string FormOfTheAssassin = "https://render.guildwars2.com/file/FA48DB2E91CC6C964B3B774C36B2CC6F12CA3205/3680045.png";
+    public const string FormOfTheWarrior = "https://render.guildwars2.com/file/08D392BC0416E0B9409A0CBFB7DA6E1ED80CDE30/3680049.png";
     #endregion
     #region Thief
+    public const string ExhilaratingEphemera = "https://render.guildwars2.com/file/CE22E9489B9754A65A750A2F07351222FDCAA17B/3680053.png";
     #endregion
     #region Warrior
     #endregion

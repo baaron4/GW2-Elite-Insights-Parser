@@ -163,6 +163,7 @@ public class SkillItem
         { FireJurisdictionLevel2, "Fire Jurisdiction (Level 2)" },
         { FireJurisdictionLevel3, "Fire Jurisdiction (Level 3)" },
         { DetonateJurisdiction, "Detonate Jurisdiction" },
+        { EffulgentStanceDamage, "Effulgent Stance (Damage)" },
         #endregion Guardian
         #region Mesmer
         { PowerReturn, "Power Return" },
@@ -426,6 +427,7 @@ public class SkillItem
         { Weakness, BuffImages.Weakness },
         { Immobile, BuffImages.Immobile },
         { Slow, BuffImages.Slow },
+        { Vulnerability, BuffImages.Vulnerability },
         { ShockingAura, BuffImages.ShockingAura },
         { RescueProtocol, SkillImages.RescueProtocol },
         #region ComboIcons
@@ -625,6 +627,11 @@ public class SkillItem
         { FlowLikeWaterHealing, TraitImages.FlowLikeWater },
         { DebrisTornado, SkillImages.DebrisTornado },
         { LesserLavaFont, SkillImages.LavaFont },
+        { IgnitePetSkill, SkillImages.Ignite },
+        { LightningBlitzPetSkill, SkillImages.LightningBlitz },
+        { SplashPetSkill, SkillImages.Splash },
+        { CalcifyPetSkill, SkillImages.Calcify },
+        { ZapPetSkill, SkillImages.Zap },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -660,6 +667,17 @@ public class SkillItem
         { SystemShockerBarrier, TraitImages.SystemShocker },
         { ExigencyProtocol, TraitImages.ExigencyProtocol },
         { GlueBomb, SkillImages.GlueBomb },
+        { OffensiveProtocolDemolish1, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolDemolish2, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolDemolish4, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolObliterate2, SkillImages.OffensiveProtocolObliterate },
+        { DefensiveProtocolThorns2, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolShred3, SkillImages.OffensiveProtocolShred },
+        { OffensiveProtocolPierce2, SkillImages.OffensiveProtocolPierce },
+        { PlasmaticStateSkill2, SkillImages.PlasmaticState },
+        { Thorns, SkillImages.DefensiveProtocolThorns },
+        { RapaciousStrain, SkillImages.DefensiveProtocolThorns },
+        { RapaciousStrain2, SkillImages.DefensiveProtocolThorns },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
@@ -710,6 +728,8 @@ public class SkillItem
             { ReceiveTheLightPulse, SkillImages.ReceiveTheLight },
             { SolarStormIlluminatedHealing, SkillImages.SolarStorm },
             { HammerOfWisdom, SkillImages.HammerOfWisdom },
+            { EffulgentStanceDamage, SkillImages.EffulgentStance },
+            { DaringAdvanceBuff, SkillImages.DaringAdvance },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, TraitImages.HealingPrism },
@@ -922,6 +942,7 @@ public class SkillItem
             { CripplingThrow, SkillImages.CripplingThrow },
             { GlyphOfEmpowermentSkill, SkillImages.GlyphOfTheStars },
             { GlyphOfEmpowermentSkillCA, SkillImages.GlyphOfTheStarsCelestialAvatar },
+            { MistralDamage, SkillImages.Mistral },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, SkillImages.RiftSlash },
@@ -974,6 +995,11 @@ public class SkillItem
             { BlitzMinesDrop, SkillImages.BlitzMines },
             { RedemptorsSermonHeal, TraitImages.RedemptorsSermon },
             { ManiacalPulse, TraitImages.ManiacalPersistence },
+            { BeguilingHaze5, SkillImages.BeguilingHaze },
+            { TwinMoonSweep3, SkillImages.TwinMoonSweep },
+            { FormOfTheDervishSkill1, BuffImages.FormOfTheDervish },
+            { FormOfTheDervishSkill2, BuffImages.FormOfTheDervish },
+        { BeguilingHaze6, SkillImages.BeguilingHaze },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },
@@ -1027,6 +1053,9 @@ public class SkillItem
             { ThousandNeedlesDamage, SkillImages.ThousandNeedles },
             { ThrowLavaRock, SkillImages.ThrowLavaRock },
             { ImpalingLotusDamage, TraitImages.LotusTraining },
+            { MetalLegionGuitar2, SkillImages.MetalLegionGuitar },
+            { InquestPortalDevice1, SkillImages.InquestPortalDevice },
+            { HoloDancerDecoy2, SkillImages.HoloDancerDecoy },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, TraitImages.MendingMight },
@@ -1078,6 +1107,7 @@ public class SkillItem
             { Inspire, SkillImages.Inspire },
             { FuriousRally, SkillImages.BannerOfDiscipline },
             { PlantStandard, SkillImages.PlantStandard },
+            { CounterblowDamage, SkillImages.Counterblow },
         #endregion WarriorIcons
             #region EncounterIcons
             { KickHeavyBomb, SkillImages.Kick },
@@ -1492,8 +1522,7 @@ public class SkillItem
         || ConduitHelper.IsLegendSwap(ID)
         || NecromancerHelper.IsDeathShroudTransform(ID)
         || HarbingerHelper.IsHarbingerShroudTransform(ID)
-        || RitualistHelper.IsRitualistShroudTransform(ID) // TODO: Verify if needed, Reaper doesn't need it
-        || GaleshotHelper.IsCycloneBowTransformation(ID); // TODO: Verify if needed, Druid doesn't need it
+        || RitualistHelper.IsRitualistShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => ID == MirageCloakDodge
         || IsAnimatedDodge(skillData);
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeID;

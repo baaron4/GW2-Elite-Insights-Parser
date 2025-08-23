@@ -832,6 +832,10 @@ public static class SpeciesIDs
         BoneMinion = 1192,
         UnstableHorror = 18802,
         ShamblingHorror = 15314,
+        // Ritualist Summons
+        SpiritOfAnguish = 27041,
+        SpiritOfWanderlust = 27035,
+        SpiritOfPreservation = 27029,
         // Ranger Spirits
         StoneSpirit = 6370,
         SunSpirit = 6330,
@@ -962,6 +966,10 @@ public static class SpeciesIDs
         SpecterSylvari2 = 25231,
         SpecterCharr2 = 25232,
         SpecterNorn2 = 25234,
+        // Antiquary
+        KryptisTurret = SpeciesIDs.KryptisTurret,
+        HoloDancer = SpeciesIDs.HoloDancer,
+        SkrittThievesGuild = 27026, // TODO Find this ID
         // Elementalist Summons
         LesserAirElemental = 8711,
         LesserEarthElemental = 8712,
@@ -971,6 +979,15 @@ public static class SpeciesIDs
         EarthElemental = 6523,
         FireElemental = 6524,
         IceElemental = 6525,
+        // Evoker Pets
+        FireFox = 27033,
+        WaterOtter = 27037,
+        AirHare = 27030,
+        EarthToad = 27042,
+        ElementalProcessionFireFox = 27038,
+        ElementalProcessionWaterOtter = 27039,
+        ElementalProcessionAirHare = 27036,
+        ElementalProcessionEarthToad = 27031,
         // Scrapper Gyros
         SneakGyro = 15012,
         ShredderGyro = 15046,
@@ -1174,6 +1191,8 @@ public static class SpeciesIDs
     private const int DecimasChest = -102;
     private const int UrasChest = -103;
     private const int AdinaPlateform = -104;
+    private const int KryptisTurret = -105;
+    private const int HoloDancer = -106;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

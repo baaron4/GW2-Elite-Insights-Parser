@@ -36,7 +36,7 @@ public static class DamageModifierIDs
     public const int Mod_FarsightedClose = 23;
     public const int Mod_FarsightedFar = 24;
     public const int Mod_HuntersTactics = 25;
-    public const int Mod_SurvivalInstincts = 26;
+    public const int Mod_SurvivalInstincts = 26; // Unused
     public const int Mod_OppressiveSuperiority = 27;
     public const int Mod_RisingTide = 28;
     public const int Mod_UnsuspectingStrikes = 29;
@@ -358,5 +358,33 @@ public static class DamageModifierIDs
     public const int Mod_Brutality = 345;
     public const int Mod_PowerBlock = 346;
     public const int Mod_PhantomPain = 347;
+    public const int Mod_ExhilaratingEphemera = 348;
+    public const int Mod_RitualistsShroud = 349;
+    public const int Mod_ElementalBalanceOutgoing5_Incoming10 = 350;
+    public const int Mod_ElementalBalanceOutgoing10_Incoming5 = 351;
+    public const int Mod_FamiliarsProwessFox = 352;
+    public const int Mod_FamiliarsProwessFocusFox = 353;
+    public const int Mod_FamiliarsProwessHare = 354;
+    public const int Mod_FamiliarsProwessFocusHare = 355;
+    public const int Mod_FamiliarsProwessToad = 356;
+    public const int Mod_FamiliarsProwessFocusToad = 357;
+    public const int Mod_Zap = 358;
+    public const int Mod_SurvivalInstinctsOutgoing5_Incoming10 = 359;
+    public const int Mod_SurvivalInstinctsOutgoing10_Incoming5 = 360;
+    public const int Mod_LutePlaying = 361;
+    public const int Mod_AlteredChord = 362;
+    public const int Mod_Harmonize = 363;
+    public const int Mod_Shredding = 364;
+    public const int Mod_WindForce = 365;
+    public const int Mod_GaleForce = 366;
+    public const int Mod_EmpoweredArmaments = 367;
+    public const int Mod_LuminarysBlessing = 368;
+    public const int Mod_ChantOfAction = 369;
+    public const int Mod_ChantOfRecuperation = 370;
+    public const int Mod_WillingHost = 371;
+    public const int Mod_PlasmaticState = 372;
+    public const int Mod_ShieldingHands = 373;
+    public const int Mod_RadiantArmamentsHammer = 374;
+    public const int Mod_RadiantArmamentsShield = 375;
+    public const int Mod_RadiantArmamentsShieldLingering = 376;
 }
-

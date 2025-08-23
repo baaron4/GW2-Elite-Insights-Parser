@@ -811,6 +811,14 @@ internal static class ProfHelper
             default:
                 break;
         }
+        switch (minion.GetFinalMaster().Spec)
+        {
+            case Spec.Evoker:
+                EvokerHelper.AdjustMinionName(minion);
+                break;
+            default:
+                break;
+        }
     }
 
 

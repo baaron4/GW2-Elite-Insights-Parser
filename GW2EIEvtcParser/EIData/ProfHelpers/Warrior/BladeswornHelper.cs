@@ -75,6 +75,7 @@ internal static class BladeswornHelper
         new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, SkillImages.TacticalReload),
         new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.OverchargedCartridges)
             .WithBuilds(GW2Builds.June2022Balance),
+        new Buff("Supercharged Cartridges", SuperchargedCartridges, Source.Bladesworn, BuffClassification.Other, SkillImages.OverchargedCartridges),
     ];
 
 

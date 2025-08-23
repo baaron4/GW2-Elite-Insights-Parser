@@ -122,6 +122,9 @@ public static class EffectGUIDs
     public static readonly GUID MesmerRifleAbstraction = new("6E2B9CF3E5C95846B15BBD1EAA9B3E98"); // 3300 Default Duration - Src Mesmer - Ground Effect
     public static readonly GUID MesmerRifleAbstraction2 = new("593E668A006AB24D84999AED68F2E4C4"); // 2000 Default Duration - Src Mesmer - Ground Effect
     // public static readonly GUID MesmerTrail = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
+    public static readonly GUID TroubadourTaleOfTheSoulkeeper = new("FF116F5E112DA042B238469590A1FCD8"); // 3833 duration
+    public static readonly GUID TroubadourTaleOfTheValiantMarshal = new("EBC45B862D299143B4D63CB6CAEC26ED"); // 3833 duration
+    public static readonly GUID TroubadourTaleOfTheHonorableRogue = new("DBECB5867D11264FA19FFCDC487A410E"); // 3833 duration
     #endregion
 
     #region Necromancer
@@ -224,6 +227,8 @@ public static class EffectGUIDs
     public static readonly GUID CatalystDeployWaterJadeSphere = new("6D7EB5747873484DAF29C01FA51FE175");
     public static readonly GUID CatalystDeployAirJadeSphere = new("A3C8A55C3E530140A7F99AAA1CBB4E09");
     public static readonly GUID CatalystDeployEarthJadeSphere = new("A674D3E7BC0C4342BC7A4EF0EE8FF8F0");
+    public static readonly GUID EvokerOttersCompassion1 = new("A30DE35C04E1454EB3B0DCC0BCF9BD9A");
+    public static readonly GUID EvokerOttersCompassion2 = new("6507424A0B7C384A9C6DB125E4724854");
     #endregion
 
     #region Warrior
@@ -233,6 +238,8 @@ public static class EffectGUIDs
     public static readonly GUID SpellbreakerWindsOfDisenchantment = new("926917599B6B6E498AD62B812001B823");
     public static readonly GUID BladeswornDragonspikeMine = new("B5BE541DBF290E4AA381E1E52A2A3525");
     public static readonly GUID BerserkerOutrage = new("AC32B7F7BB281B4D94713F180C44F322");
+    public static readonly GUID ParagonNeverSurrenderInitial = new("CB237E7C35B61E47A67663B95CB6E094");
+    public static readonly GUID ParagonNeverSurrenderEcho = new("82EF409FBC174B409BD21ACB509031DB");
     #endregion
 
     #region Revenant
@@ -406,6 +413,8 @@ public static class EffectGUIDs
     public static readonly GUID UntamedVenomousOutburst = new("60BE4692A455B140A05AD794BF4753F6");
     public static readonly GUID UntamedRendingVines = new("2C40B0741111444F98895A658A7F978F");
     public static readonly GUID UntamedEnvelopingHaze = new("F2B1B61970FC59418AC049BF3A07FFD4");
+    public static readonly GUID GaleshotSummonCycloneBow = new("C1F1E386CC1E0B448435269DBBFB34D7"); // Duration 2333 - IsAroundDst
+    public static readonly GUID GaleshotDismissCycloneBow = new("9242D10B4F04274EB6E9EBCDB2262181"); // Duration 0 - IsAroundDst
     #endregion
 
     #region Thief

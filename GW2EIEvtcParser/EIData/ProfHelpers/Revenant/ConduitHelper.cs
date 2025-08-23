@@ -10,16 +10,38 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ConduitHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = [];
+    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    [
+        new BuffGainCastFinder(LegendaryEntityStanceSkill, LegendaryEntityStanceBuff),
+    ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
+    [
+        // Shielding Hands
+        new BuffOnActorDamageModifier(Mod_ShieldingHands, ShieldingHandsBuff, "Shielding Hands", "-75% strike and condition damage", DamageSource.Incoming, -75, DamageType.StrikeAndCondition, DamageType.All, Source.Conduit, ByPresence, SkillImages.ShieldingHands, DamageModifierMode.All),
+    ];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = [];
+    internal static readonly IReadOnlyList<Buff> Buffs =
+    [
+        new Buff("Legendary Entity Stance", LegendaryEntityStanceBuff, Source.Conduit, BuffClassification.Other, SkillImages.LegendaryEntityStance),
+        new Buff("Form of the Assassin (1)", FormOfTheAssassin1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
+        new Buff("Form of the Assassin (2)", FormOfTheAssassin2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheAssassin),
+        new Buff("Form of the Dervish (1)", FormOfTheDervishBuff1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
+        new Buff("Form of the Dervish (2)", FormOfTheDervishBuff2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheDervish),
+        new Buff("Form of the Mesmer (1)", FormOfTheMesmer1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
+        new Buff("Form of the Mesmer (2)", FormOfTheMesmer2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheMesmer),
+        new Buff("Form of the Monk (1)", FormOfTheMonk1, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk),
+        new Buff("Form of the Monk (2)", FormOfTheMonk2, Source.Conduit, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FormOfTheMonk),
+        new Buff("Form of the Warrior (1)", FormOfTheWarrior1, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
+        new Buff("Form of the Warrior (2)", FormOfTheWarrior2, Source.Conduit, BuffClassification.Other, BuffImages.FormOfTheWarrior),
+        new Buff("Shielding Hands", ShieldingHandsBuff, Source.Conduit, BuffClassification.Other, SkillImages.ShieldingHands),
+        new Buff("Lingering Determination", LingeringDetermination, Source.Conduit, BuffClassification.Other, TraitImages.LingeringDetermination),
+    ];
 
     public static bool IsLegendSwap(long id)
     {
-        return CosmicWisdomDervishSkill == id;
+        return LegendaryEntityStanceSkill == id;
     }
 }
