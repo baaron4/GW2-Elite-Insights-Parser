@@ -18,8 +18,8 @@ internal static class ParagonHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Chant of Action
-        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Empowered Armaments", "20% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Empowered Armaments", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "20% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ChantOfAction, ChantOfActionBuff, "Chant of Action", "15% strike and condition damage", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfAction, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
@@ -27,7 +27,6 @@ internal static class ParagonHelper
         // Chant of Recuperation
         new BuffOnActorDamageModifier(Mod_ChantOfRecuperation, ChantOfRecuperationBuff, "Chant of Recuperation", "-20% strike and condition damage", DamageSource.Incoming, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_ChantOfRecuperation, ChantOfRecuperationBuff, "Chant of Recuperation", "-15% strike and condition damage", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Paragon, ByPresence, SkillImages.ChantOfRecuperation, DamageModifierMode.sPvPWvW),
-        // TODO Check if Unyielding Resolve can be added
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 

@@ -19,8 +19,7 @@ internal static class EvokerHelper
         new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill),
         new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
         new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
-            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2)
-            .UsingSrcNotBaseSpecChecker(Spec.Evoker),
+            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

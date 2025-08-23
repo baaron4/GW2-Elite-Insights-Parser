@@ -14,7 +14,7 @@ internal static class TroubadourHelper
     [
         new EffectCastFinder(TaleOfTheSoulkeeper, EffectGUIDs.TroubadourTaleOfTheSoulkeeper),
         new EffectCastFinder(TaleOfTheValiantMarshal, EffectGUIDs.TroubadourTaleOfTheValiantMarshal),
-        new EffectCastFinder(TaleOfTheHonorableRogue, EffectGUIDs.TroubadourTaleOfTheHonorableRogue),
+        new EffectCastFinder(TaleOfTheHonorableRogue, EffectGUIDs.TroubadourTaleOfTheHonorableRogue)
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

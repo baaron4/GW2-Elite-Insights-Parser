@@ -5126,7 +5126,7 @@ public static class SkillIDs
     public const long XinraesWeaponBuff = 76764;
     public const long ExhilaratingEphemera = 76768;
     public const long NeverSurrender = 76769;
-    public const long Motivation = 76770;
+    public const long POV_Motivation = 76770; // PoV buff for Paragon's Motivation
     public const long ChantOfRecuperationSkill = 76782;
     public const long ExplosiveGrowth = 76783;
     public const long CombatHigh = 76785;

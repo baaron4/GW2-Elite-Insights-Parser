@@ -600,6 +600,16 @@ internal static class ParserIcons
     private const string MinionSousChef = "https://i.imgur.com/dcBeQep.png";
     private const string MinionSunspreadParagon = "https://i.imgur.com/QXbFenF.png";
     private const string MinionRavenSpiritShadow = "https://i.imgur.com/dbLzIiY.png";
+    private const string MinionEvokerFox = "https://i.imgur.com/BsdPEue.png";
+    private const string MinionEvokerOtter = "https://i.imgur.com/dK8Qj4x.png";
+    private const string MinionEvokerHare = "https://i.imgur.com/sbwSA6W.png";
+    private const string MinionEvokerToad = "https://i.imgur.com/fyKMR3z.png";
+    private const string MinionSkrittThievesGuild = "https://i.imgur.com/CcCyjhp.png";
+    private const string MinionHoloDancerDecoy = "https://i.imgur.com/epivZyd.png";
+    private const string MinionKriptisTurret = "https://i.imgur.com/CZ4ALkg.png";
+    private const string MinionSpiritOfAnguish = "https://i.imgur.com/DjpbK1o.png";
+    private const string MinionSpiritOfWanderlust = "https://i.imgur.com/UKgogUa.png";
+    private const string MinionSpiritOfPreservation = "https://i.imgur.com/9nyIxmd.png";
     #endregion
 
     #region Marker
@@ -1559,9 +1569,21 @@ internal static class ParserIcons
         { MinionID.PurgeGyro, MinionPurgeGyro },
         { MinionID.ShredderGyro, MinionShredderGyro },
         { MinionID.SneakGyro, MinionSneakGyro },
+        { MinionID.FireFox, MinionEvokerFox },
+        { MinionID.ElementalProcessionFireFox, MinionEvokerFox },
+        { MinionID.WaterOtter, MinionEvokerOtter },
+        { MinionID.ElementalProcessionWaterOtter, MinionEvokerOtter },
+        { MinionID.AirHare, MinionEvokerHare },
+        { MinionID.ElementalProcessionAirHare, MinionEvokerHare },
+        { MinionID.EarthToad, MinionEvokerToad },
+        { MinionID.ElementalProcessionEarthToad, MinionEvokerToad },
+        { MinionID.SkrittThievesGuild, MinionSkrittThievesGuild },
+        { MinionID.HoloDancer, MinionHoloDancerDecoy },
+        { MinionID.KryptisTurret, MinionKriptisTurret },
+        { MinionID.SpiritOfAnguish, MinionSpiritOfAnguish },
+        { MinionID.SpiritOfPreservation, MinionSpiritOfPreservation },
+        { MinionID.SpiritOfWanderlust, MinionSpiritOfWanderlust },
     };
-
-
 
     /// <summary>
     /// Translates a Squad Marker GUID to the corresponding icon.
