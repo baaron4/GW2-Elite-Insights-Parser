@@ -29,7 +29,15 @@ internal static class LuminaryHelper
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "15% strike damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.sPvPWvW),
         // Radiant Armaments
-        // TODO Add Radiant Armaments
+        new BuffOnFoeDamageModifier(Mod_RadiantArmamentsHammer, [Stun, Daze, Knockdown, Fear, Taunt, Immobile], "Radiant Armaments (Hammer)", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsHammer, DamageModifierMode.All)
+        .UsingChecker((hde, log) => 
+        {
+            if (hde.From.HasAnyBuff(log, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], hde.Time))
+            {
+                return true;
+            }
+            return false;
+        }),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = 
@@ -37,20 +45,22 @@ internal static class LuminaryHelper
         // Luminary's Blessing
         new BuffOnActorDamageModifier(Mod_LuminarysBlessing, LuminarysBlessing, "Luminary's Blessing", "-10%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.LightsGift, DamageModifierMode.All),
         // Radiant Armaments
-        // TODO Add Radiant Armaments
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsShield, RadiantArmamentsShield, "Radiant Armaments (Shield)", "-15% strike damage", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsShield, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsShield, RadiantArmamentsShield, "Radiant Armaments (Shield)", "-10% strike damage", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsShield, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_RadiantArmamentsShieldLingering, RadiantArmamentsHammerLingering, "Radiant Armaments (Shield Lingering)", "-10% strike damage", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsShield, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
     [
-        // TODO Figure out what is what https://wiki.guildwars2.com/wiki/Radiant_Armaments
-        new Buff("Radiant Armaments (1)", RadiantArmamentsBuff1, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (2)", RadiantArmamentsBuff2, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (3)", RadiantArmamentsBuff3, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (4)", RadiantArmamentsBuff4, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (5)", RadiantArmamentsBuff5, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (6)", RadiantArmamentsBuff6, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (7)", RadiantArmamentsBuff7, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Radiant Armaments (8)", RadiantArmamentsBuff8, Source.Luminary, BuffClassification.Other, BuffImages.Unknown),
+        // Radiant Armaments
+        new Buff("Radiant Armaments (Hammer)", RadiantArmamentsHammer, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
+        new Buff("Radiant Armaments (Hammer Lingering)", RadiantArmamentsHammerLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
+        new Buff("Radiant Armaments (Staff)", RadiantArmamentsStaff, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsStaff),
+        new Buff("Radiant Armaments (Staff Lingering)", RadiantArmamentsStaffLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsStaff),
+        new Buff("Radiant Armaments (Sword)", RadiantArmamentsSword, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsSword),
+        new Buff("Radiant Armaments (Sword Lingering)", RadiantArmamentsSwordLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsSword),
+        new Buff("Radiant Armaments (Shield)", RadiantArmamentsShield, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsShield),
+        new Buff("Radiant Armaments (Shield Lingering)", RadiantArmamentsShieldLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsShield),
         // Stances
         new Buff("Resolute Stance", ResoluteStanceBuff, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ResoluteStance),
         new Buff("Stalwart Stance", StalwartStanceBuff, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.StalwartStance),
@@ -62,5 +72,7 @@ internal static class LuminaryHelper
         // Traits
         new Buff("Luminary's Blessing", LuminarysBlessing, Source.Luminary, BuffClassification.Other, TraitImages.LightsGift),
         new Buff("Empowered Armaments", EmpoweredArmaments, Source.Luminary, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.EmpoweredArmaments),
+        // Others
+        new Buff("Counterattack (Luminary Shield)", CounterattackLuminary, Source.Luminary, BuffClassification.Other, SkillImages.Counterblow),
     ];
 }

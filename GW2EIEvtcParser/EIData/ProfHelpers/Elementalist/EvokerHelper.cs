@@ -14,10 +14,13 @@ internal static class EvokerHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
-        new MinionCastCastFinder(IgniteSkill, IgniteDamage),
-        new MinionCastCastFinder(SplashSkill, 999999), // TODO Find skill id casted by the pet
-        new MinionCastCastFinder(ZapSkill, ZapDamage),
-        new MinionCastCastFinder(CalcifySkill, 999999), // TODO Find skill id casted by the pet
+        new MinionCastCastFinder(IgnitePlayerSkill, IgnitePetSkill),
+        new MinionCastCastFinder(SplashPlayerSkill, SplashPetSkill),
+        new MinionCastCastFinder(ZapPlayerSkill, ZapPetSkill),
+        new MinionCastCastFinder(CalcifyPlayerSkill, CalcifyPetSkill),
+        new EffectCastFinder(OttersCompassion, EffectGUIDs.EvokerOttersCompassion1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2)
+            .UsingSrcNotBaseSpecChecker(Spec.Evoker),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
@@ -74,10 +77,11 @@ internal static class EvokerHelper
         new DamageLogDamageModifier(Mod_ElementalBalanceOutgoing5_Incoming10, "Elemental balance (Incoming)", "-10% if hp <= 50%", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, TraitImages.ElementalBalance, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) <= 50.0, DamageModifierMode.All)
             .UsingApproximate(),
         // Familiar's Prowess (Toad)
-        // TODO Verify strike and condi if accurate
-        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-15% strike after familiar skill", DamageSource.Incoming, -15.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessToad, FamiliarsProwessToad, "Familiar's Prowess (Toad)", "-10% strike after familiar skill", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
         // Familiar's Prowess + Familiar's Focus (Toad)
-        // TODO Add this
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-15% strike and condi after familiar skill", DamageSource.Incoming, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_FamiliarsProwessFocusToad, FamiliarsProwessToad, "Familiar's Prowess + Focus (Toad)", "-10% strike and condi after familiar skill", DamageSource.Incoming, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Evoker, ByPresence, TraitImages.FamiliarsProwess, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
@@ -86,7 +90,7 @@ internal static class EvokerHelper
         new Buff("Familiar's Prowess (Otter)", FamiliarsProwessOtter, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
         new Buff("Familiar's Prowess (Hare)", FamiliarsProwessHare, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
         new Buff("Familiar's Prowess (Toad)", FamiliarsProwessToad, Source.Evoker, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.FamiliarsProwess),
-        new Buff("Familiar's Focus", FamiliarsFocus, Source.Evoker, BuffClassification.Other, TraitImages.FamiliarsFocus), // TODO Verify if there are more buffs on other elements - might be the healing component of the trait
+        new Buff("Familiar's Focus", FamiliarsFocus, Source.Evoker, BuffClassification.Other, TraitImages.FamiliarsFocus),
         new Buff("Evoker's Stone Spirit Aura (1)", EvokerStoneSpiritAura1, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (2)", EvokerStoneSpiritAura2, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (3)", EvokerStoneSpiritAura3, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
@@ -95,6 +99,7 @@ internal static class EvokerHelper
         new Buff("Hare's Agility", HaresAgilityBuff, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
         new Buff("Zap (To Target)", ZapBuffPlayerToTarget, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Zap (To Player)", ZapBuffTargetToPlayer, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
+        new Buff("Toad Block", ToadBlock, Source.Evoker, BuffClassification.Other, SkillImages.ToadsFortitude),
     ];
 
     private static readonly HashSet<int> Minions = 

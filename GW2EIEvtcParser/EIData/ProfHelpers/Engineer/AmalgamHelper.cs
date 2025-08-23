@@ -10,7 +10,10 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class AmalgamHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = [];
+    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    [
+        new BuffGainCastFinder(GaseousStateSkill, GaseousStateBuff),
+    ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [

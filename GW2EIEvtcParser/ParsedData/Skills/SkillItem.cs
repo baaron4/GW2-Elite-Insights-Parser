@@ -627,8 +627,11 @@ public class SkillItem
         { FlowLikeWaterHealing, TraitImages.FlowLikeWater },
         { DebrisTornado, SkillImages.DebrisTornado },
         { LesserLavaFont, SkillImages.LavaFont },
-        { IgniteDamage, SkillImages.Ignite },
-        { LightningBlitzDamage, SkillImages.LightningBlitz },
+        { IgnitePetSkill, SkillImages.Ignite },
+        { LightningBlitzPetSkill, SkillImages.LightningBlitz },
+        { SplashPetSkill, SkillImages.Splash },
+        { CalcifyPetSkill, SkillImages.Calcify },
+        { ZapPetSkill, SkillImages.Zap },
 #endregion  ElementalistIcons
         #region EngineerIcons
         { ShredderGyroHit, SkillImages.ShredderGyro },
@@ -667,11 +670,14 @@ public class SkillItem
         { OffensiveProtocolDemolish1, SkillImages.OffensiveProtocolDemolish },
         { OffensiveProtocolDemolish2, SkillImages.OffensiveProtocolDemolish },
         { OffensiveProtocolDemolish4, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolObliterate2, SkillImages.OffensiveProtocolObliterate },
         { DefensiveProtocolThorns2, SkillImages.OffensiveProtocolDemolish },
         { OffensiveProtocolShred3, SkillImages.OffensiveProtocolShred },
+        { OffensiveProtocolPierce2, SkillImages.OffensiveProtocolPierce },
         { PlasmaticStateSkill2, SkillImages.PlasmaticState },
         { Thorns, SkillImages.DefensiveProtocolThorns },
         { RapaciousStrain, SkillImages.DefensiveProtocolThorns },
+        { RapaciousStrain2, SkillImages.DefensiveProtocolThorns },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, SkillImages.ProtectorsStrike },
@@ -993,6 +999,7 @@ public class SkillItem
             { TwinMoonSweep3, SkillImages.TwinMoonSweep },
             { FormOfTheDervishSkill1, BuffImages.FormOfTheDervish },
             { FormOfTheDervishSkill2, BuffImages.FormOfTheDervish },
+        { BeguilingHaze6, SkillImages.BeguilingHaze },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, SkillImages.ThrowMagneticBomb },

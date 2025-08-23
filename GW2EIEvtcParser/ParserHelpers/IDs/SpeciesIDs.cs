@@ -981,9 +981,9 @@ public static class SpeciesIDs
         IceElemental = 6525,
         // Evoker Pets
         FireFox = 27033,
-        WaterOtter = 999999, // TODO Find this ID
+        WaterOtter = 27037,
         AirHare = 27030,
-        EarthToad = 999998, // TODO Find this ID
+        EarthToad = 27042,
         ElementalProcessionFireFox = 27038,
         ElementalProcessionWaterOtter = 27039,
         ElementalProcessionAirHare = 27036,

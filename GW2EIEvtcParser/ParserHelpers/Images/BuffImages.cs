@@ -455,6 +455,10 @@ public static class BuffImages
     #region Guardian
     // Spear
     public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
+    public const string RadiantArmamentsHammer = "https://render.guildwars2.com/file/4ECA0C916F5D54C3C12AC135AB5A1E2D4BC792E5/3680142.png";
+    public const string RadiantArmamentsStaff = "https://render.guildwars2.com/file/06BD9362B2F9FAE403181D0F9BE96A12664C22CA/3680148.png";
+    public const string RadiantArmamentsSword = "https://render.guildwars2.com/file/79B0DCC5E4A0A8BBE04AC0024D01A0F36D0B0C79/3680151.png";
+    public const string RadiantArmamentsShield = "https://render.guildwars2.com/file/06735858B4DE086359A7DB1D4B2B650F97D7DD03/3680144.png";
     #endregion
     #region Mesmer
     // Mimic

@@ -12,7 +12,7 @@ internal static class ParagonHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
-        // TODO Add Never Surrender
+        new EffectCastFinder(NeverSurrender, EffectGUIDs.ParagonNeverSurrenderInitial),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

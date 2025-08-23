@@ -134,9 +134,17 @@ internal static class SkillImages
     public const string DebrisTornado = "https://render.guildwars2.com/file/F20A7D6B7FB71D520B4643CF120AF6A50DF7A2B0/102914.png";
     public const string LavaFont = "https://render.guildwars2.com/file/CFA80DB42022C240001D249CED6235CEF70C9042/103135.png";
     // Evoker
+    // - Fox
     public const string Ignite = "https://render.guildwars2.com/file/3C20D2FF75DA624828651AD5CEB463AC90A01207/3680117.png";
-    public const string LightningBlitz = "https://render.guildwars2.com/file/CF99A0354E3667FDE3702CAEA4C3B6AFB2D6ACFD/3680113.png";
+    // - Otter
+    public const string Splash = "https://render.guildwars2.com/file/2C4C57C5B721422A66D3CEAB4ACE753E4FE69355/3680119.png";
+    // - Hare
     public const string Zap = "https://wiki.guildwars2.com/images/a/a0/Zap_%28skill%29.png";
+    public const string LightningBlitz = "https://render.guildwars2.com/file/CF99A0354E3667FDE3702CAEA4C3B6AFB2D6ACFD/3680113.png";
+    // - Toad
+    public const string Calcify = "https://render.guildwars2.com/file/C938A2442A5508F415AB72F70AA9A85AFA57FCDD/3680114.png";
+    public const string ToadsFortitude = "https://render.guildwars2.com/file/A3DE41C7F223D46269FCC406AEFCDF01ABCF4BE1/3680124.png";
+    // - Skills
     public const string HaresAgility = "https://render.guildwars2.com/file/CD54CEBF6BD8D37902E2EF0565BE0A9FF3CB9414/3680122.png";
     #endregion Elementalist
     #region Engineer
@@ -199,6 +207,7 @@ internal static class SkillImages
     public const string OffensiveProtocolObliterate = "https://render.guildwars2.com/file/569A167830C12BFC730095C72F1D095A7323DC3D/3680130.png";
     public const string OffensiveProtocolDemolish = "https://render.guildwars2.com/file/337E150FB638D080A5A845A73D06B3E3ED7494C7/3680128.png";
     public const string OffensiveProtocolShred = "https://render.guildwars2.com/file/09A6184ADE9313765B0620780A27B23F4DF31D1A/3680134.png";
+    public const string OffensiveProtocolPierce = "https://render.guildwars2.com/file/6C253CBFD36ABEB219013B62C4C73193C947ED60/3680131.png";
     public const string MitoticState = "https://render.guildwars2.com/file/69ACD1030C55270FE69099A95FEDA716EFE64F5C/3680126.png";
     public const string SolidState = "https://render.guildwars2.com/file/FD0857ECCA025A02E2E7BB00DB0E65FFBA551661/3680139.png";
     public const string GaseousState = "https://render.guildwars2.com/file/D2AF4AF313802004B8A333D9D6E6983CED7C7F64/3680136.png";

@@ -10,10 +10,11 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class TroubadourHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = 
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
     [
         new EffectCastFinder(TaleOfTheSoulkeeper, EffectGUIDs.TroubadourTaleOfTheSoulkeeper),
         new EffectCastFinder(TaleOfTheValiantMarshal, EffectGUIDs.TroubadourTaleOfTheValiantMarshal),
+        new EffectCastFinder(TaleOfTheHonorableRogue, EffectGUIDs.TroubadourTaleOfTheHonorableRogue),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

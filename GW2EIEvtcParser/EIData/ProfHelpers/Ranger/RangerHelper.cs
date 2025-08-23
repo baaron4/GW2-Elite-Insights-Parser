@@ -448,7 +448,7 @@ internal static class RangerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, SkillImages.Counterattack),
+        new Buff("Counterattack (Ranger Sword)", CounterattackRangerSwordBuff, Source.Ranger, BuffClassification.Other, SkillImages.Counterattack),
         // Signets
         new Buff("Signet of Renewal", SignetOfRenewalBuff, Source.Ranger, BuffClassification.Other, SkillImages.SignetOfRenewal),
         new Buff("Signet of Stone", SignetOfStoneBuff, Source.Ranger, BuffClassification.Other, SkillImages.SignetOfStone),

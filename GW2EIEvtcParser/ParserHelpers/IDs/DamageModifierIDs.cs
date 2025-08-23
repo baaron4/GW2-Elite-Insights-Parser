@@ -384,4 +384,7 @@ public static class DamageModifierIDs
     public const int Mod_WillingHost = 371;
     public const int Mod_PlasmaticState = 372;
     public const int Mod_ShieldingHands = 373;
+    public const int Mod_RadiantArmamentsHammer = 374;
+    public const int Mod_RadiantArmamentsShield = 375;
+    public const int Mod_RadiantArmamentsShieldLingering = 376;
 }

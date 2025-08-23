@@ -124,6 +124,7 @@ public static class EffectGUIDs
     // public static readonly GUID MesmerTrail = new("73414BA39AFCF540A90CF91DE961CCEF"); // used with e.g. mirror images, phase retreat, illusionary ambush - likely the trail left behind
     public static readonly GUID TroubadourTaleOfTheSoulkeeper = new("FF116F5E112DA042B238469590A1FCD8"); // 3833 duration
     public static readonly GUID TroubadourTaleOfTheValiantMarshal = new("EBC45B862D299143B4D63CB6CAEC26ED"); // 3833 duration
+    public static readonly GUID TroubadourTaleOfTheHonorableRogue = new("DBECB5867D11264FA19FFCDC487A410E"); // 3833 duration
     #endregion
 
     #region Necromancer
@@ -226,6 +227,8 @@ public static class EffectGUIDs
     public static readonly GUID CatalystDeployWaterJadeSphere = new("6D7EB5747873484DAF29C01FA51FE175");
     public static readonly GUID CatalystDeployAirJadeSphere = new("A3C8A55C3E530140A7F99AAA1CBB4E09");
     public static readonly GUID CatalystDeployEarthJadeSphere = new("A674D3E7BC0C4342BC7A4EF0EE8FF8F0");
+    public static readonly GUID EvokerOttersCompassion1 = new("A30DE35C04E1454EB3B0DCC0BCF9BD9A");
+    public static readonly GUID EvokerOttersCompassion2 = new("6507424A0B7C384A9C6DB125E4724854");
     #endregion
 
     #region Warrior
@@ -235,6 +238,8 @@ public static class EffectGUIDs
     public static readonly GUID SpellbreakerWindsOfDisenchantment = new("926917599B6B6E498AD62B812001B823");
     public static readonly GUID BladeswornDragonspikeMine = new("B5BE541DBF290E4AA381E1E52A2A3525");
     public static readonly GUID BerserkerOutrage = new("AC32B7F7BB281B4D94713F180C44F322");
+    public static readonly GUID ParagonNeverSurrenderInitial = new("CB237E7C35B61E47A67663B95CB6E094");
+    public static readonly GUID ParagonNeverSurrenderEcho = new("82EF409FBC174B409BD21ACB509031DB");
     #endregion
 
     #region Revenant
