@@ -18,8 +18,7 @@ internal static class GaleshotHelper
         new EffectCastFinderByDst(DismissCycloneBow, EffectGUIDs.GaleshotDismissCycloneBow)
             .UsingDstSpecChecker(Spec.Galeshot)
             .UsingBeforeWeaponSwap(),
-        // TODO Add Wind Shear if it's instant cast, verify https://wiki.guildwars2.com/wiki/Wind_Shear
-        // TODO Add Wuthering Wind proc? https://wiki.guildwars2.com/wiki/Wuthering_Wind
+        new DamageCastFinder(WutheringWindSkill, WutheringWindSkill),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
@@ -37,8 +36,8 @@ internal static class GaleshotHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Wind Force", WindForce, Source.Galeshot, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.WindForce),
-        new Buff("Gale Force", GaleForce, Source.Galeshot, BuffClassification.Other, TraitImages.GaleForce), // TODO Verify stacking type
-        new Buff("Wuthering Wind", WutheringWindBuff, Source.Galeshot, BuffClassification.Other, TraitImages.WutheringWind),
+        new Buff("Gale Force", GaleForce, Source.Galeshot, BuffClassification.Other, TraitImages.GaleForce),
+        new Buff("Wuthering Wind", WutheringWindBuff, Source.Galeshot, BuffClassification.Other, TraitImages.WutheringWind), // TODO PoV?
     ];
 
     private static readonly HashSet<long> _cycloneBows =
