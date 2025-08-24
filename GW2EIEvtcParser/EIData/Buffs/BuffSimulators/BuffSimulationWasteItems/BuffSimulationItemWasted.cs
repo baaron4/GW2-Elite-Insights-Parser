@@ -8,7 +8,7 @@ internal class BuffSimulationItemWasted : SimulationItemWasted
     public BuffSimulationItemWasted(AgentItem src, long waste, long time) : base(src, waste, time)
     {
     }
-    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long value = GetValue(start, end);
         if (value > 0)
@@ -23,8 +23,6 @@ internal class BuffSimulationItemWasted : SimulationItemWasted
                     AddWaste(distrib, subValue, subSrc);
                 }
             }
-
         }
-        return value;
     }
 }

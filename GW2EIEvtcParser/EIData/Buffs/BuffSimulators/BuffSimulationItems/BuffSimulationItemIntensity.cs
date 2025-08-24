@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
@@ -40,16 +41,16 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
         return GetActualDurationPerStack().Max();
     }*/
 
-    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur > 0)
         {
+            var distrib = distribs.GetDistrib(buffID);
             foreach (BuffSimulationItemBase item in Stacks)
             {
-                item.SetBuffDistributionItem(distribs, start, end, boonid);
+                item.SetBaseBuffDistributionItem(distrib, start, end);
             }
         }
-        return cDur;
     }
 }

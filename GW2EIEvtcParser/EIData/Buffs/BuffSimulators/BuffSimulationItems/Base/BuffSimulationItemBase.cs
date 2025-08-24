@@ -61,23 +61,18 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return GetSources();
     }
 
-    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    {
+        throw new InvalidOperationException("Base items can't use that SetBuffDistributionItem");
+    }
+
+    internal virtual long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur > 0)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
             AddValue(distribution, cDur, Src);
-            foreach (var subSrc in Src.EnglobedAgentItems)
-            {
-                long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                if (subcDur > 0)
-                {
-                    AddValue(distribution, subcDur, subSrc);
-                }
-            }
         }
-
         return cDur;
     }
 }
