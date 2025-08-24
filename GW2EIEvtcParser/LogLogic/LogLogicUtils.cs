@@ -170,39 +170,33 @@ internal static class LogLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static AgentItem? FindChestGadget(ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
+    private static void FindChestGadget(ChestID chestID, AgentData agentData, Dictionary<AgentItem, List<CombatItem>> positionDict, Dictionary<AgentItem, List<CombatItem>> nonZeroGadgetVelocities, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
     {
         if (chestID == ChestID.None)
         {
-            return null;
+            return;
         }
+        var gadgetMatchingPositions = positionDict.Where(entry => {
 
-        var gadgetMatchingPositions = combatData.Where(evt => {
-            if (evt.IsStateChange != StateChange.Position)
+            if (entry.Key.Type != AgentItem.AgentType.Gadget || nonZeroGadgetVelocities.ContainsKey(entry.Key))
             {
                 return false;
             }
-
-            AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-            if (agent.Type != AgentItem.AgentType.Gadget)
-            {
-                return false;
-            }
-
-            var position = MovementEvent.GetPoint3D(evt);
-            if ((position - chestPosition).XY().Length() < InchDistanceThreshold)
-            {
-                return true;
-            }
-
-            return false;
+            return entry.Value.Any(x => (MovementEvent.GetPoint3D(x) - chestPosition).XY().Length() < InchDistanceThreshold);
         });
         if (!gadgetMatchingPositions.Any())
         {
-            return null;
+            return;
         }
+        var chest = gadgetMatchingPositions.FirstOrNull((in KeyValuePair<AgentItem, List<CombatItem>> x) => chestChecker == null || chestChecker(x.Key));
+        chest?.Key.OverrideID(chestID, agentData);
+    }
 
-        var nonZeroGadgetVelocities = combatData.Where(evt => {
+    internal static void FindChestGadgets(List<(ChestID, Vector3, ChestAgentChecker? chestChecker)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    {
+        var movementData = combatData.Where(x => x.IsGeographical);
+
+        var nonZeroGadgetVelocities = movementData.Where(evt => {
             if (evt.IsStateChange == StateChange.Velocity)
             {
                 if (MovementEvent.GetPoint3D(evt).Length() < 1e-6)
@@ -214,32 +208,21 @@ internal static class LogLogicUtils
                 {
                     return false;
                 }
-                return gadgetMatchingPositions.Any(x => x.SrcMatchesAgent(agent));
+                return true;
             }
             return false;
         })
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .ToDictionary(x => x.Key, x => x.ToList());
 
-        var candidates = gadgetMatchingPositions
-            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x =>
-            {
-                if (nonZeroGadgetVelocities.TryGetValue(x, out var velocitiesPerAgent))
-                {
-                    return false;
-                }
-                return true;
-            })
-            .Distinct()
-            .ToList();
-        var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
-        if (chest != null)
+        var positionDict = movementData
+            .Where(x => x.IsStateChange == StateChange.Position)
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .ToDictionary(x => x.Key, x => x.ToList());
+        foreach (var chestID in chestIDs)
         {
-            chest.OverrideID(chestID, agentData);
-            return chest;
+            FindChestGadget(chestID.Item1, agentData, positionDict, nonZeroGadgetVelocities, chestID.Item2, chestID.Item3);
         }
-        return null;
     }
 
     internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)

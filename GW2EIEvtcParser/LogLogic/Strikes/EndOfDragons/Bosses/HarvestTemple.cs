@@ -568,7 +568,9 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
+        FindChestGadgets([
+            (ChestID, GrandStrikeChestHarvestTemplePosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2)),
+        ], agentData, combatData);
         var maxHPEvents = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
