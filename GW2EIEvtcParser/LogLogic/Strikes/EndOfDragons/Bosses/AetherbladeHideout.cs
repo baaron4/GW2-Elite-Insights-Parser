@@ -544,7 +544,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
-                BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+                BuffApplyEvent? buffApply = combatData.GetBuffApplyDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
                     logData.SetSuccess(true, buffApply.Time);

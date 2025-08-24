@@ -227,7 +227,7 @@ internal class Artsariiv : ShatteredObservatory
                                 [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
                             ];
                             uint[] radius = [400, 290, 180, 70];
-                            long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.LogData.LogEnd;
+                            long nextInvul = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.LogData.LogEnd;
                             for (int i = 0; i < 4; i++)
                             {
                                 long start = lifespan.end + 560 * i;

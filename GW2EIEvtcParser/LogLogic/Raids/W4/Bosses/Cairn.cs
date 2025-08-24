@@ -85,7 +85,7 @@ internal class Cairn : BastionOfThePenitent
         {
             return phases;
         }
-        BuffApplyEvent? enrageApply = log.CombatData.GetBuffDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
+        BuffApplyEvent? enrageApply = log.CombatData.GetBuffApplyDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
         if (enrageApply != null)
         {
             var normalPhase = new SubPhasePhaseData(log.LogData.LogStart, enrageApply.Time)

@@ -426,7 +426,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         }
                         else
                         {
-                            var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
+                            var determinedApplies = combatData.GetBuffApplyData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
                             IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
                             foreach (AnimatedCastEvent liffOff in liftOffs)
                             {

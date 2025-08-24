@@ -36,7 +36,7 @@ internal class Kanaxai : SilentSurf
                             // 5s extreme vulnerability from dread visage
                             const int duration = 5000;
                             // find last apply
-                            BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
+                            BuffApplyEvent apply = log.CombatData.GetBuffApplyDataByIDByDst(ExtremeVulnerability, remove.To)
                                 .OfType<BuffApplyEvent>()
                                 .Where(e => e.Time <= remove.Time)
                                 .MaxBy(e => e.Time);
@@ -56,7 +56,7 @@ internal class Kanaxai : SilentSurf
                             // 60s extreme vulnerability from frightening speed
                             const int duration = 60000;
                             // find last apply
-                            BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
+                            BuffApplyEvent apply = log.CombatData.GetBuffApplyDataByIDByDst(ExtremeVulnerability, remove.To)
                                 .OfType<BuffApplyEvent>()
                                 .Where(e => e.Time <= remove.Time)
                                 .MaxBy(e => e.Time);
@@ -139,7 +139,7 @@ internal class Kanaxai : SilentSurf
         // Phases
         List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
 
-        var worldCleaverPhaseStarts = log.CombatData.GetBuffDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
+        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
             >().Select(x => x.Time);
         int worldCleaverCount = 0;
         int repeatedCount = 0;
@@ -247,7 +247,7 @@ internal class Kanaxai : SilentSurf
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
-        BuffApplyEvent? invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
+        BuffApplyEvent? invul762Gain = combatData.GetBuffApplyDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
         if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
         {
             logData.SetSuccess(true, invul762Gain.Time);

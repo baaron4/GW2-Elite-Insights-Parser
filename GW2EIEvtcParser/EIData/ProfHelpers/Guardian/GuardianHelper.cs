@@ -49,16 +49,16 @@ internal static class GuardianHelper
             .UsingDstBaseSpecChecker(Spec.Guardian)
             .UsingChecker((evt, combatData, agentData, skillData) =>
             {
-                return CombatData.FindRelatedEvents(combatData.GetBuffData(Aegis).OfType<BuffApplyEvent>(), evt.Time)
-                    .Any(apply => apply.By.Is(evt.Dst) && apply.To.Is(evt.Dst) && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
+                return CombatData.FindRelatedEvents(combatData.GetBuffApplyDataByIDBySrc(Aegis, evt.Dst), evt.Time)
+                    .Any(apply => apply.To.Is(evt.Dst) && apply.AppliedDuration + ServerDelayConstant >= 20000 && apply.AppliedDuration - ServerDelayConstant <= 40000);
             }) // identify advance by self-applied 20s to 40s aegis
             .UsingNotAccurate(),
         new EffectCastFinderByDst(StandYourGround, EffectGUIDs.GuardianShout)
             .UsingDstBaseSpecChecker(Spec.Guardian)
             .UsingChecker((evt, combatData, agentData, skillData) =>
             {
-                return 5 <= CombatData.FindRelatedEvents(combatData.GetBuffData(Stability).OfType<BuffApplyEvent>(), evt.Time)
-                    .Count(apply => apply.By.Is(evt.Dst) && apply.To.Is(evt.Dst));
+                return 5 <= CombatData.FindRelatedEvents(combatData.GetBuffApplyDataByIDBySrc(Stability, evt.Dst), evt.Time)
+                    .Count(apply => apply.To.Is(evt.Dst));
             }) // identify stand your ground by self-applied 5+ stacks of stability
             .UsingNotAccurate(),
         // hold the line boons may overlap with save yourselves/pure of voice
@@ -146,7 +146,10 @@ internal static class GuardianHelper
         new Buff("Renewed Focus", RenewedFocus, Source.Guardian, BuffClassification.Other, SkillImages.RenewedFocus),
         new Buff("Shield of Wrath", ShieldOfWrathBuff, Source.Guardian, BuffStackType.Stacking, 3, BuffClassification.Other, SkillImages.ShieldOfWrath),
         new Buff("Binding Blade (Self)", BindingBladeSelf, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.BindingBlade),
-        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, SkillImages.BindingBlade),
+        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffClassification.Other, SkillImages.BindingBlade)
+            .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2025Balance),
+        new Buff("Binding Blade", BindingBlade, Source.Guardian, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.BindingBlade)
+            .WithBuilds(GW2Builds.June2025Balance),
         new Buff("Banished", Banished, Source.Guardian, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.Banish),
         new Buff("Merciful Intervention (Self)", MercifulAndJudgesInterventionSelfBuff, Source.Guardian, BuffClassification.Support, SkillImages.MercifulIntervention),
         new Buff("Merciful Intervention (Target)", MercifulInterventionTargetBuff, Source.Guardian, BuffClassification.Support, SkillImages.MercifulIntervention),

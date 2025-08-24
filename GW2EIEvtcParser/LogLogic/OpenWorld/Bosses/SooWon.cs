@@ -112,7 +112,7 @@ internal class SooWon : OpenWorldLogic
     private static int GetPhaseOffset(ParsedEvtcLog log, SingleActor mainTarget)
     {
         double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
-        Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs = log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault!;
+        Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs = log.CombatData.GetBuffApplyDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault!;
         BuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
         BuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 

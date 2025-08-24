@@ -240,7 +240,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 phase.Name = "Split " + (i) / 2;
                 var killed = embodimentsKilled.Where(target =>
                 {
-                    var invulnApplies = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, target.AgentItem).OfType<BuffApplyEvent>();
+                    var invulnApplies = log.CombatData.GetBuffApplyDataByIDByDst(Invulnerability757, target.AgentItem).OfType<BuffApplyEvent>();
                     return invulnApplies.Any(apply => phase.InInterval(apply.Time)); // phase interval is unfitted = based on cerus invuln
                 });
                 var priority = killed.Any() ? PhaseData.TargetPriority.NonBlocking : PhaseData.TargetPriority.Main; // default to all as main if none killed

@@ -892,7 +892,7 @@ internal static class ProfHelper
     internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AgentItem actor, CombatData combatData, SkillData skillData, long skillID, long startOffset, long skillDuration, long buffID)
     {
         SkillItem skill = skillData.Get(skillID);
-        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffID, actor).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
+        return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffApplyDataByIDByDst(buffID, actor).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
     }
 
     internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillID, long buffID)

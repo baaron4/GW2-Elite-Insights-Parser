@@ -284,7 +284,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         if (_hasElementalMode)
         {
-            BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+            BuffApplyEvent? invul895Gain = log.CombatData.GetBuffApplyDataByIDByDst(Determined895, elementalAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
             long eleStart = Math.Max(elementalAi.FirstAware, log.LogData.LogStart);
             long eleEnd = invul895Gain != null ? invul895Gain.Time : log.LogData.LogEnd;
             var elePhase = phases[0];
@@ -398,7 +398,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             case 1:
             case 2:
                 var ai = Targets[0];
-                BuffApplyEvent? invul895Gain = combatData.GetBuffDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+                BuffApplyEvent? invul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (invul895Gain != null)
                 {
                     logData.SetSuccess(true, invul895Gain.Time);
@@ -410,7 +410,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 break;
             case 3:
                 var darkAi = Targets.First(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2));
-                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffApplyDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (darkInvul895Gain != null)
                 {
                     logData.SetSuccess(true, darkInvul895Gain.Time);
