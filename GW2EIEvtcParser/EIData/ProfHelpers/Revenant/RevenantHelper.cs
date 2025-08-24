@@ -233,7 +233,7 @@ internal static class RevenantHelper
         new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.SteadfastRejuvenation),
         new Buff("Resolute Evasion", ResoluteEvasion, Source.Revenant, BuffClassification.Other, TraitImages.ResoluteEvasion),
         // Scepter
-        new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, SkillImages.BlossomingAura),
+        new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.BlossomingAura),
         // Spear
         new Buff("Crushing Abyss", CrushingAbyss, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, SkillImages.CrushingAbyss),
     ];
