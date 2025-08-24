@@ -58,13 +58,13 @@ internal static class ParserIcons
     private const string HighResDaredevil = "https://i.imgur.com/8DzmCRv.png";
     private const string HighResThief = "https://i.imgur.com/ElrzmpL.png";
     // Elementalist
-    private const string HighResEvoker = "https://i.imgur.com/peuQUB6.png";
+    private const string HighResEvoker = "https://i.imgur.com/P1a4oqd.png";
     private const string HighResCatalyst = "https://i.imgur.com/uFK7Jun.png";
     private const string HighResWeaver = "https://i.imgur.com/Jf9nxTO.png";
     private const string HighResTempest = "https://i.imgur.com/9nq8itX.png";
     private const string HighResElementalist = "https://i.imgur.com/53NMPGH.png";
     // Mesmer
-    private const string HighResTroubadour = "https://i.imgur.com/33hG5Lr.png";
+    private const string HighResTroubadour = "https://i.imgur.com/vkpnTJD.png";
     private const string HighResVirtuoso = "https://i.imgur.com/0sJrcUI.png";
     private const string HighResMirage = "https://i.imgur.com/Nio5XPX.png";
     private const string HighResChronomancer = "https://i.imgur.com/mNOkkOE.png";
@@ -76,13 +76,13 @@ internal static class ParserIcons
     private const string HighResReaper = "https://i.imgur.com/y0Y5ECT.png";
     private const string HighResNecromancer = "https://i.imgur.com/jvwYgmA.png";
     // Warrior
-    private const string HighResParagon = "https://i.imgur.com/tNanHxp.png";
+    private const string HighResParagon = "https://i.imgur.com/kyKiBdI.png";
     private const string HighResBladesworn = "https://i.imgur.com/90j009t.png";
     private const string HighResSpellbreaker = "https://i.imgur.com/FTh03SH.png";
     private const string HighResBerserker = "https://i.imgur.com/0ijFUUG.png";
     private const string HighResWarrior = "https://i.imgur.com/j82eNjR.png";
     // Guardian
-    private const string HighResLuminary = "https://i.imgur.com/pzh1ZZb.png";
+    private const string HighResLuminary = "https://i.imgur.com/JTFpGOh.png";
     private const string HighResWillbender = "https://i.imgur.com/WhIEbGZ.png";
     private const string HighResFirebrand = "https://i.imgur.com/J5EFywD.png";
     private const string HighResDragonhunter = "https://i.imgur.com/pSVMnVu.png";
@@ -114,13 +114,13 @@ internal static class ParserIcons
     private const string BaseResDaredevil = "https://i.imgur.com/RiCJalE.png";
     private const string BaseResThief = "https://i.imgur.com/dS8un97.png";
     // Elementalist
-    private const string BaseResEvoker = "https://i.imgur.com/ZxL3JTh.png";
+    private const string BaseResEvoker = "https://i.imgur.com/Ie4y9Qf.png";
     private const string BaseResCatalyst = "https://i.imgur.com/2B73rSk.png";
     private const string BaseResWeaver = "https://i.imgur.com/03RLBaX.png";
     private const string BaseResTempest = "https://i.imgur.com/FnLyZvk.png";
     private const string BaseResElementalist = "https://i.imgur.com/2ybEpCV.png";
     // Mesmer
-    private const string BaseResTroubadour = "https://i.imgur.com/EzBnOIM.png";
+    private const string BaseResTroubadour = "https://i.imgur.com/xRdE1iN.png";
     private const string BaseResVirtuoso = "https://i.imgur.com/sncfljQ.png";
     private const string BaseResMirage = "https://i.imgur.com/fL88z7p.png";
     private const string BaseResChronomancer = "https://i.imgur.com/rI1tW64.png";
@@ -132,13 +132,13 @@ internal static class ParserIcons
     private const string BaseResReaper = "https://i.imgur.com/X463V90.png";
     private const string BaseResNecromancer = "https://i.imgur.com/kK3l1C1.png";
     // Warrior
-    private const string BaseResParagon = "https://i.imgur.com/nBVDz0s.png";
+    private const string BaseResParagon = "https://i.imgur.com/Wp4lhTM.png";
     private const string BaseResBladesworn = "https://i.imgur.com/mFzTJXv.png";
     private const string BaseResSpellbreaker = "https://i.imgur.com/A6JTWBV.png";
     private const string BaseResBerserker = "https://i.imgur.com/dNY6e8n.png";
     private const string BaseResWarrior = "https://i.imgur.com/ejI5STj.png";
     // Guardian
-    private const string BaseResLuminary = "https://i.imgur.com/FEisoxQ.png";
+    private const string BaseResLuminary = "https://i.imgur.com/H9upKPo.png";
     private const string BaseResWillbender = "https://i.imgur.com/pIFrNLa.png";
     private const string BaseResFirebrand = "https://i.imgur.com/TOsmJOl.png";
     private const string BaseResDragonhunter = "https://i.imgur.com/GqKocpf.png";
