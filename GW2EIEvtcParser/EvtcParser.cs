@@ -154,16 +154,18 @@ public class EvtcParser
                 var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.AgentItem.IsEnglobedAgent);
 
                 _t.Log("Paralell phases");
+                Parallel.ForEach(friendliesAndTargetsAndMobs, actor =>
+                {
+                    actor.ComputeBuffMap(log);
+                });
+                _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
-                    // that part can't be // due to buff extensions
                     _t.SetAverageTimeStart();
-                    actor.ComputeBuffMap(log);
-                    _t.TrackAverageTime("Buff");
                     actor.GetMinions(log);
                     _t.TrackAverageTime("Minion");
                 }
-                _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
+                _t.Log("friendliesAndTargetsAndMobs GetMinions");
                 Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
                 _t.Log("friendliesAndTargets GetStatus");
                 if (hasEnglobingAgents)

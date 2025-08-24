@@ -36,6 +36,9 @@ public partial class CombatData
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDByDst;
 
+
+    private Dictionary<long, List<BuffExtensionEvent>> _buffExtensionData;
+
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageTakenData;
@@ -632,6 +635,14 @@ public partial class CombatData
 #endif
     }
 
+    internal void TryFindSrc(ParsedEvtcLog log)
+    {
+        foreach (var pair in _buffExtensionData)
+        {
+            pair.Value.ForEach(x => x.TryFindSrc(log));
+        }
+    }
+
     private void BuildBuffDependentContainers()
     {
         _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
@@ -662,6 +673,7 @@ public partial class CombatData
                 .GroupBy(y => y.To)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );
+        _buffExtensionData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffExtensionEvent>().ToList());
         //TODO(Rennorb) @perf @mem: find average complexity
         _buffDataByInstanceID = new(_buffData.Count / 10);
         foreach (var buffEvents in _buffData.Values)

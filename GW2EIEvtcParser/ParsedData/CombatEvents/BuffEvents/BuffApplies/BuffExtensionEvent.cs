@@ -20,7 +20,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
         OriginalExtendedDuration = ExtendedDuration;
     }
 
-    internal override void TryFindSrc(ParsedEvtcLog log)
+    internal void TryFindSrc(ParsedEvtcLog log)
     {
         if (!_sourceFinderRan && By.IsUnknown)
         {
