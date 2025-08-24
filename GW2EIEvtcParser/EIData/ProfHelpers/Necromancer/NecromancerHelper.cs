@@ -33,7 +33,7 @@ internal static class NecromancerHelper
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
         new EffectCastFinder(SpitefulSpirit, EffectGUIDs.NecromancerUnholyBurst)
             .UsingSrcBaseSpecChecker(Spec.Necromancer)
-            .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(DesertShroudBuff).OfType<BuffRemoveAllEvent>(), evt.Time, 50).Any()) // collides with sandstorm shroud
+            .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DesertShroudBuff), evt.Time, 50).Any()) // collides with sandstorm shroud
             .UsingChecker((evt, combatData, skillData, agentData) => !combatData.HasRelatedHit(UnholyBurst, evt.Src, evt.Time))
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
 
@@ -44,7 +44,7 @@ internal static class NecromancerHelper
         new BuffGainCastFinder(SpectralWalkSkill, SpectralWalkBuff)
             .WithBuilds(GW2Builds.December2018Balance),
         new BuffLossCastFinder(SpectralRecallSkill, SpectralWalkTeleportBuff)
-            .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffData(SpectralWalkBuff).OfType<BuffRemoveAllEvent>(), evt.Time + 120).Any())
+            .UsingChecker((evt, combatData, skillData, agentData) => !CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(SpectralWalkBuff), evt.Time + 120).Any())
             .WithBuilds(GW2Builds.December2018Balance),
         new EffectCastFinderByDst(PlagueSignetSkill, EffectGUIDs.NecromancerPlagueSignet)
             .UsingDstBaseSpecChecker(Spec.Necromancer),
@@ -56,7 +56,7 @@ internal static class NecromancerHelper
         new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
         // Spear
         new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress)
-            .UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
+            .UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff), effectEvent.Time).Any()),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
