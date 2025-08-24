@@ -123,7 +123,7 @@ public class Buff : IVersionable
         return new Buff(name + " " + id, id, Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, classification, link);
     }
 
-    internal void VerifyBuffInfoEvent(BuffInfoEvent buffInfoEvent, ParserController operation)
+    internal void VerifyBuffInfoEvent(BuffInfoEvent buffInfoEvent, EvtcVersionEvent versionEvent, ParserController operation)
     {
         if (buffInfoEvent.BuffID != ID)
         {
@@ -135,7 +135,15 @@ public class Buff : IVersionable
         }
         if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
         {
-            operation.UpdateProgressWithCancellationCheck("Parsing: Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
+            var message = "Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType;
+#if DEBUG
+            // I don't exactly remember when stack type on buff info event was fixed on arc's side
+            if (versionEvent.Build > 20240000)
+            {
+                throw new InvalidDataException(message);
+            }
+#endif
+            operation.UpdateProgressWithCancellationCheck("Parsing: " + message);
         }
     }
 
