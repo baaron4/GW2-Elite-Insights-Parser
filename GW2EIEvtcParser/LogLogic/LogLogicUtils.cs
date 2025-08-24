@@ -211,9 +211,11 @@ internal static class LogLogicUtils
             return false;
         });
 
-        var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
-        // Remove all candidates who moved, chests can not move
-        candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => MovementEvent.GetPoint3D(evt).Length() >= 1e-6));
+        var candidates = positions
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x => velocities.Where(evt => evt.SrcMatchesAgent(x)).Any(evt => MovementEvent.GetPoint3D(evt).Length() >= 1e-6))
+            .Distinct()
+            .ToList();
         var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
