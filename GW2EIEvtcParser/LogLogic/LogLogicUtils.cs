@@ -170,18 +170,13 @@ internal static class LogLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    private static void FindChestGadget(ChestID chestID, AgentData agentData, Dictionary<AgentItem, List<CombatItem>> positionDict, Dictionary<AgentItem, List<CombatItem>> nonZeroGadgetVelocities, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
+    private static void FindChestGadget(ChestID chestID, AgentData agentData, IEnumerable<KeyValuePair<AgentItem, List<CombatItem>>> gadgetPositions, Vector3 chestPosition, ChestAgentChecker? chestChecker)
     {
         if (chestID == ChestID.None)
         {
             return;
         }
-        var gadgetMatchingPositions = positionDict.Where(entry => {
-
-            if (entry.Key.Type != AgentItem.AgentType.Gadget || nonZeroGadgetVelocities.ContainsKey(entry.Key))
-            {
-                return false;
-            }
+        var gadgetMatchingPositions = gadgetPositions.Where(entry => {
             return entry.Value.Any(x => (MovementEvent.GetPoint3D(x) - chestPosition).XY().Length() < InchDistanceThreshold);
         });
         if (!gadgetMatchingPositions.Any())
@@ -192,7 +187,7 @@ internal static class LogLogicUtils
         chest?.Key.OverrideID(chestID, agentData);
     }
 
-    internal static void FindChestGadgets(List<(ChestID, Vector3, ChestAgentChecker? chestChecker)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
+    internal static void FindChestGadgets(List<(ChestID chestID, Vector3 chestPosition, ChestAgentChecker? chestChecker)> chestIDs, AgentData agentData, IReadOnlyList<CombatItem> combatData)
     {
         var movementData = combatData.Where(x => x.IsGeographical);
 
@@ -219,9 +214,21 @@ internal static class LogLogicUtils
             .Where(x => x.IsStateChange == StateChange.Position)
             .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .ToDictionary(x => x.Key, x => x.ToList());
+        var gadgetPositions = positionDict.Where(entry => {
+
+            if (entry.Key.Type != AgentItem.AgentType.Gadget || nonZeroGadgetVelocities.ContainsKey(entry.Key))
+            {
+                return false;
+            }
+            return entry.Value.Any(x => chestIDs.Any(y => (MovementEvent.GetPoint3D(x) - y.chestPosition).XY().Length() < InchDistanceThreshold));
+        });
+        if (!gadgetPositions.Any())
+        {
+            return;
+        }
         foreach (var chestID in chestIDs)
         {
-            FindChestGadget(chestID.Item1, agentData, positionDict, nonZeroGadgetVelocities, chestID.Item2, chestID.Item3);
+            FindChestGadget(chestID.chestID, agentData, gadgetPositions, chestID.chestPosition, chestID.chestChecker);
         }
     }
 
