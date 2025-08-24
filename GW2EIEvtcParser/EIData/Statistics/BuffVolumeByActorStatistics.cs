@@ -19,11 +19,7 @@ public class BuffVolumeByActorStatistics
         var buffs = new BuffVolumeByActorStatistics();
         var buffsActive = new BuffVolumeByActorStatistics();
 
-        var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>();
-        foreach ( var appliesEvent in applies)
-        {
-            appliesEvent.TryFindSrc(log);
-        }
+        var applies = log.CombatData.GetBuffApplyDataByIDByDst(buff.ID, dstActor.AgentItem);
         var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
         foreach (var group in appliesBySrc)
         {

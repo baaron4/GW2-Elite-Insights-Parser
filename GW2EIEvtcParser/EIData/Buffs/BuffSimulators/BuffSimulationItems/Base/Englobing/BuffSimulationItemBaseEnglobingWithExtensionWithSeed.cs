@@ -2,18 +2,17 @@
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal class BuffSimulationItemBaseWithExtensionWithSeed : BuffSimulationItemBaseWithSeed
+internal class BuffSimulationItemBaseEnglobingWithExtensionWithSeed : BuffSimulationItemBaseEnglobingWithSeed
 {
 
-    protected internal BuffSimulationItemBaseWithExtensionWithSeed(BuffStackItem buffStackItem) : base(buffStackItem)
+    protected internal BuffSimulationItemBaseEnglobingWithExtensionWithSeed(BuffStackItem buffStackItem) : base(buffStackItem)
     {
     }
-    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
     {
-        long cDur = base.SetBuffDistributionItem(distribs, start, end, buffID);
+        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
         if (cDur > 0)
         {
-            Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
             AddExtension(distribution, cDur, Src);
             foreach (var subSrc in Src.EnglobedAgentItems)
             {

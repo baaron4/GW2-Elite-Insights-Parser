@@ -121,7 +121,7 @@ internal class Eparch : LonelyTower
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor eparch = GetEparchActor();
-        var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
+        var determinedApplies = combatData.GetBuffApplyDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
         var cmCheck = logData.IsCM || IsFakeCM(agentData);
         if (cmCheck && determinedApplies.Count >= 3)
         {

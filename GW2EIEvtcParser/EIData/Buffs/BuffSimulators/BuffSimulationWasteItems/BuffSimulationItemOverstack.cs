@@ -9,7 +9,7 @@ internal class BuffSimulationItemOverstack : SimulationItemWasted
     {
     }
 
-    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long value = GetValue(start, end);
         if (value > 0)
@@ -24,8 +24,6 @@ internal class BuffSimulationItemOverstack : SimulationItemWasted
                     AddOverstack(distrib, subValue, subSrc);
                 }
             }
-
         }
-        return value;
     }
 }

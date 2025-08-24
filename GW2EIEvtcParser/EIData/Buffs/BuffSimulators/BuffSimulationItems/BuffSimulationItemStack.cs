@@ -20,9 +20,37 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
                 var hasSeed = !stack.SeedSrc.Is(stack.Src);
                 var isExtension = stack.IsExtension;
                 Stacks[i] = hasSeed ?
-                    (isExtension ? new BuffSimulationItemBaseWithExtensionWithSeed(stack)  : new BuffSimulationItemBaseWithSeed(stack))
+                        (
+                        isExtension ?
+                            stack.Src.IsEnglobingAgent ?
+                                stack.SeedSrc.IsEnglobingAgent ?
+                                    new BuffSimulationItemBaseEnglobingWithExtensionWithSeedEnglobing(stack)
+                                    :
+                                    new BuffSimulationItemBaseEnglobingWithExtensionWithSeed(stack)
+                                :
+                                stack.SeedSrc.IsEnglobingAgent ?
+                                    new BuffSimulationItemBaseWithExtensionWithSeedEnglobing(stack)
+                                    :
+                                    new BuffSimulationItemBaseWithExtensionWithSeed(stack)
+                            :
+                            stack.Src.IsEnglobingAgent ?
+                                stack.SeedSrc.IsEnglobingAgent ? 
+                                    new BuffSimulationItemBaseEnglobingWithSeedEnglobing(stack) 
+                                    : 
+                                    new BuffSimulationItemBaseEnglobingWithSeed(stack)
+                                :
+                                stack.SeedSrc.IsEnglobingAgent ?
+                                    new BuffSimulationItemBaseWithSeedEnglobing(stack)
+                                    :
+                                    new BuffSimulationItemBaseWithSeed(stack)
+                    )
                     :
-                    (isExtension ? new BuffSimulationItemBaseWithExtension(stack) : new BuffSimulationItemBase(stack))
+                    (
+                        isExtension ?
+                            stack.Src.IsEnglobingAgent ? new BuffSimulationItemBaseEnglobingWithExtension(stack) : new BuffSimulationItemBaseWithExtension(stack) 
+                            :
+                            stack.Src.IsEnglobingAgent ? new BuffSimulationItemBaseEnglobing(stack) : new BuffSimulationItemBase(stack)
+                    )
                     ;
             }
         }

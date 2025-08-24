@@ -125,6 +125,9 @@ public class ParsedEvtcLog
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
         StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
+
+        _operation.UpdateProgressWithCancellationCheck("Parsing: Find sources for buff extension events");
+        CombatData.TryFindSrc(this);
     }
 
     public void UpdateProgressWithCancellationCheck(string status)

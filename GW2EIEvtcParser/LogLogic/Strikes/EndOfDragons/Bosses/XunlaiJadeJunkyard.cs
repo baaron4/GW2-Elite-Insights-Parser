@@ -169,7 +169,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         if (!logData.Success)
         {
             SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-            var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= logData.LogStart + 5000);
+            var buffApplies = combatData.GetBuffApplyDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= logData.LogStart + 5000);
             if (buffApplies.Count() == 3)
             {
                 logData.SetSuccess(true, buffApplies.Last().Time);

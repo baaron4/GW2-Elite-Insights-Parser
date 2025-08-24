@@ -446,7 +446,7 @@ internal class Adina : TheKeyOfAhdashim
         }
         // Main phases
         var mainPhases = new List<PhaseData>();
-        var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>();
+        var pillarApplies = log.CombatData.GetBuffApplyDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>();
         Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
         var mainPhaseEnds = new List<long>();
         foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)

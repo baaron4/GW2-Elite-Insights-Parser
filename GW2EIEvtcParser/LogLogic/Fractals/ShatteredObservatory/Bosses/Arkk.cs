@@ -295,7 +295,7 @@ internal class Arkk : ShatteredObservatory
                                 break;
                             }
 
-                            var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
+                            var applies = log.CombatData.GetBuffApplyDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                             BuffApplyEvent? nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                             BuffApplyEvent? nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                             long cap = Math.Min(nextInvul?.Time ?? log.LogData.LogEnd, nextStun?.Time ?? log.LogData.LogEnd);

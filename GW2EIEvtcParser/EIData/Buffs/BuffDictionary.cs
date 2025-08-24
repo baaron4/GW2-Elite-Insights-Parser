@@ -69,8 +69,6 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         {
             return;
         }
-
-        buffEvent.TryFindSrc(log);
         if (!_buffIDToEvents.TryGetValue(buff.ID, out var list))
         {
             list = new(_layer2InitialCapacityBuffs);
@@ -102,8 +100,6 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
             }
             _lastRemovedRegen = null;
         }
-        
-        buffEvent.TryFindSrc(log);
         if (!_buffIDToEvents.TryGetValue(buff.ID, out var list))
         {
             list = new(_layer2InitialCapacityBuffs);

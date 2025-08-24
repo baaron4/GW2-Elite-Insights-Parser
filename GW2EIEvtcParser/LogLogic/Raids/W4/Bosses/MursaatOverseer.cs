@@ -163,8 +163,8 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
 
-        var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>();
-        var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>();
+        var claimApply = combatData.GetBuffApplyData(ClaimBuff).OfType<BuffApplyEvent>();
+        var dispelApply = combatData.GetBuffApplyData(DispelBuff).OfType<BuffApplyEvent>();
 
         SkillItem claimSkill = skillData.Get(ClaimSAK);
         SkillItem dispelSkill = skillData.Get(DispelSAK);

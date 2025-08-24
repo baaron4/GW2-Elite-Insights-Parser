@@ -77,8 +77,8 @@ internal class CerusAndDeimos : LonelyTower
     {
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
-        BuffApplyEvent? determinedApplyCerus = combatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
-        BuffApplyEvent? determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApplyCerus = combatData.GetBuffApplyDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApplyDeimos = combatData.GetBuffApplyDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
             logData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
@@ -104,7 +104,7 @@ internal class CerusAndDeimos : LonelyTower
 
     private static PhaseData GetBossPhase(ParsedEvtcLog log, SingleActor target, string phaseName)
     {
-        BuffApplyEvent? determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApply = log.CombatData.GetBuffApplyDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
         var bossPhase = new SubPhasePhaseData(log.LogData.LogStart, end, phaseName);
         bossPhase.AddTarget(target, log);

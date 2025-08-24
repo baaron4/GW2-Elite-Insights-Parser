@@ -1496,7 +1496,7 @@ internal class Qadim : MythwrightGambit
         foreach (Player p in log.PlayerList)
         {
             IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
-            var exitBuffs = log.CombatData.GetBuffDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>();
+            var exitBuffs = log.CombatData.GetBuffApplyDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>();
 
             // Count the times the player has entered and exited the lamp.
             // A player that has entered the lamp but never exites and remains alive is elible for the achievement.

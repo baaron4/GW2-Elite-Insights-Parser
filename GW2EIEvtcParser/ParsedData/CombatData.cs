@@ -36,6 +36,9 @@ public partial class CombatData
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDByDst;
 
+
+    private Dictionary<long, List<BuffExtensionEvent>> _buffExtensionData;
+
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataByID;
     private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageTakenData;
@@ -432,50 +435,53 @@ public partial class CombatData
 
         foreach (var events in _buffDataByDst.Values)
         {
-            //TODO(Rennorb) @perf: wtf
-            var dictApply = events.OfType<BuffApplyEvent>()
-                .Where(x => x.BuffInstance != 0)
-                .GroupBy(x => x.BuffInstance)
-                .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
-            var dictStacks = events.OfType<BuffStackEvent>()
-                .Where(x => x.BuffInstance != 0)
-                .GroupBy(x => x.BuffInstance)
-                .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
             var dictExtensions = events.OfType<BuffExtensionEvent>()
                 .Where(x => x.BuffInstance != 0)
                 .GroupBy(x => x.BuffInstance);
-               
-            foreach (var extensionEventsPerID in dictExtensions)
+            if (dictExtensions.Any())
             {
-                if (!dictApply.TryGetValue(extensionEventsPerID.Key, out var appliesPerBuffID)) { continue; }
+                //TODO(Rennorb) @perf: wtf
+                var dictApply = events.OfType<BuffApplyEvent>()
+                    .Where(x => x.BuffInstance != 0)
+                    .GroupBy(x => x.BuffInstance)
+                    .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
+                var dictStacks = events.OfType<BuffStackEvent>()
+                    .Where(x => x.BuffInstance != 0)
+                    .GroupBy(x => x.BuffInstance)
+                    .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
 
-                foreach (var extensionEvents in extensionEventsPerID.GroupBy(y => y.BuffID))
+                foreach (var extensionEventsPerID in dictExtensions)
                 {
-                    if (!appliesPerBuffID.TryGetValue(extensionEvents.Key, out var applies)) { continue; }
+                    if (!dictApply.TryGetValue(extensionEventsPerID.Key, out var appliesPerBuffID)) { continue; }
 
-                    BuffExtensionEvent? previousExtension = null;
-                    foreach (BuffExtensionEvent extensionEvent in extensionEvents)
+                    foreach (var extensionEvents in extensionEventsPerID.GroupBy(y => y.BuffID))
                     {
-                        BuffApplyEvent? initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
-                        if (initialStackApplication == null) { continue; }
+                        if (!appliesPerBuffID.TryGetValue(extensionEvents.Key, out var applies)) { continue; }
 
-                        var sequence = new List<BuffEvent>(2) { initialStackApplication };
-                        if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out var stacksPerBuffID))
+                        BuffExtensionEvent? previousExtension = null;
+                        foreach (BuffExtensionEvent extensionEvent in extensionEvents)
                         {
-                            if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out var stacks))
+                            BuffApplyEvent? initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
+                            if (initialStackApplication == null) { continue; }
+
+                            var sequence = new List<BuffEvent>(2) { initialStackApplication };
+                            if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out var stacksPerBuffID))
                             {
-                                sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
+                                if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out var stacks))
+                                {
+                                    sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
+                                }
                             }
-                        }
 
-                        if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
-                        {
-                            sequence.Add(previousExtension);
-                        }
+                            if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
+                            {
+                                sequence.Add(previousExtension);
+                            }
 
-                        previousExtension = extensionEvent;
-                        sequence.SortByTime();
-                        extensionEvent.OffsetNewDuration(sequence, evtcVersion);
+                            previousExtension = extensionEvent;
+                            sequence.SortByTime();
+                            extensionEvent.OffsetNewDuration(sequence, evtcVersion);
+                        }
                     }
                 }
             }
@@ -632,6 +638,14 @@ public partial class CombatData
 #endif
     }
 
+    internal void TryFindSrc(ParsedEvtcLog log)
+    {
+        foreach (var pair in _buffExtensionData)
+        {
+            pair.Value.ForEach(x => x.TryFindSrc(log));
+        }
+    }
+
     private void BuildBuffDependentContainers()
     {
         _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
@@ -662,6 +676,7 @@ public partial class CombatData
                 .GroupBy(y => y.To)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );
+        _buffExtensionData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffExtensionEvent>().ToList());
         //TODO(Rennorb) @perf @mem: find average complexity
         _buffDataByInstanceID = new(_buffData.Count / 10);
         foreach (var buffEvents in _buffData.Values)

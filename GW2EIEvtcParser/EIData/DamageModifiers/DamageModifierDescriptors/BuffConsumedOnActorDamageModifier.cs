@@ -20,8 +20,7 @@ internal class BuffConsumedOnActorDamageModifier : BuffOnActorDamageModifier
 
     private (IReadOnlyList<AbstractBuffRemoveEvent>, int currentIndex) GetBuffRemovesWithCurrentIndex(Dictionary<AgentItem, (IReadOnlyList<AbstractBuffRemoveEvent> buffRemoves, int currentIndex)> cache, ParsedEvtcLog log, AgentItem agent)
     {
-        (IReadOnlyList<AbstractBuffRemoveEvent>, int currentIndex) buffRemoveAllsWithCurrentIndex;
-        if (!cache.TryGetValue(agent, out buffRemoveAllsWithCurrentIndex))
+        if (!cache.TryGetValue(agent, out var buffRemoveAllsWithCurrentIndex))
         {
             buffRemoveAllsWithCurrentIndex = (log.CombatData.GetBuffDataByIDByDst(BuffID, agent).OfType<AbstractBuffRemoveEvent>().Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList(), 0);
             cache[agent] = buffRemoveAllsWithCurrentIndex;

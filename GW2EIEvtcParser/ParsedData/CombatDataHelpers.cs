@@ -25,22 +25,22 @@ partial class CombatData
     }
     public bool HasGainedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
             .Any();
     }
     public bool HasGainedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
             .Any(apply => apply.CreditedBy.Is(source));
     }
     public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
             .Any(apply => Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
     }
     public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, AgentItem source, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
             .Any(apply => apply.CreditedBy.Is(source) && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
     }
     public bool HasLostBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
@@ -73,22 +73,22 @@ partial class CombatData
     }
     public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
             .Any();
     }
     public bool HasExtendedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
             .Any(apply => apply.CreditedBy.Is(source));
     }
     public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
             .Any(apply => Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
     }
     public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, AgentItem source, long epsilon = ServerDelayConstant)
     {
-        return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+        return FindRelatedEvents(GetBuffApplyDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
             .Any(apply => apply.CreditedBy.Is(source) && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
     }
 

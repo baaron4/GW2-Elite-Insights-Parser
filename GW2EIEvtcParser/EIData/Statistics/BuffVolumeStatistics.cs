@@ -46,7 +46,6 @@ public class BuffVolumeStatistics
                 }
                 foreach (BuffEvent abae in p.GetBuffApplyEventsByID(log, start, end, buff.ID))
                 {
-                    abae.TryFindSrc(log);
                     if (abae.CreditedBy.Is(srcAgentItem))
                     {
                         if (abae is BuffApplyEvent bae)
@@ -137,7 +136,6 @@ public class BuffVolumeStatistics
             {
                 if (abae.Time >= start && abae.Time <= end)
                 {
-                    abae.TryFindSrc(log);
                     if (abae is BuffApplyEvent bae)
                     {
                         // We ignore infinite duration buffs

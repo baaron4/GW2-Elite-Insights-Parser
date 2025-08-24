@@ -177,7 +177,7 @@ internal static class LogLogicUtils
             return null;
         }
 
-        var positions = combatData.Where(evt => {
+        var gadgetMatchingPositions = combatData.Where(evt => {
             if (evt.IsStateChange != StateChange.Position)
             {
                 return false;
@@ -197,23 +197,42 @@ internal static class LogLogicUtils
 
             return false;
         });
+        if (!gadgetMatchingPositions.Any())
+        {
+            return null;
+        }
 
-        var velocities = combatData.Where(evt => {
+        var nonZeroGadgetVelocities = combatData.Where(evt => {
             if (evt.IsStateChange == StateChange.Velocity)
             {
+                if (MovementEvent.GetPoint3D(evt).Length() < 1e-6)
+                {
+                    return false;
+                }
                 AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
                 if (agent.Type != AgentItem.AgentType.Gadget)
                 {
                     return false;
                 }
-                return positions.Any(x => x.SrcMatchesAgent(agent));
+                return gadgetMatchingPositions.Any(x => x.SrcMatchesAgent(agent));
             }
             return false;
-        });
+        })
+            .GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .ToDictionary(x => x.Key, x => x.ToList());
 
-        var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
-        // Remove all candidates who moved, chests can not move
-        candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => MovementEvent.GetPoint3D(evt).Length() >= 1e-6));
+        var candidates = gadgetMatchingPositions
+            .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
+            .Where(x =>
+            {
+                if (nonZeroGadgetVelocities.TryGetValue(x, out var velocitiesPerAgent))
+                {
+                    return false;
+                }
+                return true;
+            })
+            .Distinct()
+            .ToList();
         var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
