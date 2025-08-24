@@ -154,14 +154,13 @@ public class EvtcParser
                 var hasEnglobingAgents = friendliesAndTargetsAndMobs.Any(x => x.AgentItem.IsEnglobedAgent);
 
                 _t.Log("Paralell phases");
-                Parallel.ForEach(friendliesAndTargetsAndMobs, actor =>
-                {
-                    actor.ComputeBuffMap(log);
-                });
-                _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs");
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
                     _t.SetAverageTimeStart();
+                    // Buff source finding for extension events is done at ParsedEvtcLog constructor level (not thread safe)
+                    // Something is stopping this from being thread safe, TODO: investigate
+                    actor.ComputeBuffMap(log);
+                    _t.TrackAverageTime("Buff Map");
                     actor.GetMinions(log);
                     _t.TrackAverageTime("Minion");
                 }
