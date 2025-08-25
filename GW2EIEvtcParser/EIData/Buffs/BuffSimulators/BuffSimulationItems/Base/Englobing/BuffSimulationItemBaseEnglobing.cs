@@ -13,7 +13,7 @@ internal class BuffSimulationItemBaseEnglobing : BuffSimulationItemBase
 
     internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
     {
-        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
+        long cDur = GetClampedDuration(start, end);
         if (cDur > 0)
         {
             foreach (var subSrc in EnglobedSrcs)

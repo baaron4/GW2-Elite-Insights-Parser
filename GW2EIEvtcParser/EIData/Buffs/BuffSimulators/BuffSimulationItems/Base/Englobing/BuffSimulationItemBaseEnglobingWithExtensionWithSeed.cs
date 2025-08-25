@@ -13,7 +13,6 @@ internal class BuffSimulationItemBaseEnglobingWithExtensionWithSeed : BuffSimula
         long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
         if (cDur > 0)
         {
-            AddExtension(distribution, cDur, Src);
             foreach (var subSrc in Src.EnglobedAgentItems)
             {
                 long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));

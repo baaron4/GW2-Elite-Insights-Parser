@@ -17,11 +17,6 @@ internal class BuffSimulationItemBaseEnglobingWithSeedEnglobing : BuffSimulation
         long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
         if (cDur > 0)
         {
-            AddExtended(distribution, cDur, _seedSrc);
-            if (Src.IsUnknown)
-            {
-                AddUnknown(distribution, cDur, _seedSrc);
-            }
             foreach (var subSeedSrc in EnglobedSeedSrcs)
             {
                 long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
