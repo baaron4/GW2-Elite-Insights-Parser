@@ -123,7 +123,7 @@ internal class HallOfChainsInstance : HallOfChains
             peasants.AddRange(log.AgentData.GetNPCsByID(TargetID.AscalonianPeasant2));
             foreach (var eaterOfSoul in eaterOfSouls)
             {
-                if (!eaterOfSoul.GetDamageEvents(null, log).Any(x => x.CreditedFrom.IsPlayer))
+                if (!eaterOfSoul.GetDamageTakenEvents(null, log).Any(x => x.CreditedFrom.IsPlayer))
                 {
                     continue;
                 }
@@ -224,6 +224,7 @@ internal class HallOfChainsInstance : HallOfChains
         HandleStatueOfIcePhases(targetsByIDs, log, phases);
         HandleStatueOfDeathPhases(targetsByIDs, log, phases);
         HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
+        HandleDhuumPhases(targetsByIDs, log, phases);
         return phases;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
