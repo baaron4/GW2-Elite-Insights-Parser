@@ -31,9 +31,9 @@ internal static class ParagonHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs = 
     [
-        new Buff("Chant of Action", ChantOfActionBuff, Source.Paragon, BuffClassification.Support, SkillImages.ChantOfAction),
-        new Buff("Chant of Recuperation", ChantOfRecuperationBuff, Source.Paragon, BuffClassification.Support, SkillImages.ChantOfRecuperation),
-        new Buff("Chant of Freedom", ChantOfFreedomBuff, Source.Paragon, BuffClassification.Support, SkillImages.ChantOfFreedom),
+        new Buff("Chant of Action", ChantOfActionBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfAction),
+        new Buff("Chant of Recuperation", ChantOfRecuperationBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfRecuperation),
+        new Buff("Chant of Freedom", ChantOfFreedomBuff, Source.Paragon, BuffClassification.Other, SkillImages.ChantOfFreedom),
         new Buff("\"We Will Never Yield!\"", WeWillNeverYieldBuff, Source.Paragon, BuffClassification.Support, SkillImages.WeWillNeverYield),
     ];
 }

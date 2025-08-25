@@ -53,7 +53,7 @@ internal static class MirageHelper
         new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, SkillImages.FalseOasis),
         new Buff("Phantom Pain", PhantomPain, Source.Mirage, ArcDPSEnums.BuffStackType.Stacking, 4, BuffClassification.Other, TraitImages.PhantomPain),
         // Spear
-        new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, TraitImages.MirageMantle),
+        new Buff("Sharp Edges", SharpEdges, Source.Mirage, ArcDPSEnums.BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.MirageMantle),
     ];
 
     private static readonly HashSet<int> Minions = [];
