@@ -45,7 +45,7 @@ public static class TestHelper
         var parser = new EvtcParser(ParserSettings, apiController);
 
         var fInfo = new FileInfo(location);
-        ParsedEvtcLog? parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out var failureReason, false);
+        ParsedEvtcLog? parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out var failureReason, true);
         if (failureReason != null)
         {
             failureReason.Throw();

@@ -1,10 +1,12 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIParserCommons.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using static GW2EIParser.tst.StabilityTestEvtc;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser.tst;
@@ -32,12 +34,27 @@ public class StabilityTestEvtc
     {
         try
         {
+            Stopwatch stopWatch = new();
+            stopWatch.Start();
+            TestContext.Progress.WriteLine($"Started {evtcTestItem.File}");
             ParsedEvtcLog? log = TestHelper.ParseLog(evtcTestItem.File, TestHelper.APIController);
             if (log != null)
             {
                 TestHelper.JsonString(log);
                 TestHelper.HtmlString(log);
                 TestHelper.CsvString(log);
+                stopWatch.Stop();
+                var elapsed = stopWatch.ElapsedMilliseconds;
+                // Catch absurdly high times
+                if (elapsed > (log.LogData.IsInstance || log.LogData.Logic.ParseMode == GW2EIEvtcParser.LogLogic.LogLogic.ParseModeEnum.WvW ? 300000 : 30000))
+                {
+                    throw new TimeoutException("Too much time spent");
+                }
+                TestContext.Progress.WriteLine($"Finished {evtcTestItem.File}");
+            } 
+            else
+            {
+                stopWatch.Stop();
             }
         }
         catch (ProgramException canc)
@@ -142,7 +159,7 @@ public class StabilityTestEvtc
     }
 
     [Test]
-    public void TestEvtc([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
+    public void TestEvtc([Values(0, 1, 2, 3)] int startIndex)
     {
 
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
@@ -151,16 +168,28 @@ public class StabilityTestEvtc
             Directory.CreateDirectory(testLocation);
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
-        Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        toCheck = toCheck.OrderBy(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        }).Take(new Range(500 * startIndex, 500 * startIndex + 499)).ToList();
+        TestContext.Progress.WriteLine($"Testing {toCheck.Count} items");
+        TestContext.Progress.WriteLine($"Total Size {toCheck.Sum(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        }) / 1e6} mb");
+        toCheck.ForEach(evtcTestItem => Loop(evtcTestItem)); ;
+        //Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-        GenerateCrashData(toCheck, "evtc", true);
+        GenerateCrashData(toCheck, "evtc" + startIndex, true);
 
         Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
     }
 
     [Test]
-    public void TestEvtcZip([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
+    public void TestEvtcZip([Values(0, 1, 2, 3)] int startIndex)
     {
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
         if (!Directory.Exists(testLocation))
@@ -168,16 +197,28 @@ public class StabilityTestEvtc
             Directory.CreateDirectory(testLocation);
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
-        Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.evtc.zip", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        toCheck = toCheck.OrderBy(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        }).Take(new Range(500 * startIndex, 500 * startIndex + 499)).ToList();
+        TestContext.Progress.WriteLine($"Testing {toCheck.Count} items");
+        TestContext.Progress.WriteLine($"Total Size {toCheck.Sum(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        }) / 1e6} mb");
+        toCheck.ForEach(evtcTestItem => Loop(evtcTestItem)); ;
+        //Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-        GenerateCrashData(toCheck, "evtczip", true);
+        GenerateCrashData(toCheck, "evtczip" + startIndex, true);
 
         Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
     }
 
     [Test]
-    public void TestZevtc([Values(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000)] int startIndex)
+    public void TestZevtc([Values(0, 1, 2, 3, 4, 5, 6, 7 , 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 26, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40)] int startIndex)
     {
         string testLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/../../GW2EIParser.tst/EvtcLogs/StabilityTest";
         if (!Directory.Exists(testLocation))
@@ -186,10 +227,22 @@ public class StabilityTestEvtc
         }
         Assert.IsTrue(Directory.Exists(testLocation), "Test Directory missing");
 
-        var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).Take(new Range(startIndex, startIndex + 1999)).ToList();
-        Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
+        var toCheck = Directory.EnumerateFiles(testLocation, "*.zevtc", SearchOption.AllDirectories).Select(x => new EVTCTestItem(x)).ToList();
+        toCheck = toCheck.OrderBy(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        }).Take(new Range(500 * startIndex, 500 * startIndex + 499)).ToList();
+        TestContext.Progress.WriteLine($"Testing {toCheck.Count} items");
+        TestContext.Progress.WriteLine($"Total Size {toCheck.Sum(x =>
+        {
+            var fInfo = new FileInfo(x.File);
+            return fInfo.Exists ? fInfo.Length : 0;
+        })/ 1e6} mb");
+        toCheck.ForEach(evtcTestItem => Loop(evtcTestItem));
+        //Parallel.ForEach(GetSplitList(toCheck), evtcTestItems => evtcTestItems.ForEach(evtcTestItem => Loop(evtcTestItem)));
 
-        GenerateCrashData(toCheck, "zevtc", true);
+        GenerateCrashData(toCheck, "zevtc" + startIndex, true);
 
         Assert.IsTrue(!toCheck.Any(x => x.Failed), "Check Crashes folder");
     }
