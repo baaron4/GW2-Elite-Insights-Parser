@@ -31,11 +31,12 @@ public class Player : PlayerActor
         Account = name[1].TrimStart(':');
         _squadless = noSquad;
         Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
-        // Make sure to keep the name of the player unique
+#if DEBUG
         if (AgentItem.IsEnglobedAgent)
         {
-            Character = $"{Character} ${EnglobingAgentItem.EnglobedAgentItems.IndexOf(AgentItem) + 1}";
+            Character = $"${Character} {EnglobingAgentItem.EnglobedAgentItems.IndexOf(AgentItem) + 1}";
         }
+#endif
     }
 
 
