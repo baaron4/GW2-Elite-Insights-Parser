@@ -993,8 +993,8 @@ public class EvtcParser
         //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
         // Set Agent instid, firstAware and lastAware
         var invalidCombatItems = new HashSet<CombatItem>();
-        var orphanedSrcCombatItems = new List<CombatItem>();
-        var orphanedDstCombatItems = new List<CombatItem>();
+        var orphanedSrcInstidCombatItems = new List<CombatItem>();
+        var orphanedDstInstidCombatItems = new List<CombatItem>();
         foreach (CombatItem c in _combatItems)
         {
             if (c.SrcIsAgent())
@@ -1022,7 +1022,7 @@ public class EvtcParser
                 } 
                 else if (c.SrcInstid > 0)
                 {
-                    orphanedSrcCombatItems.Add(c);
+                    orphanedSrcInstidCombatItems.Add(c);
                 }
             }
             if (c.DstIsAgent())
@@ -1050,18 +1050,18 @@ public class EvtcParser
                 } 
                 else if (c.DstInstid > 0)
                 {
-                    orphanedDstCombatItems.Add(c);
+                    orphanedDstInstidCombatItems.Add(c);
                 }
             }
         }
-        if (orphanedSrcCombatItems.Count > 0 || orphanedDstCombatItems.Count > 0)
+        if (orphanedSrcInstidCombatItems.Count > 0 || orphanedDstInstidCombatItems.Count > 0)
         {
             var agentsInstidLookup = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => {
                 var res = x.ToList();
                 res.SortByFirstAware();
                 return res;
             });
-            foreach (var c in orphanedSrcCombatItems)
+            foreach (var c in orphanedSrcInstidCombatItems)
             {
                 if (agentsInstidLookup.TryGetValue(c.SrcInstid, out var candidates))
                 {
@@ -1073,7 +1073,7 @@ public class EvtcParser
                     }
                 }
             }
-            foreach (var c in orphanedDstCombatItems)
+            foreach (var c in orphanedDstInstidCombatItems)
             {
                 if (agentsInstidLookup.TryGetValue(c.DstInstid, out var candidates))
                 {
