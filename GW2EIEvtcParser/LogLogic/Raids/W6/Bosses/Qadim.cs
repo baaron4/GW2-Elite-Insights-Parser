@@ -457,7 +457,7 @@ internal class Qadim : MythwrightGambit
     {
         base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
 
-        if (!HasPlateformAgents(log.AgentData))
+        if (!HasPlateformAgents(log.AgentData) && !log.LogData.IsInstance)
         {
             ManuallyAnimatePlateforms(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, environmentDecorations);
         }
