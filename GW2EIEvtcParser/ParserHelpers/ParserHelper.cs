@@ -193,7 +193,7 @@ public static class ParserHelper
 
     internal static bool IsSupportedStateChange(StateChange state)
     {
-        return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.Idle;
+        return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.Idle && state != StateChange.AgentChange;
     }
 
     /*
