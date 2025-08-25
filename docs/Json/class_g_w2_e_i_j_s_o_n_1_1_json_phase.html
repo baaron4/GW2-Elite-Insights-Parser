@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.12.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.13.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -114,6 +114,28 @@ long&#160;</td><td class="memItemRight" valign="bottom"><b>End</b></td></tr>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b></td></tr>
 <tr class="memdesc:a79b62e69cd32e7ecd829cfcc0d8f1025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of the phase. <br /></td></tr>
 <tr class="separator:a79b62e69cd32e7ecd829cfcc0d8f1025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d29ead63d06c57805f2cf4d55c607ff" id="r_a3d29ead63d06c57805f2cf4d55c607ff"><td class="memItemLeft" align="right" valign="top"><a id="a3d29ead63d06c57805f2cf4d55c607ff" name="a3d29ead63d06c57805f2cf4d55c607ff"></a>
+bool?&#160;</td><td class="memItemRight" valign="bottom"><b>Success</b></td></tr>
+<tr class="memdesc:a3d29ead63d06c57805f2cf4d55c607ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">The success status of the phase, only relevant in Instance logs and for Encounter type phases. <br /></td></tr>
+<tr class="separator:a3d29ead63d06c57805f2cf4d55c607ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae22f1ede8d2061fad11305b89e8a9494" id="r_ae22f1ede8d2061fad11305b89e8a9494"><td class="memItemLeft" align="right" valign="top"><a id="ae22f1ede8d2061fad11305b89e8a9494" name="ae22f1ede8d2061fad11305b89e8a9494"></a>
+bool?&#160;</td><td class="memItemRight" valign="bottom"><b>IsCM</b></td></tr>
+<tr class="memdesc:ae22f1ede8d2061fad11305b89e8a9494"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the phase is in challenge mode, only relevant in Instance logs and for Encounter type phases. <br /></td></tr>
+<tr class="separator:ae22f1ede8d2061fad11305b89e8a9494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab323fc241cd332e7ac13f272e213a1fe" id="r_ab323fc241cd332e7ac13f272e213a1fe"><td class="memItemLeft" align="right" valign="top"><a id="ab323fc241cd332e7ac13f272e213a1fe" name="ab323fc241cd332e7ac13f272e213a1fe"></a>
+bool?&#160;</td><td class="memItemRight" valign="bottom"><b>IsLegendaryCM</b></td></tr>
+<tr class="memdesc:ab323fc241cd332e7ac13f272e213a1fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the phase is in legendary challenge mode. Only relevant in Instance logs and for Encounter type phases. <br  />
+If this is true, IsCM will also be true. <br /></td></tr>
+<tr class="separator:ab323fc241cd332e7ac13f272e213a1fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598611f0cf91154f665a5491babb82c7" id="r_a598611f0cf91154f665a5491babb82c7"><td class="memItemLeft" align="right" valign="top"><a id="a598611f0cf91154f665a5491babb82c7" name="a598611f0cf91154f665a5491babb82c7"></a>
+long?&#160;</td><td class="memItemRight" valign="bottom"><b>EIEncounterID</b></td></tr>
+<tr class="memdesc:a598611f0cf91154f665a5491babb82c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encounter ID of the phase, only relevant in Instance logs and for Encounter type phases. <br /></td></tr>
+<tr class="separator:a598611f0cf91154f665a5491babb82c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd6441d4cb0693f3c967aa23177646ee" id="r_acd6441d4cb0693f3c967aa23177646ee"><td class="memItemLeft" align="right" valign="top"><a id="acd6441d4cb0693f3c967aa23177646ee" name="acd6441d4cb0693f3c967aa23177646ee"></a>
+int?&#160;</td><td class="memItemRight" valign="bottom"><b>EncounterPhase</b></td></tr>
+<tr class="memdesc:acd6441d4cb0693f3c967aa23177646ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of the encounter phase this phase is attached to. Only relevant for Time Frame and Sub Phase type phases. <br  />
+Will be -1 if the phase is not a part of an encounter. <br /></td></tr>
+<tr class="separator:acd6441d4cb0693f3c967aa23177646ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9254a49a7c54cc358f277f48fe9e426" id="r_af9254a49a7c54cc358f277f48fe9e426"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; int &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#af9254a49a7c54cc358f277f48fe9e426">Targets</a></td></tr>
 <tr class="memdesc:af9254a49a7c54cc358f277f48fe9e426"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED please use </p><dl class="section see"><dt>See also</dt><dd>JsonPhase.TargetPriorities</dd></dl>
 <p>instead. <br  />
@@ -135,6 +157,10 @@ string in : <br  />
 <tr class="memitem:a0b15954c9d57530236d6b3a8b528d059" id="r_a0b15954c9d57530236d6b3a8b528d059"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; int &gt;?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a0b15954c9d57530236d6b3a8b528d059">SubPhases</a></td></tr>
 <tr class="memdesc:a0b15954c9d57530236d6b3a8b528d059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of sub phases.  <br /></td></tr>
 <tr class="separator:a0b15954c9d57530236d6b3a8b528d059"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4918f5c687b89240431bc19839a5e894" id="r_a4918f5c687b89240431bc19839a5e894"><td class="memItemLeft" align="right" valign="top">string?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a4918f5c687b89240431bc19839a5e894">PhaseType</a></td></tr>
+<tr class="memdesc:a4918f5c687b89240431bc19839a5e894"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of the phase in: <br  />
+.  <br /></td></tr>
+<tr class="separator:a4918f5c687b89240431bc19839a5e894"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9de854e4fa498844fa1b28b8bee42b63" id="r_a9de854e4fa498844fa1b28b8bee42b63"><td class="memItemLeft" align="right" valign="top"><a id="a9de854e4fa498844fa1b28b8bee42b63" name="a9de854e4fa498844fa1b28b8bee42b63"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>BreakbarPhase</b></td></tr>
 <tr class="memdesc:a9de854e4fa498844fa1b28b8bee42b63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that the phase is a breakbar phase <br  />
@@ -145,6 +171,33 @@ The targets breakbar will be active 2 seconds after the start of the phase. <br 
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class corresponding to a phase. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4918f5c687b89240431bc19839a5e894" name="a4918f5c687b89240431bc19839a5e894"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4918f5c687b89240431bc19839a5e894">&#9670;&#160;</a></span>PhaseType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string? GW2EIJSON.JsonPhase.PhaseType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Type of the phase in: <br  />
+. </p>
+<ul>
+<li>"SubPhase" for phases that are a part of an encounter <br  />
+</li>
+<li>"TimeFrame" for phases that are a part of a log, focusing on a specific time frame of no mechanical bearing <br  />
+</li>
+<li>"Encounter" for phases representing a complete encounter <br  />
+</li>
+<li>"Instance" for phases representing a complete instance <br  />
+</li>
+</ul>
+
+</div>
+</div>
 <a id="a915fc548810f2d0bf3c77cd3e45fcdac" name="a915fc548810f2d0bf3c77cd3e45fcdac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a915fc548810f2d0bf3c77cd3e45fcdac">&#9670;&#160;</a></span>SecondaryTargets</h2>
 

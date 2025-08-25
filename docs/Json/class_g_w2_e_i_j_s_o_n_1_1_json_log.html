@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.12.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.13.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -126,23 +126,45 @@ string?&#160;</td><td class="memItemRight" valign="bottom"><b>EliteInsightsVersi
 int&#160;</td><td class="memItemRight" valign="bottom"><b>TriggerID</b></td></tr>
 <tr class="memdesc:a4003a61ee80e3c7fef014bd904ec5206"><td class="mdescLeft">&#160;</td><td class="mdescRight">The id with which the log has been triggered. <br /></td></tr>
 <tr class="separator:a4003a61ee80e3c7fef014bd904ec5206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed485a6904d95490ea792580a71de2d" id="r_a3ed485a6904d95490ea792580a71de2d"><td class="memItemLeft" align="right" valign="top"><a id="a3ed485a6904d95490ea792580a71de2d" name="a3ed485a6904d95490ea792580a71de2d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsInstanceLog</b></td></tr>
+<tr class="memdesc:a3ed485a6904d95490ea792580a71de2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that the log represents a full instance log. <br  />
+In such logs, it is possible for the same player to be present multiple times, that means they either changed specs or subgroups during the instance. <br  />
+Make sure to only include data for a given player only on phases that intersect their aware times. <br  />
+Individual encounter states (Success, CM, etc) can be checked on phases with JsonPhase.PhaseType set to "Encounter". <br /></td></tr>
+<tr class="separator:a3ed485a6904d95490ea792580a71de2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bf983ea8df11f90bb0c45cc30bf28fd" id="r_a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="memItemLeft" align="right" valign="top"><a id="a4bf983ea8df11f90bb0c45cc30bf28fd" name="a4bf983ea8df11f90bb0c45cc30bf28fd"></a>
 long&#160;</td><td class="memItemRight" valign="bottom"><b>EIEncounterID</b></td></tr>
-<tr class="memdesc:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elite insight id of the log, indicates which encounter the log corresponds to. <br  />
-see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/">https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/EncounterIDs.md/</a>. <br /></td></tr>
+<tr class="memdesc:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elite insight id of the log. <br  />
+see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/">https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/</a> <br  />
+Deprecated, use EILogID instead. <br /></td></tr>
 <tr class="separator:a4bf983ea8df11f90bb0c45cc30bf28fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aef7bd0367bec5c8f1e3e0c5e017a69" id="r_a2aef7bd0367bec5c8f1e3e0c5e017a69"><td class="memItemLeft" align="right" valign="top"><a id="a2aef7bd0367bec5c8f1e3e0c5e017a69" name="a2aef7bd0367bec5c8f1e3e0c5e017a69"></a>
+long&#160;</td><td class="memItemRight" valign="bottom"><b>EILogID</b></td></tr>
+<tr class="memdesc:a2aef7bd0367bec5c8f1e3e0c5e017a69"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elite insight id of the log. <br  />
+see <a href="https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/">https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/LogIDs.md/</a>. <br /></td></tr>
+<tr class="separator:a2aef7bd0367bec5c8f1e3e0c5e017a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b37375e74637cfa2653f6930bddacf4" id="r_a4b37375e74637cfa2653f6930bddacf4"><td class="memItemLeft" align="right" valign="top"><a id="a4b37375e74637cfa2653f6930bddacf4" name="a4b37375e74637cfa2653f6930bddacf4"></a>
 long&#160;</td><td class="memItemRight" valign="bottom"><b>MapID</b></td></tr>
 <tr class="memdesc:a4b37375e74637cfa2653f6930bddacf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The GW2API map id. <br /></td></tr>
 <tr class="separator:a4b37375e74637cfa2653f6930bddacf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ae7e27adb9833f247d48129f6f295a6" id="r_a3ae7e27adb9833f247d48129f6f295a6"><td class="memItemLeft" align="right" valign="top"><a id="a3ae7e27adb9833f247d48129f6f295a6" name="a3ae7e27adb9833f247d48129f6f295a6"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>FightName</b></td></tr>
-<tr class="memdesc:a3ae7e27adb9833f247d48129f6f295a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the fight. <br /></td></tr>
+<tr class="memdesc:a3ae7e27adb9833f247d48129f6f295a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the fight <br  />
+Deprecated, use Name instead. <br /></td></tr>
 <tr class="separator:a3ae7e27adb9833f247d48129f6f295a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20a437760edcb25a85f78f77346ba8be" id="r_a20a437760edcb25a85f78f77346ba8be"><td class="memItemLeft" align="right" valign="top"><a id="a20a437760edcb25a85f78f77346ba8be" name="a20a437760edcb25a85f78f77346ba8be"></a>
+string?&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b></td></tr>
+<tr class="memdesc:a20a437760edcb25a85f78f77346ba8be"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the log. <br /></td></tr>
+<tr class="separator:a20a437760edcb25a85f78f77346ba8be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed8ed8fdc94ee8c2b1083da51349a3fb" id="r_aed8ed8fdc94ee8c2b1083da51349a3fb"><td class="memItemLeft" align="right" valign="top"><a id="aed8ed8fdc94ee8c2b1083da51349a3fb" name="aed8ed8fdc94ee8c2b1083da51349a3fb"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>FightIcon</b></td></tr>
-<tr class="memdesc:aed8ed8fdc94ee8c2b1083da51349a3fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The icon of the fight. <br /></td></tr>
+<tr class="memdesc:aed8ed8fdc94ee8c2b1083da51349a3fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The icon of the fight Deprecated, use Icon instead. <br /></td></tr>
 <tr class="separator:aed8ed8fdc94ee8c2b1083da51349a3fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2625c10f8e6f2d63ec462a8d1b1a9e13" id="r_a2625c10f8e6f2d63ec462a8d1b1a9e13"><td class="memItemLeft" align="right" valign="top"><a id="a2625c10f8e6f2d63ec462a8d1b1a9e13" name="a2625c10f8e6f2d63ec462a8d1b1a9e13"></a>
+string?&#160;</td><td class="memItemRight" valign="bottom"><b>Icon</b></td></tr>
+<tr class="memdesc:a2625c10f8e6f2d63ec462a8d1b1a9e13"><td class="mdescLeft">&#160;</td><td class="mdescRight">The icon of the log. <br /></td></tr>
+<tr class="separator:a2625c10f8e6f2d63ec462a8d1b1a9e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5c3d5102de9dc3b33bbad15f6ee1f7d" id="r_aa5c3d5102de9dc3b33bbad15f6ee1f7d"><td class="memItemLeft" align="right" valign="top"><a id="aa5c3d5102de9dc3b33bbad15f6ee1f7d" name="aa5c3d5102de9dc3b33bbad15f6ee1f7d"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>ArcVersion</b></td></tr>
 <tr class="memdesc:aa5c3d5102de9dc3b33bbad15f6ee1f7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The used arcdps version. <br /></td></tr>
@@ -161,7 +183,7 @@ string?&#160;</td><td class="memItemRight" valign="bottom"><b>Language</b></td><
 <tr class="separator:ab503ea4a5060e39efc794c10a230c0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac075875f8eb8fb8be5a415655a951459" id="r_ac075875f8eb8fb8be5a415655a951459"><td class="memItemLeft" align="right" valign="top"><a id="ac075875f8eb8fb8be5a415655a951459" name="ac075875f8eb8fb8be5a415655a951459"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>FractalScale</b></td></tr>
-<tr class="memdesc:ac075875f8eb8fb8be5a415655a951459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale of the fractal, only applicable for fractal encounters. <br  />
+<tr class="memdesc:ac075875f8eb8fb8be5a415655a951459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale of the fractal, only applicable for fractal logs. <br  />
 Valued at 0 if missing. <br /></td></tr>
 <tr class="separator:ac075875f8eb8fb8be5a415655a951459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae12642cdb8b209e31ca150b4b198ad86" id="r_ae12642cdb8b209e31ca150b4b198ad86"><td class="memItemLeft" align="right" valign="top"><a id="ae12642cdb8b209e31ca150b4b198ad86" name="ae12642cdb8b209e31ca150b4b198ad86"></a>
@@ -170,45 +192,45 @@ byte&#160;</td><td class="memItemRight" valign="bottom"><b>LanguageID</b></td></
 <tr class="separator:ae12642cdb8b209e31ca150b4b198ad86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6198c1dc2545988041a3c065e16bdc4" id="r_aa6198c1dc2545988041a3c065e16bdc4"><td class="memItemLeft" align="right" valign="top"><a id="aa6198c1dc2545988041a3c065e16bdc4" name="aa6198c1dc2545988041a3c065e16bdc4"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>RecordedBy</b></td></tr>
-<tr class="memdesc:aa6198c1dc2545988041a3c065e16bdc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player who recorded the fight. <br /></td></tr>
+<tr class="memdesc:aa6198c1dc2545988041a3c065e16bdc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player who recorded the log. <br /></td></tr>
 <tr class="separator:aa6198c1dc2545988041a3c065e16bdc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61d15ea407f226226ff285437311ea03" id="r_a61d15ea407f226226ff285437311ea03"><td class="memItemLeft" align="right" valign="top"><a id="a61d15ea407f226226ff285437311ea03" name="a61d15ea407f226226ff285437311ea03"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>RecordedAccountBy</b></td></tr>
-<tr class="memdesc:a61d15ea407f226226ff285437311ea03"><td class="mdescLeft">&#160;</td><td class="mdescRight">The account name of the player who recorded the fight. <br /></td></tr>
+<tr class="memdesc:a61d15ea407f226226ff285437311ea03"><td class="mdescLeft">&#160;</td><td class="mdescRight">The account name of the player who recorded the log. <br /></td></tr>
 <tr class="separator:a61d15ea407f226226ff285437311ea03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6ddf396b0cf55ba26385824ff25d0de" id="r_af6ddf396b0cf55ba26385824ff25d0de"><td class="memItemLeft" align="right" valign="top"><a id="af6ddf396b0cf55ba26385824ff25d0de" name="af6ddf396b0cf55ba26385824ff25d0de"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>TimeStart</b></td></tr>
 <tr class="memdesc:af6ddf396b0cf55ba26385824ff25d0de"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: use TimeStartStd instead <br  />
-The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format <br  />
+The time at which the log started in "yyyy-mm-dd hh:mm:ss zz" format <br  />
 The value will be LogData.DefaultTimeValue if the event does not exist. <br /></td></tr>
 <tr class="separator:af6ddf396b0cf55ba26385824ff25d0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8955c9cf429dde4e5fd562f6bc1c5b17" id="r_a8955c9cf429dde4e5fd562f6bc1c5b17"><td class="memItemLeft" align="right" valign="top"><a id="a8955c9cf429dde4e5fd562f6bc1c5b17" name="a8955c9cf429dde4e5fd562f6bc1c5b17"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>TimeEnd</b></td></tr>
 <tr class="memdesc:a8955c9cf429dde4e5fd562f6bc1c5b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: use TimeEndStd instead <br  />
-The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format <br  />
+The time at which the log ended in "yyyy-mm-dd hh:mm:ss zz" format <br  />
 The value will be LogData.DefaultTimeValue if the event does not exist. <br /></td></tr>
 <tr class="separator:a8955c9cf429dde4e5fd562f6bc1c5b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab830a47222f80e61c3c40ebc13ee8412" id="r_ab830a47222f80e61c3c40ebc13ee8412"><td class="memItemLeft" align="right" valign="top"><a id="ab830a47222f80e61c3c40ebc13ee8412" name="ab830a47222f80e61c3c40ebc13ee8412"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>TimeStartStd</b></td></tr>
-<tr class="memdesc:ab830a47222f80e61c3c40ebc13ee8412"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format <br  />
+<tr class="memdesc:ab830a47222f80e61c3c40ebc13ee8412"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the log started in "yyyy-mm-dd hh:mm:ss zzz" format <br  />
 The value will be LogData.DefaultTimeValue if the event does not exist. <br /></td></tr>
 <tr class="separator:ab830a47222f80e61c3c40ebc13ee8412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1eaafbfc1afe1ce4316dc58dcbc90b8f" id="r_a1eaafbfc1afe1ce4316dc58dcbc90b8f"><td class="memItemLeft" align="right" valign="top"><a id="a1eaafbfc1afe1ce4316dc58dcbc90b8f" name="a1eaafbfc1afe1ce4316dc58dcbc90b8f"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>TimeEndStd</b></td></tr>
-<tr class="memdesc:a1eaafbfc1afe1ce4316dc58dcbc90b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format <br  />
+<tr class="memdesc:a1eaafbfc1afe1ce4316dc58dcbc90b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time at which the log ended in "yyyy-mm-dd hh:mm:ss zzz" format <br  />
 The value will be LogData.DefaultTimeValue if the event does not exist. <br /></td></tr>
 <tr class="separator:a1eaafbfc1afe1ce4316dc58dcbc90b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f739617d3dbdc5cf5e18452cd375d3b" id="r_a7f739617d3dbdc5cf5e18452cd375d3b"><td class="memItemLeft" align="right" valign="top"><a id="a7f739617d3dbdc5cf5e18452cd375d3b" name="a7f739617d3dbdc5cf5e18452cd375d3b"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b></td></tr>
-<tr class="memdesc:a7f739617d3dbdc5cf5e18452cd375d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the fight in "xh xm xs xms" format. <br /></td></tr>
+<tr class="memdesc:a7f739617d3dbdc5cf5e18452cd375d3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the log in "xh xm xs xms" format. <br /></td></tr>
 <tr class="separator:a7f739617d3dbdc5cf5e18452cd375d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab104f45d79c85e280cbf3f0c26058417" id="r_ab104f45d79c85e280cbf3f0c26058417"><td class="memItemLeft" align="right" valign="top"><a id="ab104f45d79c85e280cbf3f0c26058417" name="ab104f45d79c85e280cbf3f0c26058417"></a>
 long&#160;</td><td class="memItemRight" valign="bottom"><b>DurationMS</b></td></tr>
-<tr class="memdesc:ab104f45d79c85e280cbf3f0c26058417"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the fight in ms. <br /></td></tr>
+<tr class="memdesc:ab104f45d79c85e280cbf3f0c26058417"><td class="mdescLeft">&#160;</td><td class="mdescRight">The duration of the log in ms. <br /></td></tr>
 <tr class="separator:ab104f45d79c85e280cbf3f0c26058417"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e1890a14195ad2f83a75d25235157bf" id="r_a1e1890a14195ad2f83a75d25235157bf"><td class="memItemLeft" align="right" valign="top"><a id="a1e1890a14195ad2f83a75d25235157bf" name="a1e1890a14195ad2f83a75d25235157bf"></a>
 long&#160;</td><td class="memItemRight" valign="bottom"><b>LogStartOffset</b></td></tr>
-<tr class="memdesc:a1e1890a14195ad2f83a75d25235157bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset between fight start and log start. <br /></td></tr>
+<tr class="memdesc:a1e1890a14195ad2f83a75d25235157bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset between log start and evtc log start. <br /></td></tr>
 <tr class="separator:a1e1890a14195ad2f83a75d25235157bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7c320b4922f441a628867d21eb2351a" id="r_ab7c320b4922f441a628867d21eb2351a"><td class="memItemLeft" align="right" valign="top"><a id="ab7c320b4922f441a628867d21eb2351a" name="ab7c320b4922f441a628867d21eb2351a"></a>
 string?&#160;</td><td class="memItemRight" valign="bottom"><b>InstanceTimeStartStd</b></td></tr>
@@ -220,32 +242,32 @@ string?&#160;</td><td class="memItemRight" valign="bottom"><b>InstanceIP</b></td
 <tr class="memdesc:aebd87dfd421149a38e8f29ba06234f59"><td class="mdescLeft">&#160;</td><td class="mdescRight">XXX.XXX.XXX.XXX IP address of the instance <br  />
 The value will be null if the event does not exist. <br /></td></tr>
 <tr class="separator:aebd87dfd421149a38e8f29ba06234f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ca1eb2431159f4fc3717905d8b78029" id="r_a0ca1eb2431159f4fc3717905d8b78029"><td class="memItemLeft" align="right" valign="top"><a id="a0ca1eb2431159f4fc3717905d8b78029" name="a0ca1eb2431159f4fc3717905d8b78029"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>InstancePrivacy</b></td></tr>
-<tr class="memdesc:a0ca1eb2431159f4fc3717905d8b78029"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of instance privacy <br  />
+<tr class="memitem:aec9d5b34d4ca94c711ae35f14bb3e331" id="r_aec9d5b34d4ca94c711ae35f14bb3e331"><td class="memItemLeft" align="right" valign="top"><a id="aec9d5b34d4ca94c711ae35f14bb3e331" name="aec9d5b34d4ca94c711ae35f14bb3e331"></a>
+string?&#160;</td><td class="memItemRight" valign="bottom"><b>InstancePrivacy</b></td></tr>
+<tr class="memdesc:aec9d5b34d4ca94c711ae35f14bb3e331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of instance privacy <br  />
 Possible values are "Unknown", "Not Applicable", "Public Instance" and "Private Instance". <br /></td></tr>
-<tr class="separator:a0ca1eb2431159f4fc3717905d8b78029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:aec9d5b34d4ca94c711ae35f14bb3e331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a5ec959a120ce2016a7463dd447742" id="r_ad3a5ec959a120ce2016a7463dd447742"><td class="memItemLeft" align="right" valign="top"><a id="ad3a5ec959a120ce2016a7463dd447742" name="ad3a5ec959a120ce2016a7463dd447742"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>Success</b></td></tr>
-<tr class="memdesc:ad3a5ec959a120ce2016a7463dd447742"><td class="mdescLeft">&#160;</td><td class="mdescRight">The success status of the fight. <br /></td></tr>
+<tr class="memdesc:ad3a5ec959a120ce2016a7463dd447742"><td class="mdescLeft">&#160;</td><td class="mdescRight">The success status of the log. <br /></td></tr>
 <tr class="separator:ad3a5ec959a120ce2016a7463dd447742"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaa0d773f609bb6ef25a59b0ff5ef8a8" id="r_acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="memItemLeft" align="right" valign="top"><a id="acaa0d773f609bb6ef25a59b0ff5ef8a8" name="acaa0d773f609bb6ef25a59b0ff5ef8a8"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsCM</b></td></tr>
-<tr class="memdesc:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the fight is in challenge mode. <br /></td></tr>
+<tr class="memdesc:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the log is in challenge mode. <br /></td></tr>
 <tr class="separator:acaa0d773f609bb6ef25a59b0ff5ef8a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5de911362d014d7118f6507e360a95c2" id="r_a5de911362d014d7118f6507e360a95c2"><td class="memItemLeft" align="right" valign="top"><a id="a5de911362d014d7118f6507e360a95c2" name="a5de911362d014d7118f6507e360a95c2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsLegendaryCM</b></td></tr>
-<tr class="memdesc:a5de911362d014d7118f6507e360a95c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the fight is in legendary challenge mode. <br  />
+<tr class="memdesc:a5de911362d014d7118f6507e360a95c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the log is in legendary challenge mode. <br  />
 If this is true, IsCM will also be true. <br /></td></tr>
 <tr class="separator:a5de911362d014d7118f6507e360a95c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dae87c28216f2ecb937c1eaa5618346" id="r_a3dae87c28216f2ecb937c1eaa5618346"><td class="memItemLeft" align="right" valign="top"><a id="a3dae87c28216f2ecb937c1eaa5618346" name="a3dae87c28216f2ecb937c1eaa5618346"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsLateStart</b></td></tr>
-<tr class="memdesc:a3dae87c28216f2ecb937c1eaa5618346"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if EI detected that the encounter started later than expected. <br  />
-This value being false does not mean the encounter could not have started later than expected. <br /></td></tr>
+<tr class="memdesc:a3dae87c28216f2ecb937c1eaa5618346"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if EI detected that the log started later than expected. <br  />
+This value being false does not mean the log could not have started later than expected. <br /></td></tr>
 <tr class="separator:a3dae87c28216f2ecb937c1eaa5618346"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8dbdb5f96fda513ad748bcb2df3d74c" id="r_ab8dbdb5f96fda513ad748bcb2df3d74c"><td class="memItemLeft" align="right" valign="top"><a id="ab8dbdb5f96fda513ad748bcb2df3d74c" name="ab8dbdb5f96fda513ad748bcb2df3d74c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>MissingPreEvent</b></td></tr>
-<tr class="memdesc:ab8dbdb5f96fda513ad748bcb2df3d74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if an encounter that is supposed to have a pre-event does not have it. <br /></td></tr>
+<tr class="memdesc:ab8dbdb5f96fda513ad748bcb2df3d74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if an log that is supposed to have a pre-event does not have it. <br /></td></tr>
 <tr class="separator:ab8dbdb5f96fda513ad748bcb2df3d74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43a0aac09135663213e64ed1614c8d5c" id="r_a43a0aac09135663213e64ed1614c8d5c"><td class="memItemLeft" align="right" valign="top"><a id="a43a0aac09135663213e64ed1614c8d5c" name="a43a0aac09135663213e64ed1614c8d5c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>Anonymous</b></td></tr>

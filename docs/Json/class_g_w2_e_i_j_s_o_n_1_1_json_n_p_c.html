@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.12.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;3.13.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -145,7 +145,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>EnemyPlayer</b></td><
 IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BreakbarPercents</b></td></tr>
 <tr class="memdesc:a4b2b19c44ad66e1d5195aa5df95728d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the breakbar percent of the actor <br  />
 Value[i][0] will be the time, value[i][1] will be breakbar % <br  />
-If i corresponds to the last element that means the breakbar did not change for the remainder of the fight <br  />
+If i corresponds to the last element that means the breakbar did not change for the remainder of the log <br  />
 . <br /></td></tr>
 <tr class="separator:a4b2b19c44ad66e1d5195aa5df95728d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html">GW2EIJSON.JsonActor</a></td></tr>
@@ -155,11 +155,13 @@ string?&#160;</td><td class="memItemRight" valign="bottom"><b>Name</b></td></tr>
 <tr class="separator:a309f9e6dc7ce10cd331b219a85c48a08 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_afc437a7cb137cd4c55b250fa05714062"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>FirstAware</b></td></tr>
-<tr class="memdesc:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which actor started being tracked. <br /></td></tr>
+<tr class="memdesc:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which actor started being tracked. <br  />
+For players, this and JsonActor.LastAware should be used to determine in which phases given player was active. <br /></td></tr>
 <tr class="separator:afc437a7cb137cd4c55b250fa05714062 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a692d4ac4c43cd9862813e180552e30f3"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>LastAware</b></td></tr>
-<tr class="memdesc:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which target ended being tracked. <br /></td></tr>
+<tr class="memdesc:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which target ended being tracked. <br  />
+For players, this and JsonActor.FirstAware should be used to determine in which phases given player was active. <br /></td></tr>
 <tr class="separator:a692d4ac4c43cd9862813e180552e30f3 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d6e844feaeb74afb0992ae8c0c3e73a inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a4d6e844feaeb74afb0992ae8c0c3e73a"><td class="memItemLeft" align="right" valign="top">
 int&#160;</td><td class="memItemRight" valign="bottom"><b>TotalHealth</b></td></tr>
@@ -248,33 +250,33 @@ Length == # of phases.  <br /></td></tr>
 IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ConditionsStates</b></td></tr>
 <tr class="memdesc:a2742b34879f4e8691a563369ee286778 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of conditions <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of conditions present from Array[i][0] to Array[i+1][0] <br  />
-If i corresponds to the last element that means the status did not change for the remainder of the fight <br  />
+If i corresponds to the last element that means the status did not change for the remainder of the log <br  />
 . <br /></td></tr>
 <tr class="separator:a2742b34879f4e8691a563369ee286778 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7bf645171350e485eb27946e0f8505b0"><td class="memItemLeft" align="right" valign="top">
 IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BoonsStates</b></td></tr>
 <tr class="memdesc:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of boons <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of boons present from Array[i][0] to Array[i+1][0] <br  />
-If i corresponds to the last element that means the status did not change for the remainder of the fight. <br /></td></tr>
+If i corresponds to the last element that means the status did not change for the remainder of the log. <br /></td></tr>
 <tr class="separator:a7bf645171350e485eb27946e0f8505b0 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a814d96740f4a94e4b6a4276d2e52eb63"><td class="memItemLeft" align="right" valign="top">
 IReadOnlyList&lt; IReadOnlyList&lt; long &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>ActiveCombatMinions</b></td></tr>
 <tr class="memdesc:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int[2] that represents the number of active combat minions <br  />
 Array[i][0] will be the time, Array[i][1] will be the number of active combat minions present from Array[i][0] to Array[i+1][0] <br  />
-If i corresponds to the last element that means the status did not change for the remainder of the fight. <br /></td></tr>
+If i corresponds to the last element that means the status did not change for the remainder of the log. <br /></td></tr>
 <tr class="separator:a814d96740f4a94e4b6a4276d2e52eb63 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a7f88b049d563616bab149f5a5c87c679"><td class="memItemLeft" align="right" valign="top">
 IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>HealthPercents</b></td></tr>
 <tr class="memdesc:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the health status of the actor <br  />
 Array[i][0] will be the time, Array[i][1] will be health % <br  />
-If i corresponds to the last element that means the health did not change for the remainder of the fight <br  />
+If i corresponds to the last element that means the health did not change for the remainder of the log <br  />
 . <br /></td></tr>
 <tr class="separator:a7f88b049d563616bab149f5a5c87c679 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_a045dcd1d37a0519524dde4d749940e8b"><td class="memItemLeft" align="right" valign="top">
 IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;?&#160;</td><td class="memItemRight" valign="bottom"><b>BarrierPercents</b></td></tr>
 <tr class="memdesc:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double[2] that represents the barrier status of the actor <br  />
 Array[i][0] will be the time, Array[i][1] will be barrier % <br  />
-If i corresponds to the last element that means the health did not change for the remainder of the fight <br  />
+If i corresponds to the last element that means the health did not change for the remainder of the log <br  />
 . <br /></td></tr>
 <tr class="separator:a045dcd1d37a0519524dde4d749940e8b inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2b3bcc076c9fe12662d1c9ffa1fdbd4 inherit pub_attribs_class_g_w2_e_i_j_s_o_n_1_1_json_actor" id="r_af2b3bcc076c9fe12662d1c9ffa1fdbd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html">JsonActorCombatReplayData</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_actor.html#af2b3bcc076c9fe12662d1c9ffa1fdbd4">CombatReplayData</a></td></tr>

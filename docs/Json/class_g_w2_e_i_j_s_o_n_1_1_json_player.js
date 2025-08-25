@@ -29,6 +29,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_player =
     [ "HasCommanderTag", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66c207adcd20b26b2179ec82e1ba9e69", null ],
     [ "IncomingDamageModifiers", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9e1c4da637060580bfeb291564e41241", null ],
     [ "IncomingDamageModifiersTarget", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a14d449c269faf102ce3e958e1c94e6e1", null ],
+    [ "IsEnglobed", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ab18b2a50502fa5438adb77c2b58124df", null ],
     [ "NotInSquad", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a83e27c7f3a17dc3ef02fab1562b9e258", null ],
     [ "OffGroupBuffs", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ab5fca5f59f87c72eabb369f71c9b640a", null ],
     [ "OffGroupBuffsActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a58389e62071ed03a20dd6f284d308ea0", null ],
