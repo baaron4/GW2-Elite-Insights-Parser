@@ -49,12 +49,14 @@ You can change the settings at any time using the Settings window.
 ![how to](https://user-images.githubusercontent.com/30677999/40148954-6ec9215a-5936-11e8-94ad-d2520e7c4539.PNG)
 
 Settings can be configured using .conf files (see Settings/sample.conf for an example). You can then use it with -c.
-For console:
 
+### For console
+
+You can refresh the API caches using the -cache option.
 ```
 GuildWars2EliteInsights-CLI.exe -c [config path] [logs]
 ```
-For UI:
+### For UI
 
 ```
 GuildWars2EliteInsight.exe -c [config path] [logs]
