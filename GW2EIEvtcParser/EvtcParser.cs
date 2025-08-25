@@ -980,10 +980,16 @@ public class EvtcParser
         {
             _allAgentsList.Add(new AgentItem(missingAgentValue, "UNKNOWN " + missingAgentValue, Spec.NPC, NonIdentifiedSpecies, AgentItem.AgentType.NPC, 0, 0, 0, 0, 0, 0));
         }
-        var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
+        var agentsLookup = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => {
+            var res = x.ToList();
+            res.SortByFirstAware();
+            return res;
+        });
         //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
         // Set Agent instid, firstAware and lastAware
         var invalidCombatItems = new HashSet<CombatItem>();
+        var orphanedSrcCombatItems = new List<CombatItem>();
+        var orphanedDstCombatItems = new List<CombatItem>();
         foreach (CombatItem c in _combatItems)
         {
             if (c.SrcIsAgent())
@@ -1004,6 +1010,10 @@ public class EvtcParser
                     {
                         invalidCombatItems.Add(c);
                     }
+                } 
+                else if (c.SrcInstid > 0)
+                {
+                    orphanedSrcCombatItems.Add(c);
                 }
             }
             if (c.DstIsAgent())
@@ -1023,6 +1033,42 @@ public class EvtcParser
                     if (!updatedAgent && c.DstInstid != 0)
                     {
                         invalidCombatItems.Add(c);
+                    }
+                } 
+                else if (c.DstInstid > 0)
+                {
+                    orphanedDstCombatItems.Add(c);
+                }
+            }
+        }
+        if (orphanedSrcCombatItems.Count > 0 || orphanedDstCombatItems.Count > 0)
+        {
+            var agentsInstidLookup = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => {
+                var res = x.ToList();
+                res.SortByFirstAware();
+                return res;
+            });
+            foreach (var c in orphanedSrcCombatItems)
+            {
+                if (agentsInstidLookup.TryGetValue(c.SrcInstid, out var candidates))
+                {
+                    var candidate = candidates.FirstOrDefault(x => x.InAwareTimes(c.Time - 300) || x.InAwareTimes(c.Time + 300));
+                    if (candidate != null)
+                    {
+                        c.OverrideSrcAgent(candidate.Agent);
+                        UpdateAgentData(candidate, c.Time, 0, false);
+                    }
+                }
+            }
+            foreach (var c in orphanedDstCombatItems)
+            {
+                if (agentsInstidLookup.TryGetValue(c.DstInstid, out var candidates))
+                {
+                    var candidate = candidates.FirstOrDefault(x => x.InAwareTimes(c.Time - 300) || x.InAwareTimes(c.Time + 300));
+                    if (candidate != null)
+                    {
+                        c.OverrideDstAgent(candidate.Agent);
+                        UpdateAgentData(candidate, c.Time, 0, false);
                     }
                 }
             }
