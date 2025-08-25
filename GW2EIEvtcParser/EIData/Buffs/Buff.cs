@@ -123,6 +123,21 @@ public class Buff : IVersionable
         return new Buff(name + " " + id, id, Source.Item, capacity > 1 ? BuffStackType.Stacking : BuffStackType.Force, capacity, classification, link);
     }
 
+    private bool IsIncompatibleStackLogic(BuffStackType expectedStackType)
+    {
+        switch (StackType)
+        {
+            // Simulation logic does not change
+            case BuffStackType.StackingConditionalLoss:
+            case BuffStackType.Stacking:
+            case BuffStackType.StackingUniquePerSrc:
+                return !(expectedStackType == BuffStackType.StackingConditionalLoss || expectedStackType == BuffStackType.Stacking || expectedStackType == BuffStackType.StackingUniquePerSrc);
+            default:
+                break;
+        }
+        return expectedStackType != StackType;
+    }
+
     internal void VerifyBuffInfoEvent(BuffInfoEvent buffInfoEvent, EvtcVersionEvent versionEvent, ParserController operation)
     {
         if (buffInfoEvent.BuffID != ID)
@@ -138,7 +153,7 @@ public class Buff : IVersionable
             var message = "Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType;
 #if DEBUG
             // I don't exactly remember when stack type on buff info event was fixed on arc's side
-            if (versionEvent.Build > 20240000)
+            if (versionEvent.Build > 20240600 && IsIncompatibleStackLogic(buffInfoEvent.StackingType))
             {
                 throw new InvalidDataException(message);
             }
