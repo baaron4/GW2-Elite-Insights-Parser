@@ -75,9 +75,9 @@ public class ParsedEvtcLog
             } 
             else if (p.FirstAware < LogData.LogEnd)
             {
-                if (CombatData.GetDamageTakenData(p.AgentItem).Any(x => !x.ToFriendly) ||
-                    CombatData.GetDamageData(p.AgentItem).Any(x => !x.ToFriendly) ||
-                    CombatData.GetBuffDataBySrc(p.AgentItem).Any(x => !p.AgentItem.IsMasterOfOrSelf(x.To)))
+                if (CombatData.GetDamageTakenData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
+                    CombatData.GetDamageData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
+                    CombatData.GetBuffDataBySrc(p.EnglobingAgentItem).Any(x => !p.AgentItem.IsMasterOfOrSelf(x.To)))
                 {
                     activePlayers.Add(p);
                 }
