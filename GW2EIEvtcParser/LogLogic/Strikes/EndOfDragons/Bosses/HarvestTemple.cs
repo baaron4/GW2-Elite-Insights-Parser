@@ -466,7 +466,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             TargetID.TheDragonVoidZhaitan,
             TargetID.TheDragonVoidSooWon,
         };
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).DistinctBy(x => x.AttackTarget);
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
         foreach (var attackTarget in attackTargetEvents)
         {

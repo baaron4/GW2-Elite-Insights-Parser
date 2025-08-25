@@ -53,19 +53,20 @@ public static class AgentManipulationHelper
         }
         // Copy attack targets
         var attackTargetAgents = new HashSet<AgentItem>();
-        var attackTargetsToCopy = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList() ;
-        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1);
+        var attackTargetsToCopy = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).Select(x => (new AttackTargetEvent(x, agentData), x)).DistinctBy(x => x.Item1.AttackTarget).ToList() ;
+        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1).Select(x => new TargetableEvent(x, agentData));
         // Events copied
         var copied = new List<CombatItem>(attackTargetsToCopy.Count + 10);
-        foreach (CombatItem c in attackTargetsToCopy)
+        foreach (var tuple in attackTargetsToCopy)
         {
+            var c = tuple.Item2;
             var cExtra = new CombatItem(c);
             cExtra.OverrideTime(to.FirstAware - 1); // To make sure they are put before all actual agent events
             cExtra.OverrideDstAgent(to);
             combatData.Add(cExtra);
             copied.Add(cExtra);
-            AgentItem at = agentData.GetAgent(c.SrcAgent, c.Time);
-            if (targetableOns.Any(x => x.SrcMatchesAgent(at)))
+            AgentItem at = tuple.Item1.AttackTarget;
+            if (targetableOns.Any(x => x.Src.Is(at)))
             {
                 attackTargetAgents.Add(at);
             }
