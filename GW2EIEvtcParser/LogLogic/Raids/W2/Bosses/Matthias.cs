@@ -31,7 +31,7 @@ internal class Matthias : SalvationPass
                     .WithMinions(),
             ]),
             new MechanicGroup([
-                new PlayerDstHealthDamageHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
+                new PlayerDstHealthDamageHitMechanic(FieryVortex, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado Matthias)","Tornado (Matthias)", 250),
                 new PlayerDstBuffApplyMechanic(Slow, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD", "Knockdown by Icy Patch","Icy Patch KD", 0)
                     .UsingBuffChecker(Stability, false)
                     .UsingChecker((br,log) => br.AppliedDuration == 10000),
@@ -205,7 +205,8 @@ internal class Matthias : SalvationPass
                 {
                     continue;
                 }
-                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], sacrifice.Spec, TargetID.MatthiasSacrificeCrystal, false);
+                sacrifice = sacrifice.EnglobingAgentItem;
+                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
                 foreach (CombatItem cbt in combatData)
                 {
                     if (!sacrificeCrystal.InAwareTimes(cbt.Time))
@@ -275,6 +276,11 @@ internal class Matthias : SalvationPass
             TargetID.Matthias,
             TargetID.MatthiasSacrificeCrystal
         ];
+    }
+
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [(int)TargetID.MatthiasSacrificeCrystal];
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

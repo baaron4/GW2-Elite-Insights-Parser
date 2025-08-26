@@ -40,7 +40,7 @@ internal class BanditTrio : SalvationPass
             new MechanicGroup([
                 new PlayerCastStartMechanic(ThrowOilKeg, new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
                 new PlayerDstBuffApplyMechanic(Burning, new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Narella)),
-                new PlayerDstHealthDamageHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado)","Tornado", 250),
+                new PlayerDstHealthDamageHitMechanic(FieryVortexNarella, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado", "Fiery Vortex (Tornado Narella)","Tornado (Narella)", 250),
                 new PlayerDstHealthDamageHitMechanic(FlakShotNarella, new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
             ]),
         ]);
