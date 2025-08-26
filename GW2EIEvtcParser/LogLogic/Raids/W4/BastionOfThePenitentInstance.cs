@@ -44,6 +44,16 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
     {
         return "Bastion Of The Penitent";
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var chest = agentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
+        if (chest != null)
+        {
+            logData.SetSuccess(true, chest.FirstAware);
+            return;
+        }
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+    }
 
     private List<PhaseData> HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {

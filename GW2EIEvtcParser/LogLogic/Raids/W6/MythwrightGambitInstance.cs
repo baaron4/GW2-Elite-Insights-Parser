@@ -41,6 +41,17 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         return "Mythwright Gambit";
     }
+
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var chest = agentData.GetGadgetsByID(_qadim.ChestID).FirstOrDefault();
+        if (chest != null)
+        {
+            logData.SetSuccess(true, chest.FirstAware);
+            return;
+        }
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+    }
     private List<PhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();

@@ -40,6 +40,17 @@ internal class SalvationPassInstance : SalvationPass
         return "Salvation Pass";
     }
 
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var chest = agentData.GetGadgetsByID(_matthias.ChestID).FirstOrDefault();
+        if (chest != null)
+        {
+            logData.SetSuccess(true, chest.FirstAware);
+            return;
+        }
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+    }
+
     private List<PhaseData> HandleTrioPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var packedTrios = new List<List<SingleActor>>();
@@ -47,7 +58,7 @@ internal class SalvationPassInstance : SalvationPass
         {
             if (targetsByIDs.TryGetValue((int)TargetID.Zane, out var zanes))
             {
-                if (targetsByIDs.TryGetValue((int)TargetID.Berg, out var berg))
+                if (targetsByIDs.TryGetValue((int)TargetID.Berg, out var bergs))
                 {
                     foreach (var narella in narellas)
                     {
@@ -58,7 +69,7 @@ internal class SalvationPassInstance : SalvationPass
                         {
                             pack.Add(curZane);
                         }
-                        var curBerg = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
+                        var curBerg = bergs.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curBerg != null)
                         {
                             pack.Add(curBerg);

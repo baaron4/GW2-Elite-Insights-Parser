@@ -49,12 +49,22 @@ internal class HallOfChainsInstance : HallOfChains
     {
         return "Hall Of Chains";
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var chest = agentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
+        if (chest != null)
+        {
+            logData.SetSuccess(true, chest.FirstAware);
+            return;
+        }
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+    }
 
-    private List<PhaseData> HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<PhaseData> HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, IReadOnlyDictionary<int, List<SingleActor>> friendliesByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
         var mainPhase = phases[0];
-        if (targetsByIDs.TryGetValue((int)TargetID.Desmina, out var desminas) 
+        if (friendliesByIDs.TryGetValue((int)TargetID.Desmina, out var desminas) 
             && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
             var dummy = dummies.FirstOrDefault(x => x.Character == "River of Souls");
@@ -72,7 +82,7 @@ internal class HallOfChainsInstance : HallOfChains
                     long start = currentEnervators.Min(x => x.FirstAware);
                     bool success = false;
                     long end = desmina.LastAware;
-                    if (chest != null && chest.InAwareTimes(desmina.LastAware + 500))
+                    if (chest != null && desmina.InAwareTimes(chest.LastAware - 500))
                     {
                         end = chest.FirstAware;
                         success = true;
@@ -217,10 +227,11 @@ internal class HallOfChainsInstance : HallOfChains
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+        var friendliesByIDs = NonSquadFriendlies.Where(x => x.AgentItem.IsNPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
             return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
         });
-        HandleRiverOfSoulsPhases(targetsByIDs, log, phases);
+        HandleRiverOfSoulsPhases(targetsByIDs, friendliesByIDs, log, phases);
         HandleStatueOfIcePhases(targetsByIDs, log, phases);
         HandleStatueOfDeathPhases(targetsByIDs, log, phases);
         HandleStatueOfDarknessPhases(targetsByIDs, log, phases);

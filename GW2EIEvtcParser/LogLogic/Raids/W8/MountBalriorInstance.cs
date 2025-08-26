@@ -42,6 +42,16 @@ internal class MountBalriorInstance : MountBalrior
     {
         return "Mount Balrior";
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var chest = agentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
+        if (chest != null)
+        {
+            logData.SetSuccess(true, chest.FirstAware);
+            return;
+        }
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+    }
 
     private List<PhaseData> HandleGreerPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
