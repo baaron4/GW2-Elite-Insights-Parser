@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column justify-content-end" :style="{'height': height}">
         <div v-if="isPresent('Encounter Specifics')">
-            <combat-replay-buff-display :buffarray="data.encounterSecifics"></combat-replay-buff-display>
+            <combat-replay-buff-display :buffarray="data.encounterSpecifics"></combat-replay-buff-display>
         </div>
         <div v-if="isPresent('Others')">
             <combat-replay-buff-display :buffarray="data.others"></combat-replay-buff-display>
