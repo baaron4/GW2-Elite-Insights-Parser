@@ -191,20 +191,20 @@ internal class BanditTrio : SalvationPass
         return LogData.LogStartStatus.Normal;
     }
 
-    private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
+    private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, PhaseData encounterPhase, ParsedEvtcLog log)
     {
-        EnterCombatEvent? phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
+        EnterCombatEvent? phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault(x => x.Time >= encounterPhase.Start);
         if (phaseStart != null)
         {
             long start = phaseStart.Time;
             DeadEvent? phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
-            long end = log.LogData.LogEnd;
+            long end = encounterPhase.End;
             if (phaseEnd != null)
             {
                 end = phaseEnd.Time;
             }
-            var phase = new SubPhasePhaseData(start, Math.Min(end, log.LogData.LogEnd));
-            phase.AddParentPhase(phases[0]);
+            var phase = new SubPhasePhaseData(start, Math.Min(end, encounterPhase.End));
+            phase.AddParentPhase(encounterPhase);
             phase.AddTarget(target, log);
             phase.Name = target.ID switch
             {
@@ -217,6 +217,19 @@ internal class BanditTrio : SalvationPass
         }
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor berg, SingleActor zane, SingleActor narella, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(3);
+        SetPhasePerTarget(berg, phases, encounterPhase, log);
+        SetPhasePerTarget(zane, phases, encounterPhase, log);
+        SetPhasePerTarget(narella, phases, encounterPhase, log);
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -224,14 +237,7 @@ internal class BanditTrio : SalvationPass
         SingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
         SingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
         phases[0].AddTargets(Targets, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        foreach (SingleActor target in Targets)
-        {
-            SetPhasePerTarget(target, phases, log);
-        }
+        ComputePhases(log, berg, zane, narella, phases[0], requirePhases);
         return phases;
     }
 

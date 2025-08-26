@@ -127,21 +127,21 @@ internal class Matthias : SalvationPass
             new BuffLossCastFinder(UnstableBloodMagic, UnstableBloodMagic),
         ];
     }
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor matthias, PhaseData encounterPhase, bool requirePhases)
     {
-        long logEnd = log.LogData.LogEnd;
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
-        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var encounterStart = encounterPhase.Start;
+        var encounterEnd = encounterPhase.End;
+        var phases = new List<PhaseData>(4);
         // Special buff cast check
         BuffEvent? heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
         if (heatWave != null)
         {
-            phases.Add(new SubPhasePhaseData(0, heatWave.Time));
+            phases.Add(new SubPhasePhaseData(encounterStart, heatWave.Time));
             BuffEvent? downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
             if (downPour != null)
             {
@@ -150,33 +150,38 @@ internal class Matthias : SalvationPass
                 if (abo != null)
                 {
                     phases.Add(new SubPhasePhaseData(downPour.Time, abo.Time));
-                    BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
+                    BuffEvent? invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, matthias.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
                     if (invulRemove != null)
                     {
-                        phases.Add(new SubPhasePhaseData(invulRemove.Time, logEnd));
+                        phases.Add(new SubPhasePhaseData(invulRemove.Time, encounterEnd));
                     }
                 }
                 else
                 {
-                    phases.Add(new SubPhasePhaseData(downPour.Time, logEnd));
+                    phases.Add(new SubPhasePhaseData(downPour.Time, encounterEnd));
                 }
             }
             else
             {
-                phases.Add(new SubPhasePhaseData(heatWave.Time, logEnd));
+                phases.Add(new SubPhasePhaseData(heatWave.Time, encounterEnd));
             }
         }
-        else
-        {
-            phases.Add(new SubPhasePhaseData(log.LogData.LogStart, logEnd));
-        }
         string[] namesMat = ["Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase"];
-        for (int i = 1; i < phases.Count; i++)
+        for (int i = 0; i < phases.Count; i++)
         {
-            phases[i].Name = namesMat[i - 1];
-            phases[i].AddParentPhase(phases[0]);
-            phases[i].AddTarget(mainTarget, log);
+            phases[i].Name = namesMat[i];
+            phases[i].AddParentPhase(encounterPhase);
+            phases[i].AddTarget(matthias, log);
         }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        long logEnd = log.LogData.LogEnd;
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
+        phases[0].AddTarget(mainTarget, log);
+        phases.AddRange(ComputePhases(log, mainTarget, phases[0], requirePhases));
         return phases;
     }
 

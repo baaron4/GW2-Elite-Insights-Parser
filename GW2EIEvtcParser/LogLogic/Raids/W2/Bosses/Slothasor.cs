@@ -112,31 +112,40 @@ internal class Slothasor : SalvationPass
         ];
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        long encounterStart = encounterPhase.Start;
+        long encounterEnd = encounterPhase.End;
+        var sleepy = slothasor.GetCastEvents(log, encounterStart, encounterEnd).Where(x => x.SkillID == NarcolepsySkill);
+        long start = 0;
+        int i = 1;
+        foreach (CastEvent c in sleepy)
+        {
+            var phase = new SubPhasePhaseData(start, Math.Min(c.Time, encounterEnd), "Phase " + i++);
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(slothasor, log);
+            start = c.EndTime;
+            phases.Add(phase);
+        }
+        var lastPhase = new SubPhasePhaseData(start, encounterEnd, "Phase " + i++);
+        lastPhase.AddParentPhase(encounterPhase);
+        lastPhase.AddTarget(slothasor, log);
+        phases.Add(lastPhase);
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
         phases[0].AddTarget(mainTarget, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        var sleepy = mainTarget.GetCastEvents(log, log.LogData.LogStart, logEnd).Where(x => x.SkillID == NarcolepsySkill);
-        long start = 0;
-        int i = 1;
-        foreach (CastEvent c in sleepy)
-        {
-            var phase = new SubPhasePhaseData(start, Math.Min(c.Time, logEnd), "Phase " + i++);
-            phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget, log);
-            start = c.EndTime;
-            phases.Add(phase);
-        }
-        var lastPhase = new SubPhasePhaseData(start, logEnd, "Phase " + i++);
-        lastPhase.AddParentPhase(phases[0]);
-        lastPhase.AddTarget(mainTarget, log);
-        phases.Add(lastPhase);
+        phases.AddRange(ComputePhases(log, mainTarget, phases[0], requirePhases));
         return phases;
     }
 

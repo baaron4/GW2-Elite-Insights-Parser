@@ -51,7 +51,7 @@ internal class SalvationPassInstance : SalvationPass
                 {
                     foreach (var narella in narellas)
                     {
-                        var pack = new List<SingleActor>();
+                        var pack = new List<SingleActor>(3);
                         pack.Add(narella);
                         var curZane = zanes.FirstOrDefault(x => x.AgentItem.InAwareTimes(narella.AgentItem));
                         if (curZane != null)
@@ -127,9 +127,33 @@ internal class SalvationPassInstance : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], "Slothasor", _slothasor);
-        HandleTrioPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), "Matthias", _matthias);
+        {
+
+            var slothasorPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], "Slothasor", _slothasor);
+            foreach (var slothasorPhase in slothasorPhases)
+            {
+                var slothasor = slothasorPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Slothasor));
+                phases.AddRange(Slothasor.ComputePhases(log, slothasor, slothasorPhase, requirePhases));
+            }
+        }
+        {
+            var trioPhases = HandleTrioPhases(targetsByIDs, log, phases);
+            foreach (var trioPhase in trioPhases)
+            {
+                var berg = trioPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Berg));
+                var zane = trioPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Zane));
+                var narella = trioPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Narella));
+                phases.AddRange(BanditTrio.ComputePhases(log, berg, zane, narella, trioPhase, requirePhases));
+            }
+        }
+        {
+            var matthiasPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Matthias, Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal)), "Matthias", _matthias);
+            foreach (var matthiasPhase in matthiasPhases)
+            {
+                var matthias = matthiasPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Matthias));
+                phases.AddRange(Matthias.ComputePhases(log, matthias, matthiasPhase, requirePhases));
+            }
+        }
         return phases;
     }
 
