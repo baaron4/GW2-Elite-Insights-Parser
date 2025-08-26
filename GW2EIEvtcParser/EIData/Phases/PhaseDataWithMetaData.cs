@@ -30,9 +30,7 @@ public abstract class PhaseDataWithMetaData : PhaseData
         Name = name
             + (Mode == LogMode.CM ? " CM" : "")
             + (Mode == LogMode.LegendaryCM ? " LCM" : "")
-            + (Mode == LogMode.Story ? " Story" : "")
-            + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
-            + (MissingPreEvent ? " (No Pre-Event)" : ""); ;
+            + (Mode == LogMode.Story ? " Story" : "");
     }
 
     internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, LogStartStatus startStatus, long logID, PhaseType type) : this(start, end, name, success, icon, mode, logID, type)
