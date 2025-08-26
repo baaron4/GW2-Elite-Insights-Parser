@@ -360,7 +360,12 @@ public class AgentData
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
     public bool TryGetFirstAgentItem(ChestID chestID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
-        return TryGetFirstAgentItem((int)chestID, out agentItem);
+        agentItem = GetGadgetsByID(chestID).FirstOrDefault();
+        if (agentItem != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     /// <summary>
