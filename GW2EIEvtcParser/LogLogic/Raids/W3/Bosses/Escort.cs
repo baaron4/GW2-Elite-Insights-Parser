@@ -18,8 +18,6 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
-    private bool _hasPreEvent = false;
-
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHealthDamageMechanic(DetonateMineEscort, new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "Mine.H", "Hit by Mine Detonation", "Mine Detonation Hit", 150).UsingChecker((de, log) => de.CreditedFrom.IsSpecies(TargetID.Mine)),
             new PlayerDstHealthDamageMechanic(GlennaBombHit, new MechanicPlotlySetting(Symbols.Hexagon, Colors.LightGrey), "Bomb.H", "Hit by Glenna's Bomb", "Glenna's Bomb Hit", 0),
@@ -56,7 +54,7 @@ internal class Escort : StrongholdOfTheFaithful
         return "Siege the Stronghold";
     }
 
-    private IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, ParsedEvtcLog log)
+    private static IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
         //
@@ -78,7 +76,7 @@ internal class Escort : StrongholdOfTheFaithful
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
-                phase.AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.RadiantMcLeod, TargetID.CrimsonMcLeod])), log);
+                phase.AddTargets(targets.Where(x => x.IsAnySpecies([TargetID.RadiantMcLeod, TargetID.CrimsonMcLeod])), log);
                 phase.OverrideTimes(log);
             }
             else
@@ -91,45 +89,55 @@ internal class Escort : StrongholdOfTheFaithful
         return phases;
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(9);
+        var wargs = targets.Where(x => x.IsSpecies(TargetID.WargBloodhound));
+        {
+            long preEventEnd = mcLeod != null ? mcLeod.FirstAware : encounterPhase.End;
+            var preEventWargs = wargs.Where(x => x.FirstAware <= preEventEnd);
+            var preEventPhase = new SubPhasePhaseData(log.LogData.LogStart, preEventEnd)
+            {
+                Name = "Escort",
+            };
+            preEventPhase.AddTargets(preEventWargs, log);
+            preEventPhase.AddParentPhase(encounterPhase);
+            if (preEventPhase.Targets.Count == 0)
+            {
+                preEventPhase.AddTarget(targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget && x.Character == "Escort"), log);
+            }
+            phases.Add(preEventPhase);
+        }
+        if (mcLeod != null)
+        {
+            var mcLeodPhases = GetMcLeodPhases(mcLeod, targets, log);
+            foreach (var mcLeodPhase in mcLeodPhases)
+            {
+                mcLeodPhase.AddParentPhase(encounterPhase);
+            }
+            phases.AddRange(mcLeodPhases);
+            var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
+            if (mcLeodWargs.Any())
+            {
+                var phase = new SubPhasePhaseData(log.LogData.LogStart, log.LogData.LogEnd, "McLeod Wargs");
+                phase.AddTargets(mcLeodWargs, log);
+                phase.OverrideTimes(log);
+                phases.Add(phase);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
         phases[0].AddTarget(mcLeod, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        var wargs = Targets.Where(x => x.IsSpecies(TargetID.WargBloodhound));
-        PhaseData? preEventPhase = null;
-        if (_hasPreEvent)
-        {
-            var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
-            preEventPhase = new SubPhasePhaseData(log.LogData.LogStart, mcLeod.FirstAware)
-            {
-                Name = "Escort",
-            };
-            preEventPhase.AddTargets(preEventWargs, log);
-            preEventPhase.AddParentPhase(phases[0]);
-            preEventPhase.AddTarget(Targets.FirstOrDefault(x => x.ID == (int)TargetID.DummyTarget), log);
-            phases.Add(preEventPhase);
-        }
-        var mcLeodPhases = GetMcLeodPhases(mcLeod, log);
-        foreach (var mcLeodPhase in mcLeodPhases)
-        {
-            mcLeodPhase.AddParentPhase(phases[0]);
-        }
-        phases.AddRange(mcLeodPhases);
-        var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
-        if (mcLeodWargs.Any())
-        {
-            var phase = new SubPhasePhaseData(log.LogData.LogStart, log.LogData.LogEnd, "McLeod Wargs");
-            phase.AddTargets(mcLeodWargs, log);
-            phase.AddParentPhase(preEventPhase);
-            phase.OverrideTimes(log);
-            phases.Add(phase);
-        }
-
+        phases.AddRange(ComputePhases(log, mcLeod, Targets, phases[0], requirePhases));
         return phases;
     }
 
@@ -176,7 +184,7 @@ internal class Escort : StrongholdOfTheFaithful
             }
         }
         // to keep the pre event as we need targets
-        if (_hasPreEvent && !agentData.GetNPCsByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
+        if (!agentData.GetNPCsByID(TargetID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
             agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Escort", Spec.NPC, TargetID.DummyTarget, true);
         }
@@ -196,7 +204,6 @@ internal class Escort : StrongholdOfTheFaithful
         {
             if (mcLeod.FirstAware - logData.EvtcLogStart > MinimumInCombatDuration)
             {
-                _hasPreEvent = true;
                 // Is this reliable?
                 /*CombatItem achievementTrackApply = combatData.Where(x => (x.SkillID == AchievementEligibilityMineControl || x.SkillID == AchievementEligibilityFastSiege) && x.IsBuffApply()).FirstOrDefault();
                 if (achievementTrackApply != null)
@@ -214,7 +221,11 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
-        if (_hasPreEvent)
+        if (!agentData.TryGetFirstAgentItem(TargetID.McLeodTheSilent, out var mcLeod))
+        {
+            throw new MissingKeyActorsException("McLeod not found");
+        }
+        if (mcLeod.FirstAware - logData.EvtcLogStart > MinimumInCombatDuration)
         {
             if (!agentData.TryGetFirstAgentItem(TargetID.Glenna, out var glenna))
             {

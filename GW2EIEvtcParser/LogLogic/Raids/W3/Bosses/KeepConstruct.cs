@@ -73,34 +73,33 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ];
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor keepConstruct, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
     {
-        long logEnd = log.LogData.LogEnd;
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
-        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        long encounterStart = encounterPhase.Start;
+        long encounterEnd = encounterPhase.End;
+        var phases = new List<PhaseData>(20);
         // Main phases 35025
-        var kcPhaseInvuls = mainTarget.GetBuffStatus(log, XerasBoon);
+        var kcPhaseInvuls = keepConstruct.GetBuffStatus(log, XerasBoon);
         var mainPhases = new List<PhaseData>();
         var mainPhaseCount = 1;
         foreach (var c in kcPhaseInvuls)
         {
             if (c.Value == 0)
             {
-                var mainPhase = new SubPhasePhaseData(c.Start, c.End, "Phase " + (mainPhaseCount++));
-                mainPhase.AddParentPhase(phases[0]);
-                mainPhase.AddTarget(mainTarget, log);
+                var mainPhase = new SubPhasePhaseData(Math.Max(c.Start, encounterStart), Math.Min(c.End, encounterEnd), "Phase " + (mainPhaseCount++));
+                mainPhase.AddParentPhase(encounterPhase);
+                mainPhase.AddTarget(keepConstruct, log);
                 mainPhases.Add(mainPhase);
             }
         }
         phases.AddRange(mainPhases);
         // add burn phases
         int offset = phases.Count;
-        IReadOnlyList<BuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
+        IReadOnlyList<BuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, keepConstruct.AgentItem);
         // Get number of orbs and filter the list
         long orbStart = 0;
         int orbCount = 0;
@@ -117,24 +116,26 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
             else if (orbStart != 0)
             {
-                segments.Add(new Segment(orbStart, Math.Min(c.Time, logEnd), orbCount));
+                segments.Add(new Segment(orbStart, Math.Min(c.Time, encounterEnd), orbCount));
                 orbCount = 0;
                 orbStart = 0;
             }
         }
         int burnCount = 1;
+        var burnPhases = new List<PhaseData>(5);
         foreach (Segment seg in segments)
         {
             var phase = new SubPhasePhaseData(seg.Start, seg.End, "Burn " + burnCount++ + " (" + seg.Value + " orbs)");
-            phase.AddTarget(mainTarget, log);
+            phase.AddTarget(keepConstruct, log);
             phase.AddParentPhases(mainPhases);
             phases.Add(phase);
+            burnPhases.Add(phase);
         }
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // pre burn phases
         int preBurnCount = 1;
-        var preBurnPhase = new List<PhaseData>();
-        var kcInvuls = mainTarget.GetBuffStatus(log, Determined762);
+        var preBurnPhases = new List<PhaseData>(5);
+        var kcInvuls = keepConstruct.GetBuffStatus(log, Determined762);
         foreach (var invul in kcInvuls)
         {
             if (invul.Value > 0)
@@ -148,40 +149,50 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     {
                         var phase = new SubPhasePhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
                         phase.AddParentPhases(mainPhases);
-                        phase.AddTarget(mainTarget, log);
-                        preBurnPhase.Add(phase);
+                        phase.AddTarget(keepConstruct, log);
+                        preBurnPhases.Add(phase);
                     }
                 }
             }
         }
-        phases.AddRange(preBurnPhase);
+        phases.AddRange(preBurnPhases);
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // add leftover phases
         PhaseData? cur = null;
-        int leftOverCount = 1;
-        var leftOverPhases = new List<PhaseData>();
+        var leftOverPhases = new List<PhaseData>(5);
         for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (phase.Name.Contains('%'))
+            if (mainPhases.Contains(phase))
             {
                 cur = phase;
             }
-            else if (phase.Name.Contains("orbs"))
+            else if (burnPhases.Contains(phase))
             {
                 if (cur != null)
                 {
-                    if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
+                    if (cur.End >= phase.End + PhaseTimeLimit && (i == phases.Count - 1 || mainPhases.Contains(phases[i + 1])))
                     {
-                        var leftOverPhase = new SubPhasePhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
+                        var burnIndex = burnPhases.IndexOf(phase) + 1;
+                        var leftOverPhase = new SubPhasePhaseData(phase.End, cur.End, "Leftover " + burnIndex);
                         leftOverPhase.AddParentPhases(mainPhases);
-                        leftOverPhase.AddTarget(mainTarget, log);
+                        leftOverPhase.AddTarget(keepConstruct, log);
                         leftOverPhases.Add(leftOverPhase);
                     }
                 }
             }
         }
         phases.AddRange(leftOverPhases);
+        return phases;
+    }
+
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
+        phases[0].AddTarget(mainTarget, log);
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+       
         return phases;
     }
 

@@ -79,9 +79,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     private List<PhaseData> HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<PhaseData>();
-        if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues))
+        if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues) && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
-            var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Twisted Castle");
+            var dummy = dummies.FirstOrDefault(x => x.Character == "Twisted Castle");
             if (dummy == null)
             {
                 return encounterPhases;
@@ -139,7 +139,11 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     }
     private List<PhaseData> HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var dummy = targetsByIDs[(int)TargetID.DummyTarget].FirstOrDefault(x => x.Character == "Xera Pre Event");
+        if (!targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
+        {
+            return [];
+        }
+        var dummy = dummies.FirstOrDefault(x => x.Character == "Xera Pre Event");
         if (dummy == null)
         {
             return [];
@@ -206,9 +210,17 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        HandleEscortPhases(Targets, NonSquadFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
-        HashSet<TargetID> kcStatus = [
-            TargetID.Jessica,
+        {
+            var escortPhases = HandleEscortPhases(Targets, NonSquadFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
+            foreach (var escortPhase in escortPhases)
+            {
+                var mcLeod = escortPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.McLeodTheSilent));
+                phases.AddRange(Escort.ComputePhases(log, mcLeod, Targets, escortPhase, requirePhases));
+            }
+        }
+        {
+            HashSet<TargetID> kcStatus = [
+                TargetID.Jessica,
             TargetID.Olson,
             TargetID.Engul,
             TargetID.Faerla,
@@ -216,10 +228,23 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             TargetID.Henley,
             TargetID.Galletta,
             TargetID.Ianim
-        ];
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            ];
+            var kcPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var kcPhase in kcPhases)
+            {
+                var keepConstruct = kcPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.KeepConstruct));
+                phases.AddRange(KeepConstruct.ComputePhases(log, keepConstruct, Targets, kcPhase, requirePhases));
+            }
+        }
         HandleTwistedCastlePhases(targetsByIDs, log, phases);
-        HandleXeraPhases(targetsByIDs, log, phases);
+        {
+            var xeraPhases = HandleXeraPhases(targetsByIDs, log, phases);
+            foreach (var xeraPhase in xeraPhases)
+            {
+                var xera = xeraPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct));
+                phases.AddRange(Xera.ComputePhases(log, xera, Targets, xeraPhase, requirePhases));
+            }
+        }
         return phases;
     }
 

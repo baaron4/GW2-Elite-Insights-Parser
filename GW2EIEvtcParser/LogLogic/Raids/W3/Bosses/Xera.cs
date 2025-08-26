@@ -48,8 +48,6 @@ internal class Xera : StrongholdOfTheFaithful
             //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
         ]);
 
-    private bool _hasPreEvent = false;
-
     public Xera(int triggerID) : base(triggerID)
     {
         MechanicList.Add(Mechanics);
@@ -122,99 +120,109 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    private long GetMainXeraFightStart(ParsedEvtcLog log, AgentItem xera)
+    private static long GetMainXeraFightStart(ParsedEvtcLog log, AgentItem xera, long encounterStart)
     {
-        if (_hasPreEvent)
+        var fakeXera = log.AgentData.GetNPCsByID(TargetID.FakeXera).LastOrDefault(x => x.FirstAware <= xera.FirstAware);
+        if (fakeXera != null)
         {
             var enterCombat = log.CombatData.GetEnterCombatEvents(xera).FirstOrDefault();
             if (enterCombat != null)
             {
-                return enterCombat.Time;
+                return Math.Max(enterCombat.Time, encounterStart);
             }
         }
-        return log.LogData.LogStart;
+        return encounterStart;
     }
-
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
+        // If xera is null, the whole fight is in pre event
+        if (!requirePhases || xera == null)
+        {
+            return [];
+        }
+        long encounterStart = encounterPhase.Start;
+        long encounterEnd = encounterPhase.End;
+        var phases = new List<PhaseData>(5);
+        long xeraFightStart = GetMainXeraFightStart(log, xera.AgentItem, encounterStart);
+        PhaseData? phase100to0 = null;
+        if (xeraFightStart > encounterStart)
+        {
+            var phasePreEvent = new SubPhasePhaseData(encounterPhase.Start, xeraFightStart, "Pre Event");
+            phasePreEvent.AddParentPhase(encounterPhase);
+            phasePreEvent.AddTargets(targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
+            if (phasePreEvent.Targets.Count == 0)
+            {
+                phasePreEvent.AddTarget(targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Xera Pre Event"), log);
+            }
+            phases.Add(phasePreEvent);
+            phase100to0 = new SubPhasePhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
+            phase100to0.AddParentPhase(encounterPhase);
+            phase100to0.AddTarget(xera, log);
+            phases.Add(phase100to0);
+        }
+        BuffEvent? invulXera = GetInvulXeraEvent(log.CombatData, xera);
+        // split happened
+        if (invulXera != null)
+        {
+            var phase1 = new SubPhasePhaseData(xeraFightStart, invulXera.Time, "Phase 1");
+            if (phase100to0 != null)
+            {
+                phase1.AddParentPhase(phase100to0);
+            }
+            else
+            {
+                phase1.AddParentPhase(encounterPhase);
+            }
+            phase1.AddTarget(xera, log);
+            phases.Add(phase1);
+            var mergedXera2 = GetXera2Merge(xera.AgentItem);
+            long glidingEndTime = encounterEnd;
+            if (mergedXera2 != null)
+            {
+                var movement = log.CombatData.GetMovementData(xera.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mergedXera2.FirstAware + 500);
+                if (movement != null)
+                {
+                    glidingEndTime = movement.Time;
+                }
+                else
+                {
+                    glidingEndTime = mergedXera2.FirstAware;
+                }
+                var phase2 = new SubPhasePhaseData(glidingEndTime, encounterEnd, "Phase 2");
+                if (phase100to0 != null)
+                {
+                    phase2.AddParentPhase(phase100to0);
+                }
+                else
+                {
+                    phase2.AddParentPhase(encounterPhase);
+                }
+                phase2.AddTarget(xera, log);
+                phase2.AddTargets(targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
+                //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
+                phases.Add(phase2);
+            }
+            var glidingPhase = new SubPhasePhaseData(invulXera.Time, glidingEndTime, "Gliding");
+            if (phase100to0 != null)
+            {
+                glidingPhase.AddParentPhase(phase100to0);
+            }
+            else
+            {
+                glidingPhase.AddParentPhase(encounterPhase);
+            }
+            glidingPhase.AddTargets(targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)), log);
+            phases.Add(glidingPhase);
+        }
+        return phases;
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);
-        if (requirePhases)
-        {
-            long xeraFightStart = GetMainXeraFightStart(log, mainTarget.AgentItem);
-            PhaseData? phase100to0 = null;
-            if (xeraFightStart > log.LogData.LogStart)
-            {
-                var phasePreEvent = new SubPhasePhaseData(0, xeraFightStart, "Pre Event");
-                phasePreEvent.AddParentPhase(phases[0]);
-                phasePreEvent.AddTargets(Targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
-                if (phasePreEvent.Targets.Count == 0)
-                {
-                    phasePreEvent.AddTarget(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget)), log);
-                }
-                phases.Add(phasePreEvent);
-                phase100to0 = new SubPhasePhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
-                phase100to0.AddParentPhase(phases[0]);
-                phase100to0.AddTarget(mainTarget, log);
-                phases.Add(phase100to0);
-            }
-            BuffEvent? invulXera = GetInvulXeraEvent(log.CombatData, mainTarget);
-            // split happened
-            if (invulXera != null)
-            {
-                var phase1 = new SubPhasePhaseData(xeraFightStart, invulXera.Time, "Phase 1");
-                if (phase100to0 != null)
-                {
-                    phase1.AddParentPhase(phase100to0);
-                } 
-                else
-                {
-                    phase1.AddParentPhase(phases[0]);
-                }
-                phase1.AddTarget(mainTarget, log);
-                phases.Add(phase1);
-                var mergedXera2 = GetXera2Merge(mainTarget.AgentItem);
-                long glidingEndTime = logEnd;
-                if (mergedXera2 != null)
-                {
-                    var movement = log.CombatData.GetMovementData(mainTarget.AgentItem).OfType<PositionEvent>().FirstOrDefault(x => x.Time >= mergedXera2.FirstAware + 500);
-                    if (movement != null)
-                    {
-                        glidingEndTime = movement.Time;
-                    } 
-                    else
-                    {
-                        glidingEndTime = mergedXera2.FirstAware;
-                    }
-                    var phase2 = new SubPhasePhaseData(glidingEndTime, logEnd, "Phase 2");
-                    if (phase100to0 != null)
-                    {
-                        phase2.AddParentPhase(phase100to0);
-                    }
-                    else
-                    {
-                        phase2.AddParentPhase(phases[0]);
-                    }
-                    phase2.AddTarget(mainTarget, log);
-                    phase2.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.BloodstoneShardMainFight)), log);
-                    //mainTarget.AddCustomCastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None, log);
-                    phases.Add(phase2);
-                }
-                var glidingPhase = new SubPhasePhaseData(invulXera.Time, glidingEndTime, "Gliding");
-                if (phase100to0 != null)
-                {
-                    glidingPhase.AddParentPhase(phase100to0);
-                }
-                else
-                {
-                    glidingPhase.AddParentPhase(phases[0]);
-                }
-                glidingPhase.AddTargets(Targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)), log);
-                phases.Add(glidingPhase);
-            }
-        }
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
         return phases;
     }
 
@@ -222,7 +230,7 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal static BuffEvent? GetInvulXeraEvent(CombatData combatData, AgentItem xera)
     {
-        BuffEvent? determined = combatData.GetBuffDataByIDByDst(Determined762, xera).FirstOrDefault(x => x is BuffApplyEvent) ?? combatData.GetBuffDataByIDByDst(SpawnProtection, xera).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? determined = combatData.GetBuffApplyDataByIDByDst(Determined762, xera).FirstOrDefault() ?? combatData.GetBuffApplyDataByIDByDst(SpawnProtection, xera).FirstOrDefault();
         return determined;
     }
 
@@ -257,7 +265,6 @@ internal class Xera : StrongholdOfTheFaithful
                         encounterStart = exitCombat.Time + 1000;
                     }
                 }
-                _hasPreEvent = true;
                 return encounterStart;
             }
             return enterCombat.Time;
@@ -346,7 +353,7 @@ internal class Xera : StrongholdOfTheFaithful
             throw new MissingKeyActorsException("Xera not found");
         }
         FindBloodstones(agentData, combatData);
-        if (_hasPreEvent)
+        if (agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _))
         {
             agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
         }
@@ -365,7 +372,7 @@ internal class Xera : StrongholdOfTheFaithful
     internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
         // We expect pre event with logs with LogStartNPCUpdate events
-        if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
+        if (!agentData.TryGetFirstAgentItem(TargetID.FakeXera, out _) && combatData.GetLogNPCUpdateEvents().Any())
         {
             return LogData.LogStartStatus.NoPreEvent;
         }
