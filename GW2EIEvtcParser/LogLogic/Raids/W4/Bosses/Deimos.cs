@@ -438,7 +438,7 @@ internal class Deimos : BastionOfThePenitent
         return start;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor deimos, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor deimos, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -446,10 +446,10 @@ internal class Deimos : BastionOfThePenitent
         }
         var phases = new List<PhaseData>(10);
         var fullFight = encounterPhase;
-        var phase100to0 = fullFight;
-        var deimosMainFightStart = GetMainFightStart(log, deimos.AgentItem, encounterPhase.Start);
-        if (deimosMainFightStart > encounterPhase.Start)
+        PhaseData phase100to0 = fullFight;
+        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.LogStartStatus.Normal)
         {
+            var deimosMainFightStart = GetMainFightStart(log, deimos.AgentItem, encounterPhase.Start);
             var phasePreEvent = new SubPhasePhaseData(0, deimosMainFightStart, "Pre Event");
             phasePreEvent.AddParentPhase(fullFight);
             phasePreEvent.AddTargets(targets.Where(x => x.IsSpecies(TargetID.DemonicBond)), log);
@@ -477,7 +477,7 @@ internal class Deimos : BastionOfThePenitent
         phases[0].AddTarget(mainTarget, log);
         phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.DemonicBond)), log, PhaseData.TargetPriority.Blocking);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
 
         return phases;
     }
