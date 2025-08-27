@@ -89,11 +89,11 @@ internal class TwinLargos : MythwrightGambit
         return [];
     }
 
-    private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName, PhaseData fullFightPhase)
+    private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, SingleActor target, string baseName, EncounterPhaseData encounterPhase)
     {
-        long start = 0;
-        long end = 0;
-        long logEnd = log.LogData.LogEnd;
+        long phaseStart = encounterPhase.Start;
+        long phaseEnd = 0;
+        long end = encounterPhase.End;
         var targetPhases = new List<PhaseData>();
         var states = new List<TimeCombatEvent>();
         states.AddRange(log.CombatData.GetEnterCombatEvents(target.AgentItem));
@@ -105,19 +105,19 @@ internal class TwinLargos : MythwrightGambit
             TimeCombatEvent state = states[i];
             if (state is EnterCombatEvent)
             {
-                start = state.Time;
+                phaseStart = state.Time;
                 if (i == states.Count - 1)
                 {
-                    targetPhases.Add(new SubPhasePhaseData(start, logEnd));
+                    targetPhases.Add(new SubPhasePhaseData(phaseStart, end));
                 }
             }
             else
             {
-                end = Math.Min(state.Time, logEnd);
-                targetPhases.Add(new SubPhasePhaseData(start, end));
+                phaseEnd = Math.Min(state.Time, end);
+                targetPhases.Add(new SubPhasePhaseData(phaseStart, phaseEnd));
                 if (i == states.Count - 1 && targetPhases.Count < 3)
                 {
-                    targetPhases.Add(new SubPhasePhaseData(end, logEnd));
+                    targetPhases.Add(new SubPhasePhaseData(phaseEnd, end));
                 }
             }
         }
@@ -126,13 +126,13 @@ internal class TwinLargos : MythwrightGambit
         {
             PhaseData phase = targetPhases[i];
             phase.Name = baseName + " P" + (i + 1);
-            phase.AddParentPhase(fullFightPhase);
+            phase.AddParentPhase(encounterPhase);
             phase.AddTarget(target, log);
         }
         return targetPhases;
     }
 
-    private static void FallBackPhases(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)
+    private static void FallBackPhases(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log, EncounterPhaseData encounterPhase, bool firstPhaseAt0)
     {
         IReadOnlyCollection<AgentItem> pAgents = log.PlayerAgents;
         // clean Nikare/Kenut missing enter combat events related bugs
@@ -202,7 +202,7 @@ internal class TwinLargos : MythwrightGambit
         if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
         {
             PhaseData p1 = phases[0];
-            HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Any(x.From.IsMasterOrSelf) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+            HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= encounterPhase.Start && pAgents.Any(x.From.IsMasterOrSelf) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
             if (hit != null)
             {
                 p1.OverrideStart(hit.Time);
@@ -215,6 +215,26 @@ internal class TwinLargos : MythwrightGambit
         }
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor nikare, SingleActor? kenut, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        long start = encounterPhase.Start;
+        long end = encounterPhase.End;
+        var phases = new List<PhaseData>(6);
+        List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare", encounterPhase);
+        FallBackPhases(nikare, nikPhases, log, encounterPhase, true);
+        phases.AddRange(nikPhases);
+        if (kenut != null)
+        {
+            List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut", encounterPhase);
+            FallBackPhases(kenut, kenPhases, log, encounterPhase, false);
+            phases.AddRange(kenPhases);
+        }
+        return phases;
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -225,19 +245,7 @@ internal class TwinLargos : MythwrightGambit
         {
             phases[0].AddTarget(kenut, log);
         }
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        List<PhaseData> nikPhases = GetTargetPhases(log, nikare, "Nikare", phases[0]);
-        FallBackPhases(nikare, nikPhases, log, true);
-        phases.AddRange(nikPhases);
-        if (kenut != null)
-        {
-            List<PhaseData> kenPhases = GetTargetPhases(log, kenut, "Kenut", phases[0]);
-            FallBackPhases(kenut, kenPhases, log, false);
-            phases.AddRange(kenPhases);
-        }
+        phases.AddRange(ComputePhases(log, nikare, kenut, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

@@ -25,14 +25,14 @@ public class JsonPhase
     /// <summary>
     /// Indicates that this phase has no meaningful targets, only relevant in Instance logs and for Encounter type phases \n
     /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool? Targetless;
+    //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    //public bool? Targetless;
 
     /// <summary>
     /// The success status of the phase, only relevant in Instance logs and for Encounter type phases
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    //public bool? Success;
+    public bool? Success;
 
     /// <summary>
     /// If the phase is in challenge mode, only relevant in Instance logs and for Encounter type phases.
