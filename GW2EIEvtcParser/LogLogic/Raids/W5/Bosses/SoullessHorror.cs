@@ -136,42 +136,50 @@ internal class SoullessHorror : HallOfChains
         HandleSoullessHorrorFinalHPUpdate(combatData, soullessHorror);
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor soullessHorror, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        long end = encounterPhase.End;
+        var phases = new List<PhaseData>(6);
+        var tormentedDeads = targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
+        var howling = soullessHorror.GetCastEvents(log, log.LogData.LogStart, end).Where(x => x.SkillID == HowlingDeath);
+        long phaseStart = encounterPhase.Start;
+        int i = 1;
+        foreach (CastEvent c in howling)
+        {
+            var preBreakbarPhase = new SubPhasePhaseData(phaseStart, Math.Min(c.Time, end), "Pre-Breakbar " + i);
+            preBreakbarPhase.AddTarget(soullessHorror, log);
+            preBreakbarPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
+            preBreakbarPhase.AddParentPhase(encounterPhase);
+            phases.Add(preBreakbarPhase);
+            var howlingDeathPhase = new SubPhasePhaseData(Math.Min(c.Time, end), Math.Min(c.EndTime, end), "Howling Death " + (i++));
+            howlingDeathPhase.AddTarget(soullessHorror, log);
+            howlingDeathPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
+            howlingDeathPhase.AddParentPhase(encounterPhase);
+            phases.Add(howlingDeathPhase);
+            phaseStart = c.EndTime;
+        }
+        if (end - phaseStart > PhaseTimeLimit)
+        {
+            var lastPhase = new SubPhasePhaseData(phaseStart, end, "Final");
+            lastPhase.AddTarget(soullessHorror, log);
+            lastPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
+            lastPhase.AddParentPhase(encounterPhase);
+            phases.Add(lastPhase);
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         phases[0].AddTarget(mainTarget, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        var tormentedDeads = Targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        var howling = mainTarget.GetCastEvents(log, log.LogData.LogStart, logEnd).Where(x => x.SkillID == HowlingDeath);
-        long start = 0;
-        int i = 1;
-        foreach (CastEvent c in howling)
-        {
-            var preBreakbarPhase = new SubPhasePhaseData(start, Math.Min(c.Time, logEnd), "Pre-Breakbar " + i);
-            preBreakbarPhase.AddTarget(mainTarget, log);
-            preBreakbarPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
-            preBreakbarPhase.AddParentPhase(phases[0]);
-            phases.Add(preBreakbarPhase);
-            var howlingDeathPhase = new SubPhasePhaseData(Math.Min(c.Time, logEnd), Math.Min(c.EndTime, logEnd), "Howling Death " + (i++));
-            howlingDeathPhase.AddTarget(mainTarget, log);
-            howlingDeathPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
-            howlingDeathPhase.AddParentPhase(phases[0]);
-            phases.Add(howlingDeathPhase);
-            start = c.EndTime;
-        }
-        if (logEnd - start > PhaseTimeLimit)
-        {
-            var lastPhase = new SubPhasePhaseData(start, logEnd, "Final");
-            lastPhase.AddTarget(mainTarget, log);
-            lastPhase.AddTargets(tormentedDeads, log, PhaseData.TargetPriority.NonBlocking);
-            lastPhase.AddParentPhase(phases[0]);
-            phases.Add(lastPhase);
-        }
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
 
         return phases;
     }

@@ -4,6 +4,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -216,7 +217,14 @@ internal class HallOfChainsInstance : HallOfChains
                     end = chest.FirstAware;
                     success = true;
                 }
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                if (dhuum.GetAnimatedCastEvents(log).Any(x => (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= start && x.Time <= start + 40000))
+                {
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal, LogData.LogStartStatus.NoPreEvent);
+                } 
+                else
+                {
+                    AddInstanceEncounterPhase(log, phases, encounterPhases, [dhuum], [], [], mainPhase, "Dhuum", start, end, success, _dhuum, dhuum.GetHealth(log.CombatData) > 35e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                }
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -228,13 +236,36 @@ internal class HallOfChainsInstance : HallOfChains
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         var friendliesByIDs = NonSquadFriendlies.Where(x => x.AgentItem.IsNPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
-            return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
-        });
+        {
+            var shPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.SoullessHorror, [], "Soulless Horror", _soullessHorror, (log, soullessHorror) => {
+                return SoullessHorror.HasFastNecrosis(log.CombatData, soullessHorror.FirstAware, soullessHorror.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Story;
+            });
+            foreach (var shPhase in shPhases)
+            {
+                var soullessHorror = shPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.SoullessHorror));
+                phases.AddRange(SoullessHorror.ComputePhases(log, soullessHorror, Targets, shPhase, requirePhases));
+            }
+        }
         HandleRiverOfSoulsPhases(targetsByIDs, friendliesByIDs, log, phases);
         HandleStatueOfIcePhases(targetsByIDs, log, phases);
         HandleStatueOfDeathPhases(targetsByIDs, log, phases);
-        HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
+        {
+            var statueOfDeathPhases = HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
+            foreach (var statueOfDeathPhase in statueOfDeathPhases)
+            {
+                var eyeFate = statueOfDeathPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.EyeOfFate));
+                var eyeJudgment = statueOfDeathPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.EyeOfJudgement));
+                phases.AddRange(StatueOfDarkness.ComputePhases(log, eyeFate, eyeJudgment, statueOfDeathPhase, requirePhases));
+            }
+        }
+        {
+            var dhuumPhases = HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
+            foreach (var dhuumPhase in dhuumPhases)
+            {
+                var dhuum = dhuumPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Dhuum));
+                phases.AddRange(Dhuum.ComputePhases(log, dhuum, Targets, dhuumPhase, requirePhases));
+            }
+        }
         HandleDhuumPhases(targetsByIDs, log, phases);
         return phases;
     }
