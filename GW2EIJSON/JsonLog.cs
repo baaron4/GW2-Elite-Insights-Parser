@@ -363,6 +363,11 @@ public class JsonLog
     public string? InstancePrivacy;
 
     /// <summary>
+    /// Indicates that this log has no meaningful targets
+    /// </summary>
+    public bool Targetless;
+
+    /// <summary>
     /// The success status of the log
     /// </summary>
     public bool Success;

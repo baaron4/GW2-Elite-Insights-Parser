@@ -176,6 +176,7 @@ internal static class JsonLogBuilder
                 break;
         }
         jsonLog.Success = log.LogData.Success;
+        jsonLog.Targetless = log.LogData.Logic.Targetless;
         jsonLog.GW2Build = log.LogMetadata.GW2Build;
         jsonLog.UploadLinks = uploadLinks;
         jsonLog.Language = log.LogMetadata.Language;
