@@ -489,9 +489,9 @@ internal class Deimos : BastionOfThePenitent
         var phase100to10 = mainFightPhase;
         PhaseData? phase10to0 = null;
         var percent10Start = deimos.AgentItem.Merges.FirstOrNull((in AgentItem.MergedAgentItem x) => x.Merged.Is(deimos.AgentItem));
-        if (invulDei != null && percent10Start != null)
+        if (invulDei != null || percent10Start != null)
         {
-            long percent10StartTime = percent10Start.Value.MergeEnd;
+            long percent10StartTime = percent10Start.HasValue ? percent10Start.Value.MergeEnd : long.MaxValue;
             long npcDeimosEnd = percent10StartTime;
             var mainDeimosPhaseName = "100% - 10%";
             if (invulDei != null)
