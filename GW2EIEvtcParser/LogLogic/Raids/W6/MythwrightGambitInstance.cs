@@ -52,9 +52,9 @@ internal class MythwrightGambitInstance : MythwrightGambit
         }
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
-    private List<PhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.ConjuredAmalgamate, out var conjuredAmalgamates) && 
             targetsByIDs.TryGetValue((int)TargetID.CALeftArm, out var leftArms) && 
@@ -108,9 +108,9 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts) &&
             targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
@@ -150,9 +150,9 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {

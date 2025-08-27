@@ -51,7 +51,7 @@ internal class SalvationPassInstance : SalvationPass
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> HandleTrioPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleTrioPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var packedTrios = new List<List<SingleActor>>();
         if (targetsByIDs.TryGetValue((int)TargetID.Narella, out var narellas))
@@ -110,7 +110,7 @@ internal class SalvationPassInstance : SalvationPass
         //
         var lastPack = packedTrios.Last();
         var chest = log.AgentData.GetGadgetsByID(_banditTrio.ChestID).FirstOrDefault();
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         foreach (var pack in packedTrios)
         {
             long start = pack.Min(x => x.FirstAware);

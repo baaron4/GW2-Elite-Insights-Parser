@@ -56,9 +56,9 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
@@ -101,10 +101,10 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
-    private List<PhaseData> HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var mainPhase = phases[0];
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         HashSet<SingleActor>? handledDeimoss = null;
         if (targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies) && targetsByIDs.TryGetValue((int)TargetID.DemonicBond, out var demonicBonds))
         {

@@ -60,9 +60,9 @@ internal class HallOfChainsInstance : HallOfChains
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, IReadOnlyDictionary<int, List<SingleActor>> friendliesByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleRiverOfSoulsPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, IReadOnlyDictionary<int, List<SingleActor>> friendliesByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (friendliesByIDs.TryGetValue((int)TargetID.Desmina, out var desminas) 
             && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
@@ -95,9 +95,9 @@ internal class HallOfChainsInstance : HallOfChains
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleStatueOfIcePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleStatueOfIcePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.BrokenKing, out var brokenKings))
         {
@@ -123,9 +123,9 @@ internal class HallOfChainsInstance : HallOfChains
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
-    private List<PhaseData> HandleStatueOfDeathPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleStatueOfDeathPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.EaterOfSouls, out var eaterOfSouls))
         {
@@ -158,9 +158,9 @@ internal class HallOfChainsInstance : HallOfChains
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleStatueOfDarknessPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleStatueOfDarknessPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.EyeOfFate, out var eyeOfFates) &&
             targetsByIDs.TryGetValue((int)TargetID.EyeOfJudgement, out var eyeOfJudgements))
@@ -193,9 +193,9 @@ internal class HallOfChainsInstance : HallOfChains
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleDhuumPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleDhuumPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Dhuum, out var dhuums))
         {

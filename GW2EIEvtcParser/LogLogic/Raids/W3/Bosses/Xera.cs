@@ -133,7 +133,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         return encounterStart;
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         // If xera is null, the whole fight is in pre event
         if (!requirePhases || xera == null)
@@ -222,7 +222,7 @@ internal class Xera : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

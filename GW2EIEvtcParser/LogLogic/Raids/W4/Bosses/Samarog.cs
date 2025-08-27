@@ -118,7 +118,7 @@ internal class Samarog : BastionOfThePenitent
         TargetID.Rigom,
         TargetID.Guldhem
     };
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -151,7 +151,7 @@ internal class Samarog : BastionOfThePenitent
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         phases[0].AddTarget(mainTarget, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SecondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

@@ -63,7 +63,7 @@ internal class Gorseval : SpiritVale
         TargetID.ChargedSoul
     };
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor gorseval, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -94,7 +94,7 @@ internal class Gorseval : SpiritVale
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
         phases[0].AddTarget(mainTarget, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(ChargedSoulIDs)), log, PhaseData.TargetPriority.Blocking);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

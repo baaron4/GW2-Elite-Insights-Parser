@@ -112,7 +112,7 @@ internal class Slothasor : SalvationPass
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -145,7 +145,7 @@ internal class Slothasor : SalvationPass
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

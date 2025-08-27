@@ -71,7 +71,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mursaatOverseer, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mursaatOverseer, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -91,7 +91,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
