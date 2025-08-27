@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -70,20 +71,27 @@ internal class MursaatOverseer : BastionOfThePenitent
         ];
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mursaatOverseer, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(4);
+        phases.AddRange(GetPhasesByHealthPercent(log, mursaatOverseer, new List<double> { 75, 50, 25, 0 }, encounterPhase.Start, encounterPhase.End));
+        foreach (var phase in phases)
+        {
+            phase.AddParentPhase(encounterPhase);
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         phases[0].AddTarget(mainTarget, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, new List<double> { 75, 50, 25, 0 }));
-        for (var i = 1; i < phases.Count; i++)
-        {
-            phases[i].AddParentPhase(phases[0]);
-        }
+        phases.AddRange(ComputePhases(log, mainTarget, phases[0], requirePhases));
         return phases;
     }
 

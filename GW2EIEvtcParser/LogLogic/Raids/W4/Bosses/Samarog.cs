@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Xml.Schema;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -112,38 +113,45 @@ internal class Samarog : BastionOfThePenitent
         return [];
     }
 
+    private static readonly List<TargetID> SecondaryTargetIDs = new List<TargetID>
+    {
+        TargetID.Rigom,
+        TargetID.Guldhem
+    };
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor samarog, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        // Determined check
+        phases.AddRange(GetPhasesByInvul(log, Determined762, samarog, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int phaseIndex = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
+            {
+                phase.Name = "Split " + phaseIndex / 2;
+                AddTargetsToPhaseAndFit(phase, targets, SecondaryTargetIDs, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                phase.AddTarget(samarog, log);
+            }
+        }
+        return phases;
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         phases[0].AddTarget(mainTarget, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Guldhem) || x.IsSpecies(TargetID.Rigom)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        // Determined check
-        phases.AddRange(GetPhasesByInvul(log, Determined762, mainTarget, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + i / 2;
-                var ids = new List<TargetID>
-                {
-                    TargetID.Rigom,
-                    TargetID.Guldhem
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(mainTarget, log);
-            }
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SecondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
         return phases;
     }
 
