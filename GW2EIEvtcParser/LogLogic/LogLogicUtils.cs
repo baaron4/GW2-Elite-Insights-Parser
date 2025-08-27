@@ -11,8 +11,13 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal static class LogLogicUtils
 {
-    internal static bool TargetHPPercentUnderThreshold(SingleActor target, long time, CombatData combatData, double expectedInitialPercent = 100.0)
+    internal static bool TargetHPPercentUnderThreshold(SingleActor? target, long time, CombatData combatData, double expectedInitialPercent = 100.0)
     {
+        if (target == null)
+        {
+            // If tracked target is missing, then 0% hp
+            return true;
+        }
         long minTime = Math.Max(target.FirstAware, time);
         HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
         var targetTotalHP = target.GetHealth(combatData);
@@ -30,11 +35,6 @@ internal static class LogLogicUtils
     internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
         SingleActor? target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
-        if (target == null)
-        {
-            // If tracked target is missing, then 0% hp
-            return true;
-        }
         return TargetHPPercentUnderThreshold(target, time, combatData, expectedInitialPercent);
     }
 

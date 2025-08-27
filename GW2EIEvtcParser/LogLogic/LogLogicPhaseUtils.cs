@@ -60,15 +60,14 @@ internal static class LogLogicPhaseUtils
         return phases;
     }
 
-    internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, SingleActor mainTarget, IReadOnlyList<double> thresholds)
+    internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, SingleActor mainTarget, IReadOnlyList<double> thresholds, long start, long end)
     {
         var phases = new List<PhaseData>();
         if (thresholds.Count == 0)
         {
             return phases;
         }
-        long logEnd = log.LogData.LogEnd;
-        long start = log.LogData.LogStart;
+        long phaseStart = start;
         double offset = 100.0 / thresholds.Count;
         IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
         for (int i = 0; i < thresholds.Count; i++)
@@ -78,14 +77,14 @@ internal static class LogLogicPhaseUtils
             {
                 break;
             }
-            var phase = new SubPhasePhaseData(start, Math.Min(evt.Time, logEnd), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
+            var phase = new SubPhasePhaseData(phaseStart, Math.Min(evt.Time, end), (offset + thresholds[i]) + "% - " + thresholds[i] + "%");
             phase.AddTarget(mainTarget, log);
             phases.Add(phase);
-            start = Math.Max(evt.Time, log.LogData.LogStart);
+            phaseStart = Math.Max(evt.Time, start);
         }
         if (phases.Count > 0 && phases.Count < thresholds.Count)
         {
-            var lastPhase = new SubPhasePhaseData(start, logEnd, (offset + thresholds[phases.Count]) + "% - " + thresholds[phases.Count] + "%");
+            var lastPhase = new SubPhasePhaseData(phaseStart, end, (offset + thresholds[phases.Count]) + "% - " + thresholds[phases.Count] + "%");
             lastPhase.AddTarget(mainTarget, log);
             phases.Add(lastPhase);
         }
