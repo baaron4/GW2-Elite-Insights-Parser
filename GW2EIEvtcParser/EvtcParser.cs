@@ -1162,12 +1162,16 @@ public class EvtcParser
                 {
                     if (exitCombatEvents.TryGetValue(playerAgentItem, out var exitCombatEventsForAgent))
                     {
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
+                        AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap(enterCombatEventsForAgent, exitCombatEventsForAgent, _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                     } 
                     else 
                     {    
-                        AgentManipulationHelper.SplitPlayerPerSpecAndSubgroup(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
+                        AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap(enterCombatEventsForAgent, [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                     }
+                } 
+                else
+                {
+                    AgentManipulationHelper.SplitPlayerPerSpecSubgroupAndSwap([], [], _enabledExtensions, _agentData, playerAgentItem, splitByEnterCombatEvents);
                 }
             }
         }

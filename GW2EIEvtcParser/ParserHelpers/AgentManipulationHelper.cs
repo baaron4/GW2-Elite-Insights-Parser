@@ -160,7 +160,7 @@ public static class AgentManipulationHelper
         to.AddMergeFrom(redirectFrom, to.FirstAware, to.LastAware);
     }
 
-    internal static void SplitPlayerPerSpecAndSubgroup(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer, bool splitByEnterCombat)
+    internal static void SplitPlayerPerSpecSubgroupAndSwap(IReadOnlyList<EnterCombatEvent> enterCombatEvents, IReadOnlyList<ExitCombatEvent> exitCombatEvents, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem originalPlayer, bool splitByEnterCombat)
     {
         var player = new Player(originalPlayer, false);
         var previousSpec = player.Spec;
@@ -172,7 +172,7 @@ public static class AgentManipulationHelper
             for (var i = 0; i < enterCombatEvents.Count; i++)
             {
                 var enterCombat = enterCombatEvents[i];
-                if (ignore0Subgroups && enterCombat.Subgroup == 0)
+                if ((ignore0Subgroups && enterCombat.Subgroup == 0) || enterCombat.Spec == Spec.Unknown)
                 {
                     continue;
                 }
