@@ -89,7 +89,7 @@ internal class Escort : StrongholdOfTheFaithful
         return phases;
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? mcLeod, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -137,7 +137,7 @@ internal class Escort : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
         phases[0].AddTarget(mcLeod, log);
-        phases.AddRange(ComputePhases(log, mcLeod, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mcLeod, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

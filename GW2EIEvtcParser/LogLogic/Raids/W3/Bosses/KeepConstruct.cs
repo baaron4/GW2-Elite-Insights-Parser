@@ -73,7 +73,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor keepConstruct, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor keepConstruct, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -191,7 +191,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
        
         return phases;
     }

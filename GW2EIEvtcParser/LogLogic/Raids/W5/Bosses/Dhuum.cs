@@ -17,8 +17,6 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Dhuum : HallOfChains
 {
-    private bool _hasPrevent;
-
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new PlayerDstHealthDamageHitMechanic(HatefulEphemera, new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Golem", "Hateful Ephemera (Golem AoE dmg)","Golem Dmg", 0),
             new MechanicGroup([
@@ -89,7 +87,6 @@ internal class Dhuum : HallOfChains
 
     public Dhuum(int triggerID) : base(triggerID)
     {
-        _hasPrevent = true;
         MechanicList.Add(Mechanics);
         Extension = "dhuum";
         ChestID = ChestID.DhuumChest;
@@ -201,44 +198,42 @@ internal class Dhuum : HallOfChains
         phases.Add(final);
         return phases;
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor dhuum, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        long fightDuration = log.LogData.LogEnd;
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
-        phases[0].AddTarget(dhuum, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        var enforcers = Targets.Where(x => x.IsSpecies(TargetID.Enforcer));
-        // Sometimes the pre event is not in the evtc
+        bool hasPreEvent = encounterPhase.StartStatus == LogData.LogStartStatus.Normal;
+        long end = encounterPhase.DurationInMS;
+        long start = encounterPhase.Start;
+        var phases = new List<PhaseData>(6);
+        var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));
         var castLogs = dhuum.GetCastEvents(log);
-        // present if not bugged and pre-event done
         PhaseData? mainFight = null;
-        if (!_hasPrevent)
+        // Sometimes the pre event is not in the evtc
+        if (!hasPreEvent)
         {
             // full fight does not contain the pre event
-            ComputeFightPhases(phases, dhuum, castLogs, log, fightDuration, 0, phases[0]);
+            ComputeFightPhases(phases, dhuum, castLogs, log, end, start, encounterPhase);
         }
         else
         {
             // full fight contains the pre event
-            BuffEvent? invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
+            BuffEvent? invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > start + 115000);
             // pre event done
             if (invulDhuum != null)
             {
-                long end = invulDhuum.Time;
-                var preEvent = new SubPhasePhaseData(0, end, "Pre Event").WithParentPhase(phases[0]);
+                long preEventEnd = invulDhuum.Time;
+                var preEvent = new SubPhasePhaseData(start, preEventEnd, "Pre Event").WithParentPhase(encounterPhase);
                 preEvent.AddTarget(dhuum, log);
                 preEvent.AddTargets(enforcers, log, PhaseData.TargetPriority.NonBlocking);
                 phases.Add(preEvent);
 
-                mainFight = new SubPhasePhaseData(end, fightDuration, "Main Fight");
+                mainFight = new SubPhasePhaseData(preEventEnd, end, "Main Fight");
                 mainFight.AddTarget(dhuum, log);
-                phases.Add(mainFight.WithParentPhase(phases[0]));
-                ComputeFightPhases(phases, dhuum, castLogs, log, fightDuration, end, mainFight);
+                phases.Add(mainFight.WithParentPhase(encounterPhase));
+                ComputeFightPhases(phases, dhuum, castLogs, log, end, preEventEnd, mainFight);
             }
         }
         bool hasRitual = phases.Last().Name == "Ritual";
@@ -250,12 +245,21 @@ internal class Dhuum : HallOfChains
             // from pre event end to 10% or fight end if 10% not achieved
             phases.AddRange(GetInBetweenSoulSplits(log, dhuum, enforcers, mainFight.Start, parentPhase.End, hasRitual, parentPhase));
         }
-        else if (!_hasPrevent)
+        else if (!hasPreEvent)
         {
-            var parentPhase = dhuumFight ?? phases[0];
+            var parentPhase = dhuumFight ?? encounterPhase;
             // from start to 10% or fight end if 10% not achieved
-            phases.AddRange(GetInBetweenSoulSplits(log, dhuum, enforcers, 0, parentPhase.End, hasRitual, parentPhase));
+            phases.AddRange(GetInBetweenSoulSplits(log, dhuum, enforcers, encounterPhase.Start, parentPhase.End, hasRitual, parentPhase));
         }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        long fightDuration = log.LogData.LogEnd;
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
+        phases[0].AddTarget(dhuum, log);
+        phases.AddRange(ComputePhases(log, dhuum, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -326,7 +330,6 @@ internal class Dhuum : HallOfChains
         {
             throw new MissingKeyActorsException("Dhuum not found");
         }
-        _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);
         HandleYourSouls(agentData, combatData);
 
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
@@ -334,8 +337,12 @@ internal class Dhuum : HallOfChains
 
     internal override LogData.LogStartStatus GetLogStartStatus(CombatData combatData, AgentData agentData, LogData logData)
     {
+        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
+        {
+            throw new MissingKeyActorsException("Dhuum not found");
+        }
         // We expect pre event in all logs
-        if (!_hasPrevent)
+        if (combatData.GetAnimatedCastData(dhuum).Any(x => (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000))
         {
             return LogData.LogStartStatus.NoPreEvent;
         }

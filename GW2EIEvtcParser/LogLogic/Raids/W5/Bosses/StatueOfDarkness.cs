@@ -128,7 +128,17 @@ internal class StatueOfDarkness : HallOfChains
         }
         return res;
     }
-
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor eyeFate, SingleActor eyeJudgement, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(4);
+        phases.AddRange(GetSubPhases(eyeFate, log, encounterPhase));
+        phases.AddRange(GetSubPhases(eyeJudgement, log, encounterPhase));
+        return phases;
+    }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -140,8 +150,7 @@ internal class StatueOfDarkness : HallOfChains
         }
         phases[0].AddTarget(eyeJudgement, log);
         phases[0].AddTarget(eyeFate, log);
-        phases.AddRange(GetSubPhases(eyeFate, log, phases[0]));
-        phases.AddRange(GetSubPhases(eyeJudgement, log, phases[0]));
+        phases.AddRange(ComputePhases(log, eyeFate, eyeJudgement, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

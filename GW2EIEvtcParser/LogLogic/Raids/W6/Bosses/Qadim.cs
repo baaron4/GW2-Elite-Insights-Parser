@@ -280,6 +280,13 @@ internal class Qadim : MythwrightGambit
         return [new DamageCastFinder(BurningCrucible, BurningCrucible)];
     }
 
+    private static readonly HashSet<TargetID> SecondaryTargetIDs = new HashSet<TargetID>
+    {
+        TargetID.WyvernMatriarch,
+        TargetID.WyvernPatriarch,
+        TargetID.AncientInvokedHydra,
+        TargetID.ApocalypseBringer,
+    };
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
@@ -300,35 +307,22 @@ internal class Qadim : MythwrightGambit
         }
         return GetGenericLogOffset(logData);
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qadim, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        // Warning: Combat replay relies on these phases.
-        // If changing phase detection, combat replay platform timings may have to be updated.
-
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-        phases[0].AddTarget(qadim, log);
-        var secondaryTargetIDs = new HashSet<TargetID>
-                    {
-                       TargetID.WyvernMatriarch,
-                       TargetID.WyvernPatriarch,
-                       TargetID.AncientInvokedHydra,
-                       TargetID.ApocalypseBringer,
-                    };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(secondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false));
-        for (int i = 1; i < phases.Count; i++)
+        var phases = new List<PhaseData>(7);
+        phases.AddRange(GetPhasesByInvul(log, QadimInvulnerable, qadim, true, false, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
         {
+            int phaseIndex = i + 1;
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
             {
-                phase.Name = "Qadim P" + (i) / 2;
+                phase.Name = "Qadim P" + (phaseIndex) / 2;
                 var pyresFirstAware = new List<long>();
                 var pyres = new List<TargetID>
                     {
@@ -347,7 +341,7 @@ internal class Qadim : MythwrightGambit
                     phase.OverrideStart(pyresFirstAware.Max());
                 }
                 phase.AddTarget(qadim, log);
-                phase.AddTargets(Targets.Where(x => x.IsAnySpecies(pyres)), log, PhaseData.TargetPriority.NonBlocking); 
+                phase.AddTargets(targets.Where(x => x.IsAnySpecies(pyres)), log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
@@ -359,7 +353,7 @@ internal class Qadim : MythwrightGambit
                        TargetID.ApocalypseBringer,
                        TargetID.QadimLamp
                     };
-                AddTargetsToPhaseAndFit(phase, ids, log);
+                AddTargetsToPhaseAndFit(phase, targets, ids, log);
                 if (phase.Targets.Count > 0)
                 {
                     var phaseTarIDs = new HashSet<int>(phase.Targets.Keys.Select(x => x.ID));
@@ -383,6 +377,19 @@ internal class Qadim : MythwrightGambit
             }
         }
         phases.RemoveAll(x => x.Start >= x.End);
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        // Warning: Combat replay relies on these phases.
+        // If changing phase detection, combat replay platform timings may have to be updated.
+
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+        phases[0].AddTarget(qadim, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SecondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, qadim, Targets, (EncounterPhaseData)phases[0], requirePhases));
+       
         return phases;
     }
 

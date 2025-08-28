@@ -133,7 +133,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         return encounterStart;
     }
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor? xera, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         // If xera is null, the whole fight is in pre event
         if (!requirePhases || xera == null)
@@ -143,10 +143,10 @@ internal class Xera : StrongholdOfTheFaithful
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
         var phases = new List<PhaseData>(5);
-        long xeraFightStart = GetMainXeraFightStart(log, xera.AgentItem, encounterStart);
-        PhaseData? phase100to0 = null;
-        if (xeraFightStart > encounterStart)
+        PhaseData phase100to0 = encounterPhase;
+        if (log.CombatData.GetLogNPCUpdateEvents().Count > 0 && encounterPhase.StartStatus == LogData.LogStartStatus.Normal)
         {
+            long xeraFightStart = GetMainXeraFightStart(log, xera.AgentItem, encounterStart);
             var phasePreEvent = new SubPhasePhaseData(encounterPhase.Start, xeraFightStart, "Pre Event");
             phasePreEvent.AddParentPhase(encounterPhase);
             phasePreEvent.AddTargets(targets.Where(x => x.IsSpecies(TargetID.BloodstoneShardButton) || x.IsSpecies(TargetID.BloodstoneShardRift)), log);
@@ -164,7 +164,7 @@ internal class Xera : StrongholdOfTheFaithful
         // split happened
         if (invulXera != null)
         {
-            var phase1 = new SubPhasePhaseData(xeraFightStart, invulXera.Time, "Phase 1");
+            var phase1 = new SubPhasePhaseData(phase100to0.Start, invulXera.Time, "Phase 1");
             if (phase100to0 != null)
             {
                 phase1.AddParentPhase(phase100to0);
@@ -203,14 +203,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phases.Add(phase2);
             }
             var glidingPhase = new SubPhasePhaseData(invulXera.Time, glidingEndTime, "Gliding");
-            if (phase100to0 != null)
-            {
-                glidingPhase.AddParentPhase(phase100to0);
-            }
-            else
-            {
-                glidingPhase.AddParentPhase(encounterPhase);
-            }
+            glidingPhase.AddParentPhase(phase100to0);
             glidingPhase.AddTargets(targets.Where(t => t.IsSpecies(TargetID.ChargedBloodstone)), log);
             phases.Add(glidingPhase);
         }
@@ -222,7 +215,7 @@ internal class Xera : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

@@ -52,9 +52,9 @@ internal class MythwrightGambitInstance : MythwrightGambit
         }
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
-    private List<PhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleConjuredAmalgamatePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.ConjuredAmalgamate, out var conjuredAmalgamates) && 
             targetsByIDs.TryGetValue((int)TargetID.CALeftArm, out var leftArms) && 
@@ -108,51 +108,56 @@ internal class MythwrightGambitInstance : MythwrightGambit
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleTwinLargosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        if (targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts) &&
-            targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
+        if (!targetsByIDs.TryGetValue((int)TargetID.Kenut, out var kenuts))
+        {
+            kenuts = [];
+        }
+        if (targetsByIDs.TryGetValue((int)TargetID.Nikare, out var nikares))
         {
             var chest = log.AgentData.GetGadgetsByID(_twinLargos.ChestID).FirstOrDefault();
             foreach (var nikare in nikares)
             {
                 var kenut = kenuts.FirstOrDefault(x => x.InAwareTimes(nikare));
+                long start = nikare.FirstAware;
+                var nikareEnterCombat = log.CombatData.GetEnterCombatEvents(nikare.AgentItem).FirstOrDefault();
+                if (nikareEnterCombat != null)
+                {
+                    start = nikareEnterCombat.Time;
+                }
+                long end = nikare.LastAware;
                 if (kenut != null)
                 {
-                    long start = nikare.FirstAware;
-                    var nikareEnterCombat = log.CombatData.GetEnterCombatEvents(nikare.AgentItem).FirstOrDefault();
-                    if (nikareEnterCombat != null)
-                    {
-                        start = nikareEnterCombat.Time;
-                    }
                     var kenutEnterCombat = log.CombatData.GetEnterCombatEvents(kenut.AgentItem).FirstOrDefault();
                     if (kenutEnterCombat != null)
                     {
                         start = Math.Min(start, kenutEnterCombat.Time);
-                    } else
+                    }
+                    else
                     {
                         start = Math.Min(start, kenut.FirstAware);
                     }
-                    long end = Math.Max(nikare.LastAware, kenut.LastAware);
-                    bool success = false;
-                    if (chest != null && chest.InAwareTimes(end + 500))
-                    {
-                        end = chest.FirstAware;
-                        success = true;
-                    }
-                    AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, _twinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+                    end = Math.Max(nikare.LastAware, kenut.LastAware);
                 }
+                bool success = false;
+                if (chest != null && chest.InAwareTimes(end + 500))
+                {
+                    end = chest.FirstAware;
+                    success = true;
+                }
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [nikare, kenut], [], [], mainPhase, "Twin Largos", start, end, success, _twinLargos, TwinLargos.HasCastAquaticDomainOrCMHP(log.CombatData, nikare, kenut) ? LogData.LogMode.CM : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleQadimPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Qadim, out var qadims))
         {
@@ -186,9 +191,35 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        HandleConjuredAmalgamatePhases(targetsByIDs, log, phases);
-        HandleTwinLargosPhases(targetsByIDs, log, phases);
-        HandleQadimPhases(targetsByIDs, log, phases);
+        {
+
+            var caPhases = HandleConjuredAmalgamatePhases(targetsByIDs, log, phases);
+            foreach (var caPhase in caPhases)
+            {
+                var ca = caPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.ConjuredAmalgamate));
+                var rightArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
+                var leftArm = caPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
+                phases.AddRange(ConjuredAmalgamate.ComputePhases(log, ca, rightArm, leftArm, caPhase, requirePhases));
+            }
+        }
+        {
+            var twinLargosPhases = HandleTwinLargosPhases(targetsByIDs, log, phases);
+            foreach (var twinLargosPhase in twinLargosPhases)
+            {
+                var nikare = twinLargosPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Nikare));
+                var kenut = twinLargosPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Kenut));
+                phases.AddRange(TwinLargos.ComputePhases(log, nikare, kenut, twinLargosPhase, requirePhases));
+            }
+        }
+        {
+            var qadimPhases = HandleQadimPhases(targetsByIDs, log, phases);
+            foreach (var qadimPhase in qadimPhases)
+            {
+                var nikare = qadimPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Qadim));
+                phases.AddRange(Qadim.ComputePhases(log, nikare, Targets, qadimPhase, requirePhases));
+            }
+        }
+        
         return phases;
     }
 

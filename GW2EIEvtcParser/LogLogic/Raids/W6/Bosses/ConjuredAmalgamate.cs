@@ -339,7 +339,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    private static List<long> GetTargetableTimes(ParsedEvtcLog log, SingleActor? target, TargetID atID)
+    private static List<long> GetTargetableTimes(ParsedEvtcLog log, SingleActor? target, TargetID atID, long start, long end)
     {
         if (target == null)
         {
@@ -348,48 +348,44 @@ internal class ConjuredAmalgamate : MythwrightGambit
         var attackTargetEvent = log.CombatData.GetAttackTargetEventsBySrc(target.AgentItem).FirstOrDefault(x => x.AttackTarget.IsSpecies(atID));
         if (attackTargetEvent != null)
         {
-            return attackTargetEvent.GetTargetableEvents(log).Where(x => x.Targetable).Select(x => x.Time).ToList();
+            return attackTargetEvent.GetTargetableEvents(log).Where(x => x.Targetable && x.Time >= start && x.Time <= end).Select(x => x.Time).ToList();
         }
         return [];
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor conjuredAmalgamate, SingleActor? rightArm, SingleActor? leftArm, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
-        SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
-        phases[0].AddTarget(ca, log);
-        phases[0].AddTarget(leftArm, log, PhaseData.TargetPriority.Blocking);
-        phases[0].AddTarget(rightArm, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        phases.AddRange(GetPhasesByInvul(log, CAInvul, ca, true, false));
+        long start = encounterPhase.Start;
+        long end = encounterPhase.End;
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, CAInvul, conjuredAmalgamate, true, false, start, end));
         int burnPhase = 0, armPhase = 0;
-        for (int i = 1; i < phases.Count; i++)
+        for (int i = 0; i < phases.Count; i++)
         {
             string name;
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 1)
+            phase.AddParentPhase(encounterPhase);
+            if (i % 2 == 0)
             {
                 name = "Arm Phase " + (++armPhase);
             }
             else
             {
                 name = "Burn Phase " + (++burnPhase);
-                phase.AddTarget(ca, log);
+                phase.AddTarget(conjuredAmalgamate, log);
             }
             phase.Name = name;
         }
         if (leftArm != null || rightArm != null)
         {
             int leftArmPhase = 0, rightArmPhase = 0, bothArmPhase = 0;
-            var targetablesL = GetTargetableTimes(log, leftArm, TargetID.CALeftArmAttackTarget);
-            var targetablesR = GetTargetableTimes(log, rightArm, TargetID.CARightArmAttackTarget);
-            for (int i = 1; i < phases.Count; i++)
+            var targetablesL = GetTargetableTimes(log, leftArm, TargetID.CALeftArmAttackTarget, start, end);
+            var targetablesR = GetTargetableTimes(log, rightArm, TargetID.CARightArmAttackTarget, start, end);
+            for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 var leftExists = targetablesL.Exists(x => phase.InInterval(x));
@@ -412,7 +408,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
                         phase.Name = "Right Arm Phase " + (++rightArmPhase);
                         phase.AddTarget(rightArm, log);
                     }
-                } 
+                }
                 else
                 {
                     if (leftExists && rightExists)
@@ -431,6 +427,18 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 }
             }
         }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CALeftArm));
+        SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CARightArm));
+        phases[0].AddTarget(ca, log);
+        phases[0].AddTarget(leftArm, log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTarget(rightArm, log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, ca, rightArm, leftArm, (EncounterPhaseData)phases[0], requirePhases));      
         return phases;
     }
 

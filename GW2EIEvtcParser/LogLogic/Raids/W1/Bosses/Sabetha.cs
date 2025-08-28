@@ -93,7 +93,7 @@ internal class Sabetha : SpiritVale
         TargetID.Kernan,
     };
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabetha, IReadOnlyList<SingleActor> targets, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabetha, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -140,7 +140,7 @@ internal class Sabetha : SpiritVale
         SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
         phases[0].AddTarget(sabetha, log);
         phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(BanditBossIDs)), log, PhaseData.TargetPriority.Blocking);
-        phases.AddRange(ComputePhases(log, sabetha, Targets, phases[0], requirePhases));
+        phases.AddRange(ComputePhases(log, sabetha, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

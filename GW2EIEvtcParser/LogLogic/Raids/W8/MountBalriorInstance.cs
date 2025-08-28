@@ -53,9 +53,9 @@ internal class MountBalriorInstance : MountBalrior
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> HandleGreerPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleGreerPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Greer, out var greers))
         {
@@ -86,9 +86,9 @@ internal class MountBalriorInstance : MountBalrior
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleDecimaPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID decimaID)
+    private List<EncounterPhaseData> HandleDecimaPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID decimaID)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)decimaID, out var decimas))
         {
@@ -132,9 +132,9 @@ internal class MountBalriorInstance : MountBalrior
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleUraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleUraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Ura, out var uras))
         {

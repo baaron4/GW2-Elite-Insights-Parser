@@ -4,6 +4,7 @@ using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -55,9 +56,9 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleCairnPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)TargetID.Cairn, out var cairns))
         {
@@ -100,11 +101,11 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
-
-    private List<PhaseData> HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleDeimosPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var mainPhase = phases[0];
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
+        HashSet<SingleActor>? handledDeimoss = null;
         if (targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies) && targetsByIDs.TryGetValue((int)TargetID.DemonicBond, out var demonicBonds))
         {
             var deimosDummy = dummies.FirstOrDefault(x => x.Character == "Deimos Pre Event");
@@ -145,6 +146,8 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                             var deimos = deimoss.FirstOrDefault(x => x.FirstAware > start || x.AgentItem.InAwareTimes(start));
                             if (deimos != null)
                             {
+                                handledDeimoss ??= new HashSet<SingleActor>(deimoss.Count);
+                                handledDeimoss.Add(deimos);
                                 target = deimos;
                             }
                         }
@@ -198,6 +201,40 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
             }
         }
+        // Handle deimoss without pre events
+        {
+            if (targetsByIDs.TryGetValue((int)TargetID.Deimos, out var deimoss))
+            {
+                if (handledDeimoss == null || handledDeimoss.Count != deimoss.Count)
+                {
+                    var chest = log.AgentData.GetGadgetsByID(_deimos.ChestID).FirstOrDefault();
+                    var nonBlockingSubBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Thief, TargetID.Gambler, TargetID.Drunkard]));
+                    foreach (var deimos in deimoss)
+                    {
+                        var spawnProtectionRemove = log.CombatData.GetBuffRemoveAllDataByDst(SpawnProtection, deimos.AgentItem).FirstOrDefault();
+                        long start = deimos.FirstAware;
+                        bool skip = !log.CombatData.GetDamageTakenData(deimos.AgentItem).Any(x => x.CreditedFrom.IsPlayer);
+                        if (spawnProtectionRemove != null)
+                        {
+                            skip = false;
+                            start = spawnProtectionRemove.Time;
+                        }
+                        if (skip)
+                        {
+                            continue;
+                        }
+                        long end = deimos.LastAware;
+                        bool success = false;
+                        if (chest != null && chest.InAwareTimes(start, end + 2000))
+                        {
+                            end = chest.FirstAware;
+                            success = true;
+                        }
+                        AddInstanceEncounterPhase(log, phases, encounterPhases, [deimos], [], nonBlockingSubBosses, mainPhase, "Deimos", start, end, success, _deimos, deimos.GetHealth(log.CombatData) > 40e6 ? LogData.LogMode.CM : LogData.LogMode.Normal, LogData.LogStartStatus.NoPreEvent);
+                    }
+                }
+            }
+        }
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
@@ -207,9 +244,30 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         HandleCairnPhases(targetsByIDs, log, phases);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], "Mursaat Overseer", _mursaatOverseer, (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), "Samarog", _samarog, (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
-        HandleDeimosPhases(targetsByIDs, log, phases);
+        {
+            var moPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.MursaatOverseer, [], "Mursaat Overseer", _mursaatOverseer, (log, mursaat) => mursaat.GetHealth(log.CombatData) > 25e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var moPhase in moPhases)
+            {
+                var mursaatOverseer = moPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.MursaatOverseer));
+                phases.AddRange(MursaatOverseer.ComputePhases(log, mursaatOverseer, moPhase, requirePhases));
+            }
+        }
+        {
+            var samarogPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Samarog, Targets.Where(x => x.IsAnySpecies([TargetID.Guldhem, TargetID.Rigom])), "Samarog", _samarog, (log, samarog) => samarog.GetHealth(log.CombatData) > 30e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var samarogPhase in samarogPhases)
+            {
+                var samarog = samarogPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Samarog));
+                phases.AddRange(Samarog.ComputePhases(log, samarog, Targets, samarogPhase, requirePhases));
+            }
+        }
+        {
+            var deimosPhases = HandleDeimosPhases(targetsByIDs, log, phases);
+            foreach (var deimosPhase in deimosPhases)
+            {
+                var deimos = deimosPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Deimos));
+                phases.AddRange(Deimos.ComputePhases(log, deimos, Targets, deimosPhase, requirePhases));
+            }
+        }
         return phases;
     }
 

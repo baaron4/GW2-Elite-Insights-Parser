@@ -53,9 +53,9 @@ internal class SpiritValeInstance : SpiritVale
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
-    private List<PhaseData> ProcessSpiritRacePhases_SingleGadgetInstances(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> ProcessSpiritRacePhases_SingleGadgetInstances(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
         {
             var wallOfGhosts = log.AgentData.GetNPCsByID(TargetID.WallOfGhosts);
@@ -99,9 +99,9 @@ internal class SpiritValeInstance : SpiritVale
         return encounterPhases;
     }
 
-    private List<PhaseData> ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> ProcessSpiritRacePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.EtherealBarrier, out var etherealBarriers))
         {
             var packedEtherealBarriers = new List<List<SingleActor>>(etherealBarriers.Count / 4 + 1);

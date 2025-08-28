@@ -138,7 +138,7 @@ internal class Golem : LogLogic
                     phases.Add(phase);
                 }
             }
-            var subPhases = GetPhasesByHealthPercent(log, mainTarget, thresholds);
+            var subPhases = GetPhasesByHealthPercent(log, mainTarget, thresholds, phases[0].Start, phases[0].End);
             foreach (var subPhase in subPhases)
             {
                 subPhase.AddParentPhases(phases);

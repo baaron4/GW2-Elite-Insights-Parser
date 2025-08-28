@@ -52,9 +52,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
-    private List<PhaseData> HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         var mcLeods = targets.Where(x => x.IsSpecies(TargetID.McLeodTheSilent));
         var dummy = targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Escort");
@@ -86,9 +86,9 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return encounterPhases;
     }
 
-    private List<PhaseData> HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleTwistedCastlePhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         if (targetsByIDs.TryGetValue((int)TargetID.HauntingStatue, out var statues) && targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
             var dummy = dummies.FirstOrDefault(x => x.Character == "Twisted Castle");
@@ -147,7 +147,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
-    private List<PhaseData> HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleXeraPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         if (!targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
@@ -158,7 +158,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         {
             return [];
         }
-        var encounterPhases = new List<PhaseData>();
+        var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         var fakeXeras = log.AgentData.GetNPCsByID(TargetID.FakeXera);
         var xeras = log.AgentData.GetNPCsByID(TargetID.Xera);

@@ -217,7 +217,7 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor berg, SingleActor zane, SingleActor narella, PhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor berg, SingleActor zane, SingleActor narella, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -237,7 +237,7 @@ internal class BanditTrio : SalvationPass
         SingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
         SingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
         phases[0].AddTargets(Targets, log);
-        ComputePhases(log, berg, zane, narella, phases[0], requirePhases);
+        ComputePhases(log, berg, zane, narella, (EncounterPhaseData)phases[0], requirePhases);
         return phases;
     }
 
