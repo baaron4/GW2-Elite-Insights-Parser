@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -466,10 +467,14 @@ internal class HarvestTemple : EndOfDragonsStrike
             TargetID.TheDragonVoidZhaitan,
             TargetID.TheDragonVoidSooWon,
         };
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).DistinctBy(x => x.AttackTarget);
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
         var targetableEvents = new Dictionary<AgentItem, IEnumerable<TargetableEvent>>();
         foreach (var attackTarget in attackTargetEvents)
         {
+            if (targetableEvents.ContainsKey(attackTarget.AttackTarget))
+            {
+                throw new EvtcCombatEventException("Duplicated attack target events");
+            }
             targetableEvents[attackTarget.AttackTarget] = attackTarget.GetTargetableEvents(combatData, agentData);
         }
         attackTargetEvents = attackTargetEvents.Where(x =>
