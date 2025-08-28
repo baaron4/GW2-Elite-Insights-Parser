@@ -46,7 +46,7 @@ public class StabilityTestEvtc
                 stopWatch.Stop();
                 var elapsed = stopWatch.ElapsedMilliseconds;
                 // Catch absurdly high times
-                if (elapsed > (log.LogData.IsInstance || log.LogData.Logic.ParseMode == GW2EIEvtcParser.LogLogic.LogLogic.ParseModeEnum.WvW ? 300000 : 30000))
+                if (elapsed > (log.LogData.IsInstance || log.LogData.Logic.ParseMode == GW2EIEvtcParser.LogLogic.LogLogic.ParseModeEnum.WvW || log.LogData.Logic.ParseMode == GW2EIEvtcParser.LogLogic.LogLogic.ParseModeEnum.OpenWorld ? 300000 : 30000))
                 {
                     throw new TimeoutException("Too much time spent");
                 }
