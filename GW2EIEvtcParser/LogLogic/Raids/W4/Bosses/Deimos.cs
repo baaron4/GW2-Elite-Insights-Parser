@@ -459,15 +459,15 @@ internal class Deimos : BastionOfThePenitent
             }
             phases.Add(phasePreEvent);
 
-            phase100to0 = new SubPhasePhaseData(deimosMainFightStart, log.LogData.LogEnd, "Main Fight");
+            phase100to0 = new SubPhasePhaseData(deimosMainFightStart, encounterPhase.End, "Main Fight");
             phase100to0.AddParentPhase(fullFight);
             phase100to0.AddTarget(deimos, log);
             phase100to0.AddTargets(targets.Where(x => x.IsAnySpecies([TargetID.Drunkard, TargetID.Gambler, TargetID.Thief])), log, PhaseData.TargetPriority.NonBlocking);
             phases.Add(phase100to0);
         }
         (var phase100to10, var phase10to0) = AddBossPhases(phases, log, deimos, phase100to0, encounterPhase);
-        AddAddPhases(phases, targets, log, deimos);
-        AddBurstPhases(phases, log, deimos, [phase100to0, phase100to10, phase10to0]);
+        AddAddPhases(phases, targets, log, deimos, encounterPhase);
+        AddBurstPhases(phases, log, deimos, [phase100to0, phase100to10, phase10to0], encounterPhase);
         return phases;
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -504,9 +504,9 @@ internal class Deimos : BastionOfThePenitent
             phase100to10.AddParentPhase(mainFightPhase);
             phases.Add(phase100to10);
 
-            if (log.LogData.LogEnd - percent10StartTime > PhaseTimeLimit)
+            if (encounterPhase.End - percent10StartTime > PhaseTimeLimit)
             {
-                phase10to0 = new SubPhasePhaseData(percent10StartTime, log.LogData.LogEnd, "10% - 0%");
+                phase10to0 = new SubPhasePhaseData(percent10StartTime, encounterPhase.End, "10% - 0%");
                 phase10to0.AddTarget(deimos, log);
                 phase10to0.AddParentPhase(mainFightPhase);
                 phases.Add(phase10to0);
@@ -517,13 +517,13 @@ internal class Deimos : BastionOfThePenitent
         return (phase100to10, phase10to0);
     }
 
-    private static void AddAddPhases(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, SingleActor mainTarget)
+    private static void AddAddPhases(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, SingleActor mainTarget, EncounterPhaseData encounterPhase)
     {
         foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.Thief) || target.IsSpecies(TargetID.Drunkard) || target.IsSpecies(TargetID.Gambler))
             {
-                var addPhase = new SubPhasePhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, log.LogData.LogEnd));
+                var addPhase = new SubPhasePhaseData(target.FirstAware - 1000, Math.Min(target.LastAware + 1000, encounterPhase.End));
                 switch(target.ID)
                 {
                     case (int)TargetID.Thief:
@@ -545,14 +545,14 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    private static void AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases)
+    private static void AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget, List<PhaseData> parentPhases, EncounterPhaseData encounterPhase)
     {
         var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet).Where(x => x.Value > 0);
         int burstID = 1;
         foreach (Segment signet in signets)
         {
-            long sigStart = Math.Max(signet.Start, log.LogData.LogStart);
-            long sigEnd = Math.Min(signet.End, log.LogData.LogEnd);
+            long sigStart = Math.Max(signet.Start, encounterPhase.Start);
+            long sigEnd = Math.Min(signet.End, encounterPhase.End);
             var burstPhase = new SubPhasePhaseData(sigStart, sigEnd, "Burst " + burstID++);
             burstPhase.AddTarget(mainTarget, log);
             burstPhase.AddParentPhases(parentPhases);

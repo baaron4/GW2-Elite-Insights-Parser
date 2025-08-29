@@ -255,7 +255,6 @@ internal class Dhuum : HallOfChains
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long fightDuration = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
         phases[0].AddTarget(dhuum, log);
@@ -504,7 +503,7 @@ internal class Dhuum : HallOfChains
                 var scytheSwing = casts.Where(x => x.SkillID == ScytheSwing).ToList();
                 for (int i = 0; i < scytheSwing.Count; i++)
                 {
-                    var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.LogData.LogEnd;
+                    var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : target.LastAware;
 
                     // AoE Indicator
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out var scytheSwingIndicators))

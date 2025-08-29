@@ -102,7 +102,7 @@ internal class StatueOfDarkness : HallOfChains
         return startToUse;
     }
 
-    private static List<PhaseData> GetSubPhases(SingleActor eye, ParsedEvtcLog log, PhaseData mainPhase)
+    private static List<PhaseData> GetSubPhases(SingleActor eye, ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
         var res = new List<PhaseData>();
         BuffRemoveAllEvent? det762Loss = log.CombatData.GetBuffDataByIDByDst(Determined762, eye.AgentItem).OfType<BuffRemoveAllEvent>().FirstOrDefault();
@@ -116,11 +116,11 @@ internal class StatueOfDarkness : HallOfChains
                 if (abe.Value == 0)
                 {
                     string name = eye.IsSpecies(TargetID.EyeOfJudgement) ? "Eye of Judgement" : "Eye of Fate";
-                    var phase = new SubPhasePhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, log.LogData.LogEnd))
+                    var phase = new SubPhasePhaseData(Math.Max(det762LossTime, abe.Start), Math.Min(abe.End, encounterPhase.End))
                     {
                         Name = name + " " + (++count)
                     };
-                    phase.AddParentPhase(mainPhase);
+                    phase.AddParentPhase(encounterPhase);
                     phase.AddTarget(eye, log);
                     res.Add(phase);
                 }

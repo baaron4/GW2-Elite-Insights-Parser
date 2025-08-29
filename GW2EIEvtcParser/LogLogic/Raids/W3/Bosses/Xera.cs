@@ -155,7 +155,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phasePreEvent.AddTarget(targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Xera Pre Event"), log);
             }
             phases.Add(phasePreEvent);
-            phase100to0 = new SubPhasePhaseData(xeraFightStart, log.LogData.LogEnd, "Main Fight");
+            phase100to0 = new SubPhasePhaseData(xeraFightStart, encounterPhase.End, "Main Fight");
             phase100to0.AddParentPhase(encounterPhase);
             phase100to0.AddTarget(xera, log);
             phases.Add(phase100to0);
@@ -211,7 +211,6 @@ internal class Xera : StrongholdOfTheFaithful
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = GetMainTarget();
         phases[0].AddTarget(mainTarget, log);

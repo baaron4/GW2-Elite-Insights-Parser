@@ -54,13 +54,13 @@ internal class Escort : StrongholdOfTheFaithful
         return "Siege the Stronghold";
     }
 
-    private static IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log)
+    private static IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, IReadOnlyList<SingleActor> targets, ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
         var phases = new List<PhaseData>();
         //
         DeadEvent? mcLeodDeath = log.CombatData.GetDeadEvents(mcLeod.AgentItem).LastOrDefault();
-        long mcLeodStart = Math.Max(mcLeod.FirstAware, log.LogData.LogStart);
-        long mcLeodEnd = Math.Min(mcLeodDeath != null ? mcLeodDeath.Time : mcLeod.LastAware, log.LogData.LogEnd);
+        long mcLeodStart = Math.Max(mcLeod.FirstAware, encounterPhase.Start);
+        long mcLeodEnd = Math.Min(mcLeodDeath != null ? mcLeodDeath.Time : mcLeod.LastAware, encounterPhase.End);
         var mainPhase = new SubPhasePhaseData(mcLeodStart, mcLeodEnd)
         {
             Name = "McLeod The Silent"
@@ -100,7 +100,7 @@ internal class Escort : StrongholdOfTheFaithful
         {
             long preEventEnd = mcLeod != null ? mcLeod.FirstAware : encounterPhase.End;
             var preEventWargs = wargs.Where(x => x.FirstAware <= preEventEnd);
-            var preEventPhase = new SubPhasePhaseData(log.LogData.LogStart, preEventEnd)
+            var preEventPhase = new SubPhasePhaseData(encounterPhase.Start, preEventEnd)
             {
                 Name = "Escort",
             };
@@ -114,7 +114,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
         if (mcLeod != null)
         {
-            var mcLeodPhases = GetMcLeodPhases(mcLeod, targets, log);
+            var mcLeodPhases = GetMcLeodPhases(mcLeod, targets, log, encounterPhase);
             foreach (var mcLeodPhase in mcLeodPhases)
             {
                 mcLeodPhase.AddParentPhase(encounterPhase);
@@ -123,7 +123,7 @@ internal class Escort : StrongholdOfTheFaithful
             var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
             if (mcLeodWargs.Any())
             {
-                var phase = new SubPhasePhaseData(log.LogData.LogStart, log.LogData.LogEnd, "McLeod Wargs");
+                var phase = new SubPhasePhaseData(encounterPhase.Start, encounterPhase.End, "McLeod Wargs");
                 phase.AddTargets(mcLeodWargs, log);
                 phase.OverrideTimes(log);
                 phases.Add(phase);

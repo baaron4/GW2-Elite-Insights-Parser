@@ -103,7 +103,6 @@ internal class Adina : TheKeyOfAhdashim
             }
             return false;
         }).ToList();
-        long final = logData.LogEnd;
         var handOfEruptionPositions = new Vector2[] { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
@@ -133,7 +132,7 @@ internal class Adina : TheKeyOfAhdashim
             foreach (TargetableEvent targetableEvent in attackOns)
             {
                 long start = targetableEvent.Time;
-                long end = final;
+                long end = logData.LogEnd;
                 TargetableEvent? attackOff = attackOffs.FirstOrDefault(x => x.Time > start);
                 if (attackOff != null)
                 {

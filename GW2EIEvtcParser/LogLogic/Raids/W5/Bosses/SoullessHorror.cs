@@ -145,7 +145,7 @@ internal class SoullessHorror : HallOfChains
         long end = encounterPhase.End;
         var phases = new List<PhaseData>(6);
         var tormentedDeads = targets.Where(x => x.IsSpecies(TargetID.TormentedDead));
-        var howling = soullessHorror.GetCastEvents(log, log.LogData.LogStart, end).Where(x => x.SkillID == HowlingDeath);
+        var howling = soullessHorror.GetCastEvents(log, encounterPhase.Start, end).Where(x => x.SkillID == HowlingDeath);
         long phaseStart = encounterPhase.Start;
         int i = 1;
         foreach (CastEvent c in howling)
@@ -175,7 +175,6 @@ internal class SoullessHorror : HallOfChains
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        long logEnd = log.LogData.LogEnd;
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         phases[0].AddTarget(mainTarget, log);
