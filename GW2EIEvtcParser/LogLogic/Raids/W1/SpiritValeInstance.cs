@@ -42,6 +42,16 @@ internal class SpiritValeInstance : SpiritVale
     {
         return "Spirit Vale";
     }
+
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 1961), (-15360, -36864, 5360, 13936));
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
+    }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var chest = agentData.GetGadgetsByID(_sabetha.ChestID).FirstOrDefault();
