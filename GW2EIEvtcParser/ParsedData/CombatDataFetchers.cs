@@ -156,6 +156,11 @@ partial class CombatData
         return _metaDataEvents.MapIDEvents;
     }
 
+    public IReadOnlyList<MapChangeEvent> GetMapChangeEvents()
+    {
+        return _metaDataEvents.MapChangeEvents;
+    }
+
     public IReadOnlyList<RewardEvent> GetRewardEvents()
     {
         return _rewardEvents;

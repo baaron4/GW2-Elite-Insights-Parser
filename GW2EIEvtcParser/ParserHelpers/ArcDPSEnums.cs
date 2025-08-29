@@ -253,6 +253,7 @@ public static class ArcDPSEnums
         EffectAgentCreate = 62,
         EffectAgentRemove = 63,
         AgentChange = 64,
+        MapChange = 65,
         Unknown
     };
 

@@ -152,6 +152,8 @@ public class CombatItem
             || IsStateChange == StateChange.SquadCombatEnd
             || IsStateChange == StateChange.EffectAgentRemove
             || IsStateChange == StateChange.EffectGroundRemove
+            || IsStateChange == StateChange.MapID
+            || IsStateChange == StateChange.MapChange
             ;
     }
 
