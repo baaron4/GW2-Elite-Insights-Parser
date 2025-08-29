@@ -90,7 +90,7 @@ internal abstract class FractalLogic : LogLogic
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, logData.LogEnd);
+            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         // check reward
