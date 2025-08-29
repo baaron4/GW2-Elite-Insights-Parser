@@ -191,60 +191,43 @@ internal class GreerTheBlightbringer : MountBalrior
 
     }
 
-    private static void AddMainTitansToPhase(PhaseData phase, SingleActor? greer, IEnumerable<SingleActor> subTitans, SingleActor? ereg, ParsedEvtcLog log)
+    private static void AddMainTitansToPhase(PhaseData phase, SingleActor? greer, IEnumerable<SingleActor> greeAndReg, SingleActor? ereg, ParsedEvtcLog log)
     {
         phase.AddTarget(greer, log);
-        phase.AddTargets(subTitans, log, PhaseData.TargetPriority.Blocking);
+        phase.AddTargets(greeAndReg, log, PhaseData.TargetPriority.Blocking);
         phase.AddTarget(ereg, log, PhaseData.TargetPriority.NonBlocking);
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor greer, IEnumerable<SingleActor> greeAndReeg, SingleActor? ereg, IEnumerable<SingleActor> protoGreerlings, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
-        var subTitanIDs = new List<int>
-        {
-            (int) TargetID.Reeg,
-            (int) TargetID.Gree,
-        };
-        var subTitans = Targets.Where(x => x.IsAnySpecies(subTitanIDs));
-        // Ereg is present in CM
-        var ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
-        AddMainTitansToPhase(phases[0], greer, subTitans, ereg, log);
-
-        // The Proto-Greelings can respawn during 10%
-        var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
-        var damageImmunity3StatusCount = greer.GetBuffStatus(log, DamageImmunity3).Count(x => x.Value > 0);
-        var filteredProtoGreelings = protoGreelings.OrderBy(x => x.FirstAware).Take(damageImmunity3StatusCount * 3);
-        phases[0].AddTargets(filteredProtoGreelings, log, PhaseData.TargetPriority.Blocking);
-
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var phases = new List<PhaseData>(encounterPhase.IsCM ? 14 : 11);
         // In shield bubble phases
-        phases.AddRange(GetPhasesByCast(log, InvulnerableBarrier, greer, true, true));
+        phases.AddRange(GetPhasesByCast(log, InvulnerableBarrier, greer, true, true, encounterPhase.Start, encounterPhase.End));
         var mainPhases = new List<PhaseData>(3);
-        for (int i = 1; i < phases.Count; i++)
+        for (int i = 0; i < phases.Count; i++)
         {
+            var phaseIndex = i + 1;
             PhaseData phase = phases[i];
-            if (i % 2 == 0)
+            if (phaseIndex % 2 == 0)
             {
-                phase.Name = "Split " + (i) / 2;
-                phase.AddParentPhase(phases[0]);
-                phase.AddTargets(subTitans, log);
+                phase.Name = "Split " + (phaseIndex) / 2;
+                phase.AddParentPhase(encounterPhase);
+                phase.AddTargets(greeAndReeg, log);
                 phase.AddTargets([greer, ereg], log, PhaseData.TargetPriority.NonBlocking);
             }
             else
             {
                 mainPhases.Add(phase);
-                phase.AddParentPhase(phases[0]);
-                phase.Name = "Phase " + (i + 1) / 2;
-                AddMainTitansToPhase(phase, greer, subTitans, ereg, log);
+                phase.AddParentPhase(encounterPhase);
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                AddMainTitansToPhase(phase, greer, greeAndReeg, ereg, log);
             }
         }
         // Generic in between damage immunity phases handling
-        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true);
+        var damageImmunityPhases = GetPhasesByInvul(log, [DamageImmunity1, DamageImmunity2], greer, false, true, encounterPhase.Start, encounterPhase.End);
         foreach (var damageImmunityPhase in damageImmunityPhases)
         {
             damageImmunityPhase.AddParentPhases(mainPhases);
@@ -254,16 +237,16 @@ internal class GreerTheBlightbringer : MountBalrior
             {
                 if (currentMainPhase.End > damageImmunityPhase.End)
                 {
-                    AddMainTitansToPhase(damageImmunityPhase, greer, subTitans, ereg, log);
+                    AddMainTitansToPhase(damageImmunityPhase, greer, greeAndReeg, ereg, log);
                     phases.Add(damageImmunityPhase);
                     SetPhaseNameForHP(damageImmunityPhase, hpAtStart);
-                } 
+                }
                 else
                 {
                     var beforeShieldPhase = new SubPhasePhaseData(damageImmunityPhase.Start, currentMainPhase.End);
                     beforeShieldPhase.AddParentPhases(mainPhases);
                     SetPhaseNameForHP(beforeShieldPhase, hpAtStart);
-                    AddMainTitansToPhase(beforeShieldPhase, greer, subTitans, ereg, log);
+                    AddMainTitansToPhase(beforeShieldPhase, greer, greeAndReeg, ereg, log);
                     phases.Add(beforeShieldPhase);
                     var nextMainPhase = phases.FirstOrDefault(x => x.Start >= damageImmunityPhase.Start && x.Name.Contains("Phase"));
                     if (nextMainPhase != null)
@@ -271,22 +254,22 @@ internal class GreerTheBlightbringer : MountBalrior
                         var afterShieldPhase = new SubPhasePhaseData(nextMainPhase.Start, damageImmunityPhase.End);
                         afterShieldPhase.AddParentPhases(mainPhases);
                         SetPhaseNameForHP(afterShieldPhase, greer.GetCurrentHealthPercent(log, afterShieldPhase.Start));
-                        AddMainTitansToPhase(afterShieldPhase, greer, subTitans, ereg, log);
+                        AddMainTitansToPhase(afterShieldPhase, greer, greeAndReeg, ereg, log);
                         phases.Add(afterShieldPhase);
-                    } 
+                    }
                 }
-            } 
+            }
         }
         // Enrage handling, greer gets damage immunity again, remove that
         var lastPhase = phases.Last();
-        if (log.CombatData.GetAnimatedCastData(TheWorldEndsInDecay).Any(x => lastPhase.Start >= x.Time))
+        if (log.CombatData.GetAnimatedCastData(TheWorldEndsInDecay).Any(x => lastPhase.Start >= x.Time && x.Time >= encounterPhase.Start))
         {
             phases.Remove(lastPhase);
         }
         // Below 20% CM phases handling
-        if (log.LogData.IsCM && damageImmunity3StatusCount > 0)
+        if (encounterPhase.IsCM && greer.GetBuffStatus(log, DamageImmunity3).Any(x => x.Value > 0))
         {
-            var finalPhases = GetPhasesByInvul(log, DamageImmunity3, greer, true, true);
+            var finalPhases = GetPhasesByInvul(log, DamageImmunity3, greer, true, true, encounterPhase.Start, encounterPhase.End);
             var finalHPPhase = phases.Last();
             if (finalPhases.Count > 0)
             {
@@ -294,7 +277,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 p20Percent10PercentPhase.AddParentPhase(finalHPPhase);
                 p20Percent10PercentPhase.OverrideStart(finalHPPhase.Start);
                 p20Percent10PercentPhase.Name = "20% - 10%";
-                AddMainTitansToPhase(p20Percent10PercentPhase, greer, subTitans, ereg, log);
+                AddMainTitansToPhase(p20Percent10PercentPhase, greer, greeAndReeg, ereg, log);
                 phases.Add(finalPhases[0]);
                 var protoPhases = 0;
                 var below10Phases = 0;
@@ -305,20 +288,38 @@ internal class GreerTheBlightbringer : MountBalrior
                     if (i % 2 == 1)
                     {
                         phase.Name = "Proto Greer " + (++protoPhases);
-                        AddTargetsToPhase(phase, [TargetID.ProtoGreerling], log);
+                        phase.AddTargets(protoGreerlings, log);
                         phases.Add(phase);
-                    } 
+                    }
                     else
                     {
                         phase.Name = "Below 10% " + (++below10Phases);
-                        AddMainTitansToPhase(phase, greer, subTitans, ereg, log);
+                        AddMainTitansToPhase(phase, greer, greeAndReeg, ereg, log);
                         phases.Add(phase);
                     }
                     phase.OverrideEnd(Math.Min(phase.End, finalHPPhase.End));
                 }
             }
         }
-
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor greer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Greer)) ?? throw new MissingKeyActorsException("Greer not found");
+        var greeAndReegIDs = new List<int>
+        {
+            (int) TargetID.Reeg,
+            (int) TargetID.Gree,
+        };
+        var greeAndReeg = Targets.Where(x => x.IsAnySpecies(greeAndReegIDs));
+        // Ereg is present in CM
+        var ereg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
+        AddMainTitansToPhase(phases[0], greer, greeAndReeg, ereg, log);
+        // The Proto-Greelings can respawn during 10%
+        var protoGreerlings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
+        phases[0].AddTargets(protoGreerlings, log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, greer, greeAndReeg, ereg, protoGreerlings, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

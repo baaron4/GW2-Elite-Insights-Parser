@@ -17,9 +17,9 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class DecimaTheStormsinger : MountBalrior
 {
-    private bool isCM => GenericTriggerID == (int)TargetID.DecimaCM;
+    private bool IsCMTriggerID => GenericTriggerID == (int)TargetID.DecimaCM;
 
-    private SingleActor Decima => Targets.FirstOrDefault(x => isCM ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
+    private SingleActor Decima => Targets.FirstOrDefault(x => IsCMTriggerID ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
 
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
@@ -199,7 +199,7 @@ internal class DecimaTheStormsinger : MountBalrior
         CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            var decima = agentData.GetNPCsByID(isCM ? TargetID.DecimaCM : TargetID.Decima).FirstOrDefault() ?? throw new MissingKeyActorsException("Decima not found");
+            var decima = agentData.GetNPCsByID(IsCMTriggerID ? TargetID.DecimaCM : TargetID.Decima).FirstOrDefault() ?? throw new MissingKeyActorsException("Decima not found");
             var determined = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Determined762);
             var determinedLost = determined.Where(x => x.IsBuffRemoval() && x.DstMatchesAgent(decima)).FirstOrDefault();
             var determinedApply = determined.Where(x => x.IsBuffApply() && x.SrcMatchesAgent(decima)).FirstOrDefault();
@@ -276,24 +276,24 @@ internal class DecimaTheStormsinger : MountBalrior
         return phase;
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor decima, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor decima = Decima;
-        phases[0].AddTarget(decima, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        bool isCM = encounterPhase.IsCM;
+        var phases = new List<PhaseData>(isCM ? 9 : 5);
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true));
+        phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true, encounterPhase.Start, encounterPhase.End));
         List<PhaseData> mainPhases = new List<PhaseData>(3);
         var currentMainPhase = 1;
-        for (int i = 1; i < phases.Count; i++)
+        for (int i = 0; i < phases.Count; i++)
         {
+            var phaseIndex = i + 1;
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
             {
                 phase.Name = "Split " + (currentMainPhase++);
                 if (isCM && i < phases.Count - 1)
@@ -312,7 +312,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     phase.AddTarget(decima, log);
                 }
             }
-            else if (i % 2 == 1)
+            else
             {
                 mainPhases.Add(phase);
                 phase.Name = "Phase " + (currentMainPhase);
@@ -322,35 +322,48 @@ internal class DecimaTheStormsinger : MountBalrior
         // Final phases + Boulder phases
         if (isCM)
         {
-            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem));
+            var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem) && encounterPhase.InInterval(x.Time));
             if (finalSeismicJumpEvent != null)
             {
                 var preFinalPhase = new SubPhasePhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
                 preFinalPhase.AddParentPhases(mainPhases);
-                preFinalPhase.AddTarget(Decima, log);
+                preFinalPhase.AddTarget(decima, log);
                 phases.Add(preFinalPhase);
-                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault();
+                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
                 if (finalPhaseStartEvent != null)
                 {
-                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, log.LogData.LogEnd, "10% - 0%");
+                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, encounterPhase.End, "10% - 0%");
                     finalPhase.AddParentPhases(mainPhases);
-                    finalPhase.AddTarget(Decima, log);
+                    finalPhase.AddTarget(decima, log);
                     phases.Add(finalPhase);
                 }
             }
-            var boulders = Targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder)).OrderBy(x => x.FirstAware);
-            phases[0].AddTargets(boulders, log, PhaseData.TargetPriority.Blocking);
-            var firstBoulders = boulders.Take(new Range(0, 2));
+            var sortedBoulders = targets.Where(x => x.IsSpecies(TargetID.TranscendentBoulder) && encounterPhase.InInterval(x.FirstAware)).OrderBy(x => x.FirstAware);
+            var firstBoulders = sortedBoulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {
                 phases.Add(GetBoulderPhase(log, firstBoulders, "Boulders 1", decima).WithParentPhases(mainPhases));
-                var secondBoulders = boulders.Take(new Range(2, 4));
+                var secondBoulders = sortedBoulders.Take(new Range(2, 4));
                 if (secondBoulders.Any())
                 {
                     phases.Add(GetBoulderPhase(log, secondBoulders, "Boulders 2", decima).WithParentPhases(mainPhases));
                 }
             }
         }
+        return phases;
+    }
+
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor decima = Decima;
+        phases[0].AddTarget(decima, log);
+        if (IsCMTriggerID)
+        {
+            AddTargetsToPhase(phases[0], [TargetID.TranscendentBoulder], log, PhaseData.TargetPriority.Blocking);
+        }
+        phases.AddRange(ComputePhases(log, decima, Targets, (EncounterPhaseData)phases[0], requirePhases));
+        
         return phases;
     }
 
@@ -840,14 +853,14 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
     {
-        return isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
+        return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
 
-        if (log.LogData.Success && isCM)
+        if (log.LogData.Success && IsCMTriggerID)
         {
             if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
             {

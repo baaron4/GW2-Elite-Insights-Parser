@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -295,22 +296,19 @@ internal class UraTheSteamshrieker : MountBalrior
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         RenameFumarollers(Targets);
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor ura, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
-        phases[0].AddTarget(ura, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        var parentPhase = phases[0];
-        bool isCm = log.LogData.IsCM || log.LogData.IsLegendaryCM;
-        long start = log.LogData.LogStart;
-        long end = log.LogData.LogEnd;
+        var phases = new List<PhaseData>(6);
+        PhaseData parentPhase = encounterPhase;
+        bool isCm = encounterPhase.IsCM || encounterPhase.IsLegendaryCM;
+        long start = encounterPhase.Start;
+        long end = encounterPhase.End;
 
-        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(ura.AgentItem));
+        var hp1 = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(ura.AgentItem) && encounterPhase.InInterval(x.Time));
         // Healed CM
         if (hp1 != null)
         {
@@ -318,7 +316,7 @@ internal class UraTheSteamshrieker : MountBalrior
             before1.AddParentPhase(parentPhase);
             before1.AddTarget(ura, log);
             phases.Add(before1);
-            var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To.Is(ura.AgentItem) && x.Time >= hp1.Time);
+            var determinedLost = log.CombatData.GetBuffData(Determined895).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To.Is(ura.AgentItem) && x.Time >= hp1.Time && encounterPhase.InInterval(x.Time));
             if (determinedLost != null)
             {
                 var after1 = new SubPhasePhaseData(determinedLost.Time, end, "Healed");
@@ -351,14 +349,14 @@ internal class UraTheSteamshrieker : MountBalrior
                 after40.AddTarget(ura, log);
                 phases.Add(after40);
 
-                var after70 = new SubPhasePhaseData(after70before40.Start, after40.End, isCm  ? "70% - 1%" : "70% - 0%");
+                var after70 = new SubPhasePhaseData(after70before40.Start, after40.End, isCm ? "70% - 1%" : "70% - 0%");
                 after70.AddParentPhase(parentPhase);
                 after70.AddTarget(ura, log);
                 phases.Add(after70);
 
                 after70before40.AddParentPhase(after70);
                 after40.AddParentPhase(after70);
-            } 
+            }
             else
             {
                 var after70 = new SubPhasePhaseData(hp70.Start, end, "70% - 40%");
@@ -366,8 +364,15 @@ internal class UraTheSteamshrieker : MountBalrior
                 phases.Add(after70);
                 after70.AddParentPhase(parentPhase);
             }
-        } 
-
+        }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor ura = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ura)) ?? throw new MissingKeyActorsException("Ura not found");
+        phases[0].AddTarget(ura, log);
+        phases.AddRange(ComputePhases(log, ura, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

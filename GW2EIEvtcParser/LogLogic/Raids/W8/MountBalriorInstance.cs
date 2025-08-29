@@ -60,6 +60,9 @@ internal class MountBalriorInstance : MountBalrior
         if (targetsByIDs.TryGetValue((int)TargetID.Greer, out var greers))
         {
             var chest = log.AgentData.GetGadgetsByID(_greer.ChestID).FirstOrDefault();
+            var greeAndRegs = Targets.Where(x => x.IsAnySpecies([TargetID.Reeg, TargetID.Gree]));
+            var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
+            var eregs = Targets.Where(x => x.IsSpecies(TargetID.Ereg));
             foreach (var greer in greers)
             {
                 // TBC
@@ -79,7 +82,7 @@ internal class MountBalriorInstance : MountBalrior
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
                 var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [], [], mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -191,8 +194,34 @@ internal class MountBalriorInstance : MountBalrior
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         HandleGreerPhases(targetsByIDs, log, phases);
-        HandleDecimaPhases(targetsByIDs, log, phases, TargetID.Decima);
-        HandleDecimaPhases(targetsByIDs, log, phases, TargetID.DecimaCM);
+        {
+            var greerPhases = HandleGreerPhases(targetsByIDs, log, phases);
+            foreach (var greerPhase in greerPhases)
+            {
+                var greer = greerPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Greer));
+                var greeAndReeg = greerPhase.Targets.Keys.Where(x => x.IsAnySpecies([TargetID.Gree, TargetID.Reeg]));
+                var ereg = greerPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
+                var protoGreerlings = greerPhase.Targets.Keys.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
+                phases.AddRange(GreerTheBlightbringer.ComputePhases(log, greer, greeAndReeg, ereg, protoGreerlings, greerPhase, requirePhases));
+            }
+        }
+        {
+            var decimaPhases = HandleDecimaPhases(targetsByIDs, log, phases, TargetID.Decima);
+            decimaPhases.AddRange(HandleDecimaPhases(targetsByIDs, log, phases, TargetID.DecimaCM));
+            foreach (var decimaPhase in decimaPhases)
+            {
+                var decima = decimaPhase.Targets.Keys.First(x => x.IsAnySpecies([TargetID.Decima, TargetID.DecimaCM]));
+                phases.AddRange(DecimaTheStormsinger.ComputePhases(log, decima, Targets, decimaPhase, requirePhases));
+            }
+        }
+        {
+            var uraPhases = HandleUraPhases(targetsByIDs, log, phases);
+            foreach (var uraPhase in uraPhases)
+            {
+                var ura = uraPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Ura));
+                phases.AddRange(UraTheSteamshrieker.ComputePhases(log, ura, uraPhase, requirePhases));
+            }
+        }
         HandleUraPhases(targetsByIDs, log, phases);
         return phases;
     }
