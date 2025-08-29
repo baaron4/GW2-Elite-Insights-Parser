@@ -209,12 +209,17 @@ public class ParsedEvtcLog
     }
 
 
-    public (List<SingleActorCombatReplayDescription>,List<CombatReplayRenderingDescription>, List<CombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public 
+        (
+        List<SingleActorCombatReplayDescription> actors,
+        List<CombatReplayRenderingDescription> decorationRendering, 
+        List<CombatReplayMetadataDescription> decorationMetadata
+        ) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var map = LogData.Logic.GetCombatReplayMap(this);
         var actors = new List<SingleActorCombatReplayDescription>();
         var decorationRenderings = new List<CombatReplayRenderingDescription>();
-        var decorationMetadata = new List<CombatReplayDecorationMetadataDescription>();
+        var decorationMetadata = new List<CombatReplayMetadataDescription>();
         var fromNonFriendliesSet = new HashSet<SingleActor>(LogData.Logic.Hostiles);
         foreach (SingleActor actor in Friendlies)
         {

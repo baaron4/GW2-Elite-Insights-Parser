@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public abstract class DecorationMetadataDescription : CombatReplayDecorationMetadataDescription
+public abstract class DecorationMetadataDescription : CombatReplayMetadataDescription
 {
 
     public string Signature { get; private set; }

@@ -9,7 +9,9 @@ internal static class JsonCombatReplayMetaDataBuilder
     public static JsonCombatReplayMetaData BuildJsonCombatReplayMetaData(ParsedEvtcLog log, RawFormatSettings settings)
     {
         CombatReplayMap map = log.LogData.Logic.GetCombatReplayMap(log);
-        var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>(map.Maps.Count);
+        var decorations = log.GetCombatReplayDescriptions([], []);
+        var mapDecorations = decorations.decorationRendering.OfType<ArenaDecorationRenderingDescription>().ToList();
+        var maps = new List<JsonCombatReplayMetaData.CombatReplayMap>(mapDecorations.Count);
         var jsonCR = new JsonCombatReplayMetaData()
         {
             InchToPixel = map.GetInchToPixel(),
@@ -18,13 +20,18 @@ internal static class JsonCombatReplayMetaDataBuilder
             Maps = maps
         };
         //
-        foreach (CombatReplayMap.MapItem mapItem in map.Maps)
+        var mapMetaDatas = decorations.decorationMetadata.OfType<ArenaDecorationMetadataDescription>().GroupBy(x => x.Signature).ToDictionary(x => x.Key, x => x.First());
+        foreach (var mapItem in mapDecorations)
         {
-            maps.Add(new JsonCombatReplayMetaData.CombatReplayMap()
+            if (mapItem.ConnectedTo is PositionConnectorDescription posConnector &&  mapMetaDatas.TryGetValue(mapItem.MetadataSignature, out var metadata))
             {
-                Url = mapItem.Link,
-                Interval = [mapItem.Start, mapItem.End]
-            });
+                maps.Add(new JsonCombatReplayMetaData.CombatReplayMap()
+                {
+                    Url = metadata.Image,
+                    Interval = [mapItem.Start, mapItem.End],
+                    Position = posConnector.Position
+                });
+            }
         }
         //
         return jsonCR;
