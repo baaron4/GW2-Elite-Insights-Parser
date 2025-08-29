@@ -244,13 +244,20 @@ internal class Sabir : TheKeyOfAhdashim
                     {
                         if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) < 200 && mainPlateformOpacities.Last().X != 1)
                         {
+                            lastMainPlateformTime = position.Time - 8000;
                             mainPlateformOpacities.Add(new(1, position.Time - 8000));
+
                         } 
                         else if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) >= 200 && mainPlateformOpacities.Last().X != 0)
                         {
-                            mainPlateformOpacities.Add(new(0, position.Time + 20000));
+                            mainPlateformOpacities.Add(new(0, Math.Min(position.Time + 20000, sabir.LastAware)));
                         }
                     }
+                }
+                var successSabirPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().LastOrDefault(x => x.LogID == LogID && x.Success);
+                if (successSabirPhase != null)
+                {
+                    mainPlateformOpacities.Add(new(1, successSabirPhase.End));
                 }
                 AddPlateformDecoration(target, replay, ParserIcons.SabirMainPlatform, 1660, mainPlateformOpacities);
                 break;
