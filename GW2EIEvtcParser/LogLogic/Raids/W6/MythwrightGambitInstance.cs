@@ -41,6 +41,16 @@ internal class MythwrightGambitInstance : MythwrightGambit
     {
         return "Mythwright Gambit";
     }
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMythwrightGambit, crMap));
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
+    }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {

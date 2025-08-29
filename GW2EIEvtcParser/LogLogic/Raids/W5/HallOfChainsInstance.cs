@@ -50,6 +50,38 @@ internal class HallOfChainsInstance : HallOfChains
     {
         return "Hall Of Chains";
     }
+
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 426), (-21504, -12288, 24576, 12288));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayHallOfChains, crMap));
+        _river.GetCombatMapInternal(log, arenaDecorations);
+        _soullessHorror.GetCombatMapInternal(log, arenaDecorations);
+        _statueOfIce.GetCombatMapInternal(log, arenaDecorations);
+        _statueOfDeath.GetCombatMapInternal(log, arenaDecorations);
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
+        var statueOfDarknessPhases = encounterPhases.Where(x => x.LogID == _statueOfDarkness.LogID);
+        var dhuumPhases = encounterPhases.Where(x => x.LogID == _dhuum.LogID);
+        if (statueOfDarknessPhases.Any() && dhuumPhases.Any())
+        {
+            var lastDarkness = statueOfDarknessPhases.Last();
+            var firstDarkness = statueOfDarknessPhases.First();
+            Dhuum.GetCombatMapInternal(log, arenaDecorations, long.MinValue, firstDarkness.End);
+            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
+            Dhuum.GetCombatMapInternal(log, arenaDecorations, lastDarkness.End, long.MaxValue);
+        } 
+        else if (statueOfDarknessPhases.Any())
+        {
+            _dhuum.GetCombatMapInternal(log, arenaDecorations);
+            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
+        } 
+        else
+        {
+            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
+            _dhuum.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
+    }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var chest = agentData.GetGadgetsByID(_dhuum.ChestID).FirstOrDefault();
@@ -259,14 +291,13 @@ internal class HallOfChainsInstance : HallOfChains
             }
         }
         {
-            var dhuumPhases = HandleStatueOfDarknessPhases(targetsByIDs, log, phases);
+            var dhuumPhases = HandleDhuumPhases(targetsByIDs, log, phases);
             foreach (var dhuumPhase in dhuumPhases)
             {
                 var dhuum = dhuumPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Dhuum));
                 phases.AddRange(Dhuum.ComputePhases(log, dhuum, Targets, dhuumPhase, requirePhases));
             }
         }
-        HandleDhuumPhases(targetsByIDs, log, phases);
         return phases;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

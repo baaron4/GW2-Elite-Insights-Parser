@@ -1330,7 +1330,8 @@ class ArenaDrawable extends MechanicDrawable {
         ctx.save();
         this.moveContext(ctx, pos, null);
         const height = this.height;   
-        const width = this.width;   
+        const width = this.width;    
+        ctx.clearRect(0, 0, width, height);  
         ctx.drawImage(this.image, 0, 0, width, height);
         ctx.restore();
     }

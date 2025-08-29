@@ -97,10 +97,15 @@ internal class Dhuum : HallOfChains
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
+        return GetCombatMapInternal(log, arenaDecorations, long.MinValue, long.MaxValue);
+    }
+
+    internal static CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, long start, long end)
+    {
         var crMap = new CombatReplayMap(
                         (1000, 899),
                         (13524, -1334, 18039, 2735));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayDhuum, crMap));
+        arenaDecorations.Add(new ArenaDecoration((start, end), CombatReplayDhuum, crMap));
         return crMap;
     }
 
@@ -205,7 +210,7 @@ internal class Dhuum : HallOfChains
             return [];
         }
         bool hasPreEvent = encounterPhase.StartStatus == LogData.LogStartStatus.Normal;
-        long end = encounterPhase.DurationInMS;
+        long end = encounterPhase.End;
         long start = encounterPhase.Start;
         var phases = new List<PhaseData>(6);
         var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));

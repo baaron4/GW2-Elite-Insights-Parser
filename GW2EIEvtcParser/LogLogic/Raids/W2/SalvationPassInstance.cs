@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -38,6 +39,17 @@ internal class SalvationPassInstance : SalvationPass
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Salvation Pass";
+    }
+
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 1800), (-12288, -27648, 12288, 27648));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplaySalvationPass, crMap));
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
