@@ -5056,7 +5056,7 @@ public static class SkillIDs
     public const long SplinterWeaponSkill = 76549;
     public const long ReverberatingLute = 76552;
     public const long EvokerStoneSpiritAura1 = 76557; // Reused buff from Stone Spirit for Evoker's Pets
-    public const long FormOfTheMonk2 = 76559;
+    public const long FormOfTheMonk1 = 76559;
     public const long WeWillNeverYieldSkill = 76562;
     public const long WeaponOfRemedyBuff = 76565;
     public const long SplinterWeaponBuff = 76566;
@@ -5095,12 +5095,14 @@ public static class SkillIDs
     public const long PreservationSkill = 76684;
     public const long RitualistDarkStalker = 76685;
     public const long DaringAdvanceSkill = 76687;
+    public const long SyncopateDelayedWave = 76689; // 3 seconds delay, applies daze
     public const long RadiantArmamentsSwordLingering = 76690;
     public const long FormOfTheAssassin1 = 76691;
     public const long OffensiveProtocolDemolish4 = 76693;
     public const long TaleOfTheSecondScion = 76695;
     public const long RitualistStormSpiritAura1 = 76699; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ExaltedHammer = 76702;
+    public const long OffensiveProtocolObliterate3 = 76705;
     public const long SeismicImpactPlayerSkill = 76707;
     public const long LuminousStaff = 76708;
     public const long SplashPetSkill = 76709;
@@ -5145,6 +5147,7 @@ public static class SkillIDs
     public const long OffensiveProtocolPierce = 76815;
     public const long ChakShield = 76816;
     public const long FormOfTheDervishSkill1 = 76818;
+    public const long Syncopate = 76822; // Procs twice, on Deafening Drum cast and on a 3s delay when ID 76689 activates
     public const long MitoticStateBuff = 76837;
     public const long RitualistStormSpiritAura2 = 76839; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ElementalProcession = 76841;
@@ -5206,6 +5209,7 @@ public static class SkillIDs
     public const long WeaponOfWardingBuff = 77011;
     public const long FleetingZephyr = 77012;
     public const long OffensiveProtocolDemolish2 = 77013;
+    public const long OffensiveProtocolPierce3 = 77015;
     public const long EvokerStoneSpiritAura3 = 77016; // Reused buff from Stone Spirit for Evoker's Pets
     public const long GaseousStateSkill = 77018;
     public const long RestorativeGlowBuff1 = 77020;
@@ -5217,7 +5221,7 @@ public static class SkillIDs
     public const long RitualistStormSpiritAura3 = 77042; // Reused buff from Storm Spirit for Ritualist's Spirits
     public const long ShieldingHandsSkill = 77043;
     public const long BeguilingHaze6 = 77047;
-    public const long FormOfTheWarrior1 = 77049;
+    public const long FormOfTheWarrior2 = 77049;
     public const long RuptureAnguish = 77050;
     public const long PlasmaticStateBuff = 77052;
     public const long EssenceBLast = 77061;
@@ -5234,7 +5238,7 @@ public static class SkillIDs
     public const long LightningBlitzPlayerSkill = 77089;
     public const long DaringAdvanceBuff = 77094;
     public const long EffulgentStanceStackGainBuff = 77095;
-    public const long FormOfTheWarrior2 = 77100;
+    public const long FormOfTheWarrior1 = 77100;
     public const long OffensiveProtocolShred2 = 77103;
     public const long DefensiveProtocolThorns2 = 77104;
     public const long LingeringDetermination = 77105;
@@ -5255,7 +5259,7 @@ public static class SkillIDs
     public const long RestorativeGlowBuff2 = 77162;
     public const long DefensiveProtocolThorns1 = 77163;
     public const long SovereignOfLight = 77164;
-    public const long FormOfTheMonk1 = 77167;
+    public const long FormOfTheMonk2 = 77167;
     public const long EmpoweredArmaments = 77169;
     public const long SupersonicArrow = 77174;
     public const long RitualistHealingRain = 77177; // Buff - Reused ele skill?
