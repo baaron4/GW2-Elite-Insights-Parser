@@ -97,15 +97,10 @@ internal class Dhuum : HallOfChains
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return GetCombatMapInternal(log, arenaDecorations, long.MinValue, long.MaxValue);
-    }
-
-    internal static CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, long start, long end)
-    {
         var crMap = new CombatReplayMap(
                         (1000, 899),
                         (13524, -1334, 18039, 2735));
-        arenaDecorations.Add(new ArenaDecoration((start, end), CombatReplayDhuum, crMap));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayDhuum, crMap));
         return crMap;
     }
 

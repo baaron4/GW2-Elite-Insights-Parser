@@ -244,7 +244,6 @@ internal class Sabir : TheKeyOfAhdashim
                     {
                         if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) < 200 && mainPlateformOpacities.Last().X != 1)
                         {
-                            lastMainPlateformTime = position.Time - 8000;
                             mainPlateformOpacities.Add(new(1, position.Time - 8000));
 
                         } 

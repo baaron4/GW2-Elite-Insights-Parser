@@ -59,27 +59,8 @@ internal class HallOfChainsInstance : HallOfChains
         _soullessHorror.GetCombatMapInternal(log, arenaDecorations);
         _statueOfIce.GetCombatMapInternal(log, arenaDecorations);
         _statueOfDeath.GetCombatMapInternal(log, arenaDecorations);
-        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
-        var statueOfDarknessPhases = encounterPhases.Where(x => x.LogID == _statueOfDarkness.LogID);
-        var dhuumPhases = encounterPhases.Where(x => x.LogID == _dhuum.LogID);
-        if (statueOfDarknessPhases.Any() && dhuumPhases.Any())
-        {
-            var lastDarkness = statueOfDarknessPhases.Last();
-            var firstDarkness = statueOfDarknessPhases.First();
-            Dhuum.GetCombatMapInternal(log, arenaDecorations, long.MinValue, firstDarkness.End);
-            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
-            Dhuum.GetCombatMapInternal(log, arenaDecorations, lastDarkness.End, long.MaxValue);
-        } 
-        else if (statueOfDarknessPhases.Any())
-        {
-            _dhuum.GetCombatMapInternal(log, arenaDecorations);
-            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
-        } 
-        else
-        {
-            _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
-            _dhuum.GetCombatMapInternal(log, arenaDecorations);
-        }
+        _dhuum.GetCombatMapInternal(log, arenaDecorations);
+        _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
         return crMap;
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)

@@ -42,10 +42,16 @@ internal class StatueOfDarkness : HallOfChains
 
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
+        var statueOfDarknessPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
         var crMap = new CombatReplayMap(
                         (809, 1000),
                         (11664, -2108, 16724, 4152));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayStatueOfDarkness, crMap));
+        if (statueOfDarknessPhases.Any())
+        {
+            var firstDarkness = statueOfDarknessPhases.First();
+            var lastDarkness = statueOfDarknessPhases.Last();
+            arenaDecorations.Add(new ArenaDecoration((firstDarkness.Start - 60000, lastDarkness.End + 10000), CombatReplayStatueOfDarkness, crMap));
+        }
         return crMap;
     }
 
