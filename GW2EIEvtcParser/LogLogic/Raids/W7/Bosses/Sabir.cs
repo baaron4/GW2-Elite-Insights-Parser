@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -109,26 +110,23 @@ internal class Sabir : TheKeyOfAhdashim
         NegateDamageAgainstBarrier(combatData, agentData, [TargetID.Sabir]);
         return [];
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor sabir, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
-        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var phases = new List<PhaseData>(3);
 
-        var casts = mainTarget.GetCastEvents(log);
+        var casts = sabir.GetCastEvents(log);
         var wallopingWinds = casts.Where(x => x.SkillID == WallopingWind);
-        long start = 0;
+        long start = encounterPhase.Start;
         int i = 0;
         foreach (var wallopingWind in wallopingWinds)
         {
             var phase = new SubPhasePhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
-            phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget, log);
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(sabir, log);
             phases.Add(phase);
             CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillID == StormsEdgeRightHand || x.SkillID == StormsEdgeLeftHand || x.SkillID == ChainLightning));
             if (nextAttack == null)
@@ -136,17 +134,24 @@ internal class Sabir : TheKeyOfAhdashim
                 break;
             }
             start = nextAttack.Time;
-            
+
             i++;
         }
         if (i > 0)
         {
-            var phase = new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + (i + 1));
-            phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget, log);
+            var phase = new SubPhasePhaseData(start, encounterPhase.End, "Phase " + (i + 1));
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(sabir, log);
             phases.Add(phase);
         }
-
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
+        phases[0].AddTarget(mainTarget, log);
+        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

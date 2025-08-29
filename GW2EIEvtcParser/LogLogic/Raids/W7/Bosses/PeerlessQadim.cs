@@ -138,20 +138,18 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             TargetID.PeerlessQadimPylon
         ];
     }
-
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor qtp, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
-        phases[0].AddTarget(mainTarget, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var phases = new List<PhaseData>(11);
         var phaseStarts = new List<long>();
         var phaseEnds = new List<long>();
+        var casts = qtp.GetAnimatedCastEvents(log).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
         //
-        var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent);
+        var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent && x.Time >= encounterPhase.Start && x.Time <= encounterPhase.End);
         foreach (BuffEvent magmaDrop in magmaDrops)
         {
             if (phaseEnds.Count > 0)
@@ -166,8 +164,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 phaseEnds.Add(magmaDrop.Time);
             }
         }
-        IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(ForceOfRetaliationCast);
-        if (pushes.Count > 0)
+        if (casts.TryGetValue(ForceOfRetaliationCast, out var pushes))
         {
             CastEvent? push = pushes[0];
             phaseStarts.Add(push.Time);
@@ -182,10 +179,16 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             }
         }
         // rush to pylon
-        phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(BatteringBlitz).Select(x => x.Time));
-        phaseEnds.Add(log.LogData.LogEnd);
+        if (casts.TryGetValue(BatteringBlitz, out var blitzs))
+        {
+            phaseEnds.AddRange(blitzs.Select(x => x.Time));
+        }
+        phaseEnds.Add(encounterPhase.End);
         // tp to middle after pylon destruction
-        phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(PeerlessQadimTPCenter).Select(x => x.EndTime));
+        if (casts.TryGetValue(PeerlessQadimTPCenter, out var tps))
+        {
+            phaseStarts.AddRange(tps.Select(x => x.Time));
+        }
         // There should be at least as many starts as ends, otherwise skip phases
         if (phaseEnds.Count < phaseStarts.Count)
         {
@@ -194,14 +197,14 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         for (int i = 0; i < phaseStarts.Count; i++)
         {
             var phase = new SubPhasePhaseData(phaseStarts[i], phaseEnds[i], "Phase " + (i + 1));
-            phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget, log);
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(qtp, log);
             phases.Add(phase);
         }
         // intermission phase never finished, add a "dummy" log end
         if (phaseEnds.Count - 1 == phaseStarts.Count)
         {
-            phaseStarts.Add(log.LogData.LogEnd);
+            phaseStarts.Add(encounterPhase.End);
         }
         // There should be as many ends as starts, otherwise anomaly, skip intermission phases
         if (phaseEnds.Count != phaseStarts.Count)
@@ -212,11 +215,20 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         bool skipNames = intermissionNames.Length < phaseEnds.Count - 1;
         for (int i = 0; i < phaseEnds.Count - 1; i++)
         {
-            var phase = new SubPhasePhaseData(phaseEnds[i], Math.Min(phaseStarts[i + 1], log.LogData.LogEnd), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
-            phase.AddParentPhase(phases[0]);
-            phase.AddTarget(mainTarget, log);
+            var phase = new SubPhasePhaseData(Math.Max(phaseEnds[i], encounterPhase.Start), Math.Min(phaseStarts[i + 1], encounterPhase.End), skipNames ? "Intermission " + (i + 1) : intermissionNames[i]);
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTarget(qtp, log);
             phases.Add(phase);
         }
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
+        phases[0].AddTarget(mainTarget, log);
+        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
+        
         return phases;
     }
 

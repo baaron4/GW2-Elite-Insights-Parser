@@ -57,9 +57,35 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], "Cardinal Adina", _adina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], "Cardinal Sabir", _sabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
-        ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], "Qadim the Peerless", _peerlessQadim, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+        {
+
+            var adinaPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Adina, [], "Cardinal Adina", _adina, (log, adina) => adina.GetHealth(log.CombatData) > 23e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var adinaPhase in adinaPhases)
+            {
+                var adina = adinaPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Adina));
+                var lastInvuln = adina.GetBuffStatus(log, SkillIDs.Determined762).LastOrNull();
+                long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : adinaPhase.End; // if log ends with any boss phase, ignore hands after that point
+                phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(Adina.HandIDs) && x.FirstAware < lastBossPhaseStart && x.FirstAware > adinaPhase.Start), log, PhaseData.TargetPriority.Blocking);
+                phases.AddRange(Adina.ComputePhases(log, adina, Targets, adinaPhase, requirePhases));
+            }
+        }
+        {
+            var sabirPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Sabir, [], "Cardinal Sabir", _sabir, (log, sabir) => sabir.GetHealth(log.CombatData) > 32e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var sabirPhase in sabirPhases)
+            {
+                var sabir = sabirPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Sabir));
+                phases.AddRange(Sabir.ComputePhases(log, sabir, sabirPhase, requirePhases));
+            }
+        }
+        {
+            var qtpPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.PeerlessQadim, [], "Qadim the Peerless", _peerlessQadim, (log, qtp) => qtp.GetHealth(log.CombatData) > 48e6 ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            foreach (var qtpPhase in qtpPhases)
+            {
+                var qtp = qtpPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.PeerlessQadim));
+                phases.AddRange(PeerlessQadim.ComputePhases(log, qtp, qtpPhase, requirePhases));
+            }
+        }
+        
         return phases;
     }
 

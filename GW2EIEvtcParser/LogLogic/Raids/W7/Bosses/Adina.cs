@@ -414,21 +414,16 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
+    internal static readonly List<TargetID> HandIDs = [ TargetID.HandOfErosion, TargetID.HandOfEruption];
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor adina, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
-        phases[0].AddTarget(adina, log);
-        var handIDs = new TargetID[] { TargetID.HandOfErosion, TargetID.HandOfEruption };
-        var invuls = adina.GetBuffStatus(log, Determined762);
-        var lastInvuln = invuls.LastOrNull();
-        long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : log.LogData.EvtcLogEnd; // if log ends with any boss phase, ignore hands after that point
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(handIDs) && x.FirstAware < lastBossPhaseStart), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var invuls = adina.GetBuffStatus(log, Determined762);
+        var phases = new List<PhaseData>(7);
         // Split phases
         var splitPhases = new List<PhaseData>();
         var splitPhaseEnds = new List<long>();
@@ -438,9 +433,9 @@ internal class Adina : TheKeyOfAhdashim
             if (invul.Value > 0)
             {
                 var splitPhase = new SubPhasePhaseData(invul.Start, invul.End, "Split " + (i / 2 + 1));
-                splitPhase.AddParentPhase(phases[0]);
+                splitPhase.AddParentPhase(encounterPhase);
                 splitPhaseEnds.Add(invul.End);
-                AddTargetsToPhaseAndFit(splitPhase, [TargetID.HandOfErosion, TargetID.HandOfEruption], log);
+                AddTargetsToPhaseAndFit(splitPhase, targets, HandIDs, log);
                 splitPhases.Add(splitPhase);
             }
         }
@@ -456,8 +451,8 @@ internal class Adina : TheKeyOfAhdashim
                 mainPhaseEnds.Add(pair.Key);
             }
         }
-        CastEvent? boulderBarrage = adina.GetCastEvents(log).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < 6000);
-        long start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
+        CastEvent? boulderBarrage = adina.GetCastEvents(log).FirstOrDefault(x => x.SkillID == BoulderBarrage && x.Time < encounterPhase.Start + 6000);
+        long start = boulderBarrage == null ? encounterPhase.Start : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {
             int phaseIndex = 1;
@@ -478,25 +473,35 @@ internal class Adina : TheKeyOfAhdashim
             }
             if (start != mainPhases.Last().Start)
             {
-                mainPhases.Add(new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + (phaseIndex + 1)));
+                mainPhases.Add(new SubPhasePhaseData(start, encounterPhase.End, "Phase " + (phaseIndex + 1)));
             }
         }
         else if (start > 0 && invuls.Count == 0)
         {
             // no split
-            mainPhases.Add(new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase 1"));
+            mainPhases.Add(new SubPhasePhaseData(start, encounterPhase.End, "Phase 1"));
         }
 
         foreach (PhaseData phase in mainPhases)
         {
             phase.AddTarget(adina, log);
-            phase.AddParentPhase(phases[0]);
-            phase.AddTargets(Targets.Where(x => x.IsAnySpecies(handIDs) && phase.InInterval(x.FirstAware)), log, PhaseData.TargetPriority.NonBlocking);
+            phase.AddParentPhase(encounterPhase);
+            phase.AddTargets(targets.Where(x => x.IsAnySpecies(HandIDs) && phase.InInterval(x.FirstAware)), log, PhaseData.TargetPriority.NonBlocking);
         }
         phases.AddRange(mainPhases);
         phases.AddRange(splitPhases);
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
-        //
+        return phases;
+    }
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+        phases[0].AddTarget(adina, log);
+        var lastInvuln = adina.GetBuffStatus(log, Determined762).LastOrNull();
+        long lastBossPhaseStart = lastInvuln != null && lastInvuln.Value.Value == 0 ? lastInvuln.Value.Start : log.LogData.EvtcLogEnd; // if log ends with any boss phase, ignore hands after that point
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(HandIDs) && x.FirstAware < lastBossPhaseStart), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, adina, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
