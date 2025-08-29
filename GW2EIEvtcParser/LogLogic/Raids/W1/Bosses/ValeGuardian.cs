@@ -56,13 +56,13 @@ internal class ValeGuardian : SpiritVale
         ChestID = ChestID.GuardianChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayValeGuardian,
+        var crMap = new CombatReplayMap(
                         (889, 889),
-                        (-6365, -22213, -3150, -18999)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-6365, -22213, -3150, -18999));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayValeGuardian, crMap));
+        return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {

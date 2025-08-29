@@ -46,13 +46,13 @@ internal class MursaatOverseer : BastionOfThePenitent
         ChestID = ChestID.RecreationRoomChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayMursaatOverseer,
+        var crMap = new CombatReplayMap(
                         (889, 889),
-                        (1360, 2701, 3911, 5258)/*,
-                        (-27648, -9216, 27648, 12288),
-                        (11774, 4480, 14078, 5376)*/);
+                        (1360, 2701, 3911, 5258));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMursaatOverseer, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

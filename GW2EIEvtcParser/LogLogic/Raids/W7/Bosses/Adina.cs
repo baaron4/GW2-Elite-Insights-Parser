@@ -504,7 +504,7 @@ internal class Adina : TheKeyOfAhdashim
         return phases;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         string mainPhase1;
         if (log.CombatData.TryGetEffectEventsByGUIDs([EffectGUIDs.AdinaPillarDestroyedByProjectiles, EffectGUIDs.AdinaPillarDestroyedByAdina], out _))
@@ -515,14 +515,14 @@ internal class Adina : TheKeyOfAhdashim
         {
             mainPhase1 = CombatReplayAdinaMainPhase1;
         }
-        var map = new CombatReplayMap(mainPhase1,
+        var crMap = new CombatReplayMap(
                         (866, 1000),
-                        (13860, -2678, 15951, -268)/*,
-                        (-21504, -21504, 24576, 24576),
-                        (33530, 34050, 35450, 35970)*/);
+                        (13860, -2678, 15951, -268));
         //
         try
         {
+            var allPhases = log.LogData.GetPhases(log);
+            var adinaPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
             var splitPhasesMap = new List<string>()
             {
                     CombatReplayAdinaSplitPhase1,
@@ -536,39 +536,62 @@ internal class Adina : TheKeyOfAhdashim
                     CombatReplayAdinaMainPhase3,
                     CombatReplayAdinaMainPhase4
             };
-            var crMaps = new List<string>();
-            int mainPhaseIndex = 0;
-            int splitPhaseIndex = 0;
-            var phases = log.LogData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
-            var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
-            for (int i = 1; i < phases.Count; i++)
+            var subPhases = allPhases.OfType<SubPhasePhaseData>().Where(x => !x.BreakbarPhase);
+            long start = log.LogData.LogStart;
+            foreach (var adinaPhase in adinaPhases)
             {
-                PhaseData phaseData = phases[i];
-                if (mainPhases.Contains(phaseData))
+                var crMaps = new List<string>();
+                int mainPhaseIndex = 0;
+                int splitPhaseIndex = 0;
+                var phases = subPhases.Where(x => x.EncounterPhase == adinaPhase).ToList();
+                var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
+                for (int i = 0; i < phases.Count; i++)
                 {
-                    if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
+                    PhaseData phaseData = phases[i];
+                    long end = phaseData.End;
+                    if (i < phases.Count - 1)
                     {
-                        splitPhaseIndex++;
+                        end = phases[i + 1].Start;
                     }
-                    crMaps.Add(mainPhasesMap[mainPhaseIndex++]);
-                }
-                else
-                {
-                    if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
+                    if (mainPhases.Contains(phaseData))
                     {
-                        mainPhaseIndex++;
+                        if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
+                        {
+                            splitPhaseIndex++;
+                        }
+                        var url = mainPhasesMap[mainPhaseIndex++];
+                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                        crMaps.Add(url);
                     }
-                    crMaps.Add(splitPhasesMap[splitPhaseIndex++]);
+                    else
+                    {
+                        if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
+                        {
+                            mainPhaseIndex++;
+                        }
+                        var url = splitPhasesMap[splitPhaseIndex++];
+                        arenaDecorations.Add(new ArenaDecoration((start, end), url, crMap));
+                        crMaps.Add(url);
+                    }
+                    start = end;
                 }
             }
-            map.MatchMapsToPhases(crMaps, phases, log.LogData.LogEnd);
+            if (!adinaPhases.Any())
+            {
+                arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), mainPhase1, crMap));
+            } 
+            else
+            {
+                arenaDecorations.Add(new ArenaDecoration((start, log.LogData.LogEnd), mainPhase1, crMap));
+            }
+
         }
         catch (Exception)
         {
             log.UpdateProgressWithCancellationCheck("Parsing: Failed to associate Adina Combat Replay maps");
         }
         //
-        return map;
+        return crMap;
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)

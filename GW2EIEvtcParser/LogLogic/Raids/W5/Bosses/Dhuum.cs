@@ -95,13 +95,13 @@ internal class Dhuum : HallOfChains
         LogID |= 0x000006;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayDhuum,
+        var crMap = new CombatReplayMap(
                         (1000, 899),
-                        (13524, -1334, 18039, 2735)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (13524, -1334, 18039, 2735));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayDhuum, crMap));
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

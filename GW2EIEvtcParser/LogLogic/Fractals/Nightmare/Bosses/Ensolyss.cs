@@ -50,13 +50,14 @@ internal class Ensolyss : Nightmare
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayEnsolyss,
-                        (366, 366),
+        var crMap = new CombatReplayMap((366, 366),
                         (252, 1, 2892, 2881)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        return crMap;
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)

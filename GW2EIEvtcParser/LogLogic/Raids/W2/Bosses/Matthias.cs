@@ -76,13 +76,13 @@ internal class Matthias : SalvationPass
         ChestID = ChestID.MatthiasChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayMatthias,
+        var crMap = new CombatReplayMap(
                         (880, 880),
-                        (-7248, 4585, -4625, 7207)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (2688, 11906, 3712, 14210)*/);
+                        (-7248, 4585, -4625, 7207));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMatthias, crMap));
+        return crMap;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

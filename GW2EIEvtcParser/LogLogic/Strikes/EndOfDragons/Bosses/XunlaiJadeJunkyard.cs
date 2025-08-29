@@ -84,13 +84,13 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         return "Xunlai Jade Junkyard";
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayXunlaiJadeJunkyard,
+        var crMap = new CombatReplayMap(
                         (1485, 1292),
-                        (-7090, -2785, 3647, 6556)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-7090, -2785, 3647, 6556));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayXunlaiJadeJunkyard, crMap));
+        return crMap;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

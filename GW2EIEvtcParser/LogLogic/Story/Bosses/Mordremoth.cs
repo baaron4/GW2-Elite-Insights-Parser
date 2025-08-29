@@ -26,11 +26,13 @@ internal class Mordremoth : StoryInstance
         ];
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayMordremoth,
+        var crMap = new CombatReplayMap(
                         (899, 1172),
                         (-9059, 10171, -6183, 13149));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMordremoth, crMap));
+        return crMap;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

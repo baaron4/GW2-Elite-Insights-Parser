@@ -89,11 +89,13 @@ internal class Eparch : LonelyTower
         return "Eparch";
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayEparch,
+        var crMap = new CombatReplayMap(
                         (1035, 934),
-                        (-950, 1040, 2880, 4496)); 
+                        (-950, 1040, 2880, 4496));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayEparch, crMap));
+        return crMap;
 
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)

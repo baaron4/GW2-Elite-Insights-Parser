@@ -50,13 +50,13 @@ internal class Skorvald : ShatteredObservatory
         LogID |= 0x000001;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySkorvald,
+        var crMap = new CombatReplayMap(
                         (987, 1000),
-                        (-22267, 14955, -17227, 20735)/*,
-                        (-24576, -24576, 24576, 24576),
-                        (11204, 4414, 13252, 6462)*/);
+                        (-22267, 14955, -17227, 20735));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplaySkorvald, crMap));
+        return crMap;
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -51,11 +52,12 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
         return name;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayMountBalrior, 
-            (1280, 1280),
+        var crMap = new CombatReplayMap((1280, 1280),
             (-15454, -22004, 20326, 20076));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()

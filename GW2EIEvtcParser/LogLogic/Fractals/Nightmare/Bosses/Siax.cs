@@ -41,13 +41,15 @@ internal class Siax : Nightmare
         LogID |= 0x000002;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySiax,
+        var crMap = new CombatReplayMap(
                         (476, 548),
                         (663, -4127, 3515, -997)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
+        arenaDecorations.Add(new ArenaDecoration(CombatReplaySiax, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

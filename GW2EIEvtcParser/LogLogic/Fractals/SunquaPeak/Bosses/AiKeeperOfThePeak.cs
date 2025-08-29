@@ -135,11 +135,13 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayAi,
+        var crMap = new CombatReplayMap(
                         (823, 1000),
                         (5411, -95, 8413, 3552));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayAi, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

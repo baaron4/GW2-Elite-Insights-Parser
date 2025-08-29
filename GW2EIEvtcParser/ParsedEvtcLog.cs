@@ -1,8 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser;
@@ -247,7 +248,8 @@ public class ParsedEvtcLog
             decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
 
         }
-        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayEnvironmentDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+        decorationRenderings.AddRange(LogData.Logic.GetCombatReplayArenaDecorationRenderableDescriptions(map, this));
         foreach (var pair in LogData.Logic.DecorationCache)
         {
             decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());

@@ -42,13 +42,13 @@ internal class Gorseval : SpiritVale
         ChestID = ChestID.GorsevalChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayGorseval,
+        var crMap = new CombatReplayMap(
                         (957, 1000),
-                        (-603, -6754, 3751, -2206)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-603, -6754, 3751, -2206));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayGorseval, crMap));
+        return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {

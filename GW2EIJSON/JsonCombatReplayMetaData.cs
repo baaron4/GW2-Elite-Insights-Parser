@@ -20,7 +20,7 @@ public class JsonCombatReplayMetaData
         /// </summary>
         public IReadOnlyList<long>? Interval;
         /// <summary>
-        /// X and Y coordinates, in inches, of the top left of the image
+        /// X and Y coordinates, in pixels, of the top left of the image
         /// </summary>
         public IReadOnlyList<float>? Position;
     }

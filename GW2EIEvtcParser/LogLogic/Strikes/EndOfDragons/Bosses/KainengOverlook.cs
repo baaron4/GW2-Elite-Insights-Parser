@@ -82,13 +82,13 @@ internal class KainengOverlook : EndOfDragonsStrike
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayKainengOverlook,
+        var crMap = new CombatReplayMap(
                         (1803, 1918),
-                        (-24798, -18014, -18164, -10932)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-24798, -18014, -18164, -10932));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayKainengOverlook, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

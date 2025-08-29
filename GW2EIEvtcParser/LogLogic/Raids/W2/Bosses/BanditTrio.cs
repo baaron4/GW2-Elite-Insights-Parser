@@ -79,13 +79,13 @@ internal class BanditTrio : SalvationPass
         return [ TargetID.Cage ];
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayBanditTrio,
+        var crMap = new CombatReplayMap(
                         (1000, 913),
-                        (-2900, -12251, 2561, -7265)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (2688, 11906, 3712, 14210)*/);
+                        (-2900, -12251, 2561, -7265));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayBanditTrio, crMap));
+        return crMap;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

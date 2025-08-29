@@ -73,11 +73,13 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         LogID |= 0x000001;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayCosmicObservatory,
+        var crMap = new CombatReplayMap(
                         (1169, 1169),
                         (-1388, -779, 1991, 2610));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayCosmicObservatory, crMap));
+        return crMap;
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

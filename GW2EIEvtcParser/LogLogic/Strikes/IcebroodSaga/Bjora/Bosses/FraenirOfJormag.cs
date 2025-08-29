@@ -49,13 +49,13 @@ internal class FraenirOfJormag : Bjora
         LogID |= 0x000002;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayFraenirOfJormag,
+        var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-833, -1780, 2401, 1606)/*,
-                        (-0, -0, 0, 0),
-                        (0, 0, 0, 0)*/);
+                        (-833, -1780, 2401, 1606));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayFraenirOfJormag, crMap));
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

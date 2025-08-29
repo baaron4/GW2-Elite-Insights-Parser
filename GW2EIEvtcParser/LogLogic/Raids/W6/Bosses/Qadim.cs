@@ -101,13 +101,13 @@ internal class Qadim : MythwrightGambit
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayQadim,
+        var crMap = new CombatReplayMap(
                         (1000, 994),
-                        (-11676, 8825, -3870, 16582)/*,
-                        (-21504, -21504, 24576, 24576),
-                        (13440, 14336, 15360, 16256)*/);
+                        (-11676, 8825, -3870, 16582));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayQadim, crMap));
+        return crMap;
     }
 
 

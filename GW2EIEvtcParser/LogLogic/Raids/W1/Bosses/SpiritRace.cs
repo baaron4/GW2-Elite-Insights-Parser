@@ -26,14 +26,13 @@ internal class SpiritRace : SpiritVale
         LogID |= 0x000004;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySpiritRun,
+        var crMap = new CombatReplayMap(
                         (581, 1193),
-                        (-11188, -13757, -4700, -436)
-                        /*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-11188, -13757, -4700, -436));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplaySpiritRun, crMap));
+        return crMap;
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {

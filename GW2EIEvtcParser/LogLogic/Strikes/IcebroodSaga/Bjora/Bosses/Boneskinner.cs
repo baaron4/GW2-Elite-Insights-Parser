@@ -44,13 +44,13 @@ internal class Boneskinner : Bjora
         LogID |= 0x000004;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayBoneskinner,
+        var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-1013, -1600, 2221, 1416)/*,
-                        (-0, -0, 0, 0),
-                        (0, 0, 0, 0)*/);
+                        (-1013, -1600, 2221, 1416));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayBoneskinner, crMap));
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

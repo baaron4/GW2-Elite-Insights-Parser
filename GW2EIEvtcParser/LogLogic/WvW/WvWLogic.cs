@@ -97,22 +97,41 @@ internal class WvWLogic : LogLogic
         return LogData.LogMode.NotApplicable;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
-            return base.GetCombatMapInternal(log);
+            return base.GetCombatMapInternal(log, arenaDecorations);
         }
-        return mapID.MapID switch
+        CombatReplayMap crMap;
+        switch (mapID.MapID)
         {
-            EternalBattleground => new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250)),
-            GreenAlpineBorderland => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
-            BlueAlpineBorderland => new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)),
-            RedDesertBorderland => new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)),
-            EdgeOfTheMists => new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)),
-            _ => base.GetCombatMapInternal(log),
-        };
+            case EternalBattleground:
+                crMap = new CombatReplayMap((954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250));
+                arenaDecorations.Add(new ArenaDecoration(CombatReplayEternalBattlegrounds, crMap));
+                break;
+            case GreenAlpineBorderland:
+                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                arenaDecorations.Add(new ArenaDecoration(CombatReplayAlpineBorderlands, crMap));
+                break;
+            case BlueAlpineBorderland:
+                crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
+                arenaDecorations.Add(new ArenaDecoration(CombatReplayAlpineBorderlands, crMap));
+                break;
+            case RedDesertBorderland:
+                crMap = new CombatReplayMap((1000, 1000), (-36864, -36864, 36864, 36864));
+                arenaDecorations.Add(new ArenaDecoration(CombatReplayDesertBorderlands, crMap));
+                break;
+            case EdgeOfTheMists:
+                crMap = new CombatReplayMap((3556, 3646), (-36864, -36864, 36864, 36864));
+                arenaDecorations.Add(new ArenaDecoration(CombatReplayEdgeOfTheMists, crMap));
+                break;
+            default:
+                crMap = base.GetCombatMapInternal(log, arenaDecorations);
+                break;
+        }
+        return crMap;
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {

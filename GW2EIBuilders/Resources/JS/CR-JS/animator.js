@@ -78,6 +78,7 @@ const Types = {
     Text: 20,
     Polygon: 21,
     TextOverhead: 22,
+    Arena: 23,
 };
 
 function getDefaultCombatReplayTime() {
@@ -288,10 +289,9 @@ class Animator {
         this.agentDataPerParentID = new Map();
         this.selectedActor = null;
         // maps
-        this.backgroundImages = [];
+        this.backgroundImages = new RenderablesRoot(start, end);
         // animation
         this.needBGUpdate = false;
-        this.prevBGImage = null;
         this.animation = null;
         // manipulation
         this.mouseDown = null;
@@ -304,22 +304,6 @@ class Animator {
             }
             if (options.pollingRate) {
                 PollingRate = options.pollingRate;
-            }
-            if (options.maps) {
-                for (var i = 0; i < options.maps.length; i++) {
-                    var mapData = options.maps[i];
-                    var image = new Image();
-                    image.onload = function () {
-                        _this.needBGUpdate = true;
-                        animateCanvas(noUpdateTime);
-                    };
-                    image.src = mapData.link;
-                    this.backgroundImages.push({
-                        image: image,
-                        start: mapData.start,
-                        end: mapData.end
-                    });
-                }
             }
             if (options.actors) {
                 this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
@@ -433,6 +417,9 @@ class Animator {
                 case Types.TextOverhead:
                     MetadataClass = TextOverheadMetadata;
                     break;
+                case Types.Arena:
+                    MetadataClass = ArenaMetadata;
+                    break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
             }
@@ -513,6 +500,9 @@ class Animator {
                         break;
                     case Types.BackgroundIcon:
                         this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
+                        break;
+                    case Types.Arena:
+                        this.backgroundImages.add(new ArenaDrawable(decorationRendering));
                         break;
                     default:
                         throw "Unknown decoration type " + decorationRendering.type;
@@ -1013,22 +1003,17 @@ class Animator {
         };
     }
     // animation
-    _getBackgroundImage() {
-        var time = this.reactiveDataStatus.time;
-        for (var i = 0; i < this.backgroundImages.length; i++) {
-            var imageData = this.backgroundImages[i];
-            if (imageData.start <= time && imageData.end >= time) {
-                return imageData.image;
-            }
-        }
-        return null;
-    }
-
     _drawBGCanvas() {
-        var imgToDraw = this._getBackgroundImage();
-        if ((imgToDraw !== null && imgToDraw !== this.prevBGImage) || this.needBGUpdate || this._mustMoveToSelected()) {
+        const _this = this;
+        if (!this.needBGUpdate) {
+            this.backgroundImages.forEach(x => {
+                if (x.needsUpdate()) {
+                    _this.needBGUpdate = true;
+                }
+            });
+        }
+        if (this.needBGUpdate || this._mustMoveToSelected()) {
             this.needBGUpdate = false;
-            this.prevBGImage = imgToDraw;
             var ctx = this.bgContext;
             var canvas = this.bgCanvas;
             var p1 = ctx.transformedPoint(0, 0);
@@ -1046,8 +1031,7 @@ class Animator {
             {
 
                 this._moveToSelected(ctx);
-                ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
-
+                this.backgroundImages.draw(standardDraw);
                 //ctx.globalCompositeOperation = "color-burn";
                 ctx.save();
                 {

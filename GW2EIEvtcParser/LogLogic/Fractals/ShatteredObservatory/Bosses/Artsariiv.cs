@@ -35,13 +35,13 @@ internal class Artsariiv : ShatteredObservatory
         LogID |= 0x000002;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayArtsariiv,
+        var crMap = new CombatReplayMap(
                         (914, 914),
-                        (8991, 112, 11731, 2812)/*,
-                        (-24576, -24576, 24576, 24576),
-                        (11204, 4414, 13252, 6462)*/);
+                        (8991, 112, 11731, 2812));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayArtsariiv, crMap));
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

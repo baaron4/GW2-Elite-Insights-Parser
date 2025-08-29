@@ -55,6 +55,7 @@ public abstract class LogLogic
     internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
     private CombatReplayDecorationContainer EnvironmentDecorations;
+    private readonly CombatReplayDecorationContainer ArenaDecorations;
 
     public ChestID ChestID { get; protected set; } = ChestID.None;
 
@@ -104,6 +105,7 @@ public abstract class LogLogic
                 ),
             ])
         ];
+        ArenaDecorations = new(DecorationCache);
         _basicMechanicsCount = MechanicList.Count;
         LogCategoryInformation = new LogCategories();
         GenericFallBackMethod = IsInstance ? FallBackMethod.None : FallBackMethod.Death;
@@ -119,16 +121,16 @@ public abstract class LogLogic
         return new MechanicData(allMechs, GenericTriggerID == (int)TargetID.Instance);
     }
 
-    protected virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal virtual CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayNoImage, (800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
+        return new CombatReplayMap((800, 800), (0, 0, 0, 0)/*, (0, 0, 0, 0), (0, 0, 0, 0)*/);
     }
 
     public CombatReplayMap GetCombatReplayMap(ParsedEvtcLog log)
     {
         if (Map == null)
         {
-            Map = GetCombatMapInternal(log);
+            Map = GetCombatMapInternal(log, ArenaDecorations);
             Map.ComputeBoundingBox(log);
         }
         return Map;
@@ -469,7 +471,12 @@ public abstract class LogLogic
         }
     }
 
-    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayArenaDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log)
+    {
+        return ArenaDecorations.GetCombatReplayRenderableDescriptions(Map, log, [], []);
+    }
+
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayEnvironmentDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         if (EnvironmentDecorations == null)
         {

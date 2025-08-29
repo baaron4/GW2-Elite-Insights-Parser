@@ -26,7 +26,7 @@ internal class ColdWar : Drizzlewood
         LogID |= 0x000006;
     }
 
-    /*protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    /*internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
         return new CombatReplayMap(CombatReplayColdWar,
                         (729, 581),

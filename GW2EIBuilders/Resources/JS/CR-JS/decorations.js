@@ -110,6 +110,21 @@ class OverheadProgressBarMetadata extends ProgressBarMetadata {
     }
 }
 
+class ArenaMetadata extends GenericAttachedMetadata {
+    constructor(params) {
+        super(params);
+        this.imageUrl = params.image;
+        this.image = new Image();
+        this.image.src = this.imageUrl;
+        this.image.onload = () => {
+            animator.needBGUpdate = true;
+            animateCanvas(noUpdateTime);
+        };
+        this.width = InchToPixel * params.width;
+        this.height = InchToPixel * params.height;
+    }
+}
+
 class GenericIconMetadata extends GenericAttachedMetadata{
     constructor(params) {
         super(params);
@@ -1267,6 +1282,60 @@ class MovingPlatformDrawable extends BackgroundDrawable {
     }
 }
 ///
+
+class ArenaDrawable extends MechanicDrawable {
+    constructor(params) {
+        super(params);
+        this.previouslyRendered = false;
+    }
+
+    get image() {
+        return this.metadata.image;
+    }
+
+    get imageUrl() {
+        return this.metadata.imageUrl;
+    }
+
+    get width() {
+        return this.metadata.width;
+    }
+
+    get height() {
+        return this.metadata.height;
+    }
+
+    needsUpdate() {
+        if (!this.canDraw()) {
+            return this.previouslyRendered;
+        }
+        const pos = this.getPosition();
+        if (pos === null) {
+            return this.previouslyRendered;
+        }  
+        return !this.previouslyRendered;
+    }
+
+    draw() {
+        this.previouslyRendered = false;
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        if (pos === null) {
+            return;
+        }    
+        this.previouslyRendered = true; 
+        const ctx = animator.bgContext;
+        ctx.save();
+        this.moveContext(ctx, pos, null);
+        const height = this.height;   
+        const width = this.width;   
+        ctx.drawImage(this.image, 0, 0, width, height);
+        ctx.restore();
+    }
+}
+
 class IconMechanicDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);

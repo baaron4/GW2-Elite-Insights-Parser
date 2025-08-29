@@ -56,13 +56,13 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ChestID = ChestID.KeepConstructChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayKeepConstruct,
+        var crMap = new CombatReplayMap(
                         (987, 1000),
-                        (-5467, 8069, -2282, 11297)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (1920, 12160, 2944, 14464)*/);
+                        (-5467, 8069, -2282, 11297));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayKeepConstruct, crMap));
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

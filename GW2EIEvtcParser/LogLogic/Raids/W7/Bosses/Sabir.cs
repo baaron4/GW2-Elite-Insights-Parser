@@ -155,18 +155,18 @@ internal class Sabir : TheKeyOfAhdashim
         return phases;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirRectanglePlateform).Count > 0 ?
                 CombatReplayNoImage : CombatReplaySabir;
-        return new CombatReplayMap(mapUrl,
+        var crMap = new CombatReplayMap(
                         (1000, 910),
-                        (-14122, 142, -9199, 4640)/*,
-                        (-21504, -21504, 24576, 24576),
-                        (33530, 34050, 35450, 35970)*/);
+                        (-14122, 142, -9199, 4640));
+        arenaDecorations.Add(new ArenaDecoration(mapUrl, crMap));
+        return crMap;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

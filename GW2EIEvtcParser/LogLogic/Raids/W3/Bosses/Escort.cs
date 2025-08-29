@@ -42,11 +42,13 @@ internal class Escort : StrongholdOfTheFaithful
         LogID |= 0x000001;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayEscort,
+        var crMap = new CombatReplayMap(
                         (1080, 676),
                         (-6081.86, 13624.72, 8956.86, 23099.28));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayEscort, crMap));
+        return crMap;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

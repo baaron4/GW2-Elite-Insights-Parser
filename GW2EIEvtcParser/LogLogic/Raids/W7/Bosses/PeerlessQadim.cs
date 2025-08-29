@@ -232,13 +232,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         return phases;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayPeerlessQadim,
+        var crMap = new CombatReplayMap(
                         (1000, 1000),
-                        (-968, 7480, 4226, 12676)/*,
-                        (-21504, -21504, 24576, 24576),
-                        (33530, 34050, 35450, 35970)*/);
+                        (-968, 7480, 4226, 12676));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplayPeerlessQadim, crMap));
+        return crMap;
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

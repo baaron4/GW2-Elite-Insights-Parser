@@ -52,13 +52,13 @@ internal class Sabetha : SpiritVale
         ChestID = ChestID.SabethaChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySabetha,
+        var crMap = new CombatReplayMap(
                         (1000, 990),
-                        (-8587, -162, -1601, 6753)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-8587, -162, -1601, 6753));
+        arenaDecorations.Add(new ArenaDecoration(CombatReplaySabetha, crMap));
+        return crMap;
     }
 
     internal static void FindCannonsAndHeavyBombs(AgentData agentData, List<CombatItem> combatData)
