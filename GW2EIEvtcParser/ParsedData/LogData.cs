@@ -356,11 +356,11 @@ public class LogData
             _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
             if (_phases.Count == 0)
             {
-                throw new InvalidOperationException("At least one phase must be present");
+                throw new InvalidDataException("At least one phase must be present");
             }
-            if (!_phases.Exists(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
+            if (!_phases.Any(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
             {
-                throw new InvalidOperationException("A phase representing the full log must be present");
+                throw new InvalidDataException("A phase representing the full log must be present");
             }
             // Auto add dummy instance if no targets in main phase
             if (IsInstance && _phases[0].Targets.Count == 0)
@@ -371,7 +371,7 @@ public class LogData
             {
                 if (_phases.Where(x => x.Type == PhaseData.PhaseType.Encounter).Count() != 1)
                 {
-                    throw new InvalidOperationException("Boss logs must have only one encounter phase");
+                    throw new InvalidDataException("Boss logs must have only one encounter phase");
                 }
             }
             _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
@@ -380,19 +380,23 @@ public class LogData
             {
                 throw new EvtcAgentException("No valid targets found for phases");
             }
-            if (!_phases.Exists(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
+            if (!_phases.Any(x => x.Type == PhaseData.PhaseType.Encounter || x.Type == PhaseData.PhaseType.Instance))
             {
                 throw new EvtcAgentException("No valid targets found for full log phase");
             }
             if (_phases.Any(phase => phase.Targets.Keys.Any(target => !Logic.Targets.Contains(target))))
             {
-                throw new InvalidOperationException("Phases can only have targets");
+                throw new InvalidDataException("Phases can only have targets");
             }
-            if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
+            if (_phases.Any(x => x.BreakbarPhase && x.Targets.Count != 1))
             {
-                throw new InvalidOperationException("Breakbar phases can only have one target");
+                throw new InvalidDataException("Breakbar phases can only have one target");
             }
             _phases.RemoveAll(x => x.DurationInMS < ParserHelper.PhaseTimeLimit);
+            if (_phases.Any(x => x.Start < LogStart || x.End > LogEnd))
+            {
+                throw new InvalidDataException("Phases must be within LogStart and LogEnd");
+            }
             _phases.Sort((x, y) =>
             {
                 int startCompare = x.Start.CompareTo(y.Start);
