@@ -52,36 +52,42 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         }
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
-    private List<EncounterPhaseData> HandleEscortPhases(IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleEscortPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, IReadOnlyList<SingleActor> glennas, ParsedEvtcLog log, List<PhaseData> phases)
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        var mcLeods = targets.Where(x => x.IsSpecies(TargetID.McLeodTheSilent));
-        var dummy = targets.FirstOrDefault(x => x.IsSpecies(TargetID.DummyTarget) && x.Character == "Escort");
-        var subMcLeods = targets.Where(x => x.IsAnySpecies([TargetID.CrimsonMcLeod, TargetID.RadiantMcLeod]));
-        List<AbstractBuffApplyEvent> surveilledAppliesPerGlenna = glennas.Select(x => log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, x.AgentItem).FirstOrDefault()).Where(x => x != null).ToList()!;
-        foreach (var surveilledApply in surveilledAppliesPerGlenna)
+        if (targetsByIDs.TryGetValue((int)TargetID.McLeodTheSilent, out var mcLeods) &&
+            targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
-            var glenna = surveilledApply.To;
-            var chest = log.AgentData.GetGadgetsByID(_escort.ChestID).FirstOrDefault();
-            if (surveilledApply != null)
+            var dummy = dummies.FirstOrDefault(x => x.Character == "Escort");
+            if (dummy != null)
             {
-                long start = surveilledApply.Time;
-                long end = glenna.LastAware;
-                bool success = false;
-                if (chest != null && chest.FirstAware >= glenna.FirstAware && chest.FirstAware <= glenna.LastAware + 5000)
+                List<AbstractBuffApplyEvent> surveilledAppliesPerGlenna = glennas.Select(x => log.CombatData.GetBuffApplyDataByIDByDst(SkillIDs.EscortSurveilled, x.AgentItem).FirstOrDefault()).Where(x => x != null).ToList()!;
+                foreach (var surveilledApply in surveilledAppliesPerGlenna)
                 {
-                    end = chest!.FirstAware;
-                    success = true;
+                    var glenna = surveilledApply.To;
+                    var chest = log.AgentData.GetGadgetsByID(_escort.ChestID).FirstOrDefault();
+                    if (surveilledApply != null)
+                    {
+                        long start = surveilledApply.Time;
+                        long end = glenna.LastAware;
+                        bool success = false;
+                        if (chest != null && chest.FirstAware >= glenna.FirstAware && chest.FirstAware <= glenna.LastAware + 5000)
+                        {
+                            end = chest!.FirstAware;
+                            success = true;
+                        }
+                        var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, [], [], mainPhase, "Siege the Stronghold", start, end, success, _escort);
+                        if (phase?.Targets.Count == 0)
+                        {
+                            phase.AddTarget(dummy, log);
+                        }
+                    }
                 }
-                var phase = AddInstanceEncounterPhase(log, phases, encounterPhases, mcLeods, subMcLeods, [], mainPhase, "Siege the Stronghold", start, end, success, _escort);
-                if (phase?.Targets.Count == 0)
-                {
-                    phase.AddTarget(dummy, log);
-                }
+                mainPhase.AddTargets(mcLeods, log);
             }
         }
-        mainPhase.AddTargets(mcLeods, log);
+        
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
@@ -221,7 +227,7 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
-            var escortPhases = HandleEscortPhases(Targets, NonSquadFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
+            var escortPhases = HandleEscortPhases(targetsByIDs, NonSquadFriendlies.Where(x => x.IsSpecies(TargetID.Glenna)).ToList(), log, phases);
             foreach (var escortPhase in escortPhases)
             {
                 var mcLeod = escortPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.McLeodTheSilent));
@@ -229,20 +235,12 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
             }
         }
         {
-            HashSet<TargetID> kcStatus = [
-                TargetID.Jessica,
-            TargetID.Olson,
-            TargetID.Engul,
-            TargetID.Faerla,
-            TargetID.Caulle,
-            TargetID.Henley,
-            TargetID.Galletta,
-            TargetID.Ianim
-            ];
-            var kcPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, Targets.Where(x => x.IsAnySpecies(kcStatus)), "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            var kcPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.KeepConstruct, [], "Keep Construct", _keepConstruct, (log, kc) => log.CombatData.GetBuffApplyData(SkillIDs.AchievementEligibilityDownDownDowned).Any(x => x.Time >= kc.FirstAware && x.Time <= kc.LastAware) ? LogData.LogMode.CM : LogData.LogMode.Normal);
+            var statues = Targets.Where(x => x.IsAnySpecies(KeepConstruct.KCStatues));
             foreach (var kcPhase in kcPhases)
             {
                 var keepConstruct = kcPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.KeepConstruct));
+                kcPhase.AddTargets(statues, log, PhaseData.TargetPriority.NonBlocking);
                 phases.AddRange(KeepConstruct.ComputePhases(log, keepConstruct, Targets, kcPhase, requirePhases));
             }
         }

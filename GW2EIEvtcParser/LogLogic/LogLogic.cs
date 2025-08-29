@@ -396,7 +396,7 @@ public abstract class LogLogic
     }
 
 
-    protected static void AddTargetsToPhase(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected static void AddTargetsToPhase(PhaseData phase, IReadOnlyList<SingleActor> targets, IReadOnlyList<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         foreach (SingleActor target in targets)
         {
@@ -406,18 +406,18 @@ public abstract class LogLogic
             }
         }
     }
-    protected void AddTargetsToPhase(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected void AddTargetsToPhase(PhaseData phase, IReadOnlyList<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         AddTargetsToPhase(phase, Targets, ids, log, priority);
     }
 
-    protected static void AddTargetsToPhaseAndFit(PhaseData phase, IReadOnlyList<SingleActor> targets, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected static void AddTargetsToPhaseAndFit(PhaseData phase, IReadOnlyList<SingleActor> targets, IReadOnlyList<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         AddTargetsToPhase(phase, targets, ids, log, priority);
         phase.OverrideTimes(log);
     }
 
-    protected void AddTargetsToPhaseAndFit(PhaseData phase, List<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
+    protected void AddTargetsToPhaseAndFit(PhaseData phase, IReadOnlyList<TargetID> ids, ParsedEvtcLog log, PhaseData.TargetPriority priority = PhaseData.TargetPriority.Main)
     {
         AddTargetsToPhaseAndFit(phase, Targets, ids, log, priority);
     }

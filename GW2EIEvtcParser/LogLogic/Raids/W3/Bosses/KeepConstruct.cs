@@ -93,6 +93,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 var mainPhase = new SubPhasePhaseData(Math.Max(c.Start, encounterStart), Math.Min(c.End, encounterEnd), "Phase " + (mainPhaseCount++));
                 mainPhase.AddParentPhase(encounterPhase);
                 mainPhase.AddTarget(keepConstruct, log);
+                AddTargetsToPhase(mainPhase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
                 mainPhases.Add(mainPhase);
             }
         }
@@ -150,6 +151,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                         var phase = new SubPhasePhaseData(preBurnStart, preBurnEnd, "Pre-Burn " + preBurnCount++);
                         phase.AddParentPhases(mainPhases);
                         phase.AddTarget(keepConstruct, log);
+                        AddTargetsToPhase(phase, targets, KCStatues, log, PhaseData.TargetPriority.NonBlocking);
                         preBurnPhases.Add(phase);
                     }
                 }
@@ -186,11 +188,22 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
+    internal static readonly IReadOnlyList<TargetID> KCStatues = [
+            TargetID.Jessica,
+            TargetID.Olson,
+            TargetID.Engul,
+            TargetID.Faerla,
+            TargetID.Caulle,
+            TargetID.Henley,
+            TargetID.Galletta,
+            TargetID.Ianim
+    ];
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(KCStatues)), log, PhaseData.TargetPriority.NonBlocking);
         phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
        
         return phases;
@@ -201,14 +214,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return
         [
             TargetID.KeepConstruct,
-            TargetID.Jessica,
-            TargetID.Olson,
-            TargetID.Engul,
-            TargetID.Faerla,
-            TargetID.Caulle,
-            TargetID.Henley,
-            TargetID.Galletta,
-            TargetID.Ianim,
+            ..KCStatues
         ];
     }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()

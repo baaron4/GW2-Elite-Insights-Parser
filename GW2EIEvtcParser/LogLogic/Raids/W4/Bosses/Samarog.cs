@@ -113,7 +113,7 @@ internal class Samarog : BastionOfThePenitent
         return [];
     }
 
-    private static readonly List<TargetID> SecondaryTargetIDs = new List<TargetID>
+    private static readonly List<TargetID> RigomAndGuldhemIDs = new List<TargetID>
     {
         TargetID.Rigom,
         TargetID.Guldhem
@@ -135,7 +135,7 @@ internal class Samarog : BastionOfThePenitent
             if (phaseIndex % 2 == 0)
             {
                 phase.Name = "Split " + phaseIndex / 2;
-                AddTargetsToPhaseAndFit(phase, targets, SecondaryTargetIDs, log);
+                AddTargetsToPhaseAndFit(phase, targets, RigomAndGuldhemIDs, log);
             }
             else
             {
@@ -150,7 +150,7 @@ internal class Samarog : BastionOfThePenitent
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         phases[0].AddTarget(mainTarget, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(SecondaryTargetIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(RigomAndGuldhemIDs)), log, PhaseData.TargetPriority.Blocking);
         phases.AddRange(ComputePhases(log, mainTarget, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
