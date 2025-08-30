@@ -449,7 +449,7 @@ th:hover img.icon-hover,
 }
 
 .cr-ellipsis {
-    width: 130px;
+    width: 110px;
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -469,15 +469,15 @@ th:hover img.icon-hover,
 }
 
 .name-cr-cell {
-    width: 130px;
+    min-width: 110px;
 }
 
 .damage-cr-cell-small {
-    width: 80px;
+    min-width: 90px;
 }
 
 .damage-cr-cell {
-    width: 130px;
+    min-width: 110px;
 }
 
 .sub-tabs {
