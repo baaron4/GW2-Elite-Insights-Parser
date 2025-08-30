@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -57,7 +58,7 @@ internal class Sabetha : SpiritVale
         var crMap = new CombatReplayMap(
                         (1000, 990),
                         (-8587, -162, -1601, 6753));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySabetha, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySabetha, crMap);
         return crMap;
     }
 

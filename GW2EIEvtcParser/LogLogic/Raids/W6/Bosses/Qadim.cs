@@ -106,7 +106,7 @@ internal class Qadim : MythwrightGambit
         var crMap = new CombatReplayMap(
                         (1000, 994),
                         (-11676, 8825, -3870, 16582));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayQadim, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayQadim, crMap);
         return crMap;
     }
 

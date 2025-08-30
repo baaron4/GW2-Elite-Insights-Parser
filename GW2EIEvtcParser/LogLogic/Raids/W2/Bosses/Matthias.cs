@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -81,7 +82,7 @@ internal class Matthias : SalvationPass
         var crMap = new CombatReplayMap(
                         (880, 880),
                         (-7248, 4585, -4625, 7207));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMatthias, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap);
         return crMap;
     }
 

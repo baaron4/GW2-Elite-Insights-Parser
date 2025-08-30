@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -38,7 +39,7 @@ internal class StatueOfIce : HallOfChains
         var crMap = new CombatReplayMap(
                         (999, 890),
                         (2497, 5388, 7302, 9668));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayStatueOfIce, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfIce, crMap);
         return crMap;
     }
 

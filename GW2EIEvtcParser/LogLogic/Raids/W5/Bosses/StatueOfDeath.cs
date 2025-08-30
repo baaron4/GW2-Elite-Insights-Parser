@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -41,7 +42,7 @@ internal class StatueOfDeath : HallOfChains
         var crMap = new CombatReplayMap(
                         (710, 709),
                         (1306, -9381, 4720, -5968));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayStatueOfDeath, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfDeath, crMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

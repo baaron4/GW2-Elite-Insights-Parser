@@ -100,7 +100,7 @@ internal class Dhuum : HallOfChains
         var crMap = new CombatReplayMap(
                         (1000, 899),
                         (13524, -1334, 18039, 2735));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayDhuum, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDhuum, crMap);
         return crMap;
     }
 

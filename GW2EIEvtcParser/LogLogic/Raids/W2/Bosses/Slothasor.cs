@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -54,7 +55,7 @@ internal class Slothasor : SalvationPass
         var crMap = new CombatReplayMap(
                         (654, 1000),
                         (5822, -3491, 9549, 2205));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySlothasor, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySlothasor, crMap);
         return crMap;
     }
 
