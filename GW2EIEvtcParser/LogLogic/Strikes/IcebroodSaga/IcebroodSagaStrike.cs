@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -14,7 +15,7 @@ internal abstract class IcebroodSagaStrike : StrikeMissionLogic
     {
         if (IsInstance)
         {
-            logData.SetSuccess(true, logData.LogEnd);
+            logData.SetSuccess(true, GetFinalMapChangeTime(logData, combatData));
             return;
         }
         var strikeRewardIDs = new HashSet<ulong>

@@ -175,6 +175,7 @@ public class SkillItem
         { UnstableBladestormProjectiles, "Unstable Bladestorm (Projectile Hit)" },
         { PhantasmalBerserkerProjectileDamage, "Phantasmal Berserker (Greatsword Projectile Hit)" },
         { HealingPrism, "Healing Prism" },
+        { SyncopateDelayedWave, "Syncopate (Delay Wave)" },
         #endregion Mesmer
         #region Necromancer
         { DesertEmpowerment, "Desert Empowerment" },
@@ -671,9 +672,12 @@ public class SkillItem
         { OffensiveProtocolDemolish2, SkillImages.OffensiveProtocolDemolish },
         { OffensiveProtocolDemolish4, SkillImages.OffensiveProtocolDemolish },
         { OffensiveProtocolObliterate2, SkillImages.OffensiveProtocolObliterate },
-        { DefensiveProtocolThorns2, SkillImages.OffensiveProtocolDemolish },
+        { OffensiveProtocolObliterate3, SkillImages.OffensiveProtocolObliterate },
+        { DefensiveProtocolThorns2, SkillImages.DefensiveProtocolThorns },
+        { OffensiveProtocolShred1, SkillImages.OffensiveProtocolShred },
         { OffensiveProtocolShred3, SkillImages.OffensiveProtocolShred },
         { OffensiveProtocolPierce2, SkillImages.OffensiveProtocolPierce },
+        { OffensiveProtocolPierce3, SkillImages.OffensiveProtocolPierce },
         { PlasmaticStateSkill2, SkillImages.PlasmaticState },
         { Thorns, SkillImages.DefensiveProtocolThorns },
         { RapaciousStrain, SkillImages.DefensiveProtocolThorns },
@@ -778,6 +782,7 @@ public class SkillItem
             { PhantasmalSwordsman, SkillImages.PhantasmalSwordsman },
             { PhantasmalSeekingAxe, TraitImages.PhantomPain },
             { PhantasmalSpinningAxe, TraitImages.PhantomPain },
+            { Syncopate, TraitImages.Syncopate },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, TraitImages.LifeFromDeath },
@@ -828,6 +833,9 @@ public class SkillItem
             { BoneShardBoneFiend1, SkillImages.BoneShardBoneFiend },
             { BoneShardBoneFiend2, SkillImages.BoneShardBoneFiend },
             { SandSwellBarrierInteraction, SkillImages.SandSwell },
+            { SplinterWeaponSkill, SkillImages.SplinterWeapon },
+            { Anguish2, SkillImages.Anguish },
+            { ExplosiveGrowth, TraitImages.ExplosiveGrowth },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger

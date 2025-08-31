@@ -9,7 +9,20 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal static class LogLogicTimeUtils
 {
-
+    internal static long GetFinalMapChangeTime(LogData logData, CombatData combatData)
+    {
+        var mapEvent = combatData.GetMapIDEvents().FirstOrDefault();
+        if (mapEvent != null)
+        {
+            var mapID = mapEvent.MapID;
+            var mapLeaveEvent = combatData.GetMapChangeEvents().LastOrDefault(x => x.OldMapID == mapID);
+            if (mapLeaveEvent != null)
+            {
+                return mapLeaveEvent.Time;
+            }           
+        }
+        return logData.LogEnd;
+    }
     internal static long GetGenericLogOffset(LogData logData)
     {
         return logData.EvtcLogStart;

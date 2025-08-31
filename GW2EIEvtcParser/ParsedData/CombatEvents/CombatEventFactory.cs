@@ -121,6 +121,9 @@ internal static class CombatEventFactory
             case StateChange.MapID:
                 metaDataEvents.MapIDEvents.Add(new MapIDEvent(stateChangeEvent));
                 break;
+            case StateChange.MapChange:
+                metaDataEvents.MapChangeEvents.Add(new MapChangeEvent(stateChangeEvent));
+                break;
             case StateChange.Guild:
                 if (settings.AnonymousPlayers)
                 {

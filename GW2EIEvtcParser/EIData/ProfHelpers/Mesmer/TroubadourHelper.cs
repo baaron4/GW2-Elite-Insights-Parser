@@ -14,7 +14,10 @@ internal static class TroubadourHelper
     [
         new EffectCastFinder(TaleOfTheSoulkeeper, EffectGUIDs.TroubadourTaleOfTheSoulkeeper),
         new EffectCastFinder(TaleOfTheValiantMarshal, EffectGUIDs.TroubadourTaleOfTheValiantMarshal),
-        new EffectCastFinder(TaleOfTheHonorableRogue, EffectGUIDs.TroubadourTaleOfTheHonorableRogue)
+        new EffectCastFinder(TaleOfTheHonorableRogue, EffectGUIDs.TroubadourTaleOfTheHonorableRogue),
+        new EffectCastFinder(SyncopateDelayedWave, EffectGUIDs.TroubadourSyncopateDelayedWave1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.TroubadourSyncopateDelayedWave2)
+            .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 

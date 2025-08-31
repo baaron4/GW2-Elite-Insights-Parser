@@ -11,6 +11,7 @@ internal class MetaEventsContainer
     public List<SquadCombatStartEvent> SquadCombatStartEvents { get; } = [];
     public readonly List<LogNPCUpdateEvent> LogNPCUpdateEvents = [];
     public readonly List<MapIDEvent> MapIDEvents = [];
+    public readonly List<MapChangeEvent> MapChangeEvents = [];
     public readonly List<ShardEvent> ShardEvents = [];
     public readonly List<TickRateEvent> TickRateEvents = [];
     public PointOfViewEvent? PointOfViewEvent { get; set; }
