@@ -428,7 +428,7 @@ public sealed class ProgramHelper : IDisposable
         string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
         fName = $"{fName}{PoVClassTerm}_{log.LogData.Logic.Extension}{logLengthTerm}_{result}";
 
-        var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
+        var uploadResults = new UploadResults(uploadStrings[0]);
         operation.OutLocation = saveDirectory.FullName;
         if (Settings.SaveOutHTML)
         {
