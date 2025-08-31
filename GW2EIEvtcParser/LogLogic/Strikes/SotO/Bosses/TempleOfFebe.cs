@@ -161,7 +161,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         var crMap = new CombatReplayMap(
                         (1149, 1149),
                         (-2088, -6124, 2086, -1950));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayTempleOfFebe, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap);
         return crMap;
     }
 

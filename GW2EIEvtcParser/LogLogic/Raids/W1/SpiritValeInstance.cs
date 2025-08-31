@@ -46,7 +46,7 @@ internal class SpiritValeInstance : SpiritVale
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((800, 1961), (-15360, -36864, 5360, 13936));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySpiritVale, crMap));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplaySpiritVale, crMap));
         foreach (var subLogic in _subLogics)
         {
             subLogic.GetCombatMapInternal(log, arenaDecorations);

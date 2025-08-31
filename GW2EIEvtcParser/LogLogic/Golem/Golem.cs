@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -82,7 +83,7 @@ internal class Golem : LogLogic
         var crMap = new CombatReplayMap(
                         (895, 629),
                         (18115.12, -13978.016, 22590.12, -10833.016));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayGolem, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGolem, crMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

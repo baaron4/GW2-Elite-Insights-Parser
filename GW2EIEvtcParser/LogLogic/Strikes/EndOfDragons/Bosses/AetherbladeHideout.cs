@@ -82,7 +82,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         var crMap = new CombatReplayMap(
                         (838, 639),
                         (1165, 540, 4194, 2850));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayAetherbladeHideout, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayAetherbladeHideout, crMap);
         return crMap;
     }
 

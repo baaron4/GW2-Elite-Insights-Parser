@@ -59,8 +59,4 @@ internal class ArenaDecoration : AttachedDecoration
     {
 
     }
-    public ArenaDecoration(string imageUrl, CombatReplayMap crMap) : this(new ArenaDecorationMetadata(imageUrl, crMap.Width, crMap.Height), new ArenaDecorationRenderingData((long.MinValue, long.MaxValue), new PositionConnector(new Vector3(crMap.TopX, crMap.BottomY, 0))))
-    {
-
-    }
 }

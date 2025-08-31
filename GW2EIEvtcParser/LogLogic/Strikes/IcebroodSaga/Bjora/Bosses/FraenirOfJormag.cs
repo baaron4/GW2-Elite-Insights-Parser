@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -54,7 +55,7 @@ internal class FraenirOfJormag : Bjora
         var crMap = new CombatReplayMap(
                         (905, 789),
                         (-833, -1780, 2401, 1606));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayFraenirOfJormag, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayFraenirOfJormag, crMap);
         return crMap;
     }
 

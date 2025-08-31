@@ -94,7 +94,7 @@ internal class Eparch : LonelyTower
         var crMap = new CombatReplayMap(
                         (1035, 934),
                         (-950, 1040, 2880, 4496));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayEparch, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEparch, crMap);
         return crMap;
 
     }

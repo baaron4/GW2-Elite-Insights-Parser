@@ -87,7 +87,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         var crMap = new CombatReplayMap(
                         (1803, 1918),
                         (-24798, -18014, -18164, -10932));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayKainengOverlook, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKainengOverlook, crMap);
         return crMap;
     }
 

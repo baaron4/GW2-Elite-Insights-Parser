@@ -47,7 +47,7 @@ internal class Escort : StrongholdOfTheFaithful
         var crMap = new CombatReplayMap(
                         (1080, 676),
                         (-6081.86, 13624.72, 8956.86, 23099.28));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayEscort, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEscort, crMap);
         return crMap;
     }
 

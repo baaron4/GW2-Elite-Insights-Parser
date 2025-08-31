@@ -87,7 +87,7 @@ internal class Kanaxai : SilentSurf
         var crMap = new CombatReplayMap(
                        (334, 370),
                        (-6195, -295, -799, 5685));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayKanaxai, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKanaxai, crMap);
         return crMap;
     }
 

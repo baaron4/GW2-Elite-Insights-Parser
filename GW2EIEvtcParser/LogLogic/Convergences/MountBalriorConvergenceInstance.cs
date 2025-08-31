@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -56,7 +57,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     {
         var crMap = new CombatReplayMap((1280, 1280),
             (-15454, -22004, 20326, 20076));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMountBalrior, crMap);
         return crMap;
     }
 

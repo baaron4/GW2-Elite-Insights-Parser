@@ -45,7 +45,7 @@ internal class MAMA : Nightmare
                         (1653, 4555, 5733, 7195)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMAMA, crMap);
         return crMap;
     }
 

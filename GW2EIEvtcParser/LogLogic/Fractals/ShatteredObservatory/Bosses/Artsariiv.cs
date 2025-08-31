@@ -40,7 +40,7 @@ internal class Artsariiv : ShatteredObservatory
         var crMap = new CombatReplayMap(
                         (914, 914),
                         (8991, 112, 11731, 2812));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayArtsariiv, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArtsariiv, crMap);
         return crMap;
     }
 

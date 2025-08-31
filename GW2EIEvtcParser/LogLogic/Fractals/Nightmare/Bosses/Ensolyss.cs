@@ -56,7 +56,7 @@ internal class Ensolyss : Nightmare
                         (252, 1, 2892, 2881)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap);
         return crMap;
     }
 

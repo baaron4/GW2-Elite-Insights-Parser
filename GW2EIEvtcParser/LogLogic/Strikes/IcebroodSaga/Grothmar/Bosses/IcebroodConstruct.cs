@@ -3,6 +3,7 @@ using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -54,7 +55,7 @@ internal class IcebroodConstruct : Grothmar
         var crMap = new CombatReplayMap(
                         (729, 581),
                         (-32118, -11470, -28924, -8274));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayIcebroodConstruct, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayIcebroodConstruct, crMap);
         return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()

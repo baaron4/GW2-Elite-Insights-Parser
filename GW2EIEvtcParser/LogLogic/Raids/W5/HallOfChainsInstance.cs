@@ -54,7 +54,7 @@ internal class HallOfChainsInstance : HallOfChains
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((800, 426), (-21504, -12288, 24576, 12288));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayHallOfChains, crMap));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayHallOfChains, crMap));
         foreach (var subLogic in _subLogics)
         {
             subLogic.GetCombatMapInternal(log, arenaDecorations);

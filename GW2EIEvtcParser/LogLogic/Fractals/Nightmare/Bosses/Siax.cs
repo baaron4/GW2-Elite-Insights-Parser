@@ -48,7 +48,7 @@ internal class Siax : Nightmare
                         (663, -4127, 3515, -997)/*,
                         (-6144, -6144, 9216, 9216),
                         (11804, 4414, 12444, 5054)*/);
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySiax, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySiax, crMap);
         return crMap;
     }
 

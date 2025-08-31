@@ -105,27 +105,28 @@ internal class WvWLogic : LogLogic
             return base.GetCombatMapInternal(log, arenaDecorations);
         }
         CombatReplayMap crMap;
+        var lifespan = (log.LogData.LogStart, log.LogData.LogEnd);
         switch (mapID.MapID)
         {
             case EternalBattleground:
                 crMap = new CombatReplayMap((954, 1000), (-36864 + 950, -36864 + 2250, 36864 + 950, 36864 + 2250));
-                arenaDecorations.Add(new ArenaDecoration(CombatReplayEternalBattlegrounds, crMap));
+                arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayEternalBattlegrounds, crMap));
                 break;
             case GreenAlpineBorderland:
                 crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
-                arenaDecorations.Add(new ArenaDecoration(CombatReplayAlpineBorderlands, crMap));
+                arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case BlueAlpineBorderland:
                 crMap = new CombatReplayMap((697, 1000), (-30720, -43008, 30720, 43008));
-                arenaDecorations.Add(new ArenaDecoration(CombatReplayAlpineBorderlands, crMap));
+                arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayAlpineBorderlands, crMap));
                 break;
             case RedDesertBorderland:
                 crMap = new CombatReplayMap((1000, 1000), (-36864, -36864, 36864, 36864));
-                arenaDecorations.Add(new ArenaDecoration(CombatReplayDesertBorderlands, crMap));
+                arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayDesertBorderlands, crMap));
                 break;
             case EdgeOfTheMists:
                 crMap = new CombatReplayMap((3556, 3646), (-36864, -36864, 36864, 36864));
-                arenaDecorations.Add(new ArenaDecoration(CombatReplayEdgeOfTheMists, crMap));
+                arenaDecorations.Add(new ArenaDecoration(lifespan, CombatReplayEdgeOfTheMists, crMap));
                 break;
             default:
                 crMap = base.GetCombatMapInternal(log, arenaDecorations);

@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -78,7 +79,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         var crMap = new CombatReplayMap(
                         (1169, 1169),
                         (-1388, -779, 1991, 2610));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayCosmicObservatory, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCosmicObservatory, crMap);
         return crMap;
     }
 

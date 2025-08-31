@@ -51,7 +51,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         var crMap = new CombatReplayMap(
                         (889, 889),
                         (1360, 2701, 3911, 5258));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMursaatOverseer, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMursaatOverseer, crMap);
         return crMap;
     }
 

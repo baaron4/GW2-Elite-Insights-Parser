@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -31,7 +32,7 @@ internal class Mordremoth : StoryInstance
         var crMap = new CombatReplayMap(
                         (899, 1172),
                         (-9059, 10171, -6183, 13149));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMordremoth, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMordremoth, crMap);
         return crMap;
     }
 

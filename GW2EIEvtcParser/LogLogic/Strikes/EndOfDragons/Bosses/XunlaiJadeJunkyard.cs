@@ -89,7 +89,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         var crMap = new CombatReplayMap(
                         (1485, 1292),
                         (-7090, -2785, 3647, 6556));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayXunlaiJadeJunkyard, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXunlaiJadeJunkyard, crMap);
         return crMap;
     }
 

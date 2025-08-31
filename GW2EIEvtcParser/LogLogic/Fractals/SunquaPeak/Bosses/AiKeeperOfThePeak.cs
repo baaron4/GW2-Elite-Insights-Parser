@@ -140,7 +140,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         var crMap = new CombatReplayMap(
                         (823, 1000),
                         (5411, -95, 8413, 3552));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayAi, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayAi, crMap);
         return crMap;
     }
 

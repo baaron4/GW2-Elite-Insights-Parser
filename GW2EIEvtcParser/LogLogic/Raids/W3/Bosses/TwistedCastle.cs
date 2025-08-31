@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -40,7 +41,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         var crMap = new CombatReplayMap(
                         (774, 1000),
                         (-8058, -4321, 819, 7143));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayTwistedCastle, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap);
         return crMap;
     }
 

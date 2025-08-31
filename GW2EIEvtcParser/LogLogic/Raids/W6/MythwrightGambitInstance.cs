@@ -44,7 +44,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMythwrightGambit, crMap));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayMythwrightGambit, crMap));
         foreach (var subLogic in _subLogics)
         {
             subLogic.GetCombatMapInternal(log, arenaDecorations);

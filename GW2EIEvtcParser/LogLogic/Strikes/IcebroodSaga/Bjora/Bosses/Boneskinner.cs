@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -49,7 +50,7 @@ internal class Boneskinner : Bjora
         var crMap = new CombatReplayMap(
                         (905, 789),
                         (-1013, -1600, 2221, 1416));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayBoneskinner, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayBoneskinner, crMap);
         return crMap;
     }
 

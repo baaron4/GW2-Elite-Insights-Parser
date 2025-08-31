@@ -44,7 +44,7 @@ internal class SalvationPassInstance : SalvationPass
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((800, 1800), (-12288, -27648, 12288, 27648));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySalvationPass, crMap));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplaySalvationPass, crMap));
         foreach (var subLogic in _subLogics)
         {
             subLogic.GetCombatMapInternal(log, arenaDecorations);

@@ -151,7 +151,7 @@ internal class DecimaTheStormsinger : MountBalrior
         var crMap = new CombatReplayMap(
                         (1602, 1602),
                         (-13068, 10300, -7141, 16227));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayDecimaTheStormsinger, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDecimaTheStormsinger, crMap);
         return crMap;
     }
 

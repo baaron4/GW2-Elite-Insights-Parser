@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -71,7 +72,7 @@ internal class OuterNayosConvergenceInstance : ConvergenceLogic
     {
         var crMap = new CombatReplayMap((1800, 2000),
              (-15360, -15360, 15360, 15360)); // TODO Fix values
-        arenaDecorations.Add(new ArenaDecoration(CombatReplayMountBalrior, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOuterNayos, crMap);
         return crMap;
     }
 

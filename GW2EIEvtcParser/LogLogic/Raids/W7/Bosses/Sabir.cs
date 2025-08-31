@@ -165,7 +165,7 @@ internal class Sabir : TheKeyOfAhdashim
         var crMap = new CombatReplayMap(
                         (1000, 910),
                         (-14122, 142, -9199, 4640));
-        arenaDecorations.Add(new ArenaDecoration(mapUrl, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, mapUrl, crMap);
         return crMap;
     }
 

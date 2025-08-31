@@ -71,7 +71,7 @@ internal class Samarog : BastionOfThePenitent
         var crMap = new CombatReplayMap(
                         (1000, 959),
                         (-6526, 1218, -2423, 5146));
-        arenaDecorations.Add(new ArenaDecoration(CombatReplaySamarog, crMap));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySamarog, crMap);
         return crMap;
     }
 
