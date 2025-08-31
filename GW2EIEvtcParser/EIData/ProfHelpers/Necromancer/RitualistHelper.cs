@@ -20,7 +20,7 @@ internal static class RitualistHelper
         new BuffGiveCastFinder(WeaponOfWarding, WeaponOfWardingBuff),
         new BuffGiveCastFinder(WeaponOfRemedy, WeaponOfRemedyBuff),
         new BuffGiveCastFinder(XinraeWeapon, XinraesWeaponBuff),
-        new DamageCastFinder(ExplosiveGrowth, ExplosiveGrowth) // TODO check if can be done via effects
+        new DamageCastFinder(ExplosiveGrowth, ExplosiveGrowth)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Unconditional),
     ];
 
