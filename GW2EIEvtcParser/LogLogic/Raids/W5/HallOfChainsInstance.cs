@@ -55,12 +55,10 @@ internal class HallOfChainsInstance : HallOfChains
     {
         var crMap = new CombatReplayMap((800, 426), (-21504, -12288, 24576, 12288));
         arenaDecorations.Add(new ArenaDecoration(CombatReplayHallOfChains, crMap));
-        _river.GetCombatMapInternal(log, arenaDecorations);
-        _soullessHorror.GetCombatMapInternal(log, arenaDecorations);
-        _statueOfIce.GetCombatMapInternal(log, arenaDecorations);
-        _statueOfDeath.GetCombatMapInternal(log, arenaDecorations);
-        _dhuum.GetCombatMapInternal(log, arenaDecorations);
-        _statueOfDarkness.GetCombatMapInternal(log, arenaDecorations);
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
         return crMap;
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
