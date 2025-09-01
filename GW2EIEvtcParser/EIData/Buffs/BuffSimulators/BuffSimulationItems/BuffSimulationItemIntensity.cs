@@ -49,7 +49,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
             var distrib = distribs.GetDistrib(buffID);
             foreach (BuffSimulationItemBase item in Stacks)
             {
-                item.SetBaseBuffDistributionItem(distrib, start, end);
+                item.SetBaseBuffDistributionItem(distrib, start, end, cDur);
             }
         }
     }

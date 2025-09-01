@@ -22,8 +22,6 @@ internal abstract class BuffSimulationItem : SimulationItem
 
     public long GetClampedDuration(long start, long end)
     {
-
-        Debug.Assert(Start <= End);
         if (start >= end)
         {
             return 0;

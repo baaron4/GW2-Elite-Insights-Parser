@@ -8,21 +8,16 @@ internal class BuffSimulationItemBaseEnglobingWithExtensionWithSeedEnglobing : B
     protected internal BuffSimulationItemBaseEnglobingWithExtensionWithSeedEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
     }
-    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
-        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
-        if (cDur > 0)
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
+        foreach (var subSrc in EnglobedSrcs)
         {
-            foreach (var subSrc in Src.EnglobedAgentItems)
+            long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+            if (subcDur > 0)
             {
-                long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                if (subcDur > 0)
-                {
-                    AddExtension(distribution, subcDur, subSrc);
-                }
+                AddExtension(distribution, subcDur, subSrc);
             }
-
         }
-        return cDur;
     }
 }

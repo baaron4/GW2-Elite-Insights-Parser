@@ -31,7 +31,11 @@ internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) :
 
     public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
-        var distrib = distribs.GetDistrib(buffID);
-        Stacks.First().SetBaseBuffDistributionItem(distrib, start, end);
+        long cDur = GetClampedDuration(start, end);
+        if (cDur > 0)
+        {
+            var distrib = distribs.GetDistrib(buffID);
+            Stacks.First().SetBaseBuffDistributionItem(distrib, start, end, cDur);
+        }
     }
 }

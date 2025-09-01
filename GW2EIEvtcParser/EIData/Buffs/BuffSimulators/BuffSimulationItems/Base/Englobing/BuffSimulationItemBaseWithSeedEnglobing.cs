@@ -4,33 +4,27 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemBaseWithSeedEnglobing : BuffSimulationItemBase
 {
-    internal readonly AgentItem _seedSrc;
     public readonly IReadOnlyList<AgentItem> EnglobedSeedSrcs;
 
     protected internal BuffSimulationItemBaseWithSeedEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        _seedSrc = buffStackItem.SeedSrc;
-        EnglobedSeedSrcs = _seedSrc.EnglobedAgentItems;
+        var seedSrc = buffStackItem.SeedSrc;
+        EnglobedSeedSrcs = seedSrc.EnglobedAgentItems.Where(subSrc => Math.Min(End, subSrc.LastAware) - Math.Max(Start, subSrc.FirstAware) > 0).ToList();
     }
-    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
-        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
-        if (cDur > 0)
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
+        foreach (var subSeedSrc in EnglobedSeedSrcs)
         {
-            foreach (var subSeedSrc in EnglobedSeedSrcs)
+            long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
+            if (subcDur > 0)
             {
-                long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
-                if (subcDur > 0)
+                AddExtended(distribution, subcDur, subSeedSrc);
+                if (Src.IsUnknown)
                 {
-                    AddExtended(distribution, subcDur, subSeedSrc);
-                    if (Src.IsUnknown)
-                    {
-                        AddUnknown(distribution, subcDur, subSeedSrc);
-                    }
+                    AddUnknown(distribution, subcDur, subSeedSrc);
                 }
             }
-
         }
-        return cDur;
     }
 }
