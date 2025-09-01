@@ -250,16 +250,29 @@ public abstract partial class SingleActor : Actor
         var positions = GetCombatReplayPolledPositions(log);
         var activePositions = new List<ParametricPoint3D?>(positions.Count);
         bool canCR = HasCombatReplayPositions(log);
-        for (int i = 0; i < positions.Count; i++)
+        int positionIndex = 0;
+        for (int j = 0; j < actives.Count; j++)
         {
-            var cur = positions[i]!;
-            if (canCR && actives.Any(x => x.ContainsPoint(cur.Time)))
+            var active = actives[j];
+            for (; positionIndex < positions.Count; positionIndex++)
             {
-                activePositions.Add(cur);
-            }
-            else
-            {
-                activePositions.Add(null);
+                var cur = positions[positionIndex];
+                if (!canCR)
+                {
+                    activePositions.Add(null);
+                } 
+                else if (active.End < cur.Time)
+                {
+                    break;
+                }
+                else if (active.Start > cur.Time)
+                {
+                    activePositions.Add(null);
+                }
+                else
+                {
+                    activePositions.Add(cur);
+                }
             }
         }
         return activePositions;

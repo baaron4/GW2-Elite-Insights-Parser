@@ -64,7 +64,7 @@ partial class SingleActor
     {
         _buffRemoveAllByByIDAccelerator ??= new CachingCollection<Dictionary<long, List<BuffRemoveAllEvent>>>(log);
         if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, out var dict))
-    {
+        {
             var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end);
             dict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             _buffRemoveAllByByIDAccelerator.Set(start, end, dict);
