@@ -128,7 +128,7 @@ internal class EXTHealingStatsHealingDistributionDto
         dto.ContributedHealing = outgoingHealingStats.ActorHealing;
         dto.ContributedDownedHealing = outgoingHealingStats.ActorDownedHealing;
         dto.TotalHealing = outgoingHealingStats.Healing;
-        dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
+        dto.TotalCasting = p.GetGameplayStats(log, phase.Start, phase.End).SkillCastTime;
         dto.Distribution = BuildHealingDistBodyData(log, casting, healingLogs, usedSkills, usedBuffs, phase);
         return dto;
     }

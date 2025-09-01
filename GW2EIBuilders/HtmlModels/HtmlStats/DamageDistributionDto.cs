@@ -306,7 +306,7 @@ internal class DamageDistributionDto
             ContributedBreakbarDamage = dps.ActorBreakbarDamage,
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
-            TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start)),
+            TotalCasting = actor.GetGameplayStats(log, phase.Start, phase.End).SkillCastTime,
             Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, breakbarLogs, usedSkills, usedBuffs, phase)
         };
         return dto;
