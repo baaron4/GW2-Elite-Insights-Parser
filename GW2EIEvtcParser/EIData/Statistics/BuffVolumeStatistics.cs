@@ -44,30 +44,27 @@ public class BuffVolumeStatistics
                 {
                     activePlayerCount++;
                 }
-                foreach (BuffEvent abae in p.GetBuffApplyEventsByID(log, start, end, buff.ID))
+                foreach (BuffEvent abae in p.GetBuffApplyEventsOnByID(log, start, end, buff.ID, srcAgentItem))
                 {
-                    if (abae.CreditedBy.Is(srcAgentItem))
+                    if (abae is BuffApplyEvent bae)
                     {
-                        if (abae is BuffApplyEvent bae)
+                        // We ignore infinite duration buffs
+                        /*if (bae.AppliedDuration >= int.MaxValue)
                         {
-                            // We ignore infinite duration buffs
-                            /*if (bae.AppliedDuration >= int.MaxValue)
-                            {
-                                continue;
-                            }*/
-                            totalOutgoing += bae.AppliedDuration;
-                            if (playerActiveDuration > 0)
-                            {
-                                totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
-                            }
+                            continue;
+                        }*/
+                        totalOutgoing += bae.AppliedDuration;
+                        if (playerActiveDuration > 0)
+                        {
+                            totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
                         }
-                        if (abae is BuffExtensionEvent bee)
+                    }
+                    if (abae is BuffExtensionEvent bee)
+                    {
+                        totalOutgoingByExtension += bee.ExtendedDuration;
+                        if (playerActiveDuration > 0)
                         {
-                            totalOutgoingByExtension += bee.ExtendedDuration;
-                            if (playerActiveDuration > 0)
-                            {
-                                totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
-                            }
+                            totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
                         }
                     }
                 }
@@ -132,34 +129,31 @@ public class BuffVolumeStatistics
             double totalActiveIncomingByUnknownExtension = 0;
             double totalActiveOutgoing = 0;
             double totalActiveOutgoingByExtension = 0;
-            foreach (BuffEvent abae in log.CombatData.GetBuffApplyDataByIDByDst(buff.ID, dstActor.AgentItem))
+            foreach (BuffEvent abae in dstActor.GetBuffApplyEventsOnByID(log, start, end, buff.ID, null))
             {
-                if (abae.Time >= start && abae.Time <= end)
+                if (abae is BuffApplyEvent bae)
                 {
-                    if (abae is BuffApplyEvent bae)
+                    // We ignore infinite duration buffs
+                    /*if (bae.AppliedDuration >= int.MaxValue)
                     {
-                        // We ignore infinite duration buffs
-                        /*if (bae.AppliedDuration >= int.MaxValue)
-                        {
-                            continue;
-                        }*/
-                        if (abae.CreditedBy.Is(dstActor.AgentItem))
-                        {
-                            totalOutgoing += bae.AppliedDuration;
-                        }
-                        totalIncoming += bae.AppliedDuration;
+                        continue;
+                    }*/
+                    if (abae.CreditedBy.Is(dstActor.AgentItem))
+                    {
+                        totalOutgoing += bae.AppliedDuration;
                     }
-                    if (abae is BuffExtensionEvent bee)
+                    totalIncoming += bae.AppliedDuration;
+                }
+                if (abae is BuffExtensionEvent bee)
+                {
+                    if (abae.CreditedBy.Is(dstActor.AgentItem))
                     {
-                        if (abae.CreditedBy.Is(dstActor.AgentItem))
-                        {
-                            totalOutgoingByExtension += bee.ExtendedDuration;
-                        }
-                        totalIncomingByExtension += bee.ExtendedDuration;
-                        if (abae.CreditedBy.IsUnknown)
-                        {
-                            totalIncomingByUnknownExtension += bee.ExtendedDuration;
-                        }
+                        totalOutgoingByExtension += bee.ExtendedDuration;
+                    }
+                    totalIncomingByExtension += bee.ExtendedDuration;
+                    if (abae.CreditedBy.IsUnknown)
+                    {
+                        totalIncomingByUnknownExtension += bee.ExtendedDuration;
                     }
                 }
             }

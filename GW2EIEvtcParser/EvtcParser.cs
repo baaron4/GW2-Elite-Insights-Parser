@@ -283,7 +283,8 @@ public class EvtcParser
                     foreach (PhaseData phase in phases)
                     {
                         // To create the caches
-                        actor.GetBuffApplyEventsByID(log, phase.Start, phase.End, 0);
+                        actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, null);
+                        actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0);
                         actor.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });

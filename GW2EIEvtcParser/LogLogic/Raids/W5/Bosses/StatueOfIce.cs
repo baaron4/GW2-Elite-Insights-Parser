@@ -73,7 +73,7 @@ internal class StatueOfIce : HallOfChains
         foreach (BuffEvent c in green)
         {
             int duration = 45000;
-            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllDataByDst(FrozenWind, p.AgentItem).FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllDataByIDByDst(FrozenWind, p.AgentItem).FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
             (long start, long end) lifespan = (c.Time, c.Time + duration);
             if (removedBuff != null)
             {
