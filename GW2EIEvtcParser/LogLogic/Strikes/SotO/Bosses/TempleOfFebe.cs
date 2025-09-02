@@ -156,11 +156,13 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         LogID |= 0x000002;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayTempleOfFebe,
+        var crMap = new CombatReplayMap(
                         (1149, 1149),
                         (-2088, -6124, 2086, -1950));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTempleOfFebe, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

@@ -73,13 +73,15 @@ internal class Arkk : ShatteredObservatory
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayArkk,
+        var crMap = new CombatReplayMap(
                         (914, 914),
                         (-19231, -18137, -16591, -15677)/*,
-                        (-24576, -24576, 24576, 24576),
-                        (11204, 4414, 13252, 6462)*/);
+                        (-6144, -6144, 9216, 9216),
+                        (11804, 4414, 12444, 5054)*/);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayArkk, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

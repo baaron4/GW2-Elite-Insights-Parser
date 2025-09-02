@@ -77,13 +77,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         LogID |= 0x000001;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayAetherbladeHideout,
+        var crMap = new CombatReplayMap(
                         (838, 639),
-                        (1165, 540, 4194, 2850)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (1165, 540, 4194, 2850));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayAetherbladeHideout, crMap);
+        return crMap;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

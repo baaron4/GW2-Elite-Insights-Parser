@@ -38,6 +38,15 @@ internal static class LogLogicUtils
         return TargetHPPercentUnderThreshold(target, time, combatData, expectedInitialPercent);
     }
 
+    internal static void AddArenaDecorationsPerEncounter(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations, long logID, string image, CombatReplayMap crMap)
+    {
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == logID);
+        foreach (var encounterPhase in encounterPhases)
+        {
+            arenaDecorations.Add(new ArenaDecoration((encounterPhase.Start - 5000, encounterPhase.End + 5000), image, crMap));
+        }
+    }
+
     internal static bool TargetHPPercentUnderThreshold(TargetID targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);

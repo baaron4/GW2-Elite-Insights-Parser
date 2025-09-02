@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -36,13 +37,13 @@ internal class StatueOfDeath : HallOfChains
         LogID |= 0x000004;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayStatueOfDeath,
+        var crMap = new CombatReplayMap(
                         (710, 709),
-                        (1306, -9381, 4720, -5968)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (1306, -9381, 4720, -5968));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfDeath, crMap);
+        return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {

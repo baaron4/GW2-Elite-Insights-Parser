@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -76,13 +77,13 @@ internal class Matthias : SalvationPass
         ChestID = ChestID.MatthiasChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayMatthias,
+        var crMap = new CombatReplayMap(
                         (880, 880),
-                        (-7248, 4585, -4625, 7207)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (2688, 11906, 3712, 14210)*/);
+                        (-7248, 4585, -4625, 7207));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMatthias, crMap);
+        return crMap;
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

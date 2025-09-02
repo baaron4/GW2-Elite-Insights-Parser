@@ -66,13 +66,13 @@ internal class Samarog : BastionOfThePenitent
         ChestID = ChestID.SamarogChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySamarog,
+        var crMap = new CombatReplayMap(
                         (1000, 959),
-                        (-6526, 1218, -2423, 5146)/*,
-                        (-27648, -9216, 27648, 12288),
-                        (11774, 4480, 14078, 5376)*/);
+                        (-6526, 1218, -2423, 5146));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySamarog, crMap);
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

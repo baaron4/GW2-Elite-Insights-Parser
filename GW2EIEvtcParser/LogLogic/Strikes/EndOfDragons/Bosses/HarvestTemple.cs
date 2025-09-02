@@ -147,13 +147,13 @@ internal class HarvestTemple : EndOfDragonsStrike
         LogCategoryInformation.InSubCategoryOrder = 3;
         LogID |= 0x000004;
     }
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayHarvestTemple,
+        var crMap = new CombatReplayMap(
                         (1024, 1024),
-                        (-844, -21845, 2055, -18946)/*,
-                        (-15360, -36864, 15360, 39936),
-                        (3456, 11012, 4736, 14212)*/);
+                        (-844, -21845, 2055, -18946));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayHarvestTemple, crMap);
+        return crMap;
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {

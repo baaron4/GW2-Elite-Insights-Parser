@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -33,13 +34,13 @@ internal class StatueOfIce : HallOfChains
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayStatueOfIce,
+        var crMap = new CombatReplayMap(
                         (999, 890),
-                        (2497, 5388, 7302, 9668)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (2497, 5388, 7302, 9668));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfIce, crMap);
+        return crMap;
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

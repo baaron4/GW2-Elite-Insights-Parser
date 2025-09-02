@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -83,11 +84,13 @@ internal class GreerTheBlightbringer : MountBalrior
         LogCategoryInformation.InSubCategoryOrder = 0;
         LogID |= 0x000001;
     }
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayGreerTheBlightbringer,
+        var crMap = new CombatReplayMap(
                         (1912, 1845),
                         (11300, -10621, 18374, -3794));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayGreerTheBlightbringer, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

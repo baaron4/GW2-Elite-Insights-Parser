@@ -32,13 +32,13 @@ internal class SuperKodanBrothers : Bjora
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayKodanBrothers,
+        var crMap = new CombatReplayMap(
                         (905, 789),
-                        (-1013, -1600, 2221, 1416)/*,
-                        (-0, -0, 0, 0),
-                        (0, 0, 0, 0)*/);
+                        (-1013, -1600, 2221, 1416));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKodanBrothers, crMap);
+        return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {

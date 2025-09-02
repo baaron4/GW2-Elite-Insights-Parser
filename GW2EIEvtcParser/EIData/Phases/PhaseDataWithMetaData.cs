@@ -35,6 +35,7 @@ public abstract class PhaseDataWithMetaData : PhaseData
 
     internal PhaseDataWithMetaData(long start, long end, string name, bool success, string icon, LogMode mode, LogStartStatus startStatus, long logID, PhaseType type) : this(start, end, name, success, icon, mode, logID, type)
     {
+        StartStatus = startStatus;
         Name = name
             + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
             + (MissingPreEvent ? " (No Pre-Event)" : ""); ;

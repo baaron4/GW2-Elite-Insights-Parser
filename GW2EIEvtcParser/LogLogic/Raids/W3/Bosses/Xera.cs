@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -59,13 +60,13 @@ internal class Xera : StrongholdOfTheFaithful
         ChestID = ChestID.XeraChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayXera,
+        var crMap = new CombatReplayMap(
                         (1000, 897),
-                        (-5992, -5992, 69, -522)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (1920, 12160, 2944, 14464)*/);
+                        (-5992, -5992, 69, -522));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayXera, crMap);
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

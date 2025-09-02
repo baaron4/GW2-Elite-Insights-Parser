@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -49,13 +50,13 @@ internal class Slothasor : SalvationPass
         ChestID = ChestID.SlothasorChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySlothasor,
+        var crMap = new CombatReplayMap(
                         (654, 1000),
-                        (5822, -3491, 9549, 2205)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (2688, 11906, 3712, 14210)*/);
+                        (5822, -3491, 9549, 2205));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySlothasor, crMap);
+        return crMap;
     }
 
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, LogData logData)
@@ -122,7 +123,7 @@ internal class Slothasor : SalvationPass
         long encounterStart = encounterPhase.Start;
         long encounterEnd = encounterPhase.End;
         var sleepy = slothasor.GetCastEvents(log, encounterStart, encounterEnd).Where(x => x.SkillID == NarcolepsySkill);
-        long start = 0;
+        long start = encounterStart;
         int i = 1;
         foreach (CastEvent c in sleepy)
         {

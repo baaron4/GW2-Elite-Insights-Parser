@@ -83,11 +83,13 @@ internal class OldLionsCourt : EndOfDragonsStrike
         LogID |= 0x000005;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayOldLionsCourt,
+        var crMap = new CombatReplayMap(
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayOldLionsCourt, crMap);
+        return crMap;
     }
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()
     {

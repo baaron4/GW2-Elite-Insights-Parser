@@ -37,13 +37,13 @@ internal class River : HallOfChains
         LogID |= 0x000002;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayRiver,
+        var crMap = new CombatReplayMap(
                         (1000, 387),
-                        (-12201, -4866, 7742, 2851)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (-12201, -4866, 7742, 2851));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayRiver, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

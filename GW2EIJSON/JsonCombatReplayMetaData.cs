@@ -19,6 +19,10 @@ public class JsonCombatReplayMetaData
         /// Interval[0] is start and Interval[1] is end.
         /// </summary>
         public IReadOnlyList<long>? Interval;
+        /// <summary>
+        /// X and Y coordinates, in pixels, of the top left of the image
+        /// </summary>
+        public IReadOnlyList<float>? Position;
     }
     /// <summary>
     /// Factor to convert inches (in game unit) to pixels (map unit)

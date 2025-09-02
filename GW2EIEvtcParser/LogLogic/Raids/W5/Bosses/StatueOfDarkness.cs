@@ -40,13 +40,13 @@ internal class StatueOfDarkness : HallOfChains
         LogID |= 0x000005;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayStatueOfDarkness,
+        var crMap = new CombatReplayMap(
                         (809, 1000),
-                        (11664, -2108, 16724, 4152)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (11664, -2108, 16724, 4152));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayStatueOfDarkness, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTrashMobsIDs()

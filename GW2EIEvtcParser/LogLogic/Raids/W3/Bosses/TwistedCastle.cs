@@ -3,6 +3,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -35,13 +36,13 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         LogID |= 0x000003;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayTwistedCastle,
+        var crMap = new CombatReplayMap(
                         (774, 1000),
-                        (-8058, -4321, 819, 7143)/*,
-                        (-12288, -27648, 12288, 27648),
-                        (1920, 12160, 2944, 14464)*/);
+                        (-8058, -4321, 819, 7143));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayTwistedCastle, crMap);
+        return crMap;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)

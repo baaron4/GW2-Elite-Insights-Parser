@@ -4,18 +4,17 @@ namespace GW2EIEvtcParser.EIData;
 
 public class CombatReplayMap
 {
-
-    public class MapItem
-    {
-        public string? Link { get; internal set; }
-        public long Start { get; internal set; }
-        public long End { get; internal set; }
-    }
-
-    public IReadOnlyList<MapItem> Maps => _maps;
-    private readonly List<MapItem> _maps = [];
-    private (int width, int height) _urlPixelSize;
+    private (int width, int height) _pixelSize;
     private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
+    public float Width => (float)(_rectInMap.bottomX - _rectInMap.topX);
+
+    public float Height => (float)(_rectInMap.bottomY - _rectInMap.topY);
+    public float TopX => (float)_rectInMap.topX;
+
+    public float TopY => (float)_rectInMap.topY;
+    public float BottomX => (float)_rectInMap.bottomX;
+
+    public float BottomY => (float)_rectInMap.bottomY;
     //private (int topX, int topY, int bottomX, int bottomY) _fullRect;
     //private (int bottomX, int bottomY, int topX, int topY) _worldRect;
 
@@ -25,15 +24,9 @@ public class CombatReplayMap
     /// <param name="link">Url to the image</param>
     /// <param name="urlPixelSize">Width and Height of the image in pixel</param>
     /// <param name="rectInMap">The map rectangle region corresponding to the image in map coordinates</param>
-    internal CombatReplayMap(string link, (int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
+    internal CombatReplayMap((int width, int height) urlPixelSize, (double topX, double topY, double bottomX, double bottomY) rectInMap)
     {
-        _maps.Add(new MapItem()
-        {
-            Link = link,
-            Start = 0,
-            End = long.MaxValue
-        });
-        _urlPixelSize = urlPixelSize;
+        _pixelSize = urlPixelSize;
         _rectInMap = rectInMap;
     }
 
@@ -53,7 +46,7 @@ public class CombatReplayMap
 
     public (int width, int height) GetPixelMapSize()
     {
-        double ratio = (double)_urlPixelSize.width / _urlPixelSize.height;
+        double ratio = (double)_pixelSize.width / _pixelSize.height;
         const int pixelSize = 750;
         if (ratio > 1.0)
         {
@@ -113,41 +106,16 @@ public class CombatReplayMap
     internal Vector2 GetMapCoordRounded(float realX, float realY)
     {
         var (width, height) = GetPixelMapSize();
-        double scaleX = (double)width / _urlPixelSize.width;
-        double scaleY = (double)height / _urlPixelSize.height;
+        double scaleX = (double)width / _pixelSize.width;
+        double scaleY = (double)height / _pixelSize.height;
         double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
         double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
-        return new((float)Math.Round(scaleX * _urlPixelSize.width * x, ParserHelper.CombatReplayDataDigit), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), ParserHelper.CombatReplayDataDigit));
+        return new(
+            (float)Math.Round(scaleX * _pixelSize.width * x, ParserHelper.CombatReplayDataDigit), 
+            (float)Math.Round(scaleY * (_pixelSize.height - _pixelSize.height * y), ParserHelper.CombatReplayDataDigit)
+        );
     }
     internal Vector2 GetMapCoordRounded(in Vector2 realPos) => GetMapCoordRounded(realPos.X, realPos.Y);
-
-    /// <summary>
-    /// This assumes that all urls are of the same size (or at least size ratio) and that they have the same map rectangle
-    /// </summary>
-    /// <param name="urls"></param>
-    /// <param name="phases"></param>
-    /// <param name="logEnd"></param>
-    internal void MatchMapsToPhases(List<string> urls, List<PhaseData> phases, long logEnd)
-    {
-        if (phases.Count - 1 > urls.Count)
-        {
-            return;
-        }
-        MapItem originalMap = _maps[0];
-        originalMap.Start = 0;
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            _maps.Last().End = phase.Start;
-            _maps.Add(new MapItem()
-            {
-                Link = urls[i - 1],
-                Start = phase.Start
-            });
-        }
-        _maps.Last().End = logEnd;
-        _maps.RemoveAll(x => x.End - x.Start <= 0);
-    }
 
     public float GetInchToPixel()
     {
@@ -179,7 +147,7 @@ public class CombatReplayMap
 
     internal CombatReplayMap AdjustForAspectRatio()
     {
-        double ratio = (double)_urlPixelSize.width / _urlPixelSize.height;
+        double ratio = (double)_pixelSize.width / _pixelSize.height;
         double centerY = (_rectInMap.bottomY + _rectInMap.topY) / 2.0;
         double halfHeigth = (_rectInMap.bottomY - centerY);
         double centerX = (_rectInMap.bottomX + _rectInMap.topX) / 2.0;
@@ -190,5 +158,4 @@ public class CombatReplayMap
         _rectInMap.topY = centerY - halfHeigth;
         return this;
     }
-
 }

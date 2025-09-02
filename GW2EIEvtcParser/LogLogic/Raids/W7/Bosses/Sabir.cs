@@ -155,18 +155,18 @@ internal class Sabir : TheKeyOfAhdashim
         return phases;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         string mapUrl = log.AgentData.GetNPCsByID(TargetID.SabirMainPlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirSquarePlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirBigRectanglePlateform).Count > 0 &&
             log.AgentData.GetNPCsByID(TargetID.SabirRectanglePlateform).Count > 0 ?
                 CombatReplayNoImage : CombatReplaySabir;
-        return new CombatReplayMap(mapUrl,
+        var crMap = new CombatReplayMap(
                         (1000, 910),
-                        (-14122, 142, -9199, 4640)/*,
-                        (-21504, -21504, 24576, 24576),
-                        (33530, 34050, 35450, 35970)*/);
+                        (-14122, 142, -9199, 4640));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, mapUrl, crMap);
+        return crMap;
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -245,12 +245,18 @@ internal class Sabir : TheKeyOfAhdashim
                         if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) < 200 && mainPlateformOpacities.Last().X != 1)
                         {
                             mainPlateformOpacities.Add(new(1, position.Time - 8000));
+
                         } 
                         else if (Math.Abs(position.XYZ.Z - plateformPosition.XYZ.Z) >= 200 && mainPlateformOpacities.Last().X != 0)
                         {
-                            mainPlateformOpacities.Add(new(0, position.Time + 20000));
+                            mainPlateformOpacities.Add(new(0, Math.Min(position.Time + 20000, sabir.LastAware)));
                         }
                     }
+                }
+                var successSabirPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().LastOrDefault(x => x.LogID == LogID && x.Success);
+                if (successSabirPhase != null)
+                {
+                    mainPlateformOpacities.Add(new(1, successSabirPhase.End));
                 }
                 AddPlateformDecoration(target, replay, ParserIcons.SabirMainPlatform, 1660, mainPlateformOpacities);
                 break;

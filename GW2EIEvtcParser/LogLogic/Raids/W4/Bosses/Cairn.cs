@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
@@ -59,13 +60,13 @@ internal class Cairn : BastionOfThePenitent
         ChestID = ChestID.CairnChest;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayCairn,
+        var crMap = new CombatReplayMap(
                         (607, 607),
-                        (12981, 642, 15725, 3386)/*,
-                        (-27648, -9216, 27648, 12288),
-                        (11774, 4480, 14078, 5376)*/);
+                        (12981, 642, 15725, 3386));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayCairn, crMap);
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

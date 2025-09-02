@@ -67,13 +67,13 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplaySoullessHorror,
+        var crMap = new CombatReplayMap(
                         (1000, 1000),
-                        (-12223, -771, -8932, 2420)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (-12223, -771, -8932, 2420));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySoullessHorror, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

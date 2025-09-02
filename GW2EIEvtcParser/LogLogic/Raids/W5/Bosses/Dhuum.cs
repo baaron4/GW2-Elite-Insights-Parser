@@ -95,13 +95,13 @@ internal class Dhuum : HallOfChains
         LogID |= 0x000006;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayDhuum,
+        var crMap = new CombatReplayMap(
                         (1000, 899),
-                        (13524, -1334, 18039, 2735)/*,
-                        (-21504, -12288, 24576, 12288),
-                        (19072, 15484, 20992, 16508)*/);
+                        (13524, -1334, 18039, 2735));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDhuum, crMap);
+        return crMap;
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
@@ -205,7 +205,7 @@ internal class Dhuum : HallOfChains
             return [];
         }
         bool hasPreEvent = encounterPhase.StartStatus == LogData.LogStartStatus.Normal;
-        long end = encounterPhase.DurationInMS;
+        long end = encounterPhase.End;
         long start = encounterPhase.Start;
         var phases = new List<PhaseData>(6);
         var enforcers = targets.Where(x => x.IsSpecies(TargetID.Enforcer));

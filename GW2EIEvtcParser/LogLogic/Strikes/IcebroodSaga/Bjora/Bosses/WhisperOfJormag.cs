@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
@@ -49,13 +50,13 @@ internal class WhisperOfJormag : Bjora
         LogID |= 0x000005;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayWhisperOfJormag,
+        var crMap = new CombatReplayMap(
                         (1682, 1682),
-                        (-3287, -1772, 3313, 4828)/*,
-                        (-0, -0, 0, 0),
-                        (0, 0, 0, 0)*/);
+                        (-3287, -1772, 3313, 4828));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayWhisperOfJormag, crMap);
+        return crMap;
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {

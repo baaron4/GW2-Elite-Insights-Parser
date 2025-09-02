@@ -146,11 +146,13 @@ internal class DecimaTheStormsinger : MountBalrior
         LogCategoryInformation.InSubCategoryOrder = 1;
         LogID |= 0x000002;
     }
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayDecimaTheStormsinger,
+        var crMap = new CombatReplayMap(
                         (1602, 1602),
                         (-13068, 10300, -7141, 16227));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayDecimaTheStormsinger, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

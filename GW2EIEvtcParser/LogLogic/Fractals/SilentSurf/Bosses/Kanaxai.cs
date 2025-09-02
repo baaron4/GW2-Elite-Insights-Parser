@@ -82,11 +82,13 @@ internal class Kanaxai : SilentSurf
         LogID |= 0x000001;
     }
 
-    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
-        return new CombatReplayMap(CombatReplayKanaxai,
+        var crMap = new CombatReplayMap(
                        (334, 370),
                        (-6195, -295, -799, 5685));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayKanaxai, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID>  GetTargetsIDs()

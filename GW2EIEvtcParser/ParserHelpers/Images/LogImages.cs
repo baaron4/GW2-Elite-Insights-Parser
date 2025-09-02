@@ -92,10 +92,12 @@ internal static class LogImages
 
     // Combat Replay Maps
     internal const string CombatReplayNoImage = "";
+    internal const string CombatReplaySpiritVale = "https://wiki.guildwars2.com/images/3/35/Spirit_Vale_map.jpg";
     internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
     internal const string CombatReplaySpiritRun = "https://i.imgur.com/RyA0XH3.png";
     internal const string CombatReplayGorseval = "https://i.imgur.com/U9pH5dG.png";
     internal const string CombatReplaySabetha = "https://i.imgur.com/HXjxqlu.png";
+    internal const string CombatReplaySalvationPass = "https://wiki.guildwars2.com/images/7/7f/Salvation_Pass_map.jpg";
     internal const string CombatReplaySlothasor = "https://i.imgur.com/pChxnuf.png";
     internal const string CombatReplayBanditTrio = "https://i.imgur.com/dDvhEOP.png";
     internal const string CombatReplayMatthias = "https://i.imgur.com/3X0YveK.png";
@@ -107,12 +109,14 @@ internal static class LogImages
     internal const string CombatReplayMursaatOverseer = "https://i.imgur.com/lT1FW2r.png";
     internal const string CombatReplaySamarog = "https://i.imgur.com/znpsqsI.png";
     internal const string CombatReplayDeimos = "https://i.imgur.com/FFs9cFq.png";
+    internal const string CombatReplayHallOfChains = "https://wiki.guildwars2.com/images/6/63/Hall_of_Chains_map.jpg";
     internal const string CombatReplaySoullessHorror = "https://i.imgur.com/xjPq9vq.png";
     internal const string CombatReplayRiver = "https://i.imgur.com/BMqQKqb.png";
     internal const string CombatReplayStatueOfDarkness = "https://i.imgur.com/ZMCqeQd.png";
     internal const string CombatReplayStatueOfDeath = "https://i.imgur.com/Owo34RS.png";
     internal const string CombatReplayStatueOfIce = "https://i.imgur.com/JRPskkX.png";
     internal const string CombatReplayDhuum = "https://i.imgur.com/7tEZYPd.png";
+    internal const string CombatReplayMythwrightGambit = "https://wiki.guildwars2.com/images/9/93/Mythwright_Gambit_map.jpg";
     internal const string CombatReplayConjuredAmalgamate = "https://i.imgur.com/lgzr1xD.png";
     internal const string CombatReplayTwinLargos = "https://i.imgur.com/O8wIWds.png";
     internal const string CombatReplayQadim = "https://i.imgur.com/f4jfgiX.png";

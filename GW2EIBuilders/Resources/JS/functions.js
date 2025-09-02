@@ -1056,10 +1056,20 @@ function getActivePlayers(time) {
     let res = [];
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
-        if (player.isEnglobed && 
+        if ( 
             (
-                (!player.isFirstEnglobed && player.firstAware > time) ||
-                (!player.isLastEnglobed && player.lastAware < time)
+                player.notInSquad && 
+                (
+                    player.firstAware > time || 
+                    player.lastAware < time
+                )
+            ) || 
+            (
+                    player.isEnglobed && 
+                (
+                    (!player.isFirstEnglobed && player.firstAware > time) ||
+                    (!player.isLastEnglobed && player.lastAware < time)
+                )
             )
         ) {
             res.push(null);
@@ -1075,6 +1085,13 @@ function getActiveNonFakePlayers(time) {
     for (let i = 0; i < logData.players.length; i++) {
         const player = logData.players[i];
         if (player.isFake || 
+            (
+                player.notInSquad && 
+                (
+                    player.firstAware > time || 
+                    player.lastAware < time
+                )
+            ) || 
             (
                 player.isEnglobed && 
                 (            

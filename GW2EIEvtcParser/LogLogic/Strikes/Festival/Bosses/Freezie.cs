@@ -42,7 +42,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         LogID |= 0x000001;
     }
 
-    //protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    //internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     //{
     //    return new CombatReplayMap(CombatReplayFreezie,
     //                    (1008, 1008),
