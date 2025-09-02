@@ -104,10 +104,16 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
     }
 #pragma warning restore CS8774 // must have non null value when exiting
 
-
-    public IEnumerable<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private CachingCollectionWithTarget<List<EXTHealingEvent>> _justActorHealCache;
+    public IReadOnlyList<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From.Is(_agentItem));
+        _justActorHealCache ??= new(log);
+        if (!_justActorHealCache.TryGetValue(start, end, target, out var healEvents))
+        {
+            healEvents = GetOutgoingHealEvents(target, log, start, end).Where(x => x.From.Is(_agentItem)).ToList();
+            _justActorHealCache.Set(start, end, target, healEvents);
+        }
+        return healEvents;
     }
 
     internal IReadOnlyList<EXTHealingEvent> GetJustActorTypedOutgoingHealEvents(SingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)

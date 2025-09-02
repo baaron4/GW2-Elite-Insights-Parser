@@ -98,10 +98,16 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 
         return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
-
-    public IEnumerable<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private CachingCollectionWithTarget<List<EXTBarrierEvent>> _justActorBarrierCache;
+    public IReadOnlyList<EXTBarrierEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From.Is(_agentItem));
+        _justActorBarrierCache ??= new(log);
+        if (!_justActorBarrierCache.TryGetValue(start, end, target, out var healEvents))
+        {
+            healEvents = GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From.Is(_agentItem)).ToList();
+            _justActorBarrierCache.Set(start, end, target, healEvents);
+        }
+        return healEvents;
     }
 
     private static int[] ComputeBarrierGraph(IEnumerable<EXTBarrierEvent> dls, long start, long end)

@@ -668,9 +668,16 @@ public abstract partial class SingleActor : Actor
         }
     }
 
-    public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private CachingCollectionWithTarget<List<HealthDamageEvent>> _justActorDamageCache;
+    public IReadOnlyList<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
+        _justActorDamageCache ??= new(log);
+        if (!_justActorDamageCache.TryGetValue(start, end, target, out var damageEvents))
+        {
+            damageEvents = GetDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem)).ToList();
+            _justActorDamageCache.Set(start, end, target, damageEvents);
+        }
+        return damageEvents;
     }
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
@@ -724,10 +731,16 @@ public abstract partial class SingleActor : Actor
     #endregion DAMAGE
 
     #region BREAKBAR DAMAGE
-
-    public IEnumerable<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private CachingCollectionWithTarget<List<BreakbarDamageEvent>> _justActorBreakbarDamageCache;
+    public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
+        _justActorBreakbarDamageCache ??= new(log);
+        if (!_justActorBreakbarDamageCache.TryGetValue(start, end, target, out var damageEvents))
+        {
+            damageEvents = GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From.Is(AgentItem)).ToList();
+            _justActorBreakbarDamageCache.Set(start, end, target, damageEvents);
+        }
+        return damageEvents;
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
@@ -803,10 +816,16 @@ public abstract partial class SingleActor : Actor
     #endregion BREAKBAR DAMAGE
 
     #region CROWD CONTROL
-
-    public IEnumerable<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+    private CachingCollectionWithTarget<List<CrowdControlEvent>> _justActorCrowdControlCache;
+    public IReadOnlyList<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From.Is(AgentItem));
+        _justActorCrowdControlCache ??= new(log);
+        if (!_justActorCrowdControlCache.TryGetValue(start, end, target, out var ccEvents))
+        {
+            ccEvents = GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From.Is(AgentItem)).ToList();
+            _justActorCrowdControlCache.Set(start, end, target, ccEvents);
+        }
+        return ccEvents;
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
