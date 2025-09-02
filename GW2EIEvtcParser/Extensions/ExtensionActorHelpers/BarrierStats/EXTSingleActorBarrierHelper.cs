@@ -99,7 +99,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
     private CachingCollectionWithTarget<List<EXTBarrierEvent>> _justActorBarrierCache;
-    public IReadOnlyList<EXTBarrierEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyList<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorBarrierCache ??= new(log);
         if (!_justActorBarrierCache.TryGetValue(start, end, target, out var healEvents))
