@@ -8,7 +8,7 @@ internal class BuffSimulationItemBaseEnglobing : BuffSimulationItemBase
     public readonly IReadOnlyList<AgentItem> EnglobedSrcs;
     protected internal BuffSimulationItemBaseEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        EnglobedSrcs = Src.EnglobedAgentItems.Where(subSrc => Math.Min(End, subSrc.LastAware) - Math.Max(Start, subSrc.FirstAware) > 0 ).ToList();
+        EnglobedSrcs = Src.EnglobedAgentItems.Where(subSrc => !(Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
     }
 
     internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)

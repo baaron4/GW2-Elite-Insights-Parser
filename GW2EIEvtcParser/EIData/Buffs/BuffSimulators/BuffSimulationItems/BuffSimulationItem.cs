@@ -22,7 +22,7 @@ internal abstract class BuffSimulationItem : SimulationItem
 
     public long GetClampedDuration(long start, long end)
     {
-        if (start >= end)
+        if (start >= end || start >= End || Start >= end)
         {
             return 0;
         }

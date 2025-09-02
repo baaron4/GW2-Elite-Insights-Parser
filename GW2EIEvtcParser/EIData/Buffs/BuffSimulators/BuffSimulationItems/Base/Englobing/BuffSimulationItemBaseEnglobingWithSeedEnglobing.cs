@@ -9,7 +9,7 @@ internal class BuffSimulationItemBaseEnglobingWithSeedEnglobing : BuffSimulation
     protected internal BuffSimulationItemBaseEnglobingWithSeedEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
         var seedSrc = buffStackItem.SeedSrc;
-        EnglobedSeedSrcs = seedSrc.EnglobedAgentItems.Where(subSrc => Math.Min(End, subSrc.LastAware) - Math.Max(Start, subSrc.FirstAware) > 0).ToList();
+        EnglobedSeedSrcs = seedSrc.EnglobedAgentItems.Where(subSrc => !( Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
     }
     internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
