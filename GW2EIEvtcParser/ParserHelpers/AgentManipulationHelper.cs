@@ -255,34 +255,64 @@ public static class AgentManipulationHelper
         var dstCombatDataDict = combatDataDict.Where(x => x.DstIsAgent(extensions)).GroupBy(x => agentData.GetAgent(x.DstAgent, x.Time)).ToDictionary(x => x.Key, x => x.ToList());
         // NPCs
         {
-            var npcsBySpeciesIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var npcsBySpeciesID in npcsBySpeciesIDs)
+            var npcsByInstIDs = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !x.IsNonIdentifiedSpecies()).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var npcsByInstdID in npcsByInstIDs)
             {
-                var agentsByInstid = npcsBySpeciesID.Value.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (var pair in agentsByInstid)
+                var agentToRegroup = new List<AgentItem>(5);
+                var previousID = npcsByInstdID.Value[0].ID;
+                foreach (var agent in npcsByInstdID.Value)
                 {
-                    var agents = pair.Value;
-                    if (agents.Count > 1)
+                    if (previousID == agent.ID)
                     {
-                        AgentItem firstItem = agents.First();
-                        var newTargetAgent = new AgentItem(firstItem);
-                        newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                        foreach (AgentItem agentItem in agents)
+                        agentToRegroup.Add(agent);
+                    } 
+                    else
+                    {
+                        if (agentToRegroup.Count > 1)
                         {
-                            if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                            AgentItem firstItem = agentToRegroup.First();
+                            var newTargetAgent = new AgentItem(firstItem);
+                            newTargetAgent.OverrideAwareTimes(agentToRegroup.Min(x => x.FirstAware), agentToRegroup.Max(x => x.LastAware));
+                            foreach (AgentItem agentItem in agentToRegroup)
                             {
-                                srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                                if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                                {
+                                    srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                                }
+                                if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                                {
+                                    dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
+                                }
+                                agentData.SwapMasters(agentItem, newTargetAgent);
+                                newTargetAgent.AddRegroupedFrom(agentItem);
                             }
-                            if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
-                            {
-                                dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
-                            }
-                            agentData.SwapMasters(agentItem, newTargetAgent);
-                            newTargetAgent.AddRegroupedFrom(agentItem);
+                            toRemove.AddRange(agentToRegroup);
+                            toAdd.Add(newTargetAgent);
                         }
-                        toRemove.AddRange(agents);
-                        toAdd.Add(newTargetAgent);
+                        agentToRegroup = new List<AgentItem>(5) { agent };
+                        previousID = agent.ID;
                     }
+                }
+                if (agentToRegroup.Count > 1)
+                {
+                    AgentItem firstItem = agentToRegroup.First();
+                    var newTargetAgent = new AgentItem(firstItem);
+                    newTargetAgent.OverrideAwareTimes(agentToRegroup.Min(x => x.FirstAware), agentToRegroup.Max(x => x.LastAware));
+                    foreach (AgentItem agentItem in agentToRegroup)
+                    {
+                        if (srcCombatDataDict.TryGetValue(agentItem, out var srcCombatItems))
+                        {
+                            srcCombatItems.ForEach(x => x.OverrideSrcAgent(newTargetAgent));
+                        }
+                        if (dstCombatDataDict.TryGetValue(agentItem, out var dstCombatItems))
+                        {
+                            dstCombatItems.ForEach(x => x.OverrideDstAgent(newTargetAgent));
+                        }
+                        agentData.SwapMasters(agentItem, newTargetAgent);
+                        newTargetAgent.AddRegroupedFrom(agentItem);
+                    }
+                    toRemove.AddRange(agentToRegroup);
+                    toAdd.Add(newTargetAgent);
                 }
             }
         }
