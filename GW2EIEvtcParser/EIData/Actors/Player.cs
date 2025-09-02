@@ -180,11 +180,11 @@ public class Player : PlayerActor
                 CommanderStates.Add(lastSegment); 
             }
             // Clamp to aware times
-            CommanderStates.ForEach(x =>
+            for (var i = 0; i < CommanderStates.Count; i++)
             {
-                x.Start = Math.Max(x.Start, FirstAware);
-                x.End = Math.Min(x.End, LastAware);
-            });
+                var seg = CommanderStates[i];
+                CommanderStates[i] = new(Math.Max(seg.Start, FirstAware), Math.Min(seg.End, LastAware), seg.Value);
+            }
             CommanderStates.RemoveAll(x => x.IsEmpty());
         }
         return CommanderStates;
