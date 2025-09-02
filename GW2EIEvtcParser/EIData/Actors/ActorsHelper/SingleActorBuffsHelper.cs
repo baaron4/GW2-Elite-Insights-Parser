@@ -25,16 +25,16 @@ partial class SingleActor
 
     #region ACCELERATORS
     private CachingCollectionWithTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>? _buffApplyByIDAccelerator;
-    private HashSet<long>? PresentApplyOnBuffIDs = [];
+    private HashSet<long>? PresentApplyOnBuffIDs;
 
-    internal IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyEventsOnByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? creditedBy)
+    internal IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyEventsOnByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? creditedBy, bool force = false)
     {
         if (PresentApplyOnBuffIDs == null)
         {
             var allBuffApplies = log.CombatData.GetBuffApplyDataByDst(AgentItem);
             PresentApplyOnBuffIDs = [.. allBuffApplies.Select(x => x.BuffID)];
         }
-        if (!PresentApplyOnBuffIDs.Contains(buffID) && _buffApplyByIDAccelerator != null)
+        if (!PresentApplyOnBuffIDs.Contains(buffID) && !force)
         {
             return [];
         }
@@ -84,15 +84,15 @@ partial class SingleActor
     }
 
     private CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllByByIDAccelerator;
-    private HashSet<long>? PresentRemovedByBuffIDs = [];
-    internal IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllEventsByByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? removedFrom)
+    private HashSet<long>? PresentRemovedByBuffIDs;
+    internal IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllEventsByByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? removedFrom, bool force = false)
     {
         if (PresentRemovedByBuffIDs == null)
         {
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem);
             PresentRemovedByBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        if (!PresentRemovedByBuffIDs.Contains(buffID) && _buffRemoveAllByByIDAccelerator != null)
+        if (!PresentRemovedByBuffIDs.Contains(buffID) && !force)
         {
             return [];
         }
@@ -148,15 +148,15 @@ partial class SingleActor
 
 
     private CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllFromByIDAccelerator;
-    private HashSet<long>? PresentRemovedFromBuffIDs = [];
-    internal IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllEventsFromByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? removedBy)
+    private HashSet<long>? PresentRemovedFromBuffIDs;
+    internal IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllEventsFromByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? removedBy, bool force = false)
     {
         if (PresentRemovedFromBuffIDs == null)
         {
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem);
             PresentRemovedFromBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        if (!PresentRemovedFromBuffIDs.Contains(buffID) && _buffRemoveAllFromByIDAccelerator != null)
+        if (!PresentRemovedFromBuffIDs.Contains(buffID) && !force)
         {
             return [];
         }

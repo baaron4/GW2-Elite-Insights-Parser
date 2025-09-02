@@ -271,9 +271,12 @@ public class EvtcParser
                     foreach (PhaseData phase in phases)
                     {
                         // To create the caches
-                        actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, null);
-                        actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0, null);
-                        actor.GetBuffRemoveAllEventsFromByID(log, phase.Start, phase.End, 0, null);
+                        foreach (var p in log.PlayerList)
+                        {
+                            actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, p, true);
+                            actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0, p, true);
+                            actor.GetBuffRemoveAllEventsFromByID(log, phase.Start, phase.End, 0, p, true);
+                        }
                     }
                 });
                 _t.Log("Friendlies accelerator caches");
