@@ -235,13 +235,10 @@ public class EvtcParser
                     Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
                         var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-                        foreach (PhaseData phase in phases)
+                        actor.GetBuffGraphs(log);
+                        foreach (var englobed in englobeds)
                         {
-                            actor.GetBuffGraphs(log);
-                            foreach (var englobed in englobeds)
-                            {
-                                englobed.GetBuffGraphs(log);
-                            }
+                            englobed.GetBuffGraphs(log);
                         }
                     });
                     _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
