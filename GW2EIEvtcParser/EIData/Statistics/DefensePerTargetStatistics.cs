@@ -45,27 +45,23 @@ public class DefensePerTargetStatistics
     public readonly int ReceivedCrowdControl;
     public readonly double ReceivedCrowdControlDuration;
 
-    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? from, bool excludeSelf)
+    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? by, bool excludeSelf)
     {
         double stripTime = 0;
         int strip = 0;
         foreach (Buff buff in buffs)
         {
             double currentBoonStripTime = 0;
-            IReadOnlyList<BuffRemoveAllEvent> removeAllArray = log.CombatData.GetBuffRemoveAllDataByIDByDst(buff.ID, actor.AgentItem);
+            IReadOnlyList<BuffRemoveAllEvent> removeAllArray = actor.GetBuffRemoveAllEventsFromByID(log, start, end, buff.ID, by);
             foreach (BuffRemoveAllEvent brae in removeAllArray)
             {
-                if (brae.Time >= start && brae.Time <= end)
+                if (brae.CreditedBy.IsUnknown ||
+                    (excludeSelf && brae.CreditedBy.Is(actor.AgentItem)))
                 {
-                    if ((from != null && !from.AgentItem.Is(brae.CreditedBy)) || 
-                        brae.CreditedBy.IsUnknown || 
-                        (excludeSelf && brae.CreditedBy.Is(actor.AgentItem)))
-                    {
-                        continue;
-                    }
-                    currentBoonStripTime = Math.Max(currentBoonStripTime + brae.RemovedDuration, log.LogData.LogDuration);
-                    strip++;
+                    continue;
                 }
+                currentBoonStripTime = Math.Max(currentBoonStripTime + brae.RemovedDuration, log.LogData.LogDuration);
+                strip++;
             }
             stripTime += currentBoonStripTime;
         }

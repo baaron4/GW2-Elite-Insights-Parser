@@ -269,6 +269,17 @@ public class EvtcParser
                     });
                     _t.Log("friendliesAndTargets GetBuffPresence");
                 }
+                Parallel.ForEach(log.Friendlies, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        // To create the caches
+                        actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, null);
+                        actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0, null);
+                        actor.GetBuffRemoveAllEventsFromByID(log, phase.Start, phase.End, 0, null);
+                    }
+                });
+                _t.Log("Friendlies accelerator caches");
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.Friendlies, actor =>
@@ -282,9 +293,6 @@ public class EvtcParser
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        // To create the caches
-                        actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, null);
-                        actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0);
                         actor.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
