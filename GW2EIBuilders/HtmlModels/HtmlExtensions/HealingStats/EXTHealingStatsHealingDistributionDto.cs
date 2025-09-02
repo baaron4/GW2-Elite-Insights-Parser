@@ -148,7 +148,7 @@ internal class EXTHealingStatsHealingDistributionDto
         dto.ContributedHealing = healingLogs.Sum(x => x.HealingDone);
         dto.ContributedDownedHealing = healingLogs.Sum(x => x.AgainstDowned ? x.HealingDone : 0);
         dto.TotalHealing = outgoingHealingStats.Healing;
-        dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
+        dto.TotalCasting = minions.GetIntersectingCastTime(log, phase.Start, phase.End);
         dto.Distribution = BuildHealingDistBodyData(log, casting, healingLogs, usedSkills, usedBuffs, phase);
         return dto;
     }

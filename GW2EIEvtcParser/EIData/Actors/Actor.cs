@@ -27,18 +27,22 @@ public abstract class Actor
     // Damage
     protected List<HealthDamageEvent>? DamageEvents;
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageEventByDst;
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageEvents = [];
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageTakenEvents = [];
+
     protected List<HealthDamageEvent>? DamageTakenEvents;
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageTakenEventsBySrc;
+
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageEvents = [];
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageTakenEvents = [];
     // Breakbar Damage
     protected List<BreakbarDamageEvent>? BreakbarDamageEvents;
     protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageEventsByDst;
+
     protected List<BreakbarDamageEvent>? BreakbarDamageTakenEvents;
     protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageTakenEventsBySrc;
     // Crowd Control
     protected List<CrowdControlEvent>? OutgoingCrowdControlEvents;
     protected Dictionary<AgentItem, List<CrowdControlEvent>>? OutgoingCrowdControlEventsByDst;
+
     protected List<CrowdControlEvent>? IncomingCrowdControlEvents;
     protected Dictionary<AgentItem, List<CrowdControlEvent>>? IncomingCrowdControlEventsBySrc;
     // Cast
@@ -140,9 +144,36 @@ public abstract class Actor
     #endregion AwareTimes
 
     #region Damage
-    public abstract IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    protected CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageEventByDstCache;
+    public IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageEvents(log);
+        DamageEventByDstCache ??= new(log);
+        if (!DamageEventByDstCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var damageEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = damageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            DamageEventByDstCache.Set(start, end, target, list);
+        }
+        return list;
+    }
 
-    public IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log)
+    public IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
@@ -178,9 +209,36 @@ public abstract class Actor
         return dls;
     }
 
-    public abstract IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
+    protected CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageTakenEventsBySrcCache;
+    public IReadOnlyList<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageTakenEvents(log);
+        DamageTakenEventsBySrcCache ??= new(log);
+        if (!DamageTakenEventsBySrcCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (DamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var damageTakenEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = damageTakenEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            DamageTakenEventsBySrcCache.Set(start, end, target, list);
+        }
+        return list;
+    }
 
-    public IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
+    public IReadOnlyList<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetDamageTakenEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
@@ -210,13 +268,44 @@ public abstract class Actor
     }
     #endregion CrowdControl
     #region Cast
-    public abstract IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);
-    public IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log)
+    private CachingCollection<List<CastEvent>>? _castEventsCache;
+    public IReadOnlyList<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+    {
+        if (CastEvents == null)
+        {
+            InitCastEvents(log);
+        }
+        _castEventsCache ??= new CachingCollection<List<CastEvent>>(log);
+        if (!_castEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            _castEventsCache.Set(start, end, list);
+        }
+        return list;
+
+    }
+    public IReadOnlyList<CastEvent> GetCastEvents(ParsedEvtcLog log)
     {
         return GetCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
-    public abstract IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end);
-    public IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log)
+
+    private CachingCollection<List<CastEvent>>? _intersectingCastEventsCache;
+    public IReadOnlyList<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+    {
+        if (CastEvents == null)
+        {
+            InitCastEvents(log);
+        }
+        _intersectingCastEventsCache ??= new CachingCollection<List<CastEvent>>(log);
+        if (!_intersectingCastEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            _intersectingCastEventsCache.Set(start, end, list);
+        }
+        return list;
+
+    }
+    public IReadOnlyList<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log)
     {
         return GetIntersectingCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }

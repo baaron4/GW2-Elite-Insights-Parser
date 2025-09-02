@@ -32,10 +32,9 @@ public class Minions : Actor
 
     #region DAMAGE
 
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitDamageEvents(ParsedEvtcLog log)
     {
-        if (DamageEvents == null)
+        if (DamageEvents == null || DamageEventByDst == null)
         {
             DamageEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
@@ -46,32 +45,9 @@ public class Minions : Actor
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
-#pragma warning restore CS8774 // must have non null value when exiting
-    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitDamageEvents(log);
-
-        if (target != null)
-        {
-            if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return DamageEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitDamageTakenEvents(ParsedEvtcLog log)
     {
-        if (DamageTakenEvents == null)
+        if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
         {
             DamageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
@@ -81,26 +57,6 @@ public class Minions : Actor
             DamageTakenEvents.SortByTime();
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
-    }
-#pragma warning restore CS8774 // must have non null value when exiting
-    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitDamageTakenEvents(log);
-
-        if (target != null)
-        {
-            if (DamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-        return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end);
     }
     #endregion DAMAGE
 
@@ -266,22 +222,16 @@ public class Minions : Actor
         CastEvents.SortByTimeThenSwap();
     }
 
-    public override IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+    private CachingCollection<long> _intersectingCastTimeCache;
+    public long GetIntersectingCastTime(ParsedEvtcLog log, long start, long end)
     {
-        if (CastEvents == null)
+        _intersectingCastTimeCache ??= new(log);
+        if (!_intersectingCastTimeCache.TryGetValue(start, end, out var time))
         {
-            InitCastEvents(log);
+            time = GetIntersectingCastEvents(log).Sum(cl => Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start));
+            _intersectingCastTimeCache.Set(start, end, time);
         }
-        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-    public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
-    {
-        if (CastEvents == null)
-        {
-            InitCastEvents(log);
-        }
-        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
+        return time;
     }
     #endregion CAST
 

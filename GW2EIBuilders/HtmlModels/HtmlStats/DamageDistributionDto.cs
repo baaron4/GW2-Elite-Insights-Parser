@@ -341,7 +341,7 @@ internal class DamageDistributionDto
             ContributedBreakbarDamage = Math.Round(brkDamageLogs.Sum(x => x.BreakbarDamage), 1),
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
-            TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start)),
+            TotalCasting = minions.GetIntersectingCastTime(log, phase.Start, phase.End),
             Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, brkDamageLogs, usedSkills, usedBuffs, phase)
         };
         return dto;

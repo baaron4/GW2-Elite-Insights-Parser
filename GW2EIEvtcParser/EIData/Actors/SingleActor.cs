@@ -21,19 +21,6 @@ public abstract partial class SingleActor : Actor
     // Helpers
     public readonly EXTSingleActorHealingHelper EXTHealing;
     public readonly EXTSingleActorBarrierHelper EXTBarrier;
-    // Minions
-    private Dictionary<long, Minions>? _minions;
-    // Replay
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
-    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsHitDamageEvents = [];
-    private CombatReplay? CombatReplay;
-    // Statistics
-    private CachingCollectionWithTarget<DamageStatistics>? _dpsStats;
-    private CachingCollectionWithTarget<DefensePerTargetStatistics>? _defenseStats;
-    private CachingCollectionWithTarget<OffensiveStatistics>? _offensiveStats;
-    private CachingCollection<GameplayStatistics>? _gameplayStats;
-    private CachingCollectionWithTarget<SupportPerAllyStatistics>? _supportStats;
-    private CachingCollection<SupportStatistics>? _toPlayerSupportStats;
 
     protected SingleActor(AgentItem agent) : base(agent)
     {
@@ -115,6 +102,7 @@ public abstract partial class SingleActor : Actor
 
 
     // Minions
+    private Dictionary<long, Minions>? _minions;
     public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
     {
         if (_minions == null)
@@ -212,6 +200,7 @@ public abstract partial class SingleActor : Actor
 
     #region COMBAT REPLAY
 
+    private CombatReplay? CombatReplay;
     public bool HasPositions(ParsedEvtcLog log)
     {
         return GetCombatReplayNonPolledPositions(log).Count > 0;
@@ -326,7 +315,7 @@ public abstract partial class SingleActor : Actor
         }
         replay.Trim(Math.Max(trimStart, FirstAware), Math.Min(trimEnd, LastAware));
     }
-
+    
     [MemberNotNull(nameof(CombatReplay))]
     protected CombatReplay InitCombatReplay(ParsedEvtcLog log)
     {
@@ -502,38 +491,6 @@ public abstract partial class SingleActor : Actor
     #endregion COMBAT REPLAY
 
     #region CAST
-    private CachingCollection<List<CastEvent>>? _castEventsCache;
-    public override IReadOnlyList<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
-    {
-        if (CastEvents == null)
-        {
-            InitCastEvents(log);
-        }
-        _castEventsCache ??= new CachingCollection<List<CastEvent>>(log);
-        if (!_castEventsCache.TryGetValue(start, end, out var list))
-        {
-            list = CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
-            _castEventsCache.Set(start, end, list);
-        }
-        return list;
-
-    }
-    private CachingCollection<List<CastEvent>>? _intersectingCastEventsCache;
-    public override IReadOnlyList<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
-    {
-        if (CastEvents == null)
-        {
-            InitCastEvents(log);
-        }
-        _intersectingCastEventsCache ??= new CachingCollection<List<CastEvent>>(log);
-        if (!_intersectingCastEventsCache.TryGetValue(start, end, out var list))
-        {
-            list = CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
-            _intersectingCastEventsCache.Set(start, end, list);
-        }
-        return list;
-
-    }
 
     private CachingCollection<List<AnimatedCastEvent>>? _animatedCastEventsCache;
     public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
@@ -543,7 +500,7 @@ public abstract partial class SingleActor : Actor
         {
             list = log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
             _animatedCastEventsCache.Set(start, end, list);
-    }
+        }
         return list;
     }
 
@@ -560,7 +517,7 @@ public abstract partial class SingleActor : Actor
         {
             list = log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
             _instantCastEventsCache.Set(start, end, list);
-    }
+        }
         return list;
     }
 
@@ -595,6 +552,7 @@ public abstract partial class SingleActor : Actor
 
     #region STATISTICS
 
+    private CachingCollectionWithTarget<DamageStatistics>? _dpsStats;
     public DamageStatistics GetDamageStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _dpsStats ??= new CachingCollectionWithTarget<DamageStatistics>(log);
@@ -614,6 +572,7 @@ public abstract partial class SingleActor : Actor
 
     // Defense Stats
 
+    private CachingCollectionWithTarget<DefensePerTargetStatistics>? _defenseStats;
     public DefensePerTargetStatistics GetDefenseStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _defenseStats ??= new CachingCollectionWithTarget<DefensePerTargetStatistics>(log);
@@ -633,6 +592,7 @@ public abstract partial class SingleActor : Actor
 
     // Gameplay Stats
 
+    private CachingCollection<GameplayStatistics>? _gameplayStats;
     public GameplayStatistics GetGameplayStats(ParsedEvtcLog log, long start, long end)
     {
         _gameplayStats ??= new(log); 
@@ -645,6 +605,7 @@ public abstract partial class SingleActor : Actor
         return value;
     }
 
+    private CachingCollectionWithTarget<OffensiveStatistics>? _offensiveStats;
     public OffensiveStatistics GetOffensiveStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _offensiveStats ??= new CachingCollectionWithTarget<OffensiveStatistics>(log);
@@ -663,6 +624,7 @@ public abstract partial class SingleActor : Actor
         return (GetSupportStats(null, log, start, end) as SupportAllStatistics)!;
     }
 
+    private CachingCollectionWithTarget<SupportPerAllyStatistics>? _supportStats;
     public SupportPerAllyStatistics GetSupportStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _supportStats ??= new CachingCollectionWithTarget<SupportPerAllyStatistics>(log);
@@ -675,6 +637,7 @@ public abstract partial class SingleActor : Actor
         return value;
     }
 
+    private CachingCollection<SupportStatistics>? _toPlayerSupportStats;
     public SupportStatistics GetToAllySupportStats(ParsedEvtcLog log, long start, long end)
     {
         _toPlayerSupportStats ??= new(log);
@@ -690,10 +653,9 @@ public abstract partial class SingleActor : Actor
 
     #region DAMAGE
 
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitDamageEvents(ParsedEvtcLog log)
     {
-        if (DamageEvents == null)
+        if (DamageEvents == null || DamageEventByDst == null)
         {
             DamageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
@@ -705,27 +667,6 @@ public abstract partial class SingleActor : Actor
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
-#pragma warning restore CS8774 // must have non null value when exiting
-    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitDamageEvents(log);
-
-        if (target != null)
-        {
-            if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var damageEvents))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return damageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return DamageEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
 
     public IEnumerable<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
@@ -736,36 +677,16 @@ public abstract partial class SingleActor : Actor
         return GetJustActorDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitDamageTakenEvents(ParsedEvtcLog log)
     {
-        if (DamageTakenEvents == null)
+        if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
         {
             DamageTakenEvents = [.. log.CombatData.GetDamageTakenData(AgentItem)];
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
-#pragma warning restore CS8774 // must have non null value when exiting
 
-    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitDamageTakenEvents(log);
-        if (target != null)
-        {
-            if (DamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var damageTakenEvents))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return damageTakenEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-        return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
     /// <summary>
     /// cached method for damage modifiers
     /// </summary>
@@ -784,6 +705,7 @@ public abstract partial class SingleActor : Actor
         return dls;
     }
 
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedMinionsHitDamageEvents = [];
     internal IReadOnlyList<HealthDamageEvent> GetJustMinionsHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
     {
         if (!_typedMinionsHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))

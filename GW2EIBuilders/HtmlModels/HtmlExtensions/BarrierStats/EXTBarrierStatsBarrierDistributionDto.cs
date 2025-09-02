@@ -140,7 +140,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
         dto.ContributedBarrier = barrierLogs.Sum(x => x.BarrierGiven);
         dto.TotalBarrier = outgoingBarrierStats.Barrier;
         //TODO(Rennorb) @perf
-        dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
+        dto.TotalCasting = minions.GetIntersectingCastTime(log, phase.Start, phase.End);
         dto.Distribution = BuildBarrierDistBodyData(log, casting, barrierLogs, usedSkills, usedBuffs, phase);
         return dto;
     }
