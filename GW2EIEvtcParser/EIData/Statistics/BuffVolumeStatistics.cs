@@ -12,7 +12,7 @@ public class BuffVolumeStatistics
     public double Outgoing { get; internal set; }
     public double OutgoingByExtension { get; internal set; }
 
-    internal static (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes) GetBuffVolumesForPlayers(IEnumerable<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+    internal static (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes) GetBuffVolumesForPlayers(IEnumerable<Player> playerList, ParsedEvtcLog log, SingleActor srcActor, long start, long end)
     {
 
         long phaseDuration = end - start;
@@ -44,7 +44,7 @@ public class BuffVolumeStatistics
                 {
                     activePlayerCount++;
                 }
-                foreach (BuffEvent abae in p.GetBuffApplyEventsOnByID(log, start, end, buff.ID, srcAgentItem))
+                foreach (BuffEvent abae in p.GetBuffApplyEventsOnByID(log, start, end, buff.ID, srcActor))
                 {
                     if (abae is BuffApplyEvent bae)
                     {

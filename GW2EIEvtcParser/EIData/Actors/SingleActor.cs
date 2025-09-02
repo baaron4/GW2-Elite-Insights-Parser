@@ -203,7 +203,7 @@ public abstract partial class SingleActor : Actor
         {
             BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
             BuffEnum.Squad => 
-                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, this, start, end),
             _ => BuffVolumeStatistics.GetBuffVolumesForSelf(log, this, start, end),
         };
     }
@@ -502,41 +502,69 @@ public abstract partial class SingleActor : Actor
     #endregion COMBAT REPLAY
 
     #region CAST
-    public override IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+    private CachingCollection<List<CastEvent>>? _castEventsCache;
+    public override IReadOnlyList<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
     {
         if (CastEvents == null)
         {
             InitCastEvents(log);
         }
-        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
+        _castEventsCache ??= new CachingCollection<List<CastEvent>>(log);
+        if (!_castEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            _castEventsCache.Set(start, end, list);
+        }
+        return list;
 
     }
-    public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+    private CachingCollection<List<CastEvent>>? _intersectingCastEventsCache;
+    public override IReadOnlyList<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
     {
         if (CastEvents == null)
         {
             InitCastEvents(log);
         }
-        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
+        _intersectingCastEventsCache ??= new CachingCollection<List<CastEvent>>(log);
+        if (!_intersectingCastEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            _intersectingCastEventsCache.Set(start, end, list);
+        }
+        return list;
 
     }
 
-    public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
+    private CachingCollection<List<AnimatedCastEvent>>? _animatedCastEventsCache;
+    public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log, long start, long end)
     {
-        return log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+        _animatedCastEventsCache ??= new CachingCollection<List<AnimatedCastEvent>>(log);
+        if (!_animatedCastEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = log.CombatData.GetAnimatedCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+            _animatedCastEventsCache.Set(start, end, list);
+    }
+        return list;
     }
 
-    public IEnumerable<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log)
+    public IReadOnlyList<AnimatedCastEvent> GetAnimatedCastEvents(ParsedEvtcLog log)
     {
         return GetAnimatedCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
 
-    public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
+    private CachingCollection<List<InstantCastEvent>>? _instantCastEventsCache;
+    public IReadOnlyList<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log, long start, long end)
     {
-        return log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+        _instantCastEventsCache ??= new CachingCollection<List<InstantCastEvent>>(log);
+        if (!_instantCastEventsCache.TryGetValue(start, end, out var list))
+        {
+            list = log.CombatData.GetInstantCastData(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+            _instantCastEventsCache.Set(start, end, list);
+    }
+        return list;
     }
 
-    public IEnumerable<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log)
+    public IReadOnlyList<InstantCastEvent> GetInstantCastEvents(ParsedEvtcLog log)
     {
         return GetInstantCastEvents(log, log.LogData.LogStart, log.LogData.LogEnd);
     }
@@ -667,7 +695,7 @@ public abstract partial class SingleActor : Actor
     {
         if (DamageEvents == null)
         {
-            DamageEvents = new List<HealthDamageEvent>(log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly));
+            DamageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
             foreach (Minions mins in minionsList.Values)
             {
@@ -713,7 +741,7 @@ public abstract partial class SingleActor : Actor
     {
         if (DamageTakenEvents == null)
         {
-            DamageTakenEvents = new List<HealthDamageEvent>(log.CombatData.GetDamageTakenData(AgentItem));
+            DamageTakenEvents = [.. log.CombatData.GetDamageTakenData(AgentItem)];
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }

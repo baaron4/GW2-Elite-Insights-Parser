@@ -26,7 +26,7 @@ partial class SingleActor
     #region ACCELERATORS
     private CachingCollectionWithTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>? _buffApplyByIDAccelerator;
 
-    internal IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyEventsOnByID(ParsedEvtcLog log, long start, long end, long buffID, AgentItem? creditedBy)
+    internal IReadOnlyList<AbstractBuffApplyEvent> GetBuffApplyEventsOnByID(ParsedEvtcLog log, long start, long end, long buffID, SingleActor? creditedBy)
     {
         _buffApplyByIDAccelerator ??= new CachingCollectionWithTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>(log);
         if (!_buffApplyByIDAccelerator.TryGetValue(start, end, null, out var dict))
@@ -42,14 +42,16 @@ partial class SingleActor
                 _buffApplyByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
             }
         }
-        var creditedBySingleActor = creditedBy != null ? log.FindActor(creditedBy.EnglobingAgentItem) : null;
+        var creditedBySingleActor = creditedBy != null ? creditedBy.AgentItem.IsEnglobedAgent ? log.FindActor(creditedBy.EnglobingAgentItem) : creditedBy : null;
         if (!_buffApplyByIDAccelerator.TryGetValue(start, end, creditedBySingleActor, out dict))
         {
+            dict = [];
+            _buffApplyByIDAccelerator.Set(start, end, creditedBySingleActor, dict);
             return [];
         }
         if (dict.TryGetValue(buffID, out var list))
         {
-            if (creditedBy == null || !creditedBy.IsEnglobedAgent)
+            if (creditedBy == null || !creditedBy.AgentItem.IsEnglobedAgent)
             {
                 return list;
             }
@@ -75,9 +77,11 @@ partial class SingleActor
                 _buffRemoveAllByByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
             }
         }
-        var removedFromEnglobing = removedFrom != null ? log.FindActor(removedFrom.EnglobingAgentItem) : null;
+        var removedFromEnglobing = removedFrom != null ? removedFrom.AgentItem.IsEnglobedAgent ? log.FindActor(removedFrom.EnglobingAgentItem) : removedFrom : null;
         if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFromEnglobing, out dict))
         {
+            dict = [];
+            _buffRemoveAllByByIDAccelerator.Set(start, end, removedFromEnglobing, dict);
             return [];
         }
         if (dict.TryGetValue(buffID, out var list))
@@ -109,9 +113,11 @@ partial class SingleActor
                 _buffRemoveAllFromByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
             }
         }
-        var removedByEnglobing = removedBy != null ? log.FindActor(removedBy.EnglobingAgentItem) : null;
+        var removedByEnglobing = removedBy != null ? removedBy.AgentItem.IsEnglobedAgent ? log.FindActor(removedBy.EnglobingAgentItem) : removedBy : null;
         if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedByEnglobing, out dict))
         {
+            dict = [];
+            _buffRemoveAllFromByIDAccelerator.Set(start, end, removedByEnglobing, dict);
             return [];
         }
         if (dict.TryGetValue(buffID, out var list))

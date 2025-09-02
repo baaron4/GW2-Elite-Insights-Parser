@@ -146,7 +146,7 @@ public abstract class Actor
     {
         return GetDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
-    public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    public IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
         if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
         {
@@ -162,7 +162,7 @@ public abstract class Actor
         }
         return dls;
     }
-    public IEnumerable<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    public IReadOnlyList<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
         if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
         {
