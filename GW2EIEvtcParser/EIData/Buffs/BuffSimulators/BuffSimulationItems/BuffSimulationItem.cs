@@ -15,7 +15,6 @@ internal abstract class BuffSimulationItem : SimulationItem
 
     public BuffSimulationItem(long start, long end)
     {
-        Debug.Assert(start <= end);
         Start = start;
         End = end;
     }
