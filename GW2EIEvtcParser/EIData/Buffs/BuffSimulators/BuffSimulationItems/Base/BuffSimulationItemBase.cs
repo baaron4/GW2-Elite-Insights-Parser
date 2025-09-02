@@ -16,6 +16,11 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         //_totalDuration = buffStackItem.TotalDuration;
     }
 
+    internal virtual long GetKey()
+    {
+        return Src.InstID;
+    }
+
     public override void OverrideEnd(long end)
     {
         End = end;

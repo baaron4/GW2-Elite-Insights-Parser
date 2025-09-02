@@ -5,11 +5,16 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 internal class BuffSimulationItemBaseEnglobingWithSeedEnglobing : BuffSimulationItemBaseEnglobing
 {
     public readonly IReadOnlyList<AgentItem> EnglobedSeedSrcs;
+    internal readonly AgentItem _seedSrc;
 
     protected internal BuffSimulationItemBaseEnglobingWithSeedEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        var seedSrc = buffStackItem.SeedSrc;
-        EnglobedSeedSrcs = seedSrc.EnglobedAgentItems.Where(subSrc => !( Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
+        _seedSrc = buffStackItem.SeedSrc;
+        EnglobedSeedSrcs = _seedSrc.EnglobedAgentItems.Where(subSrc => !( Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
+    }
+    internal override long GetKey()
+    {
+        return base.GetKey() + (_seedSrc.InstID + 1) * 65536;
     }
     internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
