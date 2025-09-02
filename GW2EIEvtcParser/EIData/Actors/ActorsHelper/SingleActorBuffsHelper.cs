@@ -16,7 +16,7 @@ partial class SingleActor
     private Dictionary<long, BuffGraph>? _buffGraphs;
     private Dictionary<AgentItem, Dictionary<long, BuffGraph>>? _buffGraphsPerAgent;
     private CachingCollection<BuffDistribution>? _buffDistribution;
-    private CachingCollection<Dictionary<long, long>>? _buffPresence;
+    private CachingCollection<IReadOnlyDictionary<long, long>>? _buffPresence;
     private CachingCollectionCustom<BuffEnum, (Dictionary<long, BuffStatistics> Buffs, Dictionary<long, BuffStatistics> ActiveBuffs)>? _buffStats;
     private CachingCollectionCustom<BuffEnum, (Dictionary<long, BuffVolumeStatistics> Volumes, Dictionary<long, BuffVolumeStatistics> ActiveVolumes)>? _buffVolumes;
     private CachingCollection<(Dictionary<long, BuffByActorStatistics> Rates, Dictionary<long, BuffByActorStatistics> ActiveRates)>? _buffsDictionary;
@@ -136,15 +136,18 @@ partial class SingleActor
     #region DISTRIBUTION
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
-        if (AgentItem.IsEnglobedAgent)
-        {
-            return log.FindActor(EnglobingAgentItem).GetBuffDistribution(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
-        }
-
         SimulateBuffsAndComputeGraphs(log);
+
         if (!_buffDistribution.TryGetValue(start, end, out var value))
         {
+        if (AgentItem.IsEnglobedAgent)
+        {
+                value = log.FindActor(EnglobingAgentItem).GetBuffDistribution(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
+        }
+            else
+        {
             value = ComputeBuffDistribution(_buffSimulators, start, end);
+            }
             _buffDistribution.Set(start, end, value);
         }
 
@@ -178,16 +181,19 @@ partial class SingleActor
     #region PRESENCE
     public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
     {
-        if (AgentItem.IsEnglobedAgent)
-        {
-            return log.FindActor(EnglobingAgentItem).GetBuffPresence(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
-        }
 
         SimulateBuffsAndComputeGraphs(log);
 
         if (!_buffPresence.TryGetValue(start, end, out var value))
         {
+            if (AgentItem.IsEnglobedAgent)
+            {
+                value = log.FindActor(EnglobingAgentItem).GetBuffPresence(log, Math.Max(start, FirstAware), Math.Min(end, LastAware));
+            }
+            else
+            {
             value = ComputeBuffPresence(_buffSimulators!, start, end);
+            }
             _buffPresence.Set(start, end, value);
         }
         return value;
@@ -255,7 +261,7 @@ partial class SingleActor
     public IReadOnlyDictionary<long, BuffGraph> GetBuffGraphs(ParsedEvtcLog log)
     {
         SimulateBuffsAndComputeGraphs(log);
-        if (AgentItem.IsEnglobedAgent)
+        if (AgentItem.IsEnglobedAgent && _buffGraphs.Count == 0)
         {
             var graphs = log.FindActor(EnglobingAgentItem).GetBuffGraphs(log);
             foreach (var graph in graphs)
@@ -672,13 +678,16 @@ partial class SingleActor
     #region COMPUTE
     public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
     {
-        if (AgentItem.IsEnglobedAgent)
-        {
-            return log.FindActor(EnglobingAgentItem).GetTrackedBuffs(log);
-        }
         if (_trackedBuffs == null)
         {
+        if (AgentItem.IsEnglobedAgent)
+        {
+                _trackedBuffs = log.FindActor(EnglobingAgentItem).GetTrackedBuffs(log).ToHashSet();
+        }
+            else
+        {
             ComputeBuffMap(log);
+        }
         }
         return _trackedBuffs;
     }
@@ -730,20 +739,20 @@ partial class SingleActor
     [MemberNotNull(nameof(_buffSimulators))]
     internal void SimulateBuffsAndComputeGraphs(ParsedEvtcLog log)
     {
-        if (AgentItem.IsEnglobedAgent)
-        {
-            log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
-            _buffGraphs = new Dictionary<long, BuffGraph>();
-            _buffDistribution = new CachingCollection<BuffDistribution>(log);
-            _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
-            _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
-            return;
-        }
         if (_buffGraphs != null)
         {
 #pragma warning disable CS8774 // must have non null
             return;
 #pragma warning restore CS8774 // must have non null
+        }
+        if (AgentItem.IsEnglobedAgent)
+        {
+            log.FindActor(EnglobingAgentItem).SimulateBuffsAndComputeGraphs(log);
+            _buffGraphs = new Dictionary<long, BuffGraph>();
+            _buffDistribution = new CachingCollection<BuffDistribution>(log);
+            _buffPresence = new CachingCollection<IReadOnlyDictionary<long, long>>(log);
+            _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
+            return;
         }
         if (_buffMap == null)
         {
