@@ -25,12 +25,8 @@ public class SupportPerAllyStatistics
             long friendlyTime = 0;
             int unknownCount = 0;
             long unknownTime = 0;
-            foreach (BuffRemoveAllEvent brae in actor.GetBuffRemoveAllEventsByByID(log, start, end, buffID))
+            foreach (BuffRemoveAllEvent brae in actor.GetBuffRemoveAllEventsByByID(log, start, end, buffID, to))
             {
-                if (to != null && !to.AgentItem.Is(brae.To))
-                {
-                    continue;
-                }
                 if (brae.ToFriendly)
                 {
                     friendlyCount++;
