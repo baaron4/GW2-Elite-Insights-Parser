@@ -65,36 +65,40 @@ internal class Artsariiv : ShatteredObservatory
         return trashIDs;
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor artsariiv, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            var phaseIndex = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
+            {
+                phase.Name = "Split " + (phaseIndex) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, [TargetID.CloneArtsariiv], log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                phase.AddTarget(artsariiv, log);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         phases[0].AddTarget(artsariiv, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + (i) / 2;
-                var ids = new List<TargetID>
-                {
-                   TargetID.CloneArtsariiv,
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(artsariiv, log);
-            }
-        }
+        phases.AddRange(ComputePhases(log, artsariiv, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -126,15 +130,15 @@ internal class Artsariiv : ShatteredObservatory
             .Select(x => new MarkerGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         if (artsariivMarkerGUID != null)
-    {
-            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
-        foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
         {
-                if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
+            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
+            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
             {
-                artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
+                {
+                    artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                }
             }
-        }
             return true;
         }
         return false;

@@ -87,7 +87,7 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                 {
                     success = true;
                     end = death.Time;
-                } 
+                }
                 else
                 {
                     var lastDamageTaken = skorvald.GetDamageTakenEvents(null, log).LastOrDefault(x => x.CreditedFrom.IsPlayer);
@@ -108,7 +108,39 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
-
+    private List<EncounterPhaseData> HandleArtsariivPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<EncounterPhaseData>();
+        var mainPhase = phases[0];
+        if (targetsByIDs.TryGetValue((int)TargetID.Artsariiv, out var artsariivs))
+        {
+            foreach (var artsariiv in artsariivs)
+            {
+                long start = artsariiv.FirstAware;
+                var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, artsariiv.AgentItem);
+                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
+                var enterCombat = log.CombatData.GetEnterCombatEvents(artsariiv.AgentItem).FirstOrDefault();
+                if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
+                {
+                    start = determinedLost.Time;
+                }
+                bool success = false;
+                long end = artsariiv.LastAware;
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
+                {
+                    var effect = effects.FirstOrDefault(x => artsariiv.InAwareTimes(x.Time - 500));
+                    if (effect != null)
+                    {
+                        success = true;
+                        end = effect.Time;
+                    }
+                }
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [artsariiv], [], [], mainPhase, "Artsariiv", start, end, success, _artsariiv, LogData.LogMode.CMNoName );
+            }
+        }
+        NumericallyRenameEncounterPhases(encounterPhases);
+        return encounterPhases;
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -120,6 +152,14 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
             {
                 var skorvald = skorvaldPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Skorvald));
                 phases.AddRange(Skorvald.ComputePhases(log, skorvald, Targets, skorvaldPhase, requirePhases));
+            }
+        }
+        {
+            var artsariivPhases = HandleArtsariivPhases(targetsByIDs, log, phases);
+            foreach (var artsariivPhase in artsariivPhases)
+            {
+                var artsariiv = artsariivPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Artsariiv));
+                phases.AddRange(Artsariiv.ComputePhases(log, artsariiv, Targets, artsariivPhase, requirePhases));
             }
         }
         return phases;
@@ -166,15 +206,19 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [
-            ..Skorvald.FluxAnomalies.Select(x => (int)x)
+            ..Skorvald.FluxAnomalies.Select(x => (int)x),
+            (int)TargetID.CloneArtsariiv
         ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Skorvald.DetectUnknownAnomalies(agentData, combatData);
+        Artsariiv.DetectCloneArtsariivs(evtcVersion, agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
         Skorvald.RenameAnomalies(Targets);
+        Artsariiv.RenameSmallArtsariivs(TrashMobs);
+        Artsariiv.RenameCloneArtsariivs(Targets, combatData);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
