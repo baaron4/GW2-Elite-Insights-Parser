@@ -73,7 +73,7 @@ internal class WhisperingShadow : Kinfall
         ];
     }
 
-    protected SingleActor GetWhisperingShadow(ParsedEvtcLog log)
+    protected SingleActor GetWhisperingShadow()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
     }
@@ -143,7 +143,7 @@ internal class WhisperingShadow : Kinfall
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         var phases = GetInitialPhase(log);
-        var shadow = GetWhisperingShadow(log);
+        var shadow = GetWhisperingShadow();
         phases[0].AddTarget(shadow, log);
         phases.AddRange(ComputePhases(log, shadow, (EncounterPhaseData)phases[0], requirePhases));
        
