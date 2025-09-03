@@ -73,9 +73,9 @@ internal class WhisperingShadow : Kinfall
         ];
     }
 
-    protected static SingleActor GetWhisperingShadow(ParsedEvtcLog log)
+    protected SingleActor GetWhisperingShadow(ParsedEvtcLog log)
     {
-        return log.LogData.Logic.Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
+        return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
