@@ -17,13 +17,11 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Arkk : ShatteredObservatory
 {
-    public Arkk(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices)","Horizon Strike", 0),
-                    new PlayerDstHealthDamageHitMechanic(HorizonStrikeNormal, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm", "Horizon Strike (normal)","Horizon Strike (normal)", 0),
+                    new PlayerDstHealthDamageHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices during Arkk)","Horizon Strike (Arkk)", 0),
+                    new PlayerDstHealthDamageHitMechanic(HorizonStrikeNormal, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm", "Horizon Strike (normal during Arkk)","Horizon Strike (normal, Arkk)", 0),
                 ]
             ),
             new MechanicGroup(
@@ -37,12 +35,8 @@ internal class Arkk : ShatteredObservatory
             new PlayerDstHealthDamageHitMechanic(FocusedRage, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Cone KB", "Knockback in Cone with overhead crosshair","Knockback Cone", 0),
             new PlayerDstHealthDamageHitMechanic([ StarbustCascade1, StarbustCascade2 ], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring", "Starburst Cascade (Expanding/Retracting Lifting Ring)","Float Ring", 500),
             new PlayerDstHealthDamageHitMechanic(OverheadSmash, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash", "Overhead Smash","Overhead Smash",0),
-            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull", "Exploding Skull mechanic application","Corporeal Reassignment", 0),
             new PlayerDstHealthDamageHitMechanic(ExplodeArkk, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode", "Hit by Solar Bloom explosion","Bloom Explosion", 0),
-            new PlayerDstBuffApplyMechanic([ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate", 0),
             new PlayerDstBuffApplyMechanic(CosmicMeteor, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green", "Temporal Realignment (Green) application","Green", 0),
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)", 0)
-                .UsingChecker((ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new MechanicGroup(
                 [
                     new EnemyCastStartMechanic(ArkkBreakbarCast, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar", "Start Breakbar","CC", 0),
@@ -66,7 +60,10 @@ internal class Arkk : ShatteredObservatory
                 ]
             ),
             new PlayerDstHealthDamageHitMechanic(SpinningCut, new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightPurple), "Daze", "Spinning Cut (3rd Gladiator Auto->Daze)","Gladiator Daze", 0), //
-        ]));
+        ]);
+    public Arkk(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "arkk";
         Icon = EncounterIconArkk;
         LogCategoryInformation.InSubCategoryOrder = 2;
