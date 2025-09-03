@@ -193,7 +193,6 @@ internal class MountBalriorInstance : MountBalrior
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        HandleGreerPhases(targetsByIDs, log, phases);
         {
             var greerPhases = HandleGreerPhases(targetsByIDs, log, phases);
             foreach (var greerPhase in greerPhases)
