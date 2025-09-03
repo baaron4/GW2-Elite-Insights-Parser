@@ -43,6 +43,7 @@ internal static class LogImages
     internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";
     internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
     internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
+    internal const string CombatReplaySilentSurf = "https://wiki.guildwars2.com/images/f/f9/Silent_Surf_Fractal_map.jpg";
     internal const string CombatReplayEparch = "https://i.imgur.com/begYkfC.png";
     internal const string CombatReplayKinfall = "https://wiki.guildwars2.com/images/3/31/Kinfall_Fractal_map.jpg";
 

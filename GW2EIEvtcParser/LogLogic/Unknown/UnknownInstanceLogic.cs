@@ -76,6 +76,8 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
                     return new CaptainMaiTrinBossInstance(GenericTriggerID);
                 case DeepstoneFractal:
                     return new DeepstoneInstance(GenericTriggerID);
+                case SilentSurfFractal:
+                    return new SilentSurfInstance(GenericTriggerID);
                 case KinfallFractal:
                     return new KinfallInstance(GenericTriggerID);
                 // Raids
