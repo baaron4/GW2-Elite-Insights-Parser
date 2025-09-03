@@ -142,7 +142,6 @@ public static class CustomSettingsManager
             UploadToWingman = Properties.Settings.Default.UploadToWingman,
             SaveOutCSV = Properties.Settings.Default.SaveOutCSV,
             SaveOutHTML = Properties.Settings.Default.SaveOutHTML,
-            SaveOutXML = Properties.Settings.Default.SaveOutXML,
             SaveOutJSON = Properties.Settings.Default.SaveOutJSON,
             SaveOutTrace = Properties.Settings.Default.SaveOutTrace,
             ParseMultipleLogs = Properties.Settings.Default.ParseMultipleLogs,
@@ -166,7 +165,6 @@ public static class CustomSettingsManager
             RawTimelineArrays = Properties.Settings.Default.RawTimelineArrays,
             CompressRaw = Properties.Settings.Default.CompressRaw,
             IndentJSON = Properties.Settings.Default.IndentJSON,
-            IndentXML = Properties.Settings.Default.IndentXML,
             MemoryLimit = Properties.Settings.Default.MemoryLimit,
         };
         return settings;

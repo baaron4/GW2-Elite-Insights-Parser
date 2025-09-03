@@ -165,18 +165,6 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
     [global::System.Configuration.UserScopedSettingAttribute()]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Configuration.DefaultSettingValueAttribute("False")]
-    public bool UploadToRaidar {
-        get {
-            return ((bool)(this["UploadToRaidar"]));
-        }
-        set {
-            this["UploadToRaidar"] = value;
-        }
-    }
-    
-    [global::System.Configuration.UserScopedSettingAttribute()]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Configuration.DefaultSettingValueAttribute("False")]
     public bool SaveOutJSON {
         get {
             return ((bool)(this["SaveOutJSON"]));
@@ -189,36 +177,12 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
     [global::System.Configuration.UserScopedSettingAttribute()]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Configuration.DefaultSettingValueAttribute("False")]
-    public bool SaveOutXML {
-        get {
-            return ((bool)(this["SaveOutXML"]));
-        }
-        set {
-            this["SaveOutXML"] = value;
-        }
-    }
-    
-    [global::System.Configuration.UserScopedSettingAttribute()]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Configuration.DefaultSettingValueAttribute("False")]
     public bool IndentJSON {
         get {
             return ((bool)(this["IndentJSON"]));
         }
         set {
             this["IndentJSON"] = value;
-        }
-    }
-    
-    [global::System.Configuration.UserScopedSettingAttribute()]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Configuration.DefaultSettingValueAttribute("False")]
-    public bool IndentXML {
-        get {
-            return ((bool)(this["IndentXML"]));
-        }
-        set {
-            this["IndentXML"] = value;
         }
     }
     

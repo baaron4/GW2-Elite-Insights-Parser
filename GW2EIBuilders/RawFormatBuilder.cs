@@ -45,27 +45,4 @@ public class RawFormatBuilder
         JsonSerializer.Serialize(stream, jsonLog, indent ? SerializerSettings.Indentent : SerializerSettings.Default);
     }
 
-    /// <summary>
-    /// Creates an xml file based on the original JsonLog of the RawFormat builder
-    /// </summary>
-    public void CreateXML(StreamWriter sw, bool indent)
-    {
-        CreateXML(_jsonLog, sw, indent);
-    }
-
-
-    static readonly XmlSerializer s_xmlSerializer = new(typeof(JsonLog), new XmlRootAttribute("log"));
-
-    /// <summary>
-    /// Creates an xml file based on the given JsonLog
-    /// </summary>
-    public static void CreateXML(JsonLog jsonLog, StreamWriter sw, bool indent)
-    {
-        using var xmlTextWriter = new XmlTextWriter(sw)
-        {
-            Formatting = indent ? Formatting.Indented : Formatting.None
-        };
-        s_xmlSerializer.Serialize(xmlTextWriter, jsonLog);
-    }
-
 }
