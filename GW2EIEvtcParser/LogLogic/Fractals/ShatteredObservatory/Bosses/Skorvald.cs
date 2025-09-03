@@ -53,44 +53,42 @@ internal class Skorvald : ShatteredObservatory
         return crMap;
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor skorvald, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, skorvald, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int phaseIndex = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
+            {
+                phase.Name = "Split " + (phaseIndex) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, FluxAnomalies, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                phase.AddTarget(skorvald, log);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         phases[0].AddTarget(skorvald, log);
-        var anomalyIDs = new List<TargetID>
-        {
-            TargetID.FluxAnomaly1,
-            TargetID.FluxAnomaly2,
-            TargetID.FluxAnomaly3,
-            TargetID.FluxAnomaly4,
-            TargetID.FluxAnomalyCM1,
-            TargetID.FluxAnomalyCM2,
-            TargetID.FluxAnomalyCM3,
-            TargetID.FluxAnomalyCM4,
-        };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIDs)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, skorvald, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + (i) / 2;
-                AddTargetsToPhaseAndFit(phase, anomalyIDs, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(skorvald, log);
-            }
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(FluxAnomalies)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, skorvald, Targets, (EncounterPhaseData)phases[0], requirePhases));
+        
         return phases;
     }
 
@@ -108,28 +106,12 @@ internal class Skorvald : ShatteredObservatory
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void DetectUnknownAnomalies(AgentData agentData, List<CombatItem> combatData)
     {
-        var manualFractalScaleSet = false;
-        if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
-        {
-            manualFractalScaleSet = true;
-        }
         var fluxAnomalies = new List<AgentItem>();
-        var fluxIDs = new List<TargetID>
-                {
-                    TargetID.FluxAnomaly1,
-                    TargetID.FluxAnomaly2,
-                    TargetID.FluxAnomaly3,
-                    TargetID.FluxAnomaly4,
-                    TargetID.FluxAnomalyCM1,
-                    TargetID.FluxAnomalyCM2,
-                    TargetID.FluxAnomalyCM3,
-                    TargetID.FluxAnomalyCM4,
-                };
-        for (int i = 0; i < fluxIDs.Count; i++)
+        for (int i = 0; i < FluxAnomalies.Count; i++)
         {
-            fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIDs[i]));
+            fluxAnomalies.AddRange(agentData.GetNPCsByID(FluxAnomalies[i]));
         }
         foreach (AgentItem fluxAnomaly in fluxAnomalies)
         {
@@ -138,18 +120,12 @@ internal class Skorvald : ShatteredObservatory
                 fluxAnomaly.OverrideID(TargetID.UnknownAnomaly, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-        skorvald.OverrideName("Skorvald");
-        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
-        {
-            // Remove manual scale from T1 to T3 for now
-            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
-            // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
-        }
+    }
 
+    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets)
+    {
         int[] nameCount = [0, 0, 0, 0];
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             switch (target.ID)
             {
@@ -171,6 +147,26 @@ internal class Skorvald : ShatteredObservatory
                     break;
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var manualFractalScaleSet = false;
+        if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
+        {
+            manualFractalScaleSet = true;
+        }
+        DetectUnknownAnomalies(agentData, combatData);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        skorvald.OverrideName("Skorvald");
+        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
+        {
+            // Remove manual scale from T1 to T3 for now
+            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
+            // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
+        }
+        RenameAnomalies(Targets);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
@@ -240,7 +236,6 @@ internal class Skorvald : ShatteredObservatory
             TargetID.FluxAnomalyCM3,
             TargetID.FluxAnomalyCM4,
         ];
-    }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {

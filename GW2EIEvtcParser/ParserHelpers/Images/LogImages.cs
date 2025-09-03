@@ -41,6 +41,7 @@ internal static class LogImages
     internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
     internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
     internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";
+    internal const string CombatReplayShatteredObservatory = "https://wiki.guildwars2.com/images/a/a2/Shattered_Observatory_Fractal_map.jpg";
     internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
     internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
     internal const string CombatReplaySilentSurf = "https://wiki.guildwars2.com/images/f/f9/Silent_Surf_Fractal_map.jpg";
