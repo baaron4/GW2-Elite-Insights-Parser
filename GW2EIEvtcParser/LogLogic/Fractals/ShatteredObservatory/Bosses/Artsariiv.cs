@@ -72,7 +72,7 @@ internal class Artsariiv : ShatteredObservatory
             return [];
         }
         var phases = new List<PhaseData>(5);
-        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true));
+        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
             var phaseIndex = i + 1;
