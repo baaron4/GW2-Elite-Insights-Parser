@@ -89,7 +89,7 @@ partial class SingleActor
             spawnEvents.Count +
             despawnEvents.Count +
             (AgentItem.IsEnglobedAgent ? 1 : 0) +
-            AgentItem.EnglobingAgentItem.Regrouped.Count
+            2 * AgentItem.EnglobingAgentItem.Regrouped.Count
         );
         if (AgentItem.IsEnglobedAgent)
         {
