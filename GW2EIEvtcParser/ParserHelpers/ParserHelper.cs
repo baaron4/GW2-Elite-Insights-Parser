@@ -11,6 +11,7 @@ public static class ParserHelper
 {
 
     internal static readonly AgentItem _unknownAgent = new();
+    internal static readonly AgentItem _nullAgent = new();
 
     public const int CombatReplayPollingRate = 300;
     internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
