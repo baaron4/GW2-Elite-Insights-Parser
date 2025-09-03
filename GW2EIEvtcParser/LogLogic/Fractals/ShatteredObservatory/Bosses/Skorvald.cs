@@ -542,7 +542,7 @@ internal class Skorvald : ShatteredObservatory
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
-        var fixations = p.GetBuffStatus(log, [FixatedBloom1, SkorvaldsIre]).Where(x => x.Value > 0);
+        var fixations = p.GetBuffStatus(log, [SkorvaldsIre]).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
     }
 

@@ -194,10 +194,6 @@ internal class Artsariiv : ShatteredObservatory
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-
-        // Corporeal Reassignment (skull)
-        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff).Where(x => x.Value > 0);
-        replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
