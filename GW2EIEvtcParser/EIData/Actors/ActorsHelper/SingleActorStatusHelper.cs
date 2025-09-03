@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
@@ -87,28 +88,35 @@ partial class SingleActor
             deadEvents.Count +
             spawnEvents.Count +
             despawnEvents.Count +
-            (AgentItem.IsEnglobedAgent ? 1 : 0)
+            (AgentItem.IsEnglobedAgent ? 1 : 0) +
+            AgentItem.EnglobingAgentItem.Regrouped.Count
         );
         if (AgentItem.IsEnglobedAgent)
         {
+            var englobingRegroupedEvents = AgentItem.EnglobingAgentItem.Regrouped.Where(x => x.MergeStart >= AgentItem.EnglobingAgentItem.FirstAware && x.MergeEnd <= AgentItem.EnglobingAgentItem.LastAware).Select(x => (new SpawnEvent(AgentItem, x.MergeStart), new DespawnEvent(AgentItem, x.MergeEnd)));
             List<StatusEvent?> firstEvents = [
                 combatData.GetDownEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
                 combatData.GetAliveEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
                 combatData.GetDeadEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
                 combatData.GetSpawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
                 combatData.GetDespawnEvents(EnglobingAgentItem).LastOrDefault(x => x.Time < FirstAware),
+                englobingRegroupedEvents.Select(x => x.Item1).LastOrDefault(x => x.Time < FirstAware),
+                englobingRegroupedEvents.Select(x => x.Item2).LastOrDefault(x => x.Time < FirstAware)
             ];
-            var firstEvent = firstEvents.Where(x => x != null).OrderBy(x => x!.Time).FirstOrDefault();
+            var firstEvent = firstEvents.Where(x => x != null).OrderBy(x => x!.Time).LastOrDefault();
             if (firstEvent != null)
             {
                 status.Add((FirstAware, firstEvent));
             }
         }
+        var regroupedEvents = AgentItem.EnglobingAgentItem.Regrouped.Where(x => x.MergeStart >= FirstAware && x.MergeEnd <= LastAware).Select(x => (new SpawnEvent(AgentItem, x.MergeStart), new DespawnEvent(AgentItem, x.MergeEnd)));
         status.AddRange(downEvents.Select(x => (x.Time, (StatusEvent)x)));
         status.AddRange(aliveEvents.Select(x => (x.Time, (StatusEvent)x)));
         status.AddRange(deadEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(regroupedEvents.Select(x => (x.Item1.Time, (StatusEvent)x.Item1)));
         status.AddRange(spawnEvents.Select(x => (x.Time, (StatusEvent)x)));
         status.AddRange(despawnEvents.Select(x => (x.Time, (StatusEvent)x)));
+        status.AddRange(regroupedEvents.Select(x => (x.Item2.Time, (StatusEvent)x.Item2)));
 
         AddSegment(dc, long.MinValue, FirstAware);
 

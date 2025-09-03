@@ -7,4 +7,9 @@ public class SpawnEvent : StatusEvent
 
     }
 
+    internal SpawnEvent(AgentItem src, long time) : base(src, time)
+    {
+
+    }
+
 }

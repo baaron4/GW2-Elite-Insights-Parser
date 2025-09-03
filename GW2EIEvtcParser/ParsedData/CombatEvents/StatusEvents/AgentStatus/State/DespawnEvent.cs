@@ -7,4 +7,9 @@ public class DespawnEvent : StatusEvent
 
     }
 
+    internal DespawnEvent(AgentItem src, long time) : base(src, time)
+    {
+
+    }
+
 }
