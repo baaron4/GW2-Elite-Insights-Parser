@@ -655,16 +655,17 @@ public abstract partial class SingleActor : Actor
 
     protected override void InitDamageEvents(ParsedEvtcLog log)
     {
-        if (DamageEvents == null || DamageEventByDst == null)
+        if (DamageEventByDst == null)
         {
-            DamageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
+            List<HealthDamageEvent> damageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
             foreach (Minions mins in minionsList.Values)
             {
-                DamageEvents.AddRange(mins.GetDamageEvents(null, log));
+                damageEvents.AddRange(mins.GetDamageEvents(null, log));
             }
-            DamageEvents.SortByTime();
-            DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            damageEvents.SortByTime();
+            DamageEventByDst = damageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            DamageEventByDst[ParserHelper._nullAgent] = damageEvents;
         }
     }
 
@@ -686,10 +687,11 @@ public abstract partial class SingleActor : Actor
 
     protected override void InitDamageTakenEvents(ParsedEvtcLog log)
     {
-        if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
+        if (DamageTakenEventsBySrc == null)
         {
-            DamageTakenEvents = [.. log.CombatData.GetDamageTakenData(AgentItem)];
-            DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            List<HealthDamageEvent> damageTakenEvents = [.. log.CombatData.GetDamageTakenData(AgentItem)];
+            DamageTakenEventsBySrc = damageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            DamageTakenEventsBySrc[ParserHelper._nullAgent] = damageTakenEvents;
         }
     }
 
@@ -743,74 +745,30 @@ public abstract partial class SingleActor : Actor
         return damageEvents;
     }
 
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitBreakbarDamageEvents(ParsedEvtcLog log)
     {
-        if (BreakbarDamageEvents == null)
+        if (BreakbarDamageEventsByDst == null)
         {
-            BreakbarDamageEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
+            var breakbarDamageEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
             foreach (Minions mins in minionsList.Values)
             {
-                BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log));
+                breakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log));
             }
-            BreakbarDamageEvents.SortByTime();
-            BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            breakbarDamageEvents.SortByTime();
+            BreakbarDamageEventsByDst = breakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            BreakbarDamageEventsByDst[ParserHelper._nullAgent] = breakbarDamageEvents;
         }
     }
-#pragma warning restore CS8774 // must have non null value when exiting
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitBreakbarDamageEvents(log);
-
-        if (target != null)
-        {
-            if (BreakbarDamageEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitBreakbarDamageTakenEvents(ParsedEvtcLog log)
     {
-        if (BreakbarDamageTakenEvents == null)
+        if (BreakbarDamageTakenEventsBySrc == null)
         {
-            BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
-            BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            var breakbarDamageTakenEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
+            BreakbarDamageTakenEventsBySrc = breakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            BreakbarDamageTakenEventsBySrc[ParserHelper._nullAgent] = breakbarDamageTakenEvents;
         }
-    }
-#pragma warning restore CS8774 // must have non null value when exiting
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitBreakbarDamageTakenEvents(log);
-
-        if (target != null)
-        {
-            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
     #endregion BREAKBAR DAMAGE
@@ -828,72 +786,30 @@ public abstract partial class SingleActor : Actor
         return ccEvents;
     }
 
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitOutgoingCrowdControlEvents(ParsedEvtcLog log)
     {
-        if (OutgoingCrowdControlEvents == null)
+        if (OutgoingCrowdControlEventsByDst == null)
         {
-            OutgoingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetOutgoingCrowdControlData(AgentItem).Where(x => !x.ToFriendly));
+            var outgoingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetOutgoingCrowdControlData(AgentItem).Where(x => !x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
             {
-                OutgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log));
+                outgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log));
             }
-            OutgoingCrowdControlEvents.SortByTime();
-            OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            outgoingCrowdControlEvents.SortByTime();
+            OutgoingCrowdControlEventsByDst = outgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            OutgoingCrowdControlEventsByDst[ParserHelper._nullAgent] = outgoingCrowdControlEvents;
         }
     }
-#pragma warning restore CS8774 // must have non null value when exiting}
-    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitOutgoingCrowdControlEvents(log);
 
-        if (target != null)
-        {
-            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.EnglobingAgentItem, out var ccList))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return ccList.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitIncomingCrowdControlEvents(ParsedEvtcLog log)
     {
-        if (IncomingCrowdControlEvents == null)
+        if (IncomingCrowdControlEventsBySrc == null)
         {
-            IncomingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetIncomingCrowdControlData(AgentItem));
-            IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            var incomingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetIncomingCrowdControlData(AgentItem));
+            IncomingCrowdControlEventsBySrc = incomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            IncomingCrowdControlEventsBySrc[ParserHelper._nullAgent] = incomingCrowdControlEvents;
         }
-    }
-#pragma warning restore CS8774 // must have non null value when exiting
-    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitIncomingCrowdControlEvents(log);
-
-        if (target != null)
-        {
-            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [ ];
-            }
-        }
-
-        return IncomingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
     #endregion CROWD CONTROL

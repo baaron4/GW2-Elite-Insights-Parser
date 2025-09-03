@@ -25,25 +25,16 @@ public abstract class Actor
     public bool IsFakeActor => AgentItem.IsFake;
     public ushort InstID => AgentItem.EnglobingAgentItem.InstID;
     // Damage
-    protected List<HealthDamageEvent>? DamageEvents;
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageEventByDst;
 
-    protected List<HealthDamageEvent>? DamageTakenEvents;
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageTakenEventsBySrc;
-
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageEvents = [];
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageTakenEvents = [];
     // Breakbar Damage
-    protected List<BreakbarDamageEvent>? BreakbarDamageEvents;
     protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageEventsByDst;
 
-    protected List<BreakbarDamageEvent>? BreakbarDamageTakenEvents;
     protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageTakenEventsBySrc;
     // Crowd Control
-    protected List<CrowdControlEvent>? OutgoingCrowdControlEvents;
     protected Dictionary<AgentItem, List<CrowdControlEvent>>? OutgoingCrowdControlEventsByDst;
 
-    protected List<CrowdControlEvent>? IncomingCrowdControlEvents;
     protected Dictionary<AgentItem, List<CrowdControlEvent>>? IncomingCrowdControlEventsBySrc;
     // Cast
     protected List<CastEvent>? CastEvents;
@@ -58,22 +49,16 @@ public abstract class Actor
 
     [MemberNotNull(nameof(CastEvents))]
     protected abstract void InitCastEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(DamageEvents))]
     [MemberNotNull(nameof(DamageEventByDst))]
     protected abstract void InitDamageEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(DamageTakenEvents))]
     [MemberNotNull(nameof(DamageTakenEventsBySrc))]
     protected abstract void InitDamageTakenEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(BreakbarDamageEvents))]
     [MemberNotNull(nameof(BreakbarDamageEventsByDst))]
     protected abstract void InitBreakbarDamageEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(BreakbarDamageTakenEvents))]
     [MemberNotNull(nameof(BreakbarDamageTakenEventsBySrc))]
     protected abstract void InitBreakbarDamageTakenEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(OutgoingCrowdControlEvents))]
     [MemberNotNull(nameof(OutgoingCrowdControlEventsByDst))]
     protected abstract void InitOutgoingCrowdControlEvents(ParsedEvtcLog log);
-    [MemberNotNull(nameof(IncomingCrowdControlEvents))]
     [MemberNotNull(nameof(IncomingCrowdControlEventsBySrc))]
     protected abstract void InitIncomingCrowdControlEvents(ParsedEvtcLog log);
     #endregion Initializers
@@ -144,7 +129,7 @@ public abstract class Actor
     #endregion AwareTimes
 
     #region Damage
-    protected CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageEventByDstCache;
+    private CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageEventByDstCache;
     public IReadOnlyList<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         InitDamageEvents(log);
@@ -166,7 +151,7 @@ public abstract class Actor
             }
             else
             {
-                list = DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+                list = DamageEventByDst[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             DamageEventByDstCache.Set(start, end, target, list);
         }
@@ -177,6 +162,7 @@ public abstract class Actor
     {
         return GetDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageEvents = [];
     public IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
         if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
@@ -193,6 +179,8 @@ public abstract class Actor
         }
         return dls;
     }
+
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedHitDamageTakenEvents = [];
     public IReadOnlyList<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
         if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
@@ -209,7 +197,7 @@ public abstract class Actor
         return dls;
     }
 
-    protected CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageTakenEventsBySrcCache;
+    private CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageTakenEventsBySrcCache;
     public IReadOnlyList<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         InitDamageTakenEvents(log);
@@ -231,7 +219,7 @@ public abstract class Actor
             }
             else
             {
-                list = DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+                list = DamageTakenEventsBySrc[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             DamageTakenEventsBySrcCache.Set(start, end, target, list);
         }
@@ -244,25 +232,137 @@ public abstract class Actor
     }
     #endregion Damage
     #region BreakbarDamage
-    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log)
+
+    private CachingCollectionWithTarget<List<BreakbarDamageEvent>>? BreakbarDamageEventByDstCache;
+    public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageEvents(log);
+        BreakbarDamageEventByDstCache ??= new(log);
+        if (!BreakbarDamageEventByDstCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (BreakbarDamageEventsByDst.TryGetValue(target.EnglobingAgentItem, out var breakbarDamageEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = breakbarDamageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = BreakbarDamageEventsByDst[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            BreakbarDamageEventByDstCache.Set(start, end, target, list);
+        }
+        return list;
+    }
+    public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetBreakbarDamageEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
-    public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    public IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
+
+    private CachingCollectionWithTarget<List<BreakbarDamageEvent>>? BreakbarDamageTakenEventBySrcCache;
+    public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageTakenEvents(log);
+        BreakbarDamageTakenEventBySrcCache ??= new(log);
+        if (!BreakbarDamageTakenEventBySrcCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var breakbarDamageEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = breakbarDamageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = BreakbarDamageTakenEventsBySrc[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            BreakbarDamageTakenEventBySrcCache.Set(start, end, target, list);
+        }
+        return list;
+    }
+    public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetBreakbarDamageTakenEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
     #endregion BreakbarDamage
     #region CrowdControl
-    public abstract IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    public IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
+
+    private CachingCollectionWithTarget<List<CrowdControlEvent>>? OutgoingCrowdControlEventByDstCache;
+    public IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitOutgoingCrowdControlEvents(log);
+        OutgoingCrowdControlEventByDstCache ??= new(log);
+        if (!OutgoingCrowdControlEventByDstCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (OutgoingCrowdControlEventsByDst.TryGetValue(target.EnglobingAgentItem, out var ccEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = ccEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = OutgoingCrowdControlEventsByDst[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            OutgoingCrowdControlEventByDstCache.Set(start, end, target, list);
+        }
+        return list;
+    }
+    public IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetOutgoingCrowdControlEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
-    public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
-    public IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
+
+    private CachingCollectionWithTarget<List<CrowdControlEvent>>? IncomingCrowdControlEventBySrcCache;
+    public IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitIncomingCrowdControlEvents(log);
+        IncomingCrowdControlEventBySrcCache ??= new(log);
+        if (!IncomingCrowdControlEventBySrcCache.TryGetValue(start, end, target, out var list))
+        {
+            if (target != null)
+            {
+                if (IncomingCrowdControlEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var ccEvents))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    list = ccEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    list = [];
+                }
+            }
+            else
+            {
+                list = IncomingCrowdControlEventsBySrc[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
+            }
+            IncomingCrowdControlEventBySrcCache.Set(start, end, target, list);
+        }
+        return list;
+    }
+    public IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log)
     {
         return GetIncomingCrowdControlEvents(target, log, log.LogData.LogStart, log.LogData.LogEnd);
     }
