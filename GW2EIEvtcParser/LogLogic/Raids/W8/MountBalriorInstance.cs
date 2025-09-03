@@ -80,7 +80,7 @@ internal class MountBalriorInstance : MountBalrior
                     success = true;
                 }
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
-                var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
+                var name = (isCM ? "Godspoil Greer " : "Greer, the Blightbringer ") + greer.Character.Last();
                 greer.OverrideName(name);
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
@@ -180,7 +180,7 @@ internal class MountBalriorInstance : MountBalrior
                 encounterThreshold = end;
                 var maxHP = ura.GetHealth(log.CombatData);
                 var isCM = maxHP > 70e6;
-                var name = isCM ? "Godscream Ura" : "Ura, the Steamshrieker";
+                var name = (isCM ? "Godscream Ura " : "Ura, the Steamshrieker ") + ura.Character.Last();
                 ura.OverrideName(name);
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
