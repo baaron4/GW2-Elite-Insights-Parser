@@ -32,6 +32,7 @@ internal static class LogImages
     internal const string InstanceIconDeepstone = "https://i.imgur.com/3fACTgN.jpg";
     internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
     internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
+    internal const string InstanceIconKinfall = "https://i.imgur.com/jJXcGeE.png";
 
     // Combat Replay Maps
     internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
@@ -43,6 +44,7 @@ internal static class LogImages
     internal const string CombatReplayAi = "https://i.imgur.com/zSBL7YP.png";
     internal const string CombatReplayKanaxai = "https://i.imgur.com/UckZyqX.png";
     internal const string CombatReplayEparch = "https://i.imgur.com/begYkfC.png";
+    internal const string CombatReplayKinfall = "https://wiki.guildwars2.com/images/3/31/Kinfall_Fractal_map.jpg";
 
     #endregion FRACTALS
 

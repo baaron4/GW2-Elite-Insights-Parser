@@ -14,9 +14,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class WhisperingShadow : Kinfall
 {
-    public WhisperingShadow(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(DeathlyGrime, new MechanicPlotlySetting(Symbols.Diamond, Colors.Purple), "DeathGr.A", "Gained Deathly Grime", "Deathly Grime Application", 0),
                 new PlayerDstBuffApplyMechanic([LifeFireCircleT1, LifeFireCircleT2, LifeFireCircleT3, LifeFireCircleT4, LifeFireCircleCM], new MechanicPlotlySetting(Symbols.Pentagon, Colors.LightBlue), "LifeFire.A", "Gained Life-Fire Circle", "Life-Fire Circle Apply", 0),
@@ -50,10 +48,22 @@ internal class WhisperingShadow : Kinfall
                 new PlayerDstHealthDamageHitMechanic([LoftedCryoflash, TerrestialCryoflash], new MechanicPlotlySetting(Symbols.YDown, Colors.Yellow), "Shatterstep.Achiv", "Achievement Eligibility: Shatterstep", "Achiv Shatterstep", 0)
                     .UsingAchievementEligibility(),
             ]),
-        ]));
+        ]);
+    public WhisperingShadow(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "whispshadow";
         Icon = EncounterIconWhisperingShadow;
         LogID |= 0x000001;
+    }
+
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap(
+                        (800, 800),
+                        (519, -9425.5, 4214, -5730.5));
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayNoImage, crMap);
+        return crMap;
     }
 
     internal override IReadOnlyList<TargetID> GetTargetsIDs()
@@ -63,9 +73,9 @@ internal class WhisperingShadow : Kinfall
         ];
     }
 
-    protected SingleActor GetWhisperingShadow()
+    protected static SingleActor GetWhisperingShadow(ParsedEvtcLog log)
     {
-        return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
+        return log.LogData.Logic.Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WhisperingShadow)) ?? throw new MissingKeyActorsException("Whispering Shadow not found");
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
@@ -77,39 +87,36 @@ internal class WhisperingShadow : Kinfall
         return LogData.LogMode.Normal;
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor shadow, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        var phases = GetInitialPhase(log);
-        var shadow = GetWhisperingShadow();
-        phases[0].AddTarget(shadow, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-
+        var phases = new List<PhaseData>(7);
         // guttering light queues up at 80%, 50%, 20%
         // we use the first cast as start and stun/breakbar as end
         int i = 1;
-        var start = log.LogData.LogStart;
+        var start = encounterPhase.Start;
         bool isFirst = true;
         var breakbarEnds = log.CombatData.GetBreakbarStateEvents(shadow.AgentItem).Where(x => x.State != ArcDPSEnums.BreakbarState.Active);
         var stuns = log.CombatData.GetBuffApplyDataByIDByDst(Stun, shadow.AgentItem);
-        foreach (var cast in log.CombatData.GetAnimatedCastData(shadow.AgentItem).Where(x => x.ActualDuration > 0))
+        foreach (var cast in shadow.GetAnimatedCastEvents(log).Where(x => x.ActualDuration > 0))
         {
             if (cast.SkillID == GutteringLight || cast.SkillID == GutteringLightCM)
             {
                 if (isFirst)
                 {
                     var phase = new SubPhasePhaseData(start, cast.Time, "Phase " + i);
-                    phase.AddParentPhase(phases[0]);
+                    phase.AddParentPhase(encounterPhase);
                     phase.AddTarget(shadow, log);
                     phases.Add(phase);
 
                     var stunned = stuns.FirstOrDefault(x => x.Time > phase.End);
                     var broken = breakbarEnds.FirstOrDefault(x => x.Time > phase.End);
-                    var end = Math.Min(stunned?.Time ?? log.LogData.LogEnd, broken?.Time ?? long.MaxValue);
+                    var end = Math.Min(stunned?.Time ?? encounterPhase.End, broken?.Time ?? long.MaxValue);
                     var split = new SubPhasePhaseData(cast.Time, end, "Darkness " + i);
-                    split.AddParentPhase(phases[0]);
+                    split.AddParentPhase(encounterPhase);
                     split.AddTarget(shadow, log);
                     phases.Add(split);
 
@@ -123,14 +130,23 @@ internal class WhisperingShadow : Kinfall
                 isFirst = true;
             }
         }
-        if (start < log.LogData.LogEnd)
+        if (start < encounterPhase.End)
         {
-            var lastPhase = new SubPhasePhaseData(start, log.LogData.LogEnd, "Phase " + i);
-            lastPhase.AddParentPhase(phases[0]);
+            var lastPhase = new SubPhasePhaseData(start, encounterPhase.End, "Phase " + i);
+            lastPhase.AddParentPhase(encounterPhase);
             lastPhase.AddTarget(shadow, log);
             phases.Add(lastPhase);
         }
+        return phases;
+    }
 
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        var phases = GetInitialPhase(log);
+        var shadow = GetWhisperingShadow(log);
+        phases[0].AddTarget(shadow, log);
+        phases.AddRange(ComputePhases(log, shadow, (EncounterPhaseData)phases[0], requirePhases));
+       
         return phases;
     }
 
