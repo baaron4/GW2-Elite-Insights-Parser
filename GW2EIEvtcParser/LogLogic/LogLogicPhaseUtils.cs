@@ -107,7 +107,7 @@ internal static class LogLogicPhaseUtils
             {
                 long curEnd = Math.Min(c.Time, end);
                 phases.Add(new SubPhasePhaseData(last, curEnd));
-                last = curEnd;
+                last = Math.Max(curEnd, start);
                 nextToAddIsSkipPhase = true;
             }
             else
@@ -117,7 +117,7 @@ internal static class LogLogicPhaseUtils
                 {
                     phases.Add(new SubPhasePhaseData(last, curEnd));
                 }
-                last = curEnd;
+                last = Math.Max(curEnd, start);
                 nextToAddIsSkipPhase = false;
             }
         }
