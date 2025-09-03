@@ -154,7 +154,7 @@ internal class MountBalriorInstance : MountBalrior
                 }
                 var deterrencesToConsider = deterrences.Where(x => x.Time > encounterThreshold && x.Time < ura.LastAware);
                 var activeDeterrences = new Dictionary<AgentItem, long>();
-                foreach (var deterrence in deterrences)
+                foreach (var deterrence in deterrencesToConsider)
                 {
                     if (deterrence is BuffApplyEvent)
                     {
@@ -222,7 +222,6 @@ internal class MountBalriorInstance : MountBalrior
                 phases.AddRange(UraTheSteamshrieker.ComputePhases(log, ura, uraPhase, requirePhases));
             }
         }
-        HandleUraPhases(targetsByIDs, log, phases);
         return phases;
     }
 
