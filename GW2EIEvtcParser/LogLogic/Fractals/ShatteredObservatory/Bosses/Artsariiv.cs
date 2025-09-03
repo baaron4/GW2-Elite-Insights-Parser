@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -181,13 +182,27 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
+        if (combatData.GetEffectEvents().Count > 0)
+        {
+            // TBC: this looks promising so far
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
+            {
+                logData.SetSuccess(true, effects.Last().Time);
+            }
+            else
+            {
+                logData.SetSuccess(false, target.LastAware);
+            }
+            return;
+        }
+        // Legacy
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // reward or death worked
         if (logData.Success)
         {
             return;
         }
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 4);
     }
 
