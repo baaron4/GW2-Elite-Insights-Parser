@@ -116,18 +116,33 @@ internal class Artsariiv : ShatteredObservatory
             (int)TargetID.CloneArtsariiv
         ];
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+
+    internal static bool DetectCloneArtsariivs(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
     {
-        var targetArtsariiv = FindTargetArtsariiv(agentData);
+        var artsariivMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.ArtsariivTripleLaserEyeMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (artsariivMarkerGUID != null)
+    {
+            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
         foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
         {
-            if (!artsariiv.Is(targetArtsariiv))
+                if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
             {
                 artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        foreach (NPC trashMob in _trashMobs)
+            return true;
+        }
+        return false;
+    }
+
+    internal static void RenameSmallArtsariivs(IReadOnlyList<NPC> trashMobs)
+    {
+        foreach (NPC trashMob in trashMobs)
         {
             if (trashMob.IsSpecies(TargetID.SmallArtsariiv))
             {
@@ -142,13 +157,16 @@ internal class Artsariiv : ShatteredObservatory
                 trashMob.OverrideName("Big " + trashMob.Character);
             }
         }
+    }
 
+    internal static void RenameCloneArtsariivs(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
         var nameCount = new Dictionary<string, int> {
                 { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
                 { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
         };
 
-        foreach (var target in Targets)
+        foreach (var target in targets)
         {
             if (target.IsSpecies(TargetID.CloneArtsariiv))
             {
@@ -160,6 +178,25 @@ internal class Artsariiv : ShatteredObservatory
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        if (!DetectCloneArtsariivs(evtcVersion, agentData, combatData))
+        {
+            // Legacy
+            var targetArtsariiv = FindTargetArtsariiv(agentData);
+            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
+            {
+                if (!artsariiv.Is(targetArtsariiv))
+                {
+                    artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                }
+            }
+        }
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        RenameSmallArtsariivs(TrashMobs);
+        RenameCloneArtsariivs(Targets, combatData);
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
