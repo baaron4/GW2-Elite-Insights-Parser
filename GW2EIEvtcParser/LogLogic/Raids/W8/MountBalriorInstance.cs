@@ -100,8 +100,8 @@ internal class MountBalriorInstance : MountBalrior
             {
                 long start = decima.FirstAware;
                 var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, decima.AgentItem);
-                var determinedLost = determinedBuffs.OfType<BuffRemoveAllEvent>().FirstOrDefault();
-                var determinedApply = determinedBuffs.OfType<BuffApplyEvent>().FirstOrDefault();
+                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
+                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
                 var enterCombat = log.CombatData.GetEnterCombatEvents(decima.AgentItem).FirstOrDefault();
                 if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
                 {

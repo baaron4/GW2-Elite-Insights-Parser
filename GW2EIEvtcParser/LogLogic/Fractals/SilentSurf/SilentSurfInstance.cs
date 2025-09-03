@@ -41,7 +41,16 @@ internal class SilentSurfInstance : SilentSurf
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        var lastKanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault();
+        if (lastKanaxai != null)
+        {
+            var determinedBuffs = combatData.GetBuffDataByIDByDst(SkillIDs.Determined762, lastKanaxai);
+            var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
+            if (determinedApply != null && !combatData.GetDespawnEvents(lastKanaxai).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
+            {
+                logData.SetSuccess(true, determinedApply.Time);
+            }
+        }
     }
 
     private List<EncounterPhaseData> HandleKanaxaiPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
@@ -54,7 +63,7 @@ internal class SilentSurfInstance : SilentSurf
             {
                 long start = kanaxai.FirstAware;
                 var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, kanaxai.AgentItem);
-                var determinedLost = determinedBuffs.OfType<BuffRemoveAllEvent>().FirstOrDefault();
+                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
                 var enterCombat = log.CombatData.GetEnterCombatEvents(kanaxai.AgentItem).FirstOrDefault();
                 if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
                 {
@@ -62,7 +71,7 @@ internal class SilentSurfInstance : SilentSurf
                 }
                 bool success = false;
                 long end = kanaxai.LastAware;
-                var determinedApply = determinedBuffs.OfType<BuffApplyEvent>().FirstOrDefault();
+                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
                 if (determinedApply != null && !log.CombatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
                 {
                     success = true;

@@ -40,7 +40,15 @@ internal class KinfallInstance : Kinfall
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        var lastWhisperingShadow = agentData.GetNPCsByID(TargetID.WhisperingShadow).LastOrDefault();
+        if (lastWhisperingShadow != null)
+        {
+            var death = combatData.GetDeadEvents(lastWhisperingShadow).FirstOrDefault();
+            if (death != null)
+            {
+                logData.SetSuccess(true, death.Time);
+            }
+        }
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
