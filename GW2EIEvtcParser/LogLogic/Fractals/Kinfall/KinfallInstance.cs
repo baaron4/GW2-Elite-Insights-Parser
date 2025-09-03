@@ -48,7 +48,10 @@ internal class KinfallInstance : Kinfall
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
-            var whisperingShadowPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.WhisperingShadow, [], "Whispering Shadow", _whisperingShadow);
+            var whisperingShadowPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.WhisperingShadow, [], "Whispering Shadow", _whisperingShadow, (log, whisperingShadow) =>
+            {
+                return log.CombatData.GetBuffApplyData(SkillIDs.LifeFireCircleCM).Any(x => whisperingShadow.InAwareTimes(x.Time)) ? LogData.LogMode.CM : LogData.LogMode.Normal;
+            });
             foreach (var whisperingShadowPhase in whisperingShadowPhases)
             {
                 var whisperingShadow = whisperingShadowPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.WhisperingShadow));
@@ -92,11 +95,7 @@ internal class KinfallInstance : Kinfall
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        SpiritRace.FindEtherealBarriers(agentData, combatData);
-        Sabetha.FindCannonsAndHeavyBombs(agentData, combatData);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        SpiritRace.RenameEtherealBarriersAndOverrideID(Targets, agentData);
-        Gorseval.RenameChargedSouls(Targets, combatData);
     }
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
