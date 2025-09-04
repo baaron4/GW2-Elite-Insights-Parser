@@ -241,6 +241,10 @@ internal static class LogLogicPhaseUtils
         {
             return null;
         }
+        if (success)
+        {
+            end = Math.Min(end + ParserHelper.ServerDelayConstant, log.LogData.LogEnd);
+        }
         var phase = new EncounterPhaseData(start, end, phaseName, success, icon, logMode, logStartStatus, encounterID);
         phases.Add(phase);
         encounterPhases.Add(phase);
