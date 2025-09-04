@@ -113,42 +113,40 @@ internal class Arkk : ShatteredObservatory
         ];
     }
 
-    private void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
+    private static void GetMiniBossPhase(TargetID targetID, ParsedEvtcLog log, IReadOnlyList<SingleActor> targets, string phaseName, List<PhaseData> phases, EncounterPhaseData encounterPhase)
     {
-        SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(targetID));
+        SingleActor? target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
         {
             return;
         }
         var phaseData = new SubPhasePhaseData(Math.Max(target.FirstAware, log.LogData.LogStart), Math.Min(target.LastAware, log.LogData.LogEnd), phaseName);
-        AddTargetsToPhaseAndFit(phaseData, [targetID], log);
+        AddTargetsToPhaseAndFit(phaseData, targets, [targetID], log);
         phases.Add(phaseData);
-        phaseData.AddParentPhase(phases[0]);
+        phaseData.AddParentPhase(encounterPhase);
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor arkk, IReadOnlyList<SingleActor> targets, IReadOnlyList<SingleActor> trashMobs, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
-        phases[0].AddTarget(arkk, log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Archdiviner) || x.IsSpecies(TargetID.EliteBrazenGladiator)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, arkk, false, true));
-        for (int i = 1; i < phases.Count; i++)
+        var phases = new List<PhaseData>(11);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, arkk, false, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
         {
-            phases[i].Name = "Phase " + i;
-            phases[i].AddParentPhase(phases[0]);
+            phases[i].Name = "Phase " + (i + 1);
+            phases[i].AddParentPhase(encounterPhase);
             phases[i].AddTarget(arkk, log);
         }
-
-        GetMiniBossPhase(TargetID.Archdiviner, log, "Archdiviner", phases);
-        GetMiniBossPhase(TargetID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+        var encounterMiniBosses = targets.Where(x => x.IsAnySpecies([TargetID.Archdiviner, TargetID.EliteBrazenGladiator]) && encounterPhase.InInterval(x.FirstAware)).ToList();
+        GetMiniBossPhase(TargetID.Archdiviner, log, encounterMiniBosses, "Archdiviner", phases, encounterPhase);
+        GetMiniBossPhase(TargetID.EliteBrazenGladiator, log, encounterMiniBosses, "Brazen Gladiator", phases, encounterPhase);
 
         var bloomPhases = new List<PhaseData>(10);
-        foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom)).OrderBy(x => x.FirstAware))
+        var encounterBlooms = trashMobs.Where(x => x.IsSpecies(TargetID.SolarBloom) && encounterPhase.InInterval(x.FirstAware)).OrderBy(x => x.FirstAware);
+        foreach (NPC bloom in encounterBlooms)
         {
             long start = bloom.FirstAware;
             long end = bloom.LastAware;
@@ -167,7 +165,7 @@ internal class Arkk : ShatteredObservatory
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
-            phase.AddParentPhase(phases[0]);
+            phase.AddParentPhase(encounterPhase);
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk, log);
             var invulLoss = invuls.FirstOrNull((in Segment x) => x.Start > phase.Start && x.Value == 0);
@@ -176,8 +174,8 @@ internal class Arkk : ShatteredObservatory
         phases.AddRange(bloomPhases);
 
         // Add anomalies as secondary target to the phases
-        var anomalies = Targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
-        for (int i = 1; i < phases.Count; i++)
+        var anomalies = targets.Where(x => x.IsSpecies(TargetID.TemporalAnomalyArkk));
+        for (int i = 0; i < phases.Count; i++)
         {
             phases[i].AddTargets(anomalies, log, PhaseData.TargetPriority.Blocking);
         }
@@ -185,10 +183,19 @@ internal class Arkk : ShatteredObservatory
         return phases;
     }
 
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
+        phases[0].AddTarget(arkk, log);
+        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Archdiviner) || x.IsSpecies(TargetID.EliteBrazenGladiator)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, arkk, Targets, TrashMobs, (EncounterPhaseData)phases[0], requirePhases));
+        return phases;
+    }
+
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         var arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault() ?? throw new MissingKeyActorsException("Arkk not found");
-        long start = GetLogOffsetBySpawn(logData, combatData, arkk);
         CombatItem? startBuffApply = combatData.FirstOrDefault(x => x.SkillID == ArkkStartBuff && x.SrcMatchesAgent(arkk) && x.IsBuffApply());
         return startBuffApply?.Time ?? GetLogOffsetBySpawn(logData, combatData, arkk);
     }

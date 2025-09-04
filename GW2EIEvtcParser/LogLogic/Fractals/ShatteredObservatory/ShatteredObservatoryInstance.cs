@@ -48,19 +48,21 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
         }
         return crMap;
     }
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var lastArkk = agentData.GetNPCsByID(TargetID.Arkk).LastOrDefault();
+        if (lastArkk != null)
+        {
+            var death = combatData.GetDeadEvents(lastArkk).FirstOrDefault();
+            if (death != null)
+            {
+                logData.SetSuccess(true, death.Time);
+            }
+        }
+    }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Shattered Observatory";
-    }
-    internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
-    {
-        var chest = agentData.GetGadgetsByID(_arkk.ChestID).FirstOrDefault();
-        if (chest != null)
-        {
-            logData.SetSuccess(true, chest.FirstAware);
-            return;
-        }
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
     }
 
     private List<EncounterPhaseData> HandleSkorvaldPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
@@ -126,7 +128,12 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                 }
                 bool success = false;
                 long end = artsariiv.LastAware;
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
+                var death = log.CombatData.GetDeadEvents(artsariiv.AgentItem).FirstOrDefault();
+                if (death != null)
+                {
+                    success = true;
+                    end = death.Time;
+                } else if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
                 {
                     var effect = effects.FirstOrDefault(x => artsariiv.InAwareTimes(x.Time - 500));
                     if (effect != null)
@@ -136,6 +143,45 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
                     }
                 }
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [artsariiv], [], [], mainPhase, "Artsariiv", start, end, success, _artsariiv, LogData.LogMode.CMNoName );
+            }
+        }
+        NumericallyRenameEncounterPhases(encounterPhases);
+        return encounterPhases;
+    }
+
+    private List<EncounterPhaseData> HandleArkkPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    {
+        var encounterPhases = new List<EncounterPhaseData>();
+        var mainPhase = phases[0];
+        if (targetsByIDs.TryGetValue((int)TargetID.Arkk, out var arkks))
+        {
+            var subBosses = Targets.Where(x => x.IsAnySpecies([TargetID.Archdiviner, TargetID.EliteBrazenGladiator]));
+            foreach (var arkk in arkks)
+            {
+                long start = arkk.FirstAware;
+                var arkkStartBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.ArkkStartBuff, arkk.AgentItem);
+                var arkkStartBuffApply = arkkStartBuffs.FirstOrDefault(x => x is BuffApplyEvent);
+                if (arkkStartBuffApply != null)
+                {
+                    start = arkkStartBuffApply.Time;
+                }
+                else
+                {
+                    var arkkSpawn = log.CombatData.GetSpawnEvents(arkk.AgentItem).FirstOrDefault();
+                    if (arkkSpawn != null)
+                    {
+                        start = arkkSpawn.Time;
+                    }
+                }
+                bool success = false;
+                long end = arkk.LastAware;
+                var death = log.CombatData.GetDeadEvents(arkk.AgentItem).FirstOrDefault();
+                if (death != null)
+                {
+                    success = true;
+                    end = death.Time;
+                }
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [arkk], subBosses, [], mainPhase, "Arkk", start, end, success, _arkk, LogData.LogMode.CMNoName);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -160,6 +206,14 @@ internal class ShatteredObservatoryInstance : ShatteredObservatory
             {
                 var artsariiv = artsariivPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Artsariiv));
                 phases.AddRange(Artsariiv.ComputePhases(log, artsariiv, Targets, artsariivPhase, requirePhases));
+            }
+        }
+        {
+            var arkkPhases = HandleArkkPhases(targetsByIDs, log, phases);
+            foreach (var arkkPhase in arkkPhases)
+            {
+                var arkk = arkkPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Arkk));
+                phases.AddRange(Arkk.ComputePhases(log, arkk, Targets, TrashMobs, arkkPhase, requirePhases));
             }
         }
         return phases;

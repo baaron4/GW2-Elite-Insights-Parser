@@ -223,6 +223,12 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
+        base.CheckSuccess(combatData, agentData, logData, playerAgents);
+        // reward or death worked
+        if (logData.Success)
+        {
+            return;
+        }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         if (combatData.GetEffectEvents().Count > 0)
         {
@@ -238,12 +244,6 @@ internal class Artsariiv : ShatteredObservatory
             return;
         }
         // Legacy
-        base.CheckSuccess(combatData, agentData, logData, playerAgents);
-        // reward or death worked
-        if (logData.Success)
-        {
-            return;
-        }
         SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 4);
     }
 
