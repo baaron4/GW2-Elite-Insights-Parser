@@ -513,6 +513,7 @@ public static class EffectGUIDs
     public static readonly GUID ArtsariivObliterateIndicator = new("8938C846962EA045B5726F53C3ECF6AF"); // no owner
     public static readonly GUID ArtsariivObliterateExplosion = new("F2D51BED8214F1419A5D1684D2087093"); // no owner
     public static readonly GUID ArtsariivBlackSmoke = new("172355593E35D6479A742472E29CA150");
+    public static readonly GUID ArtsariivDeadExplosion = new("4482BB2AB2EF804E8F802C13FE43C2E3");
     public static readonly GUID CorporealReassignmentDome = new("1607FB8A58554A4E96E5AD04AF8E247A"); // owned by unknown agent
     public static readonly GUID CorporealReassignmentExplosionDome = new("5B8F0DCE941DF544AD0966F6158A5127");
     public static readonly GUID CorporealReassignmentExplosion1 = new("C93D2CA54BC7F84BBFA31B40DE056D21"); // owned by exploding player

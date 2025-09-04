@@ -107,7 +107,7 @@ internal static class LogLogicPhaseUtils
             {
                 long curEnd = Math.Min(c.Time, end);
                 phases.Add(new SubPhasePhaseData(last, curEnd));
-                last = curEnd;
+                last = Math.Max(curEnd, start);
                 nextToAddIsSkipPhase = true;
             }
             else
@@ -117,7 +117,7 @@ internal static class LogLogicPhaseUtils
                 {
                     phases.Add(new SubPhasePhaseData(last, curEnd));
                 }
-                last = curEnd;
+                last = Math.Max(curEnd, start);
                 nextToAddIsSkipPhase = false;
             }
         }
@@ -241,6 +241,10 @@ internal static class LogLogicPhaseUtils
         {
             return null;
         }
+        if (success)
+        {
+            end = Math.Min(end + ParserHelper.ServerDelayConstant, log.LogData.LogEnd);
+        }
         var phase = new EncounterPhaseData(start, end, phaseName, success, icon, logMode, logStartStatus, encounterID);
         phases.Add(phase);
         encounterPhases.Add(phase);
@@ -293,9 +297,10 @@ internal static class LogLogicPhaseUtils
     #region INSTANCE ENCOUNTERS
     internal static List<EncounterPhaseData> ProcessGenericEncounterPhasesForInstance(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID targetID, IEnumerable<SingleActor> blockingBosses, ChestID chestID, string phaseName, string icon, long encounterID, LogModeChecker? fightModeChecker, LogStartStatusChecker? fightStartStatusChecker)
     {
+        bool useDeath = false;
         if (chestID == ChestID.None)
         {
-            throw new InvalidOperationException("ProcessGenericEncounterPhasesForInstance requires a chest ID");
+            useDeath = true;
         }
         var mainPhase = phases[0];
         var encounterPhases = new List<EncounterPhaseData>();
@@ -312,7 +317,16 @@ internal static class LogLogicPhaseUtils
                 long start = enterCombat != null ? enterCombat.Time : target.FirstAware;
                 bool success = false;
                 long end = target.LastAware; 
-                if (chest != null && chest.InAwareTimes(end + 500))
+                if (useDeath)
+                {
+                    var death = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault(x => x.Time >= start);
+                    if (death != null)
+                    {
+                        success = true;
+                        end = death.Time;
+                    }
+                } 
+                else if (chest != null && chest.InAwareTimes(end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;

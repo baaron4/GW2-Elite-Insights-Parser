@@ -23,8 +23,6 @@ internal class StatueOfDeath : HallOfChains
                 new PlayerCastStartMechanic(ReclaimedEnergySkill, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown", "Has thrown a light orb","Light Orb Thrown", 0)
                     .UsingChecker((evt, log) => !evt.IsInterrupted),
             ]),
-            new PlayerDstBuffApplyMechanic(FracturedSpirit, new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD", "Applied when taking green","Green port", 0)
-                .UsingEnable((log) => !log.LogData.IsInstance), // Same mechanic as on Dhuum
         ]);
 
 
