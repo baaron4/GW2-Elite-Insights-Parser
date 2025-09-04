@@ -196,7 +196,7 @@ internal class Kanaxai : SilentSurf
                 {
                     if (aspect.IsAnySpecies(Aspects))
                     {
-                        if (log.CombatData.GetBuffRemoveAllDataByDst(Determined762, aspect.AgentItem).Any(x => x.Time >= curPhase.Start && x.Time <= curPhase.End))
+                        if (log.CombatData.GetBuffRemoveAllDataByIDByDst(Determined762, aspect.AgentItem).Any(x => x.Time >= curPhase.Start && x.Time <= curPhase.End))
                         {
                             curPhase.AddTarget(aspect, log);
                         } 
