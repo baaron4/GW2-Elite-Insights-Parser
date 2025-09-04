@@ -333,10 +333,8 @@ public abstract partial class SingleActor : Actor
         {
             // Use position data from englobing
             var parentActor = log.FindActor(AgentItem.EnglobingAgentItem);
-            CombatReplay.Positions.AddRange(parentActor.GetCombatReplayNonPolledPositions(log));
-            CombatReplay.PolledPositions.AddRange(parentActor.GetCombatReplayPolledPositions(log));
-            CombatReplay.Rotations.AddRange(parentActor.GetCombatReplayNonPolledRotations(log));
-            CombatReplay.PolledRotations.AddRange(parentActor.GetCombatReplayPolledRotations(log));
+            parentActor.InitCombatReplay(log);
+            CombatReplay.CopyFrom(parentActor.CombatReplay);
         } 
         else
         {

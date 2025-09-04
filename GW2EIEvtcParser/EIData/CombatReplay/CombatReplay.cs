@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.SpeciesIDs;
 
@@ -10,11 +11,18 @@ public class CombatReplay
 {
 
     //TODO(Rennorb) @perf: capacity
-    internal readonly List<ParametricPoint3D> Positions = [];
-    internal readonly List<ParametricPoint3D> PolledPositions = [];
-    internal readonly List<ParametricPoint3D> Velocities = [];
-    internal readonly List<ParametricPoint3D> Rotations = [];
-    internal readonly List<ParametricPoint3D> PolledRotations = [];
+    internal IReadOnlyList<ParametricPoint3D> Positions => _Positions;
+    internal IReadOnlyList<ParametricPoint3D> PolledPositions => _PolledPositions;
+    internal IReadOnlyList<ParametricPoint3D> Velocities => _Velocities;
+    internal IReadOnlyList<ParametricPoint3D> Rotations => _Rotations;
+    internal IReadOnlyList<ParametricPoint3D> PolledRotations => _PolledRotations;
+
+    private List<ParametricPoint3D> _Positions = [];
+    private List<ParametricPoint3D> _PolledPositions = [];
+    private List<ParametricPoint3D> _Velocities = [];
+    private List<ParametricPoint3D> _Rotations = [];
+    private List<ParametricPoint3D> _PolledRotations = [];
+
     internal readonly List<Segment> Hidden = [];
     private long _start = -1;
     private long _end = -1;
@@ -30,12 +38,42 @@ public class CombatReplay
         Decorations = new(log.LogData.Logic.DecorationCache);
     }
 
+    internal void AddPosition(ParametricPoint3D position)
+    {
+        _Positions.Add(position);
+    }
+
+    internal void AddVelocity(ParametricPoint3D velocity)
+    {
+        _Velocities.Add(velocity);
+    }
+
+    internal void AddRotation(ParametricPoint3D rotation)
+    {
+        _Rotations.Add(rotation);
+    }
+
+    internal void CopyFrom(CombatReplay other)
+    {
+        _Positions = other.Positions.ToList();
+        _PolledPositions = other.PolledPositions.ToList();
+        _Rotations = other.Rotations.ToList();
+        _PolledRotations = other.PolledRotations.ToList();
+        _Velocities = other.Velocities.ToList();
+    }
+
     internal void Trim(long start, long end)
     {
         _start = Math.Max(start, _start);
         _end = Math.Max(_start, Math.Min(end, _end));
-        PolledPositions.RemoveAll(x => x.Time < _start || x.Time > _end);
-        PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
+        if (_PolledPositions.Count > 0 && (_PolledPositions[0].Time < _start || _PolledPositions[^1].Time > _end))
+        {
+            _PolledPositions.RemoveAll(x => x.Time < _start || x.Time > _end);
+        }
+        if (_PolledRotations.Count > 0 && (_PolledRotations[0].Time < _start || _PolledRotations[^1].Time > _end))
+        {
+            _PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
+        }
     }
 
     private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, long time, int currentIndex)
@@ -57,130 +95,142 @@ public class CombatReplay
         return res - 1;
     }
 
-    private void PositionPolling(int rate, long logDuration, bool forcePolling)
+    private void HandlePosition(long t, ref int positionTableIndex, ref int velocityTableIndex, int rate)
     {
-        List<ParametricPoint3D> positions = Positions;
-        if (Positions.Count == 0 && forcePolling)
+        ParametricPoint3D pos = _Positions[positionTableIndex];
+        ParametricPoint3D? toInsert = null;
+        if (t <= pos.Time)
         {
-            positions = [new(int.MinValue, int.MinValue, 0, 0)];
+            toInsert = (pos.WithChangedTime(t));
         }
-        else if (Positions.Count == 0)
+        else
+        {
+            if (positionTableIndex == _Positions.Count - 1)
+            {
+                toInsert = (pos.WithChangedTime(t));
+            }
+            else
+            {
+                ParametricPoint3D nextPos = _Positions[positionTableIndex + 1];
+                if (nextPos.Time < t)
+                {
+                    positionTableIndex++;
+                    HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
+                }
+                else
+                {
+                    ParametricPoint3D last = _PolledPositions.Last().Time > pos.Time ? _PolledPositions.Last() : pos;
+                    velocityTableIndex = UpdateVelocityIndex(_Velocities, t, velocityTableIndex);
+                    ParametricPoint3D velocity = default;
+                    if (velocityTableIndex >= 0 && velocityTableIndex < Velocities.Count)
+                    {
+                        velocity = Velocities[velocityTableIndex];
+                    }
+
+                    if (nextPos.Time - last.Time > ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
+                    {
+                        toInsert = (last.WithChangedTime(t));
+                    }
+                    else
+                    {
+                        float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
+                        toInsert = (new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
+                    }
+
+                }
+            }
+        }
+        if (toInsert != null && toInsert.Value.Time >= 0)
+        {
+            _PolledPositions.Add(toInsert.Value);
+        }
+    }
+
+    private void HandleRotation(long t, ref int rotationTableIndex, int rate)
+    {
+        var rot = _Rotations[rotationTableIndex];
+        ParametricPoint3D? toInsert = null;
+        if (t <= rot.Time)
+        {
+            toInsert = (rot.WithChangedTime(t));
+        }
+        else
+        {
+            if (rotationTableIndex == _Rotations.Count - 1)
+            {
+                toInsert = (rot.WithChangedTime(t));
+            }
+            else
+            {
+                ParametricPoint3D nextRot = _Rotations[rotationTableIndex + 1];
+                if (nextRot.Time < t)
+                {
+                    rotationTableIndex++;
+                    HandleRotation(t, ref rotationTableIndex, rate);
+                }
+                else
+                {
+                    ParametricPoint3D last = _PolledRotations.Last().Time > rot.Time ? _PolledRotations.Last() : rot;
+                    if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
+                    {
+                        toInsert = (last.WithChangedTime(t));
+                    }
+                    else
+                    {
+                        float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
+                        toInsert = (new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
+                    }
+
+                }
+            }
+        }
+        if (toInsert != null && toInsert.Value.Time >= 0)
+        {
+            _PolledRotations.Add(toInsert.Value);
+        }
+    }
+
+    internal void PollingRate(long logDuration, bool forcePolling)
+    {
+        if (_Positions.Count == 0 && forcePolling)
+        {
+            _Positions = [new(int.MinValue, int.MinValue, 0, 0)];
+        }
+        else if (_Positions.Count == 0)
         {
             return;
         }
+
+        int rate = ParserHelper.CombatReplayPollingRate;
+
+        bool doRotation = _Rotations.Count > 0;
 
         int positionTableIndex = 0;
         int velocityTableIndex = 0;
-
-        //TODO(Rennorb) @perf: reserve PolledPositions
-
-        for (long t = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); t < logDuration; t += rate)
-        {
-            ParametricPoint3D pos = positions[positionTableIndex];
-            if (t <= pos.Time)
-            {
-                PolledPositions.Add(pos.WithChangedTime(t));
-            }
-            else
-            {
-                if (positionTableIndex == positions.Count - 1)
-                {
-                    PolledPositions.Add(pos.WithChangedTime(t));
-                }
-                else
-                {
-                    ParametricPoint3D nextPos = positions[positionTableIndex + 1];
-                    if (nextPos.Time < t)
-                    {
-                        positionTableIndex++;
-                        t -= rate;
-                    }
-                    else
-                    {
-                        ParametricPoint3D last = PolledPositions.Last().Time > pos.Time ? PolledPositions.Last() : pos;
-                        velocityTableIndex = UpdateVelocityIndex(Velocities, t, velocityTableIndex);
-                        ParametricPoint3D velocity = default;
-                        if (velocityTableIndex >= 0 && velocityTableIndex < Velocities.Count)
-                        {
-                            velocity = Velocities[velocityTableIndex];
-                        }
-
-                        if (nextPos.Time - last.Time > ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
-                        {
-                            PolledPositions.Add(last.WithChangedTime(t));
-                        }
-                        else
-                        {
-                            float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
-                            PolledPositions.Add(new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
-                        }
-
-                    }
-                }
-            }
-        }
-        PolledPositions.RemoveAll(x => x.Time < 0); //TODO(Rennorb) @perf: inline before inserting
-    }
-
-    /// <summary>
-    /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
-    /// in javascript
-    /// </summary>
-    private void RotationPolling(int rate, long logDuration)
-    {
-        if (Rotations.Count == 0)
-        {
-            return;
-        }
-
-        //TODO(Rennorb) @perf: reserve PolledPositions
-
         int rotationTableIndex = 0;
-        for (int t = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); t < logDuration; t += rate)
-        {
-            var rot = Rotations[rotationTableIndex];
-            if (t <= rot.Time)
-            {
-                PolledRotations.Add(rot.WithChangedTime(t));
-            }
-            else
-            {
-                if (rotationTableIndex == Rotations.Count - 1)
-                {
-                    PolledRotations.Add(rot.WithChangedTime(t));
-                }
-                else
-                {
-                    ParametricPoint3D nextRot = Rotations[rotationTableIndex + 1];
-                    if (nextRot.Time < t)
-                    {
-                        rotationTableIndex++;
-                        t -= rate;
-                    }
-                    else
-                    {
-                        ParametricPoint3D last = PolledRotations.Last().Time > rot.Time ? PolledRotations.Last() : rot;
-                        if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
-                        {
-                            PolledRotations.Add(last.WithChangedTime(t));
-                        }
-                        else
-                        {
-                            float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
-                            PolledRotations.Add(new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
-                        }
 
-                    }
-                }
+        long posStartOffset = Math.Min(0, rate * ((_Positions[0].Time / rate) - 1));
+        long rotStartOffset = doRotation ? Math.Min(0, rate * ((_Rotations[0].Time / rate) - 1)) : 0;
+        long startOffset = Math.Min(posStartOffset, rotStartOffset);
+        int capacity = (int)(logDuration - startOffset) / rate + 1;
+        _PolledPositions = new List<ParametricPoint3D>(capacity);
+        _PolledRotations = doRotation ? new List<ParametricPoint3D>(capacity) : [];
+
+        if (doRotation)
+        {
+            for (long t = startOffset; t < logDuration; t += rate)
+            {
+                HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
+                HandleRotation(t, ref rotationTableIndex, rate);
+            }
+        } 
+        else
+        {
+            for (long t = startOffset; t < logDuration; t += rate)
+            {
+                HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
             }
         }
-        PolledRotations.RemoveAll(x => x.Time < 0); //TODO(Rennorb) @perf: inline before inserting
-    }
-
-    internal void PollingRate(long logDuration, bool forcePositionPolling)
-    {
-        PositionPolling(ParserHelper.CombatReplayPollingRate, logDuration, forcePositionPolling);
-        RotationPolling(ParserHelper.CombatReplayPollingRate, logDuration);
     }
 
 #if DEBUG
