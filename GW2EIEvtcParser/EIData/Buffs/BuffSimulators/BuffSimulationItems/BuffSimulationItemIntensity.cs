@@ -5,34 +5,35 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemIntensity : BuffSimulationItemStack
 {
-    private Dictionary<long, RegroupedStack> RegroupedStacks; 
+    private readonly List<RegroupedStack> RegroupedStacks; 
 
     private class RegroupedStack
     {
-        public BuffSimulationItemBase Item;
+        public required BuffSimulationItemBase Item;
         public int StackCount;
     }
     public BuffSimulationItemIntensity(IReadOnlyList<BuffStackItem> stacks) : base(stacks)
     {
         var simulStacks = GetStacks(stacks);
         End = Start + simulStacks.Max(x => x.Duration);
-        RegroupedStacks = new Dictionary<long, RegroupedStack>(simulStacks.Length);
+        var regroupedStacksDict = new Dictionary<long, RegroupedStack>(simulStacks.Length);
         foreach (var simulItem in simulStacks)
         {
             var key = simulItem.GetKey();
-            if (RegroupedStacks.TryGetValue(key, out var list))
+            if (regroupedStacksDict.TryGetValue(key, out var list))
             {
                 list.StackCount++;
             }
             else
             {
-                RegroupedStacks[key] = new RegroupedStack()
+                regroupedStacksDict[key] = new RegroupedStack()
                 {
                     Item = simulItem,
                     StackCount = 1
                 };
             }
         }
+        RegroupedStacks = regroupedStacksDict.Values.ToList();
     }
 
     public override void OverrideEnd(long end)
@@ -40,7 +41,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
         long maxDur = 0;
         foreach (var pair in RegroupedStacks)
         {
-            var stack = pair.Value.Item;
+            var stack = pair.Item;
             stack.OverrideEnd(end);
 
             if(stack.Duration > maxDur) { maxDur = stack.Duration; }
@@ -49,7 +50,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
     }
     public override int GetStacks()
     {
-        return RegroupedStacks.Sum(x => x.Value.StackCount);
+        return RegroupedStacks.Sum(x => x.StackCount);
     }
 
     public override int GetActiveStacks()
@@ -66,7 +67,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
                 StacksPerSource = new(10);
                 foreach (var stack in RegroupedStacks)
                 {
-                    StacksPerSource.IncrementValue(stack.Value.Item.Src, stack.Value.StackCount);
+                    StacksPerSource.IncrementValue(stack.Item.Src, stack.StackCount);
                 }
             }
             else
@@ -94,9 +95,9 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
                 int offset = 0;
                 foreach (var pair in RegroupedStacks)
                 {
-                    for (int i = 0; i < pair.Value.StackCount; i++)
+                    for (int i = 0; i < pair.StackCount; i++)
                     {
-                        Sources[offset++] = pair.Value.Item.Src;
+                        Sources[offset++] = pair.Item.Src;
                     }
                 }
             }
@@ -126,7 +127,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
             var distrib = distribs.GetDistrib(buffID);
             foreach (var pair in RegroupedStacks)
             {
-                pair.Value.Item.SetBaseBuffDistributionItem(distrib, start, end, pair.Value.StackCount * cDur);
+                pair.Item.SetBaseBuffDistributionItem(distrib, start, end, pair.StackCount * cDur);
             }
         }
     }
