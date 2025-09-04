@@ -19,7 +19,9 @@ internal static class LogImages
     internal const string EncounterIconSkorvald = "https://i.imgur.com/DImBzpy.png";
     internal const string EncounterIconArtsariiv = "https://i.imgur.com/eYYQWEJ.png";
     internal const string EncounterIconArkk = "https://i.imgur.com/XkLP4U8.png";
-    internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
+    internal const string EncounterIconAi = "https://i.imgur.com/kbp444q.png";
+    internal const string EncounterIconAiDark = "https://i.imgur.com/rCgZTIl.png";
+    internal const string EncounterIconAiElemental = "https://i.imgur.com/8RsfyPJ.png";
     internal const string EncounterIconKanaxai = "https://i.imgur.com/Q0qgy0t.png";
     internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
     internal const string EncounterIconEparch = "https://wiki.guildwars2.com/images/5/5a/Mini_Eparch.png";
@@ -31,6 +33,7 @@ internal static class LogImages
     internal const string InstanceIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
     internal const string InstanceIconDeepstone = "https://i.imgur.com/3fACTgN.jpg";
     internal const string InstanceIconCaptainMaiTrin = "https://i.imgur.com/rIbzpxA.png";
+    internal const string EncounterIconSunquaPeak = "https://i.imgur.com/3mlCdI9.png";
     internal const string InstanceIconSilentSurf = "https://i.imgur.com/09jNNri.jpg";
     internal const string InstanceIconKinfall = "https://i.imgur.com/jJXcGeE.png";
 
