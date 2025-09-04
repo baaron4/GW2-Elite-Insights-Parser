@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.LogLogic.LogCategories;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -13,6 +14,13 @@ internal abstract class ShatteredObservatory : FractalLogic
     public ShatteredObservatory(int triggerID) : base(triggerID)
     {
         LogCategoryInformation.SubCategory = SubLogCategory.ShatteredObservatory;
+        MechanicList.Add(new MechanicGroup([
+            new PlayerDstBuffApplyMechanic([ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate", 0),
+            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)" , 0)
+                .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull", "Exploding Skull mechanic application","Corporeal Reassignment", 0),
+            ])
+        );
         LogID |= LogIDs.FractalMasks.ShatteredObservatoryMask;
     }
 
@@ -76,5 +84,19 @@ internal abstract class ShatteredObservatory : FractalLogic
                 environmentDecorations.Add(new CircleDecoration(2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
             }
         }
+    }
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
+    {
+        base.ComputePlayerCombatReplayActors(p, log, replay);
+
+        // Corporeal Reassignment (skull)
+        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff).Where(x => x.Value > 0);
+        replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+
+        // Fixations
+        var fixations = p.GetBuffStatus(log, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4]).Where(x => x.Value > 0);
+        var fixationEvents = GetBuffApplyRemoveSequence(log.CombatData, [FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4], p, true, true);
+        replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
     }
 }

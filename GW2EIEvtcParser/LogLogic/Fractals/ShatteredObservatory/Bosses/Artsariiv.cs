@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
@@ -15,20 +16,18 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Artsariiv : ShatteredObservatory
 {
-    public Artsariiv(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
-            new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Skull", "Exploding Skull mechanic application","Corporeal Reassignment",0),
             new PlayerDstHealthDamageHitMechanic(VaultArtsariiv, new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Vault", "Vault from Big Adds","Vault (Add)", 0),
             new PlayerDstHealthDamageHitMechanic(SlamArtsariiv, new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam", "Slam (Vault) from Boss","Vault (Arts)", 0),
             new PlayerDstHealthDamageHitMechanic(TeleportLunge, new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump", "Triple Jump Mid->Edge","Triple Jump", 0),
             new PlayerDstHealthDamageHitMechanic(AstralSurge, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle", "Different sized spiraling circles","1000 Circles", 0),
             new PlayerDstHealthDamageHitMechanic([RedMarble1, RedMarble2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble", "Red KD Marble after Jump","Red Marble", 0),
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)" , 0)
-                .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new SpawnMechanic((int)TargetID.Spark, new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
-        ]));
+        ]);
+    public Artsariiv(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "arts";
         Icon = EncounterIconArtsariiv;
         LogCategoryInformation.InSubCategoryOrder = 1;
@@ -66,36 +65,40 @@ internal class Artsariiv : ShatteredObservatory
         return trashIDs;
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor artsariiv, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            var phaseIndex = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
+            {
+                phase.Name = "Split " + (phaseIndex) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, [TargetID.CloneArtsariiv], log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                phase.AddTarget(artsariiv, log);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         phases[0].AddTarget(artsariiv, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, artsariiv, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + (i) / 2;
-                var ids = new List<TargetID>
-                {
-                   TargetID.CloneArtsariiv,
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(artsariiv, log);
-            }
-        }
+        phases.AddRange(ComputePhases(log, artsariiv, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -117,18 +120,33 @@ internal class Artsariiv : ShatteredObservatory
             (int)TargetID.CloneArtsariiv
         ];
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+
+    internal static bool DetectCloneArtsariivs(EvtcVersionEvent evtcVersion, AgentData agentData, List<CombatItem> combatData)
     {
-        var targetArtsariiv = FindTargetArtsariiv(agentData);
-        foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
+        var artsariivMarkerGUID = combatData
+            .Where(x => x.IsStateChange == StateChange.IDToGUID &&
+                GetContentLocal((byte)x.OverstackValue) == ContentLocal.Marker &&
+                MarkerGUIDs.ArtsariivTripleLaserEyeMarker.Equals(x.SrcAgent, x.DstAgent))
+            .Select(x => new MarkerGUIDEvent(x, evtcVersion))
+            .FirstOrDefault();
+        if (artsariivMarkerGUID != null)
         {
-            if (!artsariiv.Is(targetArtsariiv))
+            var markedsArtsariivs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Marker && x.Value == artsariivMarkerGUID.ContentID).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct();
+            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
             {
-                artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                if (!markedsArtsariivs.Any(x => x.Is(artsariiv)))
+                {
+                    artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                }
             }
+            return true;
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        foreach (NPC trashMob in _trashMobs)
+        return false;
+    }
+
+    internal static void RenameSmallArtsariivs(IReadOnlyList<NPC> trashMobs)
+    {
+        foreach (NPC trashMob in trashMobs)
         {
             if (trashMob.IsSpecies(TargetID.SmallArtsariiv))
             {
@@ -143,13 +161,16 @@ internal class Artsariiv : ShatteredObservatory
                 trashMob.OverrideName("Big " + trashMob.Character);
             }
         }
+    }
 
+    internal static void RenameCloneArtsariivs(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
+    {
         var nameCount = new Dictionary<string, int> {
                 { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
                 { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
         };
 
-        foreach (var target in Targets)
+        foreach (var target in targets)
         {
             if (target.IsSpecies(TargetID.CloneArtsariiv))
             {
@@ -161,6 +182,25 @@ internal class Artsariiv : ShatteredObservatory
                 }
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        if (!DetectCloneArtsariivs(evtcVersion, agentData, combatData))
+        {
+            // Legacy
+            var targetArtsariiv = FindTargetArtsariiv(agentData);
+            foreach (AgentItem artsariiv in agentData.GetNPCsByID(TargetID.Artsariiv))
+            {
+                if (!artsariiv.Is(targetArtsariiv))
+                {
+                    artsariiv.OverrideID(TargetID.CloneArtsariiv, agentData);
+                }
+            }
+        }
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        RenameSmallArtsariivs(TrashMobs);
+        RenameCloneArtsariivs(Targets, combatData);
     }
 
     internal override LogData.LogMode GetLogMode(CombatData combatData, AgentData agentData, LogData logData)
@@ -190,16 +230,26 @@ internal class Artsariiv : ShatteredObservatory
             return;
         }
         SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
+        if (combatData.GetEffectEvents().Count > 0)
+        {
+            // TBC: this looks promising so far
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivDeadExplosion, out var effects))
+            {
+                logData.SetSuccess(true, effects.Last().Time);
+            }
+            else
+            {
+                logData.SetSuccess(false, target.LastAware);
+            }
+            return;
+        }
+        // Legacy
         SetSuccessByBuffCount(combatData, logData, playerAgents, target, Determined762, 4);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-
-        // Corporeal Reassignment (skull)
-        IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff).Where(x => x.Value > 0);
-        replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

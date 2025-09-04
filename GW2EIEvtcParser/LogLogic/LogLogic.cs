@@ -379,11 +379,22 @@ public abstract class LogLogic
     internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
         // TODO: To be removed once all specific instance logics are implemented
         if (IsInstance)
         {
-            AddPhasesPerTarget(log, phases, Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration));
+            var targets = Targets.Where(x => x.GetHealth(log.CombatData) > 3e6 && x.LastAware - x.FirstAware > MinimumInCombatDuration);
+            if (targets.Any())
+            {
+                AddPhasesPerTarget(log, phases, targets);
+            }
+            else
+            {
+                phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.Instance)), log);
+            }
+        } 
+        else
+        {
+            phases[0].AddTargets(Targets.Where(x => x.IsSpecies(GenericTriggerID)), log);
         }
         return phases;
     }

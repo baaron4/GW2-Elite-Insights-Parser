@@ -63,8 +63,10 @@ internal class MountBalriorInstance : MountBalrior
             var greeAndRegs = Targets.Where(x => x.IsAnySpecies([TargetID.Reeg, TargetID.Gree]));
             var protoGreelings = Targets.Where(x => x.IsSpecies(TargetID.ProtoGreerling));
             var eregs = Targets.Where(x => x.IsSpecies(TargetID.Ereg));
+            int offset = 0;
             foreach (var greer in greers)
             {
+                offset++;
                 // TBC
                 var enterCombat = log.CombatData.GetEnterCombatEvents(greer.AgentItem).FirstOrDefault();
                 if (enterCombat == null && !log.CombatData.GetDamageTakenData(greer.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
@@ -80,7 +82,7 @@ internal class MountBalriorInstance : MountBalrior
                     success = true;
                 }
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
-                var name = isCM ? "Godspoil Greer" : "Greer, the Blightbringer";
+                var name = (isCM ? "Godspoil Greer" : "Greer, the Blightbringer") + (greers.Count > 0 ? " " + (offset) : "");
                 greer.OverrideName(name);
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
@@ -100,8 +102,8 @@ internal class MountBalriorInstance : MountBalrior
             {
                 long start = decima.FirstAware;
                 var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, decima.AgentItem);
-                var determinedLost = determinedBuffs.OfType<BuffRemoveAllEvent>().FirstOrDefault();
-                var determinedApply = determinedBuffs.OfType<BuffApplyEvent>().FirstOrDefault();
+                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
+                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
                 var enterCombat = log.CombatData.GetEnterCombatEvents(decima.AgentItem).FirstOrDefault();
                 if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
                 {
@@ -144,8 +146,10 @@ internal class MountBalriorInstance : MountBalrior
             long encounterThreshold = log.LogData.EvtcLogStart;
             var deterrences = log.CombatData.GetBuffData(SkillIDs.Deterrence).Where(x => x is BuffApplyEvent || x is BuffRemoveAllEvent);
             var chest = log.AgentData.GetGadgetsByID(_ura.ChestID).FirstOrDefault();
+            int offset = 0;
             foreach (var ura in uras)
             {
+                offset++;
                 var enterCombat = log.CombatData.GetEnterCombatEvents(ura.AgentItem).FirstOrDefault();
                 if (enterCombat == null && !log.CombatData.GetDamageTakenData(ura.AgentItem).Any(x => x.HealthDamage > 0 && x.CreditedFrom.IsPlayer))
                 {
@@ -180,7 +184,7 @@ internal class MountBalriorInstance : MountBalrior
                 encounterThreshold = end;
                 var maxHP = ura.GetHealth(log.CombatData);
                 var isCM = maxHP > 70e6;
-                var name = isCM ? "Godscream Ura" : "Ura, the Steamshrieker";
+                var name = (isCM ? "Godscream Ura" : "Ura, the Steamshrieker") + (uras.Count > 0 ? " " + (offset) : "");
                 ura.OverrideName(name);
                 AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
@@ -193,7 +197,6 @@ internal class MountBalriorInstance : MountBalrior
     {
         List<PhaseData> phases = GetInitialPhase(log);
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
-        HandleGreerPhases(targetsByIDs, log, phases);
         {
             var greerPhases = HandleGreerPhases(targetsByIDs, log, phases);
             foreach (var greerPhase in greerPhases)
