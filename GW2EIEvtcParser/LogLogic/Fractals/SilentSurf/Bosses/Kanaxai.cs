@@ -16,9 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Kanaxai : SilentSurf
 {
-    public Kanaxai(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new MechanicGroup(
                 [
@@ -76,7 +74,10 @@ internal class Kanaxai : SilentSurf
             new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
             new PlayerDstBuffApplyMechanic(Phantasmagoria, new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Phant.A", "Phantasmagoria Applied (Aspect visible on Island)", "Phantasmagoria Application", 150),
             new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.TriangleLeft, Colors.Pink), "Expo.A", "Applied Exposed to Kanaxai", "Exposed Application (Kanaxai)", 150),
-        ]));
+        ]);
+    public Kanaxai(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "kanaxai";
         Icon = EncounterIconKanaxai;
         LogID |= 0x000001;
@@ -96,13 +97,17 @@ internal class Kanaxai : SilentSurf
         return
         [
             TargetID.KanaxaiScytheOfHouseAurkusCM,
+            .. Aspects
+        ];
+    }
+
+    internal static readonly IReadOnlyList<TargetID> Aspects = [
             TargetID.AspectOfTorment,
             TargetID.AspectOfLethargy,
             TargetID.AspectOfExposure,
             TargetID.AspectOfDeath,
             TargetID.AspectOfFear,
-        ];
-    }
+    ];
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
@@ -129,27 +134,23 @@ internal class Kanaxai : SilentSurf
         return GetLogOffsetByInvulnStart(logData, combatData, kanaxai, Determined762);
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor kanaxai, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
-        phases[0].AddTarget(kanaxai, log);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
+        var phases = new List<PhaseData>(5);
         // Phases
-        List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
-
-        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
-            >().Select(x => x.Time);
+        List<PhaseData> mainPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true, encounterPhase.Start, encounterPhase.End);
+        var worldCleaverPhaseStarts = log.CombatData.GetBuffApplyDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent>().Select(x => x.Time);
         int worldCleaverCount = 0;
         int repeatedCount = 0;
         var isRepeatedWorldCleaverPhase = new List<bool>();
-        for (int i = 0; i < encounterPhases.Count; i++)
+        for (int i = 0; i < mainPhases.Count; i++)
         {
-            PhaseData curPhase = encounterPhases[i];
-            curPhase.AddParentPhase(phases[0]);
+            PhaseData curPhase = mainPhases[i];
+            curPhase.AddParentPhase(encounterPhase);
             if (worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
             {
                 var baseName = "World Cleaver ";
@@ -191,20 +192,18 @@ internal class Kanaxai : SilentSurf
                     // No hp update events, buggy log
                     return phases;
                 }
-                foreach (SingleActor aspect in Targets)
+                foreach (SingleActor aspect in targets)
                 {
-                    switch (aspect.ID)
+                    if (aspect.IsAnySpecies(Aspects))
                     {
-                        case (int)TargetID.AspectOfTorment:
-                        case (int)TargetID.AspectOfLethargy:
-                        case (int)TargetID.AspectOfExposure:
-                        case (int)TargetID.AspectOfDeath:
-                        case (int)TargetID.AspectOfFear:
-                            if (log.CombatData.GetBuffRemoveAllDataByIDByDst(Determined762, aspect.AgentItem).Any(x => x.Time >= curPhase.Start && x.Time <= curPhase.End))
-                            {
-                                curPhase.AddTarget(aspect, log);
-                            }
-                            break;
+                        if (log.CombatData.GetBuffRemoveAllDataByDst(Determined762, aspect.AgentItem).Any(x => x.Time >= curPhase.Start && x.Time <= curPhase.End))
+                        {
+                            curPhase.AddTarget(aspect, log);
+                        } 
+                        else
+                        {
+                            curPhase.AddTarget(aspect, log, PhaseData.TargetPriority.NonBlocking);
+                        }
                     }
                 }
                 curPhase.AddTarget(kanaxai, log);
@@ -216,9 +215,9 @@ internal class Kanaxai : SilentSurf
         }
         // Handle main phases after world cleave phases as we need to know if it is a repeated phase
         int phaseCount = 0;
-        for (int i = 0; i < encounterPhases.Count; i++)
+        for (int i = 0; i < mainPhases.Count; i++)
         {
-            PhaseData curPhase = encounterPhases[i];
+            PhaseData curPhase = mainPhases[i];
             if (!worldCleaverPhaseStarts.Any(x => curPhase.Start == x))
             {
                 var baseName = "Phase ";
@@ -241,8 +240,16 @@ internal class Kanaxai : SilentSurf
                 curPhase.AddTarget(kanaxai, log);
             }
         }
-        phases.AddRange(encounterPhases);
+        phases.AddRange(mainPhases);
+        return phases;
+    }
 
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
+        phases[0].AddTarget(kanaxai, log);
+        phases.AddRange(ComputePhases(log, kanaxai, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

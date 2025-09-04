@@ -89,9 +89,6 @@ partial class SettingsForm
         this.RadioThemeDark = new System.Windows.Forms.RadioButton();
         this.TabCSV = new System.Windows.Forms.TabPage();
         this.TabRaw = new System.Windows.Forms.TabPage();
-        this.PanelXML = new System.Windows.Forms.Panel();
-        this.ChkIndentXML = new System.Windows.Forms.CheckBox();
-        this.ChkOutputXml = new System.Windows.Forms.CheckBox();
         this.PanelJson = new System.Windows.Forms.Panel();
         this.GroupRawSettings = new System.Windows.Forms.GroupBox();
         this.ChkCompressRaw = new System.Windows.Forms.CheckBox();
@@ -118,7 +115,6 @@ partial class SettingsForm
         this.PanelTheme.SuspendLayout();
         this.TabCSV.SuspendLayout();
         this.TabRaw.SuspendLayout();
-        this.PanelXML.SuspendLayout();
         this.PanelJson.SuspendLayout();
         this.GroupRawSettings.SuspendLayout();
         this.TabUpload.SuspendLayout();
@@ -798,8 +794,6 @@ partial class SettingsForm
         // 
         // TabRaw
         // 
-        this.TabRaw.Controls.Add(this.PanelXML);
-        this.TabRaw.Controls.Add(this.ChkOutputXml);
         this.TabRaw.Controls.Add(this.PanelJson);
         this.TabRaw.Controls.Add(this.ChkOutputJson);
         this.TabRaw.Controls.Add(this.GroupRawSettings);
@@ -809,36 +803,6 @@ partial class SettingsForm
         this.TabRaw.TabIndex = 3;
         this.TabRaw.Text = "Raw formats";
         this.TabRaw.UseVisualStyleBackColor = true;
-        // 
-        // PanelXML
-        // 
-        this.PanelXML.Controls.Add(this.ChkIndentXML);
-        this.PanelXML.Location = new System.Drawing.Point(147, 35);
-        this.PanelXML.Name = "PanelXML";
-        this.PanelXML.Size = new System.Drawing.Size(127, 35);
-        this.PanelXML.TabIndex = 47;
-        // 
-        // ChkIndentXML
-        // 
-        this.ChkIndentXML.AutoSize = true;
-        this.ChkIndentXML.Location = new System.Drawing.Point(3, 3);
-        this.ChkIndentXML.Name = "ChkIndentXML";
-        this.ChkIndentXML.Size = new System.Drawing.Size(81, 17);
-        this.ChkIndentXML.TabIndex = 44;
-        this.ChkIndentXML.Text = "Indent XML";
-        this.ChkIndentXML.UseVisualStyleBackColor = true;
-        this.ChkIndentXML.CheckedChanged += new System.EventHandler(this.ChkIndentXMLCheckedChanged);
-        // 
-        // ChkOutputXml
-        // 
-        this.ChkOutputXml.AutoSize = true;
-        this.ChkOutputXml.Location = new System.Drawing.Point(147, 12);
-        this.ChkOutputXml.Name = "ChkOutputXml";
-        this.ChkOutputXml.Size = new System.Drawing.Size(97, 17);
-        this.ChkOutputXml.TabIndex = 46;
-        this.ChkOutputXml.Text = "Output as XML";
-        this.ChkOutputXml.UseVisualStyleBackColor = true;
-        this.ChkOutputXml.CheckedChanged += new System.EventHandler(this.ChkOutputXMLCheckedChanged);
         // 
         // PanelJson
         // 
@@ -1010,8 +974,6 @@ partial class SettingsForm
         this.TabCSV.PerformLayout();
         this.TabRaw.ResumeLayout(false);
         this.TabRaw.PerformLayout();
-        this.PanelXML.ResumeLayout(false);
-        this.PanelXML.PerformLayout();
         this.PanelJson.ResumeLayout(false);
         this.PanelJson.PerformLayout();
         this.GroupRawSettings.ResumeLayout(false);
@@ -1080,10 +1042,7 @@ partial class SettingsForm
     private System.Windows.Forms.CheckBox ChkAddPoVProf;
     private System.Windows.Forms.CheckBox ChkAddDuration;
     private System.Windows.Forms.Panel PanelJson;
-    private System.Windows.Forms.CheckBox ChkOutputXml;
-    private System.Windows.Forms.Panel PanelXML;
     private System.Windows.Forms.GroupBox GroupRawSettings;
-    private System.Windows.Forms.CheckBox ChkIndentXML;
     private System.Windows.Forms.GroupBox GroupParsing;
     private System.Windows.Forms.Button BtnDumpSettings;
     private System.Windows.Forms.Button BtnLoadSettings;

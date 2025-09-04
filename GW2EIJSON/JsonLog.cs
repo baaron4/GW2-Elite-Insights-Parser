@@ -428,7 +428,7 @@ public class JsonLog
     public IReadOnlyList<JsonMechanics>? Mechanics;
 
     /// <summary>
-    /// Upload links to dps.reports/raidar
+    /// Upload links to dps.reports
     /// </summary>
     public IReadOnlyList<string>? UploadLinks;
 

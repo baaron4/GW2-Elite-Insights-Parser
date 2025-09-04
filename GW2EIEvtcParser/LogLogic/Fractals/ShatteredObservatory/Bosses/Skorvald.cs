@@ -16,9 +16,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Skorvald : ShatteredObservatory
 {
-    public Skorvald(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new PlayerDstHealthDamageHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge", "Combustion Rush","Charge", 0),
             new PlayerDstHealthDamageHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick", "Punishing Kick (Single purple Line, Add)","Kick (Add)", 0),
@@ -27,23 +25,19 @@ internal class Skorvald : ShatteredObservatory
             new PlayerDstHealthDamageHitMechanic(FocusedAnger, new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB", "Focused Anger (Large Cone Overhead Crosshair Knockback)","Large Cone Knockback", 0),
             new MechanicGroup(
                 [
-                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices)","Horizon Strike", 0), // 
+                    new PlayerDstHealthDamageHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike", "Horizon Strike (turning pizza slices during Skorvald)","Horizon Strike (Skorvald)", 0), // 
                     new PlayerDstHealthDamageHitMechanic(CrimsonDawn, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End", "Crimson Dawn (almost Full platform attack after Horizon Strike)","Horizon Strike (last)", 0),
                 ]
             ),
             new PlayerDstHealthDamageHitMechanic(SolarCyclone, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone", "Solar Cyclone (Circling Knockback)","KB Cyclone", 0),
-            new PlayerDstBuffApplyMechanic(Fear, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye", "Hit by the Overhead Eye Fear","Eye (Fear)", 0)
-                .UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
-            new MechanicGroup(
-                [
-                    new PlayerDstBuffApplyMechanic(SkorvaldsIre, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire", "Skorvald's Fixate",  0),
-                    new PlayerDstBuffApplyMechanic(FixatedBloom1, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix", "Fixated by Solar Bloom","Bloom Fixate", 0),
-                ]
-            ),
+            new PlayerDstBuffApplyMechanic(SkorvaldsIre, new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "Skor Fixate", "Fixated by Skorvald's Ire", "Skorvald's Fixate",  0),
             new PlayerDstHealthDamageHitMechanic(BloomExplode, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl", "Hit by Solar Bloom Explosion","Bloom Explosion", 0), //shockwave, not damage? (damage is 50% max HP, not tracked)
             new PlayerDstHealthDamageHitMechanic(SpiralStrike, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Spiral", "Hit after Warp (Jump to Player with overhead bomb)","Spiral Strike", 0),
             new PlayerDstHealthDamageHitMechanic(WaveOfMutilation, new MechanicPlotlySetting(Symbols.TriangleSW,Colors.DarkGreen), "KB Jump", "Hit by KB Jump (player targeted)","Knockback jump", 0),
-        ]));
+        ]);
+    public Skorvald(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "skorv";
         Icon = EncounterIconSkorvald;
         LogCategoryInformation.InSubCategoryOrder = 0;
@@ -59,44 +53,42 @@ internal class Skorvald : ShatteredObservatory
         return crMap;
     }
 
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor skorvald, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, skorvald, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            int phaseIndex = i + 1;
+            PhaseData phase = phases[i];
+            phase.AddParentPhase(encounterPhase);
+            if (phaseIndex % 2 == 0)
+            {
+                phase.Name = "Split " + (phaseIndex) / 2;
+                AddTargetsToPhaseAndFit(phase, targets, FluxAnomalies, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (phaseIndex + 1) / 2;
+                phase.AddTarget(skorvald, log);
+            }
+        }
+        return phases;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         phases[0].AddTarget(skorvald, log);
-        var anomalyIDs = new List<TargetID>
-        {
-            TargetID.FluxAnomaly1,
-            TargetID.FluxAnomaly2,
-            TargetID.FluxAnomaly3,
-            TargetID.FluxAnomaly4,
-            TargetID.FluxAnomalyCM1,
-            TargetID.FluxAnomalyCM2,
-            TargetID.FluxAnomalyCM3,
-            TargetID.FluxAnomalyCM4,
-        };
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(anomalyIDs)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, skorvald, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Split " + (i) / 2;
-                AddTargetsToPhaseAndFit(phase, anomalyIDs, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(skorvald, log);
-            }
-        }
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(FluxAnomalies)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, skorvald, Targets, (EncounterPhaseData)phases[0], requirePhases));
+        
         return phases;
     }
 
@@ -114,28 +106,12 @@ internal class Skorvald : ShatteredObservatory
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void DetectUnknownAnomalies(AgentData agentData, List<CombatItem> combatData)
     {
-        var manualFractalScaleSet = false;
-        if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
-        {
-            manualFractalScaleSet = true;
-        }
         var fluxAnomalies = new List<AgentItem>();
-        var fluxIDs = new List<TargetID>
-                {
-                    TargetID.FluxAnomaly1,
-                    TargetID.FluxAnomaly2,
-                    TargetID.FluxAnomaly3,
-                    TargetID.FluxAnomaly4,
-                    TargetID.FluxAnomalyCM1,
-                    TargetID.FluxAnomalyCM2,
-                    TargetID.FluxAnomalyCM3,
-                    TargetID.FluxAnomalyCM4,
-                };
-        for (int i = 0; i < fluxIDs.Count; i++)
+        for (int i = 0; i < FluxAnomalies.Count; i++)
         {
-            fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIDs[i]));
+            fluxAnomalies.AddRange(agentData.GetNPCsByID(FluxAnomalies[i]));
         }
         foreach (AgentItem fluxAnomaly in fluxAnomalies)
         {
@@ -144,18 +120,12 @@ internal class Skorvald : ShatteredObservatory
                 fluxAnomaly.OverrideID(TargetID.UnknownAnomaly, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-        skorvald.OverrideName("Skorvald");
-        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
-        {
-            // Remove manual scale from T1 to T3 for now
-            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
-            // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
-        }
+    }
 
+    internal static void RenameAnomalies(IReadOnlyList<SingleActor> targets)
+    {
         int[] nameCount = [0, 0, 0, 0];
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             switch (target.ID)
             {
@@ -177,6 +147,26 @@ internal class Skorvald : ShatteredObservatory
                     break;
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var manualFractalScaleSet = false;
+        if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
+        {
+            manualFractalScaleSet = true;
+        }
+        DetectUnknownAnomalies(agentData, combatData);
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        skorvald.OverrideName("Skorvald");
+        if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
+        {
+            // Remove manual scale from T1 to T3 for now
+            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
+            // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
+        }
+        RenameAnomalies(Targets);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
@@ -232,6 +222,11 @@ internal class Skorvald : ShatteredObservatory
         return
         [
             TargetID.Skorvald,
+            .. FluxAnomalies
+        ];
+    }
+
+    internal static readonly IReadOnlyList<TargetID> FluxAnomalies = [
             TargetID.FluxAnomaly1,
             TargetID.FluxAnomaly2,
             TargetID.FluxAnomaly3,
@@ -241,7 +236,6 @@ internal class Skorvald : ShatteredObservatory
             TargetID.FluxAnomalyCM3,
             TargetID.FluxAnomalyCM4,
         ];
-    }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
@@ -255,7 +249,7 @@ internal class Skorvald : ShatteredObservatory
         HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Any(x.From.IsMasterOrSelf));
         if (lastDamageTaken != null)
         {
-            BuffApplyEvent? invul895Apply = combatData.GetBuffApplyDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+            var invul895Apply = combatData.GetBuffApplyDataByIDByDst(Determined895, skorvald.AgentItem).Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
             if (invul895Apply != null)
             {
                 logData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
@@ -548,7 +542,7 @@ internal class Skorvald : ShatteredObservatory
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
-        var fixations = p.GetBuffStatus(log, [FixatedBloom1, SkorvaldsIre]).Where(x => x.Value > 0);
+        var fixations = p.GetBuffStatus(log, [SkorvaldsIre]).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
     }
 

@@ -61,7 +61,34 @@ public class CombatReplayMap
             return (pixelSize, pixelSize);
         }
     }
-
+#if DEBUG
+    internal void ComputeBoundingBox(ParsedEvtcLog log, long start, long end)
+    {
+        if (log.CanCombatReplay && _rectInMap.topX == _rectInMap.bottomX)
+        {
+            _rectInMap.topX = int.MaxValue;
+            _rectInMap.topY = int.MaxValue;
+            _rectInMap.bottomX = int.MinValue;
+            _rectInMap.bottomY = int.MinValue;
+            foreach (Player p in log.PlayerList)
+            {
+                if (!p.HasCombatReplayPositions(log))
+                {
+                    continue;
+                }
+                var pos = p.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end);
+                if (pos.Any())
+                {
+                    _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.XYZ.X)) - 250, _rectInMap.topX);
+                    _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.XYZ.Y)) - 250, _rectInMap.topY);
+                    _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.XYZ.X)) + 250, _rectInMap.bottomX);
+                    _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.XYZ.Y)) + 250, _rectInMap.bottomY);
+                }
+            }
+            FixAspectRatio();
+        }
+    }
+#endif
     internal void ComputeBoundingBox(ParsedEvtcLog log)
     {
         if (log.CanCombatReplay && _rectInMap.topX == _rectInMap.bottomX)

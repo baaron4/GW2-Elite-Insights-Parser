@@ -14,7 +14,6 @@ public class ProgramSettings
     // Format
     public bool SaveOutCSV { get; set; } = false;
     public bool SaveOutHTML { get; set; } = true;
-    public bool SaveOutXML { get; set; } = false;
     public bool SaveOutJSON { get; set; } = false;
     public bool SaveOutTrace { get; set; } = false;
     // Multi threading
@@ -40,11 +39,10 @@ public class ProgramSettings
     public string HtmlExternalScriptsPath { get; set; }
     public string HtmlExternalScriptsCdn { get; set; }
     public bool HtmlCompressJson { get; set; } = false;
-    // JSON/XML
+    // JSON
     public bool RawTimelineArrays { get; set; } = true;
     public bool CompressRaw { get; set; } = false;
     public bool IndentJSON { get; set; } = false;
-    public bool IndentXML { get; set; } = false;
     // Other
     public int MemoryLimit { get; set; } = 0;
 
@@ -72,7 +70,7 @@ public class ProgramSettings
 
     public bool HasFormat()
     {
-        return SaveOutCSV || SaveOutHTML || SaveOutXML || SaveOutJSON;
+        return SaveOutCSV || SaveOutHTML || SaveOutJSON;
     }
 
     public bool DoParseMultipleLogs()

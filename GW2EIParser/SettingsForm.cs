@@ -54,8 +54,7 @@ public partial class SettingsForm : Form
     {
         PanelHtml.Enabled = Settings.SaveOutHTML;
         PanelJson.Enabled = Settings.SaveOutJSON;
-        PanelXML.Enabled = Settings.SaveOutXML;
-        GroupRawSettings.Enabled = Settings.SaveOutJSON || Settings.SaveOutXML;
+        GroupRawSettings.Enabled = Settings.SaveOutJSON;
         TxtHtmlExternalScriptsPath.Enabled = Settings.HtmlExternalScripts;
         LblHtmlExternalScriptsPath.Enabled = Settings.HtmlExternalScripts;
         TxtHtmlExternalScriptsCdn.Enabled = Settings.HtmlExternalScripts;
@@ -80,8 +79,6 @@ public partial class SettingsForm : Form
         ChkCombatReplay.Checked = Settings.ParseCombatReplay;
         ChkOutputJson.Checked = Settings.SaveOutJSON;
         ChkIndentJSON.Checked = Settings.IndentJSON;
-        ChkOutputXml.Checked = Settings.SaveOutXML;
-        ChkIndentXML.Checked = Settings.IndentXML;
         ChkUploadDPSReports.Checked = Settings.UploadToDPSReports;
         ChkUploadWingman.Checked = Settings.UploadToWingman;
         TxtDPSReportUserToken.Text = Settings.DPSReportUserToken;
@@ -261,23 +258,10 @@ public partial class SettingsForm : Form
         SetUIEnable();
     }
 
-    private void ChkOutputXMLCheckedChanged(object sender, EventArgs e)
-    {
-        Settings.SaveOutXML = ChkOutputXml.Checked;
-        Properties.Settings.Default.SaveOutXML = Settings.SaveOutXML;
-        SetUIEnable();
-    }
-
     private void ChkIndentJSONCheckedChanged(object sender, EventArgs e)
     {
         Settings.IndentJSON = ChkIndentJSON.Checked;
         Properties.Settings.Default.IndentJSON = Settings.IndentJSON;
-    }
-
-    private void ChkIndentXMLCheckedChanged(object sender, EventArgs e)
-    {
-        Settings.IndentXML = ChkIndentXML.Checked;
-        Properties.Settings.Default.IndentXML = Settings.IndentXML;
     }
 
     private void ChkHtmlExternalScriptsCheckedChanged(object sender, EventArgs e)

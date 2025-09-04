@@ -121,16 +121,19 @@ internal class AiKeeperOfThePeak : SunquaPeak
         if (_hasDarkMode && _hasElementalMode)
         {
             LogID |= 0x000001;
+            Icon = EncounterIconAi;
             return "Ai, Keeper of the Peak";
         }
         else if (_hasDarkMode)
         {
             LogID |= 0x000003;
+            Icon = EncounterIconAiDark;
             return "Dark Ai, Keeper of the Peak";
         }
         else
         {
             LogID |= 0x000002;
+            Icon = EncounterIconAiElemental;
             return "Elemental Ai, Keeper of the Peak";
         }
     }

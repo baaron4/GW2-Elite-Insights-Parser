@@ -73,7 +73,8 @@ public static class MarkerGUIDs
         TriangleOverhead,
         XOverhead
     };
-
+    // Artsariiv
+    internal static readonly GUID ArtsariivTripleLaserEyeMarker = new("7701D3BA0508E3418D250F22FE407CDA");
     // Sabetha
     internal static readonly GUID SabethaCannonRedCrossSwordsMarker = new("09C2D6DFE68B004D928B1C76EF77D47E");
     // Ura

@@ -59,8 +59,6 @@ public sealed class ProgramHelper : IDisposable
     public ProgramSettings Settings { get; private set; }
     private readonly Version ParserVersion;
 
-    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
-
     public static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
     public static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
     public static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
@@ -468,7 +466,7 @@ public sealed class ProgramHelper : IDisposable
             }
             operation.UpdateProgressWithCancellationCheck("Program: CSV created");
         }
-        if (Settings.SaveOutJSON || Settings.SaveOutXML)
+        if (Settings.SaveOutJSON)
         {
             var builder = new RawFormatBuilder(log, new RawFormatSettings(Settings.RawTimelineArrays), ParserVersion, uploadResults);
             if (Settings.SaveOutJSON)
@@ -494,38 +492,6 @@ public sealed class ProgramHelper : IDisposable
                 }
 
                 operation.UpdateProgressWithCancellationCheck("Program: JSON created");
-            }
-            if (Settings.SaveOutXML)
-            {
-                using var _t1 = new AutoTrace("Generate XML");
-                operation.UpdateProgressWithCancellationCheck("Program: Creating XML");
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}.xml"
-                );
-                Stream str;
-                if (Settings.CompressRaw || log.LogData.IsInstance)
-                {
-                    str = new MemoryStream();
-                }
-                else
-                {
-                    str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
-                }
-                using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
-                {
-                    builder.CreateXML(sw, Settings.IndentXML);
-                }
-                if (str is MemoryStream msr)
-                {
-                    CompressFile(outputFile, msr, operation);
-                    operation.UpdateProgressWithCancellationCheck("Program: XML compressed");
-                }
-                else
-                {
-                    operation.AddFile(outputFile);
-                }
-                operation.UpdateProgressWithCancellationCheck("Program: XML created");
             }
         }
         operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.LogData.Logic.Extension}");
