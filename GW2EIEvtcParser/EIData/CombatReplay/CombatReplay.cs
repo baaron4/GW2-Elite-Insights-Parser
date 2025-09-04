@@ -95,10 +95,12 @@ public class CombatReplay
         return res - 1;
     }
 
-    private void HandlePosition(long t, ref int positionTableIndex, ref int velocityTableIndex, int rate)
+    private static readonly ParametricPoint3D _Default = new(0, 0, 0, long.MinValue);
+
+    private (int, int) HandlePosition(long t, int positionTableIndex, int velocityTableIndex, int rate)
     {
         ParametricPoint3D pos = _Positions[positionTableIndex];
-        ParametricPoint3D? toInsert = null;
+        ParametricPoint3D toInsert = _Default;
         if (t <= pos.Time)
         {
             toInsert = (pos.WithChangedTime(t));
@@ -115,7 +117,7 @@ public class CombatReplay
                 if (nextPos.Time < t)
                 {
                     positionTableIndex++;
-                    HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
+                    (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
                 }
                 else
                 {
@@ -140,16 +142,17 @@ public class CombatReplay
                 }
             }
         }
-        if (toInsert != null && toInsert.Value.Time >= 0)
+        if (toInsert.Time >= 0)
         {
-            _PolledPositions.Add(toInsert.Value);
+            _PolledPositions.Add(toInsert);
         }
+        return (positionTableIndex, velocityTableIndex);
     }
 
-    private void HandleRotation(long t, ref int rotationTableIndex, int rate)
+    private int HandleRotation(long t, int rotationTableIndex, int rate)
     {
         var rot = _Rotations[rotationTableIndex];
-        ParametricPoint3D? toInsert = null;
+        ParametricPoint3D toInsert = _Default;
         if (t <= rot.Time)
         {
             toInsert = (rot.WithChangedTime(t));
@@ -166,7 +169,7 @@ public class CombatReplay
                 if (nextRot.Time < t)
                 {
                     rotationTableIndex++;
-                    HandleRotation(t, ref rotationTableIndex, rate);
+                    rotationTableIndex = HandleRotation(t, rotationTableIndex, rate);
                 }
                 else
                 {
@@ -184,10 +187,11 @@ public class CombatReplay
                 }
             }
         }
-        if (toInsert != null && toInsert.Value.Time >= 0)
+        if (toInsert.Time >= 0)
         {
-            _PolledRotations.Add(toInsert.Value);
+            _PolledRotations.Add(toInsert);
         }
+        return rotationTableIndex;
     }
 
     internal void PollingRate(long logDuration, bool forcePolling)
@@ -220,15 +224,15 @@ public class CombatReplay
         {
             for (long t = startOffset; t < logDuration; t += rate)
             {
-                HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
-                HandleRotation(t, ref rotationTableIndex, rate);
+                (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
+                rotationTableIndex = HandleRotation(t, rotationTableIndex, rate);
             }
         } 
         else
         {
             for (long t = startOffset; t < logDuration; t += rate)
             {
-                HandlePosition(t, ref positionTableIndex, ref velocityTableIndex, rate);
+                (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
             }
         }
     }
