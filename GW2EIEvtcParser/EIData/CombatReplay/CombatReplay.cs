@@ -100,16 +100,15 @@ public class CombatReplay
     private (int, int) HandlePosition(long t, int positionTableIndex, int velocityTableIndex, int rate)
     {
         ParametricPoint3D pos = _Positions[positionTableIndex];
-        ParametricPoint3D toInsert = _Default;
         if (t <= pos.Time)
         {
-            toInsert = (pos.WithChangedTime(t));
+            _PolledPositions.Add(pos.WithChangedTime(t));
         }
         else
         {
             if (positionTableIndex == _Positions.Count - 1)
             {
-                toInsert = (pos.WithChangedTime(t));
+                _PolledPositions.Add(pos.WithChangedTime(t));
             }
             else
             {
@@ -131,20 +130,16 @@ public class CombatReplay
 
                     if (nextPos.Time - last.Time > ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
                     {
-                        toInsert = (last.WithChangedTime(t));
+                        _PolledPositions.Add(last.WithChangedTime(t));
                     }
                     else
                     {
                         float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
-                        toInsert = (new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
+                        _PolledPositions.Add(new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
                     }
 
                 }
             }
-        }
-        if (toInsert.Time >= 0)
-        {
-            _PolledPositions.Add(toInsert);
         }
         return (positionTableIndex, velocityTableIndex);
     }
@@ -152,16 +147,15 @@ public class CombatReplay
     private int HandleRotation(long t, int rotationTableIndex, int rate)
     {
         var rot = _Rotations[rotationTableIndex];
-        ParametricPoint3D toInsert = _Default;
         if (t <= rot.Time)
         {
-            toInsert = (rot.WithChangedTime(t));
+            _PolledRotations.Add(rot.WithChangedTime(t));
         }
         else
         {
             if (rotationTableIndex == _Rotations.Count - 1)
             {
-                toInsert = (rot.WithChangedTime(t));
+                _PolledRotations.Add(rot.WithChangedTime(t));
             }
             else
             {
@@ -176,20 +170,16 @@ public class CombatReplay
                     ParametricPoint3D last = _PolledRotations.Last().Time > rot.Time ? _PolledRotations.Last() : rot;
                     if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
                     {
-                        toInsert = (last.WithChangedTime(t));
+                        _PolledRotations.Add(last.WithChangedTime(t));
                     }
                     else
                     {
                         float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
-                        toInsert = (new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
+                        _PolledRotations.Add(new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
                     }
 
                 }
             }
-        }
-        if (toInsert.Time >= 0)
-        {
-            _PolledRotations.Add(toInsert);
         }
         return rotationTableIndex;
     }
