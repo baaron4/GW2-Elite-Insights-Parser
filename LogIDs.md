@@ -126,11 +126,15 @@ Slient Surf Full Instance: 0x030400
 Kanaxai, Scythe of House Aurkus: 0x030401
 
 ### Lonely Tower
+Lonely Tower Full Instance: 0x030500
+
 Cerus and Deimos: 0x030501
 
 Eparch: 0x030502
 
 ### Kinfall
+Kinfall Full Instance: 0x030600
+
 Whispering Shadow: 0x030601
 
 ## Strikes
@@ -224,7 +228,7 @@ Large Golem: 0x080109
 
 Medium Golem: 0x08010A
 
-0xXXX2XX indicates a full instance log.
+0xXX02XX indicates a full instance log.
 
 ## Convergences
 Convergences are all full instance logs.
