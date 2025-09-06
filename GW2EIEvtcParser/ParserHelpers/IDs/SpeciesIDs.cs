@@ -607,7 +607,7 @@ public static class SpeciesIDs
         ProjectionArkk = 17613,
         // - Ai
         AiKeeperOfThePeak = 23254,
-        AiKeeperOfThePeak2 = SpeciesIDs.AiKeeperOfThePeak2,
+        DarkAiKeeperOfThePeak = SpeciesIDs.AiKeeperOfThePeak2,
         EnragedWaterSprite = 23270,
         TransitionSorrowDemon1 = 23265,
         TransitionSorrowDemon2 = 23242,

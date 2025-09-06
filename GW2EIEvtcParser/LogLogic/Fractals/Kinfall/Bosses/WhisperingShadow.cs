@@ -317,7 +317,7 @@ internal class WhisperingShadow : Kinfall
         environmentDecorations.AddNonHomingMissiles(log, freezingVortexMissiles, Colors.Red, 0.1, 200);
     }
 
-    protected static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
+    private static void AddLifeFireCircle(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, long buff, uint radius)
     {
         var lifefires = player.GetBuffStatus(log, buff).Where(x => x.Value > 0);
         foreach (var lifefire in lifefires)

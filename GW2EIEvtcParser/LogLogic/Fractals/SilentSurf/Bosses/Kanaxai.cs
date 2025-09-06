@@ -446,37 +446,32 @@ internal class Kanaxai : SilentSurf
         // Rending Storm - Red Axe AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out var axeAoEs))
         {
+            // Get Axe AoE Buffs
+            //TODO(Rennorb) @perf: find average complexity
+            var axes = new List<BuffEvent>(50);
+            axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
+            axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
+            axes.SortByTime();
             // Get World Cleaver casts
-            SingleActor? kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
-            if (kanaxai != null)
+            var casts = log.CombatData.GetAnimatedCastData(WorldCleaver).Where(x => x.Caster.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
+
+            foreach (EffectEvent aoe in axeAoEs)
             {
-                var casts = kanaxai.GetCastEvents(log);
+                // Find the first cast time event present after the AoE effect time
+                var cast = casts.FirstOrDefault(x => x.Time > aoe.Time);
+                long worldCleaverTime = cast?.Time ?? 0;
 
-                // Get Axe AoE Buffs
-                //TODO(Rennorb) @perf: find average complexity
-                var axes = new List<BuffEvent>(50);
-                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
-                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
-                axes.SortByTime();
-
-                foreach (EffectEvent aoe in axeAoEs)
+                // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
+                // World Cleaver is the time-limit of when the AoEs reset, in third phase we use LogEnd
+                if (worldCleaverTime != 0)
                 {
-                    // Find the first cast time event present after the AoE effect time
-                    var cast = casts.Where(x => x.SkillID == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
-                    long worldCleaverTime = cast?.Time ?? 0;
-
-                    // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
-                    // World Cleaver is the time-limit of when the AoEs reset, in third phase we use LogEnd
-                    if (worldCleaverTime != 0)
-                    {
-                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
-                        AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime, environmentDecorations);
-                    }
-                    else
-                    {
-                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
-                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.LogData.LogEnd, environmentDecorations);
-                    }
+                    var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
+                    AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime, environmentDecorations);
+                }
+                else
+                {
+                    var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
+                    AddAxeAoeDecoration(aoe, axeBuffRemoval, log.LogData.LogEnd, environmentDecorations);
                 }
             }
         }
