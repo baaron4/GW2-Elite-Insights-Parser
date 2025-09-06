@@ -15,6 +15,6 @@ public class PositionEvent : MovementEvent
         {
             return;
         }
-        replay.Positions.Add(point);
+        replay.AddPosition(point);
     }
 }

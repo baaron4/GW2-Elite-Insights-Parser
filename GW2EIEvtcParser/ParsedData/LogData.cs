@@ -1,7 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.LogLogic.OpenWorld;
-using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParsedData.AgentItem;
 using static GW2EIEvtcParser.SkillIDs;
@@ -374,7 +374,13 @@ public class LogData
                     throw new InvalidDataException("Boss logs must have only one encounter phase");
                 }
             }
-            _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
+            var encounterPhases = _phases.OfType<EncounterPhaseData>().ToList();
+            var breakbarPhases = Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases);
+            // Add a limit to the number of breakbar phases for instance
+            if (!IsInstance || breakbarPhases.Count < 10 * encounterPhases.Count)
+            {
+                _phases.AddRange(breakbarPhases);
+            }
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
             if (_phases.Count == 0 && removed > 0)
             {
@@ -408,7 +414,6 @@ public class LogData
             });
             // Attach encounter phases
             var subPhases = _phases.OfType<SubPhasePhaseData>().ToList();
-            var encounterPhases = _phases.OfType<EncounterPhaseData>();
             int offset = 0;
             foreach (var encounterPhase in encounterPhases)
             {

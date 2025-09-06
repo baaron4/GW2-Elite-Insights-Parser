@@ -134,7 +134,9 @@ internal class DecimaTheStormsinger : MountBalrior
                 .UsingEnable(log => log.LogData.IsCM)
                 .UsingAchievementEligibility(),
             new EnemyDstBuffApplyMechanic(ChargeDecima, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0),
+            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0)
+                // Collides with Ura
+                .UsingEnable((log) => !log.LogData.IsInstance),
         ]);
 
     public DecimaTheStormsinger(int triggerID) : base(triggerID)
@@ -331,7 +333,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 preFinalPhase.AddParentPhases(mainPhases);
                 preFinalPhase.AddTarget(decima, log);
                 phases.Add(preFinalPhase);
-                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
+                var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByIDByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
                 if (finalPhaseStartEvent != null)
                 {
                     var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, encounterPhase.End, "10% - 0%");

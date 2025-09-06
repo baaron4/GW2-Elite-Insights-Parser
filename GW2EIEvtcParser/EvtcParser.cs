@@ -235,13 +235,10 @@ public class EvtcParser
                     Parallel.ForEach(friendliesAndTargetsEnglobing, actor =>
                     {
                         var englobeds = friendliesAndTargetsAndMobsEnglobed.Where(x => x.EnglobingAgentItem == actor.AgentItem);
-                        foreach (PhaseData phase in phases)
+                        actor.GetBuffGraphs(log);
+                        foreach (var englobed in englobeds)
                         {
-                            actor.GetBuffGraphs(log);
-                            foreach (var englobed in englobeds)
-                            {
-                                englobed.GetBuffGraphs(log);
-                            }
+                            englobed.GetBuffGraphs(log);
                         }
                     });
                     _t.Log("friendliesAndTargetsAndMobs englobed ComputeBuffGraphs");
@@ -269,6 +266,20 @@ public class EvtcParser
                     });
                     _t.Log("friendliesAndTargets GetBuffPresence");
                 }
+                Parallel.ForEach(log.Friendlies, actor =>
+                {
+                    foreach (PhaseData phase in phases)
+                    {
+                        // To create the caches
+                        foreach (var p in log.PlayerList)
+                        {
+                            actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, p, true);
+                            actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0, p, true);
+                            actor.GetBuffRemoveAllEventsFromByID(log, phase.Start, phase.End, 0, p, true);
+                        }
+                    }
+                });
+                _t.Log("Friendlies accelerator caches");
                 //
                 //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                 Parallel.ForEach(log.Friendlies, actor =>
@@ -282,8 +293,6 @@ public class EvtcParser
                 {
                     foreach (PhaseData phase in phases)
                     {
-                        // To create the caches
-                        actor.GetBuffApplyEventsByID(log, phase.Start, phase.End, 0);
                         actor.GetBuffVolumes(BuffEnum.Self, log, phase.Start, phase.End);
                     }
                 });
