@@ -56,15 +56,4 @@
         <ProjectReference Include="..\GW2EIWingman\GW2EIWingman.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <None Include="Settings\sample.conf">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <Compile Update="Settings\Settings.Designer.cs">
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <DependentUpon>Settings.settings</DependentUpon>
-            <AutoGen>True</AutoGen>
-        </Compile>
-    </ItemGroup>
-
 </Project>

@@ -30,6 +30,8 @@ partial class UpdaterForm
     /// </summary>
     private void InitializeComponent()
     {
+        var dataGridViewCellStyle1 = new DataGridViewCellStyle();
+        var resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdaterForm));
         lblHeader = new Label();
         gridVersions = new DataGridView();
         dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
@@ -37,6 +39,7 @@ partial class UpdaterForm
         btnUpdate = new Button();
         btnDismiss = new Button();
         linkLblReleaseNotes = new LinkLabel();
+        lblDwnlSize = new Label();
         ((System.ComponentModel.ISupportInitialize)gridVersions).BeginInit();
         SuspendLayout();
         // 
@@ -57,13 +60,19 @@ partial class UpdaterForm
         gridVersions.AllowUserToResizeRows = false;
         gridVersions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
         gridVersions.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2 });
-        gridVersions.DefaultCellStyle.SelectionBackColor = gridVersions.DefaultCellStyle.BackColor;
-        gridVersions.DefaultCellStyle.SelectionForeColor = gridVersions.DefaultCellStyle.ForeColor;
+        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle1.BackColor = SystemColors.Window;
+        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+        dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle1.SelectionBackColor = SystemColors.Window;
+        dataGridViewCellStyle1.SelectionForeColor = SystemColors.ControlText;
+        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+        gridVersions.DefaultCellStyle = dataGridViewCellStyle1;
         gridVersions.Location = new Point(23, 47);
         gridVersions.Name = "gridVersions";
         gridVersions.ReadOnly = true;
         gridVersions.RowHeadersVisible = false;
-        gridVersions.Size = new Size(203, 51);
+        gridVersions.Size = new Size(203, 49);
         gridVersions.TabIndex = 1;
         // 
         // dataGridViewTextBoxColumn1
@@ -80,7 +89,7 @@ partial class UpdaterForm
         // 
         // btnUpdate
         // 
-        btnUpdate.Location = new Point(151, 151);
+        btnUpdate.Location = new Point(151, 152);
         btnUpdate.Name = "btnUpdate";
         btnUpdate.Size = new Size(75, 23);
         btnUpdate.TabIndex = 2;
@@ -90,7 +99,7 @@ partial class UpdaterForm
         // 
         // btnDismiss
         // 
-        btnDismiss.Location = new Point(23, 151);
+        btnDismiss.Location = new Point(23, 152);
         btnDismiss.Name = "btnDismiss";
         btnDismiss.Size = new Size(75, 23);
         btnDismiss.TabIndex = 3;
@@ -101,25 +110,39 @@ partial class UpdaterForm
         // linkLblReleaseNotes
         // 
         linkLblReleaseNotes.AutoSize = true;
-        linkLblReleaseNotes.Location = new Point(23, 117);
+        linkLblReleaseNotes.Location = new Point(23, 110);
         linkLblReleaseNotes.Name = "linkLblReleaseNotes";
         linkLblReleaseNotes.Size = new Size(80, 15);
         linkLblReleaseNotes.TabIndex = 4;
         linkLblReleaseNotes.TabStop = true;
         linkLblReleaseNotes.Text = "Release Notes";
         // 
+        // lblDwnlSize
+        // 
+        lblDwnlSize.AutoSize = true;
+        lblDwnlSize.Location = new Point(23, 134);
+        lblDwnlSize.Name = "lblDwnlSize";
+        lblDwnlSize.Size = new Size(87, 15);
+        lblDwnlSize.TabIndex = 5;
+        lblDwnlSize.Text = "Download Size:";
+        // 
         // UpdaterForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(244, 191);
+        ClientSize = new Size(247, 195);
+        Controls.Add(lblDwnlSize);
         Controls.Add(linkLblReleaseNotes);
         Controls.Add(btnDismiss);
         Controls.Add(btnUpdate);
         Controls.Add(gridVersions);
         Controls.Add(lblHeader);
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        Icon = (Icon)resources.GetObject("$this.Icon");
+        MaximizeBox = false;
+        MinimizeBox = false;
         Name = "UpdaterForm";
-        Text = "Update Found";
+        Text = "GW2 Elite Insights Updater";
         ((System.ComponentModel.ISupportInitialize)gridVersions).EndInit();
         ResumeLayout(false);
         PerformLayout();
@@ -134,4 +157,5 @@ partial class UpdaterForm
     private Button btnUpdate;
     private Button btnDismiss;
     private LinkLabel linkLblReleaseNotes;
+    private Label lblDwnlSize;
 }

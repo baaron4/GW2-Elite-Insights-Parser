@@ -1,18 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace GW2EIUpdater;
 
 /// <summary>
 /// See https://api.github.com/repos/baaron4/GW2-Elite-Insights-Parser/releases/latest for available properties.
 /// </summary>
-internal sealed class GitHubRelease
+public sealed class GitHubRelease
 {
-    [JsonProperty("html_url")]
-    internal string Html_Url { get; set; }
+    [JsonPropertyName("html_url")]
+    public string HtmlUrl { get; set; } = string.Empty;
 
-    [JsonProperty("name")]
-    internal string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 
-    [JsonProperty("assets")]
-    internal GitHubReleaseAsset[] Assets { get; set; }
+    [JsonPropertyName("assets")]
+    public GitHubReleaseAsset[] Assets { get; set; } = [];
 }

@@ -46,6 +46,18 @@ internal sealed partial class MainForm : Form
         _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
         _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
         FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
+
+        // Updater
+        long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (time - Properties.Settings.Default.UpdateLastChecked > 3600)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
+                _settingsForm.UpdaterSettings(info.UpdateAvailable, time);
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        _settingsForm.LoadUpdaterSettings(LblVersion);
     }
 
     private void LoadSettingsWatcher(object sender, EventArgs e)
@@ -193,6 +205,7 @@ internal sealed partial class MainForm : Form
         BtnParse.Enabled = false;
         BtnCancelAll.Enabled = true;
         BtnDiscordBatch.Enabled = false;
+        BtnCheckUpdates.Enabled = false;
         ChkAutoDiscordBatch.Enabled = false;
         if (_programHelper.ParseMultipleLogs() && _runningCount < _programHelper.GetMaxParallelRunning())
         {
@@ -230,6 +243,7 @@ internal sealed partial class MainForm : Form
                 BtnClearAll.Enabled = true;
                 BtnCancelAll.Enabled = false;
                 BtnDiscordBatch.Enabled = true;
+                BtnCheckUpdates.Enabled = true;
                 ChkAutoDiscordBatch.Enabled = true;
                 _settingsForm.ConditionalSettingDisable(_anyRunning);
                 AutoUpdateDiscordBatch();
@@ -882,20 +896,22 @@ internal sealed partial class MainForm : Form
     private void BtnCheckUpdates_Click(object sender, EventArgs e)
     {
         AddTraceMessage("Updater: Checking for updates");
-        Updater updater = new();
 
-        var mainForm = this;
-        var uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
         Task.Factory.StartNew(async () =>
         {
-            if (await updater.NewReleaseCheckerAsync())
+            Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
+            if (info.UpdateAvailable)
             {
-                mainForm.Invoke(() => // Must run on UI thread
+                Invoke(() => // Must run on UI thread
                 {
-                    var updaterForm = new UpdaterForm(updater);
-                    updaterForm.Show();
+                    var updaterForm = new UpdaterForm(info);
+                    updaterForm.ShowDialog(this);
                 });
             }
-        }, CancellationToken.None, TaskCreationOptions.None, uiScheduler);
+            else
+            {
+                MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
     }
 }

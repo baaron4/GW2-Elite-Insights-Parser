@@ -1,140 +1,131 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace GW2EIUpdater;
 
-public class Updater
+public static class Updater
 {
-    /// <summary>
-    /// Current Elite Insights running version.
-    /// </summary>
-    public string CurrentVersion { get; private set; } = string.Empty;
-    /// <summary>
-    /// Latest Elite Insights version found.
-    /// </summary>
-    public string LatestVersion { get; private set; } = string.Empty;
-    /// <summary>
-    /// Latest Elite Insights release page link.
-    /// </summary>
-    public string ReleasePageURL { get; private set; } = string.Empty;
-    /// <summary>
-    /// Wether a new Elite Insights update has been found or not.
-    /// </summary>
-    public bool UpdateFound { get; private set; } = false;
-
-    public const string EI_DownloadName = "GW2EI.zip";
-    public const string EICLI_DownloadName = "GW2EICLI.zip";
-    public const string EI_TempFolder = "GW2EIUpdateTemp";
-    public const string EIUpdater_Executable = "GuildWars2EliteInsightsUpdater.exe";
-    private readonly string Executable = Process.GetCurrentProcess().ProcessName;
-    private const string LatestReleaseURL = "https://api.github.com/repos/baaron4/GW2-Elite-Insights-Parser/releases/latest";
-    private readonly HttpClient httpClient = new();
-    private readonly bool DownloadCLI = false;
-    private GitHubRelease LatestRelease;
-
-    public Updater()
+    public struct UpdateInfo(string current, string latest, string release, string size, string file, bool update)
     {
+        /// <summary>
+        /// Current Elite Insights running version.
+        /// </summary>
+        public string CurrentVersion = current;
+        /// <summary>
+        /// Latest Elite Insights version found.
+        /// </summary>
+        public string LatestVersion = latest;
+        /// <summary>
+        /// Latest Elite Insights release page link.
+        /// </summary>
+        public string ReleasePageURL = release;
+        /// <summary>
+        /// Size of the downloadable file.
+        /// </summary>
+        public string DownloadSize = size;
+        /// <summary>
+        /// Name of the file to download.
+        /// </summary>
+        public string FileName = file;
+        /// <summary>
+        /// Wether a new Elite Insights update has been found or not.
+        /// </summary>
+        public bool UpdateAvailable = update;
     }
 
-    public Updater(bool downloadCLI)
-    {
-        DownloadCLI = downloadCLI;
-    }
+    public static string TempFolderName { get; } = "GW2EIUpdateTemp";
+    
+    private static readonly bool _downloadCLI = false;
+    private static readonly HttpClient _httpClient = new();
+    private static GitHubRelease _latestRelease = new();
 
     /// <summary>
     /// Checks the version of the latest GitHub release.
     /// </summary>
     /// <returns>Returns true if the latest version has a higher number than current.</returns>
-    public async Task<bool> NewReleaseCheckerAsync()
+    public static async Task<UpdateInfo> CheckForUpdate(string fileName)
     {
-        var assembly = Assembly.GetEntryAssembly();
+        bool isCLI = fileName.Equals("GW2EICLI.zip");
+        Version currentVersion = Assembly.GetEntryAssembly().GetName().Version;
 
-        if (assembly != null)
+        // GitHub API Call & JSON Object creation
+        try
         {
-            Version currentVersion = assembly.GetName().Version!;
+            // Uri & Client Headers
+            var uri = new Uri("https://api.github.com/repos/baaron4/GW2-Elite-Insights-Parser/releases/latest");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("GW2EI-Updater/1.0");
+            _httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
 
-            // GitHub API Call & JSON Object creation
-            try
-            {
-                var uri = new Uri(LatestReleaseURL);
-                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("GW2EI-Updater/1.0");
-                httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
-                using var responseMessage = await httpClient.GetAsync(uri);
-                responseMessage.EnsureSuccessStatusCode();
-                var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
-                LatestRelease = JsonConvert.DeserializeObject<GitHubRelease>(jsonResponse);
-            }
-            catch
-            {
-                LatestRelease = null;
-            }
+            // API Response
+            using var responseMessage = await _httpClient.GetAsync(uri);
+            responseMessage.EnsureSuccessStatusCode();
 
-            if (LatestRelease != null && currentVersion != null)
-            {
-                // Release format is "v1.0.0.0"
-                string version = LatestRelease.Name.Substring(1); // Remove "v"
-                var latestVersion = Version.Parse(version);
+            // Response serialization
+            var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
+            _latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse);
 
-                // Store release information
-                CurrentVersion = currentVersion.ToString();
-                LatestVersion = latestVersion.ToString();
-                ReleasePageURL = LatestRelease.Html_Url;
-                UpdateFound = latestVersion > currentVersion;
-            }
-            return UpdateFound;
+            // Release format is "v1.0.0.0"
+            string version = _latestRelease.Name.Substring(1); // Remove "v"
+            var latestVersion = Version.Parse(version);
+
+            // File download size
+            long size = isCLI ? _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size : _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
+
+            return new UpdateInfo(
+                currentVersion.ToString(),
+                latestVersion.ToString(),
+                _latestRelease.HtmlUrl,
+                $"{size / (1024.0 * 1024.0):F2} MB",
+                fileName,
+                latestVersion > currentVersion);
         }
-        
-        return UpdateFound;
+        catch
+        {
+            throw new HttpRequestException("API Request failed");
+        }
     }
 
-    public async Task DownloadFileAsync()
+    public static async Task DownloadAndUpdate(UpdateInfo info)
     {
-        string downloadUrl = string.Empty;
         
+        string downloadUrl = string.Empty;
+        string filePath = string.Empty;
+
         // Windows: C:\Users\User\AppData\Local\Temp\
         // Linux: /tmp/
         string tempPath = Path.GetTempPath();
 
         // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\
         // Linux: /tmp/GW2EIUpdateTemp/
-        string folderPath = Path.Combine(tempPath, EI_TempFolder);
-
-        // Create folder if it doesn't exist
-        Directory.CreateDirectory(folderPath);
+        string folderPath = Path.Combine(tempPath, TempFolderName);
 
         try
         {
-            if (LatestRelease == null)
-            {
-                throw new HttpRequestException("Latest Release not found");
-            }
+            Directory.CreateDirectory(folderPath);
 
-            if (DownloadCLI)
+            if (_downloadCLI)
             {
-                downloadUrl = Array.Find(LatestRelease.Assets, x => x.Name.Equals(EICLI_DownloadName, StringComparison.Ordinal))?.BrowserDownloadUrl!;
+                downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
 
-                // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EI.zip
-                // Linux: /tmp/GW2EIUpdateTemp/GW2EI.zip
-                string filePath = Path.Combine(folderPath, EICLI_DownloadName);
+                // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EICLI.zip
+                // Linux: /tmp/GW2EIUpdateTemp/GW2EICLI.zip
+                filePath = Path.Combine(folderPath, info.FileName);
             }
             else
             {
-                downloadUrl = Array.Find(LatestRelease.Assets, x => x.Name.Equals(EI_DownloadName, StringComparison.Ordinal))?.BrowserDownloadUrl!;
+                downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
 
                 // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EI.zip
                 // Linux: /tmp/GW2EIUpdateTemp/GW2EI.zip
-                string filePath = Path.Combine(folderPath, EI_DownloadName);
+                filePath = Path.Combine(folderPath, info.FileName);
             }
 
-            // Get Zip response message
+            // Get response message
             var uri = new Uri(downloadUrl);
-            using HttpResponseMessage responseMessage = await httpClient.GetAsync(uri);
-            if (!responseMessage.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException("Download failed");
-            }
+            using HttpResponseMessage responseMessage = await _httpClient.GetAsync(uri);
+            responseMessage.EnsureSuccessStatusCode();
 
             // Read Zip content
             using Stream response = await responseMessage.Content.ReadAsStreamAsync();
@@ -142,36 +133,38 @@ public class Updater
             await response.CopyToAsync(ms);
             ms.Position = 0;
 
-            // Unzip memory stream
+            // Unzip and save from memory stream
             try
             {
                 using var archive = new ZipArchive(ms, ZipArchiveMode.Read);
-                archive.ExtractToDirectory(folderPath, overwriteFiles: true);
+                //ExtractToDirectory(folderPath, overwriteFiles: true);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new InvalidDataException("Unzip failed");
+                throw new InvalidDataException("Downloaded zip archive extraction has failed", ex);
             }
 
         }
-        catch
+        catch (Exception ex)
         {
-            throw new HttpRequestException("Update failed");
+            throw new HttpRequestException("Update failed", ex);
         }
 
         // Execute updater process
         try
         {
-            Process.Start(new ProcessStartInfo
+            var psi = new ProcessStartInfo
             {
                 UseShellExecute = true,
-                FileName = $"{folderPath}\\{EIUpdater_Executable}",
-                Arguments = $"{AppContext.BaseDirectory} {Executable}",
-            });
+                FileName = Path.Combine(folderPath, "GuildWars2EliteInsightsUpdater.exe"),
+            };
+            psi.ArgumentList.Add(AppContext.BaseDirectory);
+            psi.ArgumentList.Add(Process.GetCurrentProcess().ProcessName);
+            Process.Start(psi);
         }
-        catch
+        catch (Exception ex)
         {
-            throw new DllNotFoundException("Executable not found");
+            throw new DllNotFoundException("GW2EIUpdater executable not found", ex);
         }
     }
 }

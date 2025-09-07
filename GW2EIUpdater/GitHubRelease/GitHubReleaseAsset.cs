@@ -1,15 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace GW2EIUpdater;
 
-internal class GitHubReleaseAsset
+public class GitHubReleaseAsset
 {
-    [JsonProperty("name")]
-    internal string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 
-    [JsonProperty("size")]
-    internal long Size { get; set; }
+    [JsonPropertyName("size")]
+    public long Size { get; set; } = 0;
 
-    [JsonProperty("browser_download_url")]
-    internal string BrowserDownloadUrl { get; set; }
+    [JsonPropertyName("browser_download_url")]
+    public string BrowserDownloadUrl { get; set; } = string.Empty;
 }

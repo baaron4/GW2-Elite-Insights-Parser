@@ -60,6 +60,7 @@ partial class MainForm
         ChkApplicationTraces = new CheckBox();
         ChkAutoDiscordBatch = new CheckBox();
         BtnCheckUpdates = new Button();
+        ToolTipUpdate = new ToolTip(components);
         ((System.ComponentModel.ISupportInitialize)NumericCustomPopulateLimit).BeginInit();
         ((System.ComponentModel.ISupportInitialize)DgvFiles).BeginInit();
         ((System.ComponentModel.ISupportInitialize)OperatorBindingSource).BeginInit();
@@ -314,11 +315,13 @@ partial class MainForm
         // 
         // BtnCheckUpdates
         // 
+        BtnCheckUpdates.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
         BtnCheckUpdates.Location = new Point(105, 386);
+        BtnCheckUpdates.Margin = new Padding(4, 3, 4, 3);
         BtnCheckUpdates.Name = "BtnCheckUpdates";
         BtnCheckUpdates.Size = new Size(108, 27);
         BtnCheckUpdates.TabIndex = 21;
-        BtnCheckUpdates.Text = "Check Updates";
+        BtnCheckUpdates.Text = "Check EI Updates";
         BtnCheckUpdates.UseVisualStyleBackColor = true;
         BtnCheckUpdates.Click += BtnCheckUpdates_Click;
         // 
@@ -384,6 +387,7 @@ partial class MainForm
     private CheckBox ChkApplicationTraces;
     private CheckBox ChkAutoDiscordBatch;
     private Button BtnCheckUpdates;
+    private ToolTip ToolTipUpdate;
 
     #region CUSTOM_GRID_VIEW
     // https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/disable-buttons-in-a-button-column-in-the-datagrid?view=netframeworkdesktop-4.8&redirectedfrom=MSDN

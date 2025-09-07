@@ -59,7 +59,7 @@ internal static class Program
         try
         {
             // TODO restore this comment before merging
-            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.EI_TempFolder), true);
+            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.TempFolderName), true);
         }
         catch
         {

@@ -5,22 +5,22 @@ namespace GW2EIParser;
 
 public partial class UpdaterForm : Form
 {
-    private readonly Updater Updater = new();
+    private Updater.UpdateInfo _info = new ();
 
-    public UpdaterForm(Updater updater)
+    public UpdaterForm(Updater.UpdateInfo info)
     {
-        Updater = updater;
+        _info = info;
         InitializeComponent();
 
         // Add versions to grid
-        gridVersions.Rows.Add([updater.CurrentVersion, updater.LatestVersion]);
+        gridVersions.Rows.Add([_info.CurrentVersion, _info.LatestVersion]);
         foreach (DataGridViewColumn column in gridVersions.Columns)
         {
             column.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
 
         // Add release notes link
-        linkLblReleaseNotes.Links.Add(0, linkLblReleaseNotes.Text.Length, updater.ReleasePageURL);
+        linkLblReleaseNotes.Links.Add(0, linkLblReleaseNotes.Text.Length, _info.ReleasePageURL);
         linkLblReleaseNotes.LinkClicked += (sender, e) =>
         {
             string link = e.Link.LinkData as string;
@@ -33,13 +33,16 @@ public partial class UpdaterForm : Form
                 });
             }
         };
+
+        // Add update size
+        lblDwnlSize.Text = lblDwnlSize.Text + " " + _info.DownloadSize;
     }
 
     private async void buttonUpdate_Click(object sender, EventArgs e)
     {
-        if (Updater.UpdateFound)
+        if (_info.UpdateAvailable)
         {
-            await Updater.DownloadFileAsync();
+            await Updater.DownloadAndUpdate(_info);
         }
     }
 

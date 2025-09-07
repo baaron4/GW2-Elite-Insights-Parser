@@ -70,6 +70,7 @@ dotnet_style_prefer_collection_expression = true:suggestion
 dotnet_diagnostic.CA1416.severity = suggestion
 dotnet_diagnostic.CA2201.severity = suggestion
 dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA1056.severity = none
 ############################### 
 # C# Coding Conventions       # 
 ############################### 

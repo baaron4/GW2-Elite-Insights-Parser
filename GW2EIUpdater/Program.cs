@@ -1,6 +1,4 @@
-﻿using System.IO.Compression;
-using System.Reflection;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIUpdater;
@@ -62,10 +60,8 @@ internal static class Program
                 FileName = Path.Combine(originDirectory, fullProcessName),
                 Arguments = "",
             });
-
-            return 0;
-            
         }
+
         return 0;
     }
 }
