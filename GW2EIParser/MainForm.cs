@@ -6,6 +6,7 @@ using GW2EIEvtcParser;
 using GW2EIParser.Setting;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using GW2EIUpdater;
 
 namespace GW2EIParser;
 
@@ -132,7 +133,7 @@ internal sealed partial class MainForm : Form
                         {
                             operation.UpdateProgress("Program: operation Aborted");
                         }
-                        else if(ex.InnerException != null)
+                        else if (ex.InnerException != null)
                         {
                             var finalException = ParserHelper.GetFinalException(ex);
                             operation.UpdateProgress("Program: " + finalException.Source);
@@ -876,5 +877,25 @@ internal sealed partial class MainForm : Form
     {
         AddTraceMessage("Settings: Closing settings");
         BtnSettings.Enabled = true;
+    }
+
+    private void BtnCheckUpdates_Click(object sender, EventArgs e)
+    {
+        AddTraceMessage("Updater: Checking for updates");
+        Updater updater = new();
+
+        var mainForm = this;
+        var uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+        Task.Factory.StartNew(async () =>
+        {
+            if (await updater.NewReleaseCheckerAsync())
+            {
+                mainForm.Invoke(() => // Must run on UI thread
+                {
+                    var updaterForm = new UpdaterForm(updater);
+                    updaterForm.Show();
+                });
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, uiScheduler);
     }
 }

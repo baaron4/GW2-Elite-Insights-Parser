@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
+using GW2EIUpdater;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser;
@@ -52,6 +53,17 @@ internal static class Program
         {
             Properties.Settings.Default.Upgrade();
             Properties.Settings.Default.Outdated = false;
+        }
+
+        // Clean up temp folder on startup
+        try
+        {
+            // TODO restore this comment before merging
+            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.EI_TempFolder), true);
+        }
+        catch
+        {
+
         }
 
         var logFiles = new List<string>();

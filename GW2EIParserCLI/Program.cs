@@ -17,6 +17,17 @@ internal static class Program
             Properties.Settings.Default.Outdated = false;
         }
 
+        // Clean up temp folder on startup
+        try
+        {
+            // TODO restore this comment before merging
+            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.EI_TempFolder), true);
+        }
+        catch
+        {
+
+        }
+
         var logFiles = new List<string>();
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
         if (args.Length > 0)
@@ -54,6 +65,11 @@ internal static class Program
                     Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
                     return 0;
                 }
+            }
+
+            if (args.Contains("-update"))
+            {
+
             }
 
             for (int i = parserArgOffset; i < args.Length; i++)
