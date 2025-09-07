@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Text;
 using GW2EIWingman.WingmanUploadJsons;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+using System.Text.Json.Serialization;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIWingman;
@@ -14,9 +15,10 @@ public static class WingmanController
 {
     public delegate void TraceHandler(string trace);
 
-    private static readonly DefaultContractResolver DefaultJsonContractResolver = new()
+    private static readonly JsonSerializerOptions DeserializerSettings = new()
     {
-        NamingStrategy = new CamelCaseNamingStrategy()
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        IncludeFields = true,
     };
     private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
     private static readonly HttpClient HTTPClient = new HttpClient()
@@ -104,12 +106,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            });
+            return JsonSerializer.Deserialize<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, DeserializerSettings);
         }
         catch (Exception e)
         {
@@ -126,12 +123,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            });
+            return JsonSerializer.Deserialize<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, DeserializerSettings);
         }
         catch (Exception e)
         {
@@ -148,12 +140,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            });
+            return JsonSerializer.Deserialize<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, DeserializerSettings);
         }
         catch (Exception e)
         {

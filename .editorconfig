@@ -71,6 +71,7 @@ dotnet_diagnostic.CA1416.severity = suggestion
 dotnet_diagnostic.CA2201.severity = suggestion
 dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.CA1056.severity = none
+dotnet_diagnostic.CA1823.severity = warning
 ############################### 
 # C# Coding Conventions       # 
 ############################### 
@@ -258,6 +259,10 @@ dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.IDE0305.severity = silent
 csharp_style_prefer_primary_constructors = true:suggestion
 csharp_prefer_system_threading_lock = true:suggestion
+
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = none
+
 
 [*.vb] 
 # Modifier preferences 

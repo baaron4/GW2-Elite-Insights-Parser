@@ -906,7 +906,7 @@ internal static class ParserIcons
         { TargetID.Artsariiv, TargetArtsariiv },
         { TargetID.Arkk, TargetArkk },
         { TargetID.AiKeeperOfThePeak, TargetAiKeeperOfThePeak },
-        { TargetID.AiKeeperOfThePeak2, TargetAiKeeperOfThePeak2 },
+        { TargetID.DarkAiKeeperOfThePeak, TargetAiKeeperOfThePeak2 },
         { TargetID.LGolem, TargetVitalGolem },
         { TargetID.VitalGolem, TargetVitalGolem },
         { TargetID.PowerGolem, TargetPowerGolem },
