@@ -7,6 +7,9 @@ namespace GW2EIUpdater;
 
 public static class Updater
 {
+    /// <summary>
+    /// Structure to store the update information.
+    /// </summary>
     public struct UpdateInfo(string current, string latest, string release, string size, string file, bool update)
     {
         /// <summary>
@@ -35,6 +38,10 @@ public static class Updater
         public bool UpdateAvailable = update;
     }
 
+    /// <summary>
+    /// Elite Insights temporary folder name in the system 'Temp' folder.<br></br>
+    /// 'GW2EIUpdateTemp' for the UI and 'GW2EICLIUpdateTemp' for the CLI.
+    /// </summary>
     public static string TempFolderName { get; private set; } = string.Empty;
     
     private static readonly bool _downloadCLI = false;
@@ -42,9 +49,9 @@ public static class Updater
     private static GitHubRelease _latestRelease = new();
 
     /// <summary>
-    /// Checks the version of the latest GitHub release.
+    /// Compares the current Elite Insights versions to the latest released version on GitHub.
     /// </summary>
-    /// <returns>Returns true if the latest version has a higher number than current.</returns>
+    /// <returns>Returns <see cref="UpdateInfo"/> with the update information of the latest version if it has a higher number than the current.</returns>
     public static async Task<UpdateInfo> CheckForUpdate(string fileName)
     {
         bool isCLI = fileName.Equals("GW2EICLI.zip");
@@ -88,6 +95,9 @@ public static class Updater
         }
     }
 
+    /// <summary>
+    /// Downloads the latest released .zip and executes the update.
+    /// </summary>
     public static async Task DownloadAndUpdate(UpdateInfo info)
     {
         string downloadUrl = string.Empty;
@@ -158,7 +168,7 @@ public static class Updater
                 UseShellExecute = true,
                 FileName = Path.Combine(folderPath, "GuildWars2EliteInsightsUpdater.exe"),
             };
-            psi.ArgumentList.Add(AppContext.BaseDirectory);
+            psi.ArgumentList.Add(AppContext.BaseDirectory); // Let the library handle excaping spaces in the folder names
             psi.ArgumentList.Add(Process.GetCurrentProcess().ProcessName);
             Process.Start(psi);
         }
