@@ -35,7 +35,7 @@ public static class Updater
         public bool UpdateAvailable = update;
     }
 
-    public static string TempFolderName { get; } = "GW2EIUpdateTemp";
+    public static string TempFolderName { get; private set; } = string.Empty;
     
     private static readonly bool _downloadCLI = false;
     private static readonly HttpClient _httpClient = new();
@@ -48,6 +48,7 @@ public static class Updater
     public static async Task<UpdateInfo> CheckForUpdate(string fileName)
     {
         bool isCLI = fileName.Equals("GW2EICLI.zip");
+        TempFolderName = isCLI ? "GW2EICLIUpdateTemp" : "GW2EIUpdateTemp";
         Version currentVersion = Assembly.GetEntryAssembly().GetName().Version;
 
         // GitHub API Call & JSON Object creation
@@ -89,7 +90,6 @@ public static class Updater
 
     public static async Task DownloadAndUpdate(UpdateInfo info)
     {
-        
         string downloadUrl = string.Empty;
         string filePath = string.Empty;
 
@@ -97,8 +97,8 @@ public static class Updater
         // Linux: /tmp/
         string tempPath = Path.GetTempPath();
 
-        // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\
-        // Linux: /tmp/GW2EIUpdateTemp/
+        // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\ or \GW2EICLIUpdateTemp\
+        // Linux: /tmp/GW2EIUpdateTemp/ or /GW2EICLIUpdateTemp/
         string folderPath = Path.Combine(tempPath, TempFolderName);
 
         try
@@ -109,8 +109,8 @@ public static class Updater
             {
                 downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
 
-                // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EICLI.zip
-                // Linux: /tmp/GW2EIUpdateTemp/GW2EICLI.zip
+                // Windows: C:\Users\User\AppData\Local\Temp\GW2EICLIUpdateTemp\GW2EICLI.zip
+                // Linux: /tmp/GW2EICLIUpdateTemp/GW2EICLI.zip
                 filePath = Path.Combine(folderPath, info.FileName);
             }
             else
@@ -137,7 +137,7 @@ public static class Updater
             try
             {
                 using var archive = new ZipArchive(ms, ZipArchiveMode.Read);
-                //ExtractToDirectory(folderPath, overwriteFiles: true);
+                archive.ExtractToDirectory(folderPath, overwriteFiles: true);
             }
             catch (Exception ex)
             {
