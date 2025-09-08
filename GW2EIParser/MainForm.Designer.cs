@@ -60,7 +60,6 @@ partial class MainForm
         ChkApplicationTraces = new CheckBox();
         ChkAutoDiscordBatch = new CheckBox();
         BtnCheckUpdates = new Button();
-        ToolTipUpdate = new ToolTip(components);
         ((System.ComponentModel.ISupportInitialize)NumericCustomPopulateLimit).BeginInit();
         ((System.ComponentModel.ISupportInitialize)DgvFiles).BeginInit();
         ((System.ComponentModel.ISupportInitialize)OperatorBindingSource).BeginInit();
@@ -387,7 +386,6 @@ partial class MainForm
     private CheckBox ChkApplicationTraces;
     private CheckBox ChkAutoDiscordBatch;
     private Button BtnCheckUpdates;
-    private ToolTip ToolTipUpdate;
 
     #region CUSTOM_GRID_VIEW
     // https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/disable-buttons-in-a-button-column-in-the-datagrid?view=netframeworkdesktop-4.8&redirectedfrom=MSDN
