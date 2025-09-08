@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.SpeciesIDs;
 
