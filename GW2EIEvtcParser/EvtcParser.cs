@@ -273,9 +273,9 @@ public class EvtcParser
                         // To create the caches
                         foreach (var p in log.PlayerList)
                         {
-                            actor.GetBuffApplyEventsOnByID(log, phase.Start, phase.End, 0, p, true);
-                            actor.GetBuffRemoveAllEventsByByID(log, phase.Start, phase.End, 0, p, true);
-                            actor.GetBuffRemoveAllEventsFromByID(log, phase.Start, phase.End, 0, p, true);
+                            actor.GetBuffApplyEventsOnByIDInternal(log, phase.Start, phase.End, 0, p);
+                            actor.GetBuffRemoveAllEventsByByIDInternal(log, phase.Start, phase.End, 0, p);
+                            actor.GetBuffRemoveAllEventsFromByIDInternal(log, phase.Start, phase.End, 0, p);
                         }
                     }
                 });

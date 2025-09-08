@@ -15,7 +15,7 @@ public class SupportPerAllyStatistics
 
     internal SupportPerAllyStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? to)
     {
-        foreach (long buffID in log.Buffs.BuffsByIDs.Keys)
+        foreach (long buffID in actor.GetBuffRemoveAllEventsByPresentBuffIDs(log))
         {
             int foeCount = 0;
             long foeTime = 0;
