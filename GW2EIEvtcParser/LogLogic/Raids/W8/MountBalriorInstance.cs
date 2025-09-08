@@ -78,9 +78,10 @@ internal class MountBalriorInstance : MountBalrior
                     success = true;
                 }
                 var isCM = greer.GetHealth(log.CombatData) > 35e6;
-                var name = (isCM ? "Godspoil Greer" : "Greer, the Blightbringer") + (greers.Count > 0 ? " " + (offset) : "");
+                var encounterName = (isCM ? "Godspoil Greer" : "Greer, the Blightbringer");
+                var name = encounterName + (greers.Count > 0 ? " " + (offset) : "");
                 greer.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, name, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [greer], [..greeAndRegs, ..protoGreelings], eregs, mainPhase, encounterName, start, end, success, _greer, isCM ? LogData.LogMode.CMNoName : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
@@ -180,9 +181,10 @@ internal class MountBalriorInstance : MountBalrior
                 encounterThreshold = end;
                 var maxHP = ura.GetHealth(log.CombatData);
                 var isCM = maxHP > 70e6;
-                var name = (isCM ? "Godscream Ura" : "Ura, the Steamshrieker") + (uras.Count > 0 ? " " + (offset) : "");
+                var encounterName = (isCM ? "Godscream Ura" : "Ura, the Steamshrieker");
+                var name = encounterName  + (uras.Count > 0 ? " " + (offset) : "");
                 ura.OverrideName(name);
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, name, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
+                AddInstanceEncounterPhase(log, phases, encounterPhases, [ura], [], [], mainPhase, encounterName, start, end, success, _ura, isCM ? (maxHP > 100e6 ? LogData.LogMode.LegendaryCM : LogData.LogMode.CMNoName) : LogData.LogMode.Normal);
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
