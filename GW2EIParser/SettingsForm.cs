@@ -105,18 +105,9 @@ public partial class SettingsForm : Form
         SetUIEnable();
     }
 
-    public void UpdaterSettings(bool available, long time)
+    public void UpdateText(Label label, bool isAvailable)
     {
-        Properties.Settings.Default.UpdateAvailable = available;
-        Properties.Settings.Default.UpdateLastChecked = time;
-    }
-
-    public void LoadUpdaterSettings(Label label)
-    {
-        if (Properties.Settings.Default.UpdateAvailable)
-        {
-            label.Text = label.Text + " (Update Available)";
-        }
+        label.Text = isAvailable ? label.Text + " (Update Available)" : label.Text;
     }
 
     private void SettingsFormLoad(object sender, EventArgs e)

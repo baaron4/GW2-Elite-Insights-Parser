@@ -34,9 +34,6 @@ internal sealed partial class MainForm : Form
         ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
         ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
-        //display version
-        string version = Application.ProductVersion;
-        LblVersion.Text = version;
         _logsFiles = [];
         BtnCancelAll.Enabled = false;
         BtnParse.Enabled = false;
@@ -54,10 +51,12 @@ internal sealed partial class MainForm : Form
             Task.Factory.StartNew(async () =>
             {
                 Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
-                _settingsForm.UpdaterSettings(info.UpdateAvailable, time);
+                Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                Properties.Settings.Default.UpdateLastChecked = time;
+                VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
-        _settingsForm.LoadUpdaterSettings(LblVersion);
+        VersionLabelUpdate(Application.ProductVersion, Properties.Settings.Default.UpdateAvailable);
     }
 
     private void LoadSettingsWatcher(object sender, EventArgs e)
@@ -913,5 +912,10 @@ internal sealed partial class MainForm : Form
                 MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    private void VersionLabelUpdate(string version, bool isAvailable)
+    {
+        LblVersion.Text = isAvailable ? version + " (Update Available)" : version;
     }
 }
