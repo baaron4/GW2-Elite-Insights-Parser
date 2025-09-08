@@ -898,17 +898,24 @@ internal sealed partial class MainForm : Form
 
         Task.Factory.StartNew(async () =>
         {
+            var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
             if (info.UpdateAvailable)
             {
                 Invoke(() => // Must run on UI thread
                 {
+                    Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                    Properties.Settings.Default.UpdateLastChecked = time;
+                    VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                     var updaterForm = new UpdaterForm(info);
                     updaterForm.ShowDialog(this);
                 });
             }
             else
             {
+                Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                Properties.Settings.Default.UpdateLastChecked = time;
+                VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                 MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());

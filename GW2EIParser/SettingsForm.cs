@@ -105,11 +105,6 @@ public partial class SettingsForm : Form
         SetUIEnable();
     }
 
-    public void UpdateText(Label label, bool isAvailable)
-    {
-        label.Text = isAvailable ? label.Text + " (Update Available)" : label.Text;
-    }
-
     private void SettingsFormLoad(object sender, EventArgs e)
     {
         SetValues();
