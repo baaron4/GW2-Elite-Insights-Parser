@@ -18,10 +18,10 @@ public class CombatReplay
     internal IReadOnlyList<ParametricPoint3D> PolledRotations => _PolledRotations;
 
     private List<ParametricPoint3D> _Positions = [];
-    private List<ParametricPoint3D> _PolledPositions = [];
+    private ParametricPoint3D[] _PolledPositions = [];
     private List<ParametricPoint3D> _Velocities = [];
     private List<ParametricPoint3D> _Rotations = [];
-    private List<ParametricPoint3D> _PolledRotations = [];
+    private ParametricPoint3D[] _PolledRotations = [];
 
     internal readonly List<Segment> Hidden = [];
     private long _start = -1;
@@ -56,9 +56,9 @@ public class CombatReplay
     internal void CopyFrom(CombatReplay other)
     {
         _Positions = other.Positions.ToList();
-        _PolledPositions = other.PolledPositions.ToList();
+        _PolledPositions = other.PolledPositions.ToArray();
         _Rotations = other.Rotations.ToList();
-        _PolledRotations = other.PolledRotations.ToList();
+        _PolledRotations = other.PolledRotations.ToArray();
         _Velocities = other.Velocities.ToList();
     }
 
@@ -66,13 +66,13 @@ public class CombatReplay
     {
         _start = Math.Max(start, _start);
         _end = Math.Max(_start, Math.Min(end, _end));
-        if (_PolledPositions.Count > 0 && (_PolledPositions[0].Time < _start || _PolledPositions[^1].Time > _end))
+        if (_PolledPositions.Length > 0 && (_PolledPositions[0].Time < _start || _PolledPositions[^1].Time > _end))
         {
-            _PolledPositions.RemoveAll(x => x.Time < _start || x.Time > _end);
+            _PolledPositions = _PolledPositions.Where(x => x.Time >= start && x.Time <= end).ToArray();
         }
-        if (_PolledRotations.Count > 0 && (_PolledRotations[0].Time < _start || _PolledRotations[^1].Time > _end))
+        if (_PolledRotations.Length > 0 && (_PolledRotations[0].Time < _start || _PolledRotations[^1].Time > _end))
         {
-            _PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
+            _PolledRotations = _PolledRotations.Where(x => x.Time >= start && x.Time <= end).ToArray();
         }
     }
 
@@ -95,20 +95,18 @@ public class CombatReplay
         return res - 1;
     }
 
-    private static readonly ParametricPoint3D _Default = new(0, 0, 0, long.MinValue);
-
-    private (int, int) HandlePosition(long t, int positionTableIndex, int velocityTableIndex, int rate)
+    private void HandlePosition(long t, ref int polledPositionTableIndex, ref int positionTableIndex, ref int velocityTableIndex, int rate)
     {
         ParametricPoint3D pos = _Positions[positionTableIndex];
         if (t <= pos.Time)
         {
-            _PolledPositions.Add(pos.WithChangedTime(t));
+            _PolledPositions[polledPositionTableIndex++] = pos.WithChangedTime(t);
         }
         else
         {
             if (positionTableIndex == _Positions.Count - 1)
             {
-                _PolledPositions.Add(pos.WithChangedTime(t));
+                _PolledPositions[polledPositionTableIndex++] = pos.WithChangedTime(t);
             }
             else
             {
@@ -116,7 +114,7 @@ public class CombatReplay
                 if (nextPos.Time < t)
                 {
                     positionTableIndex++;
-                    (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
+                    HandlePosition(t, ref polledPositionTableIndex, ref positionTableIndex, ref velocityTableIndex, rate);
                 }
                 else
                 {
@@ -130,32 +128,31 @@ public class CombatReplay
 
                     if (nextPos.Time - last.Time > ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
                     {
-                        _PolledPositions.Add(last.WithChangedTime(t));
+                        _PolledPositions[polledPositionTableIndex++] = pos.WithChangedTime(t);
                     }
                     else
                     {
                         float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
-                        _PolledPositions.Add(new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
+                        _PolledPositions[polledPositionTableIndex++] = new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t);
                     }
 
                 }
             }
         }
-        return (positionTableIndex, velocityTableIndex);
     }
 
-    private int HandleRotation(long t, int rotationTableIndex, int rate)
+    private void  HandleRotation(long t, ref int polledRotationTableIndex, ref int rotationTableIndex, int rate)
     {
         var rot = _Rotations[rotationTableIndex];
         if (t <= rot.Time)
         {
-            _PolledRotations.Add(rot.WithChangedTime(t));
+            _PolledRotations[polledRotationTableIndex++] = rot.WithChangedTime(t);
         }
         else
         {
             if (rotationTableIndex == _Rotations.Count - 1)
             {
-                _PolledRotations.Add(rot.WithChangedTime(t));
+                _PolledRotations[polledRotationTableIndex++] = rot.WithChangedTime(t);
             }
             else
             {
@@ -163,25 +160,24 @@ public class CombatReplay
                 if (nextRot.Time < t)
                 {
                     rotationTableIndex++;
-                    rotationTableIndex = HandleRotation(t, rotationTableIndex, rate);
+                    HandleRotation(t, ref polledRotationTableIndex, ref rotationTableIndex, rate);
                 }
                 else
                 {
                     ParametricPoint3D last = _PolledRotations.Last().Time > rot.Time ? _PolledRotations.Last() : rot;
                     if (nextRot.Time - last.Time > ArcDPSPollingRate + rate)
                     {
-                        _PolledRotations.Add(last.WithChangedTime(t));
+                        _PolledRotations[polledRotationTableIndex++] = rot.WithChangedTime(t);
                     }
                     else
                     {
                         float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
-                        _PolledRotations.Add(new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
+                        _PolledRotations[polledRotationTableIndex++] = new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t);
                     }
 
                 }
             }
         }
-        return rotationTableIndex;
     }
 
     internal void PollingRate(long logDuration, bool forcePolling)
@@ -200,29 +196,31 @@ public class CombatReplay
         bool doRotation = _Rotations.Count > 0;
 
         int positionTableIndex = 0;
+        int polledPositionTableIndex = 0;
         int velocityTableIndex = 0;
         int rotationTableIndex = 0;
+        int polledRotationTableIndex = 0;
 
         long posStartOffset = Math.Min(0, rate * ((_Positions[0].Time / rate) - 1));
         long rotStartOffset = doRotation ? Math.Min(0, rate * ((_Rotations[0].Time / rate) - 1)) : 0;
         long startOffset = Math.Min(posStartOffset, rotStartOffset);
         int capacity = (int)(logDuration - startOffset) / rate + 1;
-        _PolledPositions = new List<ParametricPoint3D>(capacity);
-        _PolledRotations = doRotation ? new List<ParametricPoint3D>(capacity) : [];
+        _PolledPositions = new ParametricPoint3D[capacity];
+        _PolledRotations = doRotation ? new ParametricPoint3D[capacity] : [];
 
         if (doRotation)
         {
             for (long t = startOffset; t < logDuration; t += rate)
             {
-                (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
-                rotationTableIndex = HandleRotation(t, rotationTableIndex, rate);
+                HandlePosition(t, ref polledPositionTableIndex, ref positionTableIndex, ref velocityTableIndex, rate);
+                HandleRotation(t, ref polledRotationTableIndex, ref rotationTableIndex, rate);
             }
         } 
         else
         {
             for (long t = startOffset; t < logDuration; t += rate)
             {
-                (positionTableIndex, velocityTableIndex) = HandlePosition(t, positionTableIndex, velocityTableIndex, rate);
+                HandlePosition(t, ref polledPositionTableIndex, ref positionTableIndex, ref velocityTableIndex, rate);
             }
         }
     }
