@@ -1127,14 +1127,6 @@ public class EvtcParser
             }
         }
 
-        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
-        AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
-
-        if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
-        {
-            throw new EvtcAgentException("No players found");
-        }
-
         operation.UpdateProgressWithCancellationCheck("Parsing: Linking minions to their masters");
         foreach (CombatItem c in _combatItems)
         {
@@ -1146,6 +1138,14 @@ public class EvtcParser
             {
                 FindAgentMaster(c.Time, c.DstMasterInstid, c.DstAgent);
             }
+        }
+
+        operation.UpdateProgressWithCancellationCheck("Parsing: Regrouping Agents");
+        AgentManipulationHelper.RegroupSameAgentsAndDetermineTeams(_agentData, _combatItems, _evtcVersion, _enabledExtensions);
+
+        if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
+        {
+            throw new EvtcAgentException("No players found");
         }
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting minion names");
