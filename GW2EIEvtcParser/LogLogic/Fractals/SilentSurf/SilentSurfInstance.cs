@@ -41,11 +41,12 @@ internal class SilentSurfInstance : SilentSurf
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        var lastKanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault();
+        var lastKanaxai = agentData.GetNPCsByID(TargetID.KanaxaiScytheOfHouseAurkusCM).LastOrDefault(x => combatData.GetEnterCombatEvents(x).Any());
         if (lastKanaxai != null)
         {
             var determinedBuffs = combatData.GetBuffDataByIDByDst(SkillIDs.Determined762, lastKanaxai);
-            var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
+            var enterCombat = combatData.GetEnterCombatEvents(lastKanaxai).First();
+            var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent && x.Time > enterCombat.Time);
             if (determinedApply != null && !combatData.GetDespawnEvents(lastKanaxai).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
             {
                 logData.SetSuccess(true, determinedApply.Time);
@@ -68,10 +69,14 @@ internal class SilentSurfInstance : SilentSurf
                 if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
                 {
                     start = determinedLost.Time;
+                } 
+                else
+                {
+                    continue;
                 }
                 bool success = false;
                 long end = kanaxai.LastAware;
-                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
+                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent && x.Time > start);
                 if (determinedApply != null && !log.CombatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - determinedApply.Time) < ServerDelayConstant))
                 {
                     success = true;
