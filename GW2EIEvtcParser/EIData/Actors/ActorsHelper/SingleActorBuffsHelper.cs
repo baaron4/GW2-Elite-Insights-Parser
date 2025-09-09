@@ -41,7 +41,15 @@ partial class SingleActor
         {
             if (!_buffApplyByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
-                var curBuffApplies = log.CombatData.GetBuffApplyDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+                List<AbstractBuffApplyEvent> curBuffApplies;
+                if (_buffApplyByIDAccelerator.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
+                {
+                    curBuffApplies = englobingNullDict.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
+                } 
+                else
+                {
+                    curBuffApplies = log.CombatData.GetBuffApplyDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
                 nullDict = curBuffApplies.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
                 _buffApplyByIDAccelerator.Set(start, end, null, nullDict);
                 var dictByCreditedBy = curBuffApplies.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
@@ -109,7 +117,7 @@ partial class SingleActor
             if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
                 recheck = true;
-                var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+                var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
                 nullDict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
                 _buffRemoveAllByByIDAccelerator.Set(start, end, null, nullDict);
                 var dictByTo = curBuffRemoves.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -186,7 +194,7 @@ partial class SingleActor
         {
             if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
-                var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end);
+                var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
                 nullDict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
                 _buffRemoveAllFromByIDAccelerator.Set(start, end, null, nullDict);
                 var dictByTo = curBuffRemoves.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
