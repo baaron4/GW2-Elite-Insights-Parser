@@ -44,7 +44,7 @@ public static class Updater
     /// </summary>
     public static string TempFolderName { get; private set; } = string.Empty;
     
-    private static readonly bool _downloadCLI = false;
+    private static bool _isCLI = false;
     private static readonly HttpClient _httpClient = new();
     private static GitHubRelease _latestRelease = new();
 
@@ -54,8 +54,8 @@ public static class Updater
     /// <returns>Returns <see cref="UpdateInfo"/> with the update information of the latest version if it has a higher number than the current.</returns>
     public static async Task<UpdateInfo> CheckForUpdate(string fileName)
     {
-        bool isCLI = fileName.Equals("GW2EICLI.zip");
-        TempFolderName = isCLI ? "GW2EICLIUpdateTemp" : "GW2EIUpdateTemp";
+        _isCLI = fileName.Equals("GW2EICLI.zip");
+        TempFolderName = _isCLI ? "GW2EICLIUpdateTemp" : "GW2EIUpdateTemp";
         Version currentVersion = Assembly.GetEntryAssembly().GetName().Version;
 
         // GitHub API Call & JSON Object creation
@@ -79,7 +79,7 @@ public static class Updater
             var latestVersion = Version.Parse(version);
 
             // File download size
-            long size = isCLI ? _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size : _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
+            long size = _isCLI ? _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size : _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
 
             return new UpdateInfo(
                 currentVersion.ToString(),
@@ -115,7 +115,7 @@ public static class Updater
         {
             Directory.CreateDirectory(folderPath);
 
-            if (_downloadCLI)
+            if (_isCLI)
             {
                 downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
 
