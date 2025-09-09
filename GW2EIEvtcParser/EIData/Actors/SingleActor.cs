@@ -231,13 +231,17 @@ public abstract partial class SingleActor : Actor
     {
         return InitCombatReplay(log).PolledPositions;
     }
-
+    private IReadOnlyList<ParametricPoint3D?>? CombatReplayActivePositions;
     /// <summary> Calculates a list of positions of the player which are null in places where the player is dead or disconnected. </summary>
-    public List<ParametricPoint3D?> GetCombatReplayActivePolledPositions(ParsedEvtcLog log)
+    public IReadOnlyList<ParametricPoint3D?> GetCombatReplayActivePolledPositions(ParsedEvtcLog log)
     {
+        if (CombatReplayActivePositions != null)
+        {
+            return CombatReplayActivePositions;
+        }
         var (_, _, _, actives) = GetStatus(log);
         var positions = GetCombatReplayPolledPositions(log);
-        var activePositions = new List<ParametricPoint3D?>(positions.Count);
+        var activePositions = new ParametricPoint3D?[positions.Count];
         bool canCR = HasCombatReplayPositions(log);
         int positionIndex = 0;
         for (int j = 0; j < actives.Count; j++)
@@ -248,7 +252,7 @@ public abstract partial class SingleActor : Actor
                 var cur = positions[positionIndex];
                 if (!canCR)
                 {
-                    activePositions.Add(null);
+                    activePositions[positionIndex] = null;
                 } 
                 else if (active.End < cur.Time)
                 {
@@ -256,15 +260,16 @@ public abstract partial class SingleActor : Actor
                 }
                 else if (active.Start > cur.Time)
                 {
-                    activePositions.Add(null);
+                    activePositions[positionIndex] = null;
                 }
                 else
                 {
-                    activePositions.Add(cur);
+                    activePositions[positionIndex] = cur;
                 }
             }
         }
-        return activePositions;
+        CombatReplayActivePositions = activePositions.ToList();
+        return CombatReplayActivePositions;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledRotations(ParsedEvtcLog log)
