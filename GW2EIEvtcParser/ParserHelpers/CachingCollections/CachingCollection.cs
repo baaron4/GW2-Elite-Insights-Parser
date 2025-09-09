@@ -67,4 +67,8 @@ public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection
         _cache.Clear();
     }
 
+    public override bool IsEmpty()
+    {
+        return _cache.Count == 0;
+    }
 }

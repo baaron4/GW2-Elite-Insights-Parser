@@ -86,5 +86,9 @@ public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int i
     {
         _cache.Clear();
     }
+    public override bool IsEmpty()
+    {
+        return _cache.Count == 0;
+    }
 
 }
