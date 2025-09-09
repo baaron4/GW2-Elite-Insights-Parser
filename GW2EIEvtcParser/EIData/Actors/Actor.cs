@@ -136,22 +136,29 @@ public abstract class Actor
         DamageEventByDstCache ??= new(log);
         if (!DamageEventByDstCache.TryGetValue(start, end, target, out var list))
         {
-            if (target != null)
+            if (DamageEventByDstCache.TryGetEnglobingValue(start, end, target, out var englobingList))
             {
-                if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var damageEvents))
+                list = englobingList.Where(x => x.Time >= start && x.Time <= end).ToList();
+            } 
+            else
+            {
+                if (target != null)
                 {
-                    long targetStart = target.FirstAware;
-                    long targetEnd = target.LastAware;
-                    list = damageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    if (DamageEventByDst.TryGetValue(target.EnglobingAgentItem, out var damageEvents))
+                    {
+                        long targetStart = target.FirstAware;
+                        long targetEnd = target.LastAware;
+                        list = damageEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    }
+                    else
+                    {
+                        list = [];
+                    }
                 }
                 else
                 {
-                    list = [];
+                    list = DamageEventByDst[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
-            }
-            else
-            {
-                list = DamageEventByDst[ParserHelper._nullAgent].Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             DamageEventByDstCache.Set(start, end, target, list);
         }
