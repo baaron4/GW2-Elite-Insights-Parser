@@ -376,11 +376,7 @@ public class LogData
             }
             var encounterPhases = _phases.OfType<EncounterPhaseData>().ToList();
             var breakbarPhases = Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases);
-            // Add a limit to the number of breakbar phases for instance
-            if (!IsInstance || breakbarPhases.Count < 10 * encounterPhases.Count)
-            {
-                _phases.AddRange(breakbarPhases);
-            }
+            _phases.AddRange(breakbarPhases);
             var removed = _phases.RemoveAll(x => x.Targets.Count == 0);
             if (_phases.Count == 0 && removed > 0)
             {
