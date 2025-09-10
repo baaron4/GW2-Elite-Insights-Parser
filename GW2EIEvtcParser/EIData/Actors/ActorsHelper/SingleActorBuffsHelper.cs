@@ -111,7 +111,15 @@ partial class SingleActor
 
     private void InitBuffRemoveAllByByIDDict(ParsedEvtcLog log, long start, long end)
     {
-        var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+        List<BuffRemoveAllEvent> curBuffRemoves;
+        if (_buffRemoveAllByByIDAccelerator!.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
+        {
+            curBuffRemoves = englobingNullDict.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        else
+        {
+            curBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
         var nullDict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
         _buffRemoveAllByByIDAccelerator!.Set(start, end, null, nullDict);
         var dictByTo = curBuffRemoves.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
@@ -193,7 +201,15 @@ partial class SingleActor
 
     private void InitBuffRemoveAllFromByIDDict(ParsedEvtcLog log, long start, long end)
     {
-        var curBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+        List<BuffRemoveAllEvent> curBuffRemoves;
+        if (_buffRemoveAllFromByIDAccelerator!.TryGetEnglobingValue(start, end, null, out var englobingNullDict))
+        {
+            curBuffRemoves = englobingNullDict.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        else
+        {
+            curBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem).Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
         var nullDict = curBuffRemoves.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
         _buffRemoveAllFromByIDAccelerator!.Set(start, end, null, nullDict);
         var dictByTo = curBuffRemoves.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
@@ -264,6 +280,28 @@ partial class SingleActor
         return GetBuffRemoveAllEventsFromByIDInternal(log, start, end, buffID, removedBy);
     }
 
+
+
+    private CachingCollectionCustom<AbstractBuffSimulator, List<BuffSimulationItem>>? _buffGenerationSimulationItemsCache;
+
+    private IReadOnlyList<BuffSimulationItem> GetBuffGenerationSimulationItems(ParsedEvtcLog log, AbstractBuffSimulator simulator, long start, long end)
+    {
+        _buffGenerationSimulationItemsCache ??= new(log, null!, 50); // we don't care about the null equivalent, simulator can't be null
+        if (!_buffGenerationSimulationItemsCache.TryGetValue(start, end, simulator, out var list))
+        {
+            if (_buffGenerationSimulationItemsCache.TryGetEnglobingValue(start, end, simulator, out var englobingList))
+            {
+                list = englobingList.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
+            } 
+            else
+            {
+                list = simulator.GenerationSimulation.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
+            }
+            _buffGenerationSimulationItemsCache.Set(start, end, simulator, list);
+        }
+        return list;
+    }
+
     #endregion ACCELERATORS
 
     #region DISTRIBUTION
@@ -279,7 +317,7 @@ partial class SingleActor
             } 
             else
             {
-                value = ComputeBuffDistribution(_buffSimulators, start, end);
+                value = ComputeBuffDistribution(log, _buffSimulators, start, end);
             }
             _buffDistribution.Set(start, end, value);
         }
@@ -287,12 +325,12 @@ partial class SingleActor
         return value;
     }
 
-    private static BuffDistribution ComputeBuffDistribution(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
+    private BuffDistribution ComputeBuffDistribution(ParsedEvtcLog log, Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
     {
         var res = new BuffDistribution(buffSimulators.Count, 8); //TODO(Rennorb) @perf: find capacity dependencies
         foreach (var (buff, simulator) in buffSimulators)
         {
-            foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
+            foreach (BuffSimulationItem simul in GetBuffGenerationSimulationItems(log, simulator, start, end))
             {
                 simul.SetBuffDistributionItem(res, start, end, buff);
             }
@@ -325,24 +363,24 @@ partial class SingleActor
             }
             else
             {
-                value = ComputeBuffPresence(_buffSimulators!, start, end);
+                value = ComputeBuffPresence(log, _buffSimulators, start, end);
             }
             _buffPresence.Set(start, end, value);
         }
         return value;
     }
 
-    private static Dictionary<long, long> ComputeBuffPresence(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
+    private Dictionary<long, long> ComputeBuffPresence(ParsedEvtcLog log, Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
     {
         var buffPresence = new Dictionary<long, long>(buffSimulators.Count);
-        foreach (KeyValuePair<long, AbstractBuffSimulator> pair in buffSimulators)
+        foreach (var (buff, simulator) in buffSimulators)
         {
-            foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
+            foreach (BuffSimulationItem simul in GetBuffGenerationSimulationItems(log, simulator, start, end))
             {
                 long duration = simul.GetClampedDuration(start, end);
                 if (duration != 0)
                 {
-                    buffPresence.IncrementValue(pair.Key, duration);
+                    buffPresence.IncrementValue(buff, duration);
                 }
             }
         }
