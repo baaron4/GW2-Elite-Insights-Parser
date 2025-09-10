@@ -67,11 +67,11 @@ public class CombatReplay
         _end = Math.Max(_start, Math.Min(end, _end));
         if (_PolledPositions.Length > 0 && (_PolledPositions[0].Time < _start || _PolledPositions[^1].Time > _end))
         {
-            _PolledPositions = _PolledPositions.Where(x => x.Time >= start && x.Time <= end).ToArray();
+            _PolledPositions = _PolledPositions.Where(x => x.Time >= _start && x.Time <= _end).ToArray();
         }
         if (_PolledRotations.Length > 0 && (_PolledRotations[0].Time < _start || _PolledRotations[^1].Time > _end))
         {
-            _PolledRotations = _PolledRotations.Where(x => x.Time >= start && x.Time <= end).ToArray();
+            _PolledRotations = _PolledRotations.Where(x => x.Time >= _start && x.Time <= _end).ToArray();
         }
     }
 
