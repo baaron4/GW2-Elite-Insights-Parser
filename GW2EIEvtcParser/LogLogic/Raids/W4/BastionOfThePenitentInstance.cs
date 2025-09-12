@@ -371,7 +371,6 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         return res;
     }
 
-    // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);
