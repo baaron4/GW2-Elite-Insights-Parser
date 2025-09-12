@@ -238,13 +238,13 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.LogData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
         {
-            InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1));
+            instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1));
         }
     }
 

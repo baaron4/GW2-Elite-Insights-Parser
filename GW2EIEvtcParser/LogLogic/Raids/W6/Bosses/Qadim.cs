@@ -1469,19 +1469,19 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
             }
             else if (CustomCheckManipulateTheManipulator(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
             }
         }
     }

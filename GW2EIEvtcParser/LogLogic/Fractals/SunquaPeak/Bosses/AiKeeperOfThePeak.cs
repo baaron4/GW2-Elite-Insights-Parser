@@ -467,9 +467,9 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && HasDarkMode(log.AgentData) && HasElementalMode(log.AgentData))
         {
@@ -486,12 +486,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
                 if (counter == 5)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
+                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
                 }
             }
             if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
             }
         }
     }

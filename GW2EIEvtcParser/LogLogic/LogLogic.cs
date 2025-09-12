@@ -136,15 +136,13 @@ public abstract class LogLogic
         return Map;
     }
 
-    [MemberNotNull(nameof(InstanceBuffs))]
-    protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
+    protected virtual void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        InstanceBuffs = [];
         foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
         {
             if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
             {
-                InstanceBuffs.Add((fractalInstability, 1));
+                instanceBuffs.Add((fractalInstability, 1));
             }
         }
         if (!IsInstance)
@@ -163,7 +161,7 @@ public abstract class LogLogic
             }).Max();
             if (emboldenedStacks > 0)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
             }
         }
     }
@@ -172,7 +170,8 @@ public abstract class LogLogic
     {
         if (InstanceBuffs == null)
         {
-            SetInstanceBuffs(log);
+            InstanceBuffs = [];
+            SetInstanceBuffs(log, InstanceBuffs);
         }
         return InstanceBuffs;
     }

@@ -858,15 +858,15 @@ internal class DecimaTheStormsinger : MountBalrior
         return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && IsCMTriggerID)
         {
             if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
             }
         }
     }

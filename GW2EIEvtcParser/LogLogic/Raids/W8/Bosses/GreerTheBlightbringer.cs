@@ -812,9 +812,9 @@ internal class GreerTheBlightbringer : MountBalrior
         replay.Decorations.AddHomingMissiles(log, orbs, Colors.Purple, 0.5, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.LogData.IsCM)
         {
@@ -822,7 +822,7 @@ internal class GreerTheBlightbringer : MountBalrior
             AgentItem? ereg = log.AgentData.GetNPCsByID((int)TargetID.Ereg).FirstOrDefault();
             if (ereg != null && !log.CombatData.GetDeadEvents(ereg).Any())
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1));
             }
             
         }

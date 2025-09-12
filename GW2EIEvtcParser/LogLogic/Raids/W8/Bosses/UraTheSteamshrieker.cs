@@ -703,9 +703,9 @@ internal class UraTheSteamshrieker : MountBalrior
         return LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && (log.LogData.IsCM || log.LogData.IsLegendaryCM))
         {
@@ -731,7 +731,7 @@ internal class UraTheSteamshrieker : MountBalrior
             }
             if (eligible)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
             }
         }
     }

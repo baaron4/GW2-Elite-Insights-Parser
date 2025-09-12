@@ -221,9 +221,9 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
         IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
         int counter = 0;
 
@@ -240,7 +240,7 @@ internal class Arkk : ShatteredObservatory
         // The party must have 5 players to be eligible
         if (counter == 5)
         {
-            InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
+            instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
         }
     }
 

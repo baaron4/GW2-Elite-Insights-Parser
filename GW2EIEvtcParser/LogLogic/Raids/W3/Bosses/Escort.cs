@@ -292,14 +292,20 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
-            if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
+            if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) 
+            { 
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); 
+            }
+            if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) 
+            { 
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); 
+            }
         }
     }
 

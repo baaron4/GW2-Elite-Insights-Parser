@@ -241,9 +241,9 @@ internal class WvWLogic : LogLogic
         return _defaultName;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
         if (_isGuildHall)
         {
             var modes = new List<BuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
@@ -253,12 +253,12 @@ internal class WvWLogic : LogLogic
             var usedModes = modes.Select(x => x.BuffID).Distinct();
             foreach (long buffID in usedModes)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[buffID], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[buffID], 1));
             }
             // When buff is missing on a player, they are in PvE mode
             if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To.Is(x.AgentItem))))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[GuildHallPvEMode], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[GuildHallPvEMode], 1));
             }
         }
     }

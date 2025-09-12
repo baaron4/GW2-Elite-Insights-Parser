@@ -327,9 +327,9 @@ internal class WhisperingShadow : Kinfall
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.LogData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
@@ -341,7 +341,7 @@ internal class WhisperingShadow : Kinfall
             {
                 if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.LogData.LogEnd - ServerDelayConstant))
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
+                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
                     break;
                 }
             }

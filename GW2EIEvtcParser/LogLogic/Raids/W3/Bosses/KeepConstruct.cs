@@ -443,9 +443,9 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         environmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.LogData.IsCM)
         {
@@ -459,7 +459,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             }
             if (hasHitKc == log.PlayerList.Count)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDownDownDowned], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDownDownDowned], 1));
             }
         }
     }

@@ -145,19 +145,19 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return "Twisted Castle";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
             }
             else if (CustomCheckMildlyInsaneEligibility(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
             }
         }
     }
