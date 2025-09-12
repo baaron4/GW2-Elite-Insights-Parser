@@ -1537,8 +1537,8 @@ public class SkillItem
     public bool IsAutoAttack(ParsedEvtcLog log) => AA
         || FirebrandHelper.IsAutoAttack(log, ID)
         || BladeswornHelper.IsAutoAttack(log, ID);
-    public readonly string Name = "";
-    public readonly string Icon = "";
+    public string Name { get; private set; } = "";
+    public string Icon { get; private set; } = "";
     private readonly WeaponDescriptor? _weaponDescriptor;
     public bool IsWeaponSkill => _weaponDescriptor != null;
     internal readonly GW2APISkill? ApiSkill;
@@ -1610,6 +1610,12 @@ public class SkillItem
             return gw2Build < build;
         }
         return true;
+    }
+
+    internal void OverrideFromBuff(Buff buff)
+    {
+        Name = buff.Name;
+        Icon = buff.Link;
     }
 
     internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
