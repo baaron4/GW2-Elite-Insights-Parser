@@ -926,6 +926,7 @@ internal sealed partial class MainForm : Form
             else
             {
                 AddTraceMessage("Updater: Up to date");
+                Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
                 Properties.Settings.Default.UpdateLastChecked = time;
                 VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                 MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
