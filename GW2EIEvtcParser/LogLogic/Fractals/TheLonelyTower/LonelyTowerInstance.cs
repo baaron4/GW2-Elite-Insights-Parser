@@ -13,7 +13,7 @@ internal class LonelyTowerInstance : LonelyTower
     public LonelyTowerInstance(int triggerID) : base(triggerID)
     {
         LogID = LogIDs.LogMasks.Unsupported;
-        Extension = "lnlytw";
+        Extension = "lnlytwr";
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
