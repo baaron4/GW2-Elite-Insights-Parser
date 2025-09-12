@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIParserCommons", "GW2EI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GW2EIParserCLI", "GW2EIParserCLI\GW2EIParserCLI.csproj", "{E7CBC0B6-2276-4143-9409-A3802491A1A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GW2EIUpdater", "GW2EIUpdater\GW2EIUpdater.csproj", "{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,14 @@ Global
 		{E7CBC0B6-2276-4143-9409-A3802491A1A5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7CBC0B6-2276-4143-9409-A3802491A1A5}.Trace|Any CPU.ActiveCfg = Trace|Any CPU
 		{E7CBC0B6-2276-4143-9409-A3802491A1A5}.Trace|Any CPU.Build.0 = Trace|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.NoRewards|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.NoRewards|Any CPU.Build.0 = Debug|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Trace|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB9EC8F-009A-41DD-8EC4-CD161DE56C68}.Trace|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

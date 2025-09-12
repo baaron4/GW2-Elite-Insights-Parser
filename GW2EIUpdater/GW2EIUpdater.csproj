@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AssemblyName>GuildWars2EliteInsightsUpdater</AssemblyName>
+    <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
+    <PackageId>GW2EIUpdater</PackageId>
+    <Authors>EliphasNUIT, Baaron</Authors>
+    <Product>EliteInsights</Product>
+    <Copyright>Copyright ©  2025</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Content\ArenaNet\LI.ico" />
+  </ItemGroup>
+
+</Project>

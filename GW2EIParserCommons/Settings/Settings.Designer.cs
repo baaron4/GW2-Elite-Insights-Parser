@@ -544,4 +544,32 @@ public sealed partial class Settings : global::System.Configuration.ApplicationS
             this["MemoryLimit"] = value;
         }
     }
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("false")]
+    public bool UpdateAvailable
+    {
+        get
+        {
+            return ((bool)(this["UpdateAvailable"]));
+        }
+        set
+        {
+            this["UpdateAvailable"] = value;
+        }
+    }
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("0")]
+    public long UpdateLastChecked
+    {
+        get
+        {
+            return ((long)(this["UpdateLastChecked"]));
+        }
+        set
+        {
+            this["UpdateLastChecked"] = value;
+        }
+    }
 }
