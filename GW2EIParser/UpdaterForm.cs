@@ -3,9 +3,11 @@ using GW2EIUpdater;
 
 namespace GW2EIParser;
 
-public partial class UpdaterForm : Form
+partial class UpdaterForm : Form
 {
-    private Updater.UpdateInfo _info = new ();
+    private readonly Updater.UpdateInfo _info = new ();
+
+    public event EventHandler UpdateStartedEvent;
 
     public UpdaterForm(Updater.UpdateInfo info)
     {
@@ -42,7 +44,8 @@ public partial class UpdaterForm : Form
     {
         if (_info.UpdateAvailable)
         {
-            await Updater.DownloadAndUpdate(_info);
+            await Updater.DownloadAndUpdate(_info, "GW2EIUpdateTemp", "GW2EI.zip");
+            UpdateStartedEvent(this, null);
         }
     }
 

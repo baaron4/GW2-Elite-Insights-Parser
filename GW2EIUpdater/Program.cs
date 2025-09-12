@@ -21,7 +21,7 @@ internal static class Program
             {
                 try
                 {
-                    if (!process.WaitForExit(350))
+                    if (!process.WaitForExit(500))
                     {
                         process.Kill();
                     }

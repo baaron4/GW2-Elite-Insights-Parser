@@ -22,15 +22,7 @@ internal static class Program
         }
 
         // Clean up temp folder on startup
-        try
-        {
-            // TODO restore this comment before merging
-            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.TempFolderName), true);
-        }
-        catch
-        {
-
-        }
+        Updater.CleanTemp("GW2EICLIUpdateTemp");
 
         var logFiles = new List<string>();
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -49,7 +41,7 @@ internal static class Program
                     Console.WriteLine($"Latest Elite Insights version: {info.LatestVersion}");
                     Console.WriteLine($"Download Size: {info.DownloadSize}");
                     Console.WriteLine("Installing");
-                    Updater.DownloadAndUpdate(info).GetAwaiter();
+                    Updater.DownloadAndUpdate(info, "GW2EICLIUpdateTemp", "GW2EICLI.zip").GetAwaiter();
                 }
                 else
                 {

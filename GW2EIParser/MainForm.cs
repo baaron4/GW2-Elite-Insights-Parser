@@ -67,6 +67,16 @@ internal sealed partial class MainForm : Form
         NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
     }
 
+    private void UpdateStartedWatcher(object sender, EventArgs e)
+    {
+        if (sender is UpdaterForm updaterForm)
+        {
+            AddTraceMessage("Updater: Update started");
+            updaterForm.Close();
+            Close();
+        }
+    }
+
     public MainForm(IEnumerable<string> filesArray, ProgramHelper programHelper) : this(programHelper)
     {
         Load += new EventHandler((send, e) => AddLogFiles(filesArray));
@@ -902,18 +912,20 @@ internal sealed partial class MainForm : Form
             Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
             if (info.UpdateAvailable)
             {
+                AddTraceMessage("Updater: Update found, opening UI");
                 Invoke(() => // Must run on UI thread
                 {
                     Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
                     Properties.Settings.Default.UpdateLastChecked = time;
                     VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                     var updaterForm = new UpdaterForm(info);
+                    updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
                     updaterForm.ShowDialog(this);
                 });
             }
             else
             {
-                Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                AddTraceMessage("Updater: Up to date");
                 Properties.Settings.Default.UpdateLastChecked = time;
                 VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                 MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);

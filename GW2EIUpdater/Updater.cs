@@ -10,43 +10,36 @@ public static class Updater
     /// <summary>
     /// Structure to store the update information.
     /// </summary>
-    public struct UpdateInfo(string current, string latest, string release, string size, string file, bool update)
+    public struct UpdateInfo(GitHubRelease release, string current, string latest, string size, string file, bool update)
     {
+        public readonly GitHubRelease Release = release;
         /// <summary>
         /// Current Elite Insights running version.
         /// </summary>
-        public string CurrentVersion = current;
+        public readonly string CurrentVersion = current;
         /// <summary>
         /// Latest Elite Insights version found.
         /// </summary>
-        public string LatestVersion = latest;
+        public readonly string LatestVersion = latest;
         /// <summary>
         /// Latest Elite Insights release page link.
         /// </summary>
-        public string ReleasePageURL = release;
+        public string ReleasePageURL => Release.HtmlUrl;
         /// <summary>
         /// Size of the downloadable file.
         /// </summary>
-        public string DownloadSize = size;
+        public readonly string DownloadSize = size;
         /// <summary>
         /// Name of the file to download.
         /// </summary>
-        public string FileName = file;
+        public readonly string FileName = file;
         /// <summary>
         /// Wether a new Elite Insights update has been found or not.
         /// </summary>
-        public bool UpdateAvailable = update;
+        public readonly bool UpdateAvailable = update;
     }
 
-    /// <summary>
-    /// Elite Insights temporary folder name in the system 'Temp' folder.<br></br>
-    /// 'GW2EIUpdateTemp' for the UI and 'GW2EICLIUpdateTemp' for the CLI.
-    /// </summary>
-    public static string TempFolderName { get; private set; } = string.Empty;
-    
-    private static bool _isCLI = false;
     private static readonly HttpClient _httpClient = new();
-    private static GitHubRelease _latestRelease = new();
 
     /// <summary>
     /// Compares the current Elite Insights versions to the latest released version on GitHub.
@@ -54,8 +47,6 @@ public static class Updater
     /// <returns>Returns <see cref="UpdateInfo"/> with the update information of the latest version if it has a higher number than the current.</returns>
     public static async Task<UpdateInfo> CheckForUpdate(string fileName)
     {
-        _isCLI = fileName.Equals("GW2EICLI.zip");
-        TempFolderName = _isCLI ? "GW2EICLIUpdateTemp" : "GW2EIUpdateTemp";
         Version currentVersion = Assembly.GetEntryAssembly().GetName().Version;
 
         // GitHub API Call & JSON Object creation
@@ -72,19 +63,19 @@ public static class Updater
 
             // Response serialization
             var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
-            _latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse);
+            var latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse);
 
             // Release format is "v1.0.0.0"
-            string version = _latestRelease.Name.Substring(1); // Remove "v"
+            string version = latestRelease.Name.Substring(1); // Remove "v"
             var latestVersion = Version.Parse(version);
 
             // File download size
-            long size = _isCLI ? _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size : _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
+            long size = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
 
             return new UpdateInfo(
+                latestRelease,
                 currentVersion.ToString(),
                 latestVersion.ToString(),
-                _latestRelease.HtmlUrl,
                 $"{size / (1024.0 * 1024.0):F2} MB",
                 fileName,
                 latestVersion > currentVersion);
@@ -98,39 +89,29 @@ public static class Updater
     /// <summary>
     /// Downloads the latest released .zip and executes the update.
     /// </summary>
-    public static async Task DownloadAndUpdate(UpdateInfo info)
+    public static async Task DownloadAndUpdate(UpdateInfo info, string dlFolderName, string fileName)
     {
-        string downloadUrl = string.Empty;
-        string filePath = string.Empty;
+#if DEBUG
+        string tempPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "GW2EITemp");
+#else
 
         // Windows: C:\Users\User\AppData\Local\Temp\
         // Linux: /tmp/
         string tempPath = Path.GetTempPath();
+#endif
 
         // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\ or \GW2EICLIUpdateTemp\
         // Linux: /tmp/GW2EIUpdateTemp/ or /GW2EICLIUpdateTemp/
-        string folderPath = Path.Combine(tempPath, TempFolderName);
+        string folderPath = Path.Combine(tempPath, dlFolderName);
 
         try
         {
             Directory.CreateDirectory(folderPath);
+            var downloadUrl = info.Release.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
 
-            if (_isCLI)
-            {
-                downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
-
-                // Windows: C:\Users\User\AppData\Local\Temp\GW2EICLIUpdateTemp\GW2EICLI.zip
-                // Linux: /tmp/GW2EICLIUpdateTemp/GW2EICLI.zip
-                filePath = Path.Combine(folderPath, info.FileName);
-            }
-            else
-            {
-                downloadUrl = _latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
-
-                // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EI.zip
-                // Linux: /tmp/GW2EIUpdateTemp/GW2EI.zip
-                filePath = Path.Combine(folderPath, info.FileName);
-            }
+            // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EI.zip or GW2EICLIUpdateTemp\GW2EICLI.zip
+            // Linux: /tmp/GW2EIUpdateTemp/GW2EI.zip or GW2CLI.zip
+            var filePath = Path.Combine(folderPath, info.FileName);
 
             // Get response message
             var uri = new Uri(downloadUrl);
@@ -176,5 +157,26 @@ public static class Updater
         {
             throw new DllNotFoundException("GW2EIUpdater executable not found", ex);
         }
+    }
+
+    public static void CleanTemp(string dlFolderName)
+    {
+#if DEBUG
+        string tempPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "GW2EITemp");
+        if (Directory.Exists(tempPath))
+        {
+            Directory.Delete(tempPath, true);
+        }
+#else
+
+        // Windows: C:\Users\User\AppData\Local\Temp\
+        // Linux: /tmp/
+        string tempPath = Path.GetTempPath();
+        string folderPath = Path.Combine(tempPath, dlFolderName);
+        if (Directory.Exists(folderPath))
+        {
+            Directory.Delete(folderPath, true);
+        }
+#endif
     }
 }

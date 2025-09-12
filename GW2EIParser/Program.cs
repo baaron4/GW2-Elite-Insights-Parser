@@ -55,16 +55,7 @@ internal static class Program
             Properties.Settings.Default.Outdated = false;
         }
 
-        // Clean up temp folder on startup
-        try
-        {
-            // TODO restore this comment before merging
-            // Directory.Delete(Path.Combine(Path.GetTempPath(), Updater.TempFolderName), true);
-        }
-        catch
-        {
-
-        }
+        Updater.CleanTemp("GW2EIUpdateTemp");
 
         var logFiles = new List<string>();
         Application.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
