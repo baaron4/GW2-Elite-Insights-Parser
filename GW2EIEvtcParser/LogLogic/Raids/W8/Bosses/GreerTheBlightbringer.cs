@@ -328,7 +328,10 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         (long start, long end) lifespan;
 
@@ -433,7 +436,10 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // Eruption of Rot - Green AoE
         if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, 
@@ -466,7 +472,10 @@ internal class GreerTheBlightbringer : MountBalrior
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Wave of Corruption
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GreerWaveOfCorruption1, out var shockwaves))
@@ -814,7 +823,10 @@ internal class GreerTheBlightbringer : MountBalrior
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log, instanceBuffs);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && log.LogData.IsCM)
         {
