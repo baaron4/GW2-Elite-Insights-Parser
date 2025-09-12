@@ -267,7 +267,7 @@ internal class SpiritValeInstance : SpiritVale
 
     internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        var res = new List<BuffEvent>();
+        var res = base.SpecialBuffEventProcess(combatData, skillData);
         foreach (var subLogic in _subLogics)
         {
             res.AddRange(subLogic.SpecialBuffEventProcess(combatData, skillData));
@@ -277,7 +277,7 @@ internal class SpiritValeInstance : SpiritVale
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        var res = new List<CastEvent>();
+        var res = base.SpecialCastEventProcess(combatData, skillData);
         foreach (var subLogic in _subLogics)
         {
             res.AddRange(subLogic.SpecialCastEventProcess(combatData, skillData));
@@ -287,7 +287,7 @@ internal class SpiritValeInstance : SpiritVale
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        var res = new List<HealthDamageEvent>();
+        var res = base.SpecialDamageEventProcess(combatData, agentData, skillData);
         foreach (var subLogic in _subLogics)
         {
             res.AddRange(subLogic.SpecialDamageEventProcess(combatData, agentData, skillData));

@@ -277,6 +277,10 @@ internal class BanditTrio : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         long growing;
         (long start, long end) lifespan;
@@ -338,7 +342,10 @@ internal class BanditTrio : SalvationPass
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
         // Sapper bombs
         var sapperBombs = player.GetBuffStatus(log, SapperBombBuff).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
@@ -349,13 +356,16 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
         {
-            InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
+            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
         }
     }
 }

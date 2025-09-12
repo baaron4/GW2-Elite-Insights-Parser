@@ -171,6 +171,10 @@ internal class Sabetha : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan;
 
@@ -294,7 +298,10 @@ internal class Sabetha : SpiritVale
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // Timed bombs
         var timedBombs = p.GetBuffStatus(log, TimeBomb).Where(x => x.Value > 0);
@@ -317,7 +324,10 @@ internal class Sabetha : SpiritVale
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Cannon Barrage
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SabethaCannonBarrage, out var cannonBarrage))
