@@ -22,7 +22,7 @@ internal static class Program
         }
 
         // Clean up temp folder on startup
-        Updater.CleanTemp("GW2EICLIUpdateTemp");
+        Updater.CleanTemp();
 
         var logFiles = new List<string>();
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
@@ -50,7 +50,7 @@ internal static class Program
                     Console.WriteLine($"Latest Elite Insights version: {info.LatestVersion}");
                     Console.WriteLine($"Download Size: {info.DownloadSize}");
                     Console.WriteLine("Installing");
-                    if (!Updater.DownloadAndUpdate(info, "GW2EICLIUpdateTemp", "GW2EICLI.zip", traces).GetAwaiter().GetResult())
+                    if (!Updater.DownloadAndUpdate(info, traces).GetAwaiter().GetResult())
                     {
                         traces.ForEach(x => Console.WriteLine(x));
                     }

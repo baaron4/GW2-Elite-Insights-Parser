@@ -92,26 +92,15 @@ public static class Updater
     /// <summary>
     /// Downloads the latest released .zip and executes the update.
     /// </summary>
-    public static async Task<bool> DownloadAndUpdate(UpdateInfo info, string dlFolderName, string fileName, List<string> traces)
+    public static async Task<bool> DownloadAndUpdate(UpdateInfo info, List<string> traces)
     {
-#if DEBUG
         var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         if (location == null)
         {
             traces.Add($"Download location does not exist");
             return false;
         }
-        string tempPath = Path.Combine(location, "GW2EITemp");
-#else
-
-        // Windows: C:\Users\User\AppData\Local\Temp\
-        // Linux: /tmp/
-        string tempPath = Path.GetTempPath();
-#endif
-        // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\ or \GW2EICLIUpdateTemp\
-        // Linux: /tmp/GW2EIUpdateTemp/ or /GW2EICLIUpdateTemp/
-        string folderPath = Path.Combine(tempPath, dlFolderName);
-
+        string folderPath = Path.Combine(location, "GW2EITemp");
         try
         {
             traces.Add($"Creating temp directory {folderPath}");
@@ -178,9 +167,8 @@ public static class Updater
         return true;
     }
 
-    public static void CleanTemp(string dlFolderName)
+    public static void CleanTemp()
     {
-#if DEBUG
         var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         if (location == null)
         {
@@ -191,16 +179,5 @@ public static class Updater
         {
             Directory.Delete(tempPath, true);
         }
-#else
-
-        // Windows: C:\Users\User\AppData\Local\Temp\
-        // Linux: /tmp/
-        string tempPath = Path.GetTempPath();
-        string folderPath = Path.Combine(tempPath, dlFolderName);
-        if (Directory.Exists(folderPath))
-        {
-            Directory.Delete(folderPath, true);
-        }
-#endif
     }
 }

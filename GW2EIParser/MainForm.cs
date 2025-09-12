@@ -925,16 +925,21 @@ internal sealed partial class MainForm : Form
             List<string> traces = [];
             Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
             traces.ForEach(x => AddTraceMessage("Updater: " + x));
+#if DEBUG
+            var force = true;
+#else
+            var force = false;
+#endif
             if (info != null)
             {
-                if (info.Value.UpdateAvailable)
+                if (info.Value.UpdateAvailable || force)
                 {
                     AddTraceMessage("Updater: Update found, opening UI");
                     Invoke(() => // Must run on UI thread
                     {
-                        Properties.Settings.Default.UpdateAvailable = true;
+                        Properties.Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
                         Properties.Settings.Default.UpdateLastChecked = time;
-                        VersionLabelUpdate(Application.ProductVersion, true);
+                        VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
                         var updaterForm = new UpdaterForm(info.Value);
                         updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
                         updaterForm.UpdateTracesEvent += UpdateTracesWatcher;
