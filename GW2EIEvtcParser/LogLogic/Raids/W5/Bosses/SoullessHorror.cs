@@ -95,9 +95,9 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
-        return base.GetCustomWarningMessages(logData, evtcVersion)
+        return base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion)
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 

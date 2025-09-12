@@ -398,7 +398,7 @@ public abstract class LogLogic
         return phases;
     }
 
-    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
         {

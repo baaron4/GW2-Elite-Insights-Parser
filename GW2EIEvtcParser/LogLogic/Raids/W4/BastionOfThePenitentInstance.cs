@@ -417,4 +417,22 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
         }
         return base.GetLogMode(combatData, agentData, logData);
     }
+
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
+    {
+        var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
+        if (agentData.GetNPCsByID(TargetID.Deimos).Any(deimos =>
+        {
+            var lastMaxHPUpdate = combatData.GetMaxHealthUpdateEvents(deimos).LastOrDefault(x => x.Time < deimos.HalfAware);
+            if (lastMaxHPUpdate != null)
+            {
+                return lastMaxHPUpdate.MaxHealth < 40e6;
+            }
+            return false;
+        }))
+        {
+            res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
+        }
+        return res;
+    }
 }
