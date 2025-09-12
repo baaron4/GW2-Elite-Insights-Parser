@@ -123,16 +123,19 @@ internal class KinfallInstance : Kinfall
     // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        base.ComputeNPCCombatReplayActors(target, log, replay);
         _whisperingShadow.ComputeNPCCombatReplayActors(target, log, replay);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
+        base.ComputePlayerCombatReplayActors(p, log, replay);
         _whisperingShadow.ComputePlayerCombatReplayActors(p, log, replay);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         _whisperingShadow.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 
