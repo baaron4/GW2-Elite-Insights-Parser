@@ -33,7 +33,16 @@ internal static class Program
             if (args.Contains("-update"))
             {
                 Console.WriteLine("Checking for a new update");
-                Updater.UpdateInfo info = Updater.CheckForUpdate("GW2EICLI.zip").GetAwaiter().GetResult();
+                List<string> traces = [];
+                Updater.UpdateInfo? _info = Updater.CheckForUpdate("GW2EICLI.zip", traces).GetAwaiter().GetResult();
+                if (_info == null)
+                {
+                    Console.WriteLine("Update check has failed");
+                    traces.ForEach(x => Console.WriteLine(x));
+                    return 0;
+                }
+                traces.Clear();
+                Updater.UpdateInfo info = _info.Value;
                 if (info.UpdateAvailable)
                 {
                     Console.WriteLine("New release has been found");
@@ -41,7 +50,10 @@ internal static class Program
                     Console.WriteLine($"Latest Elite Insights version: {info.LatestVersion}");
                     Console.WriteLine($"Download Size: {info.DownloadSize}");
                     Console.WriteLine("Installing");
-                    Updater.DownloadAndUpdate(info, "GW2EICLIUpdateTemp", "GW2EICLI.zip").GetAwaiter();
+                    if (!Updater.DownloadAndUpdate(info, "GW2EICLIUpdateTemp", "GW2EICLI.zip", traces).GetAwaiter().GetResult())
+                    {
+                        traces.ForEach(x => Console.WriteLine(x));
+                    }
                 }
                 else
                 {
