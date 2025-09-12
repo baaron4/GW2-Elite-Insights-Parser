@@ -85,6 +85,11 @@ internal abstract class ShatteredObservatory : FractalLogic
             }
         }
     }
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        AddCorporealReassignmentDecorations(log, environmentDecorations);
+    }
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
