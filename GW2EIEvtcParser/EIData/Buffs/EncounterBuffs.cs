@@ -72,6 +72,7 @@ internal static class EncounterBuffs
             new Buff("Call of the Mists", CallOfTheMists, Source.EncounterSpecific, BuffClassification.Other, BuffImages.CallOfTheMists),
             new Buff("Untargetable", Untargetable, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Resistance (Unremovable)", ResistanceUnremovable, Source.EncounterSpecific,BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.Resistance),
+            new Buff("Quickplay Boost", QuickplayBoost, Source.EncounterSpecific, BuffClassification.Other, BuffImages.QuickplayBoost),
             // Strike Essences
             new Buff("Essence of Vigilance Tier 1", EssenceOfVigilanceTier1, Source.EncounterSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
             new Buff("Essence of Vigilance Tier 2", EssenceOfVigilanceTier2, Source.EncounterSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),

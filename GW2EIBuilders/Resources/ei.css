@@ -821,6 +821,10 @@ td.approximate::before {
     background-color: #EEEEEE;
 }
 
+.fightModeQuickplay-light {
+    background-color: #32FCEB;
+}
+
 .fightModeEmboldened-light {
     background-color: #39925A;
 }
@@ -845,6 +849,10 @@ td.approximate::before {
 /* Fight Mode Header - Dark Theme */
 .fightModeStory-dark {
     background-color: #515960;
+}
+
+.fightModeQuickplay-dark {
+    background-color: #006858;
 }
 
 .fightModeEmboldened-dark {

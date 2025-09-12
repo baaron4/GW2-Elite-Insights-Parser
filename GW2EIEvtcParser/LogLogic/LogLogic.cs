@@ -150,6 +150,8 @@ public abstract class LogLogic
         if (!IsInstance)
         {
             long end = log.LogData.Success ? log.LogData.LogEnd : (log.LogData.LogEnd + log.LogData.LogStart) / 2;
+
+            // Emboldened
             int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
@@ -164,6 +166,13 @@ public abstract class LogLogic
             if (emboldenedStacks > 0)
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
+            }
+
+            // Quickplay
+            var hasQuickplay = log.PlayerList.Where(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)).Any();
+            if (hasQuickplay)
+            {
+                InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1));
             }
         }
     }
