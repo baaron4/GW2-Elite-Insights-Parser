@@ -1,4 +1,4 @@
-﻿namespace GW2EIParser.Setting;
+﻿namespace GW2EIParser.SettingsForm;
 
 partial class SettingsForm
 {

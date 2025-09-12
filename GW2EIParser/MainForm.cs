@@ -3,16 +3,17 @@ using System.Runtime.Versioning;
 using Discord;
 using GW2EIDiscord;
 using GW2EIEvtcParser;
-using GW2EIParser.Setting;
+using GW2EIParser.SettingsForm;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using GW2EIParserCommons.Properties;
 using GW2EIUpdater;
 
 namespace GW2EIParser;
 
 internal sealed partial class MainForm : Form
 {
-    private readonly SettingsForm _settingsForm;
+    private readonly SettingsForm.SettingsForm _settingsForm;
     private readonly List<string> _logsFiles;
     private List<ulong> _currentDiscordMessageIDs = [];
     private int _runningCount = 0;
@@ -31,40 +32,40 @@ internal sealed partial class MainForm : Form
         _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
         InitializeComponent();
         // Traces
-        ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
-        ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
-        NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
+        ChkApplicationTraces.Checked = Settings.Default.ApplicationTraces;
+        ChkAutoDiscordBatch.Checked = Settings.Default.AutoDiscordBatch;
+        NumericCustomPopulateLimit.Value = Settings.Default.PopulateHourLimit;
         _logsFiles = [];
         BtnCancelAll.Enabled = false;
         BtnParse.Enabled = false;
         UpdateWatchDirectory();
-        _settingsForm = new SettingsForm(_programHelper);
+        _settingsForm = new SettingsForm.SettingsForm(_programHelper);
         _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
         _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
         _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
-        FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
+        FormClosing += new FormClosingEventHandler((sender, e) => Settings.Default.Save());
 
         // Updater
         long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        if (time - Properties.Settings.Default.UpdateLastChecked > 3600)
+        if (time - Settings.Default.UpdateLastChecked > 3600)
         {
             Task.Factory.StartNew(async () =>
             {
                 Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
-                Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
-                Properties.Settings.Default.UpdateLastChecked = time;
+                Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                Settings.Default.UpdateLastChecked = time;
                 VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
-        VersionLabelUpdate(Application.ProductVersion, Properties.Settings.Default.UpdateAvailable);
+        VersionLabelUpdate(Application.ProductVersion, Settings.Default.UpdateAvailable);
     }
 
     private void LoadSettingsWatcher(object sender, EventArgs e)
     {
         AddTraceMessage("Settings: Loaded settings");
-        ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
-        ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
-        NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
+        ChkApplicationTraces.Checked = Settings.Default.ApplicationTraces;
+        ChkAutoDiscordBatch.Checked = Settings.Default.AutoDiscordBatch;
+        NumericCustomPopulateLimit.Value = Settings.Default.PopulateHourLimit;
     }
 
     private void UpdateStartedWatcher(object sender, EventArgs e)
@@ -102,7 +103,7 @@ internal sealed partial class MainForm : Form
 
             var operation = new FormOperationController(file, "Ready to parse", DgvFiles, OperatorBindingSource);
 
-            if (Properties.Settings.Default.AutoParse)
+            if (Settings.Default.AutoParse)
             {
                 QueueOrRunOperation(operation);
             }
@@ -566,9 +567,9 @@ internal sealed partial class MainForm : Form
         AddTraceMessage("UI: Populating from directory");
         using (var fbd = new FolderBrowserDialog())
         {
-            if (Directory.Exists(Properties.Settings.Default.AutoAddPath))
+            if (Directory.Exists(Settings.Default.AutoAddPath))
             {
-                fbd.SelectedPath = Properties.Settings.Default.AutoAddPath;
+                fbd.SelectedPath = Settings.Default.AutoAddPath;
             }
             fbd.ShowNewFolderButton = false;
             DialogResult result = fbd.ShowDialog();
@@ -587,10 +588,10 @@ internal sealed partial class MainForm : Form
             {
                 try
                 {
-                    if (Properties.Settings.Default.PopulateHourLimit > 0)
+                    if (Settings.Default.PopulateHourLimit > 0)
                     {
                         var fileList = new DirectoryInfo(path).EnumerateFiles("*" + format, SearchOption.AllDirectories);
-                        var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Properties.Settings.Default.PopulateHourLimit);
+                        var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Settings.Default.PopulateHourLimit);
                         toAdd.AddRange(toKeep.Select(x => x.FullName));
                     }
                     else
@@ -782,7 +783,7 @@ internal sealed partial class MainForm : Form
 
     private void AutoUpdateDiscordBatch()
     {
-        if (!Properties.Settings.Default.AutoDiscordBatch)
+        if (!Settings.Default.AutoDiscordBatch)
         {
             return;
         }
@@ -826,7 +827,7 @@ internal sealed partial class MainForm : Form
 
     private void _AddTraceMessage(string message)
     {
-        if (!Properties.Settings.Default.ApplicationTraces)
+        if (!Settings.Default.ApplicationTraces)
         {
             return;
         }
@@ -864,36 +865,36 @@ internal sealed partial class MainForm : Form
     // UI 
     private void UpdateWatchDirectory()
     {
-        if (Properties.Settings.Default.AutoAdd && Directory.Exists(Properties.Settings.Default.AutoAddPath))
+        if (Settings.Default.AutoAdd && Directory.Exists(Settings.Default.AutoAddPath))
         {
-            LogFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
-            LblWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
+            LogFileWatcher.Path = Settings.Default.AutoAddPath;
+            LblWatchingDir.Text = "Watching for log files in " + Settings.Default.AutoAddPath;
             LogFileWatcher.EnableRaisingEvents = true;
             LblWatchingDir.Visible = true;
-            AddTraceMessage("Settings: Updated watch directory to " + Properties.Settings.Default.AutoAddPath);
+            AddTraceMessage("Settings: Updated watch directory to " + Settings.Default.AutoAddPath);
         }
         else
         {
-            Properties.Settings.Default.AutoAdd = false;
+            Settings.Default.AutoAdd = false;
             LblWatchingDir.Visible = false;
             LogFileWatcher.EnableRaisingEvents = false;
         }
     }
     private void ChkApplicationTracesCheckedChanged(object sender, EventArgs e)
     {
-        Properties.Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
-        AddTraceMessage("Settings: " + (Properties.Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces"));
+        Settings.Default.ApplicationTraces = ChkApplicationTraces.Checked;
+        AddTraceMessage("Settings: " + (Settings.Default.ApplicationTraces ? "Enabled traces" : "Disabled traces"));
     }
 
     private void NumericCustomPopulateLimitValueChanged(object sender, EventArgs e)
     {
-        Properties.Settings.Default.PopulateHourLimit = (long)NumericCustomPopulateLimit.Value;
-        AddTraceMessage("Settings: Updated populate function hour limit to " + Properties.Settings.Default.PopulateHourLimit);
+        Settings.Default.PopulateHourLimit = (long)NumericCustomPopulateLimit.Value;
+        AddTraceMessage("Settings: Updated populate function hour limit to " + Settings.Default.PopulateHourLimit);
     }
     private void ChkAutoDiscordBatchCheckedChanged(object sender, EventArgs e)
     {
-        Properties.Settings.Default.AutoDiscordBatch = ChkAutoDiscordBatch.Checked;
-        AddTraceMessage("Settings: " + (Properties.Settings.Default.AutoDiscordBatch ? "Enabled automatic discord batching" : "Disabled automatic discord batching"));
+        Settings.Default.AutoDiscordBatch = ChkAutoDiscordBatch.Checked;
+        AddTraceMessage("Settings: " + (Settings.Default.AutoDiscordBatch ? "Enabled automatic discord batching" : "Disabled automatic discord batching"));
     }
 
     private void EnableSettingsWatcher(object sender, EventArgs e)
@@ -915,8 +916,8 @@ internal sealed partial class MainForm : Form
                 AddTraceMessage("Updater: Update found, opening UI");
                 Invoke(() => // Must run on UI thread
                 {
-                    Properties.Settings.Default.UpdateAvailable = info.UpdateAvailable;
-                    Properties.Settings.Default.UpdateLastChecked = time;
+                    Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                    Settings.Default.UpdateLastChecked = time;
                     VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                     var updaterForm = new UpdaterForm(info);
                     updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
@@ -926,7 +927,8 @@ internal sealed partial class MainForm : Form
             else
             {
                 AddTraceMessage("Updater: Up to date");
-                Properties.Settings.Default.UpdateLastChecked = time;
+                Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                Settings.Default.UpdateLastChecked = time;
                 VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
                 MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

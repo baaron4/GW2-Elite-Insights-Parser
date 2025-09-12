@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using GW2EIParserCommons;
+using GW2EIParserCommons.Properties;
 using GW2EIUpdater;
 
 [assembly: CLSCompliant(false)]
@@ -15,10 +16,10 @@ internal static class Program
         Console.WriteLine($"{Process.GetCurrentProcess().ProcessName} {Assembly.GetEntryAssembly().GetName().Version}");
 
         // Migrate previous settings if version changed
-        if (Properties.Settings.Default.Outdated)
+        if (Settings.Default.Outdated)
         {
-            Properties.Settings.Default.Upgrade();
-            Properties.Settings.Default.Outdated = false;
+            Settings.Default.Upgrade();
+            Settings.Default.Outdated = false;
         }
 
         // Clean up temp folder on startup
