@@ -377,6 +377,7 @@ internal static class FoodBuffs
         new Buff("Poor Nourishment", PoorNourishment, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentEffect),
         new Buff("Nourishment (Guild Banquet Table)", NourishmentGuildBanquetTable, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentBirthdayBlaster),
         new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentEffect),
+        new Buff("Cooking Golem", CookingGolem, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentEffect),
     ];
 
     internal static readonly IReadOnlyList<Buff> AscendedFood =
