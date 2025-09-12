@@ -8,6 +8,7 @@ partial class UpdaterForm : Form
     private readonly Updater.UpdateInfo _info = new ();
 
     public event EventHandler UpdateStartedEvent;
+    public event EventHandler UpdateTracesEvent;
 
     public UpdaterForm(Updater.UpdateInfo info)
     {
@@ -44,8 +45,16 @@ partial class UpdaterForm : Form
     {
         if (_info.UpdateAvailable)
         {
-            await Updater.DownloadAndUpdate(_info, "GW2EIUpdateTemp", "GW2EI.zip");
-            UpdateStartedEvent(this, null);
+            List<string> traces = [];
+            if (await Updater.DownloadAndUpdate(_info, "GW2EIUpdateTemp", "GW2EI.zip", traces))
+            {
+                UpdateTracesEvent(traces, null);
+                UpdateStartedEvent(this, null);
+            } 
+            else
+            {
+                UpdateTracesEvent(traces, null);
+            }
         }
     }
 

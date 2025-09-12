@@ -45,9 +45,10 @@ public static class Updater
     /// Compares the current Elite Insights versions to the latest released version on GitHub.
     /// </summary>
     /// <returns>Returns <see cref="UpdateInfo"/> with the update information of the latest version if it has a higher number than the current.</returns>
-    public static async Task<UpdateInfo> CheckForUpdate(string fileName)
+    public static async Task<UpdateInfo?> CheckForUpdate(string fileName, List<string> traces)
     {
-        Version currentVersion = Assembly.GetEntryAssembly().GetName().Version;
+        var entryAssembly = Assembly.GetEntryAssembly();
+        var currentVersion = entryAssembly?.GetName().Version;
 
         // GitHub API Call & JSON Object creation
         try
@@ -63,55 +64,68 @@ public static class Updater
 
             // Response serialization
             var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
-            var latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse);
+            var latestRelease = JsonSerializer.Deserialize<GitHubRelease>(jsonResponse) ?? throw new InvalidOperationException("Deserialize failed");
 
             // Release format is "v1.0.0.0"
             string version = latestRelease.Name.Substring(1); // Remove "v"
             var latestVersion = Version.Parse(version);
 
             // File download size
-            long size = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)).Size;
+            var asset = latestRelease.Assets.FirstOrDefault(x => x.Name.Equals(fileName)) ?? throw new InvalidOperationException("Asset could not be found");
+            long size = asset.Size;
 
             return new UpdateInfo(
                 latestRelease,
-                currentVersion.ToString(),
+                (currentVersion ?? new Version(0, 0 , 0 , 0)).ToString(),
                 latestVersion.ToString(),
                 $"{size / (1024.0 * 1024.0):F2} MB",
                 fileName,
                 latestVersion > currentVersion);
         }
-        catch
+        catch (Exception ex)
         {
-            throw new HttpRequestException("API Request failed");
+            traces.Add($"Update check failed: {ex.Message}");
         }
+        return null;
     }
 
     /// <summary>
     /// Downloads the latest released .zip and executes the update.
     /// </summary>
-    public static async Task DownloadAndUpdate(UpdateInfo info, string dlFolderName, string fileName)
+    public static async Task<bool> DownloadAndUpdate(UpdateInfo info, string dlFolderName, string fileName, List<string> traces)
     {
 #if DEBUG
-        string tempPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "GW2EITemp");
+        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (location == null)
+        {
+            traces.Add($"Download location does not exist");
+            return false;
+        }
+        string tempPath = Path.Combine(location, "GW2EITemp");
 #else
 
         // Windows: C:\Users\User\AppData\Local\Temp\
         // Linux: /tmp/
         string tempPath = Path.GetTempPath();
 #endif
-
         // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\ or \GW2EICLIUpdateTemp\
         // Linux: /tmp/GW2EIUpdateTemp/ or /GW2EICLIUpdateTemp/
         string folderPath = Path.Combine(tempPath, dlFolderName);
 
         try
         {
+            traces.Add($"Creating temp directory {folderPath}");
             Directory.CreateDirectory(folderPath);
-            var downloadUrl = info.Release.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName)).BrowserDownloadUrl;
-
+            var downloadUrl = info.Release.Assets.FirstOrDefault(x => x.Name.Equals(info.FileName))?.BrowserDownloadUrl;
+            if (downloadUrl == null)
+            {
+                traces.Add($"No download url");
+                return false;
+            }
             // Windows: C:\Users\User\AppData\Local\Temp\GW2EIUpdateTemp\GW2EI.zip or GW2EICLIUpdateTemp\GW2EICLI.zip
             // Linux: /tmp/GW2EIUpdateTemp/GW2EI.zip or GW2CLI.zip
             var filePath = Path.Combine(folderPath, info.FileName);
+            traces.Add($"Downloading {downloadUrl} to {filePath}");
 
             // Get response message
             var uri = new Uri(downloadUrl);
@@ -127,6 +141,7 @@ public static class Updater
             // Unzip and save from memory stream
             try
             {
+
                 using var archive = new ZipArchive(ms, ZipArchiveMode.Read);
                 archive.ExtractToDirectory(folderPath, overwriteFiles: true);
             }
@@ -138,12 +153,14 @@ public static class Updater
         }
         catch (Exception ex)
         {
-            throw new HttpRequestException("Update failed", ex);
+            traces.Add($"Download failed with {ex.Message}");
+            return false;
         }
 
         // Execute updater process
         try
         {
+            traces.Add($"Executing GuildWars2EliteInsightsUpdater.exe with arguments ${AppContext.BaseDirectory} and {Process.GetCurrentProcess().ProcessName}");
             var psi = new ProcessStartInfo
             {
                 UseShellExecute = true,
@@ -155,14 +172,21 @@ public static class Updater
         }
         catch (Exception ex)
         {
-            throw new DllNotFoundException("GW2EIUpdater executable not found", ex);
+            traces.Add($"GuildWars2EliteInsightsUpdater.exe could not be executed - {ex.Message}");
+            return false;
         }
+        return true;
     }
 
     public static void CleanTemp(string dlFolderName)
     {
 #if DEBUG
-        string tempPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "GW2EITemp");
+        var location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        if (location == null)
+        {
+            return;
+        }
+        string tempPath = Path.Combine(location, "GW2EITemp");
         if (Directory.Exists(tempPath))
         {
             Directory.Delete(tempPath, true);

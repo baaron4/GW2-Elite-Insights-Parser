@@ -51,10 +51,15 @@ internal sealed partial class MainForm : Form
         {
             Task.Factory.StartNew(async () =>
             {
-                Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
-                Settings.Default.UpdateAvailable = info.UpdateAvailable;
-                Settings.Default.UpdateLastChecked = time;
-                VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
+                List<string> traces = [];
+                Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+                if (info != null)
+                {
+                    Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
+                    Settings.Default.UpdateLastChecked = time;
+                    VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
+                }
+                traces.ForEach(x => AddTraceMessage("Updater: " + x));
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
         VersionLabelUpdate(Application.ProductVersion, Settings.Default.UpdateAvailable);
@@ -75,6 +80,14 @@ internal sealed partial class MainForm : Form
             AddTraceMessage("Updater: Update started");
             updaterForm.Close();
             Close();
+        }
+    }
+
+    private void UpdateTracesWatcher(object sender, EventArgs e)
+    {
+        if (sender is List<string> traces)
+        {
+            traces.ForEach(x => AddTraceMessage("Updater: " + x));
         }
     }
 
@@ -910,27 +923,33 @@ internal sealed partial class MainForm : Form
         Task.Factory.StartNew(async () =>
         {
             var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            Updater.UpdateInfo info = await Updater.CheckForUpdate("GW2EI.zip");
-            if (info.UpdateAvailable)
+            List<string> traces = [];
+            Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+            traces.ForEach(x => AddTraceMessage("Updater: " + x));
+            if (info != null)
             {
-                AddTraceMessage("Updater: Update found, opening UI");
-                Invoke(() => // Must run on UI thread
+                if (info.Value.UpdateAvailable)
                 {
-                    Settings.Default.UpdateAvailable = info.UpdateAvailable;
+                    AddTraceMessage("Updater: Update found, opening UI");
+                    Invoke(() => // Must run on UI thread
+                    {
+                        Settings.Default.UpdateAvailable = true;
+                        Settings.Default.UpdateLastChecked = time;
+                        VersionLabelUpdate(Application.ProductVersion, true);
+                        var updaterForm = new UpdaterForm(info.Value);
+                        updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
+                        updaterForm.UpdateTracesEvent += UpdateTracesWatcher;
+                        updaterForm.ShowDialog(this);
+                    });
+                }
+                else
+                {
+                    AddTraceMessage("Updater: Up to date");
+                    Settings.Default.UpdateAvailable = false;
                     Settings.Default.UpdateLastChecked = time;
-                    VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
-                    var updaterForm = new UpdaterForm(info);
-                    updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
-                    updaterForm.ShowDialog(this);
-                });
-            }
-            else
-            {
-                AddTraceMessage("Updater: Up to date");
-                Settings.Default.UpdateAvailable = info.UpdateAvailable;
-                Settings.Default.UpdateLastChecked = time;
-                VersionLabelUpdate(Application.ProductVersion, info.UpdateAvailable);
-                MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    VersionLabelUpdate(Application.ProductVersion, false);
+                    MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
     }
