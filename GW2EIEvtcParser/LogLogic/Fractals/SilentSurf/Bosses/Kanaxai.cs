@@ -269,7 +269,10 @@ internal class Kanaxai : SilentSurf
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
         long maxEnd = log.LogData.LogEnd;
 
         // Orange Tether from Aspect to player
@@ -316,6 +319,10 @@ internal class Kanaxai : SilentSurf
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         long growing;
         (long start, long end) lifespan;
@@ -429,7 +436,10 @@ internal class Kanaxai : SilentSurf
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Frightening Speed - Red AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out var frighteningSpeedRedAoEs))
