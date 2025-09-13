@@ -116,7 +116,7 @@ public class ParsedEvtcLog
         LogMetadata = new LogMetadata(evtcVersion, CombatData, LogData.EvtcLogEnd - LogData.EvtcLogStart, playerList, extensions, operation);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Container");
-        Buffs = new BuffsContainer(CombatData, operation);
+        Buffs = new BuffsContainer(CombatData, SkillData, operation);
 
         _operation.UpdateProgressWithCancellationCheck("Parsing: Creating Damage Modifier Container");
         DamageModifiers = new DamageModifiersContainer(CombatData, logData.Logic.ParseMode, logData.Logic.SkillMode, parserSettings);

@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillData
 {
@@ -23,6 +25,12 @@ public class SkillData
         }
         Add(ID, SkillItem.DefaultName);
         return _skills[ID];
+    }
+
+    
+    internal bool TryGet(long ID, [NotNullWhen(true)] out SkillItem? skillItem)
+    {
+        return _skills.TryGetValue(ID, out skillItem);
     }
 
     internal HashSet<long> NotAccurate = [];
