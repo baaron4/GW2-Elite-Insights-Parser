@@ -170,7 +170,7 @@ public abstract class LogLogic
             var hasQuickplay = log.PlayerList.Where(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)).Any();
             if (hasQuickplay)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1));
             }
         }
     }
