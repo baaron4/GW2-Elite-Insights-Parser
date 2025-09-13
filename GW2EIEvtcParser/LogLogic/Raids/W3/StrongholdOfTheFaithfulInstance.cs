@@ -56,9 +56,12 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
-        if (targetsByIDs.TryGetValue((int)TargetID.McLeodTheSilent, out var mcLeods) &&
-            targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
+        if (targetsByIDs.TryGetValue((int)TargetID.DummyTarget, out var dummies))
         {
+            if (!targetsByIDs.TryGetValue((int)TargetID.McLeodTheSilent, out var mcLeods))
+            {
+                mcLeods = [];
+            }
             var dummy = dummies.FirstOrDefault(x => x.Character == "Escort");
             if (dummy != null)
             {
