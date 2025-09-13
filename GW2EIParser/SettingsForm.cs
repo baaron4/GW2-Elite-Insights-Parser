@@ -2,7 +2,7 @@
 using GW2EIParserCommons;
 using GW2EIParserCommons.Properties;
 
-namespace GW2EIParser.SettingsForm;
+namespace GW2EIParser;
 
 public partial class SettingsForm : Form
 {

@@ -3,7 +3,6 @@ using System.Runtime.Versioning;
 using Discord;
 using GW2EIDiscord;
 using GW2EIEvtcParser;
-using GW2EIParser.SettingsForm;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 using GW2EIParserCommons.Properties;
@@ -13,7 +12,7 @@ namespace GW2EIParser;
 
 internal sealed partial class MainForm : Form
 {
-    private readonly SettingsForm.SettingsForm _settingsForm;
+    private readonly SettingsForm _settingsForm;
     private readonly List<string> _logsFiles;
     private List<ulong> _currentDiscordMessageIDs = [];
     private int _runningCount = 0;
@@ -39,7 +38,7 @@ internal sealed partial class MainForm : Form
         BtnCancelAll.Enabled = false;
         BtnParse.Enabled = false;
         UpdateWatchDirectory();
-        _settingsForm = new SettingsForm.SettingsForm(_programHelper);
+        _settingsForm = new SettingsForm(_programHelper);
         _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
         _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
         _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
