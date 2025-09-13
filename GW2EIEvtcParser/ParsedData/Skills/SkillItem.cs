@@ -53,17 +53,10 @@ public class SkillItem
         { LightningStrike_SigilOfAir, "Lightning Strike (Minor/Major/Superior Sigil of Air)" },
         { FlameBlast_SigilOfFire, "Flame Blast (Minor/Major/Superior Sigil of Fire)" },
         { Snowball_SigilOfMischief, "Snowball (Minor/Major/Superior Sigil of Mischief)" },
-        { SuperiorSigilOfSeverance, "Superior Sigil of Severance" },
-        { MinorSigilOfDoom, "Minor Sigil of Doom" },
-        { MajorSigilOfDoom, "Major Sigil of Doom" },
-        { SuperiorSigilOfDoom, "Superior Sigil of Doom" },
         { MinorSigilOfBlood, "Minor Sigil of Blood" },
         { MajorSigilOfBlood, "Major Sigil of Blood" },
         { SuperiorSigilOfBlood, "Superior Sigil of Blood" },
-        { MajorSigilOfLeeching, "Major Sigil of Leeching" },
         { SuperiorSigilOfLeeching, "Superior Sigil of Leeching" },
-        { SuperiorSigilOfVision, "Superior Sigil of Vision" },
-        { SuperiorSigilOfConcentration, "Superior Sigil of Concentration" },
         #endregion Sigils
         #region Runes
         { RuneOfNightmare, "Rune of the Nightmare" },
@@ -99,15 +92,10 @@ public class SkillItem
         #endregion Mounts
         #region Relics
         { RelicOfTheWizardsTower, "Relic of the Wizard's Tower" },
-        { RelicOfIsgarrenTargetBuff, "Relic of Isgarren" },
-        { RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter" },
-        { RelicOfPeithaTargetBuff, "Relic of Peitha" },
         { RelicOfPeithaBlade, "Relic of Peitha (Blade)" },
         { RelicOfFireworksBuffLoss, "Relic of Fireworks (Buff Loss)" },
         { RelicOfTheFlockBarrier, "Relic of the Flock (Barrier)" },
         { RelicOfMercyHealing, "Relic of Mercy" },
-        { MabonsStrength, "Relic of Mabon" },
-        { NouryssHungerDamageBuff, "Relic of Nourys" },
         { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
         { RelicOfTheClawBuffLoss, "Relic of the Claw (Buff Loss)" },
         { RelicOfTheStormsingerChain, "Relic of the Stormsinger (Chain)" },
@@ -240,7 +228,6 @@ public class SkillItem
         #region Raids
         // Gorseval
         { GhastlyRampage,"Ghastly Rampage" },
-        { ProtectiveShadow,"Protective Shadow" },
         { GhastlyRampageBegin,"Ghastly Rampage (Begin)" },
         // Sabetha
         { ShadowStepSabetha, "Shadow Step" },
