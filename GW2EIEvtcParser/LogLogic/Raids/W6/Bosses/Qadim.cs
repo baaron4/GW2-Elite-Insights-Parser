@@ -462,7 +462,10 @@ internal class Qadim : MythwrightGambit
     }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         if (!HasPlateformAgents(log.AgentData) && !log.LogData.IsInstance)
         {
@@ -733,6 +736,10 @@ internal class Qadim : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         var cls = target.GetCastEvents(log);
 
         long castDuration;
@@ -1469,19 +1476,22 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
             }
             else if (CustomCheckManipulateTheManipulator(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
             }
         }
     }

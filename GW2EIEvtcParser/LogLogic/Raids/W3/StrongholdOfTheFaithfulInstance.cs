@@ -325,7 +325,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Twisted Castle", Spec.NPC, TargetID.DummyTarget, true);
         // For encounters before reaching Xera
         agentData.AddCustomNPCAgent(logData.LogStart, logData.LogEnd, "Xera Pre Event", Spec.NPC, TargetID.DummyTarget, true);
-        // TODO: verify charged bloodstones, it is possible there is only a single instance of each in the map and they get hidden/put back to 100% hp as they are present from log start to log end in boss logs
         Xera.FindBloodstones(agentData, combatData);
         MergeXeraAgents(agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
@@ -370,7 +369,6 @@ internal class StrongholdOfTheFaithfulInstance : StrongholdOfTheFaithful
         return res;
     }
 
-    // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputeNPCCombatReplayActors(target, log, replay);

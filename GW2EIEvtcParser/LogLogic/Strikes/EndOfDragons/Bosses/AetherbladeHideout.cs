@@ -1054,19 +1054,19 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return maiTrin.GetHealth(combatData) > 8e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
             }
             else if (CustomCheckTriangulationEligibility(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityTriangulation], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityTriangulation], 1));
             }
         }
     }

@@ -528,9 +528,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return "Cosmic Observatory";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.LogData.IsCM)
         {
@@ -557,7 +557,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
             if (buffCounter == log.PlayerList.Count && aliveCounter == log.PlayerList.Count)
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityPrecisionAnxiety));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityPrecisionAnxiety));
             }
         }
     }
