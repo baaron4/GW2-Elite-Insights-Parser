@@ -148,13 +148,16 @@ public class BuffsContainer
             return x.First();
         });
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Skill icons using buffs");
+        var adjusted = 0;
         foreach (var pair in BuffsByIDs)
         {
             if (skillData.TryGet(pair.Key, out var skill))
             {
+                adjusted++;
                 skill.OverrideFromBuff(pair.Value);
             }
         }
+        operation.UpdateProgressWithCancellationCheck($"Parsing: Adjusted {adjusted} Skill icons using buffs");
         operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buffs");
         BuffInfoSolver.AdjustBuffs(combatData, BuffsByIDs, operation);
         foreach (Buff buff in currentBuffs)
