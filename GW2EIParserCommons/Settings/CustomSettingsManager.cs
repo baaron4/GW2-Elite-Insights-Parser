@@ -1,7 +1,6 @@
 ﻿using System.Configuration;
-using GW2EIParserCommons;
 
-namespace GW2EIParser;
+namespace GW2EIParserCommons;
 
 public static class CustomSettingsManager
 {

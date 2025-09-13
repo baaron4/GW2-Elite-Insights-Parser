@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using GW2EIParserCommons.Properties;
 using GW2EIUpdater;
 
 namespace GW2EIParser;
@@ -44,10 +45,10 @@ partial class UpdaterForm : Form
     private async void buttonUpdate_Click(object sender, EventArgs e)
     {
         List<string> traces = [];
-        Properties.Settings.Default.UpdateLastChecked = 0;
+        Settings.Default.UpdateLastChecked = 0;
         if (await Updater.DownloadAndUpdate(_info, traces))
         {
-            Properties.Settings.Default.UpdateAvailable = false;
+            Settings.Default.UpdateAvailable = false;
             UpdateTracesEvent(traces, null);
             UpdateStartedEvent(this, null);
         }
