@@ -145,7 +145,10 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.DeimosLonelyTower:
@@ -176,7 +179,10 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         SingleActor? cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
         DoFixationTether(log, p, replay, cerus, CerussFocus, Colors.Orange);
         SingleActor? deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));

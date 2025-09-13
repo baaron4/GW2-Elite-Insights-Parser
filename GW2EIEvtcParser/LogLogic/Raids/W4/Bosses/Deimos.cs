@@ -265,9 +265,9 @@ internal class Deimos : BastionOfThePenitent
         return start >= 0 ? start : genericStart;
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
-        var res = base.GetCustomWarningMessages(logData, evtcVersion);
+        var res = base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion);
         if (!logData.IsCM)
         {
             return res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
@@ -589,6 +589,10 @@ internal class Deimos : BastionOfThePenitent
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
@@ -752,7 +756,10 @@ internal class Deimos : BastionOfThePenitent
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // teleport zone
         var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen).Where(x => x.Value > 0);
         foreach (Segment seg in tpDeimos)
@@ -767,7 +774,10 @@ internal class Deimos : BastionOfThePenitent
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Rapid Decay - Orange Indicator - Oil
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeimosRapidDecayIndicator, out var rapidDecayIndicator))

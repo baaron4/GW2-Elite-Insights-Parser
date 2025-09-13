@@ -221,9 +221,12 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
         IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
         int counter = 0;
 
@@ -240,13 +243,16 @@ internal class Arkk : ShatteredObservatory
         // The party must have 5 players to be eligible
         if (counter == 5)
         {
-            InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
+            instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
         }
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // Cosmic Meteor (green)
         IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor).Where(x => x.Value > 0);
@@ -260,7 +266,10 @@ internal class Arkk : ShatteredObservatory
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         switch (target.ID)
         {
@@ -353,9 +362,10 @@ internal class Arkk : ShatteredObservatory
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-
-        AddCorporealReassignmentDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Horizon Strike
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out var strikes))
@@ -373,7 +383,7 @@ internal class Arkk : ShatteredObservatory
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = [];
         res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, HypernovaLaunchSAK, HypernovaLaunchBuff));
         return res;
     }
