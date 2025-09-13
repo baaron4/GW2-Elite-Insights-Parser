@@ -236,6 +236,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.ConjuredAmalgamate:
@@ -444,7 +448,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // Conjured Protection - Shield AoE
         var casts = p.GetCastEvents(log);
         var shieldCast = casts.Where(x => x.SkillID == ConjuredProtectionSAK);
@@ -472,7 +479,10 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         (long start, long end) lifespan;
 

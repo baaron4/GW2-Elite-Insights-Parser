@@ -220,6 +220,10 @@ internal class SpiritRace : SpiritVale
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:

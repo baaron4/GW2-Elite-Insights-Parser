@@ -330,7 +330,7 @@ public partial class CombatData
         }
     }
 
-    private void EIMetaAndStatusParse(LogData logData, EvtcVersionEvent evtcVersion)
+    private void EIMetaAndStatusParse(LogData logData, AgentData agentData, EvtcVersionEvent evtcVersion)
     {
         foreach (var (agent, events) in _damageTakenData)
         {
@@ -383,7 +383,7 @@ public partial class CombatData
                 _statusEvents.DownEvents[agent] = agentDowns;
             }
         }
-        _metaDataEvents.ErrorEvents.AddRange(logData.Logic.GetCustomWarningMessages(logData, evtcVersion));
+        _metaDataEvents.ErrorEvents.AddRange(logData.Logic.GetCustomWarningMessages(logData, agentData, this, evtcVersion));
     }
 
     private void EIExtraEventProcess(SkillData skillData, AgentData agentData, LogData logData, ParserController operation, EvtcVersionEvent evtcVersion)
@@ -422,7 +422,7 @@ public partial class CombatData
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
         EICastParse(players, skillData, logData, agentData);
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Status Events");
-        EIMetaAndStatusParse(logData, evtcVersion);
+        EIMetaAndStatusParse(logData, agentData, evtcVersion);
     }
 
     private void OffsetBuffExtensionEvents(EvtcVersionEvent evtcVersion)

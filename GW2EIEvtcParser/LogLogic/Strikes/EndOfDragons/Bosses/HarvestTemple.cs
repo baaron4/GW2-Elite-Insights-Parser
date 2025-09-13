@@ -2126,20 +2126,20 @@ internal class HarvestTemple : EndOfDragonsStrike
         return LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         // Added a CM mode check because the eligibility had been bugged for some time and showed up in normal mode.
         if (log.LogData.Success && log.LogData.IsCM)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityVoidwalker));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityVoidwalker));
             }
             else if (CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityVoidwalker], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityVoidwalker], 1));
             }
         }
     }

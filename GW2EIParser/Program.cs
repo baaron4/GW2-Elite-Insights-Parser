@@ -56,7 +56,7 @@ internal static class Program
             Settings.Default.Outdated = false;
         }
 
-        Updater.CleanTemp("GW2EIUpdateTemp");
+        Updater.CleanTemp();
 
         var logFiles = new List<string>();
         Application.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");

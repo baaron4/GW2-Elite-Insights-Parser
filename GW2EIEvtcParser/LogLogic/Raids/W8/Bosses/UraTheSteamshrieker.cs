@@ -380,6 +380,10 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         long growing;
         (long start, long end) lifespan;
@@ -626,7 +630,10 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // Deterrence - Pick-Up Bloodstone Shard
         replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, Deterrence).Where(x => x.Value > 0), player, ParserIcons.CrimsonAttunementOverhead);
@@ -676,7 +683,10 @@ internal class UraTheSteamshrieker : MountBalrior
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Bloodstone Radiation - AoE
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.UraBloodstoneRadiationPulse, out var bloodstoneRadiation))
@@ -703,9 +713,12 @@ internal class UraTheSteamshrieker : MountBalrior
         return LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && (log.LogData.IsCM || log.LogData.IsLegendaryCM))
         {
@@ -731,7 +744,7 @@ internal class UraTheSteamshrieker : MountBalrior
             }
             if (eligible)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
             }
         }
     }

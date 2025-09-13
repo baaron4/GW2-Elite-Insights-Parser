@@ -43,18 +43,18 @@ partial class UpdaterForm : Form
 
     private async void buttonUpdate_Click(object sender, EventArgs e)
     {
-        if (_info.UpdateAvailable)
+        List<string> traces = [];
+        Properties.Settings.Default.UpdateLastChecked = 0;
+        if (await Updater.DownloadAndUpdate(_info, traces))
         {
-            List<string> traces = [];
-            if (await Updater.DownloadAndUpdate(_info, "GW2EIUpdateTemp", "GW2EI.zip", traces))
-            {
-                UpdateTracesEvent(traces, null);
-                UpdateStartedEvent(this, null);
-            } 
-            else
-            {
-                UpdateTracesEvent(traces, null);
-            }
+            Properties.Settings.Default.UpdateAvailable = false;
+            UpdateTracesEvent(traces, null);
+            UpdateStartedEvent(this, null);
+        }
+        else
+        {
+            UpdateTracesEvent(traces, null);
+            MessageBox.Show(this, "Update Failed.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 

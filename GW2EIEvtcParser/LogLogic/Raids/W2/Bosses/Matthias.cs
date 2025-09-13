@@ -86,9 +86,12 @@ internal class Matthias : SalvationPass
         return crMap;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
         if (bloodstoneBisque.Any() && log.LogData.Success)
         {
@@ -114,7 +117,7 @@ internal class Matthias : SalvationPass
             }
             if (expectedPlayersForSuccess <= playersWithBisque)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[BloodstoneBisque], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[BloodstoneBisque], 1));
             }
         }
     }
@@ -306,6 +309,10 @@ internal class Matthias : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
@@ -381,7 +388,10 @@ internal class Matthias : SalvationPass
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         long growing;
         (long start, long end) lifespan;
@@ -498,7 +508,10 @@ internal class Matthias : SalvationPass
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         (long start, long end) lifespan;
 

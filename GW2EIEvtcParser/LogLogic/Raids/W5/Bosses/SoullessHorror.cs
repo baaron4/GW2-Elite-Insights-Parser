@@ -95,9 +95,9 @@ internal class SoullessHorror : HallOfChains
         ];
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
-        return base.GetCustomWarningMessages(logData, evtcVersion)
+        return base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion)
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
@@ -185,6 +185,10 @@ internal class SoullessHorror : HallOfChains
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
@@ -345,14 +349,20 @@ internal class SoullessHorror : HallOfChains
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
         IEnumerable<Segment> fixations = player.GetBuffStatus(log, FixatedSH).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(fixations, player, ParserIcons.FixationPurpleOverhead);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         (long start, long end) lifespan;
 

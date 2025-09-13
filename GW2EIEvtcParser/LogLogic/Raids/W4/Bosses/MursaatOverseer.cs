@@ -95,14 +95,18 @@ internal class MursaatOverseer : BastionOfThePenitent
         return phases;
     }
 
-    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
-        return base.GetCustomWarningMessages(logData, evtcVersion)
+        return base.GetCustomWarningMessages(logData, agentData, combatData, evtcVersion)
             .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.Jade:
@@ -137,7 +141,10 @@ internal class MursaatOverseer : BastionOfThePenitent
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         (long start, long end) lifespan;
 

@@ -97,6 +97,10 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(npc, log, replay);
+        }
         switch (npc.ID)
         {
             case (int)TargetID.HauntingStatue:
@@ -115,7 +119,10 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
         // Madness - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
         IEnumerable<Segment> madnesses = player.GetBuffStatus(log, Madness).Where(x => x.Value > 0);
         foreach (Segment segment in madnesses)
@@ -145,19 +152,22 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return "Twisted Castle";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
             }
             else if (CustomCheckMildlyInsaneEligibility(log))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
             }
         }
     }

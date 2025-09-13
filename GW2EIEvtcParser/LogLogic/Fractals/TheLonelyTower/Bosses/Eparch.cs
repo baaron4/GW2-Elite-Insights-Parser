@@ -220,7 +220,10 @@ internal class Eparch : LonelyTower
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // Consume fixations
         var consumes = player.GetBuffStatus(log, Consume).Where(x => x.Value > 0);
@@ -231,7 +234,10 @@ internal class Eparch : LonelyTower
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         (long start, long end) lifespan;
         long duration;
@@ -311,7 +317,10 @@ internal class Eparch : LonelyTower
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         (long start, long end) lifespan;
 

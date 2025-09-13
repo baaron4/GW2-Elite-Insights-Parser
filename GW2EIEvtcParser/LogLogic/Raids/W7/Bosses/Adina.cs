@@ -202,7 +202,10 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness).Where(x => x.Value > 0);
         replay.Decorations.AddOverheadIcons(radiantBlindnesses, p, BuffImages.PersistentlyBlinded);
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.AdinaSelectedForPillar, out var selectedForPillars))
@@ -271,7 +274,10 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AdinaPillarDropLocationWarning, out var pillarDrops))
         {
             foreach (var pillarDrop in pillarDrops)
@@ -344,6 +350,10 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan;
 
@@ -600,13 +610,16 @@ internal class Adina : TheKeyOfAhdashim
         return (target.GetHealth(combatData) > 23e6) ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
         {
-            InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
+            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
         }
     }
 

@@ -82,13 +82,16 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
         {
-            InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
+            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
         }
     }
 
@@ -197,6 +200,10 @@ internal class Slothasor : SalvationPass
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan;
 
@@ -277,7 +284,10 @@ internal class Slothasor : SalvationPass
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // Poison
         var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff).Where(x => x.Value > 0);
         foreach (Segment seg in poisonToDrop)
@@ -309,7 +319,10 @@ internal class Slothasor : SalvationPass
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SlothasorSporeReleaseProjectileImpacts, out var sporeReleaseImpacts))
         {
             foreach (var sporeReleaseImpact in sporeReleaseImpacts)
