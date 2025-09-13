@@ -187,6 +187,7 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfTheHolosmith, EffectGUIDs.RelicOfTheHolosmith)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheSteamshrieker, EffectGUIDs.RelicOfTheSteamshrieker)
+            .UsingICD(0)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(BloodstoneExplosion, EffectGUIDs.RelicOfBloodstone)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
