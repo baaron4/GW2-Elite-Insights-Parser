@@ -430,7 +430,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             return false;
         }))
         {
-            res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
+            res = res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
         }
         return res;
     }
