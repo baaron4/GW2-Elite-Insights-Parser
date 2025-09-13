@@ -33,7 +33,7 @@ internal class DamageModData
                 Data.Add(
                 [
                     0,
-                    dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
+                    dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count,
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
                 ]);
@@ -64,7 +64,7 @@ internal class DamageModData
                     pTarget.Add(
                     [
                         0,
-                        dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
+                        dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count,
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
                     ]);
@@ -94,7 +94,7 @@ internal class DamageModData
                 Data.Add(
                 [
                     0,
-                    dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
+                    dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count,
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
                 ]);
@@ -124,7 +124,7 @@ internal class DamageModData
                     pTarget.Add(
                     [
                         0,
-                        dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
+                        dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count,
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
                     ]);

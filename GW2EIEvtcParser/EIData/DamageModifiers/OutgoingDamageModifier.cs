@@ -134,7 +134,7 @@ public class OutgoingDamageModifier : DamageModifier
         throw new NotImplementedException("Not implemented damage source " + DmgSrc);
     }
 
-    public override IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
+    public override IReadOnlyList<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
         switch (DmgSrc)
         {

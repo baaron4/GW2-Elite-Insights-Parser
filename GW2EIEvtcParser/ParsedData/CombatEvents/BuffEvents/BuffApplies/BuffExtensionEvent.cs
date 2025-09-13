@@ -25,7 +25,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
         if (!_sourceFinderRan && By.IsUnknown)
         {
             _sourceFinderRan = true;
-            if (ExtendedDuration > 1)
+            if (ExtendedDuration >= 1)
             {
                 By = log.Buffs.TryFindSrc(To, Time, ExtendedDuration, log, BuffID, BuffInstance).EnglobingAgentItem;
             }
@@ -109,7 +109,7 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
-        if (ExtendedDuration <= 1)
+        if (ExtendedDuration < 1)
         {
             // no need to bother with 0 extensions
             return;

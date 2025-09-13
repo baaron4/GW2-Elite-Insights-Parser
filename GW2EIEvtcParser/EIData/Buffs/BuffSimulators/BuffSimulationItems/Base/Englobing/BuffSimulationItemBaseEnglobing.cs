@@ -8,24 +8,19 @@ internal class BuffSimulationItemBaseEnglobing : BuffSimulationItemBase
     public readonly IReadOnlyList<AgentItem> EnglobedSrcs;
     protected internal BuffSimulationItemBaseEnglobing(BuffStackItem buffStackItem) : base(buffStackItem)
     {
-        EnglobedSrcs = Src.EnglobedAgentItems;
+        EnglobedSrcs = Src.EnglobedAgentItems.Where(subSrc => !(Start >= subSrc.LastAware || End <= subSrc.FirstAware)).ToList();
     }
 
-    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
-        long cDur = GetClampedDuration(start, end);
-        if (cDur > 0)
+        foreach (var subSrc in EnglobedSrcs)
         {
-            foreach (var subSrc in EnglobedSrcs)
+            long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
+            if (subcDur > 0)
             {
-                long subcDur = GetClampedDuration(Math.Max(start, subSrc.FirstAware), Math.Min(end, subSrc.LastAware));
-                if (subcDur > 0)
-                {
-                    AddValue(distribution, subcDur, subSrc);
-                }
-
+                AddValue(distribution, subcDur, subSrc);
             }
+
         }
-        return cDur;
     }
 }

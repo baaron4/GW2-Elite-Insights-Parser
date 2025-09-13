@@ -15,7 +15,7 @@ public class SupportPerAllyStatistics
 
     internal SupportPerAllyStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? to)
     {
-        foreach (long buffID in log.Buffs.BuffsByIDs.Keys)
+        foreach (long buffID in actor.GetBuffRemoveAllEventsByPresentBuffIDs(log))
         {
             int foeCount = 0;
             long foeTime = 0;
@@ -25,34 +25,27 @@ public class SupportPerAllyStatistics
             long friendlyTime = 0;
             int unknownCount = 0;
             long unknownTime = 0;
-            foreach (BuffRemoveAllEvent brae in log.CombatData.GetBuffRemoveAllDataBySrc(buffID, actor.AgentItem))
+            foreach (BuffRemoveAllEvent brae in actor.GetBuffRemoveAllEventsByByID(log, start, end, buffID, to))
             {
-                if (brae.Time >= start && brae.Time <= end)
+                if (brae.ToFriendly)
                 {
-                    if (to != null && !to.AgentItem.Is(brae.To))
+                    friendlyCount++;
+                    friendlyTime = Math.Max(friendlyTime + brae.RemovedDuration, log.LogData.LogDuration);
+                }
+                else if (brae.ToFoe)
+                {
+                    foeCount++;
+                    foeTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
+                    if (brae.To.IsDownedBeforeNext90(log, brae.Time))
                     {
-                        continue;
+                        foeDownContributionCount++;
+                        foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
                     }
-                    if (brae.ToFriendly)
-                    {
-                        friendlyCount++;
-                        friendlyTime = Math.Max(friendlyTime + brae.RemovedDuration, log.LogData.LogDuration);
-                    }
-                    else if (brae.ToFoe)
-                    {
-                        foeCount++;
-                        foeTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
-                        if (brae.To.IsDownedBeforeNext90(log, brae.Time))
-                        {
-                            foeDownContributionCount++;
-                            foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.LogData.LogDuration);
-                        }
-                    }
-                    else
-                    {
-                        unknownCount++;
-                        unknownTime = Math.Max(unknownTime + brae.RemovedDuration, log.LogData.LogDuration);
-                    }
+                }
+                else
+                {
+                    unknownCount++;
+                    unknownTime = Math.Max(unknownTime + brae.RemovedDuration, log.LogData.LogDuration);
                 }
             }
             if (foeCount > 0)

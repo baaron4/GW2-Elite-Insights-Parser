@@ -8,13 +8,9 @@ internal class BuffSimulationItemBaseWithExtension : BuffSimulationItemBase
     protected internal BuffSimulationItemBaseWithExtension(BuffStackItem buffStackItem) : base(buffStackItem)
     {
     }
-    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
     {
-        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
-        if (cDur > 0)
-        {
-            AddExtension(distribution!, cDur, Src);
-        }
-        return cDur;
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
+        AddExtension(distribution!, cDur, Src);
     }
 }

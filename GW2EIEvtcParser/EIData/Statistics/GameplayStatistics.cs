@@ -22,6 +22,7 @@ public class GameplayStatistics
     // Counts
     public readonly int WeaponSwapCount;
 
+    public readonly long SkillCastTime;
     public readonly double SkillCastUptime;
     public readonly double SkillCastUptimeNoAutoAttack;
 
@@ -99,11 +100,12 @@ public class GameplayStatistics
         //
         foreach (CastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
         {
+            long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
+            SkillCastTime += value;
             if (cl.IsInterrupted || cl.IsUnknown)
             {
                 continue;
             }
-            long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
             SkillCastUptime += value;
             if (!cl.Skill.IsAutoAttack(log))
             {

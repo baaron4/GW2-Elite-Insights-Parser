@@ -365,7 +365,7 @@ partial class CombatData
     {
         return _buffRemoveAllData.GetValueOrEmpty(buffID);
     }
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataBySrc(long buffID, AgentItem src)
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByIDBySrc(long buffID, AgentItem src)
     {
         if (_buffRemoveAllDataByIDBySrc.TryGetValue(buffID, out var bySrc))
         {
@@ -374,13 +374,23 @@ partial class CombatData
         return [];
     }
 
-    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByDst(long buffID, AgentItem dst)
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataBySrc( AgentItem src)
+    {
+        return GetTimeValueOrEmpty(_buffRemoveAllDataBySrc, src);
+    }
+
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByIDByDst(long buffID, AgentItem dst)
     {
         if (_buffRemoveAllDataByIDByDst.TryGetValue(buffID, out var byDst))
         {
             return GetTimeValueOrEmpty(byDst, dst);
         }
         return [];
+    }
+
+    public IReadOnlyList<BuffRemoveAllEvent> GetBuffRemoveAllDataByDst( AgentItem dst)
+    {
+        return GetTimeValueOrEmpty(_buffRemoveAllDataByDst, dst);
     }
 
     /// <summary>

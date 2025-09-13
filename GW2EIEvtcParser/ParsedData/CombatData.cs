@@ -35,6 +35,8 @@ public partial class CombatData
     private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDBySrc;
     private Dictionary<long, Dictionary<AgentItem, List<BuffRemoveAllEvent>>> _buffRemoveAllDataByIDByDst;
+    private Dictionary<AgentItem, List<BuffRemoveAllEvent>> _buffRemoveAllDataBySrc;
+    private Dictionary<AgentItem, List<BuffRemoveAllEvent>> _buffRemoveAllDataByDst;
 
 
     private Dictionary<long, List<BuffExtensionEvent>> _buffExtensionData;
@@ -664,6 +666,7 @@ public partial class CombatData
         _buffDataByIDByDst = _buffData.ToDictionary(x => x.Key, x => x.Value.GroupBy(y => y.To).ToDictionary(y => y.Key, y => y.ToList()));
         _buffApplyData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<AbstractBuffApplyEvent>().ToList());
         _buffApplyDataByDst = _buffDataByDst.ToDictionary(x => x.Key, x => x.Value.OfType<AbstractBuffApplyEvent>().ToList());
+        _buffRemoveAllDataByDst = _buffDataByDst.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         _buffApplyDataByIDBySrc = _buffData.ToDictionary(
             x => x.Key,
             x => x.Value.OfType<BuffApplyEvent>()
@@ -676,6 +679,7 @@ public partial class CombatData
                 .GroupBy(y => y.To)
                 .ToDictionary(y => y.Key, y => y.ToList())
         );
+        _buffRemoveAllDataBySrc = _buffDataBySrc.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
         _buffExtensionData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffExtensionEvent>().ToList());
         //TODO(Rennorb) @perf @mem: find average complexity
         _buffDataByInstanceID = new(_buffData.Count / 10);

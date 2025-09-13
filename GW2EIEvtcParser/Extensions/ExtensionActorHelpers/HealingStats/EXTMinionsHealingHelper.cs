@@ -15,79 +15,36 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
         _minions = minions;
     }
 
-
-    public override IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitHealEvents(log);
-
-        if (target != null)
-        {
-            if (HealEventsByDst.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [];
-            }
-        }
-
-        return HealEvents.Where(x => x.Time >= start && x.Time <= end);
-    }
-
-#pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitHealEvents(ParsedEvtcLog log)
     {
-        if (HealEvents == null)
+        if (HealEventsByDst == null)
         {
             //TODO(Rennorb) @perf: find average complexity
-            HealEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
+            var healEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {
-                HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, Master.FirstAware, Master.LastAware));
+                healEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, Master.FirstAware, Master.LastAware));
             }
-            HealEvents.SortByTime();
-            HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            healEvents.SortByTime();
+            HealEventsByDst = healEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            HealEventsByDst[ParserHelper._nullAgent] = healEvents;
         }
-    }
-#pragma warning restore CS8774 // must have non null value when exiting
-
-    public override IEnumerable<EXTHealingEvent> GetIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        InitIncomingHealEvents(log);
-
-        if (target != null)
-        {
-            if (HealReceivedEventsBySrc.TryGetValue(target.EnglobingAgentItem, out var list))
-            {
-                long targetStart = target.FirstAware;
-                long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
-            }
-            else
-            {
-                return [];
-            }
-        }
-
-        return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
 #pragma warning disable CS8774 // must have non null value when exiting
     protected override void InitIncomingHealEvents(ParsedEvtcLog log)
     {
-        if (HealReceivedEvents == null)
+        if (HealReceivedEventsBySrc == null)
         {
             //TODO(Rennorb) @perf: find average complexity
-            HealReceivedEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
+            var healReceivedEvents = new List<EXTHealingEvent>(_minionList.Count * 10);
             foreach (NPC minion in _minionList)
             {
-                HealReceivedEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, Master.FirstAware, Master.LastAware));
+                healReceivedEvents.AddRange(minion.EXTHealing.GetIncomingHealEvents(null, log, Master.FirstAware, Master.LastAware));
             }
-            HealReceivedEvents.SortByTime();
-            HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            healReceivedEvents.SortByTime();
+            HealReceivedEventsBySrc = healReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            HealReceivedEventsBySrc[ParserHelper._nullAgent] = healReceivedEvents;
         }
     }
 #pragma warning restore CS8774 // must have non null value when exiting
