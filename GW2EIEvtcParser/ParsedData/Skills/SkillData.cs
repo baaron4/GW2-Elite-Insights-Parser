@@ -30,11 +30,7 @@ public class SkillData
     
     internal bool TryGet(long ID, [NotNullWhen(true)] out SkillItem? skillItem)
     {
-        if (_skills.TryGetValue(ID, out skillItem))
-        {
-            return true;
-        }
-        return false;
+        return _skills.TryGetValue(ID, out skillItem);
     }
 
     internal HashSet<long> NotAccurate = [];
