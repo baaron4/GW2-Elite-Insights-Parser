@@ -6,6 +6,7 @@ using GW2EIEvtcParser;
 using GW2EIParser.Setting;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using GW2EIUpdater;
 
 namespace GW2EIParser;
 
@@ -33,9 +34,6 @@ internal sealed partial class MainForm : Form
         ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
         ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
-        //display version
-        string version = Application.ProductVersion;
-        LblVersion.Text = version;
         _logsFiles = [];
         BtnCancelAll.Enabled = false;
         BtnParse.Enabled = false;
@@ -45,6 +43,25 @@ internal sealed partial class MainForm : Form
         _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
         _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
         FormClosing += new FormClosingEventHandler((sender, e) => Properties.Settings.Default.Save());
+
+        // Updater
+        long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        if (time - Properties.Settings.Default.UpdateLastChecked > 3600)
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                List<string> traces = [];
+                Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+                if (info != null)
+                {
+                    Properties.Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
+                    Properties.Settings.Default.UpdateLastChecked = time;
+                    VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
+                }
+                traces.ForEach(x => AddTraceMessage("Updater: " + x));
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        VersionLabelUpdate(Application.ProductVersion, Properties.Settings.Default.UpdateAvailable);
     }
 
     private void LoadSettingsWatcher(object sender, EventArgs e)
@@ -53,6 +70,24 @@ internal sealed partial class MainForm : Form
         ChkApplicationTraces.Checked = Properties.Settings.Default.ApplicationTraces;
         ChkAutoDiscordBatch.Checked = Properties.Settings.Default.AutoDiscordBatch;
         NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
+    }
+
+    private void UpdateStartedWatcher(object sender, EventArgs e)
+    {
+        if (sender is UpdaterForm updaterForm)
+        {
+            AddTraceMessage("Updater: Update started");
+            updaterForm.Close();
+            Close();
+        }
+    }
+
+    private void UpdateTracesWatcher(object sender, EventArgs e)
+    {
+        if (sender is List<string> traces)
+        {
+            traces.ForEach(x => AddTraceMessage("Updater: " + x));
+        }
     }
 
     public MainForm(IEnumerable<string> filesArray, ProgramHelper programHelper) : this(programHelper)
@@ -132,7 +167,7 @@ internal sealed partial class MainForm : Form
                         {
                             operation.UpdateProgress("Program: operation Aborted");
                         }
-                        else if(ex.InnerException != null)
+                        else if (ex.InnerException != null)
                         {
                             var finalException = ParserHelper.GetFinalException(ex);
                             operation.UpdateProgress("Program: " + finalException.Source);
@@ -192,6 +227,7 @@ internal sealed partial class MainForm : Form
         BtnParse.Enabled = false;
         BtnCancelAll.Enabled = true;
         BtnDiscordBatch.Enabled = false;
+        BtnCheckUpdates.Enabled = false;
         ChkAutoDiscordBatch.Enabled = false;
         if (_programHelper.ParseMultipleLogs() && _runningCount < _programHelper.GetMaxParallelRunning())
         {
@@ -229,6 +265,7 @@ internal sealed partial class MainForm : Form
                 BtnClearAll.Enabled = true;
                 BtnCancelAll.Enabled = false;
                 BtnDiscordBatch.Enabled = true;
+                BtnCheckUpdates.Enabled = true;
                 ChkAutoDiscordBatch.Enabled = true;
                 _settingsForm.ConditionalSettingDisable(_anyRunning);
                 AutoUpdateDiscordBatch();
@@ -876,5 +913,53 @@ internal sealed partial class MainForm : Form
     {
         AddTraceMessage("Settings: Closing settings");
         BtnSettings.Enabled = true;
+    }
+
+    private void BtnCheckUpdates_Click(object sender, EventArgs e)
+    {
+        AddTraceMessage("Updater: Checking for updates");
+
+        Task.Factory.StartNew(async () =>
+        {
+            var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            List<string> traces = [];
+            Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
+            traces.ForEach(x => AddTraceMessage("Updater: " + x));
+#if DEBUG
+            var force = true;
+#else
+            var force = false;
+#endif
+            if (info != null)
+            {
+                if (info.Value.UpdateAvailable || force)
+                {
+                    AddTraceMessage("Updater: Update found, opening UI");
+                    Invoke(() => // Must run on UI thread
+                    {
+                        Properties.Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
+                        Properties.Settings.Default.UpdateLastChecked = time;
+                        VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
+                        var updaterForm = new UpdaterForm(info.Value);
+                        updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
+                        updaterForm.UpdateTracesEvent += UpdateTracesWatcher;
+                        updaterForm.ShowDialog(this);
+                    });
+                }
+                else
+                {
+                    AddTraceMessage("Updater: Up to date");
+                    Properties.Settings.Default.UpdateAvailable = false;
+                    Properties.Settings.Default.UpdateLastChecked = time;
+                    VersionLabelUpdate(Application.ProductVersion, false);
+                    MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    private void VersionLabelUpdate(string version, bool isAvailable)
+    {
+        LblVersion.Text = isAvailable ? version + " (Update Available)" : version;
     }
 }

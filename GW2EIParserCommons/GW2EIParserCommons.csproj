@@ -52,6 +52,7 @@
         <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />
         <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
+        <ProjectReference Include="..\GW2EIUpdater\GW2EIUpdater.csproj" />
         <ProjectReference Include="..\GW2EIWingman\GW2EIWingman.csproj" />
     </ItemGroup>
 

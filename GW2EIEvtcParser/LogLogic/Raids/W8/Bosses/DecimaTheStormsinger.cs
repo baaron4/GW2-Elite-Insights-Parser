@@ -374,6 +374,10 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
         switch (target.ID)
@@ -814,7 +818,10 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // Target Overhead
         // In phase 2 you get the Fluxlance Target Buff but also Target Order, in game only Target Order is displayed overhead, so we filter those out.
@@ -860,15 +867,18 @@ internal class DecimaTheStormsinger : MountBalrior
         return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && IsCMTriggerID)
         {
             if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
             }
         }
     }

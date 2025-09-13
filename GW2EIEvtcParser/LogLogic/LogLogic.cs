@@ -136,20 +136,20 @@ public abstract class LogLogic
         return Map;
     }
 
-    [MemberNotNull(nameof(InstanceBuffs))]
-    protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
+    protected virtual void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        InstanceBuffs = [];
         foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
         {
             if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
             {
-                InstanceBuffs.Add((fractalInstability, 1));
+                instanceBuffs.Add((fractalInstability, 1));
             }
         }
         if (!IsInstance)
         {
             long end = log.LogData.Success ? log.LogData.LogEnd : (log.LogData.LogEnd + log.LogData.LogStart) / 2;
+
+            // Emboldened
             int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
@@ -163,7 +163,14 @@ public abstract class LogLogic
             }).Max();
             if (emboldenedStacks > 0)
             {
-                InstanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
+            }
+
+            // Quickplay
+            var hasQuickplay = log.PlayerList.Where(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)).Any();
+            if (hasQuickplay)
+            {
+                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1));
             }
         }
     }
@@ -172,7 +179,8 @@ public abstract class LogLogic
     {
         if (InstanceBuffs == null)
         {
-            SetInstanceBuffs(log);
+            InstanceBuffs = [];
+            SetInstanceBuffs(log, InstanceBuffs);
         }
         return InstanceBuffs;
     }
@@ -399,7 +407,7 @@ public abstract class LogLogic
         return phases;
     }
 
-    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, EvtcVersionEvent evtcVersion)
+    internal virtual IEnumerable<ErrorEvent> GetCustomWarningMessages(LogData logData, AgentData agentData, CombatData combatData, EvtcVersionEvent evtcVersion)
     {
         if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
         {

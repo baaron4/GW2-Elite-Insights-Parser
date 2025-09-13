@@ -45,9 +45,9 @@
                         </div>
                     </div>
                     <div v-if="encounter.hideTargets" class="mb-1">
-                        <div>Players: {{ encounter.players.length }}</div>
-                        <div>Friendlies: {{ encounter.nonSquadFriendlies.length }}</div>
-                        <div>Enemies: {{ encounter.targets.length }}</div>
+                        <div>Players: {{ encounter.playerCount }}</div>
+                        <div>Friendlies: {{ encounter.nonSquadFriendlyCount }}</div>
+                        <div>Enemies: {{ encounter.targetCount }}</div>
                     </div>
                     <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
@@ -180,6 +180,9 @@
                     case "Story Mode":
                         return { 'fightModeStory-light': this.light, 'fightModeStory-dark': !this.light };
                         break;
+                    case "Quickplay Normal Mode":
+                        return { 'fightModeQuickplay-light': this.light, 'fightModeQuickplay-dark': !this.light };
+                        break;
                     case "Emboldened Normal Mode":
                         return { 'fightModeEmboldened-light': this.light, 'fightModeEmboldened-dark': !this.light };
                         break;
@@ -206,32 +209,41 @@
                     if (phase.type === PhaseTypes.SUBPHASE || phase.type === PhaseTypes.TIMEFRAME) {
                         continue;
                     }
-                    var targets = [];
+                    const targets = [];
                     const noTargets = logData.targetless;
-                    if (!noTargets) {
-                        for (var i = 0; i < phase.targets.length; i++) {
-                            if (phase.targetPriorities[i] > 0) {
-                                continue;
-                            }
-                            if (targets.length >= 10) {
-                                break;
-                            }
-                            var targetIndex = phase.targets[i];
-                            var targetData = logData.targets[targetIndex];
+                    let targetCount = 0;
+                    let presentAccounts = new Set();
+                    for (let i = 0; i < phase.targets.length; i++) {
+                        if (phase.targetPriorities[i] > 0) {
+                            continue;
+                        }
+                        targetCount++;
+                        if (!noTargets && targets.length < 10) {
+                            const targetIndex = phase.targets[i];
+                            const targetData = logData.targets[targetIndex];
                             targets.push(targetData);
                         }
                     }
-                    const players = getActiveNonFakePlayersForPhase(phase);
                     const hideTargets = logData.wvw || (phase.type === PhaseTypes.INSTANCE && this.isMultiEncounterLog);
-                    var encounter = {
+                    const players = getActiveNonFakePlayersForPhase(phase);
+                    const squadPlayers = players.filter(x => x && !x.notInSquad);
+                    const nonSquadFriendlies = players.filter(x => x && x.notInSquad);
+                    const encounter = {
                         nameNoMode: phase == logData.phases[0] ? logData.logName : phase.nameNoMode,
                         name: phase == logData.phases[0] ? logData.logName : phase.name,
                         success: phase.success,
                         icon: phase.icon,
                         duration: phase.encounterDuration,
                         targets: targets,
-                        players: players.filter(x => x && !x.notInSquad),
-                        nonSquadFriendlies: players.filter(x => x && x.notInSquad),
+                        targetCount: targetCount,
+                        playerCount: squadPlayers.filter(x => {
+                            if (presentAccounts.has(x.acc)) {
+                                return false;
+                            }
+                            presentAccounts.add(x.acc);
+                            return true;
+                        }).length,
+                        nonSquadFriendlyCount: nonSquadFriendlies.length,
                         mode: phase.mode,
                         start: phase.startStatus,
                         hideTargets: hideTargets,
@@ -263,8 +275,8 @@
                 if (logData.instanceBuffs.length == 0) {
                     return null;
                 }
-                var res = [];
-                for (var i = 0; i < logData.instanceBuffs.length; i++) {
+                const res = [];
+                for (let i = 0; i < logData.instanceBuffs.length; i++) {
                     res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
                 }
                 return res;

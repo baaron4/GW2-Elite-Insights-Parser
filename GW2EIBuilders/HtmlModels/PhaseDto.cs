@@ -176,7 +176,8 @@ internal class PhaseDto
                     break;
                 case LogData.LogMode.Normal:
                     // TODO support emboldened properly
-                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : "Normal Mode";
+                    Mode = log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.Emboldened) ? "Emboldened Normal Mode" : 
+                        log.LogData.Logic.GetInstanceBuffs(log).Any(x => x.buff.ID == SkillIDs.QuickplayBoost) ? "Quickplay Normal Mode" : "Normal Mode";
                     break;
                 case LogData.LogMode.CM:
                 case LogData.LogMode.CMNoName:

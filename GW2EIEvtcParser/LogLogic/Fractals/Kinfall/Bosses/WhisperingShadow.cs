@@ -152,7 +152,10 @@ internal class WhisperingShadow : Kinfall
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(player, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+        }
 
         // life-fire (protective circle)
         // buff & radius are different per tier
@@ -194,7 +197,10 @@ internal class WhisperingShadow : Kinfall
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         if (target.IsSpecies(TargetID.WhisperingShadow))
         {
@@ -218,7 +224,10 @@ internal class WhisperingShadow : Kinfall
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // falling ice
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.WhisperingShadowFallingIce, out var fallingIce))
@@ -327,9 +336,12 @@ internal class WhisperingShadow : Kinfall
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && log.LogData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
@@ -341,7 +353,7 @@ internal class WhisperingShadow : Kinfall
             {
                 if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.LogData.LogEnd - ServerDelayConstant))
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
+                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
                     break;
                 }
             }

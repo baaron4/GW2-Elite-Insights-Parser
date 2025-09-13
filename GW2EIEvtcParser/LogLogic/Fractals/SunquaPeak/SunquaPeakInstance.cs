@@ -187,19 +187,21 @@ internal class SunquaPeakInstance : SunquaPeak
     {
         return _aiKeeperOfThePeak.SpecialDamageEventProcess(combatData, agentData, skillData);
     }
-    // TODO: handle duplicates due multiple base method calls in Combat Replay methods
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        base.ComputeNPCCombatReplayActors(target, log, replay);
         _aiKeeperOfThePeak.ComputeNPCCombatReplayActors(target, log, replay);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
+        base.ComputePlayerCombatReplayActors(p, log, replay);
         _aiKeeperOfThePeak.ComputePlayerCombatReplayActors(p, log, replay);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
+        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         _aiKeeperOfThePeak.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 

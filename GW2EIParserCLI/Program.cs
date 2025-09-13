@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using GW2EIParserCommons;
+using GW2EIUpdater;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser;
@@ -10,6 +12,8 @@ internal static class Program
     [STAThread]
     private static int Main(string[] args)
     {
+        Console.WriteLine($"{Process.GetCurrentProcess().ProcessName} {Assembly.GetEntryAssembly().GetName().Version}");
+
         // Migrate previous settings if version changed
         if (Properties.Settings.Default.Outdated)
         {
@@ -17,11 +21,46 @@ internal static class Program
             Properties.Settings.Default.Outdated = false;
         }
 
+        // Clean up temp folder on startup
+        Updater.CleanTemp();
+
         var logFiles = new List<string>();
         CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
         if (args.Length > 0)
         {
             int parserArgOffset = 0;
+
+            if (args.Contains("-update"))
+            {
+                Console.WriteLine("Checking for a new update");
+                List<string> traces = [];
+                Updater.UpdateInfo? _info = Updater.CheckForUpdate("GW2EICLI.zip", traces).GetAwaiter().GetResult();
+                if (_info == null)
+                {
+                    Console.WriteLine("Update check has failed");
+                    traces.ForEach(x => Console.WriteLine(x));
+                    return 0;
+                }
+                traces.Clear();
+                Updater.UpdateInfo info = _info.Value;
+                if (info.UpdateAvailable)
+                {
+                    Console.WriteLine("New release has been found");
+                    Console.WriteLine($"Current Elite Insights version: {info.CurrentVersion}");
+                    Console.WriteLine($"Latest Elite Insights version: {info.LatestVersion}");
+                    Console.WriteLine($"Download Size: {info.DownloadSize}");
+                    Console.WriteLine("Installing");
+                    if (!Updater.DownloadAndUpdate(info, traces).GetAwaiter().GetResult())
+                    {
+                        traces.ForEach(x => Console.WriteLine(x));
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Elite Insights is up to date.");
+                }
+                return 0;
+            }
 
             if (args.Contains("-h"))
             {

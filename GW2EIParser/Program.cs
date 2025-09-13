@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
+using GW2EIUpdater;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser;
@@ -53,6 +54,8 @@ internal static class Program
             Properties.Settings.Default.Upgrade();
             Properties.Settings.Default.Outdated = false;
         }
+
+        Updater.CleanTemp();
 
         var logFiles = new List<string>();
         Application.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");

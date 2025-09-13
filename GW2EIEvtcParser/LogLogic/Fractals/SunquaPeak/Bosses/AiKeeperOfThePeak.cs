@@ -467,9 +467,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success && HasDarkMode(log.AgentData) && HasElementalMode(log.AgentData))
         {
@@ -486,12 +489,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
                 if (counter == 5)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
+                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
                 }
             }
             if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
             {
-                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
             }
         }
     }
@@ -513,7 +516,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // tether between sprite and player
         var spriteFixations = GetBuffApplyRemoveSequence(log.CombatData, [FixatedEnragedWaterSprite], p, true, true);
@@ -526,7 +532,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
 
         long growing;
         (long start, long end) lifespan;
@@ -586,6 +595,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
         // arrow indicators
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out var arrows))
         {

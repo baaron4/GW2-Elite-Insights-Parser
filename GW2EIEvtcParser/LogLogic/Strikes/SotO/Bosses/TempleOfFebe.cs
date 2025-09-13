@@ -927,9 +927,9 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         return lifespan;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.IsCM || log.LogData.IsLegendaryCM)
         {
@@ -947,7 +947,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 };
                 if (empoweredBuffs.Count(x => cerus.GetBuffStatus(log, x).Any(x => x.Value > 0)) == 6)
                 {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1));
+                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1));
                 }
             }
         }

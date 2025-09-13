@@ -869,7 +869,7 @@ public class EvtcParser
         if (!master.IsUnknown)
         {
             AgentItem minion = _agentData.GetAgent(minionAgent, logTime);
-            if (!minion.IsUnknown && minion.Master == null)
+            if (!minion.IsUnknown)
             {
                 minion.SetMaster(master);
             }

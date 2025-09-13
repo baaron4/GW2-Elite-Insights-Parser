@@ -204,13 +204,13 @@ internal class FraenirOfJormag : Bjora
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        base.SetInstanceBuffs(log, instanceBuffs);
 
         if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
         {
-            InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
+            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
         }
     }
 }

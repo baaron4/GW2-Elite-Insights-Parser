@@ -171,7 +171,10 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         var boltBreaks = p.GetBuffStatus(log, BoltBreak).Where(x => x.Value > 0);
         uint boltBreakRadius = 180;
         foreach (Segment seg in boltBreaks)
@@ -183,6 +186,10 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 

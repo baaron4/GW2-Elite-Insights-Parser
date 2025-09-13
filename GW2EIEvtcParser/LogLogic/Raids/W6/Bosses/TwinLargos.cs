@@ -287,6 +287,10 @@ internal class TwinLargos : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         (long start, long end) lifespan;
 
         var cls = target.GetCastEvents(log);
@@ -366,7 +370,10 @@ internal class TwinLargos : MythwrightGambit
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // Water "Poison Bomb"
         var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff).Where(x => x.Value > 0);
         foreach (Segment seg in waterToDrop)
@@ -395,7 +402,10 @@ internal class TwinLargos : MythwrightGambit
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Aquatic Barrage - CC Projectiles - Rendering affected by player distance.
         var aquaticBarrage = log.CombatData.GetMissileEventsBySkillID(AquaticBarrage);

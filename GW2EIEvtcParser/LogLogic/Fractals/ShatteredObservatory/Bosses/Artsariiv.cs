@@ -249,12 +249,18 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputeNPCCombatReplayActors(target, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         long castDuration;
         (long start, long end) lifespan;
 
@@ -303,9 +309,10 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
-
-        AddCorporealReassignmentDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Beaming Smile
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmileIndicator, out var beamIndicators))
@@ -340,7 +347,7 @@ internal class Artsariiv : ShatteredObservatory
 
     internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = [];
         res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, NovaLaunchSAK, NovaLaunchBuff));
         return res;
     }

@@ -5327,5 +5327,8 @@ public static class SkillIDs
     public const long ChannelFormOfTheWarrior2 = 77389;
     public const long FamiliarsProwessToad = 77391;
     public const long SkrittSwipe = 77397;
+    public const long SharpeningGolem = 77466;
+    public const long CookingGolem = 77572;
+    public const long QuickplayBoost = 77676;
     #endregion
 }

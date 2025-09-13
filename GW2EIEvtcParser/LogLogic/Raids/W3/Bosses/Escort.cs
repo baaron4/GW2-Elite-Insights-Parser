@@ -292,19 +292,32 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
     {
-        base.SetInstanceBuffs(log);
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
 
         if (log.LogData.Success)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
-            if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
+            if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) 
+            { 
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); 
+            }
+            if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) 
+            { 
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); 
+            }
         }
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         switch (target.ID)
         {
             case (int)TargetID.McLeodTheSilent:
@@ -315,7 +328,10 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
         // Attunements Overhead
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);

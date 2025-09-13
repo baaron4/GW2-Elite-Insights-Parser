@@ -58,6 +58,8 @@ public class AgentItem
     public AgentType Type { get; protected set; } = AgentType.NPC;
     public long FirstAware { get; protected set; }
     public long LastAware { get; protected set; } = long.MaxValue;
+
+    public long HalfAware => (FirstAware + LastAware) / 2;
     public string Name { get; protected set; } = "UNKNOWN";
     public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
     public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;

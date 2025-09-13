@@ -80,6 +80,8 @@ internal class UnknownInstanceLogic : UnknownEncounterLogic
                     return new SilentSurfInstance(GenericTriggerID);
                 case KinfallFractal:
                     return new KinfallInstance(GenericTriggerID);
+                case LonelyTowerFractal:
+                    return new LonelyTowerInstance(GenericTriggerID);
                 // Raids
                 case SpiritValeRaid:
                     return new SpiritValeInstance(GenericTriggerID);

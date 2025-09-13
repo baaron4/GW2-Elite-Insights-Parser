@@ -360,6 +360,10 @@ internal class Dhuum : HallOfChains
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+        }
         (long start, long end) lifespan = (replay.TimeOffsets.start, replay.TimeOffsets.end);
 
         switch (target.ID)
@@ -683,7 +687,10 @@ internal class Dhuum : HallOfChains
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
-        base.ComputePlayerCombatReplayActors(p, log, replay);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
 
         // spirit transform
         var spiritTransform = p.GetBuffPresenceStatus(log, MortalCoilDhuum).Where(x => x.Value > 0);
@@ -742,7 +749,10 @@ internal class Dhuum : HallOfChains
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Collection Orbs
         var orbs = log.CombatData.GetMissileEventsBySkillIDs([DhuumEnforcerOrb, DhuumMessengerOrb, DhuumSpiderOrb, DhuumCollectableSmallOrb]);
