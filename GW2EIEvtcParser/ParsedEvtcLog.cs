@@ -61,7 +61,7 @@ public class ParsedEvtcLog
         {
             throw new InvalidDataException("LogEnd can't be bigger than EvtcLogEnd");
         }
-        if (ParserSettings.SkipFailedTries && !LogData.Success)
+        if (ParserSettings.SkipFailedTries && !LogData.Success && !LogData.IsInstance)
         {
             throw new SkipException();
         }
