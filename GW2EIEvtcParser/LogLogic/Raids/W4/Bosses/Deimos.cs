@@ -430,7 +430,7 @@ internal class Deimos : BastionOfThePenitent
 
     private static long GetMainFightStart(ParsedEvtcLog log, AgentItem deimos, long start)
     {
-        var deimosMainFightStart = log.CombatData.GetBuffRemoveAllDataByDst(SpawnProtection, deimos).FirstOrDefault();
+        var deimosMainFightStart = log.CombatData.GetBuffRemoveAllDataByIDByDst(SpawnProtection, deimos).FirstOrDefault();
         if (deimosMainFightStart != null && deimosMainFightStart.Time - start > PreEventConsiderationConstant)
         {
             return deimosMainFightStart.Time;

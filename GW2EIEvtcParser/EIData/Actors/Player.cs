@@ -74,11 +74,11 @@ public class Player : PlayerActor
         return (type) switch
         {
             BuffEnum.Group =>
-                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, AgentItem, start, end),
+                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, this, start, end),
             BuffEnum.OffGroup =>
-                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group != Group), log, AgentItem, start, end),
+                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group != Group), log, this, start, end),
             BuffEnum.Squad =>
-                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                BuffVolumeStatistics.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, this, start, end),
             _ => BuffVolumeStatistics.GetBuffVolumesForSelf(log, this, start, end),
         };
     }

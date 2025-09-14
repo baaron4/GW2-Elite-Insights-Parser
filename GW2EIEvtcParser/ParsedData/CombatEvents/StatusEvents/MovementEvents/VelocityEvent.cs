@@ -11,6 +11,6 @@ public class VelocityEvent : MovementEvent
 
     internal override void AddPoint3D(CombatReplay replay)
     {
-        replay.Velocities.Add(GetParametricPoint3D());
+        replay.AddVelocity(GetParametricPoint3D());
     }
 }

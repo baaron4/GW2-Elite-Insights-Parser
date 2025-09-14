@@ -15,16 +15,13 @@ internal abstract class BuffSimulationItem : SimulationItem
 
     public BuffSimulationItem(long start, long end)
     {
-        Debug.Assert(start <= end);
         Start = start;
         End = end;
     }
 
     public long GetClampedDuration(long start, long end)
     {
-
-        Debug.Assert(Start <= End);
-        if (start >= end)
+        if (start >= end || start >= End || Start >= end)
         {
             return 0;
         }

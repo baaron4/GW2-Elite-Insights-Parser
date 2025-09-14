@@ -11,41 +11,53 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
     readonly int _layer3InitialCapacityExts = layer3InitialCapacityExts;
     readonly Dictionary<long, List<BuffEvent>> _buffIDToEvents = new(layer1InitialCapacity);
     // Fast look up table for AddToList
-    readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIDToExtensions = new(layer1InitialCapacity);
+    readonly Dictionary<long, Dictionary<uint, List<(BuffExtensionEvent bee, int index)>>> _buffIDToExtensions = new(layer1InitialCapacity);
 
     public bool TryGetValue(long buffID, [NotNullWhen(true)] out List<BuffEvent>? list)
     {
         return _buffIDToEvents.TryGetValue(buffID, out list);
     }
 
-    static void AddToList(ParsedEvtcLog log, List<BuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, BuffEvent buffEvent, int initialListCapacity)
+    static void AddToList(ParsedEvtcLog log, List<BuffEvent> list, Dictionary<uint, List<(BuffExtensionEvent bee, int index)>> dictExtension, BuffEvent buffEvent, int initialListCapacity)
     {
+        bool insert = true;
         // Essence of speed issue for Soulbeast
         if (buffEvent is BuffExtensionEvent beeCurrent)
         {
-            if (beeCurrent.BuffInstance != 0)
+            if (beeCurrent.ExtendedDuration < 1)
+            {
+                insert = false;
+            }
+            else if (beeCurrent.BuffInstance != 0)
             {
                 if (dictExtension.TryGetValue(beeCurrent.BuffInstance, out var listExtension))
                 {
-                    var beeLast = listExtension.LastOrDefault();
-                    if (beeLast != null && Math.Abs(buffEvent.Time - beeLast.Time) <= 1)
+                    var beeLast = listExtension.LastOrNull();
+                    if (beeLast != null)
                     {
-                        if (Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
+                        var bee = beeLast.Value.bee;
+                        if (Math.Abs(buffEvent.Time - bee.Time) <= 1)
                         {
-                            //TODO(Rennorb) @perf
-                            list.Remove(beeLast);
-                            listExtension.RemoveAt(listExtension.Count - 1);
+                            if (Math.Abs(beeCurrent.OldDuration - bee.OldDuration) <= 1)
+                            {
+                                insert = false;
+                                list[beeLast.Value.index] = beeCurrent;
+                                listExtension[^1] = (beeCurrent, beeLast.Value.index);
+                            }
+                            else if (Math.Abs(beeCurrent.NewDuration - bee.NewDuration) <= 1)
+                            {
+                                insert = false;
+                            }
                         }
-                        else if (Math.Abs(beeCurrent.NewDuration - beeLast.NewDuration) <= 1)
-                        {
-                            return;
-                        }
+                    } 
+                    if (insert)
+                    {
+                        listExtension.Add((beeCurrent, list.Count));
                     }
-                    listExtension.Add(beeCurrent);
                 }
                 else
                 {
-                    dictExtension[beeCurrent.BuffInstance] = new(initialListCapacity){ beeCurrent };
+                    dictExtension[beeCurrent.BuffInstance] = new(initialListCapacity){ (beeCurrent, list.Count) };
                 }
             }
         }
@@ -57,10 +69,13 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
                 .Any();
             if (duplicated)
             {
-                return;
+                insert = false;
             }
+        } 
+        if (insert)
+        {
+            list.Add(buffEvent);
         }
-        list.Add(buffEvent);
     }
 
     public void Add(ParsedEvtcLog log, Buff buff, BuffEvent buffEvent)

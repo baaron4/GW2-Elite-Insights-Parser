@@ -10,18 +10,18 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
     {
         _seedSrc = buffStackItem.SeedSrc;
     }
-    internal override long SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end)
-    {
-        long cDur = base.SetBaseBuffDistributionItem(distribution, start, end);
-        if (cDur > 0)
-        {
-            AddExtended(distribution, cDur, _seedSrc);
-            if (Src.IsUnknown)
-            {
-                AddUnknown(distribution, cDur, _seedSrc);
-            }
 
+    internal override long GetKey()
+    {
+        return base.GetKey() + (_seedSrc.InstID + 1) * 65536;
+    }
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
+    {
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
+        AddExtended(distribution, cDur, _seedSrc);
+        if (Src.IsUnknown)
+        {
+            AddUnknown(distribution, cDur, _seedSrc);
         }
-        return cDur;
     }
 }

@@ -20,5 +20,6 @@ public abstract class AbstractCachingCollection<T>
     }
 
     public abstract void Clear();
+    public abstract bool IsEmpty();
 
 }

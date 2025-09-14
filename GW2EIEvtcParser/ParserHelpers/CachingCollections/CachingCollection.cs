@@ -20,6 +20,21 @@ public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection
         value = default;
         return false;
     }
+    public bool TryGetEnglobingValue(long start, long end, [NotNullWhen(true)] out T? value)
+    {
+        (start, end) = SanitizeTimes(start, end);
+        var englobingStart = _cache.Keys.Where(x => x <= start).DefaultIfEmpty(0).Max();
+        if (_cache.TryGetValue(englobingStart, out var subCache))
+        {
+            var englobingEnd = subCache.Keys.Where(x => x >= end).DefaultIfEmpty(0).Min();
+            if (subCache.TryGetValue(englobingEnd, out value!))
+            {
+                return true;
+            }
+        }
+        value = default;
+        return false;
+    }
 
     public void Set(long start, long end, T value)
     {
@@ -52,4 +67,8 @@ public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection
         _cache.Clear();
     }
 
+    public override bool IsEmpty()
+    {
+        return _cache.Count == 0;
+    }
 }
