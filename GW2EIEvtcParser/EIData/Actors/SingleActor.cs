@@ -672,7 +672,7 @@ public abstract partial class SingleActor : Actor
         }
     }
 
-    private CachingCollectionWithTarget<List<HealthDamageEvent>> _justActorDamageCache;
+    private CachingCollectionWithTarget<List<HealthDamageEvent>>? _justActorDamageCache;
     public IReadOnlyList<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorDamageCache ??= new(log);
@@ -736,7 +736,7 @@ public abstract partial class SingleActor : Actor
     #endregion DAMAGE
 
     #region BREAKBAR DAMAGE
-    private CachingCollectionWithTarget<List<BreakbarDamageEvent>> _justActorBreakbarDamageCache;
+    private CachingCollectionWithTarget<List<BreakbarDamageEvent>>? _justActorBreakbarDamageCache;
     public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorBreakbarDamageCache ??= new(log);
@@ -777,7 +777,7 @@ public abstract partial class SingleActor : Actor
     #endregion BREAKBAR DAMAGE
 
     #region CROWD CONTROL
-    private CachingCollectionWithTarget<List<CrowdControlEvent>> _justActorCrowdControlCache;
+    private CachingCollectionWithTarget<List<CrowdControlEvent>>? _justActorCrowdControlCache;
     public IReadOnlyList<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorCrowdControlCache ??= new(log);

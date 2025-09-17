@@ -139,7 +139,7 @@ public class Minions : Actor
         CastEvents.SortByTimeThenSwap();
     }
 
-    private CachingCollection<long> _intersectingCastTimeCache;
+    private CachingCollection<long>? _intersectingCastTimeCache;
     public long GetIntersectingCastTime(ParsedEvtcLog log, long start, long end)
     {
         _intersectingCastTimeCache ??= new(log);
