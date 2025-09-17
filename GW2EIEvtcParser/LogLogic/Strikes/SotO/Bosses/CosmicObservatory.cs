@@ -494,7 +494,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         ];
     }
 
-    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return
         [

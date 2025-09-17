@@ -118,7 +118,7 @@ internal class UraTheSteamshrieker : MountBalrior
         ];
     }
 
-    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return
         [

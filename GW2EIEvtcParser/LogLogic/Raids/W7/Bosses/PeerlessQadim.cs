@@ -131,7 +131,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         RenamePylons(Targets, combatData);
     }
 
-    protected override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return [
             TargetID.EntropicDistortion,

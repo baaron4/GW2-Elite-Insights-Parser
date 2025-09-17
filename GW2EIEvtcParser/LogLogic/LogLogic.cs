@@ -192,7 +192,7 @@ public abstract class LogLogic
 
     internal abstract IReadOnlyList<TargetID> GetTargetsIDs();
 
-    protected virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
+    internal virtual HashSet<TargetID> ForbidBreakbarPhasesFor()
     {
         return [];
     }

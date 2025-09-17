@@ -255,6 +255,16 @@ internal class MountBalriorInstance : MountBalrior
         return targets.Distinct().ToList();
     }
 
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        HashSet<TargetID> forbidBreakbarPhasesFor = [
+            .. _greer.ForbidBreakbarPhasesFor(),
+            .. _decima.ForbidBreakbarPhasesFor(),
+            .. _ura.ForbidBreakbarPhasesFor()
+        ];
+        return forbidBreakbarPhasesFor;
+    }
+
     internal override IReadOnlyList<TargetID> GetFriendlyNPCIDs()
     {
         List<TargetID> friendlies = [
