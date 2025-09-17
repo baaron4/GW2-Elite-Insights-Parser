@@ -236,7 +236,7 @@ public class ParsedEvtcLog
             }
             actors.Add(actor.GetCombatReplayDescription(map, this));
             decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
-            foreach (Minions minions in actor.GetMinions(this).Values)
+            foreach (Minions minions in actor.GetMinions(this))
             {
                 if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                 {
