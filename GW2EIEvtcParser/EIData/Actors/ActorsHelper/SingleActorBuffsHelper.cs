@@ -1011,7 +1011,7 @@ partial class SingleActor
 
         _buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
         _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-        foreach (Minions minions in GetMinions(log).Values)
+        foreach (Minions minions in GetMinions(log))
         {
             IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
             foreach (IReadOnlyList<Segment> minionsSegments in segments)

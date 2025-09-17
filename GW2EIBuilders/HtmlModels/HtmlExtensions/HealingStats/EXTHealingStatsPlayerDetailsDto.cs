@@ -35,9 +35,9 @@ internal class EXTHealingStatsPlayerDetailsDto
             dto.HealingDistributionsTargets.Add(dmgTargetsDto);
             dto.IncomingHealingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildIncomingHealingDistData(log, actor, phase, usedSkills, usedBuffs));
         }
-        foreach (KeyValuePair<long, Minions> pair in minions)
+        foreach (var minion in minions)
         {
-            dto.Minions.Add(BuildFriendlyMinionsHealingData(log, actor, pair.Value, usedSkills, usedBuffs));
+            dto.Minions.Add(BuildFriendlyMinionsHealingData(log, actor, minion, usedSkills, usedBuffs));
         }
 
         return dto;

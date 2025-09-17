@@ -28,7 +28,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         if (HealEventsByDst == null)
         {
             var healEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
-            foreach (var minion in _actor.GetMinions(log).Values)
+            foreach (var minion in _actor.GetMinions(log))
             {
                 healEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log));
             }

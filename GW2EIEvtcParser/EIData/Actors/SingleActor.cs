@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -121,8 +122,8 @@ public abstract partial class SingleActor : Actor
 
 
     // Minions
-    private Dictionary<long, Minions>? _minions;
-    public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
+    private List<Minions>? _minions;
+    public IReadOnlyList<Minions> GetMinions(ParsedEvtcLog log)
     {
         if (_minions == null)
         {
@@ -154,7 +155,7 @@ public abstract partial class SingleActor : Actor
             {
                 if (pair.Value.IsActive(log))
                 {
-                    _minions[pair.Value.UniqueID] = pair.Value;
+                    _minions.Add(pair.Value);
                 }
             }
             // gadget, string based
@@ -184,7 +185,7 @@ public abstract partial class SingleActor : Actor
             {
                 if (pair.Value.IsActive(log))
                 {
-                    _minions[pair.Value.UniqueID] = pair.Value;
+                    _minions.Add(pair.Value);
                 }
             }
         }
@@ -680,8 +681,8 @@ public abstract partial class SingleActor : Actor
         if (DamageEventByDst == null)
         {
             List<HealthDamageEvent> damageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
+            foreach (Minions mins in minionsList)
             {
                 damageEvents.AddRange(mins.GetDamageEvents(null, log));
             }
@@ -772,8 +773,8 @@ public abstract partial class SingleActor : Actor
         if (BreakbarDamageEventsByDst == null)
         {
             var breakbarDamageEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
+            foreach (Minions mins in minionsList)
             {
                 breakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log));
             }
@@ -813,8 +814,8 @@ public abstract partial class SingleActor : Actor
         if (OutgoingCrowdControlEventsByDst == null)
         {
             var outgoingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetOutgoingCrowdControlData(AgentItem).Where(x => !x.ToFriendly));
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log);
+            foreach (Minions mins in minionsList)
             {
                 outgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log));
             }

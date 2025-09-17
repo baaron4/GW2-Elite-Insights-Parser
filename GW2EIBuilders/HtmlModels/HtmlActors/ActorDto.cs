@@ -45,12 +45,12 @@ internal abstract class ActorDto
         }
         var minions = actor.GetMinions(log);
         Minions = new(minions.Count);
-        foreach (KeyValuePair<long, Minions> pair in minions)
+        for (var i = 0; i < minions.Count; i++)
         {
             Minions.Add(new MinionDto()
             {
-                Id = pair.Key,
-                Name = pair.Value.Character
+                Id = i,
+                Name = minions[i].Character
             });
         }
     }
