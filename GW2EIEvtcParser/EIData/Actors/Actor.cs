@@ -10,20 +10,16 @@ public abstract class Actor
     protected readonly AgentItem AgentItem;
     public string Character { get; protected set; }
 
-    public int UniqueID => AgentItem.UniqueID;
     public uint Toughness => AgentItem.Toughness;
     public uint Condition => AgentItem.Condition;
     public uint Concentration => AgentItem.Concentration;
     public uint Healing => AgentItem.Healing;
     public ParserHelper.Spec Spec => AgentItem.Spec;
     public ParserHelper.Spec BaseSpec => AgentItem.BaseSpec;
-    public long LastAware => AgentItem.LastAware;
-    public long FirstAware => AgentItem.FirstAware;
     public int ID => AgentItem.ID;
     public uint HitboxHeight => AgentItem.HitboxHeight;
     public uint HitboxWidth => AgentItem.HitboxWidth;
     public bool IsFakeActor => AgentItem.IsFake;
-    public ushort InstID => AgentItem.EnglobingAgentItem.InstID;
     // Damage
     protected Dictionary<AgentItem, List<HealthDamageEvent>>? DamageEventByDst;
 
@@ -113,20 +109,6 @@ public abstract class Actor
         return AgentItem.IsAnySpecies(ids);
     }
     #endregion Species
-    #region AwareTimes
-    public bool InAwareTimes(long time)
-    {
-        return AgentItem.InAwareTimes(time);
-    }
-    public bool InAwareTimes(Actor other)
-    {
-        return AgentItem.InAwareTimes(other);
-    }
-    public bool InAwareTimes(AgentItem other)
-    {
-        return AgentItem.InAwareTimes(other);
-    }
-    #endregion AwareTimes
 
     #region Damage
     private CachingCollectionWithTarget<List<HealthDamageEvent>>? DamageEventByDstCache;
@@ -457,14 +439,5 @@ public abstract class Actor
             default:
                 throw new NotImplementedException("Not implemented damage type " + damageType);
         }
-    }
-}
-
-public static partial class ListExt
-{
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SortByFirstAware<T>(this List<T> list)  where T : Actor
-    {
-        list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }

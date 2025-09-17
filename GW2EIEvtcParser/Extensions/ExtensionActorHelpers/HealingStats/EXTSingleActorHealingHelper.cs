@@ -49,7 +49,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         }
     }
 
-    private CachingCollectionWithTarget<List<EXTHealingEvent>> _justActorHealCache;
+    private CachingCollectionWithTarget<List<EXTHealingEvent>>? _justActorHealCache;
     public IReadOnlyList<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorHealCache ??= new(log);

@@ -46,7 +46,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         }
     }
 
-    private CachingCollectionWithTarget<List<EXTBarrierEvent>> _justActorBarrierCache;
+    private CachingCollectionWithTarget<List<EXTBarrierEvent>>? _justActorBarrierCache;
     public IReadOnlyList<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorBarrierCache ??= new(log);

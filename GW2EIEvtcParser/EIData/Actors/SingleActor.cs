@@ -13,6 +13,10 @@ namespace GW2EIEvtcParser.EIData;
 public abstract partial class SingleActor : Actor
 {
     public new AgentItem AgentItem => base.AgentItem;
+    public int UniqueID => AgentItem.UniqueID;
+    public long LastAware => AgentItem.LastAware;
+    public long FirstAware => AgentItem.FirstAware;
+    public ushort InstID => AgentItem.EnglobingAgentItem.InstID;
 
     public AgentItem EnglobingAgentItem => AgentItem.EnglobingAgentItem;
     public string Account { get; protected set; }
@@ -33,6 +37,21 @@ public abstract partial class SingleActor : Actor
     internal abstract void OverrideName(string name);
 
     public abstract string GetIcon(bool forceLowResolutionIfApplicable = false);
+
+    #region AwareTimes
+    public bool InAwareTimes(long time)
+    {
+        return AgentItem.InAwareTimes(time);
+    }
+    public bool InAwareTimes(SingleActor other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
+    public bool InAwareTimes(AgentItem other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
+    #endregion AwareTimes
 
     #region STATUS
 
@@ -856,5 +875,14 @@ public abstract partial class SingleActor : Actor
                 return BinarySearchRecursive(position, time, midIndex + 1, maxIndex);
             }
         }
+    }
+}
+
+public static partial class ListExt
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SortByFirstAware<T>(this List<T> list) where T : SingleActor
+    {
+        list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }
