@@ -478,7 +478,11 @@ internal static class CombatEventFactory
     {
         if (buffEvent.IsOffcycle > 0)
         {
-            buffEvents.Add(new BuffExtensionEvent(buffEvent, agentData, skillData));
+            var extensionEvent = new BuffExtensionEvent(buffEvent, agentData, skillData);
+            if (evtcVersion.Build > ArcDPSBuilds.BuffExtensionBroken || extensionEvent.ExtendedDuration > 0)
+            {
+                buffEvents.Add(extensionEvent);
+            }
         }
         else
         {
