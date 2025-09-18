@@ -158,8 +158,9 @@ public class EvtcParser
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
                     _t.SetAverageTimeStart();
-                    // Buff source finding for extension events is done at ParsedEvtcLog constructor level (not thread safe)
-                    // Something is stopping this from being thread safe, TODO: investigate
+                    // Init cache
+                    log.FindActor(actor.EnglobingAgentItem);
+                    _t.TrackAverageTime("Find actor cache");
                     actor.ComputeBuffMap(log);
                     _t.TrackAverageTime("Buff Map");
                     actor.GetMinions(log);
