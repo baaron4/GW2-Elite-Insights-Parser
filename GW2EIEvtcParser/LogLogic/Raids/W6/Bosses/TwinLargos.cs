@@ -93,6 +93,7 @@ internal class TwinLargos : MythwrightGambit
     {
         long phaseStart = encounterPhase.Start;
         long phaseEnd = 0;
+        long start = encounterPhase.Start;
         long end = encounterPhase.End;
         var targetPhases = new List<PhaseData>();
         var states = new List<TimeCombatEvent>();
@@ -105,7 +106,7 @@ internal class TwinLargos : MythwrightGambit
             TimeCombatEvent state = states[i];
             if (state is EnterCombatEvent)
             {
-                phaseStart = state.Time;
+                phaseStart = Math.Max(state.Time, start);
                 if (i == states.Count - 1)
                 {
                     targetPhases.Add(new SubPhasePhaseData(phaseStart, end));
@@ -117,7 +118,7 @@ internal class TwinLargos : MythwrightGambit
                 targetPhases.Add(new SubPhasePhaseData(phaseStart, phaseEnd));
                 if (i == states.Count - 1 && targetPhases.Count < 3)
                 {
-                    targetPhases.Add(new SubPhasePhaseData(phaseEnd, end));
+                    targetPhases.Add(new SubPhasePhaseData(Math.Max(phaseEnd, start), end));
                 }
             }
         }
