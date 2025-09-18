@@ -8,3 +8,9 @@ public class CachingCollectionWithTarget<T>(ParsedEvtcLog log)
 {
     private static readonly NPC _nullActor = new(ParserHelper._nullAgent);
 }
+
+
+public class CachingCollectionWithAgentTarget<T>(ParsedEvtcLog log)
+    : CachingCollectionCustom<AgentItem, T>(log, ParserHelper._nullAgent, log.LogData.Logic.Hostiles.Count)
+{
+}
