@@ -53,6 +53,8 @@ Settings can be configured using .conf files (see Settings/sample.conf for an ex
 ### For console
 
 You can refresh the API caches using the -cache option.
+
+You can update EI to its latest version using the -update option. 
 ```
 GuildWars2EliteInsights-CLI.exe -c [config path] [logs]
 ```
