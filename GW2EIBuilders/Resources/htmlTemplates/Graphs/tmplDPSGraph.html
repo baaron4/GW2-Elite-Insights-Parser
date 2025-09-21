@@ -20,7 +20,7 @@
             playerindex: {
                 handler: function () {
                     const players = getActivePlayersForPhase(this.encounterPhase).filter(x => !!x);
-                    for (let i = 0; i < this.data.length; i++) {
+                    for (let i = 0; i < players.length; i++) {
                         this.data[i].line.width = players[i].id === this.playerindex ? 5 : 2;
                     }
                     this.layout.datarevision = new Date().getTime();
