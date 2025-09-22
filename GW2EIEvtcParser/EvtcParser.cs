@@ -1001,7 +1001,8 @@ public class EvtcParser
         });
         //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
         // Set Agent instid, firstAware and lastAware
-        var invalidCombatItems = new HashSet<CombatItem>();
+        var invalidSrcCombatItems = new HashSet<CombatItem>();
+        var invalidDstCombatItems = new HashSet<CombatItem>();
         var orphanedSrcInstidCombatItems = new List<CombatItem>();
         var orphanedDstInstidCombatItems = new List<CombatItem>();
         foreach (CombatItem c in _combatItems)
@@ -1026,7 +1027,7 @@ public class EvtcParser
                     // this means that this particular combat item does not point to a proper agent
                     if (!updatedAgent && c.SrcInstid != 0)
                     {
-                        invalidCombatItems.Add(c);
+                        invalidSrcCombatItems.Add(c);
                     }
                 } 
                 else if (c.SrcInstid > 0)
@@ -1054,7 +1055,7 @@ public class EvtcParser
                     // this means that this particular combat item does not point to a proper agent
                     if (!updatedAgent && c.DstInstid != 0)
                     {
-                        invalidCombatItems.Add(c);
+                        invalidDstCombatItems.Add(c);
                     }
                 } 
                 else if (c.DstInstid > 0)
@@ -1095,6 +1096,7 @@ public class EvtcParser
                 }
             }
         }
+        var invalidCombatItems = invalidSrcCombatItems.Intersect(invalidDstCombatItems).ToHashSet();
         if (invalidCombatItems.Count != 0)
         {
 #if DEBUG2
