@@ -46,6 +46,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "RecordedBy", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#aa6198c1dc2545988041a3c065e16bdc4", null ],
     [ "SkillMap", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad098dd22fd0d4b2fbe7075bc6e826221", null ],
     [ "Success", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ad3a5ec959a120ce2016a7463dd447742", null ],
+    [ "Targetless", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ada6d7484a510b238f8a3a86fdc0328ae", null ],
     [ "Targets", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ada6e269761f3f560049150d1b0edb0dd", null ],
     [ "TimeEnd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a8955c9cf429dde4e5fd562f6bc1c5b17", null ],
     [ "TimeEndStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1eaafbfc1afe1ce4316dc58dcbc90b8f", null ],
