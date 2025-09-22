@@ -692,6 +692,8 @@ public class EvtcParser
         bool keepOnlyExtensionEvents = false;
         int stopAtLogEndEvent = _id == (int)TargetID.Instance ? 1 : -1;
         var extensionEvents = new List<CombatItem>(5000);
+        int mapID = -1;
+        int currentMapID = -1;
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
@@ -709,11 +711,20 @@ public class EvtcParser
                     stopAtLogEndEvent = 0;
                 }
             }
+            if (combatItem.IsStateChange == StateChange.MapID)
+            {
+                mapID = MapIDEvent.GetMapID(combatItem);
+                currentMapID = mapID;
+            }
+            if (combatItem.IsStateChange == StateChange.MapChange)
+            {
+                currentMapID = MapIDEvent.GetMapID(combatItem);
+            }
             if (combatItem.IsStateChange == StateChange.AgentChange)
             {
                 ArcDPSAgentRedirection[combatItem.SrcAgent] = combatItem.DstAgent;
             }
-            if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
+            if (!IsValid(combatItem, mapID, currentMapID, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
             {
                 discardedCbtEvents++;
                 continue;
@@ -789,8 +800,13 @@ public class EvtcParser
     /// <param name="combatItem"><see cref="CombatItem"/> data to validate.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
-    private bool IsValid(CombatItem combatItem, ParserController operation)
+    private bool IsValid(CombatItem combatItem, long expectedMapID, long currentMapID, ParserController operation)
     {
+        if (expectedMapID != -1 && expectedMapID != currentMapID)
+        {
+            // ignore events not on current map
+            return false;
+        }
         if (combatItem.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
         {
             // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
