@@ -223,7 +223,7 @@ internal class HallOfChainsInstance : HallOfChains
                 long start = currentMessengers.Min(x => x.FirstAware);
                 bool success = false;
                 long end = dhuum.LastAware;
-                if (chest != null && chest.InAwareTimes(dhuum.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;

@@ -72,7 +72,7 @@ internal class MountBalriorInstance : MountBalrior
                 long start = enterCombat != null ? enterCombat.Time : greer.FirstAware;
                 bool success = false;
                 long end = greer.LastAware;
-                if (chest != null && chest.InAwareTimes(greer.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
@@ -112,7 +112,7 @@ internal class MountBalriorInstance : MountBalrior
                 }
                 bool success = false;
                 long end = decima.LastAware;
-                if (chest != null && chest.InAwareTimes(decima.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
@@ -173,7 +173,7 @@ internal class MountBalriorInstance : MountBalrior
                 long start = activeDeterrences.Count == 2 ? activeDeterrences.Values.Max() : (enterCombat != null ? enterCombat.Time : ura.FirstAware);
                 bool success = false;
                 long end = ura.LastAware;
-                if (chest != null && chest.InAwareTimes(ura.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
