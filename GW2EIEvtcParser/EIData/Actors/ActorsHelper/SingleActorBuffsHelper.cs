@@ -289,14 +289,7 @@ partial class SingleActor
         _buffGenerationSimulationItemsCache ??= new(log, null!, 50); // we don't care about the null equivalent, simulator can't be null
         if (!_buffGenerationSimulationItemsCache.TryGetValue(start, end, simulator, out var list))
         {
-            if (_buffGenerationSimulationItemsCache.TryGetEnglobingValue(start, end, simulator, out var englobingList))
-            {
-                list = englobingList.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
-            } 
-            else
-            {
-                list = simulator.GenerationSimulation.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
-            }
+            list = simulator.GenerationSimulation.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
             _buffGenerationSimulationItemsCache.Set(start, end, simulator, list);
         }
         return list;
