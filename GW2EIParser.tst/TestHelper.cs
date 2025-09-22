@@ -53,17 +53,15 @@ public static class TestHelper
         return parsedLog;
     }
 
-    public static string JsonString(ParsedEvtcLog log)
+    public static void JsonString(ParsedEvtcLog log)
     {
         var ms = new MemoryStream();
         var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
 
         builder.CreateJSON(ms, false);
-
-        return Encoding.UTF8.GetString(ms.ToArray());
     }
 
-    public static string CsvString(ParsedEvtcLog log)
+    public static void CsvString(ParsedEvtcLog log)
     {
         var ms = new MemoryStream();
         var sw = new StreamWriter(ms);
@@ -71,11 +69,9 @@ public static class TestHelper
 
         builder.CreateCSV(sw);
         sw.Close();
-
-        return sw.ToString()!;
     }
 
-    public static string HtmlString(ParsedEvtcLog log)
+    public static void HtmlString(ParsedEvtcLog log)
     {
         var ms = new MemoryStream();
         var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
@@ -83,8 +79,6 @@ public static class TestHelper
 
         builder.CreateHTML(sw, null);
         sw.Close();
-
-        return Encoding.UTF8.GetString(ms.ToArray());
     }
 
     public static JsonLog JsonLog(ParsedEvtcLog log)

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -13,6 +14,10 @@ namespace GW2EIEvtcParser.EIData;
 public abstract partial class SingleActor : Actor
 {
     public new AgentItem AgentItem => base.AgentItem;
+    public int UniqueID => AgentItem.UniqueID;
+    public long LastAware => AgentItem.LastAware;
+    public long FirstAware => AgentItem.FirstAware;
+    public ushort InstID => AgentItem.EnglobingAgentItem.InstID;
 
     public AgentItem EnglobingAgentItem => AgentItem.EnglobingAgentItem;
     public string Account { get; protected set; }
@@ -33,6 +38,21 @@ public abstract partial class SingleActor : Actor
     internal abstract void OverrideName(string name);
 
     public abstract string GetIcon(bool forceLowResolutionIfApplicable = false);
+
+    #region AwareTimes
+    public bool InAwareTimes(long time)
+    {
+        return AgentItem.InAwareTimes(time);
+    }
+    public bool InAwareTimes(SingleActor other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
+    public bool InAwareTimes(AgentItem other)
+    {
+        return AgentItem.InAwareTimes(other);
+    }
+    #endregion AwareTimes
 
     #region STATUS
 
@@ -102,8 +122,8 @@ public abstract partial class SingleActor : Actor
 
 
     // Minions
-    private Dictionary<long, Minions>? _minions;
-    public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
+    private List<Minions>? _minions;
+    public IReadOnlyList<Minions> GetMinions(ParsedEvtcLog log)
     {
         if (_minions == null)
         {
@@ -135,7 +155,7 @@ public abstract partial class SingleActor : Actor
             {
                 if (pair.Value.IsActive(log))
                 {
-                    _minions[pair.Value.UniqueID] = pair.Value;
+                    _minions.Add(pair.Value);
                 }
             }
             // gadget, string based
@@ -165,7 +185,7 @@ public abstract partial class SingleActor : Actor
             {
                 if (pair.Value.IsActive(log))
                 {
-                    _minions[pair.Value.UniqueID] = pair.Value;
+                    _minions.Add(pair.Value);
                 }
             }
         }
@@ -661,8 +681,8 @@ public abstract partial class SingleActor : Actor
         if (DamageEventByDst == null)
         {
             List<HealthDamageEvent> damageEvents = [.. log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly)];
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
+            foreach (Minions mins in minionsList)
             {
                 damageEvents.AddRange(mins.GetDamageEvents(null, log));
             }
@@ -672,7 +692,7 @@ public abstract partial class SingleActor : Actor
         }
     }
 
-    private CachingCollectionWithTarget<List<HealthDamageEvent>> _justActorDamageCache;
+    private CachingCollectionWithTarget<List<HealthDamageEvent>>? _justActorDamageCache;
     public IReadOnlyList<HealthDamageEvent> GetJustActorDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorDamageCache ??= new(log);
@@ -736,7 +756,7 @@ public abstract partial class SingleActor : Actor
     #endregion DAMAGE
 
     #region BREAKBAR DAMAGE
-    private CachingCollectionWithTarget<List<BreakbarDamageEvent>> _justActorBreakbarDamageCache;
+    private CachingCollectionWithTarget<List<BreakbarDamageEvent>>? _justActorBreakbarDamageCache;
     public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorBreakbarDamageCache ??= new(log);
@@ -753,8 +773,8 @@ public abstract partial class SingleActor : Actor
         if (BreakbarDamageEventsByDst == null)
         {
             var breakbarDamageEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log); //TODO(Rennorb) @perf: find average complexity
+            foreach (Minions mins in minionsList)
             {
                 breakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log));
             }
@@ -777,7 +797,7 @@ public abstract partial class SingleActor : Actor
     #endregion BREAKBAR DAMAGE
 
     #region CROWD CONTROL
-    private CachingCollectionWithTarget<List<CrowdControlEvent>> _justActorCrowdControlCache;
+    private CachingCollectionWithTarget<List<CrowdControlEvent>>? _justActorCrowdControlCache;
     public IReadOnlyList<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorCrowdControlCache ??= new(log);
@@ -794,8 +814,8 @@ public abstract partial class SingleActor : Actor
         if (OutgoingCrowdControlEventsByDst == null)
         {
             var outgoingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetOutgoingCrowdControlData(AgentItem).Where(x => !x.ToFriendly));
-            IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
-            foreach (Minions mins in minionsList.Values)
+            var minionsList = GetMinions(log);
+            foreach (Minions mins in minionsList)
             {
                 outgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log));
             }
@@ -856,5 +876,14 @@ public abstract partial class SingleActor : Actor
                 return BinarySearchRecursive(position, time, midIndex + 1, maxIndex);
             }
         }
+    }
+}
+
+public static partial class ListExt
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SortByFirstAware<T>(this List<T> list) where T : SingleActor
+    {
+        list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }

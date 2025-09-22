@@ -28,7 +28,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         if (HealEventsByDst == null)
         {
             var healEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
-            foreach (var minion in _actor.GetMinions(log).Values)
+            foreach (var minion in _actor.GetMinions(log))
             {
                 healEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log));
             }
@@ -49,7 +49,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         }
     }
 
-    private CachingCollectionWithTarget<List<EXTHealingEvent>> _justActorHealCache;
+    private CachingCollectionWithTarget<List<EXTHealingEvent>>? _justActorHealCache;
     public IReadOnlyList<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorHealCache ??= new(log);

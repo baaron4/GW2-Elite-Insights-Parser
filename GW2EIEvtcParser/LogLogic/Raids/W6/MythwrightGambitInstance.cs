@@ -104,7 +104,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                             prevHPUpdate = hpUpdate.HealthPercent;
                         }
                     }
-                    if (chest != null && chest.InAwareTimes(end + 500))
+                    if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                     {
                         end = chest.FirstAware;
                         success = true;
@@ -153,7 +153,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                     end = Math.Max(nikare.LastAware, kenut.LastAware);
                 }
                 bool success = false;
-                if (chest != null && chest.InAwareTimes(end + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
@@ -185,7 +185,7 @@ internal class MythwrightGambitInstance : MythwrightGambit
                 long start = qadimFirstCast.Time;
                 long end = qadim.LastAware;
                 bool success = false;
-                if (chest != null && chest.InAwareTimes(end + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;

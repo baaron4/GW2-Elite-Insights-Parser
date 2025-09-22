@@ -48,10 +48,10 @@ internal static class JsonActorBuilder
         jsonActor.StatsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStatsAll(actor.GetGameplayStats(log, phase.Start, phase.End), actor.GetOffensiveStats(null, log, phase.Start, phase.End))).ToArray();
         jsonActor.Defenses = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDefensesAll(actor.GetDefenseStats(log, phase.Start, phase.End))).ToArray();
         //
-        IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
-        if (minionsList.Values.Any())
+        var minionsList = actor.GetMinions(log);
+        if (minionsList.Any())
         {
-            jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillMap, buffMap)).ToList();
+            jsonActor.Minions = minionsList.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillMap, buffMap)).ToList();
         }
         //
         var casts = actor.GetIntersectingCastEvents(log);

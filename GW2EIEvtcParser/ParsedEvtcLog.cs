@@ -68,6 +68,7 @@ public class ParsedEvtcLog
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Handling active players");
         List<Player> activePlayers = [];
+        var playerMinions = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.Master.IsPlayer).GroupBy(x => x.Master).ToDictionary(x => x.Key!, x => x.ToList());
         foreach (Player p in playerList)
         {
             if (p.LastAware <= LogData.LogStart)
@@ -78,7 +79,12 @@ public class ParsedEvtcLog
             {
                 if (CombatData.GetDamageTakenData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
                     CombatData.GetDamageData(p.EnglobingAgentItem).Any(x => !x.ToFriendly) ||
-                    CombatData.GetBuffDataBySrc(p.EnglobingAgentItem).Any(x => !p.AgentItem.IsMasterOfOrSelf(x.To)))
+                    CombatData.GetBuffDataBySrc(p.EnglobingAgentItem).Any(x => !p.AgentItem.IsMasterOfOrSelf(x.To)) ||
+                    (
+                        playerMinions.TryGetValue(p.EnglobingAgentItem, out var minions) && 
+                        minions.Any(x => CombatData.GetDamageData(x).Any(x => !x.ToFriendly)
+                    )
+                        ))
                 {
                     activePlayers.Add(p);
                 }
@@ -236,7 +242,7 @@ public class ParsedEvtcLog
             }
             actors.Add(actor.GetCombatReplayDescription(map, this));
             decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
-            foreach (Minions minions in actor.GetMinions(this).Values)
+            foreach (Minions minions in actor.GetMinions(this))
             {
                 if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
                 {

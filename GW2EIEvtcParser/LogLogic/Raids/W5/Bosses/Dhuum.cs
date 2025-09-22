@@ -232,7 +232,7 @@ internal class Dhuum : HallOfChains
                 ComputeFightPhases(phases, dhuum, castLogs, log, end, preEventEnd, mainFight);
             }
         }
-        bool hasRitual = phases.Last().Name == "Ritual";
+        bool hasRitual = phases.LastOrDefault()?.Name == "Ritual";
         // if present, Dhuum was at least at 10%
         PhaseData? dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
         if (mainFight != null)

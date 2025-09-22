@@ -417,7 +417,7 @@ internal static class RangerHelper
         // - Beastly Warden
         new DamageLogDamageModifier(Mod_BeastlyWardenPetOnly, "Beastly Warden (Pets)", "20% for Ursine and Porcine pets", DamageSource.PetsOnly, 20.0, DamageType.All, DamageType.All, Source.Ranger, TraitImages.BeastlyWarden, (x, log) => IsJuvenileUrsinePet(x.From) || IsJuvenilePorcinePet(x.From), DamageModifierMode.All)
             .UsingEarlyExit((a, log) => {
-                return !a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.Value.ReferenceAgentItem) || IsJuvenilePorcinePet(x.Value.ReferenceAgentItem));
+                return !a.GetMinions(log).Any(x => IsJuvenileUrsinePet(x.ReferenceAgentItem) || IsJuvenilePorcinePet(x.ReferenceAgentItem));
             })
             .WithBuilds(GW2Builds.April2025Balance),
         

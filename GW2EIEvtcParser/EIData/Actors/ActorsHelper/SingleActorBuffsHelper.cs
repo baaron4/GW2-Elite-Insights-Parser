@@ -24,7 +24,7 @@ partial class SingleActor
     private Dictionary<long, AbstractBuffSimulator>? _buffSimulators;
 
     #region ACCELERATORS
-    private CachingCollectionWithTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>? _buffApplyByIDAccelerator;
+    private CachingCollectionWithAgentTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>? _buffApplyByIDAccelerator;
     private HashSet<long>? PresentApplyOnBuffIDs;
 
     private void InitBuffApplyByIDDict(ParsedEvtcLog log, long start, long end)
@@ -43,9 +43,8 @@ partial class SingleActor
         var dictByCreditedBy = curBuffApplies.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in dictByCreditedBy)
         {
-            var curCreditedBySingleActor = log.FindActor(pair.Key);
             var dictToSet = pair.Value.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-            _buffApplyByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
+            _buffApplyByIDAccelerator.Set(start, end, pair.Key, dictToSet);
         }
     }
     [MemberNotNull(nameof(PresentApplyOnBuffIDs))]
@@ -57,8 +56,9 @@ partial class SingleActor
             var allBuffApplies = log.CombatData.GetBuffApplyDataByDst(AgentItem);
             PresentApplyOnBuffIDs = [.. allBuffApplies.Select(x => x.BuffID)];
         }
-        _buffApplyByIDAccelerator ??= new CachingCollectionWithTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>(log);
-        if (!_buffApplyByIDAccelerator.TryGetValue(start, end, creditedBy, out var dict))
+        _buffApplyByIDAccelerator ??= new CachingCollectionWithAgentTarget<Dictionary<long, List<AbstractBuffApplyEvent>>>(log);
+        var creditedByAgentItem = creditedBy?.AgentItem;
+        if (!_buffApplyByIDAccelerator.TryGetValue(start, end, creditedByAgentItem, out var dict))
         {
             if (!_buffApplyByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
@@ -66,7 +66,7 @@ partial class SingleActor
             }
             if (creditedBy != null && creditedBy.AgentItem.IsEnglobedAgent)
             {
-                var englobingCreditedBy = log.FindActor(creditedBy.EnglobingAgentItem);
+                var englobingCreditedBy = creditedBy.EnglobingAgentItem;
                 if (_buffApplyByIDAccelerator.TryGetValue(start, end, englobingCreditedBy, out var englobingDict))
                 {
                     dict = [];
@@ -79,14 +79,14 @@ partial class SingleActor
                 {
                     dict = [];
                 }
-                _buffApplyByIDAccelerator.Set(start, end, creditedBy, dict);
+                _buffApplyByIDAccelerator.Set(start, end, creditedByAgentItem, dict);
             }
             else
             {
-                if (!(_buffApplyByIDAccelerator.TryGetValue(start, end, creditedBy, out dict)))
+                if (!(_buffApplyByIDAccelerator.TryGetValue(start, end, creditedByAgentItem, out dict)))
                 {
                     dict = [];
-                    _buffApplyByIDAccelerator.Set(start, end, creditedBy, dict);
+                    _buffApplyByIDAccelerator.Set(start, end, creditedByAgentItem, dict);
                 }
             }
         }
@@ -106,7 +106,7 @@ partial class SingleActor
         return GetBuffApplyEventsOnByIDInternal(log, start, end, buffID, creditedBy);
     }
 
-    private CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllByByIDAccelerator;
+    private CachingCollectionWithAgentTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllByByIDAccelerator;
     private HashSet<long>? PresentRemovedByBuffIDs;
 
     private void InitBuffRemoveAllByByIDDict(ParsedEvtcLog log, long start, long end)
@@ -125,9 +125,8 @@ partial class SingleActor
         var dictByTo = curBuffRemoves.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in dictByTo)
         {
-            var curCreditedBySingleActor = log.FindActor(pair.Key);
             var dictToSet = pair.Value.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-            _buffRemoveAllByByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
+            _buffRemoveAllByByIDAccelerator.Set(start, end, pair.Key, dictToSet);
         }
     }
 
@@ -140,8 +139,9 @@ partial class SingleActor
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataBySrc(AgentItem);
             PresentRemovedByBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        _buffRemoveAllByByIDAccelerator ??= new CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>(log);
-        if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFrom, out var dict))
+        _buffRemoveAllByByIDAccelerator ??= new CachingCollectionWithAgentTarget<Dictionary<long, List<BuffRemoveAllEvent>>>(log);
+        var removedFromAgentItem = removedFrom?.AgentItem;
+        if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFromAgentItem, out var dict))
         {
             if (!_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
@@ -149,7 +149,7 @@ partial class SingleActor
             }
             if (removedFrom != null && removedFrom.AgentItem.IsEnglobedAgent)
             {
-                var englobingRemovedFrom = log.FindActor(removedFrom.EnglobingAgentItem);
+                var englobingRemovedFrom = removedFrom.EnglobingAgentItem;
                 if (_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, englobingRemovedFrom, out var englobingDict))
                 {
                     dict = [];
@@ -162,14 +162,14 @@ partial class SingleActor
                 {
                     dict = [];
                 }
-                _buffRemoveAllByByIDAccelerator.Set(start, end, removedFrom, dict);
+                _buffRemoveAllByByIDAccelerator.Set(start, end, removedFromAgentItem, dict);
             } 
             else
             {
-                if (!(_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFrom, out dict)))
+                if (!(_buffRemoveAllByByIDAccelerator.TryGetValue(start, end, removedFromAgentItem, out dict)))
                 {
                     dict = [];
-                    _buffRemoveAllByByIDAccelerator.Set(start, end, removedFrom, dict);
+                    _buffRemoveAllByByIDAccelerator.Set(start, end, removedFromAgentItem, dict);
                 }
             }
         }
@@ -196,7 +196,7 @@ partial class SingleActor
     }
 
 
-    private CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllFromByIDAccelerator;
+    private CachingCollectionWithAgentTarget<Dictionary<long, List<BuffRemoveAllEvent>>>? _buffRemoveAllFromByIDAccelerator;
     private HashSet<long>? PresentRemovedFromBuffIDs;
 
     private void InitBuffRemoveAllFromByIDDict(ParsedEvtcLog log, long start, long end)
@@ -215,9 +215,8 @@ partial class SingleActor
         var dictByTo = curBuffRemoves.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
         foreach (var pair in dictByTo)
         {
-            var curCreditedBySingleActor = log.FindActor(pair.Key);
             var dictToSet = pair.Value.GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-            _buffRemoveAllFromByIDAccelerator.Set(start, end, curCreditedBySingleActor, dictToSet);
+            _buffRemoveAllFromByIDAccelerator.Set(start, end, pair.Key, dictToSet);
         }
     }
 
@@ -231,8 +230,9 @@ partial class SingleActor
             var allBuffRemoves = log.CombatData.GetBuffRemoveAllDataByDst(AgentItem);
             PresentRemovedFromBuffIDs = [.. allBuffRemoves.Select(x => x.BuffID)];
         }
-        _buffRemoveAllFromByIDAccelerator ??= new CachingCollectionWithTarget<Dictionary<long, List<BuffRemoveAllEvent>>>(log);
-        if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedBy, out var dict))
+        _buffRemoveAllFromByIDAccelerator ??= new CachingCollectionWithAgentTarget<Dictionary<long, List<BuffRemoveAllEvent>>>(log);
+        var removedByAgentItem = removedBy?.AgentItem;
+        if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedByAgentItem, out var dict))
         {
             if (!_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, null, out var nullDict))
             {
@@ -240,7 +240,7 @@ partial class SingleActor
             }
             if (removedBy != null && removedBy.AgentItem.IsEnglobedAgent)
             {
-                var englobingRemovedBy = log.FindActor(removedBy.EnglobingAgentItem);
+                var englobingRemovedBy = removedBy.EnglobingAgentItem;
                 if (_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, englobingRemovedBy, out var englobingDict))
                 {
                     dict = [];
@@ -253,14 +253,14 @@ partial class SingleActor
                 {
                     dict = [];
                 }
-                _buffRemoveAllFromByIDAccelerator.Set(start, end, removedBy, dict);
+                _buffRemoveAllFromByIDAccelerator.Set(start, end, removedByAgentItem, dict);
             }
             else
             {
-                if (!(_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedBy, out dict)))
+                if (!(_buffRemoveAllFromByIDAccelerator.TryGetValue(start, end, removedByAgentItem, out dict)))
                 {
                     dict = [];
-                    _buffRemoveAllFromByIDAccelerator.Set(start, end, removedBy, dict);
+                    _buffRemoveAllFromByIDAccelerator.Set(start, end, removedByAgentItem, dict);
                 }
             }
         }
@@ -289,14 +289,7 @@ partial class SingleActor
         _buffGenerationSimulationItemsCache ??= new(log, null!, 50); // we don't care about the null equivalent, simulator can't be null
         if (!_buffGenerationSimulationItemsCache.TryGetValue(start, end, simulator, out var list))
         {
-            if (_buffGenerationSimulationItemsCache.TryGetEnglobingValue(start, end, simulator, out var englobingList))
-            {
-                list = englobingList.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
-            } 
-            else
-            {
-                list = simulator.GenerationSimulation.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
-            }
+            list = simulator.GenerationSimulation.Where(x => x.GetClampedDuration(start, end) > 0).ToList();
             _buffGenerationSimulationItemsCache.Set(start, end, simulator, list);
         }
         return list;
@@ -1011,7 +1004,7 @@ partial class SingleActor
 
         _buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
         _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-        foreach (Minions minions in GetMinions(log).Values)
+        foreach (Minions minions in GetMinions(log))
         {
             IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
             foreach (IReadOnlyList<Segment> minionsSegments in segments)

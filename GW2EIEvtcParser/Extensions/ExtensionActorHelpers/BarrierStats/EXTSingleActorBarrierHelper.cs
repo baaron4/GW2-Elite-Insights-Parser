@@ -24,8 +24,8 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         if (BarrierEventsByDst == null)
         {
             var barrierEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
-            IReadOnlyDictionary<long, Minions> minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
-            foreach (Minions minion in minions.Values)
+            var minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
+            foreach (Minions minion in minions)
             {
                 barrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log));
             }
@@ -46,7 +46,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         }
     }
 
-    private CachingCollectionWithTarget<List<EXTBarrierEvent>> _justActorBarrierCache;
+    private CachingCollectionWithTarget<List<EXTBarrierEvent>>? _justActorBarrierCache;
     public IReadOnlyList<EXTBarrierEvent> GetJustActorOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _justActorBarrierCache ??= new(log);

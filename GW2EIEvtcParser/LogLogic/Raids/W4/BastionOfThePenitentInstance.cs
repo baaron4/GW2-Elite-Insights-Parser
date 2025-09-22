@@ -90,7 +90,7 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
                 }
                 bool success = false;
                 long end = cairn.LastAware;
-                if (chest != null && chest.InAwareTimes(cairn.LastAware + 500))
+                if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;
@@ -264,8 +264,11 @@ internal class BastionOfThePenitentInstance : BastionOfThePenitent
             var deimosPhases = HandleDeimosPhases(targetsByIDs, log, phases);
             foreach (var deimosPhase in deimosPhases)
             {
-                var deimos = deimosPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Deimos));
-                phases.AddRange(Deimos.ComputePhases(log, deimos, Targets, deimosPhase, requirePhases));
+                var deimos = deimosPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Deimos));
+                if (deimos != null)
+                {
+                    phases.AddRange(Deimos.ComputePhases(log, deimos, Targets, deimosPhase, requirePhases));
+                }
             }
         }
         return phases;

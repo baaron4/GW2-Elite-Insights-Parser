@@ -134,9 +134,6 @@ internal class DecimaTheStormsinger : MountBalrior
                 .UsingEnable(log => log.LogData.IsCM)
                 .UsingAchievementEligibility(),
             new EnemyDstBuffApplyMechanic(ChargeDecima, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkMagenta), "Charge", "Charge Stacks", "Charge Stack", 0),
-            new EnemyDstBuffApplyMechanic(Exposed31589, new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.LightPurple), "Exposed", "Got Exposed (Broke Breakbar)", "Exposed", 0)
-                // Collides with Ura
-                .UsingEnable((log) => !log.LogData.IsInstance),
         ]);
 
     public DecimaTheStormsinger(int triggerID) : base(triggerID)

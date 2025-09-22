@@ -23,7 +23,7 @@ public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection
     public bool TryGetEnglobingValue(long start, long end, [NotNullWhen(true)] out T? value)
     {
         (start, end) = SanitizeTimes(start, end);
-        var englobingStart = _cache.Keys.Where(x => x <= start).DefaultIfEmpty(0).Max();
+        var englobingStart = _cache.Keys.Where(x => x <= start && _cache[x].Keys.Any(y => y >= end)).DefaultIfEmpty(0).Max();
         if (_cache.TryGetValue(englobingStart, out var subCache))
         {
             var englobingEnd = subCache.Keys.Where(x => x >= end).DefaultIfEmpty(0).Min();

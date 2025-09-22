@@ -148,7 +148,7 @@ internal static class MesmerHelper
         // Domination
         // - Empowered Illusions
         new DamageLogDamageModifier(Mod_EmpoweredIllusions, "Empowered Illusions", "Illusions deal 15% increased strike damage", DamageSource.PetsOnly, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.EmpoweredIllusions, IllusionsChecker, DamageModifierMode.All)
-            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsIllusion(x.Value.ReferenceAgentItem))),
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsIllusion(x.ReferenceAgentItem))),
         // - Vicious Expression
         new BuffOnFoeDamageModifier(Mod_ViciousExpressionWithIllusions, NumberOfBoons, "Vicious Expression", "25% on boonless target", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE)
             .UsingChecker(IllusionsWithMesmerChecker)
@@ -192,7 +192,7 @@ internal static class MesmerHelper
             .WithBuilds(GW2Builds.November2023Balance),
         // - Phantasmal Force
         new BuffOnActorDamageModifier(Mod_PhantasmalForce, PhantasmalForce, "Phantasmal Force", "1% per stack of might when creating an illusion", DamageSource.PetsOnly, 1.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.PhantasmalForce_Mistrust, DamageModifierMode.PvE)
-            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsPhantasm(x.Value.ReferenceAgentItem)))
+            .UsingEarlyExit((a, log) => !a.GetMinions(log).Any(x => IsPhantasm(x.ReferenceAgentItem)))
             .UsingChecker(PhantasmsChecker),
         
         // Chaos

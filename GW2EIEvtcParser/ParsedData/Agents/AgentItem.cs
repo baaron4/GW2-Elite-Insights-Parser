@@ -302,7 +302,7 @@ public class AgentItem
     {
         return new Segment(FirstAware, LastAware).Intersects(start, end);
     }
-    public bool InAwareTimes(Actor other)
+    public bool InAwareTimes(SingleActor other)
     {
         return InAwareTimes(other.FirstAware, other.LastAware);
     }

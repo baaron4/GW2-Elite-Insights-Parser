@@ -326,7 +326,7 @@ internal static class LogLogicPhaseUtils
                         end = death.Time;
                     }
                 } 
-                else if (chest != null && chest.InAwareTimes(end + 500))
+                else if (chest != null && chest.InAwareTimes(end - 500, end + 500))
                 {
                     end = chest.FirstAware;
                     success = true;

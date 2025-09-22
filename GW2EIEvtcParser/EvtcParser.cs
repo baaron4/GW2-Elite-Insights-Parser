@@ -59,10 +59,10 @@ public class EvtcParser
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <param name="evtc">The path to the log to parse.</param>
     /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
-    /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
+    /// <param name="multiThreadAcceleration">Will preprocess buff simulation using multi threading.</param>
     /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
     /// <exception cref="EvtcFileException"></exception>
-    public ParsedEvtcLog? ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
+    public ParsedEvtcLog? ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool multiThreadAcceleration = false)
     {
         parsingFailureReason = null;
         try
@@ -89,11 +89,11 @@ public class EvtcParser
                 using var ms = new MemoryStream();
                 data.CopyTo(ms);
                 ms.Position = 0;
-                evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAccelerationForBuffs);
+                evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAcceleration);
             }
             else
             {
-                evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAccelerationForBuffs);
+                evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAcceleration);
             }
             return evtcLog;
         }
@@ -111,9 +111,9 @@ public class EvtcParser
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <param name="evtcStream">The stream of the log.</param>
     /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
-    /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
+    /// <param name="multiThreadAcceleration">Will preprocess buff simulation using multi threading.</param>
     /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
-    public ParsedEvtcLog? ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
+    public ParsedEvtcLog? ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool multiThreadAcceleration = false)
     {
         parsingFailureReason = null;
         try
@@ -135,7 +135,7 @@ public class EvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
             var log = new ParsedEvtcLog(_evtcVersion, _logData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
 
-            if (multiThreadAccelerationForBuffs)
+            if (multiThreadAcceleration)
             {
                 using var _t = new AutoTrace("Buffs?");
 
@@ -158,8 +158,9 @@ public class EvtcParser
                 foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                 {
                     _t.SetAverageTimeStart();
-                    // Buff source finding for extension events is done at ParsedEvtcLog constructor level (not thread safe)
-                    // Something is stopping this from being thread safe, TODO: investigate
+                    // Init cache
+                    log.FindActor(actor.EnglobingAgentItem);
+                    _t.TrackAverageTime("Find actor cache");
                     actor.ComputeBuffMap(log);
                     _t.TrackAverageTime("Buff Map");
                     actor.GetMinions(log);
@@ -350,6 +351,19 @@ public class EvtcParser
                     }
                 });
                 _t.Log("LogData.Logic.Targets GetBuffs Self");
+                Parallel.ForEach(log.Friendlies, actor =>
+                {
+                    // To initialize cache
+                    foreach (PhaseData phase in phases)
+                    {
+                        actor.GetDamageEvents(null, log, phase.Start, phase.End);
+                        foreach (var target in log.LogData.Logic.Targets)
+                        {
+                            actor.GetDamageEvents(target, log, phase.Start, phase.End);
+                        }
+                    }
+                });
+                _t.Log("PlayerList GetDamageEvents");
             }
 
             return log;

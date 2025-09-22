@@ -486,6 +486,7 @@ public partial class CombatData
                         }
                     }
                 }
+                events.RemoveAll(x => x is BuffExtensionEvent bee && bee.ExtendedDuration < 1);
             }
         }
     }

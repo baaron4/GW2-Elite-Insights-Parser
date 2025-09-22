@@ -48,7 +48,7 @@ internal class ActorDetailsDto
             dto.DmgDistributionsTaken.Add(DamageDistributionDto.BuildDamageTakenDistributionData(log, actor, phase, usedSkills, usedBuffs));
             dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, actor, phase, usedBuffs));
         }
-        foreach (var minion in minions.Values)
+        foreach (var minion in minions)
         {
             dto.Minions.Add(BuildFriendlyMinionsData(log, actor, minion, usedSkills, usedBuffs));
         }
@@ -137,7 +137,7 @@ internal class ActorDetailsDto
             }
         }
 
-        foreach (var minion in minions.Values)
+        foreach (var minion in minions)
         {
             var dmgDistributions = new List<DamageDistributionDto>(phases.Count);
             var dmgTakenDistributions = new List<DamageDistributionDto>(phases.Count);

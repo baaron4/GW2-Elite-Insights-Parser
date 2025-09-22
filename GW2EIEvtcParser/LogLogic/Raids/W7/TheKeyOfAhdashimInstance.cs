@@ -127,6 +127,15 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         ];
         return friendlies.Distinct().ToList();
     }
+    internal override HashSet<TargetID> ForbidBreakbarPhasesFor()
+    {
+        HashSet<TargetID> forbidBreakbarPhasesFor = [
+            .. _adina.ForbidBreakbarPhasesFor(),
+            .. _sabir.ForbidBreakbarPhasesFor(),
+            .. _peerlessQadim.ForbidBreakbarPhasesFor()
+        ];
+        return forbidBreakbarPhasesFor;
+    }
     protected override HashSet<int> IgnoreForAutoNumericalRenaming()
     {
         return [

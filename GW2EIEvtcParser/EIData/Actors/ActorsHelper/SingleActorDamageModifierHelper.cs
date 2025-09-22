@@ -108,19 +108,20 @@ partial class SingleActor
 
         if (!_outgoingDamageModifierEventsPerTargets.TryGetValue(start, end, null, out _))
         {
-            if (_outgoingDamageModifierEventsPerTargets.TryGetEnglobingValue(start, end, null, out var allEvents))
+            if (!_outgoingDamageModifierEventsPerTargets.TryGetEnglobingValue(start, end, null, out var allEvents))
             {
-                var curDamageModifierEvents = allEvents.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
-                curDamageModifierEvents.SortByTime();
-                var curDamageModifiersEvents = curDamageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
-                _outgoingDamageModifierEventsPerTargets!.Set(start, end, null, curDamageModifiersEvents);
+                _outgoingDamageModifierEventsPerTargets.TryGetValue(log.LogData.LogStart, log.LogData.LogEnd, null, out allEvents);
+            }
+            var curDamageModifierEvents = allEvents!.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
+            curDamageModifierEvents.SortByTime();
+            var curDamageModifiersEvents = curDamageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
+            _outgoingDamageModifierEventsPerTargets!.Set(start, end, null, curDamageModifiersEvents);
 
-                foreach (var eventsByTarget in curDamageModifierEvents.GroupBy(x => x.Src))
-                {
-                    var actor = eventsByTarget.Key;
-                    var events = eventsByTarget.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
-                    _outgoingDamageModifierEventsPerTargets.Set(start, end, log.FindActor(actor), events);
-                }
+            foreach (var eventsByTarget in curDamageModifierEvents.GroupBy(x => x.Dst))
+            {
+                var actor = eventsByTarget.Key;
+                var events = eventsByTarget.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
+                _outgoingDamageModifierEventsPerTargets.Set(start, end, log.FindActor(actor), events);
             }
         }
         return ComputeDamageModifierStats(target, log, start, end);
@@ -224,19 +225,20 @@ partial class SingleActor
 
         if (!_incomingDamageModifierEventsPerTargets.TryGetValue(start, end, null, out _))
         {
-            if (_incomingDamageModifierEventsPerTargets.TryGetEnglobingValue(start, end, null, out var allEvents))
+            if (!_incomingDamageModifierEventsPerTargets.TryGetEnglobingValue(start, end, null, out var allEvents))
             {
-                var curDamageModifierEvents = allEvents.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
-                curDamageModifierEvents.SortByTime();
-                var curDamageModifiersEvents = curDamageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
-                _incomingDamageModifierEventsPerTargets!.Set(start, end, null, curDamageModifiersEvents);
+                _incomingDamageModifierEventsPerTargets.TryGetValue(log.LogData.LogStart, log.LogData.LogEnd, null, out allEvents);
+            }
+            var curDamageModifierEvents = allEvents!.Values.SelectMany(x => x.ToList()).Where(x => x.Time >= start && x.Time <= end).ToList();
+            curDamageModifierEvents.SortByTime();
+            var curDamageModifiersEvents = curDamageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
+            _incomingDamageModifierEventsPerTargets!.Set(start, end, null, curDamageModifiersEvents);
 
-                foreach (var eventsByTarget in curDamageModifierEvents.GroupBy(x => x.Src))
-                {
-                    var actor = eventsByTarget.Key;
-                    var events = eventsByTarget.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
-                    _incomingDamageModifierEventsPerTargets.Set(start, end, log.FindActor(actor), events);
-                }
+            foreach (var eventsByTarget in curDamageModifierEvents.GroupBy(x => x.Src))
+            {
+                var actor = eventsByTarget.Key;
+                var events = eventsByTarget.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
+                _incomingDamageModifierEventsPerTargets.Set(start, end, log.FindActor(actor), events);
             }
         }
         return ComputeIncomingDamageModifierStats(target, log, start, end);       
