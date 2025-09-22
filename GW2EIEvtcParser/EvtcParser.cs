@@ -1104,7 +1104,7 @@ public class EvtcParser
             _combatItems.RemoveAll(invalidCombatItems.Contains);
 #endif
         }
-        _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
+        _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
