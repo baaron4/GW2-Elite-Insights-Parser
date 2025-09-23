@@ -26,7 +26,6 @@ internal class MAMA : Nightmare
             new PlayerDstHealthDamageHitMechanic([ShootRedBalls, ShootRedBalls2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Ball", "Shoot (Direct Red Bullets)","Bullet", 0),
             new PlayerDstHealthDamageHitMechanic(Extraction, new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightOrange), "Pull", "Extraction (Knight Pull Circle)","Knight Pull", 0),
             new PlayerDstHealthDamageHitMechanic([HomingGrenades, HomingGrenades2], new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.Red), "Grenades", "Homing Grenades","Homing Grenades", 0),
-            new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", 0),
             new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", 0),
             new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", 0),
         ]);
@@ -82,7 +81,7 @@ internal class MAMA : Nightmare
             return [];
         }
         var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
-        var phases = new List<PhaseData>(5);
+        var phases = new List<PhaseData>(7);
         phases.AddRange(GetPhasesByInvul(log, Determined762, mama, true, true, encounterPhase.Start, encounterPhase.End));
         for (int i = 0; i < phases.Count; i++)
         {
@@ -154,7 +153,7 @@ internal class MAMA : Nightmare
         return trashIDs;
     }
 
-    private static readonly List<(TargetID, string)> KnightPhases = new()
+    internal static readonly List<(TargetID, string)> KnightPhases = new()
     {
         // reverse order for phase name priority
         (TargetID.BlueKnight, "Blue Knight"),

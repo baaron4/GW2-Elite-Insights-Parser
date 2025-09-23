@@ -37,7 +37,7 @@ internal class Ensolyss : Nightmare
                 ]
             ),
             new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (bubble attack)","Bubble", 0),
-            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
+            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash Ensolyss (half circle Knockback)","Tail Lash (Ensolyss)", 0),
             new PlayerDstHealthDamageHitMechanic(RampageEnsolyss, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage", "Rampage (asterisk shaped Arrow attack)","Rampage", 150),
             new PlayerDstHealthDamageHitMechanic(CausticGrasp, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull", "Caustic Grasp (Arena Wide Pull)","Pull", 0),
             new PlayerDstHealthDamageHitMechanic(TormentingBlast, new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter", "Tormenting Blast (Two Quarter Circle attacks)","Quarter circle", 0),
