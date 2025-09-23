@@ -48,6 +48,7 @@ internal sealed partial class MainForm : Form
         long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         if (time - Settings.Default.UpdateLastChecked > 3600)
         {
+            Settings.Default.UpdateLastChecked = time;
             Task.Factory.StartNew(async () =>
             {
                 List<string> traces = [];
@@ -55,7 +56,6 @@ internal sealed partial class MainForm : Form
                 if (info != null)
                 {
                     Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
-                    Settings.Default.UpdateLastChecked = time;
                     VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
                 }
                 traces.ForEach(x => AddTraceMessage("Updater: " + x));
@@ -922,6 +922,7 @@ internal sealed partial class MainForm : Form
         Task.Factory.StartNew(async () =>
         {
             var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            Settings.Default.UpdateLastChecked = time;
             List<string> traces = [];
             Updater.UpdateInfo? info = await Updater.CheckForUpdate("GW2EI.zip", traces);
             traces.ForEach(x => AddTraceMessage("Updater: " + x));
@@ -950,7 +951,6 @@ internal sealed partial class MainForm : Form
                 {
                     AddTraceMessage("Updater: Up to date");
                     Settings.Default.UpdateAvailable = false;
-                    Settings.Default.UpdateLastChecked = time;
                     VersionLabelUpdate(Application.ProductVersion, false);
                     MessageBox.Show(this, "Elite Insights is up to date.", "GW2 Elite Insights Parser", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
