@@ -16,18 +16,18 @@ internal class BuffSimulationItemBaseEnglobingWithSeedEnglobing : BuffSimulation
     {
         return base.GetKey() + (_seedSrc.InstID + 1) * 65536;
     }
-    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur, int weight)
     {
-        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur, weight);
         foreach (var subSeedSrc in EnglobedSeedSrcs)
         {
             long subcDur = GetClampedDuration(Math.Max(start, subSeedSrc.FirstAware), Math.Min(end, subSeedSrc.LastAware));
             if (subcDur > 0)
             {
-                AddExtended(distribution, subcDur, subSeedSrc);
+                AddExtended(distribution, weight * subcDur, subSeedSrc);
                 if (Src.IsUnknown)
                 {
-                    AddUnknown(distribution, subcDur, subSeedSrc);
+                    AddUnknown(distribution, weight * subcDur, subSeedSrc);
                 }
             }
         }

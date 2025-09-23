@@ -861,9 +861,10 @@ partial class SingleActor
     {
         if (AgentItem.IsEnglobedAgent)
         {
-            log.FindActor(EnglobingAgentItem).ComputeBuffMap(log);
+            var actor = log.FindActor(EnglobingAgentItem);
+            actor.ComputeBuffMap(log);
             _buffMap = new BuffDictionary(64, 256, 32, 1);
-            _trackedBuffs = new HashSet<Buff>();
+            _trackedBuffs = actor._trackedBuffs;
             return;
         }
         _buffMap = new BuffDictionary(64, 256, 32, 1);

@@ -71,8 +71,8 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         throw new InvalidOperationException("Base items can't use that SetBuffDistributionItem");
     }
 
-    internal virtual void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
+    internal virtual void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur, int weight)
     {
-        AddValue(distribution, cDur, Src);
+        AddValue(distribution, weight * cDur, Src);
     }
 }

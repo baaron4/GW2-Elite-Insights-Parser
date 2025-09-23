@@ -706,6 +706,8 @@ public class EvtcParser
         bool keepOnlyExtensionEvents = false;
         int stopAtLogEndEvent = _id == (int)TargetID.Instance ? 1 : -1;
         var extensionEvents = new List<CombatItem>(5000);
+        int mapID = -1;
+        int currentMapID = -1;
         for (long i = 0; i < cbtItemCount; i++)
         {
             CombatItem combatItem = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
@@ -723,11 +725,20 @@ public class EvtcParser
                     stopAtLogEndEvent = 0;
                 }
             }
+            if (combatItem.IsStateChange == StateChange.MapID)
+            {
+                mapID = MapIDEvent.GetMapID(combatItem);
+                currentMapID = mapID;
+            }
+            if (combatItem.IsStateChange == StateChange.MapChange)
+            {
+                currentMapID = MapIDEvent.GetMapID(combatItem);
+            }
             if (combatItem.IsStateChange == StateChange.AgentChange)
             {
                 ArcDPSAgentRedirection[combatItem.SrcAgent] = combatItem.DstAgent;
             }
-            if (!IsValid(combatItem, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
+            if (!IsValid(combatItem, mapID, currentMapID, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
             {
                 discardedCbtEvents++;
                 continue;
@@ -803,8 +814,13 @@ public class EvtcParser
     /// <param name="combatItem"><see cref="CombatItem"/> data to validate.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
-    private bool IsValid(CombatItem combatItem, ParserController operation)
+    private bool IsValid(CombatItem combatItem, long expectedMapID, long currentMapID, ParserController operation)
     {
+        if (expectedMapID != -1 && expectedMapID != currentMapID)
+        {
+            // ignore events not on current map
+            return false;
+        }
         if (combatItem.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
         {
             // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
@@ -1015,7 +1031,8 @@ public class EvtcParser
         });
         //var agentsLookup = _allAgentsList.ToDictionary(x => x.Agent);
         // Set Agent instid, firstAware and lastAware
-        var invalidCombatItems = new HashSet<CombatItem>();
+        var invalidSrcCombatItems = new HashSet<CombatItem>();
+        var invalidDstCombatItems = new HashSet<CombatItem>();
         var orphanedSrcInstidCombatItems = new List<CombatItem>();
         var orphanedDstInstidCombatItems = new List<CombatItem>();
         foreach (CombatItem c in _combatItems)
@@ -1040,7 +1057,7 @@ public class EvtcParser
                     // this means that this particular combat item does not point to a proper agent
                     if (!updatedAgent && c.SrcInstid != 0)
                     {
-                        invalidCombatItems.Add(c);
+                        invalidSrcCombatItems.Add(c);
                     }
                 } 
                 else if (c.SrcInstid > 0)
@@ -1068,7 +1085,7 @@ public class EvtcParser
                     // this means that this particular combat item does not point to a proper agent
                     if (!updatedAgent && c.DstInstid != 0)
                     {
-                        invalidCombatItems.Add(c);
+                        invalidDstCombatItems.Add(c);
                     }
                 } 
                 else if (c.DstInstid > 0)
@@ -1109,6 +1126,7 @@ public class EvtcParser
                 }
             }
         }
+        var invalidCombatItems = invalidSrcCombatItems.Intersect(invalidDstCombatItems).ToHashSet();
         if (invalidCombatItems.Count != 0)
         {
 #if DEBUG2
@@ -1118,7 +1136,7 @@ public class EvtcParser
             _combatItems.RemoveAll(invalidCombatItems.Contains);
 #endif
         }
-        _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
+        _allAgentsList.RemoveAll(x => !(x.LastAware != long.MaxValue && x.LastAware - x.FirstAware >= 0));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
