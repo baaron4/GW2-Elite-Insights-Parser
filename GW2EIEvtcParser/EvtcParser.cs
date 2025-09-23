@@ -816,9 +816,9 @@ public class EvtcParser
     /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
     private bool IsValid(CombatItem combatItem, long expectedMapID, long currentMapID, ParserController operation)
     {
-        if (expectedMapID != -1 && expectedMapID != currentMapID)
+        if (expectedMapID != -1 && expectedMapID != currentMapID && (combatItem.SrcIsAgent(_enabledExtensions) || combatItem.DstIsAgent(_enabledExtensions)))
         {
-            // ignore events not on current map
+            // ignore events linked to an agent that are not on current map
             return false;
         }
         if (combatItem.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
