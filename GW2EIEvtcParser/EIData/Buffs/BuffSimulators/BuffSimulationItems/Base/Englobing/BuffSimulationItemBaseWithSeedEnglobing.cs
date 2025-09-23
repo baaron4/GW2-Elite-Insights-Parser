@@ -19,7 +19,7 @@ internal class BuffSimulationItemBaseWithSeedEnglobing : BuffSimulationItemBase
     }
     internal override long GetKey()
     {
-        return base.GetKey() + (_seedSrc.InstID + 1) * 65536;
+        return base.GetKey() + _seedSrc.InstID * SeedShift;
     }
     internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur, int weight)
     {

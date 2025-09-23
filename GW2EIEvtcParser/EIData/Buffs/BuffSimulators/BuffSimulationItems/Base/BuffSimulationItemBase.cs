@@ -7,6 +7,9 @@ internal class BuffSimulationItemBase : BuffSimulationItem
     public readonly AgentItem Src;
     //internal readonly long _totalDuration;
 
+    protected const long SeedShift = ushort.MaxValue;
+    protected const long ExtensionShift = uint.MaxValue;
+
     protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
         //NOTE(Rennorb): We need to copy these because for some ungodly reason buffsStackItems can change after this initializer runs.
