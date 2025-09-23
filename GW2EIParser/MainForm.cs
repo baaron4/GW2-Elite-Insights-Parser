@@ -45,7 +45,11 @@ internal sealed partial class MainForm : Form
         FormClosing += new FormClosingEventHandler((sender, e) => Settings.Default.Save());
 
         // Updater
+#if DEBUG
+        long time = 0;
+#else 
         long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+#endif
         if (time - Settings.Default.UpdateLastChecked > 3600)
         {
             Settings.Default.UpdateLastChecked = time;
