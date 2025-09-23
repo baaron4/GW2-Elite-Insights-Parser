@@ -54,9 +54,7 @@ internal class Ensolyss : Nightmare
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((366, 366),
-                        (252, 1, 2892, 2881)/*,
-                        (-6144, -6144, 9216, 9216),
-                        (11804, 4414, 12444, 5054)*/);
+                        (132, 1, 3012, 2881));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap);
         return crMap;
     }
@@ -130,14 +128,14 @@ internal class Ensolyss : Nightmare
             PhaseData phase = phases[i];
             var index = i + 1;
             phase.AddParentPhase(encounterPhase);
-            if (i % 2 == 0)
+            if (index % 2 == 0)
             {
-                phase.Name = "Nightmare Altars";
+                phase.Name = "Nightmare Altars " +(index / 2);
                 phase.AddTarget(ensolyss, log);
             }
             else
             {
-                phase.Name = "Phase " + (i + 1) / 2;
+                phase.Name = "Phase " + (index + 1) / 2;
                 phase.AddTarget(ensolyss, log);
             }
         }
