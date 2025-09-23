@@ -939,7 +939,6 @@ internal sealed partial class MainForm : Form
                     Invoke(() => // Must run on UI thread
                     {
                         Settings.Default.UpdateAvailable = info.Value.UpdateAvailable;
-                        Settings.Default.UpdateLastChecked = time;
                         VersionLabelUpdate(Application.ProductVersion, info.Value.UpdateAvailable);
                         var updaterForm = new UpdaterForm(info.Value);
                         updaterForm.UpdateStartedEvent += UpdateStartedWatcher;
