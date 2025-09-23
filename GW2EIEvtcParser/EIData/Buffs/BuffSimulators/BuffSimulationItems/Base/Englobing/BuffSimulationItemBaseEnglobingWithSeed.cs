@@ -14,13 +14,13 @@ internal class BuffSimulationItemBaseEnglobingWithSeed : BuffSimulationItemBaseE
     {
         return base.GetKey() + (_seedSrc.InstID + 1) * 65536;
     }
-    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur)
+    internal override void SetBaseBuffDistributionItem(Dictionary<AgentItem, BuffDistributionItem> distribution, long start, long end, long cDur, int weight)
     {
-        base.SetBaseBuffDistributionItem(distribution, start, end, cDur);
-        AddExtended(distribution, cDur, _seedSrc);
+        base.SetBaseBuffDistributionItem(distribution, start, end, cDur, weight);
+        AddExtended(distribution, weight * cDur, _seedSrc);
         if (Src.IsUnknown)
         {
-            AddUnknown(distribution, cDur, _seedSrc);
+            AddUnknown(distribution, weight * cDur, _seedSrc);
         }
     }
 }

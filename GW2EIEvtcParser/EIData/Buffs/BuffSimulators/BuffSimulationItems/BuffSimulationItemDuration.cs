@@ -85,7 +85,7 @@ internal class BuffSimulationItemDuration : BuffSimulationItemStack
         if (cDur > 0)
         {
             var distrib = distribs.GetDistrib(buffID);
-            Stacks[0].SetBaseBuffDistributionItem(distrib, start, end, cDur);
+            Stacks[0].SetBaseBuffDistributionItem(distrib, start, end, cDur, 1);
         }
     }
 }

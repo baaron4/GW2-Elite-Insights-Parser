@@ -127,7 +127,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
             var distrib = distribs.GetDistrib(buffID);
             foreach (var pair in RegroupedStacks)
             {
-                pair.Item.SetBaseBuffDistributionItem(distrib, start, end, pair.StackCount * cDur);
+                pair.Item.SetBaseBuffDistributionItem(distrib, start, end, cDur, pair.StackCount);
             }
         }
     }
