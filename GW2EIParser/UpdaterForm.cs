@@ -45,7 +45,6 @@ partial class UpdaterForm : Form
     private async void buttonUpdate_Click(object sender, EventArgs e)
     {
         List<string> traces = [];
-        Settings.Default.UpdateLastChecked = 0;
         if (await Updater.DownloadAndUpdate(_info, traces))
         {
             Settings.Default.UpdateAvailable = false;
