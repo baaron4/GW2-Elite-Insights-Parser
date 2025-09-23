@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Siax : Nightmare
 {
-    public Siax(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new PlayerDstHealthDamageHitMechanic(VileSpit, new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Spit", "Vile Spit (green goo)","Poison Spit", 0),
             new PlayerDstHealthDamageHitMechanic(TailLashSiax, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
@@ -34,7 +32,10 @@ internal class Siax : Nightmare
                 ]
             ),
             new PlayerDstBuffApplyMechanic(FixatedNightmare, new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Fixate", "Fixated by Volatile Hallucination", "Fixated", 0),
-        ]));
+        ]);
+    public Siax(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "siax";
         Icon = EncounterIconSiax;
         LogCategoryInformation.InSubCategoryOrder = 1;
@@ -45,9 +46,7 @@ internal class Siax : Nightmare
     {
         var crMap = new CombatReplayMap(
                         (476, 548),
-                        (663, -4127, 3515, -997)/*,
-                        (-6144, -6144, 9216, 9216),
-                        (11804, 4414, 12444, 5054)*/);
+                        (663, -4127, 3515, -997));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplaySiax, crMap);
         return crMap;
     }
@@ -73,6 +72,36 @@ internal class Siax : Nightmare
     {
         return LogData.LogMode.CMNoName;
     }
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor siax, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, siax, true, true));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            PhaseData phase = phases[i];
+            var index = i + 1;
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
+            {
+                var ids = new List<TargetID>
+                {
+                   TargetID.EchoOfTheUnclean,
+                };
+                AddTargetsToPhaseAndFit(phase, targets,ids, log);
+                phase.Name = "Caustic Explosion " + (index / 2);
+            }
+            else
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(siax, log);
+            }
+        }
+        return phases;
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -80,30 +109,7 @@ internal class Siax : Nightmare
         SingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
         phases[0].AddTarget(siax, log);
         phases[0].AddTargets(Targets.Where(x => x.IsSpecies(TargetID.EchoOfTheUnclean)), log, PhaseData.TargetPriority.Blocking);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, siax, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                var ids = new List<TargetID>
-                {
-                   TargetID.EchoOfTheUnclean,
-                };
-                AddTargetsToPhaseAndFit(phase, ids, log);
-                phase.Name = "Caustic Explosion " + (i / 2);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(siax, log);
-            }
-        }
+        phases.AddRange(ComputePhases(log, siax, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -119,10 +125,9 @@ internal class Siax : Nightmare
         ("SW", new(891.370f, -3722.450f)),
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RenameSiaxAndEchoes(IReadOnlyList<SingleActor> targets, List<CombatItem> combatData)
     {
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
-        foreach (SingleActor target in Targets)
+        foreach (SingleActor target in targets)
         {
             if (target.IsSpecies(TargetID.Siax))
             {
@@ -133,6 +138,12 @@ internal class Siax : Nightmare
                 AddNameSuffixBasedOnInitialPosition(target, combatData, EchoLocations);
             }
         }
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
+        RenameSiaxAndEchoes(Targets, combatData);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)

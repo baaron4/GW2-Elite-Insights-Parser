@@ -13,9 +13,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class MAMA : Nightmare
 {
-    public MAMA(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup(
+    internal readonly MechanicGroup Mechanics = new MechanicGroup(
         [
             new PlayerDstHealthDamageHitMechanic([Blastwave1, Blastwave2], new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "KB", "Blastwave (Spinning Knockback)","KB Spin", 0),
             new PlayerDstHealthDamageHitMechanic(TantrumMAMA, new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Green), "Tantrum", "Tantrum (Double hit or Slams)","Dual Spin/Slams", 700),
@@ -31,7 +29,10 @@ internal class MAMA : Nightmare
             new PlayerDstHealthDamageHitMechanic([CascadeOfTorment1, CascadeOfTorment2], new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Rings", "Cascade of Torment (Alternating Rings)","Rings", 0),
             new PlayerDstHealthDamageHitMechanic(KnightsGaze, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightPurple), "Daze", "Knight's Daze","Daze", 0),
             new PlayerDstHealthDamageMechanic([NightmareDevastation1, NightmareDevastation3, NightmareDevastation4], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (not stood in Arkk's Shield)", "Bubble", 0),
-        ]));
+        ]);
+    public MAMA(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "mama";
         Icon = EncounterIconMAMA;
         LogCategoryInformation.InSubCategoryOrder = 0;
@@ -42,9 +43,7 @@ internal class MAMA : Nightmare
     {
         var crMap = new CombatReplayMap(
                         (664, 407),
-                        (1653, 4555, 5733, 7195)/*,
-                        (-6144, -6144, 9216, 9216),
-                        (11804, 4414, 12444, 5054)*/);
+                        (1653, 4555, 5733, 7195));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMAMA, crMap);
         return crMap;
     }
@@ -76,26 +75,24 @@ internal class MAMA : Nightmare
         return startToUse;
     }
 
-    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor mama, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
-        List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
-        phases[0].AddTarget(mama, log);
-        var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
-        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIDs)), log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
-            return phases;
+            return [];
         }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, mama, true, true));
-        for (int i = 1; i < phases.Count; i++)
+        var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, mama, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
+            var index = i + 1;
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
             {
-                AddTargetsToPhaseAndFit(phase, knightIDs, log);
-                phase.Name = "Split " + i / 2;
+                AddTargetsToPhaseAndFit(phase, targets, knightIDs, log);
+                phase.Name = "Split " + index / 2;
                 if (phase.Targets.Count > 0)
                 {
                     foreach (var (species, name) in KnightPhases)
@@ -110,10 +107,21 @@ internal class MAMA : Nightmare
             }
             else
             {
-                phase.Name = "Phase " + (i + 1) / 2;
+                phase.Name = "Phase " + (index + 1) / 2;
                 phase.AddTarget(mama, log);
             }
         }
+        return phases;
+    }
+
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
+        phases[0].AddTarget(mama, log);
+        var knightIDs = KnightPhases.Select(pair => pair.Item1).ToList();
+        phases[0].AddTargets(Targets.Where(x => x.IsAnySpecies(knightIDs)), log, PhaseData.TargetPriority.Blocking);
+        phases.AddRange(ComputePhases(log, mama, Targets, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
