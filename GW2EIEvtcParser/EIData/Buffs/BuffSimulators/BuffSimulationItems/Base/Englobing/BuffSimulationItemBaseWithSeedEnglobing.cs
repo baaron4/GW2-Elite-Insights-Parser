@@ -30,7 +30,7 @@ internal class BuffSimulationItemBaseWithSeedEnglobing : BuffSimulationItemBase
             if (subcDur > 0)
             {
                 AddExtended(distribution, weight * subcDur, subSeedSrc);
-                if (subSeedSrc.IsUnknown)
+                if (Src.IsUnknown)
                 {
                     AddUnknown(distribution, weight * subcDur, subSeedSrc);
                 }
