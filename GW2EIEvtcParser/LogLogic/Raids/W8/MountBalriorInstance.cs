@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -37,6 +38,16 @@ internal class MountBalriorInstance : MountBalrior
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Mount Balrior";
+    }
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayMountBalriorRaid, crMap));
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
@@ -94,21 +105,21 @@ internal class MountBalriorInstance : MountBalrior
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)decimaID, out var decimas))
         {
+            var arenaCenter = new Vector2(-10104.5f, 13263.5f);
             var chest = log.AgentData.GetGadgetsByID(_decima.ChestID).FirstOrDefault();
+            var conduits = TrashMobs.Where(x => x.IsAnySpecies([TargetID.EnlightenedConduit, TargetID.EnlightenedConduitCM]) && x.GetCombatReplayNonPolledPositions(log).Any(pos => (pos.XYZ.XY() - arenaCenter).LengthSquared() < 10e6)).ToList();
             foreach (var decima in decimas)
             {
-                long start = decima.FirstAware;
-                var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined762, decima.AgentItem);
-                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
-                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent);
-                var enterCombat = log.CombatData.GetEnterCombatEvents(decima.AgentItem).FirstOrDefault();
-                if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
-                {
-                    start = determinedLost.Time;
-                } 
-                else if (determinedApply != null)
+                var combatConduits = conduits.Where(x => x.InAwareTimes(decima)).ToList();
+                if (combatConduits.Count == 0)
                 {
                     continue;
+                }
+                long start = combatConduits.Min(x => x.FirstAware);
+                var enterCombat = log.CombatData.GetEnterCombatEvents(decima.AgentItem).FirstOrDefault();
+                if (enterCombat != null)
+                {
+                    start = Math.Min(enterCombat.Time, start);
                 }
                 bool success = false;
                 long end = decima.LastAware;

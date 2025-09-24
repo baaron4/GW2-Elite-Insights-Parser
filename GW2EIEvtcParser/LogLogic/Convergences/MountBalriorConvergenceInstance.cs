@@ -57,7 +57,7 @@ internal class MountBalriorConvergenceInstance : ConvergenceLogic
     {
         var crMap = new CombatReplayMap((1280, 1280),
             (-15454, -22004, 20326, 20076));
-        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMountBalrior, crMap);
+        AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayMountBalriorConvergence, crMap);
         return crMap;
     }
 

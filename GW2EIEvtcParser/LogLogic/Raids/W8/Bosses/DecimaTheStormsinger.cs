@@ -194,30 +194,6 @@ internal class DecimaTheStormsinger : MountBalrior
         ];
     }
 
-    internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
-    {
-        long startToUse = GetGenericLogOffset(logData);
-        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
-        if (logStartNPCUpdate != null)
-        {
-            var decima = agentData.GetNPCsByID(IsCMTriggerID ? TargetID.DecimaCM : TargetID.Decima).FirstOrDefault() ?? throw new MissingKeyActorsException("Decima not found");
-            var determined = combatData.Where(x => (x.IsBuffApply() || x.IsBuffRemoval()) && x.SkillID == Determined762);
-            var determinedLost = determined.Where(x => x.IsBuffRemoval() && x.DstMatchesAgent(decima)).FirstOrDefault();
-            var determinedApply = determined.Where(x => x.IsBuffApply() && x.SrcMatchesAgent(decima)).FirstOrDefault();
-            var enterCombatTime = GetEnterCombatTime(logData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
-            if (determinedLost != null && enterCombatTime >= determinedLost.Time)
-            {
-                return determinedLost.Time;
-            } 
-            else if (determinedApply != null)
-            {
-                return decima.LastAware;
-            }
-            return decima.FirstAware;
-        }
-        return startToUse;
-    }
-
     internal static void FindConduits(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPEventsAgents = combatData

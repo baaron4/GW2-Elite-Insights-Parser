@@ -128,6 +128,7 @@ internal static class LogImages
     internal const string CombatReplayConjuredAmalgamate = "https://i.imgur.com/lgzr1xD.png";
     internal const string CombatReplayTwinLargos = "https://i.imgur.com/O8wIWds.png";
     internal const string CombatReplayQadim = "https://i.imgur.com/f4jfgiX.png";
+    internal const string CombatReplayKeyOfAhdashim = "https://wiki.guildwars2.com/images/archive/5/52/20220804033342%21The_Key_of_Ahdashim_map.jpg";
     internal const string CombatReplayAdinaMainPhase1NoPillars = "https://i.imgur.com/ZbjOCsx.png";
     internal const string CombatReplayAdinaMainPhase1 = "https://i.imgur.com/IQn2RJV.png";
     internal const string CombatReplayAdinaMainPhase2 = "https://i.imgur.com/3pO7eCB.png";
@@ -138,6 +139,7 @@ internal static class LogImages
     internal const string CombatReplayAdinaSplitPhase3 = "https://i.imgur.com/P4SGbrc.png";
     internal const string CombatReplaySabir = "https://i.imgur.com/wesgoc6.png";
     internal const string CombatReplayPeerlessQadim = "https://i.imgur.com/Q5R4R6q.png";
+    internal const string CombatReplayMountBalriorRaid = "https://wiki.guildwars2.com/images/e/eb/Mount_Balrior_map.jpg";
     internal const string CombatReplayGreerTheBlightbringer = "https://i.imgur.com/yH1yulA.png";
     internal const string CombatReplayDecimaTheStormsinger = "https://i.imgur.com/4cJAW7r.png";
     internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/Vn1JQ3p.png";
@@ -245,7 +247,7 @@ internal static class LogImages
 
     // Combat Replay Maps
     internal const string CombatReplayOuterNayos = "https://i.imgur.com/UFueycy.jpeg";
-    internal const string CombatReplayMountBalrior = "https://i.imgur.com/H8QFXbC.jpeg";
+    internal const string CombatReplayMountBalriorConvergence = "https://i.imgur.com/H8QFXbC.jpeg";
     #endregion
 }
 
