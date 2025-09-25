@@ -1254,8 +1254,8 @@ public class EvtcParser
     private void PreProcessEvtcData(ParserController operation)
     {
         using var _t = new AutoTrace("Prepare Data for output");
-        operation.UpdateProgressWithCancellationCheck("Parsing: Identifying critical gadgets");
-        _logData.Logic.HandleCriticalGadgets(_evtcVersion, _logData, _agentData, _combatItems, _enabledExtensions);
+        operation.UpdateProgressWithCancellationCheck("Parsing: Identifying critical agents");
+        _logData.Logic.HandleCriticalAgents(_evtcVersion, _logData, _agentData, _combatItems, _enabledExtensions);
         operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
         OffsetEvtcData();
         operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_logData.LogStartOffset) + " ms added");

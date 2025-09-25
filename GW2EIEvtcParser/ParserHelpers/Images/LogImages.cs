@@ -41,6 +41,7 @@ internal static class LogImages
     internal const string CombatReplayMAMA = "https://i.imgur.com/zs03mc8.png";
     internal const string CombatReplaySiax = "https://i.imgur.com/hauz1jK.png";
     internal const string CombatReplayEnsolyss = "https://i.imgur.com/kjelZ4t.png";
+    internal const string CombatReplayNightmare = "https://wiki.guildwars2.com/images/9/95/Nightmare_Fractal_map.jpg";
     internal const string CombatReplaySkorvald = "https://i.imgur.com/EhblRgb.png";
     internal const string CombatReplayArtsariiv = "https://i.imgur.com/4wmuc8B.png";
     internal const string CombatReplayArkk = "https://i.imgur.com/BIybWJe.png";

@@ -186,7 +186,7 @@ internal class SpiritRace : SpiritVale
         }
     }
 
-    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!FindEtherealBarriers(agentData, combatData))
         {

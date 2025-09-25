@@ -131,7 +131,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         HandleCAAgents(agentData, combatData);
     }
