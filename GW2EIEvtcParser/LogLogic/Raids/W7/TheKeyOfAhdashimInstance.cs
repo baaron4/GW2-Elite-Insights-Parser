@@ -42,6 +42,17 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
         return "The Key Of Ahdashim";
     }
 
+    internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
+    {
+        var crMap = new CombatReplayMap((800, 800), (-21504, -21504, 24576, 24576));
+        arenaDecorations.Add(new ArenaDecoration((log.LogData.LogStart, log.LogData.LogEnd), CombatReplayKeyOfAhdashim, crMap));
+        foreach (var subLogic in _subLogics)
+        {
+            subLogic.GetCombatMapInternal(log, arenaDecorations);
+        }
+        return crMap;
+    }
+
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var chest = agentData.GetGadgetsByID(_peerlessQadim.ChestID).FirstOrDefault();
