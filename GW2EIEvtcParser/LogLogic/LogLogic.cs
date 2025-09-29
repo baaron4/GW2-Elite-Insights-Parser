@@ -572,9 +572,9 @@ public abstract class LogLogic
     }
 
     /// <summary>
-    /// To be used in situations where the log has been triggered by a gadget and its stabilisation is necessary ASAP
+    /// To be used in situations where stabilisation or identification of a certain species id is necessary ASAP
     /// </summary>
-    internal virtual void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal virtual void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
 
     }

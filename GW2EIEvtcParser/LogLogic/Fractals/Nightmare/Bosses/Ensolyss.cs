@@ -15,9 +15,7 @@ namespace GW2EIEvtcParser.LogLogic;
 
 internal class Ensolyss : Nightmare
 {
-    public Ensolyss(int triggerID) : base(triggerID)
-    {
-        MechanicList.Add(new MechanicGroup([
+    internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup(
                 [
                     new PlayerDstHealthDamageHitMechanic([ LungeEnsolyss, LungeNightmareHallucination ], new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge", "Lunge (KB charge over arena)","Charge", 150),
@@ -39,11 +37,14 @@ internal class Ensolyss : Nightmare
                 ]
             ),
             new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble", "Nightmare Devastation (bubble attack)","Bubble", 0),
-            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash (half circle Knockback)","Tail Lash", 0),
+            new PlayerDstHealthDamageHitMechanic(TailLashEnsolyss, new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail", "Tail Lash Ensolyss (half circle Knockback)","Tail Lash (Ensolyss)", 0),
             new PlayerDstHealthDamageHitMechanic(RampageEnsolyss, new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage", "Rampage (asterisk shaped Arrow attack)","Rampage", 150),
             new PlayerDstHealthDamageHitMechanic(CausticGrasp, new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull", "Caustic Grasp (Arena Wide Pull)","Pull", 0),
             new PlayerDstHealthDamageHitMechanic(TormentingBlast, new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter", "Tormenting Blast (Two Quarter Circle attacks)","Quarter circle", 0),
-        ]));
+        ]);
+    public Ensolyss(int triggerID) : base(triggerID)
+    {
+        MechanicList.Add(Mechanics);
         Extension = "ensol";
         Icon = EncounterIconEnsolyss;
         LogCategoryInformation.InSubCategoryOrder = 2;
@@ -53,9 +54,7 @@ internal class Ensolyss : Nightmare
     internal override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log, CombatReplayDecorationContainer arenaDecorations)
     {
         var crMap = new CombatReplayMap((366, 366),
-                        (252, 1, 2892, 2881)/*,
-                        (-6144, -6144, 9216, 9216),
-                        (11804, 4414, 12444, 5054)*/);
+                        (132, 1, 3012, 2881));
         AddArenaDecorationsPerEncounter(log, arenaDecorations, LogID, CombatReplayEnsolyss, crMap);
         return crMap;
     }
@@ -84,37 +83,27 @@ internal class Ensolyss : Nightmare
         return trashIDs;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void IgnoreFakeEnsolysses(AgentData agentData, List<CombatItem> combatData)
     {
-        var targetEnsolyss = FindTargetEnsolyss(agentData, combatData);
+        var validMaxHPUpdatesForEnsolyss = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToHashSet();
         foreach (var ensolyss in agentData.GetNPCsByID(TargetID.Ensolyss))
         {
-            if (!ensolyss.Is(targetEnsolyss))
+            if (!validMaxHPUpdatesForEnsolyss.Contains(ensolyss))
             {
                 ensolyss.OverrideID(IgnoredSpecies, agentData);
             }
         }
-        base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    private static AgentItem FindTargetEnsolyss(AgentData agentData, List<CombatItem> combatData)
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // some logs have duplicates with the same species id, find target by max hp
-        foreach (var maxHealthUpdate in combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6))
-        {
-            var agent = agentData.GetAgent(maxHealthUpdate.SrcAgent, maxHealthUpdate.Time);
-            if (agent.IsSpecies(TargetID.Ensolyss))
-            {
-                return agent;
-            }
-        }
-        throw new MissingKeyActorsException("Ensolyss not found");
+        IgnoreFakeEnsolysses(agentData, combatData);
     }
 
     internal override long GetLogOffset(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData)
     {
         // ensolyss spawns with invulnerability
-        var ensolyss = FindTargetEnsolyss(agentData, combatData);
+        var ensolyss = agentData.GetNPCsByID(TargetID.Ensolyss).FirstOrDefault() ?? throw new MissingKeyActorsException("Ensolyss not found");
         long start = GetLogOffsetByInvulnStart(logData, combatData, ensolyss, Determined762);
 
         // ensolyss exits combat during split phases and reenters after
@@ -126,32 +115,39 @@ internal class Ensolyss : Nightmare
         }
         return start;
     }
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor ensolyss, EncounterPhaseData encounterPhase, bool requirePhases)
+    {
+        if (!requirePhases)
+        {
+            return [];
+        }
+        var phases = new List<PhaseData>(5);
+        phases.AddRange(GetPhasesByInvul(log, Determined762, ensolyss, true, true, encounterPhase.Start, encounterPhase.End));
+        for (int i = 0; i < phases.Count; i++)
+        {
+            PhaseData phase = phases[i];
+            var index = i + 1;
+            phase.AddParentPhase(encounterPhase);
+            if (index % 2 == 0)
+            {
+                phase.Name = "Nightmare Altars " +(index / 2);
+                phase.AddTarget(ensolyss, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (index + 1) / 2;
+                phase.AddTarget(ensolyss, log);
+            }
+        }
+        return phases;
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
-        phases[0].AddTarget(enso, log);
-        if (!requirePhases)
-        {
-            return phases;
-        }
-        phases.AddRange(GetPhasesByInvul(log, Determined762, enso, true, true));
-        for (int i = 1; i < phases.Count; i++)
-        {
-            PhaseData phase = phases[i];
-            phase.AddParentPhase(phases[0]);
-            if (i % 2 == 0)
-            {
-                phase.Name = "Nightmare Altars";
-                phase.AddTarget(enso, log);
-            }
-            else
-            {
-                phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(enso, log);
-            }
-        }
+        SingleActor ensolyss = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+        phases[0].AddTarget(ensolyss, log);
+        phases.AddRange(ComputePhases(log, ensolyss, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 

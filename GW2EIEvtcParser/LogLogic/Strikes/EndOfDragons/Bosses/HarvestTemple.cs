@@ -457,7 +457,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         ];
     }
 
-    internal override void HandleCriticalGadgets(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void HandleCriticalAgents(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var idsToUse = new List<TargetID> {
             TargetID.TheDragonVoidJormag,
