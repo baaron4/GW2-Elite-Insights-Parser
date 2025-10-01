@@ -8,9 +8,9 @@ internal static class LogIDs
     public static class LogMasks
     {
         public const long Unsupported = 0x010000;
-        public const long RaidMask = 0x020000;
+        public const long RaidWingMask = 0x020000;
         public const long FractalMask = 0x030000;
-        public const long StrikeMask = 0x040000;
+        public const long SingleBossRaidMask = 0x040000;
         public const long OpenWorldMask = 0x050000;
         public const long StoryInstanceMask = 0x060000;
         public const long WvWMask = 0x070000;
@@ -40,7 +40,7 @@ internal static class LogIDs
         public const long KinfallMask = 0x000600;
     }
 
-    public static class StrikeMasks
+    public static class SingleBossRaidMasks
     {
         public const long FestivalMask = 0x000100;
         public const long IBSMask = 0x000200;

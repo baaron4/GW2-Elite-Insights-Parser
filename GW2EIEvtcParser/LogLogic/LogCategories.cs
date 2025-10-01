@@ -5,8 +5,8 @@ public class LogCategories
     internal enum LogCategory
     {
         Fractal,
-        Strike,
-        Raid,
+        SingleBossRaid,
+        RaidWing,
         WvW,
         Golem,
         Story,
@@ -88,8 +88,10 @@ public class LogCategories
     {
         switch (Category)
         {
-            case LogCategory.Strike:
-                return "Strike Mission";
+            case LogCategory.RaidWing:
+                return "Raid Wing";
+            case LogCategory.SingleBossRaid:
+                return "Single Boss Raid";
             case LogCategory.WvW:
                 return "World vs Word";
             case LogCategory.UnknownEncounter:

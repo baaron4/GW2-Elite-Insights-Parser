@@ -11,7 +11,7 @@ public static class MapIDs
     public const int EdgeOfTheMists = 968;
     public const int ArmisticeBastion = 1315;
     #endregion
-    #region Raids
+    #region Raid Wings
     public const int SpiritValeRaid = 1062;
     public const int SalvationPassRaid = 1149;
     public const int StrongholdOfTheFaithfulRaid = 1156;
@@ -21,28 +21,28 @@ public static class MapIDs
     public const int TheKeyOfAhdashimRaid = 1323;
     public const int MountBalriorRaid = 1564;
     #endregion
-    #region Strikes
-    public const int SecretLairOfTheSnowmenPrivateStrikeMission = 1306;
-    public const int SecretLairOfTheSnowmenPublicStrikeMission = 1352;
-    public const int ShiverpeaksPassPrivateStrikeMission = 1332;
-    public const int ShiverpeaksPassPublicStrikeMission = 1331;
-    public const int VoiceAndClawPrivateStrikeMission = 1346;
-    public const int VoiceAndClawPublicStrikeMission = 1340;
-    public const int FraenirOfJormagPrivateStrikeMission = 1341;
-    public const int FraenirOfJormagPublicStrikeMission = 1344;
-    public const int BoneskinnerPrivateStrikeMission = 1339;
-    public const int BoneskinnerPublicStrikeMission = 1339;
-    public const int WhisperOfJormagPrivateStrikeMission = 1359;
-    public const int WhisperOfJormagPublicStrikeMission = 1357;
-    public const int ColdWarPrivateStrikeMission = 1374;
-    public const int ColdWarPublicStrikeMission = 1376;
-    public const int AetherbladeHideoutStrikeMission = 1432;
-    public const int HarvestTempleStrikeMission = 1437;
-    public const int XunlaiJadeJunkyardStrikeMission = 1450;
-    public const int KainengOverlookStrikeMission = 1451;
-    public const int OldLionsCourtStrikeMission = 1485;
-    public const int CosmicObservatoryStrikeMission = 1515;
-    public const int TempleOfFebeStrikeMission = 1520;
+    #region Single Boss Raids
+    public const int SecretLairOfTheSnowmenPrivateSingleBossRaid = 1306;
+    public const int SecretLairOfTheSnowmenPublicSingleBossRaid = 1352;
+    public const int ShiverpeaksPassPrivateSingleBossRaid = 1332;
+    public const int ShiverpeaksPassPublicSingleBossRaid = 1331;
+    public const int VoiceAndClawPrivateSingleBossRaid = 1346;
+    public const int VoiceAndClawPublicSingleBossRaid = 1340;
+    public const int FraenirOfJormagPrivateSingleBossRaid = 1341;
+    public const int FraenirOfJormagPublicSingleBossRaid = 1344;
+    public const int BoneskinnerPrivateSingleBossRaid = 1339;
+    public const int BoneskinnerPublicSingleBossRaid = 1339;
+    public const int WhisperOfJormagPrivateSingleBossRaid = 1359;
+    public const int WhisperOfJormagPublicSingleBossRaid = 1357;
+    public const int ColdWarPrivateSingleBossRaid = 1374;
+    public const int ColdWarPublicSingleBossRaid = 1376;
+    public const int AetherbladeHideoutSingleBossRaid = 1432;
+    public const int HarvestTempleSingleBossRaid = 1437;
+    public const int XunlaiJadeJunkyardSingleBossRaid = 1450;
+    public const int KainengOverlookSingleBossRaid = 1451;
+    public const int OldLionsCourtSingleBossRaid = 1485;
+    public const int CosmicObservatorySingleBossRaid = 1515;
+    public const int TempleOfFebeSingleBossRaid = 1520;
     #endregion
     #region Fractals
     public const int AetherbladeFractal = 956;

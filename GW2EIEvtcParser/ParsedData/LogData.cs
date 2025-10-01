@@ -115,7 +115,7 @@ public class LogData
                 {
                     case TargetID.Mordremoth:
                         return new Mordremoth(id);
-                    // Raids
+                    // Raid Wings
                     case TargetID.ValeGuardian:
                         return new ValeGuardian(id);
                     case TargetID.Gorseval:
@@ -199,7 +199,7 @@ public class LogData
                         return new DecimaTheStormsinger(id);
                     case TargetID.Ura:
                         return new UraTheSteamshrieker(id);
-                    // Strike Missions
+                    // Single Boss Raids
                     case TargetID.IcebroodConstruct:
                         return new IcebroodConstruct(id);
                     case TargetID.FraenirOfJormag:
@@ -213,7 +213,7 @@ public class LogData
                         return new WhisperOfJormag(id);
                     case TargetID.VariniaStormsounder:
                         return new ColdWar(id);
-                    case TargetID.MaiTrinStrike:
+                    case TargetID.MaiTrinRaid:
                         return new AetherbladeHideout(id);
                     case TargetID.MinisterLi:
                     case TargetID.MinisterLiCM:
@@ -290,14 +290,14 @@ public class LogData
             case AgentType.Gadget:
                 switch (targetID)
                 {
-                    // Raids
+                    // Raid Wings
                     case TargetID.EtherealBarrierGadget:
                     case TargetID.EtherealBarrierGadget_CHINA:
                         return new SpiritRace(id);
                     case TargetID.ConjuredAmalgamate:
                     case TargetID.ConjuredAmalgamate_CHINA:
                         return new ConjuredAmalgamate(id);
-                    // Strike Missions
+                    // Single Boss Raids
                     case TargetID.GadgetTheDragonVoid1:
                     case TargetID.GadgetTheDragonVoid2:
                         // This will most likely require a chinese client version
