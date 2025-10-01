@@ -14,7 +14,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class XunlaiJadeJunkyard : EndOfDragonsSingleBossRaid
+internal class XunlaiJadeJunkyard : EndOfDragonsRaidEncounter
 {
     public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
     {

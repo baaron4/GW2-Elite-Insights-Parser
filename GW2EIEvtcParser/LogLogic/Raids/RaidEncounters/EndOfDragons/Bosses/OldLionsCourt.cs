@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class OldLionsCourt : EndOfDragonsSingleBossRaid
+internal class OldLionsCourt : EndOfDragonsRaidEncounter
 {
     public OldLionsCourt(int triggerID) : base(triggerID)
     {

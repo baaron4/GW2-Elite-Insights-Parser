@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class Freezie : FestivalSingleBossRaidLogic
+internal class Freezie : FestivalRaidEncounterLogic
 {
     public Freezie(int triggerID) : base(triggerID)
     {

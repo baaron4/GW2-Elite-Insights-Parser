@@ -11,7 +11,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class AetherbladeHideoutInstance : EndOfDragonsSingleBossRaid
+internal class AetherbladeHideoutInstance : EndOfDragonsRaidEncounter
 {
     private readonly AetherbladeHideout _aetherbladeHideout;
     public AetherbladeHideoutInstance(int triggerID) : base(triggerID)

@@ -5,12 +5,12 @@ using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal abstract class SecretOfTheObscureSingleBossRaid : SingleBossRaidLogic
+internal abstract class EndOfDragonsRaidEncounter : RaidEncounterLogic
 {
-    public SecretOfTheObscureSingleBossRaid(int triggerID) : base(triggerID)
+    public EndOfDragonsRaidEncounter(int triggerID) : base(triggerID)
     {
-        LogCategoryInformation.SubCategory = SubLogCategory.SotO;
-        LogID |= LogIDs.SingleBossRaidMasks.SotOMask;
+        LogCategoryInformation.SubCategory = SubLogCategory.Cantha;
+        LogID |= LogIDs.RaidEncounterMasks.EODMask;
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -21,7 +21,7 @@ internal abstract class SecretOfTheObscureSingleBossRaid : SingleBossRaidLogic
             return;
         }
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDSingleBossRaidReward && x.Time > logData.LogStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart);
         if (reward != null)
         {
             logData.SetSuccess(true, reward.Time);

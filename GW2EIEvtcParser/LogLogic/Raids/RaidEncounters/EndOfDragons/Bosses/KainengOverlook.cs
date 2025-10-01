@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class KainengOverlook : EndOfDragonsSingleBossRaid
+internal class KainengOverlook : EndOfDragonsRaidEncounter
 {
     public KainengOverlook(int triggerID) : base(triggerID)
     {

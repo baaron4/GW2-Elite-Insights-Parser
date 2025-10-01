@@ -13,7 +13,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class CosmicObservatory : SecretOfTheObscureSingleBossRaid
+internal class CosmicObservatory : SecretOfTheObscureRaidEncounter
 {
     public CosmicObservatory(int triggerID) : base(triggerID)
     {
@@ -328,7 +328,7 @@ internal class CosmicObservatory : SecretOfTheObscureSingleBossRaid
     {
         base.CheckSuccess(combatData, agentData, logData, playerAgents);
         // Special check since CM release, normal mode broke too, but we always trust reward events
-        if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDSingleBossRaidReward && x.Time > logData.LogStart) == null)
+        if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDRaidEncounterReward && x.Time > logData.LogStart) == null)
         {
             SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);

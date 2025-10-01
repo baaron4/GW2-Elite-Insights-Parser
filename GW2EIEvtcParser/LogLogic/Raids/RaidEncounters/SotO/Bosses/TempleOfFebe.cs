@@ -14,7 +14,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class TempleOfFebe : SecretOfTheObscureSingleBossRaid
+internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
 {
     private static readonly HashSet<long> UnboundOptimismSkillIDs =
     [

@@ -71,7 +71,7 @@ public static class ArcDPSEnums
         public const int OldRaidReward1 = 55821; // On each kill
         public const int OldRaidReward2 = 60685; // On each kill
         public const int CurrentRaidReward = 22797; // Once per week
-        public const int PostEoDSingleBossRaidReward = 29453;
+        public const int PostEoDRaidEncounterReward = 29453;
         public const int ConvergenceReward1 = 2071;
         public const int ConvergenceReward2 = 5091;
     }

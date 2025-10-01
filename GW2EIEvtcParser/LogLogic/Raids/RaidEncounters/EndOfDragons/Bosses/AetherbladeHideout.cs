@@ -15,7 +15,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class AetherbladeHideout : EndOfDragonsSingleBossRaid
+internal class AetherbladeHideout : EndOfDragonsRaidEncounter
 {
     internal readonly MechanicGroup Mechanics = new MechanicGroup(
             [

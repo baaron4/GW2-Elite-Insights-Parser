@@ -12,7 +12,7 @@ using static GW2EIEvtcParser.EIData.Trigonometry;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class Grothmar : IcebroodSagaSingleBossRaid
+internal class Grothmar : IcebroodSagaRaidEncounter
 {
     public Grothmar(int triggerID) : base(triggerID)
     {

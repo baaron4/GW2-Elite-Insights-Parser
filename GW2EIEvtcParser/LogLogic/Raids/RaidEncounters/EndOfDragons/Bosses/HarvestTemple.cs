@@ -14,7 +14,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class HarvestTemple : EndOfDragonsSingleBossRaid
+internal class HarvestTemple : EndOfDragonsRaidEncounter
 {
 
     private IEnumerable<SingleActor> FirstAwareSortedTargets = [];

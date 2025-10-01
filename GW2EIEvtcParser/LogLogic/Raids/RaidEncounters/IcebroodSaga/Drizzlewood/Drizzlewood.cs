@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.SpeciesIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 
-internal class Drizzlewood : IcebroodSagaSingleBossRaid
+internal class Drizzlewood : IcebroodSagaRaidEncounter
 {
     public Drizzlewood(int triggerID) : base(triggerID)
     {
