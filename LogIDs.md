@@ -137,7 +137,7 @@ Kinfall Full Instance: 0x030600
 
 Whispering Shadow: 0x030601
 
-## Single Boss Raids
+## Raid Encounters
 ### Festivals
 Freezie: 0x040101
 
