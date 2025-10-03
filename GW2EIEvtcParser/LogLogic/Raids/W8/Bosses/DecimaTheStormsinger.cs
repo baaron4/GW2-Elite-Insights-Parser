@@ -310,8 +310,8 @@ internal class DecimaTheStormsinger : MountBalrior
                 var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByIDByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
                 if (finalPhaseStartEvent != null)
                 {
-                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, encounterPhase.End, "10% - 0%");
-                    finalPhase.AddParentPhases(mainPhases);
+                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, p3.End, "10% - 0%");
+                    finalPhase.AddParentPhase(p3);
                     finalPhase.AddTarget(decima, log);
                     phases.Add(finalPhase);
                 }
