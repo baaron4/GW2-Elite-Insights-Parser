@@ -217,6 +217,24 @@ internal class SpiritRace : SpiritVale
         };
     }
 
+    private static long AddHideForBarrier(NPC target, ParsedEvtcLog log, CombatReplay replay, long offset)
+    {
+        HealthUpdateEvent? hpZeroUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent == 0 && x.Time > offset);
+        if (hpZeroUpdate != null)
+        {
+            var hpRestored = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent > 0 && x.Time > hpZeroUpdate.Time);
+            if (hpRestored != null)
+            {
+                replay.Hidden.Add(new(hpZeroUpdate.Time, hpRestored.Time));
+                return hpRestored.Time;
+            }
+            else
+            {
+                replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
+            }
+        }
+        return long.MaxValue;
+    }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
@@ -227,10 +245,10 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)TargetID.EtherealBarrier:
-                HealthUpdateEvent? hpZeroUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent == 0);
-                if (hpZeroUpdate != null)
+                long encounterOffset = 0;
+                while(encounterOffset != long.MaxValue)
                 {
-                    replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
+                    encounterOffset = AddHideForBarrier(target, log, replay, encounterOffset);
                 }
                 break;
             case (int)TargetID.WallOfGhosts:

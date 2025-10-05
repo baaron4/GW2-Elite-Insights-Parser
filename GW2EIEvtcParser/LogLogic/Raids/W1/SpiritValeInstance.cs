@@ -185,7 +185,7 @@ internal class SpiritValeInstance : SpiritVale
         }
         {
             // To be tested, gadgets
-            //ProcessSpiritRacePhases(targetsByIDs, log, phases);
+            ProcessSpiritRacePhases_SingleGadgetInstances(targetsByIDs, log, phases);
         }
         {
             var gorsevalPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), "Gorseval", _gorseval);
