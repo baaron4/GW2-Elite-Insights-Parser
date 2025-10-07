@@ -174,7 +174,6 @@ internal class Slothasor : SalvationPass
                 {
                     continue;
                 }
-                var copyEventsFrom = new List<AgentItem>() { mushroom };
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == StateChange.HealthUpdate);
                 var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100).ToList();
                 var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
@@ -191,8 +190,7 @@ internal class Slothasor : SalvationPass
                         lastDeadTime = deadEvent.Time;
                     }
                     AgentItem aliveMushroom = agentData.AddCustomNPCAgent(aliveEvent.Time, lastDeadTime, mushroom.Name, mushroom.Spec, TargetID.PoisonMushroom, false, mushroom.Toughness, mushroom.Healing, mushroom.Condition, mushroom.Concentration, mushroom.HitboxWidth, mushroom.HitboxHeight);
-                    AgentManipulationHelper.RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, mushroom, copyEventsFrom, aliveMushroom, false);
-                    copyEventsFrom.Add(aliveMushroom);
+                    aliveMushroom.SetEnglobingAgentItem(mushroom, agentData);
                 }
             }
         }
