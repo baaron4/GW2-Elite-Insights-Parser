@@ -564,7 +564,7 @@ public class AgentItem
     {
         if (!IsPlayer)
         {
-            throw new InvalidOperationException("Englobing agents are only allowed on players");
+            //throw new InvalidOperationException("Englobing agents are only allowed on players");
         }
         _englobingAgentItem = parent;
         parent.AddEnglobedAgentItem(this, agentData);
