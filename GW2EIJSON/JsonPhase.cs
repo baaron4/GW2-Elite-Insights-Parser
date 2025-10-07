@@ -57,6 +57,24 @@ public class JsonPhase
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? EncounterPhase;
+    /// <summary>
+    /// The icon of the encounter, only relevant in Instance logs and for Encounter type phases.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? EncounterIcon;
+    /// <summary>
+    /// True if EI detected that the encounter started later than expected. \n
+    /// This value being false does not mean the encounter could not have started later than expected. \n
+    /// Only relevant in Instance logs and for Encounter type phases.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? EncounterIsLateStart;
+    /// <summary>
+    /// True if an encounter that is supposed to have a pre-event does not have it. \n
+    /// Only relevant in Instance logs and for Encounter type phases.
+    /// </summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? EncounterMissingPreEvent;
 
     /// <summary>
     /// DEPRECATED please use <seealso cref="JsonPhase.TargetPriorities"/> instead. \n
