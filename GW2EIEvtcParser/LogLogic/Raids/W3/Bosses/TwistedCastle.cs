@@ -152,34 +152,41 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return "Twisted Castle";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        if (log.LogData.Success)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
+            if (encounterPhase.Success)
             {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
-            }
-            else if (CustomCheckMildlyInsaneEligibility(log))
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1));
+                if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityMildlyInsane));
+                }
+                else if (CustomCheckMildlyInsaneEligibility(log, encounterPhase))
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityMildlyInsane], 1, encounterPhase));
+                }
             }
         }
     }
 
-    private static bool CustomCheckMildlyInsaneEligibility(ParsedEvtcLog log)
+    private static bool CustomCheckMildlyInsaneEligibility(ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
         foreach (Player player in log.PlayerList)
         {
             IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(Madness, out var bgm))
             {
-                if (bgm.Values.Any(x => x.Value >= 99)) { return false; }
+                if (bgm.Values.Any(x => x.Intersects(encounterPhase.Start, encounterPhase.End) && x.Value >= 99)) 
+                { 
+                    return false; 
+                }
             }
         }
         return true;

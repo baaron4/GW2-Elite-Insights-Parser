@@ -821,22 +821,26 @@ internal class GreerTheBlightbringer : MountBalrior
         replay.Decorations.AddHomingMissiles(log, orbs, Colors.Purple, 0.5, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        if (log.LogData.Success && log.LogData.IsCM)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            // The buff elegibility remains on players even if Ereg is dead
-            AgentItem? ereg = log.AgentData.GetNPCsByID((int)TargetID.Ereg).FirstOrDefault();
-            if (ereg != null && !log.CombatData.GetDeadEvents(ereg).Any())
+            if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1));
+                // The buff elegibility remains on players even if Ereg is dead
+                var ereg = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Ereg));
+                if (ereg != null && !log.CombatData.GetDeadEvents(ereg.AgentItem).Any())
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilitySpareTheEreg], 1, encounterPhase));
+                }
+
             }
-            
         }
     }
 }

@@ -336,25 +336,29 @@ internal class WhisperingShadow : Kinfall
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && log.LogData.IsCM && log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityUndyingLight).Any())
         {
-            // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
-            // The buff is present only on the players that do not have the achievement yet.
-            // If any player dies, the buff is removed from everyone.
-            // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
-            foreach (Player p in log.PlayerList)
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            var lastEncounter = encounterPhases.LastOrDefault();
+            if (lastEncounter != null && lastEncounter.Success && lastEncounter.IsCM)
             {
-                if (p.HasBuff(log, AchievementEligibilityUndyingLight, log.LogData.LogEnd - ServerDelayConstant))
+                // The achievement requires 5 players alive and in the instance from the moment challenge mode is activated until the end.
+                // The buff is present only on the players that do not have the achievement yet.
+                // If any player dies, the buff is removed from everyone.
+                // We don't check if players died during the encounter because the elibility is valid for the entire fractal.
+                foreach (Player p in log.PlayerList)
                 {
-                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1));
-                    break;
+                    if (p.HasBuff(log, AchievementEligibilityUndyingLight, lastEncounter.End - ServerDelayConstant))
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityUndyingLight], 1, log.LogData.GetMainPhase(log)));
+                        break;
+                    }
                 }
             }
         }

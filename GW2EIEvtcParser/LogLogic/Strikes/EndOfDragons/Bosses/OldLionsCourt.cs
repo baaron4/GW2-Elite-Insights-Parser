@@ -308,13 +308,19 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return target.GetHealth(combatData) > 20e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
-
-        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
         {
-            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
+            {
+                if (encounterPhase.Success)
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityFearNotThisKnight));
+                }
+            }
         }
     }
 

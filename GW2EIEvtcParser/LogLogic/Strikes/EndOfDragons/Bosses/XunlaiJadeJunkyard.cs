@@ -238,26 +238,32 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        if (log.LogData.Success && log.LogData.IsCM && CustomCheckGazeIntoTheVoidEligibility(log))
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+
+        foreach (var encounterPhase in encounterPhases)
         {
-            instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1));
+            if (encounterPhase.Success && encounterPhase.IsCM && CustomCheckGazeIntoTheVoidEligibility(log, encounterPhase))
+            {
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityGazeIntoTheVoid], 1, encounterPhase));
+            }
         }
     }
 
-    private static bool CustomCheckGazeIntoTheVoidEligibility(ParsedEvtcLog log)
+    private static bool CustomCheckGazeIntoTheVoidEligibility(ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
-        IReadOnlyList<AgentItem> agents = log.AgentData.GetNPCsByID((int)TargetID.Ankka);
-
-        foreach (AgentItem agent in agents)
+        foreach (var ankka in encounterPhase.Targets.Where(x => x.Key.IsSpecies(TargetID.Ankka)))
         {
-            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(agent).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = ankka.Key.GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out var bgm))
             {
-                if (bgm.Values.Any(x => x.Value == 6)) { return true; }
+                if (bgm.Values.Any(x => x.Value == 6)) 
+                { 
+                    return true; 
+                }
             }
         }
         return false;

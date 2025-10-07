@@ -87,13 +87,20 @@ internal class Boneskinner : Bjora
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        if (log.LogData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
+        if (log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
         {
-            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
+            {
+                if (encounterPhase.Success)
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityHoldOntoTheLight));
+                }
+            }
         }
     }
 

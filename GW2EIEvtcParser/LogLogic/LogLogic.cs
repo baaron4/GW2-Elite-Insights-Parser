@@ -59,7 +59,20 @@ public abstract class LogLogic
 
     public ChestID ChestID { get; protected set; } = ChestID.None;
 
-    protected List<(Buff buff, int stack)>? InstanceBuffs { get; private set; } = null;
+
+    public struct InstanceBuff
+    {
+        public readonly Buff Buff;
+        public readonly int Stack;
+        public readonly PhaseDataWithMetaData AttachedPhase;
+        public InstanceBuff(Buff buff, int stack, PhaseDataWithMetaData phase)
+        {
+            Buff = buff;
+            Stack = stack;
+            AttachedPhase = phase;
+        }
+    }
+    protected List<InstanceBuff>? InstanceBuffs { get; private set; } = null;
 
     public bool Targetless { get; protected set; } = false;
     internal readonly int GenericTriggerID;
@@ -136,25 +149,27 @@ public abstract class LogLogic
         return Map;
     }
 
-    protected virtual void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected virtual void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
+        var mainPhase = log.LogData.GetMainPhase(log);
         foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
         {
             if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
             {
-                instanceBuffs.Add((fractalInstability, 1));
+                instanceBuffs.Add(new(fractalInstability, 1, mainPhase));
             }
         }
-        if (!IsInstance)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
+        foreach (var encounterPhase in encounterPhases)
         {
-            long end = log.LogData.Success ? log.LogData.LogEnd : (log.LogData.LogEnd + log.LogData.LogStart) / 2;
+            long end = encounterPhase.Success ? encounterPhase.End : (encounterPhase.End + encounterPhase.Start) / 2;
 
             // Emboldened
             int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
                 {
-                    return graph.Values.Where(y => y.Intersects(log.LogData.LogStart, end)).Max(y => y.Value);
+                    return graph.Values.Where(y => y.Intersects(encounterPhase.Start, end)).Max(y => y.Value);
                 }
                 else
                 {
@@ -163,19 +178,18 @@ public abstract class LogLogic
             }).Max();
             if (emboldenedStacks > 0)
             {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks));
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.Emboldened], emboldenedStacks, mainPhase));
             }
-
-            // Quickplay
-            var hasQuickplay = log.PlayerList.Where(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)).Any();
-            if (hasQuickplay)
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1));
-            }
+        }
+        // Quickplay
+        var hasQuickplay = log.PlayerList.Where(x => x.HasBuff(log, SkillIDs.QuickplayBoost, log.LogData.LogStart, log.LogData.LogEnd)).Any();
+        if (hasQuickplay)
+        {
+            instanceBuffs.Add(new(log.Buffs.BuffsByIDs[SkillIDs.QuickplayBoost], 1, mainPhase));
         }
     }
 
-    public virtual IReadOnlyList<(Buff buff, int stack)> GetInstanceBuffs(ParsedEvtcLog log)
+    public IReadOnlyList<InstanceBuff> GetInstanceBuffs(ParsedEvtcLog log)
     {
         if (InstanceBuffs == null)
         {
@@ -620,13 +634,13 @@ public abstract class LogLogic
     /// A pari of (<paramref name="buff"/> and its <paramref name="stack"/>) if present, otherwise null.<br></br>
     /// To be used to add to <see cref="InstanceBuffs"/>. Use <see cref="ListExt.MaybeAdd"/>.
     /// </returns>
-    protected static (Buff, int)? GetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
+    protected static InstanceBuff? GetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, PhaseDataWithMetaData encounterPhase, long buff, int stack = 1)
     {
         foreach (Player p in log.PlayerList)
         {
-            if (p.HasBuff(log, buff, log.LogData.LogEnd - ServerDelayConstant))
+            if (p.HasBuff(log, buff, encounterPhase.End - ServerDelayConstant))
             {
-                return (log.Buffs.BuffsByIDs[buff], stack);
+                return new(log.Buffs.BuffsByIDs[buff], stack, encounterPhase);
             }
         }
         return null;

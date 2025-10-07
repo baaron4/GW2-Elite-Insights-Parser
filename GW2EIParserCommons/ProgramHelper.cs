@@ -146,7 +146,7 @@ public sealed class ProgramHelper : IDisposable
         //
         if (log.LogData.Logic.GetInstanceBuffs(log).Any())
         {
-            builder.AddField("Instance Buffs", string.Join("\n", log.LogData.Logic.GetInstanceBuffs(log).Select(x => (x.stack > 1 ? x.stack + " " : "") + x.buff.Name)));
+            builder.AddField("Instance Buffs", string.Join("\n", log.LogData.Logic.GetInstanceBuffs(log).Where(x => x.AttachedPhase == log.LogData.GetMainPhase(log)).Select(x => (x.Stack > 1 ? x.Stack + " " : "") + x.Buff.Name)));
         }
         //
         /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group);

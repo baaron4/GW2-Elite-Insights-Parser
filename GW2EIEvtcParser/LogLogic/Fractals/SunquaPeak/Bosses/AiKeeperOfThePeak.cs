@@ -467,21 +467,23 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && HasDarkMode(log.AgentData) && HasElementalMode(log.AgentData))
+        var mainPhase = log.LogData.GetMainPhase(log);
+        var encountersWithDarkAi = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.Targets.Keys.Any(y => y.IsSpecies(TargetID.DarkAiKeeperOfThePeak)));
+        var finalEncounter = encountersWithDarkAi.LastOrDefault();
+        if (finalEncounter != null && finalEncounter.Success)
         {
             if (log.CombatData.GetBuffData(AchievementEligibilityDancingWithDemons).Any())
             {
                 int counter = 0;
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, log.LogData.LogEnd - ServerDelayConstant))
+                    if (p.HasBuff(log, AchievementEligibilityDancingWithDemons, finalEncounter.End - ServerDelayConstant))
                     {
                         counter++;
                     }
@@ -489,14 +491,18 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 // The achievement requires 5 players alive with the buff, if the instance has only 4 players inside, you cannot get it.
                 if (counter == 5)
                 {
-                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1));
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityDancingWithDemons], 1, mainPhase));
                 }
             }
-            if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
+        }
+        foreach (var darkAiEncounter in encountersWithDarkAi)
+        {
+            if (darkAiEncounter.Success && log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
             {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
+                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, darkAiEncounter, AchievementEligibilityEnergyDispersal));
             }
         }
+
     }
 
     private static AgentItem? GetAiAgentAt(IReadOnlyList<SingleActor> targets, long time)

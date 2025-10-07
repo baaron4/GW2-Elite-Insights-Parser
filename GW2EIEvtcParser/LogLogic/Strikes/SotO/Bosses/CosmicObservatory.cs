@@ -528,36 +528,42 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return "Cosmic Observatory";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
-
-        if (log.LogData.Success && log.LogData.IsCM)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            var check = log.CombatData.GetBuffData(AchievementEligibilityPrecisionAnxiety).Count;
-            int buffCounter = 0;
-            int aliveCounter = 0;
-
-            foreach (Player player in log.PlayerList)
+            if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
-                if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out var bgm))
+                int buffCounter = 0;
+                int aliveCounter = 0;
+                int playerCounter = 0;
+
+                foreach (Player player in log.PlayerList)
                 {
-                    if (bgm.Values.Any(x => x.Value == 1))
+                    if (player.InAwareTimes(encounterPhase.Start, encounterPhase.End))
                     {
-                        buffCounter++;
+                        playerCounter++;
+                        IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
+                        if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out var bgm))
+                        {
+                            if (bgm.Values.Any(x => x.Value == 1))
+                            {
+                                buffCounter++;
+                            }
+                        }
+                        IReadOnlyList<DeadEvent> deaths = log.CombatData.GetDeadEvents(player.AgentItem);
+                        if (deaths.Count == 0)
+                        {
+                            aliveCounter++;
+                        }
                     }
                 }
-                IReadOnlyList<DeadEvent> deaths = log.CombatData.GetDeadEvents(player.AgentItem);
-                if (deaths.Count == 0)
+                if (buffCounter == playerCounter && aliveCounter == playerCounter)
                 {
-                    aliveCounter++;
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityPrecisionAnxiety));
                 }
-            }
-
-            if (buffCounter == log.PlayerList.Count && aliveCounter == log.PlayerList.Count)
-            {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityPrecisionAnxiety));
             }
         }
     }
