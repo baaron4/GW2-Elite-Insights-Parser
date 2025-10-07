@@ -2,7 +2,7 @@
     <div class="card fight-summary" style="min-width: 350px;">
         <h3 v-if="isMultiEncounterLog" class="card-header text-center" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Select Encounter">
-                <div :style="getMinWidth()">{{ encounter.nameNoMode }}</div>
+                <div :style="getMinWidth()">{{ encounterData.nameNoMode }}</div>
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" :style="getMinWidth()" style="max-height: 500px;">
@@ -16,23 +16,23 @@
             </ul>
         </h3>
         <h3 v-if="!isMultiEncounterLog" class="card-header text-center">
-            {{ encounter.nameNoMode }}
+            {{ encounterData.nameNoMode }}
         </h3>
-        <h7 class="card-header-fightMode text-center" v-if="!!encounter.mode" :class="fightModeColorClass(encounter.mode)">{{ encounter.mode }}</h7>
+        <h7 class="card-header-fightMode text-center" v-if="!!encounterData.mode" :class="fightModeColorClass(encounterData.mode)">{{ encounterData.mode }}</h7>
         <div class="card-body card-body-encounter container">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div class="d-flex flex-column mr-3 justify-content-center">
-                    <div v-if="instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
-                        <span v-for="instanceBuff in instanceBuffs">
+                    <div v-if="encounterData.instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
+                        <span v-for="instanceBuff in encounterData.instanceBuffs">
                             {{instanceBuff.stack > 1 ? instanceBuff.stack + ' x' : ''}}
                             <img :data-original-title="instanceBuff.buff.name + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
                                  :src="instanceBuff.buff.icon" class="icon icon-hover" />
                         </span>
                     </div>
-                    <img class="encounter-icon" :src="encounter.icon" :alt="encounter.nameNoMode">
+                    <img class="encounter-icon" :src="encounterData.icon" :alt="encounterData.nameNoMode">
                 </div>
                 <div class="ml-1 d-flex flex-column justify-content-center">
-                    <div v-if="!encounter.hideTargets" class="mb-1" v-for="target in encounter.targets">
+                    <div v-if="!encounterData.hideTargets" class="mb-1" v-for="target in encounterData.targets">
                         <div class="small" style="text-align:center;">
                             {{target.name}}
                         </div>
@@ -44,16 +44,16 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="encounter.hideTargets" class="mb-1">
-                        <div>Players: {{ encounter.playerCount }}</div>
-                        <div>Friendlies: {{ encounter.nonSquadFriendlyCount }}</div>
-                        <div>Enemies: {{ encounter.targetCount }}</div>
+                    <div v-if="encounterData.hideTargets" class="mb-1">
+                        <div>Players: {{ encounterData.playerCount }}</div>
+                        <div>Friendlies: {{ encounterData.nonSquadFriendlyCount }}</div>
+                        <div>Enemies: {{ encounterData.targetCount }}</div>
                     </div>
-                    <div class="mb-2 mt-2">Duration: {{ encounter.duration }}</div>
+                    <div class="mb-2 mt-2">Duration: {{ encounterData.duration }}</div>
                     <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
                     <div class="mb-2" v-if="!!instancePrivacy">{{ instancePrivacy }}</div>
-                    <div class="mb-2 text-warning" v-if="encounter.start"> {{ encounter.start }}</div>
-                    <div v-if="!encounter.hideResult" class="text" :class="resultStatus.class">
+                    <div class="mb-2 text-warning" v-if="encounterData.start"> {{ encounterData.start }}</div>
+                    <div v-if="!encounterData.hideResult" class="text" :class="resultStatus.class">
                         Result: {{resultStatus.text}}
                     </div>
                 </div>
@@ -247,13 +247,26 @@
                         mode: phase.mode,
                         start: phase.startStatus,
                         hideTargets: hideTargets,
-                        hideResult: hideTargets
+                        hideResult: hideTargets,
+                        instanceBuffs: null,
                     };
+                    if (logData.instanceBuffs.length > 0) {
+                        const res = [];
+                        for (let i = 0; i < logData.instanceBuffs.length; i++) {
+                            const cur = logData.instanceBuffs[i];
+                            if (cur[2] <= phase.start && cur[3] >= phase.end) {
+                                res.push({buff: findSkill(true, cur[0]), stack: cur[1]});
+                            }
+                        }
+                        if (res.length > 0) {
+                            encounter.instanceBuffs = res;
+                        }
+                    }
                     res.push(encounter);
                 }
                 return res;
             },
-            encounter: function() {
+            encounterData: function() {
                 for (let i = 0; i < this.encounters.length; i++) {
                     const encounter = this.encounters[i];
                     if (encounter.active) {
@@ -269,17 +282,7 @@
                 return logData.instancePrivacy;
             },
             resultStatus: function () {
-                return this.encounter.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
-            },
-            instanceBuffs: function () {
-                if (logData.instanceBuffs.length == 0) {
-                    return null;
-                }
-                const res = [];
-                for (let i = 0; i < logData.instanceBuffs.length; i++) {
-                    res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
-                }
-                return res;
+                return this.encounterData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-danger"] };
             },
         }
     });
