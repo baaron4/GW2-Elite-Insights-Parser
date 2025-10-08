@@ -691,7 +691,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             }
         }
     }
-
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
     private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffID, Color color, double opacity)
     {
         var tethers = log.CombatData.GetBuffDataByIDByDst(buffID, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent);

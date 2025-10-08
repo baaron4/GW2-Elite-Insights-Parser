@@ -412,6 +412,13 @@ internal class TwinLargos : MythwrightGambit
         var aquaticBarrage = log.CombatData.GetMissileEventsBySkillID(AquaticBarrage);
         environmentDecorations.AddNonHomingMissiles(log, aquaticBarrage, Colors.White, 0.3, 15);
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {

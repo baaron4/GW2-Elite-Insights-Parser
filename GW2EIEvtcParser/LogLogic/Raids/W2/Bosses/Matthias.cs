@@ -86,7 +86,7 @@ internal class Matthias : SalvationPass
         return crMap;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {

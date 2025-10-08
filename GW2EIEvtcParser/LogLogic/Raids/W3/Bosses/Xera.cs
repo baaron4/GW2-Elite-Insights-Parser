@@ -623,4 +623,11 @@ internal class Xera : StrongholdOfTheFaithful
             }
         }
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 }

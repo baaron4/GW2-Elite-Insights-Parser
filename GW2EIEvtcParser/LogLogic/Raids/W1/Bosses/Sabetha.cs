@@ -373,7 +373,13 @@ internal class Sabetha : SpiritVale
             }
         }
     }
-
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
     private static readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
     {
         { (int)TargetID.Kernan, "Kernan" },

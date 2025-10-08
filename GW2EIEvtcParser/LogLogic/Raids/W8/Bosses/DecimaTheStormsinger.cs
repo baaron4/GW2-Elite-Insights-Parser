@@ -815,7 +815,13 @@ internal class DecimaTheStormsinger : MountBalrior
         // Chorus of Thunder / Discordant Thunder - Orange AoE
         AddThunderAoE(player, log, replay, player.AgentItem);
     }
-
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
     /// <summary>
     /// Chorus of Thunder / Discordant Thunder - Orange spread AoE on players or on Conduits.
     /// </summary>
@@ -839,7 +845,7 @@ internal class DecimaTheStormsinger : MountBalrior
         return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {

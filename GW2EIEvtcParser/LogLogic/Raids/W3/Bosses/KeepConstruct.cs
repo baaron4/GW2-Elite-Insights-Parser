@@ -453,7 +453,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         environmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {

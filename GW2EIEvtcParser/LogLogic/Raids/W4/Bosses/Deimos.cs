@@ -813,6 +813,13 @@ internal class Deimos : BastionOfThePenitent
         }
         */
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     internal static void AdjustDeimosHP(SingleActor deimos, bool isCM)
     {

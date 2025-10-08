@@ -292,7 +292,7 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
@@ -335,6 +335,14 @@ internal class Escort : StrongholdOfTheFaithful
         // Attunements Overhead
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

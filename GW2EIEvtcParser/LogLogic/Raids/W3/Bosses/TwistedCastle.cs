@@ -142,6 +142,13 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         }
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
     internal override int GetTriggerID()
     {
         return (int)TargetID.HauntingStatue;
@@ -152,7 +159,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return "Twisted Castle";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {

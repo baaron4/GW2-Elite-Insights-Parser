@@ -376,6 +376,13 @@ internal class SoullessHorror : HallOfChains
             }
         }
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     internal static bool HasFastNecrosis(CombatData combatData, long start, long end)
     {

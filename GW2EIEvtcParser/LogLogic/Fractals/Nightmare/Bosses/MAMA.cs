@@ -259,7 +259,13 @@ internal class MAMA : Nightmare
                 break;
         }
     }
-
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
+    }
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         if (!log.LogData.IsInstance)
@@ -353,5 +359,13 @@ internal class MAMA : Nightmare
         var shootGreenOrbs = log.CombatData.GetMissileEventsBySkillID(ShootGreenBalls);
         environmentDecorations.AddNonHomingMissiles(log, shootRedOrbs, Colors.Red, 0.4, 50);
         environmentDecorations.AddNonHomingMissiles(log, shootGreenOrbs, Colors.DarkGreen, 0.4, 50);
+    }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
     }
 }

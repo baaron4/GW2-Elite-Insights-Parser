@@ -335,6 +335,14 @@ internal class Artsariiv : ShatteredObservatory
         }
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+
     private static void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, Color color, double opacity, CombatReplayDecorationContainer environmentDecorations)
     {
         const int length = 2500;
