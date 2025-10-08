@@ -222,6 +222,14 @@ internal class TheKeyOfAhdashimInstance : TheKeyOfAhdashim
             logic.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
         }
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        foreach (var logic in _subLogics)
+        {
+            logic.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
