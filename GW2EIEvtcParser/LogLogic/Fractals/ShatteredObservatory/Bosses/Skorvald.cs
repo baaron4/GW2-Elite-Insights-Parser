@@ -556,6 +556,14 @@ internal class Skorvald : ShatteredObservatory
         replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+
     /// <summary>
     /// Add Horizon Strike decoration.
     /// </summary>
