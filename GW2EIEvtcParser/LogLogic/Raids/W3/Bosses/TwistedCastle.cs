@@ -152,7 +152,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return "Twisted Castle";
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {

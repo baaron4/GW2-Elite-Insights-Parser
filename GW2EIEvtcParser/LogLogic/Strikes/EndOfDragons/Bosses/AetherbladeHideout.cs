@@ -1054,7 +1054,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return maiTrin.GetHealth(combatData) > 8e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 

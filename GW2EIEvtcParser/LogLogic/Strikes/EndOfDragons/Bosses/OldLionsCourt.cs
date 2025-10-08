@@ -308,7 +308,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return target.GetHealth(combatData) > 20e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
         if (log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())

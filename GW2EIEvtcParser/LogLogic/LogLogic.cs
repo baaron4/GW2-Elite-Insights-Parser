@@ -149,7 +149,7 @@ public abstract class LogLogic
         return Map;
     }
 
-    protected virtual void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal virtual void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         var mainPhase = log.LogData.GetMainPhase(log);
         foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])

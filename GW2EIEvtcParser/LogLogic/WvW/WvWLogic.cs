@@ -241,7 +241,7 @@ internal class WvWLogic : LogLogic
         return _defaultName;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
         if (_isGuildHall)

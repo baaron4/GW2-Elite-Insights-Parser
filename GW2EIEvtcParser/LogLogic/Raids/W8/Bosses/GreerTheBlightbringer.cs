@@ -821,7 +821,7 @@ internal class GreerTheBlightbringer : MountBalrior
         replay.Decorations.AddHomingMissiles(log, orbs, Colors.Purple, 0.5, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
