@@ -355,7 +355,13 @@ internal class BanditTrio : SalvationPass
             replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
         }
     }
-
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
     internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
