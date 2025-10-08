@@ -477,6 +477,14 @@ internal class Ensolyss : Nightmare
         }
     }
 
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+        }
+    }
+
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
         if (!log.LogData.IsInstance)
@@ -603,5 +611,13 @@ internal class Ensolyss : Nightmare
             ];
         var redOrbs = log.CombatData.GetMissileEventsBySkillIDs(idsRedOrbs);
         environmentDecorations.AddNonHomingMissiles(log, redOrbs, Colors.Red, 0.5, 20);
+    }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
     }
 }
