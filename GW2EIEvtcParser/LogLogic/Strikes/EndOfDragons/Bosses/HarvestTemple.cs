@@ -2126,31 +2126,34 @@ internal class HarvestTemple : EndOfDragonsStrike
         return LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        // Added a CM mode check because the eligibility had been bugged for some time and showed up in normal mode.
-        if (log.LogData.Success && log.LogData.IsCM)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+
+        foreach (var encounterPhase in encounterPhases)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
+            // Added a CM mode check because the eligibility had been bugged for some time and showed up in normal mode.
+            if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityVoidwalker));
-            }
-            else if (CustomCheckVoidwalkerEligibility(log)) // In case all 10 players already have voidwalker
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityVoidwalker], 1));
+                if (log.CombatData.GetBuffData(AchievementEligibilityVoidwalker).Any())
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityVoidwalker));
+                }
+                else if (CustomCheckVoidwalkerEligibility(log, encounterPhase)) // In case all 10 players already have voidwalker
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityVoidwalker], 1, encounterPhase));
+                }
             }
         }
     }
 
-    private static bool CustomCheckVoidwalkerEligibility(ParsedEvtcLog log)
+    private static bool CustomCheckVoidwalkerEligibility(ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
-        IReadOnlyList<AgentItem> orbs = log.AgentData.GetNPCsByID((int)TargetID.PushableVoidAmalgamate);
-
-        foreach (AgentItem orb in orbs)
+        foreach (var orb in encounterPhase.Targets.Where(x => x.Key.IsSpecies(TargetID.PushableVoidAmalgamate)))
         {
-            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(orb).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = orb.Key.GetBuffGraphs(log);
             if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out var bgm))
             {
                 if (bgm.Values.Any(x => x.Value >= 3))

@@ -44,6 +44,10 @@ public abstract partial class SingleActor : Actor
     {
         return AgentItem.InAwareTimes(time);
     }
+    public bool InAwareTimes(long start, long end)
+    {
+        return AgentItem.InAwareTimes(start, end);
+    }
     public bool InAwareTimes(SingleActor other)
     {
         return AgentItem.InAwareTimes(other);

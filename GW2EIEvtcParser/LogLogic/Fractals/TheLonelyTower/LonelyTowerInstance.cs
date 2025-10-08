@@ -14,6 +14,7 @@ internal class LonelyTowerInstance : LonelyTower
     {
         LogID = LogIDs.LogMasks.Unsupported;
         Extension = "lnlytwr";
+        Icon = InstanceIconGeneric;
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

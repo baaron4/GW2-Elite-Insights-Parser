@@ -221,30 +221,36 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-        IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
-        int counter = 0;
-
-        if (beDynamic.Any() && log.LogData.Success)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var finalEncounter = encounterPhases.LastOrDefault();
+        if (finalEncounter != null && finalEncounter.Success)
         {
-            foreach (Player p in log.PlayerList)
+            IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
+            int counter = 0;
+
+            if (beDynamic.Any() && finalEncounter.Success)
             {
-                if (p.HasBuff(log, AchievementEligibilityBeDynamic, log.LogData.LogEnd - ServerDelayConstant))
+                foreach (Player p in log.PlayerList)
                 {
-                    counter++;
+                    if (p.HasBuff(log, AchievementEligibilityBeDynamic, finalEncounter.End - ServerDelayConstant))
+                    {
+                        counter++;
+                    }
                 }
             }
+            // The party must have 5 players to be eligible
+            if (counter == 5)
+            {
+                instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1, log.LogData.GetMainPhase(log)));
+            }
         }
-        // The party must have 5 players to be eligible
-        if (counter == 5)
-        {
-            instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityBeDynamic], 1));
-        }
+
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

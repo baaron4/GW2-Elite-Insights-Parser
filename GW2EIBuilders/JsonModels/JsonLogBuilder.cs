@@ -202,17 +202,18 @@ internal static class JsonLogBuilder
         {
             var presentFractalInstabilities = new List<long>(3); //TODO(Rennorb) @perf
             var presentInstanceBuffs = new List<IReadOnlyList<long>>(instanceBuffs.Count);
-            foreach ((Buff instanceBuff, int stack) in instanceBuffs)
+            foreach (var instanceBuff in instanceBuffs)
             {
-                if (!buffMap.ContainsKey(instanceBuff.ID))
+                var buff = instanceBuff.Buff;
+                if (!buffMap.ContainsKey(buff.ID))
                 {
-                    buffMap[instanceBuff.ID] = instanceBuff;
+                    buffMap[buff.ID] = buff;
                 }
-                if (instanceBuff.Source == ParserHelper.Source.FractalInstability)
+                if (buff.Source == ParserHelper.Source.FractalInstability)
                 {
-                    presentFractalInstabilities.Add(instanceBuff.ID);
+                    presentFractalInstabilities.Add(buff.ID);
                 }
-                presentInstanceBuffs.Add([instanceBuff.ID, stack]);
+                presentInstanceBuffs.Add([buff.ID, instanceBuff.Stack, log.LogData.GetPhases(log).IndexOf(instanceBuff.AttachedPhase)]);
             }
             jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
             jsonLog.PresentInstanceBuffs = presentInstanceBuffs;

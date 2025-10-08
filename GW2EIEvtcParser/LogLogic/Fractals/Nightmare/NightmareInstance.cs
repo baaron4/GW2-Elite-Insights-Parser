@@ -320,4 +320,13 @@ internal class NightmareInstance : Nightmare
         }
         return sortIDs;
     }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        foreach (var logic in _subLogics)
+        {
+            logic.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 }

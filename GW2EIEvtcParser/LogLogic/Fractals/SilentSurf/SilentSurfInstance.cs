@@ -175,6 +175,12 @@ internal class SilentSurfInstance : SilentSurf
         _kanaxai.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        _kanaxai.SetInstanceBuffs(log, instanceBuffs);
+    }
+
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return _kanaxai.GetTargetsSortIDs();

@@ -1476,22 +1476,26 @@ internal class Qadim : MythwrightGambit
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        if (log.LogData.Success)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
+            if (encounterPhase.Success)
             {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
-            }
-            else if (CustomCheckManipulateTheManipulator(log))
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1));
+                if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityManipulateTheManipulator));
+                }
+                else if (CustomCheckManipulateTheManipulator(log, encounterPhase))
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityManipulateTheManipulator], 1, encounterPhase));
+                }
             }
         }
     }
@@ -1547,13 +1551,13 @@ internal class Qadim : MythwrightGambit
     /// Check the NPC positions for the achievement eligiblity.<br></br>
     /// </summary>
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
-    private bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
+    private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log, EncounterPhaseData encounterPhase)
     {
-        SingleActor? qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-        SingleActor? hydra = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AncientInvokedHydra));
-        SingleActor? bringer = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.ApocalypseBringer));
-        SingleActor? matriarch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernMatriarch));
-        SingleActor? patriarch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernPatriarch));
+        SingleActor? qadim = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+        SingleActor? hydra = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.AncientInvokedHydra));
+        SingleActor? bringer = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.ApocalypseBringer));
+        SingleActor? matriarch = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernMatriarch));
+        SingleActor? patriarch = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.WyvernPatriarch));
 
         if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
         {

@@ -277,6 +277,13 @@ internal class River : HallOfChains
             }
         }
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
     internal override int GetTriggerID()
     {
         return (int)TargetID.Desmina;

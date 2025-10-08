@@ -355,17 +355,29 @@ internal class BanditTrio : SalvationPass
             replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
         }
     }
-
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
+        if (log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
         {
-            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
+            {
+                if (encounterPhase.Success)
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, EnvironmentallyFriendly));
+                }
+            }
         }
     }
 }

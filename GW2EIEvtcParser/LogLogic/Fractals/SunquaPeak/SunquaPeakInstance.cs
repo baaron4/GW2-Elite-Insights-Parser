@@ -205,6 +205,12 @@ internal class SunquaPeakInstance : SunquaPeak
         _aiKeeperOfThePeak.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        _aiKeeperOfThePeak.SetInstanceBuffs(log, instanceBuffs);
+    }
+
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         return _aiKeeperOfThePeak.GetTargetsSortIDs();

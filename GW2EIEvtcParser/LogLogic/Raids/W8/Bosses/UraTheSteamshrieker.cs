@@ -712,38 +712,44 @@ internal class UraTheSteamshrieker : MountBalrior
         return LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && (log.LogData.IsCM || log.LogData.IsLegendaryCM))
+        var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            var toxicGeysers = log.AgentData.GetNPCsByID(TargetID.ToxicGeyser);
-            bool eligible = true;
-            foreach (var geyser in toxicGeysers)
+            if (encounterPhase.Success && (encounterPhase.IsCM || encounterPhase.IsLegendaryCM))
             {
-                // Each eruption has to be active for less than 30 seconds
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(geyser, EffectGUIDs.UraToxicGeyserSpawnCM, out var eruptions))
+                bool eligible = true;
+                foreach (var geyser in toxicGeysers)
                 {
-                    long effectDuration = 800000;
-                    foreach (var effect in eruptions.Where(x => x.Duration == effectDuration))
+                    if (encounterPhase.IntersectsWindow(geyser.FirstAware, geyser.LastAware))
                     {
-                        (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
-                        // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
-                        if (Math.Min(end, log.LogData.LogEnd) - start > 30000)
+                        // Each eruption has to be active for less than 30 seconds
+                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(geyser, EffectGUIDs.UraToxicGeyserSpawnCM, out var eruptions))
                         {
-                            eligible = false;
-                            break;
+                            long effectDuration = 800000;
+                            foreach (var effect in eruptions.Where(x => x.Duration == effectDuration))
+                            {
+                                (long start, long end) = effect.ComputeDynamicLifespan(log, effectDuration);
+                                // Making sure we don't use start + 800000 if an Effect End isn't present due to the encounter ending without interrupting the geyser.
+                                if (Math.Min(end, log.LogData.LogEnd) - start > 30000)
+                                {
+                                    eligible = false;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-            }
-            if (eligible)
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1));
+                if (eligible)
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityNoGeysersNoProblems], 1, encounterPhase));
+                }
             }
         }
     }

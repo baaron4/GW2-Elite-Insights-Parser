@@ -142,4 +142,10 @@ internal class KinfallInstance : Kinfall
     {
         return _whisperingShadow.GetTargetsSortIDs();
     }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        _whisperingShadow.SetInstanceBuffs(log, instanceBuffs);
+    }
 }

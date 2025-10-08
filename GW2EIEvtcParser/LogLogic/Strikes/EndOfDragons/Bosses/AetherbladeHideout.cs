@@ -1054,42 +1054,47 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return maiTrin.GetHealth(combatData) > 8e6 ? LogData.LogMode.CM : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        if (log.LogData.Success)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+
+        foreach (var encounterPhase in encounterPhases)
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
+            if (encounterPhase.Success)
             {
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityTriangulation));
-            }
-            else if (CustomCheckTriangulationEligibility(log))
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityTriangulation], 1));
+                if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityTriangulation));
+                }
+                else if (CustomCheckTriangulationEligibility(log, encounterPhase))
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityTriangulation], 1, encounterPhase));
+                }
             }
         }
     }
 
-    private static bool CustomCheckTriangulationEligibility(ParsedEvtcLog log)
+    private static bool CustomCheckTriangulationEligibility(ParsedEvtcLog log, EncounterPhaseData encounterPhaseData)
     {
         IReadOnlyList<long> beamsBuffs = new List<long>() { MaiTrinCMBeamsTargetBlue, MaiTrinCMBeamsTargetGreen, MaiTrinCMBeamsTargetRed };
         var beamsSegments = new List<Segment>();
         var bombInvulnSegments = new List<Segment>();
 
-        foreach (AgentItem player in log.PlayerAgents)
+        foreach (var player in log.PlayerList)
         {
-            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(player).GetBuffGraphs(log);
+            IReadOnlyDictionary<long, BuffGraph> bgms = player.GetBuffGraphs(log);
             foreach (long buff in beamsBuffs)
             {
-                beamsSegments = GetBuffSegments(bgms, buff, beamsSegments).OrderBy(x => x.Start).ToList();
+                beamsSegments = GetBuffPresentSegments(bgms, buff, beamsSegments).OrderBy(x => x.Start).ToList();
             }
         }
 
-        foreach (AgentItem agent in log.AgentData.GetNPCsByID(TargetID.FerrousBomb))
+        foreach (var agent in encounterPhaseData.Targets.Where(x => x.Key.IsSpecies(TargetID.FerrousBomb)))
         {
-            IReadOnlyDictionary<long, BuffGraph> bgms = log.FindActor(agent).GetBuffGraphs(log);
-            bombInvulnSegments = GetBuffSegments(bgms, FailSafeActivated, bombInvulnSegments).OrderBy(x => x.Start).ToList();
+            IReadOnlyDictionary<long, BuffGraph> bgms = agent.Key.GetBuffGraphs(log);
+            bombInvulnSegments = GetBuffPresentSegments(bgms, FailSafeActivated, bombInvulnSegments).OrderBy(x => x.Start).ToList();
         }
 
         int counter = 0;
@@ -1111,7 +1116,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return counter == 8;
     }
 
-    private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffGraph> bgms, long buff, List<Segment> segments)
+    private static List<Segment> GetBuffPresentSegments(IReadOnlyDictionary<long, BuffGraph> bgms, long buff, List<Segment> segments)
     {
         if (bgms != null && bgms.TryGetValue(buff, out var bgm))
         {

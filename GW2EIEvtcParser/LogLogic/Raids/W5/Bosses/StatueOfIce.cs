@@ -123,7 +123,10 @@ internal class StatueOfIce : HallOfChains
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
     {
-        base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
 
         // Numbing Breach - Cracks - White smoke indicator
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachIndicator, out var cracksIndicators))
@@ -172,6 +175,13 @@ internal class StatueOfIce : HallOfChains
                 environmentDecorations.Add(circle);
                 environmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2, true));
             }
+        }
+    }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
         }
     }
 

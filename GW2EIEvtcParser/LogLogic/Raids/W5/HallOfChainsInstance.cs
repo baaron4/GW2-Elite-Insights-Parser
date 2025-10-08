@@ -405,6 +405,14 @@ internal class HallOfChainsInstance : HallOfChains
         }
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        foreach (var logic in _subLogics)
+        {
+            logic.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
     internal override Dictionary<TargetID, int> GetTargetsSortIDs()
     {
         var sortIDs = new Dictionary<TargetID, int>();
