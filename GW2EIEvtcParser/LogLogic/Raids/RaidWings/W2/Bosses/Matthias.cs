@@ -86,38 +86,48 @@ internal class Matthias : SalvationPass
         return crMap;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
-        if (bloodstoneBisque.Any() && log.LogData.Success)
+        if (bloodstoneBisque.Any()) 
         {
-            int playersWithBisque = 0;
-            int expectedPlayersForSuccess = 0;
-            long logEnd = log.LogData.LogEnd - ServerDelayConstant;
-            long logStart = log.LogData.LogStart + ServerDelayConstant;
-            foreach (Player p in log.PlayerList)
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
             {
-                IReadOnlyDictionary<long, BuffGraph> graphs = p.GetBuffGraphs(log);
-                if (graphs.TryGetValue(BloodstoneBisque, out var graph))
+                if (encounterPhase.Success)
                 {
-                    if (!graph.Values.Any(x => x.Value == 0 && x.Intersects(logStart, logEnd)))
+                    int playersWithBisque = 0;
+                    int expectedPlayersForSuccess = 0;
+                    long encounterEnd = encounterPhase.End - ServerDelayConstant;
+                    long encounterStart = encounterPhase.Start + ServerDelayConstant;
+                    foreach (Player p in log.PlayerList)
                     {
-                        playersWithBisque++;
+                        if (p.InAwareTimes(encounterPhase.Start, encounterPhase.End))
+                        {
+                            IReadOnlyDictionary<long, BuffGraph> graphs = p.GetBuffGraphs(log);
+                            if (graphs.TryGetValue(BloodstoneBisque, out var graph))
+                            {
+                                if (!graph.Values.Any(x => x.Value == 0 && x.Intersects(encounterStart, encounterEnd)))
+                                {
+                                    playersWithBisque++;
+                                }
+                            }
+                            var (_, _, dcs, _) = p.GetStatus(log);
+                            if (!dcs.Any(x => x.ContainsPoint(encounterEnd)))
+                            {
+                                expectedPlayersForSuccess++;
+                            }
+                        }
+                    }
+                    if (expectedPlayersForSuccess <= playersWithBisque)
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[BloodstoneBisque], 1, encounterPhase));
                     }
                 }
-                var (_, _, dcs, _) = p.GetStatus(log);
-                if (!dcs.Any(x => x.ContainsPoint(logEnd)))
-                {
-                    expectedPlayersForSuccess++;
-                }
-            }
-            if (expectedPlayersForSuccess <= playersWithBisque)
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[BloodstoneBisque], 1));
             }
         }
     }

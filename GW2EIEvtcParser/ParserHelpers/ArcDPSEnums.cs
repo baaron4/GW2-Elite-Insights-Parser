@@ -32,6 +32,7 @@ public static class ArcDPSEnums
         public const int ExtraDataInGUIDEvents = 20241030;
         public const int LogStartLogEndPerCombatSequenceOnInstanceLogs = 20250315;
         public const int SpeciesSkillGUIDs = 20250428;
+        public const int BuffFormulaOriginalAttribute = 20250913;
         //
         public const int EndOfLife = int.MaxValue;
     }
@@ -393,6 +394,15 @@ public static class ArcDPSEnums
         SiphonIncomingAdditive2 = -34,
         HealingEffectivenessIncomingMultiplicative = -35,
         AllStatsPercent = -36,
+        PowerSidekick = -37,
+        PrecisionSidekick = -38,
+        ToughnessSidekick = -39,
+        VitalitySidekick = -40,
+        FerocitySidekick = -41,
+        HealingSidekick = -42,
+        ConditionSidekick = -43,
+        ConcentrationSidekick = -44,
+        ExpertiseSidekick = -45,
     }
 
     public static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)

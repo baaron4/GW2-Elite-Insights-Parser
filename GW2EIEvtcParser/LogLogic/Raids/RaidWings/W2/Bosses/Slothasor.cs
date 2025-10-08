@@ -82,16 +82,22 @@ internal class Slothasor : SalvationPass
         }
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && log.CombatData.GetBuffData(SlipperySlubling).Any())
+        if (log.CombatData.GetBuffData(SlipperySlubling).Any())
         {
-            instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, SlipperySlubling));
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
+            {
+                if (encounterPhase.Success)
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, SlipperySlubling));
+                }
+            }
         }
     }
 

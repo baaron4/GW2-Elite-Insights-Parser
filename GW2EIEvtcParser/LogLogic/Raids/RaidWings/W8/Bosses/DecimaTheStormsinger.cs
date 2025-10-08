@@ -19,8 +19,6 @@ internal class DecimaTheStormsinger : MountBalrior
 {
     private bool IsCMTriggerID => GenericTriggerID == (int)TargetID.DecimaCM;
 
-    private SingleActor Decima => Targets.FirstOrDefault(x => IsCMTriggerID ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
-
     internal readonly MechanicGroup Mechanics = new MechanicGroup([
             new MechanicGroup([
                 new PlayerDstHealthDamageHitMechanic([ChorusOfThunderDamage, ChorusOfThunderCM], new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "ChorThun.H", "Hit by Chorus of Thunder (Spreads AoE / Conduit AoE)", "Chorus of Thunder Hit", 0),
@@ -302,15 +300,16 @@ internal class DecimaTheStormsinger : MountBalrior
             var finalSeismicJumpEvent = log.CombatData.GetBuffData(SeismicRepositionInvul).FirstOrDefault(x => x is BuffApplyEvent && x.To.Is(decima.AgentItem) && encounterPhase.InInterval(x.Time));
             if (finalSeismicJumpEvent != null)
             {
-                var preFinalPhase = new SubPhasePhaseData(phases[^1].Start, finalSeismicJumpEvent.Time, "40% - 10%");
-                preFinalPhase.AddParentPhases(mainPhases);
+                var p3 = mainPhases[^1];
+                var preFinalPhase = new SubPhasePhaseData(p3.Start, finalSeismicJumpEvent.Time, "40% - 10%");
+                preFinalPhase.AddParentPhase(p3);
                 preFinalPhase.AddTarget(decima, log);
                 phases.Add(preFinalPhase);
                 var finalPhaseStartEvent = log.CombatData.GetBuffRemoveAllDataByIDByDst(SeismicRepositionInvul, decima.AgentItem).FirstOrDefault(x => encounterPhase.InInterval(x.Time));
                 if (finalPhaseStartEvent != null)
                 {
-                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, encounterPhase.End, "10% - 0%");
-                    finalPhase.AddParentPhases(mainPhases);
+                    var finalPhase = new SubPhasePhaseData(finalPhaseStartEvent.Time, p3.End, "10% - 0%");
+                    finalPhase.AddParentPhase(p3);
                     finalPhase.AddTarget(decima, log);
                     phases.Add(finalPhase);
                 }
@@ -333,7 +332,7 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor decima = Decima;
+        SingleActor decima = Targets.FirstOrDefault(x => IsCMTriggerID ? x.IsSpecies(TargetID.DecimaCM) : x.IsSpecies(TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found"); ;
         phases[0].AddTarget(decima, log);
         if (IsCMTriggerID)
         {
@@ -816,7 +815,13 @@ internal class DecimaTheStormsinger : MountBalrior
         // Chorus of Thunder / Discordant Thunder - Orange AoE
         AddThunderAoE(player, log, replay, player.AgentItem);
     }
-
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
     /// <summary>
     /// Chorus of Thunder / Discordant Thunder - Orange spread AoE on players or on Conduits.
     /// </summary>
@@ -840,18 +845,22 @@ internal class DecimaTheStormsinger : MountBalrior
         return IsCMTriggerID ? LogData.LogMode.CMNoName : LogData.LogMode.Normal;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success && IsCMTriggerID)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            if (Decima != null && !Decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
+            if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1));
+                var decima = encounterPhase.Targets.Keys.FirstOrDefault(x => x.IsSpecies(TargetID.DecimaCM));
+                if (decima != null && !decima.GetBuffStatus(log, ChargeDecima).Any(x => x.Value > 0))
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityCalmBeforeTheStorm], 1, encounterPhase));
+                }
             }
         }
     }

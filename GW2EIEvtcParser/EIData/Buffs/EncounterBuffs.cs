@@ -470,7 +470,7 @@ internal static class EncounterBuffs
             new Buff("Not Sticking Together", NotStickingTogetherBuff, Source.EncounterSpecific, BuffClassification.Debuff, BuffImages.ActivateRed),
             new Buff("Social Awkwardness Immunity", SocialAwkwardnessImmunity, Source.EncounterSpecific, BuffClassification.Other, BuffImages.ActivateYellow),
             // Siax
-            new Buff("Fixated (Nightmare)", FixatedNightmare, Source.EncounterSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Nightmare)", FixatedNightmare, Source.EncounterSpecific,BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Fixated),
             // Ensolyss
             new Buff("Determination (Ensolyss)", DeterminationEnsolyss, Source.EncounterSpecific, BuffClassification.Other, BuffImages.GambitExhausted),
             // Shattered Observatory

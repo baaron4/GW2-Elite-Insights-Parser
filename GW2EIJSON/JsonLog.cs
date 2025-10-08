@@ -468,7 +468,9 @@ public class JsonLog
     /// <seealso cref="BuffMap"/>
     public IReadOnlyList<long>? PresentFractalInstabilities;
     /// <summary>
-    /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
+    /// List of present instance buffs, values are arrays of 3 elements, value[0] is buff id, value[1] is number of stacks, value[2] the index in <see cref="JsonLog.Phases"/> where the buffs are relevant. \n
+    /// value[2] is mainly relevant in instance logs, it can either point towards a specific Encounter phase for encounter specific buffs or to the Instance phase for buffs covering the whole instance, for example fractal instabilities. \n
+    /// In boss logs, value[2] will always be the "Full Fight" phase.
     /// </summary>
     /// <seealso cref="BuffMap"/>
     public IReadOnlyList<IReadOnlyList<long>>? PresentInstanceBuffs;

@@ -241,24 +241,34 @@ internal class WvWLogic : LogLogic
         return _defaultName;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
         if (_isGuildHall)
         {
-            var modes = new List<BuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
-            modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
-            modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
-            modes.SortByTime();
-            var usedModes = modes.Select(x => x.BuffID).Distinct();
-            foreach (long buffID in usedModes)
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>();
+            long[] usedModes = [GuildHallPvEMode, GuildHallsPvPMode, GuildHallWvWMode];
+            foreach (var encounterPhase in encounterPhases)
             {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[buffID], 1));
-            }
-            // When buff is missing on a player, they are in PvE mode
-            if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To.Is(x.AgentItem))))
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[GuildHallPvEMode], 1));
+                long end = encounterPhase.Success ? encounterPhase.End : (encounterPhase.End + encounterPhase.Start) / 2;
+                foreach (long buffID in usedModes)
+                {
+                    int modeStack = (int)log.PlayerList.Select(x =>
+                    {
+                        if (x.GetBuffGraphs(log).TryGetValue(buffID, out var graph))
+                        {
+                            return graph.Values.Where(y => y.Intersects(encounterPhase.Start, end)).Max(y => y.Value);
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }).Max();
+                    if (modeStack > 0)
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[buffID], 1, encounterPhase));
+                    }
+                }
             }
         }
     }

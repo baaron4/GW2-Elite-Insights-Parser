@@ -292,22 +292,22 @@ internal class Escort : StrongholdOfTheFaithful
         ];
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
-
-        if (log.LogData.Success)
+        if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any() || log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any())
         {
-            if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) 
-            { 
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); 
-            }
-            if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) 
-            { 
-                instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); 
+            var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+            foreach (var encounterPhase in encounterPhases)
+            {
+                if (encounterPhase.Success)
+                {
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityLoveIsBunny));
+                    instanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, encounterPhase, AchievementEligibilityFastSiege));
+                }
             }
         }
     }
@@ -335,6 +335,14 @@ internal class Escort : StrongholdOfTheFaithful
         // Attunements Overhead
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()

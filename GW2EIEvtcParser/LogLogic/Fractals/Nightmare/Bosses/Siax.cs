@@ -328,4 +328,12 @@ internal class Siax : Nightmare
         var vileSpit = log.CombatData.GetMissileEventsBySkillID(VileSpit);
         environmentDecorations.AddNonHomingMissiles(log, vileSpit, Colors.DarkGreen, 0.3, 50);
     }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 }

@@ -185,7 +185,7 @@ internal class SpiritValeInstance : SpiritVale
         }
         {
             // To be tested, gadgets
-            //ProcessSpiritRacePhases(targetsByIDs, log, phases);
+            ProcessSpiritRacePhases_SingleGadgetInstances(targetsByIDs, log, phases);
         }
         {
             var gorsevalPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Gorseval, Targets.Where(x => x.IsSpecies(TargetID.ChargedSoul)), "Gorseval", _gorseval);
@@ -318,6 +318,15 @@ internal class SpiritValeInstance : SpiritVale
         foreach (SpiritVale logic in _subLogics)
         {
             logic.ComputeEnvironmentCombatReplayDecorations(log, environmentDecorations);
+        }
+    }
+
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        base.SetInstanceBuffs(log, instanceBuffs);
+        foreach (SpiritVale logic in _subLogics)
+        {
+            logic.SetInstanceBuffs(log, instanceBuffs);
         }
     }
 

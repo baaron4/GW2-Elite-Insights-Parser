@@ -453,26 +453,31 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         environmentDecorations.AddNonHomingMissiles(log, crimsonOrbs, Colors.Red, 0.4, 25);
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         if (!log.LogData.IsInstance)
         {
             base.SetInstanceBuffs(log, instanceBuffs);
         }
 
-        if (log.LogData.Success && log.LogData.IsCM)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        foreach (var encounterPhase in encounterPhases)
         {
-            int hasHitKc = 0;
-            foreach (Player p in log.PlayerList)
+            if (encounterPhase.Success && encounterPhase.IsCM)
             {
-                if (p.GetDamageEvents(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KeepConstruct)), log).Any())
+                int hasHitKc = 0;
+                var kc = encounterPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.KeepConstruct));
+                foreach (Player p in log.PlayerList)
                 {
-                    hasHitKc++;
+                    if (p.GetDamageEvents(kc, log).Any())
+                    {
+                        hasHitKc++;
+                    }
                 }
-            }
-            if (hasHitKc == log.PlayerList.Count)
-            {
-                instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityDownDownDowned], 1));
+                if (hasHitKc == log.PlayerList.Count)
+                {
+                    instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityDownDownDowned], 1, encounterPhase));
+                }
             }
         }
     }

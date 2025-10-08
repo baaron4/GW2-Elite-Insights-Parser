@@ -499,6 +499,14 @@ internal class Kanaxai : SilentSurf
         }
     }
 
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
+
     /// <summary>
     /// Adds the Axe AoE decoration.<br></br>
     /// If the next orange AoE <see cref="BuffRemoveAllEvent"/> on players is after <see cref="WorldCleaver"/> cast time or not present,<br></br>

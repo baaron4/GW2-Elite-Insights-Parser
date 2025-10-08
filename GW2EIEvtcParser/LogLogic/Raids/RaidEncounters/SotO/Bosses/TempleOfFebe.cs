@@ -927,27 +927,31 @@ internal class TempleOfFebe : SecretOfTheObscureRaidEncounter
         return lifespan;
     }
 
-    protected override void SetInstanceBuffs(ParsedEvtcLog log, List<(Buff buff, int stack)> instanceBuffs)
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
     {
         base.SetInstanceBuffs(log, instanceBuffs);
 
-        if (log.LogData.IsCM || log.LogData.IsLegendaryCM)
+        var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
+        var empoweredBuffs = new List<long>()
         {
-            AgentItem cerus = GetCerusItem(log.AgentData);
-            if (cerus != null)
+            EmpoweredDespairCerus,
+            EmpoweredEnvyCerus,
+            EmpoweredGluttonyCerus,
+            EmpoweredMaliceCerus,
+            EmpoweredRageCerus,
+            EmpoweredRegretCerus
+        };
+        foreach (var encounterPhase in encounterPhases)
+        {
+            if (encounterPhase.IsCM || encounterPhase.IsLegendaryCM)
             {
-                var empoweredBuffs = new List<long>()
+                AgentItem cerus = encounterPhase.Targets.First(x => x.Key.IsSpecies(TargetID.Cerus)).Key.AgentItem;
+                if (cerus != null)
                 {
-                    EmpoweredDespairCerus,
-                    EmpoweredEnvyCerus,
-                    EmpoweredGluttonyCerus,
-                    EmpoweredMaliceCerus,
-                    EmpoweredRageCerus,
-                    EmpoweredRegretCerus
-                };
-                if (empoweredBuffs.Count(x => cerus.GetBuffStatus(log, x).Any(x => x.Value > 0)) == 6)
-                {
-                    instanceBuffs.Add((log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1));
+                    if (empoweredBuffs.Count(x => cerus.GetBuffStatus(log, x).Any(x => x.Value > 0)) == 6)
+                    {
+                        instanceBuffs.Add(new(log.Buffs.BuffsByIDs[AchievementEligibilityApathetic], 1, encounterPhase));
+                    }
                 }
             }
         }

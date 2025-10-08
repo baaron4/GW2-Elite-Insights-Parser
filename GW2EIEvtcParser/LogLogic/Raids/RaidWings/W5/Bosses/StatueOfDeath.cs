@@ -240,6 +240,13 @@ internal class StatueOfDeath : HallOfChains
             replay.Decorations.AddRotatedOverheadIcon(c, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, LogData logData, IReadOnlyCollection<AgentItem> playerAgents)
     {

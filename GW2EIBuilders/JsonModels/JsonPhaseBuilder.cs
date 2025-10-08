@@ -67,6 +67,9 @@ internal static class JsonPhaseBuilder
                     jsPhase.IsLegendaryCM = encounterPhase.IsLegendaryCM;
                     jsPhase.IsCM = encounterPhase.IsCM;
                     jsPhase.EIEncounterID = encounterPhase.LogID;
+                    jsPhase.EncounterIcon = encounterPhase.Icon;
+                    jsPhase.EncounterIsLateStart = encounterPhase.IsLateStart;
+                    jsPhase.EncounterMissingPreEvent = encounterPhase.MissingPreEvent;
                 }
                 break;
             case PhaseData.PhaseType.Instance:
