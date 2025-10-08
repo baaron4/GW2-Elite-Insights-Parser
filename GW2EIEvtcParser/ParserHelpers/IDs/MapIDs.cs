@@ -21,7 +21,7 @@ public static class MapIDs
     public const int TheKeyOfAhdashimRaid = 1323;
     public const int MountBalriorRaid = 1564;
     #endregion
-    #region Single Boss Raids
+    #region Raid Encounters
     public const int SecretLairOfTheSnowmenPrivateRaidEncounter = 1306;
     public const int SecretLairOfTheSnowmenPublicRaidEncounter = 1352;
     public const int ShiverpeaksPassPrivateRaidEncounter = 1332;

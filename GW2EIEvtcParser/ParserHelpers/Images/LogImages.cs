@@ -147,7 +147,7 @@ internal static class LogImages
 
     #endregion RAID WINGS
 
-    #region SINGLE BOSS RAIDS
+    #region RAID ENCOUNTERS
 
     // Encounters Icons
     internal const string EncounterIconFreezie = "https://i.imgur.com/PYtzWUT.png";
@@ -183,7 +183,7 @@ internal static class LogImages
     internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/mODYp42.png";
     internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
 
-    #endregion SINGLE BOSS RAIDS
+    #endregion RAID ENCOUNTERS
 
     #region GOLEM
 

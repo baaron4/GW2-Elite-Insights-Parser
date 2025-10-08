@@ -368,7 +368,7 @@ public static class SpeciesIDs
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
         #endregion RAID WINGS
-        #region SINGLE BOSS RAIDS
+        #region RAND ENCOUNTERS
         // - Festival
         // - Freezie
         Freezie = 21333,
@@ -544,7 +544,7 @@ public static class SpeciesIDs
         PermanentEmbodimentOfRegret = SpeciesIDs.PermanentEmbodimentOfRegret,
         PermanentEmbodimentOfEnvy = SpeciesIDs.PermanentEmbodimentOfEnvy,
         PermanentEmbodimentOfMalice = SpeciesIDs.PermanentEmbodimentOfMalice,
-        #endregion SINGLE BOSS RAIDS
+        #endregion RAID ENCOUNTERS
         #region FRACTALS
         FractalVindicator = 19684,
         FractalAvenger = 15960,

@@ -199,7 +199,7 @@ public class LogData
                         return new DecimaTheStormsinger(id);
                     case TargetID.Ura:
                         return new UraTheSteamshrieker(id);
-                    // Single Boss Raids
+                    // Raid Encounters
                     case TargetID.IcebroodConstruct:
                         return new IcebroodConstruct(id);
                     case TargetID.FraenirOfJormag:
@@ -297,7 +297,7 @@ public class LogData
                     case TargetID.ConjuredAmalgamate:
                     case TargetID.ConjuredAmalgamate_CHINA:
                         return new ConjuredAmalgamate(id);
-                    // Single Boss Raids
+                    // Raid Encounters
                     case TargetID.GadgetTheDragonVoid1:
                     case TargetID.GadgetTheDragonVoid2:
                         // This will most likely require a chinese client version
