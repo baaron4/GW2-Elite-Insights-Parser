@@ -253,6 +253,13 @@ internal class ValeGuardian : SpiritVale
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
         replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
     }
+    internal override void SetInstanceBuffs(ParsedEvtcLog log, List<InstanceBuff> instanceBuffs)
+    {
+        if (!log.LogData.IsInstance)
+        {
+            base.SetInstanceBuffs(log, instanceBuffs);
+        }
+    }
 
     /// <summary>
     /// Adds Distributed Magic green circle for older logs without Effect Data.
