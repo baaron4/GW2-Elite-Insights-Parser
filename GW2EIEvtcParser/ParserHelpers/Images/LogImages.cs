@@ -55,7 +55,7 @@ internal static class LogImages
 
     #endregion FRACTALS
 
-    #region RAIDS
+    #region RAID WINGS
 
     // Encounters Icons
     internal const string EncounterIconValeGuardian = "https://assets.gw2dat.com/1301792.png";
@@ -145,9 +145,9 @@ internal static class LogImages
     internal const string CombatReplayDecimaTheStormsinger = "https://i.imgur.com/4cJAW7r.png";
     internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/Vn1JQ3p.png";
 
-    #endregion RAIDS
+    #endregion RAID WINGS
 
-    #region STRIKES
+    #region RAID ENCOUNTERS
 
     // Encounters Icons
     internal const string EncounterIconFreezie = "https://i.imgur.com/PYtzWUT.png";
@@ -183,7 +183,7 @@ internal static class LogImages
     internal const string CombatReplayCosmicObservatory = "https://i.imgur.com/mODYp42.png";
     internal const string CombatReplayTempleOfFebe = "https://i.imgur.com/bgiL46C.png";
 
-    #endregion STRIKES
+    #endregion RAID ENCOUNTERS
 
     #region GOLEM
 

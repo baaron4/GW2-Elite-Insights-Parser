@@ -7,7 +7,7 @@ Unknown: 0x0
 Unsupported: 0x010000
 
 *Unsupported encounters are safe to ignore.*
-## Raids
+## Raid Wings
 ### Wing 1
 Spirit Vale Full Instance: 0x020100
 
@@ -137,7 +137,7 @@ Kinfall Full Instance: 0x030600
 
 Whispering Shadow: 0x030601
 
-## Strikes
+## Raid Encounters
 ### Festivals
 Freezie: 0x040101
 

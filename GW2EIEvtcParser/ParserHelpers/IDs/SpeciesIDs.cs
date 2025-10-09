@@ -10,7 +10,7 @@ public static class SpeciesIDs
 {
     public enum TargetID : int
     {
-        // Raids
+        #region RAID WINGS
         Glenna = 15014,
         // - Wing 1
         // - Vale Guardian
@@ -367,7 +367,8 @@ public static class SpeciesIDs
         TitanspawnGeyserGadget = SpeciesIDs.TitanspawnGeyserGadget,
         UraGadget_BloodstoneShard = SpeciesIDs.UraGadget_BloodstoneShard,
         LegendaryVentshot = 26824,
-        // Strike Missions
+        #endregion RAID WINGS
+        #region RAND ENCOUNTERS
         // - Festival
         // - Freezie
         Freezie = 21333,
@@ -433,11 +434,11 @@ public static class SpeciesIDs
         SonsOfSvanirHighShaman = 22283,
         // - End of Dragons
         // - Aetherblade Hideout
-        MaiTrinStrike = 24033,
-        MaiTrinStrikeFake = SpeciesIDs.MaiTrinStrikeFake,
+        MaiTrinRaid = 24033,
+        MaiTrinRaidFake = SpeciesIDs.MaiTrinRaidFake,
         EchoOfScarletBriarNM = 24768,
         EchoOfScarletBriarCM = 25247,
-        MaiTrinStrikeDuringEcho = 23826,
+        MaiTrinRaidDuringEcho = 23826,
         ScarletPhantom = 24404,
         ScarletPhantomBreakbar = 23656,
         ScarletPhantomHP = 24431,
@@ -543,7 +544,8 @@ public static class SpeciesIDs
         PermanentEmbodimentOfRegret = SpeciesIDs.PermanentEmbodimentOfRegret,
         PermanentEmbodimentOfEnvy = SpeciesIDs.PermanentEmbodimentOfEnvy,
         PermanentEmbodimentOfMalice = SpeciesIDs.PermanentEmbodimentOfMalice,
-        // Fractals
+        #endregion RAID ENCOUNTERS
+        #region FRACTALS
         FractalVindicator = 19684,
         FractalAvenger = 15960,
         JadeMawTentacle = 16721,
@@ -641,7 +643,8 @@ public static class SpeciesIDs
         KryptisRift = SpeciesIDs.KryptisRift,
         // - Kinfall
         WhisperingShadow = 27010,
-        // Golems
+        #endregion FRACTALS
+        #region GOLEMS
         MassiveGolem10M = 16169,
         MassiveGolem4M = 16202,
         MassiveGolem1M = 16178,
@@ -652,7 +655,8 @@ public static class SpeciesIDs
         MedGolem = 19645,
         ConditionGolem = 16174,
         PowerGolem = 16176,
-        // Open World
+        #endregion GOLEMS
+        #region OPEN WORLD
         // Soo Won OW
         SooWonOW = 35552, // Gadget
         SooWonTail = 51756,
@@ -695,7 +699,9 @@ public static class SpeciesIDs
         VoidThornheart1 = 24406,
         VoidThornheart2 = 23688,
         VoidWorm = 23701,
-        // Story
+        #endregion OPEN WORLD
+
+        #region STORY
         // - Mordremoth
         Mordremoth = 15884,
         SmotheringShadow = 15640,
@@ -713,13 +719,14 @@ public static class SpeciesIDs
         //BlightedPaleTree = 15597,
         //BlightedTrahearne = 15597,
         //BlightedEir = 15597,
+        #endregion STORY
         // General
         WorldVersusWorld = 1,
         Instance = 2,
         DummyTarget = SpeciesIDs.DummyTarget,
         Environment = SpeciesIDs.Environment,
         Unknown = int.MaxValue,
-        // Convergences
+        #region CONVERGENCES
         // - Outer Nayos
         DemonKnight = 26142,
         Sorrow = 26126,
@@ -734,6 +741,7 @@ public static class SpeciesIDs
         ReegTheBlighterConv = 26842,
         DecimaTheStormsingerConv = 26720,
         UraTheSteamshriekerConv = 27017,
+        #endregion CONVERGENCES
     };
 
     public enum MinionID : int
@@ -1149,7 +1157,7 @@ public static class SpeciesIDs
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
-    private const int MaiTrinStrikeFake = -64;
+    private const int MaiTrinRaidFake = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
     private const int BigEnlightenedConduitGadget = -67;
