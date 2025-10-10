@@ -5330,5 +5330,6 @@ public static class SkillIDs
     public const long SharpeningGolem = 77466;
     public const long CookingGolem = 77572;
     public const long QuickplayBoost = 77676;
+    public const long BagOfPoppedCandyCorn = 77728;
     #endregion
 }
