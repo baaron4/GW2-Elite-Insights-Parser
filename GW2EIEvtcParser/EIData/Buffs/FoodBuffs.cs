@@ -378,6 +378,7 @@ internal static class FoodBuffs
         new Buff("Nourishment (Guild Banquet Table)", NourishmentGuildBanquetTable, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentBirthdayBlaster),
         new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentEffect),
         new Buff("Cooking Golem", CookingGolem, Source.Item, BuffClassification.Nourishment, ItemImages.NourishmentEffect),
+        new Buff("Bag of Popped Candy Corn", BagOfPoppedCandyCorn, Source.Item, BuffClassification.Nourishment, ItemImages.BagOfPoppedCandyCorn), // If they update this to be an enchancement, it was introduced in build 188,794
     ];
 
     internal static readonly IReadOnlyList<Buff> AscendedFood =
