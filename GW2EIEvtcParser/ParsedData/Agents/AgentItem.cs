@@ -562,10 +562,6 @@ public class AgentItem
     }
     internal void SetEnglobingAgentItem(AgentItem parent, AgentData agentData)
     {
-        if (!IsPlayer)
-        {
-            throw new InvalidOperationException("Englobing agents are only allowed on players");
-        }
         _englobingAgentItem = parent;
         parent.AddEnglobedAgentItem(this, agentData);
     }

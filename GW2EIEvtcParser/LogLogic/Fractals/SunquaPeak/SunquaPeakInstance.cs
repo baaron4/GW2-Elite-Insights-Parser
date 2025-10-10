@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.LogLogic.LogLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.LogLogic;
 internal class SunquaPeakInstance : SunquaPeak
@@ -45,7 +46,7 @@ internal class SunquaPeakInstance : SunquaPeak
         var lastDarkAi = agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
         if (lastDarkAi != null)
         {
-            var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(SkillIDs.Determined895, lastDarkAi);
+            var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(Determined895, lastDarkAi);
             var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
             if (determinedApply != null)
             {
@@ -54,54 +55,115 @@ internal class SunquaPeakInstance : SunquaPeak
         }
     }
 
+    private int HandleSingleAiPhases(List<EncounterPhaseData> encounterPhases, PhaseData mainPhase, IReadOnlyList<SingleActor> ais, SingleActor ai, ParsedEvtcLog log, List<PhaseData> phases, TargetID aiID, int offset)
+    {
+        offset++;
+        bool dark = aiID == TargetID.DarkAiKeeperOfThePeak;
+        long start = ai.FirstAware;
+        var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(Determined895, ai.AgentItem);
+        var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
+        var enterCombat = log.CombatData.GetEnterCombatEvents(ai.AgentItem).FirstOrDefault();
+        if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
+        {
+            start = determinedLost.Time;
+        }
+        else
+        {
+            var firstCast = ai.GetAnimatedCastEvents(log).FirstOrDefault();
+            if (firstCast != null)
+            {
+                start = firstCast.Time;
+            }
+        }
+        bool success = false;
+        long end = ai.LastAware;
+        var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
+        if (determinedApply != null)
+        {
+            success = true;
+            end = determinedApply.Time;
+        }
+        var encounterName = dark ? "Dark Ai, Keeper of the Peak" : "Elemental Ai, Keeper of the Peak";
+        var encounterIcon = dark ? EncounterIconAiDark : EncounterIconAiElemental;
+        var encounterID = dark ? (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.DarkAiMask) : (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.ElementalAiMask);
+        var mode = LogData.LogMode.CMNoName;
+        ai.OverrideName(encounterName + (ais.Count > 1 ? " " + offset : ""));
+        AddInstanceEncounterPhase(log, phases, encounterPhases, [ai], [], [], mainPhase, encounterName, start, end, success, encounterIcon, encounterID, mode);
+        return offset;
+    }
+
+    private int HandleFullAiPhases(List<EncounterPhaseData> encounterPhases, PhaseData mainPhase, IReadOnlyList<SingleActor> ais, SingleActor elementalAi, SingleActor darkAi, ParsedEvtcLog log, List<PhaseData> phases, int offset)
+    {
+        offset++;
+        long start = elementalAi.FirstAware;
+        var elementalDeterminedLost = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent);
+        var elementalEnterCombat = log.CombatData.GetEnterCombatEvents(elementalAi.AgentItem).FirstOrDefault();
+        if (elementalDeterminedLost != null && elementalEnterCombat != null && elementalEnterCombat.Time >= elementalDeterminedLost.Time)
+        {
+            start = elementalDeterminedLost.Time;
+        }
+        else
+        {
+            var firstCast = elementalAi.GetAnimatedCastEvents(log).FirstOrDefault();
+            if (firstCast != null)
+            {
+                start = firstCast.Time;
+            }
+        }
+        bool success = false;
+        long end = darkAi.LastAware;
+        var darkDeterminedApply = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
+        if (darkDeterminedApply != null)
+        {
+            success = true;
+            end = darkDeterminedApply.Time;
+        }
+        var encounterName = "Ai, Keeper of the Peak";
+        var encounterIcon = EncounterIconAi;
+        var encounterID = (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.FullAiMask);
+        var mode = LogData.LogMode.CMNoName;
+        elementalAi.OverrideName("Elemental Ai, Keeper of the Peak" + (ais.Count > 1 ? " " + offset : "") + " Full");
+        darkAi.OverrideName("Dark Ai, Keeper of the Peak" + (ais.Count > 1 ? " " + offset : "") + " Full");
+        AddInstanceEncounterPhase(log, phases, encounterPhases, [elementalAi, darkAi], [], [], mainPhase, encounterName, start, end, success, encounterIcon, encounterID, mode);
+        return offset;
+    }
+
     private List<EncounterPhaseData> HandleAiPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases, TargetID aiID)
     {
         var encounterPhases = new List<EncounterPhaseData>();
         var mainPhase = phases[0];
         if (targetsByIDs.TryGetValue((int)aiID, out var ais))
         {
-            int offset = 0;
+            var nonEnglobedAis = ais.Where(x => !x.AgentItem.IsEnglobedAgent).ToList();
             bool dark = aiID == TargetID.DarkAiKeeperOfThePeak;
-            foreach (var ai in ais)
+            if (!dark)
             {
-                offset++;
-                long start = ai.FirstAware;
-                var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined895, ai.AgentItem);
-                var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
-                var enterCombat = log.CombatData.GetEnterCombatEvents(ai.AgentItem).FirstOrDefault();
-                if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
+                int fullOffset = 0;
+                var englobedElAis = ais.Where(x => x.AgentItem.IsEnglobedAgent).ToList();
+                if (englobedElAis.Count > 0 && targetsByIDs.TryGetValue((int)TargetID.DarkAiKeeperOfThePeak, out var darkAis))
                 {
-                    start = determinedLost.Time;
-                }
-                else
-                {
-                    var firstCast = ai.GetAnimatedCastEvents(log).FirstOrDefault();
-                    if (firstCast != null)
+                    var englobedDarkAis = darkAis.Where(x => x.AgentItem.IsEnglobedAgent);
+                    foreach (var elementalAi in englobedElAis)
                     {
-                        start = firstCast.Time;
+                        var darkAi = englobedDarkAis.FirstOrDefault(x => x.EnglobingAgentItem == elementalAi.EnglobingAgentItem);
+                        if (darkAi != null)
+                        {
+                            fullOffset = HandleFullAiPhases(encounterPhases, mainPhase, englobedElAis, elementalAi, darkAi, log, phases, fullOffset);
+                        }
                     }
                 }
-                bool success = false;
-                long end = ai.LastAware;
-                var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
-                if (determinedApply != null)
-                {
-                    success = true;
-                    end = determinedApply.Time;
-                }
-                var encounterName = dark ? "Dark Ai, Keeper of the Peak" : "Elemental Ai, Keeper of the Peak";
-                var encounterIcon = dark ? EncounterIconAiDark : EncounterIconAiElemental;
-                var encounterID = dark ? (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.DarkAiMask) : (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.ElementalAiMask);
-                var mode = LogData.LogMode.CMNoName;
-                ai.OverrideName(encounterName + (ais.Count > 1 ? " " + offset : ""));
-                AddInstanceEncounterPhase(log, phases, encounterPhases, [ai], [], [], mainPhase, encounterName, start, end, success, encounterIcon, encounterID, mode);
+            }
+            int offset = 0;
+            foreach (var ai in nonEnglobedAis)
+            {
+                offset = HandleSingleAiPhases(encounterPhases, mainPhase, nonEnglobedAis, ai, log, phases, aiID, offset);       
             }
         }
         NumericallyRenameEncounterPhases(encounterPhases);
         return encounterPhases;
     }
 
-    private List<EncounterPhaseData> HandleElementalAiPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
+    private List<EncounterPhaseData> HandleFullAndElementalAiPhases(IReadOnlyDictionary<int, List<SingleActor>> targetsByIDs, ParsedEvtcLog log, List<PhaseData> phases)
     {
         return HandleAiPhases(targetsByIDs, log, phases, TargetID.AiKeeperOfThePeak);
     }
@@ -114,17 +176,37 @@ internal class SunquaPeakInstance : SunquaPeak
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
+        var china = log.CombatData.GetLanguageEvent()?.Language == LanguageEvent.LanguageEnum.Chinese;
         var targetsByIDs = Targets.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
         {
-            var elementalAiPhases = HandleElementalAiPhases(targetsByIDs, log, phases);
-            foreach (var elementalAiPhase in elementalAiPhases)
+            var fullOrElementalAiPhases = HandleFullAndElementalAiPhases(targetsByIDs, log, phases);
+            foreach (var fullOrElementalAiPhase in fullOrElementalAiPhases)
             {
-                var elementalAi = elementalAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
-                phases.AddRange(AiKeeperOfThePeak.ComputeElementalPhases(log, elementalAi, elementalAiPhase, requirePhases));
+                if (fullOrElementalAiPhase.LogID == (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.FullAiMask))
+                {
+                    var fullAiPhase = fullOrElementalAiPhase;
+                    {
+                        var darkAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.DarkAiKeeperOfThePeak));
+                        var darkAiPhase = AiKeeperOfThePeak.GetFightPhase(log, darkAi, fullAiPhase, "Dark Phase");
+                        phases.Add(darkAiPhase);
+                        phases.AddRange(AiKeeperOfThePeak.ComputeDarkPhases(log, darkAi, darkAiPhase, china, requirePhases));
+                    }
+                    {
+                        var elementalAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
+                        var elementalAiPhase = AiKeeperOfThePeak.GetFightPhase(log, elementalAi, fullAiPhase, "Elemental Phase");
+                        phases.Add(elementalAiPhase);
+                        phases.AddRange(AiKeeperOfThePeak.ComputeElementalPhases(log, elementalAi, elementalAiPhase, requirePhases));
+                    }
+                } 
+                else
+                {
+                    var elementalAiPhase = fullOrElementalAiPhase;
+                    var elementalAi = elementalAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
+                    phases.AddRange(AiKeeperOfThePeak.ComputeElementalPhases(log, elementalAi, elementalAiPhase, requirePhases));
+                }
             }
         }
         {
-            var china = log.CombatData.GetLanguageEvent()?.Language == LanguageEvent.LanguageEnum.Chinese;
             var darkAiPhases = HandleDarkAiPhases(targetsByIDs, log, phases);
             foreach (var darkAiPhase in darkAiPhases)
             {

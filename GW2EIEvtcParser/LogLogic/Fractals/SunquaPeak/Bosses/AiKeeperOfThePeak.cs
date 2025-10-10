@@ -206,9 +206,14 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     long darkModeStart = aiCastEvents.FirstOrDefault(x => (china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent!.Time)!.Time;
                     CombatItem? invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(aiAgent) && x.Value > Determined895DurationCheckForSuccess);
                     long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
+
                     AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.DarkAiKeeperOfThePeak, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                    AgentManipulationHelper.RedirectNPCEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, [aiAgent], darkAiAgent, false);
-                    aiAgent.OverrideAwareTimes(aiAgent.FirstAware, elementalLastAwareTime);
+                    darkAiAgent.SetEnglobingAgentItem(aiAgent, agentData);
+
+                    AgentItem elAiAgent = agentData.AddCustomNPCAgent(aiAgent.FirstAware, elementalLastAwareTime, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
+                    elAiAgent.SetEnglobingAgentItem(aiAgent, agentData);
+
+                    aiAgent.OverrideID(TargetID.Parent_AiKeeperOfThePeak, agentData);
                 }
                 else
                 {
@@ -357,6 +362,20 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return phases;
     }
 
+    internal static PhaseData GetFightPhase(ParsedEvtcLog log, SingleActor ai, PhaseData parentPhase, string name)
+    {
+        BuffApplyEvent? invul895Gain = log.CombatData.GetBuffApplyDataByIDByDst(Determined895, ai.AgentItem)
+            .OfType<BuffApplyEvent>()
+            .Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess)
+            .FirstOrDefault();
+        long start = Math.Max(ai.FirstAware, parentPhase.Start);
+        long end = invul895Gain != null ? Math.Min(invul895Gain.Time + ServerDelayConstant, parentPhase.End) : parentPhase.End;
+        var fightPhase = new SubPhasePhaseData(start, end, name);
+        fightPhase.AddTarget(ai, log);
+        fightPhase.AddParentPhase(parentPhase);
+        return fightPhase;
+    }
+
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
@@ -383,16 +402,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             PhaseData elePhase = phases[0];
             if (darkAi != null)
             {
-                BuffApplyEvent? invul895Gain = log.CombatData.GetBuffApplyDataByIDByDst(Determined895, elementalAi.AgentItem)
-                    .OfType<BuffApplyEvent>()
-                    .Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess)
-                    .FirstOrDefault();
-                long eleStart = Math.Max(elementalAi.FirstAware, log.LogData.LogStart);
-                long eleEnd = invul895Gain != null ? Math.Min(invul895Gain.Time + ServerDelayConstant, log.LogData.LogEnd) : log.LogData.LogEnd;
-                elePhase = new SubPhasePhaseData(eleStart, eleEnd, "Elemental Phase");
-                elePhase.AddTarget(elementalAi, log);
+                elePhase = GetFightPhase(log, elementalAi, phases[0], "Elemental Phase");
                 phases.Add(elePhase);
-                elePhase.AddParentPhase(phases[0]);
             }
             phases.AddRange(ComputeElementalPhases(log, elementalAi, elePhase, requirePhases));
         }
@@ -402,16 +413,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             PhaseData darkPhase = phases[0];
             if (elementalAi != null)
             {
-                BuffApplyEvent? invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem)
-                    .OfType<BuffApplyEvent>()
-                    .Where(x => x.AppliedDuration > Determined895DurationCheckForSuccess)
-                    .FirstOrDefault();
-                long darkStart = Math.Max(darkAi.FirstAware, log.LogData.LogStart);
-                long darkEnd = invul895Gain != null ? Math.Min(invul895Gain.Time + ServerDelayConstant, log.LogData.LogEnd) : log.LogData.LogEnd;
-                darkPhase = new SubPhasePhaseData(darkStart, darkEnd, "Dark Phase");
-                darkPhase.AddTarget(darkAi, log);
+                darkPhase = GetFightPhase(log, darkAi, phases[0], "Dark Phase");
                 phases.Add(darkPhase);
-                darkPhase.AddParentPhase(phases[0]);
             }
             phases.AddRange(ComputeDarkPhases(log, darkAi, darkPhase, china,requirePhases));
         }

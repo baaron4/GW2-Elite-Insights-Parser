@@ -608,8 +608,9 @@ public static class SpeciesIDs
         CHOP = 16552,
         ProjectionArkk = 17613,
         // - Ai
+        Parent_AiKeeperOfThePeak = SpeciesIDs.ParentAiKeeperOfThePeak,
         AiKeeperOfThePeak = 23254,
-        DarkAiKeeperOfThePeak = SpeciesIDs.AiKeeperOfThePeak2,
+        DarkAiKeeperOfThePeak = SpeciesIDs.DarkAiKeeperOfThePeak,
         EnragedWaterSprite = 23270,
         TransitionSorrowDemon1 = 23265,
         TransitionSorrowDemon2 = 23242,
@@ -1101,7 +1102,7 @@ public static class SpeciesIDs
     private const int PyreGuardianStab = -5;
     private const int PyreGuardianRetal = -6;
     private const int QadimLamp = -7;
-    private const int AiKeeperOfThePeak2 = -8;
+    private const int DarkAiKeeperOfThePeak = -8;
     private const int MatthiasSacrifice = -9;
     private const int BloodstoneFragment = -10;
     private const int BloodstoneShardMainFight = -11;
@@ -1201,6 +1202,7 @@ public static class SpeciesIDs
     private const int AdinaPlateform = -104;
     private const int KryptisTurret = -105;
     private const int HoloDancer = -106;
+    private const int ParentAiKeeperOfThePeak = -107;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
