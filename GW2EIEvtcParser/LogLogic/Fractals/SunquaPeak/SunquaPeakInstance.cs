@@ -46,7 +46,7 @@ internal class SunquaPeakInstance : SunquaPeak
         var lastDarkAi = agentData.GetNPCsByID(TargetID.DarkAiKeeperOfThePeak).LastOrDefault();
         if (lastDarkAi != null)
         {
-            var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(SkillIDs.Determined895, lastDarkAi);
+            var determinedBuffs = combatData.GetBuffApplyDataByIDByDst(Determined895, lastDarkAi);
             var determinedApply = determinedBuffs.FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
             if (determinedApply != null)
             {
@@ -60,7 +60,7 @@ internal class SunquaPeakInstance : SunquaPeak
         offset++;
         bool dark = aiID == TargetID.DarkAiKeeperOfThePeak;
         long start = ai.FirstAware;
-        var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined895, ai.AgentItem);
+        var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(Determined895, ai.AgentItem);
         var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
         var enterCombat = log.CombatData.GetEnterCombatEvents(ai.AgentItem).FirstOrDefault();
         if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
@@ -96,12 +96,11 @@ internal class SunquaPeakInstance : SunquaPeak
     {
         offset++;
         long start = elementalAi.FirstAware;
-        var determinedBuffs = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined895, elementalAi.AgentItem);
-        var determinedLost = determinedBuffs.FirstOrDefault(x => x is BuffRemoveAllEvent);
-        var enterCombat = log.CombatData.GetEnterCombatEvents(elementalAi.AgentItem).FirstOrDefault();
-        if (determinedLost != null && enterCombat != null && enterCombat.Time >= determinedLost.Time)
+        var elementalDeterminedLost = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent);
+        var elementalEnterCombat = log.CombatData.GetEnterCombatEvents(elementalAi.AgentItem).FirstOrDefault();
+        if (elementalDeterminedLost != null && elementalEnterCombat != null && elementalEnterCombat.Time >= elementalDeterminedLost.Time)
         {
-            start = determinedLost.Time;
+            start = elementalDeterminedLost.Time;
         }
         else
         {
@@ -113,17 +112,18 @@ internal class SunquaPeakInstance : SunquaPeak
         }
         bool success = false;
         long end = darkAi.LastAware;
-        var determinedApply = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Determined895, darkAi.AgentItem).FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
-        if (determinedApply != null)
+        var darkDeterminedApply = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).FirstOrDefault(x => x is BuffApplyEvent bae && bae.AppliedDuration > AiKeeperOfThePeak.Determined895DurationCheckForSuccess);
+        if (darkDeterminedApply != null)
         {
             success = true;
-            end = determinedApply.Time;
+            end = darkDeterminedApply.Time;
         }
         var encounterName = "Ai, Keeper of the Peak";
         var encounterIcon = EncounterIconAi;
         var encounterID = (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.FullAiMask);
         var mode = LogData.LogMode.CMNoName;
-        elementalAi.OverrideName(encounterName + (ais.Count > 1 ? " " + offset : ""));
+        elementalAi.OverrideName("Elemental Ai, Keeper of the Peak" + (ais.Count > 1 ? " " + offset : "") + " Full");
+        darkAi.OverrideName("Dark Ai, Keeper of the Peak" + (ais.Count > 1 ? " " + offset : "") + " Full");
         AddInstanceEncounterPhase(log, phases, encounterPhases, [elementalAi, darkAi], [], [], mainPhase, encounterName, start, end, success, encounterIcon, encounterID, mode);
         return offset;
     }
@@ -185,14 +185,14 @@ internal class SunquaPeakInstance : SunquaPeak
                 if (fullOrElementalAiPhase.LogID == (_aiKeeperOfThePeak.LogID | AiKeeperOfThePeak.FullAiMask))
                 {
                     var fullAiPhase = fullOrElementalAiPhase;
-                    var elementalAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
-                    var darkAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.DarkAiKeeperOfThePeak));
                     {
+                        var darkAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.DarkAiKeeperOfThePeak));
                         var darkAiPhase = AiKeeperOfThePeak.GetFightPhase(log, darkAi, fullAiPhase, "Dark Phase");
                         phases.Add(darkAiPhase);
                         phases.AddRange(AiKeeperOfThePeak.ComputeDarkPhases(log, darkAi, darkAiPhase, china, requirePhases));
                     }
                     {
+                        var elementalAi = fullAiPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
                         var elementalAiPhase = AiKeeperOfThePeak.GetFightPhase(log, elementalAi, fullAiPhase, "Elemental Phase");
                         phases.Add(elementalAiPhase);
                         phases.AddRange(AiKeeperOfThePeak.ComputeElementalPhases(log, elementalAi, elementalAiPhase, requirePhases));
