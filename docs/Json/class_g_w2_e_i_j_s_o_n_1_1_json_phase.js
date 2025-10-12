@@ -2,6 +2,9 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_phase =
 [
     [ "BreakbarPhase", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a9de854e4fa498844fa1b28b8bee42b63", null ],
     [ "EIEncounterID", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a598611f0cf91154f665a5491babb82c7", null ],
+    [ "EncounterIcon", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#a75a3832eacf7dc24cbdf6d7d76dd357f", null ],
+    [ "EncounterIsLateStart", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#aa0a170275326d363874d8ad4e00514c8", null ],
+    [ "EncounterMissingPreEvent", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#afbb48d4866e76a1f6ce8344377a49912", null ],
     [ "EncounterPhase", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#acd6441d4cb0693f3c967aa23177646ee", null ],
     [ "End", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#aaf08c1505b75b98409ff29b96aa8e6a1", null ],
     [ "IsCM", "class_g_w2_e_i_j_s_o_n_1_1_json_phase.html#ae22f1ede8d2061fad11305b89e8a9494", null ],
