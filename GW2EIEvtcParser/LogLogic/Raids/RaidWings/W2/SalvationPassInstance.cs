@@ -153,10 +153,12 @@ internal class SalvationPassInstance : SalvationPass
         {
 
             var slothasorPhases = ProcessGenericEncounterPhasesForInstance(targetsByIDs, log, phases, TargetID.Slothasor, [], "Slothasor", _slothasor);
+            var slublingTransforms = targetsByIDs.TryGetValue((int)TargetID.PlayerSlubling, out List<SingleActor>? value) ? value : [];
             foreach (var slothasorPhase in slothasorPhases)
             {
+                slothasorPhase.AddTargets(slublingTransforms, log, PhaseData.TargetPriority.NonBlocking);
                 var slothasor = slothasorPhase.Targets.Keys.First(x => x.IsSpecies(TargetID.Slothasor));
-                phases.AddRange(Slothasor.ComputePhases(log, slothasor, slothasorPhase, requirePhases));
+                phases.AddRange(Slothasor.ComputePhases(log, slothasor, slublingTransforms, slothasorPhase, requirePhases));
             }
         }
         {
@@ -220,11 +222,19 @@ internal class SalvationPassInstance : SalvationPass
         ];
         return friendlies.Distinct().ToList();
     }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [
+            (int)TargetID.PlayerSlubling,
+            (int)TargetID.MatthiasSacrificeCrystal,
+        ];
+    }
 
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         Slothasor.FindMushrooms(logData, agentData, combatData, extensions);  
+        Slothasor.FindSlublingTransformations(logData, agentData, combatData, extensions);
         BanditTrio.FindCageAndBombs(agentData, combatData);
         Matthias.FindSacrifices(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);

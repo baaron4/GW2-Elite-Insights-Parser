@@ -56,6 +56,7 @@ public static class SpeciesIDs
         Slubling3 = 16077,
         Slubling4 = 16104,
         PoisonMushroom = SpeciesIDs.PoisonMushroom,
+        PlayerSlubling = SpeciesIDs.PlayerSlubling,
         // - Bandit Trio
         Berg = 16088,
         Zane = 16137,
@@ -1203,6 +1204,7 @@ public static class SpeciesIDs
     private const int KryptisTurret = -105;
     private const int HoloDancer = -106;
     private const int ParentAiKeeperOfThePeak = -107;
+    private const int PlayerSlubling = -108;
 
     public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;

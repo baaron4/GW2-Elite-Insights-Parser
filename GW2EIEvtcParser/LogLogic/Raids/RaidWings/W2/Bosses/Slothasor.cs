@@ -114,6 +114,19 @@ internal class Slothasor : SalvationPass
         ];
     }
 
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
+    {
+        return
+        [
+            TargetID.Slothasor,
+            TargetID.PlayerSlubling
+        ];
+    }
+    protected override HashSet<int> IgnoreForAutoNumericalRenaming()
+    {
+        return [(int)TargetID.PlayerSlubling];
+    }
+
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
         return
@@ -123,7 +136,7 @@ internal class Slothasor : SalvationPass
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor slothasor, IEnumerable<SingleActor> slublings, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -140,12 +153,14 @@ internal class Slothasor : SalvationPass
             var phase = new SubPhasePhaseData(start, Math.Min(c.Time, encounterEnd), "Phase " + i++);
             phase.AddParentPhase(encounterPhase);
             phase.AddTarget(slothasor, log);
+            phase.AddTargets(slublings, log, PhaseData.TargetPriority.NonBlocking);
             start = c.EndTime;
             phases.Add(phase);
         }
         var lastPhase = new SubPhasePhaseData(start, encounterEnd, "Phase " + i++);
         lastPhase.AddParentPhase(encounterPhase);
         lastPhase.AddTarget(slothasor, log);
+        lastPhase.AddTargets(slublings, log, PhaseData.TargetPriority.NonBlocking);
         phases.Add(lastPhase);
         return phases;
     }
@@ -154,8 +169,10 @@ internal class Slothasor : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
+        var slublings = Targets.Where(x => x.IsSpecies(TargetID.PlayerSlubling));
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
+        phases[0].AddTargets(slublings, log, PhaseData.TargetPriority.NonBlocking);
+        phases.AddRange(ComputePhases(log, mainTarget, slublings, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
@@ -197,9 +214,73 @@ internal class Slothasor : SalvationPass
         }
     }
 
+    internal static void FindSlublingTransformations(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var slubTransformList = combatData.Where(x => x.SkillID == MagicTransformation && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
+        var transformStart = slubTransformList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
+        var transformEnd = slubTransformList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
+        var copies = new List<CombatItem>();
+        for (int i = 0; i < transformStart.Count; i++)
+        {
+            //
+            long transformStartTime = transformStart[i].Time;
+            long transformEndTime = i < transformEnd.Count ? transformEnd[i].Time : logData.LogEnd;
+            //
+            AgentItem? transformedPlayer = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x.Is(agentData.GetAgent(transformStart[i].DstAgent, transformStart[i].Time)));
+            if (transformedPlayer == null)
+            {
+                continue;
+            }
+            transformedPlayer = transformedPlayer.EnglobingAgentItem;
+            AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.Name.Split('\0')[0], Spec.NPC, TargetID.PlayerSlubling, false);
+            foreach (CombatItem cbt in combatData)
+            {
+                if (!slubling.InAwareTimes(cbt.Time))
+                {
+                    continue;
+                }
+                bool skip = !(cbt.DstMatchesAgent(transformedPlayer, extensions) || cbt.SrcMatchesAgent(transformedPlayer, extensions));
+                if (skip)
+                {
+                    continue;
+                }
+                // redirect damage events
+                if (cbt.IsDamage(extensions))
+                {
+                    // only redirect incoming damage
+                    if (cbt.DstMatchesAgent(transformedPlayer, extensions))
+                    {
+                        cbt.OverrideDstAgent(slubling);
+                    }
+                }
+                // copy the rest
+                else
+                {
+                    var copy = new CombatItem(cbt);
+                    if (copy.DstMatchesAgent(transformedPlayer, extensions))
+                    {
+                        copy.OverrideDstAgent(slubling);
+                    }
+                    if (copy.SrcMatchesAgent(transformedPlayer, extensions))
+                    {
+                        copy.OverrideSrcAgent(slubling);
+                    }
+                    copies.Add(copy);
+                }
+            }
+        }
+        if (copies.Count != 0)
+        {
+            combatData.AddRange(copies);
+            combatData.SortByTime();
+        }
+    }
+
+
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindMushrooms(logData, agentData, combatData, extensions);
+        FindSlublingTransformations(logData, agentData, combatData, extensions);
         base.EIEvtcParse(gw2Build, evtcVersion, logData, agentData, combatData, extensions);
     }
 

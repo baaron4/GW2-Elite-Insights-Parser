@@ -268,6 +268,7 @@ internal static class ParserIcons
     private const string TrashTormentedDeadMessenger = "https://i.imgur.com/1J2BTFg.png";
     private const string TrashEnforcer = "https://i.imgur.com/elHjamF.png";
     private const string TrashEcho = "https://i.imgur.com/kcN9ECn.png";
+    private const string TrashSlubling = "https://i.imgur.com/mrzh71d.png";
     private const string TrashKeepConstructCoreExquisiteConjunction = "https://i.imgur.com/yI34iqw.png";
     private const string TrashKeepConstructGhosts = "https://i.imgur.com/qeYT1Bf.png";
     private const string TrashInsidiousProjection = "https://i.imgur.com/9EdItBS.png";
@@ -1037,6 +1038,11 @@ internal static class ParserIcons
         { TargetID.SabirRectanglePlateform, NoImage},
         { TargetID.SabirSquarePlateform, NoImage},
         { TargetID.PoisonMushroom, TrashPoisonMushroom },
+        { TargetID.PlayerSlubling, TrashSlubling },
+        { TargetID.Slubling1, TrashSlubling },
+        { TargetID.Slubling2, TrashSlubling },
+        { TargetID.Slubling3, TrashSlubling },
+        { TargetID.Slubling4, TrashSlubling },
         { TargetID.SpearAggressionRevulsion, TrashSpearAggressionRevulsion },
         { TargetID.QadimLamp, TrashQadimLamp },
         { TargetID.PyreGuardianRetal, TrashPyreGuardianRetal },
