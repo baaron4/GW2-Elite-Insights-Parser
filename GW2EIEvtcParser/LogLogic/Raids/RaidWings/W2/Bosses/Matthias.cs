@@ -93,7 +93,7 @@ internal class Matthias : SalvationPass
             base.SetInstanceBuffs(log, instanceBuffs);
         }
         IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
-        if (bloodstoneBisque.Any()) 
+        if (bloodstoneBisque.Any())
         {
             var encounterPhases = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().Where(x => x.LogID == LogID);
             foreach (var encounterPhase in encounterPhases)
@@ -142,7 +142,7 @@ internal class Matthias : SalvationPass
         ];
     }
 
-    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor matthias, EncounterPhaseData encounterPhase, bool requirePhases)
+    internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor matthias, IEnumerable<SingleActor> sacrifices, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
         {
@@ -186,6 +186,7 @@ internal class Matthias : SalvationPass
             phases[i].Name = namesMat[i];
             phases[i].AddParentPhase(encounterPhase);
             phases[i].AddTarget(matthias, log);
+            phases[i].AddTargets(sacrifices, log, PhaseData.TargetPriority.NonBlocking);
         }
         return phases;
     }
@@ -193,74 +194,72 @@ internal class Matthias : SalvationPass
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
+        var sacrifices = Targets.Where(x => x.IsSpecies(TargetID.MatthiasSacrificeCrystal));
         phases[0].AddTarget(mainTarget, log);
-        phases.AddRange(ComputePhases(log, mainTarget, (EncounterPhaseData)phases[0], requirePhases));
+        phases[0].AddTargets(sacrifices, log, PhaseData.TargetPriority.NonBlocking);
+        phases.AddRange(ComputePhases(log, mainTarget, sacrifices, (EncounterPhaseData)phases[0], requirePhases));
         return phases;
     }
 
     internal static void FindSacrifices(LogData logData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        // has breakbar state into
-        if (combatData.Any(x => x.IsStateChange == StateChange.BreakbarState))
+        var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
+        var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
+        var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
+        var copies = new List<CombatItem>();
+        for (int i = 0; i < sacrificeStartList.Count; i++)
         {
-            var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == BuffRemove.All || x.IsBuffApply()));
-            var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.None).ToList();
-            var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == BuffRemove.All).ToList();
-            var copies = new List<CombatItem>();
-            for (int i = 0; i < sacrificeStartList.Count; i++)
+            //
+            long sacrificeStartTime = sacrificeStartList[i].Time;
+            long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : logData.LogEnd;
+            //
+            AgentItem? sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x.Is(agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time)));
+            if (sacrifice == null)
             {
-                //
-                long sacrificeStartTime = sacrificeStartList[i].Time;
-                long sacrificeEndTime = i < sacrificeEndList.Count ? sacrificeEndList[i].Time : logData.LogEnd;
-                //
-                AgentItem? sacrifice = agentData.GetAgentByType(AgentItem.AgentType.Player).FirstOrDefault(x => x.Is(agentData.GetAgent(sacrificeStartList[i].DstAgent, sacrificeStartList[i].Time)));
-                if (sacrifice == null)
+                continue;
+            }
+            sacrifice = sacrifice.EnglobingAgentItem;
+            AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
+            foreach (CombatItem cbt in combatData)
+            {
+                if (!sacrificeCrystal.InAwareTimes(cbt.Time))
                 {
                     continue;
                 }
-                sacrifice = sacrifice.EnglobingAgentItem;
-                AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
-                foreach (CombatItem cbt in combatData)
+                bool skip = !(cbt.DstMatchesAgent(sacrifice, extensions) || cbt.SrcMatchesAgent(sacrifice, extensions));
+                if (skip)
                 {
-                    if (!sacrificeCrystal.InAwareTimes(cbt.Time))
+                    continue;
+                }
+                // redirect damage events
+                if (cbt.IsDamage(extensions))
+                {
+                    // only redirect incoming damage
+                    if (cbt.DstMatchesAgent(sacrifice, extensions))
                     {
-                        continue;
-                    }
-                    bool skip = !(cbt.DstMatchesAgent(sacrifice, extensions) || cbt.SrcMatchesAgent(sacrifice, extensions));
-                    if (skip)
-                    {
-                        continue;
-                    }
-                    // redirect damage events
-                    if (cbt.IsDamage(extensions))
-                    {
-                        // only redirect incoming damage
-                        if (cbt.DstMatchesAgent(sacrifice, extensions))
-                        {
-                            cbt.OverrideDstAgent(sacrificeCrystal);
-                        }
-                    }
-                    // copy the rest
-                    else
-                    {
-                        var copy = new CombatItem(cbt);
-                        if (copy.DstMatchesAgent(sacrifice, extensions))
-                        {
-                            copy.OverrideDstAgent(sacrificeCrystal);
-                        }
-                        if (copy.SrcMatchesAgent(sacrifice, extensions))
-                        {
-                            copy.OverrideSrcAgent(sacrificeCrystal);
-                        }
-                        copies.Add(copy);
+                        cbt.OverrideDstAgent(sacrificeCrystal);
                     }
                 }
+                // copy the rest
+                else
+                {
+                    var copy = new CombatItem(cbt);
+                    if (copy.DstMatchesAgent(sacrifice, extensions))
+                    {
+                        copy.OverrideDstAgent(sacrificeCrystal);
+                    }
+                    if (copy.SrcMatchesAgent(sacrifice, extensions))
+                    {
+                        copy.OverrideSrcAgent(sacrificeCrystal);
+                    }
+                    copies.Add(copy);
+                }
             }
-            if (copies.Count != 0)
-            {
-                combatData.AddRange(copies);
-                combatData.SortByTime();
-            }
+        }
+        if (copies.Count != 0)
+        {
+            combatData.AddRange(copies);
+            combatData.SortByTime();
         }
     }
 
@@ -282,7 +281,7 @@ internal class Matthias : SalvationPass
         ForceSacrificeHealth(Targets);
     }
 
-    internal override IReadOnlyList<TargetID>  GetTargetsIDs()
+    internal override IReadOnlyList<TargetID> GetTargetsIDs()
     {
         return
         [

@@ -91,7 +91,7 @@ public static class SpeciesIDs
         IcePatch = 16139,
         Storm = 16108,
         Tornado = 16068,
-        MatthiasSacrificeCrystal = MatthiasSacrifice,
+        MatthiasSacrificeCrystal = SpeciesIDs.MatthiasSacrificeCrystal,
         // - Wing 3
         // - Escort
         McLeodTheSilent = 16253,
@@ -1104,7 +1104,7 @@ public static class SpeciesIDs
     private const int PyreGuardianRetal = -6;
     private const int QadimLamp = -7;
     private const int DarkAiKeeperOfThePeak = -8;
-    private const int MatthiasSacrifice = -9;
+    private const int MatthiasSacrificeCrystal = -9;
     private const int BloodstoneFragment = -10;
     private const int BloodstoneShardMainFight = -11;
     private const int ChargedBloodstone = -12;
