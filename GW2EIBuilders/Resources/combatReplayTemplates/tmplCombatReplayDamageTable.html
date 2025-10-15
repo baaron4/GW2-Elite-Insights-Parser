@@ -166,7 +166,7 @@
                 return "combat-replay-dps-table";
             },
             targets: function () {
-                return this.encounterPhase.targets;
+                return this.encounterPhase.targets.filter(x => this.encounterPhase.targetPriorities[x] < 2);
             },
             graph: function () {
                 return graphData.phases[this.encounterPhase.id].players;
