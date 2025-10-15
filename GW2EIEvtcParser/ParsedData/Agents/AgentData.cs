@@ -254,6 +254,7 @@ public class AgentData
 
     private void Refresh()
     {
+        _allAgentsList.SortByFirstAware();
         var notEnglobingAgents = _allAgentsList.Where(x => !x.IsEnglobingAgent);
         _allAgentsByAgent = _allAgentsList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
         _allNPCsByID = notEnglobingAgents.Where(x => x.Type == AgentItem.AgentType.NPC).GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
