@@ -34,6 +34,7 @@ public class EvtcParser
     private long _logEndTime;
     private EvtcVersionEvent _evtcVersion;
     private ulong _gw2Build;
+    private int _mapID = -1;
     private readonly EvtcParserSettings _parserSettings;
     private readonly GW2APIController _apiController;
     private readonly Dictionary<uint, ExtensionHandler> _enabledExtensions;
@@ -706,7 +707,6 @@ public class EvtcParser
         bool keepOnlyExtensionEvents = false;
         int stopAtLogEndEvent = _id == (int)TargetID.Instance ? 1 : -1;
         var extensionEvents = new List<CombatItem>(5000);
-        int mapID = -1;
         int currentMapID = -1;
         for (long i = 0; i < cbtItemCount; i++)
         {
@@ -714,6 +714,7 @@ public class EvtcParser
             if (stopAtLogEndEvent == -1 && 
                 combatItem.IsStateChange == StateChange.SquadCombatStart)           
             {
+                // Trigger ID is map ID
                 if (SquadCombatStartEvent.GetLogType(combatItem) == LogType.Map)
                 {
                     _id = (int)TargetID.Instance;
@@ -727,8 +728,8 @@ public class EvtcParser
             }
             if (combatItem.IsStateChange == StateChange.MapID)
             {
-                mapID = MapIDEvent.GetMapID(combatItem);
-                currentMapID = mapID;
+                _mapID = MapIDEvent.GetMapID(combatItem);
+                currentMapID = _mapID;
             }
             if (combatItem.IsStateChange == StateChange.MapChange)
             {
@@ -738,7 +739,7 @@ public class EvtcParser
             {
                 ArcDPSAgentRedirection[combatItem.SrcAgent] = combatItem.DstAgent;
             }
-            if (!IsValid(combatItem, mapID, currentMapID, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
+            if (!IsValid(combatItem, currentMapID, operation) || (keepOnlyExtensionEvents && !combatItem.IsExtension))
             {
                 discardedCbtEvents++;
                 continue;
@@ -814,11 +815,19 @@ public class EvtcParser
     /// <param name="combatItem"><see cref="CombatItem"/> data to validate.</param>
     /// <param name="operation">Operation object bound to the UI.</param>
     /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
-    private bool IsValid(CombatItem combatItem, long expectedMapID, long currentMapID, ParserController operation)
+    private bool IsValid(CombatItem combatItem, long currentMapID, ParserController operation)
     {
-        if (expectedMapID != -1 && expectedMapID != currentMapID && (combatItem.SrcIsAgent(_enabledExtensions) || combatItem.DstIsAgent(_enabledExtensions)))
+        if (!IsSupportedStateChange(combatItem.IsStateChange))
+        {
+            return false;
+        }
+        if (_mapID != -1 && _mapID != currentMapID && (combatItem.SrcIsAgent(_enabledExtensions) || combatItem.DstIsAgent(_enabledExtensions)))
         {
             // ignore events linked to an agent that are not on current map
+            return false;
+        }
+        if ((_id == (int)TargetID.Instance) && !IsSupportedStateChangeForInstanceLogs(combatItem.IsStateChange))
+        {
             return false;
         }
         if (combatItem.IsStateChange == StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
@@ -851,7 +860,7 @@ public class EvtcParser
         {
             return false;
         }
-        return IsSupportedStateChange(combatItem.IsStateChange);
+        return true;
     }
 
     /// <summary>

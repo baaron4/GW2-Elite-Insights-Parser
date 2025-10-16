@@ -196,6 +196,10 @@ public static class ParserHelper
     {
         return state != StateChange.Unknown && state != StateChange.ReplInfo && state != StateChange.StatReset && state != StateChange.APIDelayed && state != StateChange.Idle && state != StateChange.AgentChange;
     }
+    internal static bool IsSupportedStateChangeForInstanceLogs(StateChange state)
+    {
+        return state != StateChange.BuffInitial;
+    }
 
     /*
     public static string UppercaseFirst(string s)
