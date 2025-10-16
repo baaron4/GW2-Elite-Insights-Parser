@@ -220,41 +220,7 @@ internal class Matthias : SalvationPass
             }
             sacrifice = sacrifice.EnglobingAgentItem;
             AgentItem sacrificeCrystal = agentData.AddCustomNPCAgent(sacrificeStartTime, sacrificeEndTime + 100, "Sacrificed " + (i + 1) + " " + sacrifice.Name.Split('\0')[0], Spec.NPC, TargetID.MatthiasSacrificeCrystal, false);
-            foreach (CombatItem cbt in combatData)
-            {
-                if (!sacrificeCrystal.InAwareTimes(cbt.Time))
-                {
-                    continue;
-                }
-                bool skip = !(cbt.DstMatchesAgent(sacrifice, extensions) || cbt.SrcMatchesAgent(sacrifice, extensions));
-                if (skip)
-                {
-                    continue;
-                }
-                // redirect damage events
-                if (cbt.IsDamage(extensions))
-                {
-                    // only redirect incoming damage
-                    if (cbt.DstMatchesAgent(sacrifice, extensions))
-                    {
-                        cbt.OverrideDstAgent(sacrificeCrystal);
-                    }
-                }
-                // copy the rest
-                else
-                {
-                    var copy = new CombatItem(cbt);
-                    if (copy.DstMatchesAgent(sacrifice, extensions))
-                    {
-                        copy.OverrideDstAgent(sacrificeCrystal);
-                    }
-                    if (copy.SrcMatchesAgent(sacrifice, extensions))
-                    {
-                        copy.OverrideSrcAgent(sacrificeCrystal);
-                    }
-                    copies.Add(copy);
-                }
-            }
+            AgentManipulationHelper.RedirectDamageAndCopyRemainingFromSrcToDst(sacrificeCrystal, sacrifice, copies, combatData, extensions);
         }
         if (copies.Count != 0)
         {

@@ -233,41 +233,7 @@ internal class Slothasor : SalvationPass
             }
             transformedPlayer = transformedPlayer.EnglobingAgentItem;
             AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.Name.Split('\0')[0], Spec.NPC, TargetID.PlayerSlubling, false, 0, 0, 0, 0, transformedPlayer.HitboxWidth, transformedPlayer.HitboxHeight);
-            foreach (CombatItem cbt in combatData)
-            {
-                if (!slubling.InAwareTimes(cbt.Time))
-                {
-                    continue;
-                }
-                bool skip = !(cbt.DstMatchesAgent(transformedPlayer, extensions) || cbt.SrcMatchesAgent(transformedPlayer, extensions));
-                if (skip)
-                {
-                    continue;
-                }
-                // redirect damage events
-                if (cbt.IsDamage(extensions))
-                {
-                    // only redirect incoming damage
-                    if (cbt.DstMatchesAgent(transformedPlayer, extensions))
-                    {
-                        cbt.OverrideDstAgent(slubling);
-                    }
-                }
-                // copy the rest
-                else
-                {
-                    var copy = new CombatItem(cbt);
-                    if (copy.DstMatchesAgent(transformedPlayer, extensions))
-                    {
-                        copy.OverrideDstAgent(slubling);
-                    }
-                    if (copy.SrcMatchesAgent(transformedPlayer, extensions))
-                    {
-                        copy.OverrideSrcAgent(slubling);
-                    }
-                    copies.Add(copy);
-                }
-            }
+            AgentManipulationHelper.RedirectDamageAndCopyRemainingFromSrcToDst(slubling, transformedPlayer, copies, combatData, extensions);
         }
         if (copies.Count != 0)
         {
