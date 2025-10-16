@@ -232,7 +232,7 @@ internal class Slothasor : SalvationPass
                 continue;
             }
             transformedPlayer = transformedPlayer.EnglobingAgentItem;
-            AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.Name.Split('\0')[0], Spec.NPC, TargetID.PlayerSlubling, false);
+            AgentItem slubling = agentData.AddCustomNPCAgent(transformStartTime, transformEndTime + 100, "Slubling " + (i + 1) + " " + transformedPlayer.Name.Split('\0')[0], Spec.NPC, TargetID.PlayerSlubling, false, 0, 0, 0, 0, transformedPlayer.HitboxWidth, transformedPlayer.HitboxHeight);
             foreach (CombatItem cbt in combatData)
             {
                 if (!slubling.InAwareTimes(cbt.Time))
