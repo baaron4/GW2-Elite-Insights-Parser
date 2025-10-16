@@ -9,7 +9,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
     protected List<Checker> Checkers { get; private set; }
 
 
-    internal delegate long TimeClamper(long time, ParsedEvtcLog log);
+    internal delegate long TimeClamper(long time, ParsedEvtcLog log, PhaseData encounterPhase);
     private TimeClamper _timeClamper;
 
 
@@ -93,7 +93,8 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
             long timeToUse = time;
             if (_timeClamper != null)
             {
-                timeToUse = _timeClamper(time, log);
+                var encounterPhase = log.LogData.GetPhases(log).OfType<EncounterPhaseData>().FirstOrDefault(x => x.IntersectsWindow(time - 1000, time + 1000)) ?? log.LogData.GetPhases(log)[0];
+                timeToUse = _timeClamper(time, log, encounterPhase);
             }
             if (actor.AgentItem.IsEnglobingAgent)
             {

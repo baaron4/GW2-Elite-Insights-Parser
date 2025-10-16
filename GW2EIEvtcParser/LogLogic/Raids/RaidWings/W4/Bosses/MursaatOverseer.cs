@@ -24,11 +24,11 @@ internal class MursaatOverseer : BastionOfThePenitent
             new PlayerDstBuffApplyMechanic(Invulnerability757, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect", "Protected by the Protect Shield","Protect Shield",0).UsingChecker((ba, log) => ba.AppliedDuration == 1000),
             new MechanicGroup([
                 new PlayerDstBuffApplyMechanic(ProtectBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)", "Took protect","Protect (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
+                    .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)),
                 new PlayerDstBuffApplyMechanic(DispelBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)", "Took dispel","Dispel (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
+                    .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)),
                 new PlayerDstBuffApplyMechanic(ClaimBuff, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)", "Took claim","Claim (SAK)",0)
-                    .UsingTimeClamper((time, log) => Math.Max(log.LogData.LogStart, time)),
+                    .UsingTimeClamper((time, log, encounterPhase) => Math.Max(encounterPhase.Start, time)),
             ]),
             new MechanicGroup([
                 new EnemyDstBuffApplyMechanic(MursaatOverseersShield, new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield", "Jade Soldier Shield","Soldier Shield", 0),
