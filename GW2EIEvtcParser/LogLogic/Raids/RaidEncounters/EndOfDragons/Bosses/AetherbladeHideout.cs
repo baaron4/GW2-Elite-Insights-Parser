@@ -567,11 +567,13 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
         {
             phases[0].AddTarget(echoOfScarlet, log);
         }
+        var eliteScarletPhantoms = Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar]));
+        var eliteScarletHPPhantoms = eliteScarletPhantoms.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM]));
+        phases[0].AddTargets(eliteScarletHPPhantoms, log, PhaseData.TargetPriority.Blocking);
         if (!requirePhases)
         {
             return phases;
         }
-        var eliteScarletPhantoms = Targets.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomHP, TargetID.ScarletPhantomHPCM, TargetID.ScarletPhantomBreakbar]));
         if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Any())
         {
             HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
@@ -589,6 +591,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
                 var maiTrinPhase = new SubPhasePhaseData(0, maiTrinEnd, "Mai Trin");
                 maiTrinPhase.AddParentPhase(phases[0]);
                 maiTrinPhase.AddTarget(maiTrin, log);
+                maiTrinPhase.AddTargets(eliteScarletHPPhantoms, log, PhaseData.TargetPriority.Blocking);
                 phases.Add(maiTrinPhase);
 
                 // Candidate phases
@@ -660,6 +663,7 @@ internal class AetherbladeHideout : EndOfDragonsRaidEncounter
             var echoPhase = new SubPhasePhaseData(echoStart, log.LogData.LogEnd, "Echo of Scarlet Briar");
             echoPhase.AddParentPhase(phases[0]);
             echoPhase.AddTarget(echoOfScarlet, log);
+            echoPhase.AddTargets(eliteScarletHPPhantoms, log, PhaseData.TargetPriority.Blocking);
             phases.Add(echoPhase);
             var beamNPCs = TrashMobs.Where(x => x.IsAnySpecies([TargetID.ScarletPhantomBeamNM, TargetID.ScarletPhantomDeathBeamCM, TargetID.ScarletPhantomDeathBeamCM2]));
             var bombs = Targets.Where(x => x.IsSpecies(TargetID.FerrousBomb));
