@@ -7,6 +7,8 @@ internal class WeaponDescriptor
 {
     public enum Hand { MainHand, TwoHand, OffHand, Dual }
 
+    public enum WeaponEstimateResult { NotApplicable, Updated, NeedNewSet }
+
     public readonly bool IsLand;
     public readonly Hand WeaponSlot;
 
@@ -45,20 +47,20 @@ internal class WeaponDescriptor
         return slot == "Weapon_1" || slot == "Weapon_2" || slot == "Weapon_3" || slot == "Weapon_4" || slot == "Weapon_5";
     }
 
-    internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
+    internal int FindFirstWeaponSet(IReadOnlyList<WeaponSwapEvent> swaps)
     {
-        if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].from))
+        if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].SwappedFrom))
         {
-            return swaps[0].from;
+            return swaps[0].SwappedFrom;
         }
         int swapped = WeaponSetIDs.NoSet;
-        int firstSwap = swaps.Count > 0 ? swaps[0].to : WeaponSetIDs.NoSet;
+        int firstSwap = swaps.Count > 0 ? swaps[0].SwappedTo : WeaponSetIDs.NoSet;
         if (IsLand)
         {
             // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
             if (!WeaponSetIDs.IsLandSet(firstSwap))
             {
-                swapped = swaps.Any(x => WeaponSetIDs.IsLandSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsLandSet(x.to)).to : WeaponSetIDs.FirstLandSet;
+                swapped = swaps.Any(x => WeaponSetIDs.IsLandSet(x.SwappedTo)) ? swaps.First(x => WeaponSetIDs.IsLandSet(x.SwappedTo)).SwappedTo : WeaponSetIDs.FirstLandSet;
             }
             else
             {
@@ -70,7 +72,7 @@ internal class WeaponDescriptor
             // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
             if (!WeaponSetIDs.IsWaterSet(firstSwap))
             {
-                swapped = swaps.Any(x => WeaponSetIDs.IsWaterSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsWaterSet(x.to)).to : WeaponSetIDs.FirstWaterSet;
+                swapped = swaps.Any(x => WeaponSetIDs.IsWaterSet(x.SwappedTo)) ? swaps.First(x => WeaponSetIDs.IsWaterSet(x.SwappedTo)).SwappedTo : WeaponSetIDs.FirstWaterSet;
             }
             else
             {

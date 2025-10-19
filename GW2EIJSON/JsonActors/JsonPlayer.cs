@@ -58,9 +58,17 @@ public class JsonPlayer : JsonActor
     /// 0-1 are the first land set, 1-2 are the second land set \n
     /// 3-4 are the first aquatic set, 5-6 are the second aquatic set \n
     /// When unknown, 'Unknown' value will appear \n
-    /// If 2 handed weapon even indices will have "2Hand" as value
+    /// If 2 handed weapon even indices will have "2Hand" as value \n
+    /// DEPRECATED, use <see cref="WeaponSets"/> instead.\n
+    /// In case where multiple weapon sets exist, this will be equal to the first one.
     /// </summary>
     public IReadOnlyList<string>? Weapons;
+
+
+    /// <summary>
+    /// Weapons of the player \n*
+    /// </summary>
+    public IReadOnlyList<JsonWeaponSet>? WeaponSets;
 
     /// <summary>
     /// Array of int[2] that represents the number of active clones \n

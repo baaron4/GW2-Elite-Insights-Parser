@@ -209,7 +209,7 @@ public class CSVBuilder
                 var deathDuration = TimeSpan.FromMilliseconds(defense.DeadDuration);
                 deadthTooltip = deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive";
             }
-            IReadOnlyList<string> wep = player.GetWeaponSets(_log).ToArray();
+            IReadOnlyList<string> wep = player.GetWeaponSets(_log)[0].ToArray().Weapons;
             string build = "";
             if (player.Condition > 0)
             {

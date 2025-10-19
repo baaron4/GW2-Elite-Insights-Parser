@@ -3,6 +3,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIGW2API.GW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParsedData.WeaponDescriptor;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -1516,7 +1517,7 @@ public class SkillItem
         Icon = buff.Link;
     }
 
-    internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
+    internal int FindFirstWeaponSet(IReadOnlyList<WeaponSwapEvent> swaps)
     {
         int swapped = WeaponSetIDs.NoSet;
         // we started on a proper weapon set
@@ -1527,15 +1528,15 @@ public class SkillItem
         return swapped;
     }
 
-    internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
+    internal WeaponEstimateResult EstimateWeapons(WeaponSet weaponSet, long time, int swapped, bool validForCurrentSwap)
     {
         bool keep = WeaponSetIDs.IsWeaponSet(swapped);
         if (_weaponDescriptor == null || !keep || !validForCurrentSwap || ApiSkill == null)
         {
-            return false;
+            weaponSet.End = time;
+            return WeaponEstimateResult.NotApplicable;
         }
-        weaponSets.SetWeapons(_weaponDescriptor, ApiSkill, swapped);
-        return true;
+        return weaponSet.SetWeapons(_weaponDescriptor, ApiSkill, time, swapped) ? WeaponEstimateResult.Updated : WeaponEstimateResult.NeedNewSet;
     }
 
     internal void AttachSkillInfoEvent(SkillInfoEvent skillInfo)

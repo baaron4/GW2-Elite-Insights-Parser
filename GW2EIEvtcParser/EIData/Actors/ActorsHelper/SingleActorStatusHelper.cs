@@ -25,7 +25,7 @@ partial class SingleActor
     private List<Segment>? _breakbarImmunes;
     private List<Segment>? _breakbarRecoverings;
     //weaponslist
-    private WeaponSets? _weaponSets;
+    private List<WeaponSet>? _weaponSets;
 
     private static void AddSegment(List<Segment> segments, long start, long end)
     {
@@ -407,8 +407,13 @@ partial class SingleActor
         return true;
     }
 
-
-    public WeaponSets GetWeaponSets(ParsedEvtcLog log)
+    /// <summary>
+    /// Returns weapons used by Single Actor.
+    /// Will always contain at least one element.
+    /// </summary>
+    /// <param name="log"></param>
+    /// <returns></returns>
+    public IReadOnlyList<WeaponSet> GetWeaponSets(ParsedEvtcLog log)
     {
         if (_weaponSets == null)
         {
@@ -419,18 +424,21 @@ partial class SingleActor
 
     private void EstimateWeapons(ParsedEvtcLog log)
     {
-        _weaponSets = new WeaponSets();
+        var firstWeaponSet = new WeaponSet(FirstAware, LastAware);
+        _weaponSets = [firstWeaponSet];
         if (this is not PlayerActor)
         {
             return;
         }
+        var currentWeaponSet = firstWeaponSet;
         var casting = GetCastEvents(log);
         int swapped = WeaponSetIDs.NoSet;
         long swappedTime = log.LogData.LogStart;
-        List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
-        {
-            return (x.SwappedTo, x.SwappedFrom);
-        }).ToList();
+        var swaps = log.CombatData.GetWeaponSwapData(AgentItem);
+        bool land1Swapped = false;
+        bool land2Swapped = false;
+        bool water1Swapped = false;
+        bool water2Swapped = false;
         foreach (CastEvent cl in casting)
         {
             if (cl.ActualDuration == 0 && cl.SkillID != SkillIDs.WeaponSwap)
@@ -442,20 +450,34 @@ partial class SingleActor
             if (swapped == WeaponSetIDs.NoSet)
             {
                 swapped = skill.FindFirstWeaponSet(swaps);
+                land1Swapped = swapped == WeaponSetIDs.FirstLandSet;
+                land2Swapped = swapped == WeaponSetIDs.SecondLandSet;
+                water1Swapped = swapped == WeaponSetIDs.FirstWaterSet;
+                water2Swapped = swapped == WeaponSetIDs.SecondWaterSet;
             }
-            if (!skill.EstimateWeapons(_weaponSets, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant) && cl is WeaponSwapEvent swe)
+            var estimateResult = skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
+            if (estimateResult != WeaponDescriptor.WeaponEstimateResult.NeedNewSet && cl is WeaponSwapEvent swe)
             {
                 //wepswap  
                 swapped = swe.SwappedTo;
                 swappedTime = swe.Time;
+                land1Swapped = land1Swapped || swapped == WeaponSetIDs.FirstLandSet;
+                land2Swapped = land2Swapped || swapped == WeaponSetIDs.SecondLandSet;
+                water1Swapped = water1Swapped || swapped == WeaponSetIDs.FirstWaterSet;
+                water2Swapped = water2Swapped || swapped == WeaponSetIDs.SecondWaterSet;
+            } 
+            else if (estimateResult == WeaponDescriptor.WeaponEstimateResult.NeedNewSet)
+            {
+                currentWeaponSet.HasLandSwapped = land1Swapped && land2Swapped;
+                currentWeaponSet.HasWaterSwapped = water1Swapped && water2Swapped;
+                currentWeaponSet = new WeaponSet(currentWeaponSet.End, LastAware);
+                // Reset count
+                land1Swapped = swapped == WeaponSetIDs.FirstLandSet;
+                land2Swapped = swapped == WeaponSetIDs.SecondLandSet;
+                water1Swapped = swapped == WeaponSetIDs.FirstWaterSet;
+                water2Swapped = swapped == WeaponSetIDs.SecondWaterSet;
             }
         }
-        int land1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstLandSet);
-        int land2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondLandSet);
-        int water1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstWaterSet);
-        int water2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondWaterSet);
-        _weaponSets.HasLandSwapped = land1Swaps > 0 && land2Swaps > 0;
-        _weaponSets.HasWaterSwapped = water1Swaps > 0 && water2Swaps > 0;
     }
     public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
     {

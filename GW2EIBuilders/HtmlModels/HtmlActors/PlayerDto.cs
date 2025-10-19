@@ -7,6 +7,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
 internal class PlayerDto : ActorDto
 {
+
+    internal class PlayerWeaponSetDto
+    {
+        public readonly List<string> L1Set = [];
+        public readonly List<string> L2Set = [];
+        public readonly List<string> A1Set = [];
+        public readonly List<string> A2Set = [];
+        public readonly List<long> Timeframe = [];
+    }
+
     public int Group;
     public string Acc;
     public string Profession;
@@ -73,12 +83,12 @@ internal class PlayerDto : ActorDto
 
     private static void BuildWeaponSets((string mh, string oh) set, List<string> listToSet)
     {
-        if (set.mh == WeaponSets.Unknown && set.oh == WeaponSets.Unknown)
+        if (set.mh == WeaponSet.Unknown && set.oh == WeaponSet.Unknown)
         {
             return;
         }
         listToSet.Add(set.mh);
-        if (set.oh != WeaponSets.TwoHand)
+        if (set.oh != WeaponSet.TwoHand)
         {
             listToSet.Add(set.oh);
         }
@@ -86,7 +96,8 @@ internal class PlayerDto : ActorDto
 
     private void BuildWeaponSets(SingleActor actor, ParsedEvtcLog log)
     {
-        WeaponSets weps = actor.GetWeaponSets(log);
+        // TODO transform LXSet and AXSet into a class
+        WeaponSet weps = actor.GetWeaponSets(log)[0];
         BuildWeaponSets(weps.LandSet1, L1Set);
         BuildWeaponSets(weps.LandSet2, L2Set);
         BuildWeaponSets(weps.WaterSet1, A1Set);
