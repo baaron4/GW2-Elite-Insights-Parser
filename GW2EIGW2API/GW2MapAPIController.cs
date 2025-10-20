@@ -48,8 +48,8 @@ internal class GW2MapAPIController
             Console.WriteLine("Reading MapList");
             using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var specList = JsonSerializer.Deserialize<List<GW2APIMap>>(reader, GW2APIUtilities.DeserializerSettings);
-                _apiMaps = new GW2APIUtilities.APIItems<GW2APIMap>(specList);
+                var mapList = JsonSerializer.Deserialize<List<GW2APIMap>>(reader, GW2APIUtilities.DeserializerSettings);
+                _apiMaps = new GW2APIUtilities.APIItems<GW2APIMap>(mapList);
             }
         }
         else
