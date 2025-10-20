@@ -133,7 +133,7 @@ public class EvtcParser
             operation.UpdateProgressWithCancellationCheck("Parsing: Preparing data for log generation");
             PreProcessEvtcData(operation);
             operation.UpdateProgressWithCancellationCheck("Parsing: Data parsed");
-            var log = new ParsedEvtcLog(_evtcVersion, _logData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, operation);
+            var log = new ParsedEvtcLog(_evtcVersion, _logData, _agentData, _skillData, _combatItems, _playerList, _enabledExtensions, _parserSettings, _apiController, operation);
 
             if (multiThreadAcceleration)
             {

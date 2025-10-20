@@ -1,5 +1,6 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -17,7 +18,7 @@ internal class CaptainMaiTrinBossInstance : CaptainMaiTrinBoss
         Extension = "captnmai";
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         return "Captain Mai Trin Boss Fractal"; ;
     }
