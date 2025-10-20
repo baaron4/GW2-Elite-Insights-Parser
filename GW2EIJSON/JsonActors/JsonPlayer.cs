@@ -60,7 +60,7 @@ public class JsonPlayer : JsonActor
     /// When unknown, 'Unknown' value will appear \n
     /// If 2 handed weapon even indices will have "2Hand" as value \n
     /// DEPRECATED, use <see cref="WeaponSets"/> instead.\n
-    /// In case where multiple weapon sets exist, this will be equal to the first one.
+    /// In case where multiple weapon sets exist, this will be equal to the last one.
     /// </summary>
     public IReadOnlyList<string>? Weapons;
 

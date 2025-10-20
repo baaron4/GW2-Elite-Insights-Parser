@@ -97,7 +97,7 @@ internal class PlayerDto : ActorDto
     private void BuildWeaponSets(SingleActor actor, ParsedEvtcLog log)
     {
         // TODO transform LXSet and AXSet into a class
-        WeaponSet weps = actor.GetWeaponSets(log)[0];
+        WeaponSet weps = actor.GetWeaponSets(log)[^1];
         BuildWeaponSets(weps.LandSet1, L1Set);
         BuildWeaponSets(weps.LandSet2, L2Set);
         BuildWeaponSets(weps.WaterSet1, A1Set);

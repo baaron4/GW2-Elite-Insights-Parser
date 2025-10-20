@@ -128,6 +128,10 @@ public class SkillItem
 
     internal int FindFirstWeaponSet(IReadOnlyList<WeaponSwapEvent> swaps)
     {
+        if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].SwappedFrom))
+        {
+            return swaps[0].SwappedFrom;
+        }
         int swapped = WeaponSetIDs.NoSet;
         // we started on a proper weapon set
         if (_weaponDescriptor != null)

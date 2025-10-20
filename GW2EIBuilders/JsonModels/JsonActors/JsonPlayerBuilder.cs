@@ -28,7 +28,7 @@ internal static class JsonPlayerBuilder
         //
         jsonPlayer.Account = player.Account;
         var weaponSets = player.GetWeaponSets(log);
-        jsonPlayer.Weapons = weaponSets[0].ToArray().Weapons;
+        jsonPlayer.Weapons = weaponSets[^1].ToArray().Weapons;
         jsonPlayer.WeaponSets = weaponSets.Select(x =>
         {
             var (Weapons, Timeframe) = x.ToArray();

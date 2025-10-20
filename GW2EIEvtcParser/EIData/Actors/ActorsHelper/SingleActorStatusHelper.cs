@@ -471,6 +471,8 @@ partial class SingleActor
                 currentWeaponSet.HasLandSwapped = land1Swapped && land2Swapped;
                 currentWeaponSet.HasWaterSwapped = water1Swapped && water2Swapped;
                 currentWeaponSet = new WeaponSet(currentWeaponSet.End, LastAware);
+                _weaponSets.Add(currentWeaponSet);
+                skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
                 // Reset count
                 land1Swapped = swapped == WeaponSetIDs.FirstLandSet;
                 land2Swapped = swapped == WeaponSetIDs.SecondLandSet;
