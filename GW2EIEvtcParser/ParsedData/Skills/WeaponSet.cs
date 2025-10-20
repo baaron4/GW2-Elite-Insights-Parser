@@ -20,11 +20,16 @@ public class WeaponSet
     public bool HasWaterSwapped { get; internal set; } = false;
 
     public long Start { get; private set; }
-    public long End { get; internal set; }
+    public long End { get; private set; }
 
     internal WeaponSet(long start, long end)
     {
         Start = start;
+        End = end;
+    }
+
+    internal void SetEnd(long end)
+    {
         End = end;
     }
 

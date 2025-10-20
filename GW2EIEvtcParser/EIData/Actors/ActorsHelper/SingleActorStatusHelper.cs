@@ -418,13 +418,14 @@ partial class SingleActor
         if (_weaponSets == null)
         {
             EstimateWeapons(log);
+            _weaponSets[^1].SetEnd(log.LogData.EvtcLogEnd);
         }
         return _weaponSets!;
     }
-
+    [MemberNotNull(nameof(_weaponSets))]
     private void EstimateWeapons(ParsedEvtcLog log)
     {
-        var firstWeaponSet = new WeaponSet(FirstAware, LastAware);
+        var firstWeaponSet = new WeaponSet(log.LogData.EvtcLogStart, log.LogData.EvtcLogEnd);
         _weaponSets = [firstWeaponSet];
         if (this is not PlayerActor)
         {
@@ -470,7 +471,7 @@ partial class SingleActor
             {
                 currentWeaponSet.HasLandSwapped = land1Swapped && land2Swapped;
                 currentWeaponSet.HasWaterSwapped = water1Swapped && water2Swapped;
-                currentWeaponSet = new WeaponSet(currentWeaponSet.End, LastAware);
+                currentWeaponSet = new WeaponSet(currentWeaponSet.End, log.LogData.EvtcLogEnd);
                 _weaponSets.Add(currentWeaponSet);
                 skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
                 // Reset count
