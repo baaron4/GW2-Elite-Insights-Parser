@@ -8,13 +8,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 internal class PlayerDto : ActorDto
 {
 
-    internal class PlayerWeaponSetDto
+    internal class PlayerWeaponSetDto(long start, long end)
     {
         public readonly List<string> L1Set = [];
         public readonly List<string> L2Set = [];
         public readonly List<string> A1Set = [];
         public readonly List<string> A2Set = [];
-        public readonly List<long> Timeframe = [];
+        public readonly long Start = start;
+        public readonly long End = end;
     }
 
     public int Group;
@@ -25,10 +26,7 @@ internal class PlayerDto : ActorDto
 
     public bool IsCommander;
     public List<string[]>? CommanderStates;
-    public readonly List<string> L1Set = [];
-    public readonly List<string> L2Set = [];
-    public readonly List<string> A1Set = [];
-    public readonly List<string> A2Set = [];
+    public List<PlayerWeaponSetDto> WeaponSets;
     public string ColTarget;
     public string ColCleave;
     public string ColTotal;
@@ -78,6 +76,7 @@ internal class PlayerDto : ActorDto
         (ColTarget, ColCleave, ColTotal) = GetSpecGraphColor(actor.BaseSpec);
         IsFake = actor.IsFakeActor;
         NotInSquad = !(actor is Player);
+        WeaponSets = [];
         BuildWeaponSets(actor, log);
     }
 
@@ -96,11 +95,14 @@ internal class PlayerDto : ActorDto
 
     private void BuildWeaponSets(SingleActor actor, ParsedEvtcLog log)
     {
-        // TODO transform LXSet and AXSet into a class
-        WeaponSet weps = actor.GetWeaponSets(log)[^1];
-        BuildWeaponSets(weps.LandSet1, L1Set);
-        BuildWeaponSets(weps.LandSet2, L2Set);
-        BuildWeaponSets(weps.WaterSet1, A1Set);
-        BuildWeaponSets(weps.WaterSet2, A2Set);
+        foreach (var weps in actor.GetWeaponSets(log))
+        {
+            var wepsDto = new PlayerWeaponSetDto(weps.Start, weps.End);
+            WeaponSets.Add(wepsDto);
+            BuildWeaponSets(weps.LandSet1, wepsDto.L1Set);
+            BuildWeaponSets(weps.LandSet2, wepsDto.L2Set);
+            BuildWeaponSets(weps.WaterSet1, wepsDto.A1Set);
+            BuildWeaponSets(weps.WaterSet2, wepsDto.A2Set);
+        }
     }
 }
