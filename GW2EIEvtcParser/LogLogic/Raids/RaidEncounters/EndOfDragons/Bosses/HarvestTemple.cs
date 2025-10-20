@@ -551,7 +551,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                             // Avoid making the gadget go back to 100% hp on "death"
                             // Regenerating back to full HP
                             // use mid life check to allow hp going back up to 100% around first aware
-                            if (healthPercent > lastHPUpdate && healthPercent > 99 && evt.Time > (to.LastAware + to.FirstAware) / 2)
+                            if (healthPercent > lastHPUpdate && healthPercent > 99 && evt.Time > to.HalfAware)
                             {
                                 return false;
                             }

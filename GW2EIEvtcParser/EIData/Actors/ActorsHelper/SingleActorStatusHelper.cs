@@ -471,7 +471,10 @@ partial class SingleActor
             {
                 currentWeaponSet.HasLandSwapped = land1Swapped && land2Swapped;
                 currentWeaponSet.HasWaterSwapped = water1Swapped && water2Swapped;
-                currentWeaponSet = new WeaponSet(currentWeaponSet.End, log.LogData.EvtcLogEnd);
+                // We can't say exactly when weapon have been changed, use mid time
+                var midTime = (currentWeaponSet.End + 1 + cl.Time) / 2;
+                currentWeaponSet.SetEnd(midTime);
+                currentWeaponSet = new WeaponSet(midTime, log.LogData.EvtcLogEnd);
                 _weaponSets.Add(currentWeaponSet);
                 skill.EstimateWeapons(currentWeaponSet, cl.Time, swapped, cl.Time > swappedTime + WeaponSwapDelayConstant);
                 // Reset count

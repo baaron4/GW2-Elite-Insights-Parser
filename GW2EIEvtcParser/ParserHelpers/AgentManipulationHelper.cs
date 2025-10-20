@@ -291,7 +291,7 @@ public static class AgentManipulationHelper
                 var previousStateTime = squadCombatStartCombatEnds[0];
                 foreach (var curAgent in npcsByInstdID.Value)
                 {
-                    var curStateTime = squadCombatStartCombatEnds.Last(x => x <= (curAgent.LastAware + curAgent.FirstAware) / 2);
+                    var curStateTime = squadCombatStartCombatEnds.Last(x => x <= curAgent.HalfAware);
                     if (previousAgent.ID == curAgent.ID && curAgent.Master == previousAgent.Master && curStateTime == previousStateTime)
                     {
                         agentToRegroup.Add(curAgent);
