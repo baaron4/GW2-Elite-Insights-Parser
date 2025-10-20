@@ -49,10 +49,6 @@ internal class WeaponDescriptor
 
     internal int FindFirstWeaponSet(IReadOnlyList<WeaponSwapEvent> swaps)
     {
-        if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].SwappedFrom))
-        {
-            return swaps[0].SwappedFrom;
-        }
         int swapped = WeaponSetIDs.NoSet;
         int firstSwap = swaps.Count > 0 ? swaps[0].SwappedTo : WeaponSetIDs.NoSet;
         if (IsLand)
