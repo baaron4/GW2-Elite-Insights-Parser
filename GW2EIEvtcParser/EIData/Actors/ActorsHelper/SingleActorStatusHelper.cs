@@ -418,7 +418,6 @@ partial class SingleActor
         if (_weaponSets == null)
         {
             EstimateWeapons(log);
-            _weaponSets[^1].SetEnd(log.LogData.EvtcLogEnd);
         }
         return _weaponSets!;
     }
@@ -484,6 +483,7 @@ partial class SingleActor
                 water2Swapped = swapped == WeaponSetIDs.SecondWaterSet;
             }
         }
+        currentWeaponSet.SetEnd(log.LogData.EvtcLogEnd);
     }
     public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
     {

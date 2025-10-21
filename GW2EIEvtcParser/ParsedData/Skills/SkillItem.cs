@@ -146,7 +146,6 @@ public class SkillItem
         bool keep = WeaponSetIDs.IsWeaponSet(swapped);
         if (_weaponDescriptor == null || !keep || !validForCurrentSwap || ApiSkill == null)
         {
-            weaponSet.SetEnd(time);
             return WeaponEstimateResult.NotApplicable;
         }
         return weaponSet.SetWeapons(_weaponDescriptor, ApiSkill, time, swapped) ? WeaponEstimateResult.Updated : WeaponEstimateResult.NeedNewSet;
