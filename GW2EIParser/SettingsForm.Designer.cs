@@ -28,962 +28,1041 @@ partial class SettingsForm
     /// </summary>
     private void InitializeComponent()
     {
-        this.components = new System.ComponentModel.Container();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-        this.LblSettingsInfoMsg = new System.Windows.Forms.Label();
-        this.ChkDefaultOutputLoc = new System.Windows.Forms.CheckBox();
-        this.TxtCustomSaveLocation = new System.Windows.Forms.TextBox();
-        this.NumericCustomTooShort = new System.Windows.Forms.NumericUpDown();
-        this.LblCustomTooShort = new System.Windows.Forms.Label();
-        this.NumericMemoryLimit = new System.Windows.Forms.NumericUpDown();
-        this.LblMemoryLimit = new System.Windows.Forms.Label();
-        this.BtnCustomSaveLocSelect = new System.Windows.Forms.Button();
-        this.LblCustomSaveLoc = new System.Windows.Forms.Label();
-        this.BtnResetSkillList = new System.Windows.Forms.Button();
-        this.BtnResetTraitList = new System.Windows.Forms.Button();
-        this.BtnResetSpecList = new System.Windows.Forms.Button();
-        this.ChkOutputHtml = new System.Windows.Forms.CheckBox();
-        this.ChkOutputCsv = new System.Windows.Forms.CheckBox();
-        this.ChkPhaseParsing = new System.Windows.Forms.CheckBox();
-        this.ChkSingleThreaded = new System.Windows.Forms.CheckBox();
-        this.ChkCombatReplay = new System.Windows.Forms.CheckBox();
-        this.ChkUploadDPSReports = new System.Windows.Forms.CheckBox();
-        this.ChkUploadWingman = new System.Windows.Forms.CheckBox();
-        this.TxtDPSReportUserToken = new System.Windows.Forms.TextBox();
-        this.ChkUploadWebhook = new System.Windows.Forms.CheckBox();
-        this.ChkUploadSimpleMessageWebhook = new System.Windows.Forms.CheckBox();
-        this.TxtUploadWebhookUrl = new System.Windows.Forms.TextBox();
-        this.ChkOutputJson = new System.Windows.Forms.CheckBox();
-        this.ChkIndentJSON = new System.Windows.Forms.CheckBox();
-        this.TlpSettings = new System.Windows.Forms.ToolTip(this.components);
-        this.GroupWebhookSettings = new System.Windows.Forms.GroupBox();
-        this.LblWebhookUrl = new System.Windows.Forms.Label();
-        this.ChkMultiLogs = new System.Windows.Forms.CheckBox();
-        this.ChkAnonymous = new System.Windows.Forms.CheckBox();
-        this.ChkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
-        this.ChkHtmlCompressJson = new System.Windows.Forms.CheckBox();
-        this.ChkDetailledWvW = new System.Windows.Forms.CheckBox();
-        this.LblHtmlExternalScriptsCdn = new System.Windows.Forms.Label();
-        this.LblHtmlExternalScriptsPath = new System.Windows.Forms.Label();
-        this.TxtHtmlExternalScriptsCdn = new System.Windows.Forms.TextBox();
-        this.TxtHtmlExternalScriptsPath = new System.Windows.Forms.TextBox();
-        this.ChkSaveOutTrace = new System.Windows.Forms.CheckBox();
-        this.ChkDamageMods = new System.Windows.Forms.CheckBox();
-        this.ChkRawTimelineArrays = new System.Windows.Forms.CheckBox();
-        this.TabControl = new System.Windows.Forms.TabControl();
-        this.TabGeneral = new System.Windows.Forms.TabPage();
-        this.GroupParsing = new System.Windows.Forms.GroupBox();
-        this.ChkAutoParse = new System.Windows.Forms.CheckBox();
-        this.ChkAutoAdd = new System.Windows.Forms.CheckBox();
-        this.ChkSkipFailedTries = new System.Windows.Forms.CheckBox();
-        this.GroupOutput = new System.Windows.Forms.GroupBox();
-        this.ChkAddDuration = new System.Windows.Forms.CheckBox();
-        this.ChkAddPoVProf = new System.Windows.Forms.CheckBox();
-        this.GroupLog = new System.Windows.Forms.GroupBox();
-        this.TabHTML = new System.Windows.Forms.TabPage();
-        this.PictureTheme = new System.Windows.Forms.PictureBox();
-        this.PanelHtml = new System.Windows.Forms.Panel();
-        this.BtnHtmlExternalScriptPathSelect = new System.Windows.Forms.Button();
-        this.PanelTheme = new System.Windows.Forms.Panel();
-        this.RadioThemeLight = new System.Windows.Forms.RadioButton();
-        this.RadioThemeDark = new System.Windows.Forms.RadioButton();
-        this.TabCSV = new System.Windows.Forms.TabPage();
-        this.TabRaw = new System.Windows.Forms.TabPage();
-        this.PanelJson = new System.Windows.Forms.Panel();
-        this.GroupRawSettings = new System.Windows.Forms.GroupBox();
-        this.ChkCompressRaw = new System.Windows.Forms.CheckBox();
-        this.TabUpload = new System.Windows.Forms.TabPage();
-        this.DPSReportUserTokenLabel = new System.Windows.Forms.Label();
-        this.TabAPI = new System.Windows.Forms.TabPage();
-        this.LblResetSkill = new System.Windows.Forms.Label();
-        this.LblResetTrait = new System.Windows.Forms.Label();
-        this.LblResetSpec = new System.Windows.Forms.Label();
-        this.BtnClose = new System.Windows.Forms.Button();
-        this.BtnDumpSettings = new System.Windows.Forms.Button();
-        this.BtnLoadSettings = new System.Windows.Forms.Button();
-        ((System.ComponentModel.ISupportInitialize)(this.NumericCustomTooShort)).BeginInit();
-        ((System.ComponentModel.ISupportInitialize)(this.NumericMemoryLimit)).BeginInit();
-        this.GroupWebhookSettings.SuspendLayout();
-        this.TabControl.SuspendLayout();
-        this.TabGeneral.SuspendLayout();
-        this.GroupParsing.SuspendLayout();
-        this.GroupOutput.SuspendLayout();
-        this.GroupLog.SuspendLayout();
-        this.TabHTML.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)(this.PictureTheme)).BeginInit();
-        this.PanelHtml.SuspendLayout();
-        this.PanelTheme.SuspendLayout();
-        this.TabCSV.SuspendLayout();
-        this.TabRaw.SuspendLayout();
-        this.PanelJson.SuspendLayout();
-        this.GroupRawSettings.SuspendLayout();
-        this.TabUpload.SuspendLayout();
-        this.TabAPI.SuspendLayout();
-        this.SuspendLayout();
+        components = new System.ComponentModel.Container();
+        var resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+        LblSettingsInfoMsg = new Label();
+        ChkDefaultOutputLoc = new CheckBox();
+        TxtCustomSaveLocation = new TextBox();
+        NumericCustomTooShort = new NumericUpDown();
+        LblCustomTooShort = new Label();
+        NumericMemoryLimit = new NumericUpDown();
+        LblMemoryLimit = new Label();
+        BtnCustomSaveLocSelect = new Button();
+        LblCustomSaveLoc = new Label();
+        BtnResetMapList = new Button();
+        BtnResetSkillList = new Button();
+        BtnResetTraitList = new Button();
+        BtnResetSpecList = new Button();
+        ChkOutputHtml = new CheckBox();
+        ChkOutputCsv = new CheckBox();
+        ChkPhaseParsing = new CheckBox();
+        ChkSingleThreaded = new CheckBox();
+        ChkCombatReplay = new CheckBox();
+        ChkUploadDPSReports = new CheckBox();
+        ChkUploadWingman = new CheckBox();
+        TxtDPSReportUserToken = new TextBox();
+        ChkUploadWebhook = new CheckBox();
+        ChkUploadSimpleMessageWebhook = new CheckBox();
+        TxtUploadWebhookUrl = new TextBox();
+        ChkOutputJson = new CheckBox();
+        ChkIndentJSON = new CheckBox();
+        TlpSettings = new ToolTip(components);
+        GroupWebhookSettings = new GroupBox();
+        LblWebhookUrl = new Label();
+        ChkMultiLogs = new CheckBox();
+        ChkAnonymous = new CheckBox();
+        ChkHtmlExternalScripts = new CheckBox();
+        ChkHtmlCompressJson = new CheckBox();
+        ChkDetailledWvW = new CheckBox();
+        LblHtmlExternalScriptsCdn = new Label();
+        LblHtmlExternalScriptsPath = new Label();
+        TxtHtmlExternalScriptsCdn = new TextBox();
+        TxtHtmlExternalScriptsPath = new TextBox();
+        ChkSaveOutTrace = new CheckBox();
+        ChkDamageMods = new CheckBox();
+        ChkRawTimelineArrays = new CheckBox();
+        TabControl = new TabControl();
+        TabGeneral = new TabPage();
+        GroupParsing = new GroupBox();
+        ChkAutoParse = new CheckBox();
+        ChkAutoAdd = new CheckBox();
+        ChkSkipFailedTries = new CheckBox();
+        GroupOutput = new GroupBox();
+        ChkAddDuration = new CheckBox();
+        ChkAddPoVProf = new CheckBox();
+        GroupLog = new GroupBox();
+        TabHTML = new TabPage();
+        PictureTheme = new PictureBox();
+        PanelHtml = new Panel();
+        BtnHtmlExternalScriptPathSelect = new Button();
+        PanelTheme = new Panel();
+        RadioThemeLight = new RadioButton();
+        RadioThemeDark = new RadioButton();
+        TabCSV = new TabPage();
+        TabRaw = new TabPage();
+        PanelJson = new Panel();
+        GroupRawSettings = new GroupBox();
+        ChkCompressRaw = new CheckBox();
+        TabUpload = new TabPage();
+        DPSReportUserTokenLabel = new Label();
+        TabAPI = new TabPage();
+        LblResetSkill = new Label();
+        LblResetTrait = new Label();
+        LblResetSpec = new Label();
+        BtnClose = new Button();
+        BtnDumpSettings = new Button();
+        BtnLoadSettings = new Button();
+        LblResetMap = new Label();
+        ((System.ComponentModel.ISupportInitialize)NumericCustomTooShort).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)NumericMemoryLimit).BeginInit();
+        GroupWebhookSettings.SuspendLayout();
+        TabControl.SuspendLayout();
+        TabGeneral.SuspendLayout();
+        GroupParsing.SuspendLayout();
+        GroupOutput.SuspendLayout();
+        GroupLog.SuspendLayout();
+        TabHTML.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)PictureTheme).BeginInit();
+        PanelHtml.SuspendLayout();
+        PanelTheme.SuspendLayout();
+        TabCSV.SuspendLayout();
+        TabRaw.SuspendLayout();
+        PanelJson.SuspendLayout();
+        GroupRawSettings.SuspendLayout();
+        TabUpload.SuspendLayout();
+        TabAPI.SuspendLayout();
+        SuspendLayout();
         // 
         // LblSettingsInfoMsg
         // 
-        this.LblSettingsInfoMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-        this.LblSettingsInfoMsg.AutoSize = true;
-        this.LblSettingsInfoMsg.Location = new System.Drawing.Point(9, 383);
-        this.LblSettingsInfoMsg.Name = "LblSettingsInfoMsg";
-        this.LblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
-        this.LblSettingsInfoMsg.TabIndex = 12;
-        this.LblSettingsInfoMsg.Text = "*Changes will not alter files that are currently parsing";
+        LblSettingsInfoMsg.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+        LblSettingsInfoMsg.AutoSize = true;
+        LblSettingsInfoMsg.Location = new Point(10, 442);
+        LblSettingsInfoMsg.Margin = new Padding(4, 0, 4, 0);
+        LblSettingsInfoMsg.Name = "LblSettingsInfoMsg";
+        LblSettingsInfoMsg.Size = new Size(285, 15);
+        LblSettingsInfoMsg.TabIndex = 12;
+        LblSettingsInfoMsg.Text = "*Changes will not alter files that are currently parsing";
         // 
         // ChkDefaultOutputLoc
         // 
-        this.ChkDefaultOutputLoc.AutoSize = true;
-        this.ChkDefaultOutputLoc.Checked = true;
-        this.ChkDefaultOutputLoc.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.ChkDefaultOutputLoc.Location = new System.Drawing.Point(12, 24);
-        this.ChkDefaultOutputLoc.Name = "ChkDefaultOutputLoc";
-        this.ChkDefaultOutputLoc.Size = new System.Drawing.Size(192, 17);
-        this.ChkDefaultOutputLoc.TabIndex = 14;
-        this.ChkDefaultOutputLoc.Text = "Save Output in same folder as evtc";
-        this.ChkDefaultOutputLoc.UseVisualStyleBackColor = true;
-        this.ChkDefaultOutputLoc.CheckedChanged += new System.EventHandler(this.ChkDefaultOutputLocationCheckedChanged);
+        ChkDefaultOutputLoc.AutoSize = true;
+        ChkDefaultOutputLoc.Checked = true;
+        ChkDefaultOutputLoc.CheckState = CheckState.Checked;
+        ChkDefaultOutputLoc.Location = new Point(14, 28);
+        ChkDefaultOutputLoc.Margin = new Padding(4, 3, 4, 3);
+        ChkDefaultOutputLoc.Name = "ChkDefaultOutputLoc";
+        ChkDefaultOutputLoc.Size = new Size(208, 19);
+        ChkDefaultOutputLoc.TabIndex = 14;
+        ChkDefaultOutputLoc.Text = "Save Output in same folder as evtc";
+        ChkDefaultOutputLoc.UseVisualStyleBackColor = true;
+        ChkDefaultOutputLoc.CheckedChanged += ChkDefaultOutputLocationCheckedChanged;
         // 
         // TxtCustomSaveLocation
         // 
-        this.TxtCustomSaveLocation.Location = new System.Drawing.Point(12, 72);
-        this.TxtCustomSaveLocation.Name = "TxtCustomSaveLocation";
-        this.TxtCustomSaveLocation.Size = new System.Drawing.Size(370, 20);
-        this.TxtCustomSaveLocation.TabIndex = 15;
-        this.TxtCustomSaveLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-        this.TxtCustomSaveLocation.TextChanged += new System.EventHandler(this.TxtCustomSaveLocationTextChanged);
+        TxtCustomSaveLocation.Location = new Point(14, 83);
+        TxtCustomSaveLocation.Margin = new Padding(4, 3, 4, 3);
+        TxtCustomSaveLocation.Name = "TxtCustomSaveLocation";
+        TxtCustomSaveLocation.Size = new Size(431, 23);
+        TxtCustomSaveLocation.TabIndex = 15;
+        TxtCustomSaveLocation.TextAlign = HorizontalAlignment.Right;
+        TxtCustomSaveLocation.TextChanged += TxtCustomSaveLocationTextChanged;
         // 
         // NumericCustomTooShort
         // 
-        this.NumericCustomTooShort.Location = new System.Drawing.Point(156, 134);
-        this.NumericCustomTooShort.Maximum = new decimal(new int[] {
-        86400000,
-        0,
-        0,
-        0});
-        this.NumericCustomTooShort.Minimum = new decimal(new int[] {
-        2200,
-        0,
-        0,
-        0});
-        this.NumericCustomTooShort.Name = "NumericCustomTooShort";
-        this.NumericCustomTooShort.Size = new System.Drawing.Size(90, 20);
-        this.NumericCustomTooShort.TabIndex = 15;
-        this.NumericCustomTooShort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-        this.NumericCustomTooShort.Value = new decimal(new int[] {
-        2200,
-        0,
-        0,
-        0});
-        this.NumericCustomTooShort.ValueChanged += new System.EventHandler(this.NumericCustomTooShortValueChanged);
+        NumericCustomTooShort.Location = new Point(182, 155);
+        NumericCustomTooShort.Margin = new Padding(4, 3, 4, 3);
+        NumericCustomTooShort.Maximum = new decimal(new int[] { 86400000, 0, 0, 0 });
+        NumericCustomTooShort.Minimum = new decimal(new int[] { 2200, 0, 0, 0 });
+        NumericCustomTooShort.Name = "NumericCustomTooShort";
+        NumericCustomTooShort.Size = new Size(105, 23);
+        NumericCustomTooShort.TabIndex = 15;
+        NumericCustomTooShort.TextAlign = HorizontalAlignment.Right;
+        NumericCustomTooShort.Value = new decimal(new int[] { 2200, 0, 0, 0 });
+        NumericCustomTooShort.ValueChanged += NumericCustomTooShortValueChanged;
         // 
         // LblCustomTooShort
         // 
-        this.LblCustomTooShort.AutoSize = true;
-        this.LblCustomTooShort.Location = new System.Drawing.Point(6, 136);
-        this.LblCustomTooShort.Name = "LblCustomTooShort";
-        this.LblCustomTooShort.Size = new System.Drawing.Size(151, 13);
-        this.LblCustomTooShort.TabIndex = 17;
-        this.LblCustomTooShort.Text = "Skip logs shorter than (in ms):";
+        LblCustomTooShort.AutoSize = true;
+        LblCustomTooShort.Location = new Point(7, 157);
+        LblCustomTooShort.Margin = new Padding(4, 0, 4, 0);
+        LblCustomTooShort.Name = "LblCustomTooShort";
+        LblCustomTooShort.Size = new Size(164, 15);
+        LblCustomTooShort.TabIndex = 17;
+        LblCustomTooShort.Text = "Skip logs shorter than (in ms):";
         // 
         // NumericMemoryLimit
         // 
-        this.NumericMemoryLimit.Location = new System.Drawing.Point(216, 313);
-        this.NumericMemoryLimit.Maximum = new decimal(new int[] {
-        2147483647,
-        0,
-        0,
-        0});
-        this.NumericMemoryLimit.Name = "NumericMemoryLimit";
-        this.NumericMemoryLimit.Size = new System.Drawing.Size(90, 20);
-        this.NumericMemoryLimit.TabIndex = 15;
-        this.NumericMemoryLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-        this.NumericMemoryLimit.ValueChanged += new System.EventHandler(this.NumericMemoryLimitValueChanged);
+        NumericMemoryLimit.Location = new Point(252, 361);
+        NumericMemoryLimit.Margin = new Padding(4, 3, 4, 3);
+        NumericMemoryLimit.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
+        NumericMemoryLimit.Name = "NumericMemoryLimit";
+        NumericMemoryLimit.Size = new Size(105, 23);
+        NumericMemoryLimit.TabIndex = 15;
+        NumericMemoryLimit.TextAlign = HorizontalAlignment.Right;
+        NumericMemoryLimit.ValueChanged += NumericMemoryLimitValueChanged;
         // 
         // LblMemoryLimit
         // 
-        this.LblMemoryLimit.AutoSize = true;
-        this.LblMemoryLimit.Location = new System.Drawing.Point(15, 315);
-        this.LblMemoryLimit.Name = "LblMemoryLimit";
-        this.LblMemoryLimit.Size = new System.Drawing.Size(200, 13);
-        this.LblMemoryLimit.TabIndex = 17;
-        this.LblMemoryLimit.Text = "Kill Application if using more than (in MB):";
-        this.TlpSettings.SetToolTip(this.LblMemoryLimit, "Keep default value if unsure (0).");
+        LblMemoryLimit.AutoSize = true;
+        LblMemoryLimit.Location = new Point(18, 363);
+        LblMemoryLimit.Margin = new Padding(4, 0, 4, 0);
+        LblMemoryLimit.Name = "LblMemoryLimit";
+        LblMemoryLimit.Size = new Size(232, 15);
+        LblMemoryLimit.TabIndex = 17;
+        LblMemoryLimit.Text = "Kill Application if using more than (in MB):";
+        TlpSettings.SetToolTip(LblMemoryLimit, "Keep default value if unsure (0).");
         // 
         // BtnCustomSaveLocSelect
         // 
-        this.BtnCustomSaveLocSelect.Location = new System.Drawing.Point(384, 72);
-        this.BtnCustomSaveLocSelect.Name = "BtnCustomSaveLocSelect";
-        this.BtnCustomSaveLocSelect.Size = new System.Drawing.Size(45, 20);
-        this.BtnCustomSaveLocSelect.TabIndex = 16;
-        this.BtnCustomSaveLocSelect.Text = "Select";
-        this.BtnCustomSaveLocSelect.UseVisualStyleBackColor = true;
-        this.BtnCustomSaveLocSelect.Click += new System.EventHandler(this.BtnCustomSaveLocationSelectClick);
+        BtnCustomSaveLocSelect.Location = new Point(448, 83);
+        BtnCustomSaveLocSelect.Margin = new Padding(4, 3, 4, 3);
+        BtnCustomSaveLocSelect.Name = "BtnCustomSaveLocSelect";
+        BtnCustomSaveLocSelect.Size = new Size(52, 23);
+        BtnCustomSaveLocSelect.TabIndex = 16;
+        BtnCustomSaveLocSelect.Text = "Select";
+        BtnCustomSaveLocSelect.UseVisualStyleBackColor = true;
+        BtnCustomSaveLocSelect.Click += BtnCustomSaveLocationSelectClick;
         // 
         // LblCustomSaveLoc
         // 
-        this.LblCustomSaveLoc.AutoSize = true;
-        this.LblCustomSaveLoc.Location = new System.Drawing.Point(12, 48);
-        this.LblCustomSaveLoc.Name = "LblCustomSaveLoc";
-        this.LblCustomSaveLoc.Size = new System.Drawing.Size(98, 13);
-        this.LblCustomSaveLoc.TabIndex = 17;
-        this.LblCustomSaveLoc.Text = "Other output folder:";
+        LblCustomSaveLoc.AutoSize = true;
+        LblCustomSaveLoc.Location = new Point(14, 55);
+        LblCustomSaveLoc.Margin = new Padding(4, 0, 4, 0);
+        LblCustomSaveLoc.Name = "LblCustomSaveLoc";
+        LblCustomSaveLoc.Size = new Size(113, 15);
+        LblCustomSaveLoc.TabIndex = 17;
+        LblCustomSaveLoc.Text = "Other output folder:";
+        // 
+        // BtnResetMapList
+        // 
+        BtnResetMapList.Location = new Point(31, 210);
+        BtnResetMapList.Margin = new Padding(4, 3, 4, 3);
+        BtnResetMapList.Name = "BtnResetMapList";
+        BtnResetMapList.Size = new Size(168, 27);
+        BtnResetMapList.TabIndex = 24;
+        BtnResetMapList.Text = "Reset Map List ";
+        BtnResetMapList.UseVisualStyleBackColor = true;
+        BtnResetMapList.Click += BtnResetMapListClick;
         // 
         // BtnResetSkillList
         // 
-        this.BtnResetSkillList.Location = new System.Drawing.Point(27, 132);
-        this.BtnResetSkillList.Name = "BtnResetSkillList";
-        this.BtnResetSkillList.Size = new System.Drawing.Size(144, 23);
-        this.BtnResetSkillList.TabIndex = 24;
-        this.BtnResetSkillList.Text = "Reset Skill List ";
-        this.BtnResetSkillList.UseVisualStyleBackColor = true;
-        this.BtnResetSkillList.Click += new System.EventHandler(this.BtnResetSkillListClick);
+        BtnResetSkillList.Location = new Point(31, 152);
+        BtnResetSkillList.Margin = new Padding(4, 3, 4, 3);
+        BtnResetSkillList.Name = "BtnResetSkillList";
+        BtnResetSkillList.Size = new Size(168, 27);
+        BtnResetSkillList.TabIndex = 24;
+        BtnResetSkillList.Text = "Reset Skill List ";
+        BtnResetSkillList.UseVisualStyleBackColor = true;
+        BtnResetSkillList.Click += BtnResetSkillListClick;
         // 
         // BtnResetTraitList
         // 
-        this.BtnResetTraitList.Location = new System.Drawing.Point(27, 78);
-        this.BtnResetTraitList.Name = "BtnResetTraitList";
-        this.BtnResetTraitList.Size = new System.Drawing.Size(144, 23);
-        this.BtnResetTraitList.TabIndex = 24;
-        this.BtnResetTraitList.Text = "Reset Trait List ";
-        this.BtnResetTraitList.UseVisualStyleBackColor = true;
-        this.BtnResetTraitList.Click += new System.EventHandler(this.BtnResetTraitListClick);
+        BtnResetTraitList.Location = new Point(31, 90);
+        BtnResetTraitList.Margin = new Padding(4, 3, 4, 3);
+        BtnResetTraitList.Name = "BtnResetTraitList";
+        BtnResetTraitList.Size = new Size(168, 27);
+        BtnResetTraitList.TabIndex = 24;
+        BtnResetTraitList.Text = "Reset Trait List ";
+        BtnResetTraitList.UseVisualStyleBackColor = true;
+        BtnResetTraitList.Click += BtnResetTraitListClick;
         // 
         // BtnResetSpecList
         // 
-        this.BtnResetSpecList.Location = new System.Drawing.Point(27, 27);
-        this.BtnResetSpecList.Name = "BtnResetSpecList";
-        this.BtnResetSpecList.Size = new System.Drawing.Size(144, 23);
-        this.BtnResetSpecList.TabIndex = 25;
-        this.BtnResetSpecList.Text = "Reset Spec List";
-        this.BtnResetSpecList.UseVisualStyleBackColor = true;
-        this.BtnResetSpecList.Click += new System.EventHandler(this.BtnResetSpecListClick);
+        BtnResetSpecList.Location = new Point(31, 31);
+        BtnResetSpecList.Margin = new Padding(4, 3, 4, 3);
+        BtnResetSpecList.Name = "BtnResetSpecList";
+        BtnResetSpecList.Size = new Size(168, 27);
+        BtnResetSpecList.TabIndex = 25;
+        BtnResetSpecList.Text = "Reset Spec List";
+        BtnResetSpecList.UseVisualStyleBackColor = true;
+        BtnResetSpecList.Click += BtnResetSpecListClick;
         // 
         // ChkOutputHtml
         // 
-        this.ChkOutputHtml.AutoSize = true;
-        this.ChkOutputHtml.Checked = true;
-        this.ChkOutputHtml.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.ChkOutputHtml.Location = new System.Drawing.Point(12, 12);
-        this.ChkOutputHtml.Name = "ChkOutputHtml";
-        this.ChkOutputHtml.Size = new System.Drawing.Size(105, 17);
-        this.ChkOutputHtml.TabIndex = 26;
-        this.ChkOutputHtml.Text = "Output as HTML";
-        this.ChkOutputHtml.UseVisualStyleBackColor = true;
-        this.ChkOutputHtml.CheckedChanged += new System.EventHandler(this.ChkOuputHTMLCheckedChanged);
+        ChkOutputHtml.AutoSize = true;
+        ChkOutputHtml.Checked = true;
+        ChkOutputHtml.CheckState = CheckState.Checked;
+        ChkOutputHtml.Location = new Point(14, 14);
+        ChkOutputHtml.Margin = new Padding(4, 3, 4, 3);
+        ChkOutputHtml.Name = "ChkOutputHtml";
+        ChkOutputHtml.Size = new Size(114, 19);
+        ChkOutputHtml.TabIndex = 26;
+        ChkOutputHtml.Text = "Output as HTML";
+        ChkOutputHtml.UseVisualStyleBackColor = true;
+        ChkOutputHtml.CheckedChanged += ChkOuputHTMLCheckedChanged;
         // 
         // ChkOutputCsv
         // 
-        this.ChkOutputCsv.AutoSize = true;
-        this.ChkOutputCsv.Location = new System.Drawing.Point(12, 12);
-        this.ChkOutputCsv.Name = "ChkOutputCsv";
-        this.ChkOutputCsv.Size = new System.Drawing.Size(96, 17);
-        this.ChkOutputCsv.TabIndex = 27;
-        this.ChkOutputCsv.Text = "Output as CSV";
-        this.ChkOutputCsv.UseVisualStyleBackColor = true;
-        this.ChkOutputCsv.CheckedChanged += new System.EventHandler(this.ChkOutputCsvCheckedChanged);
+        ChkOutputCsv.AutoSize = true;
+        ChkOutputCsv.Location = new Point(14, 14);
+        ChkOutputCsv.Margin = new Padding(4, 3, 4, 3);
+        ChkOutputCsv.Name = "ChkOutputCsv";
+        ChkOutputCsv.Size = new Size(102, 19);
+        ChkOutputCsv.TabIndex = 27;
+        ChkOutputCsv.Text = "Output as CSV";
+        ChkOutputCsv.UseVisualStyleBackColor = true;
+        ChkOutputCsv.CheckedChanged += ChkOutputCsvCheckedChanged;
         // 
         // ChkPhaseParsing
         // 
-        this.ChkPhaseParsing.AutoSize = true;
-        this.ChkPhaseParsing.Checked = true;
-        this.ChkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.ChkPhaseParsing.Location = new System.Drawing.Point(6, 19);
-        this.ChkPhaseParsing.Name = "ChkPhaseParsing";
-        this.ChkPhaseParsing.Size = new System.Drawing.Size(91, 17);
-        this.ChkPhaseParsing.TabIndex = 30;
-        this.ChkPhaseParsing.Text = "Parse Phases";
-        this.ChkPhaseParsing.UseVisualStyleBackColor = true;
-        this.ChkPhaseParsing.CheckedChanged += new System.EventHandler(this.ChkPhaseParsingCheckedChanged);
+        ChkPhaseParsing.AutoSize = true;
+        ChkPhaseParsing.Checked = true;
+        ChkPhaseParsing.CheckState = CheckState.Checked;
+        ChkPhaseParsing.Location = new Point(7, 22);
+        ChkPhaseParsing.Margin = new Padding(4, 3, 4, 3);
+        ChkPhaseParsing.Name = "ChkPhaseParsing";
+        ChkPhaseParsing.Size = new Size(93, 19);
+        ChkPhaseParsing.TabIndex = 30;
+        ChkPhaseParsing.Text = "Parse Phases";
+        ChkPhaseParsing.UseVisualStyleBackColor = true;
+        ChkPhaseParsing.CheckedChanged += ChkPhaseParsingCheckedChanged;
         // 
         // ChkSingleThreaded
         // 
-        this.ChkSingleThreaded.AutoSize = true;
-        this.ChkSingleThreaded.Location = new System.Drawing.Point(6, 19);
-        this.ChkSingleThreaded.Name = "ChkSingleThreaded";
-        this.ChkSingleThreaded.Size = new System.Drawing.Size(217, 17);
-        this.ChkSingleThreaded.TabIndex = 29;
-        this.ChkSingleThreaded.Text = "Use a single thread when log processing";
-        this.TlpSettings.SetToolTip(this.ChkSingleThreaded, "Keep default value if unsure (Unchecked).");
-        this.ChkSingleThreaded.UseVisualStyleBackColor = true;
-        this.ChkSingleThreaded.CheckedChanged += new System.EventHandler(this.ChkSingleThreadedCheckedChanged);
+        ChkSingleThreaded.AutoSize = true;
+        ChkSingleThreaded.Location = new Point(7, 22);
+        ChkSingleThreaded.Margin = new Padding(4, 3, 4, 3);
+        ChkSingleThreaded.Name = "ChkSingleThreaded";
+        ChkSingleThreaded.Size = new Size(237, 19);
+        ChkSingleThreaded.TabIndex = 29;
+        ChkSingleThreaded.Text = "Use a single thread when log processing";
+        TlpSettings.SetToolTip(ChkSingleThreaded, "Keep default value if unsure (Unchecked).");
+        ChkSingleThreaded.UseVisualStyleBackColor = true;
+        ChkSingleThreaded.CheckedChanged += ChkSingleThreadedCheckedChanged;
         // 
         // ChkCombatReplay
         // 
-        this.ChkCombatReplay.AutoSize = true;
-        this.ChkCombatReplay.Checked = true;
-        this.ChkCombatReplay.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.ChkCombatReplay.Location = new System.Drawing.Point(6, 42);
-        this.ChkCombatReplay.Name = "ChkCombatReplay";
-        this.ChkCombatReplay.Size = new System.Drawing.Size(143, 17);
-        this.ChkCombatReplay.TabIndex = 40;
-        this.ChkCombatReplay.Text = "Compute Combat Replay";
-        this.ChkCombatReplay.UseVisualStyleBackColor = true;
-        this.ChkCombatReplay.CheckedChanged += new System.EventHandler(this.ChkCombatReplayCheckedChanged);
+        ChkCombatReplay.AutoSize = true;
+        ChkCombatReplay.Checked = true;
+        ChkCombatReplay.CheckState = CheckState.Checked;
+        ChkCombatReplay.Location = new Point(7, 48);
+        ChkCombatReplay.Margin = new Padding(4, 3, 4, 3);
+        ChkCombatReplay.Name = "ChkCombatReplay";
+        ChkCombatReplay.Size = new Size(160, 19);
+        ChkCombatReplay.TabIndex = 40;
+        ChkCombatReplay.Text = "Compute Combat Replay";
+        ChkCombatReplay.UseVisualStyleBackColor = true;
+        ChkCombatReplay.CheckedChanged += ChkCombatReplayCheckedChanged;
         // 
         // ChkUploadDPSReports
         // 
-        this.ChkUploadDPSReports.AutoSize = true;
-        this.ChkUploadDPSReports.Location = new System.Drawing.Point(12, 15);
-        this.ChkUploadDPSReports.Name = "ChkUploadDPSReports";
-        this.ChkUploadDPSReports.Size = new System.Drawing.Size(196, 17);
-        this.ChkUploadDPSReports.TabIndex = 43;
-        this.ChkUploadDPSReports.Text = "Upload to DPSReports Elite Insights";
-        this.ChkUploadDPSReports.UseVisualStyleBackColor = true;
-        this.ChkUploadDPSReports.CheckedChanged += new System.EventHandler(this.ChkUploadDPSReportsCheckedChanged);
+        ChkUploadDPSReports.AutoSize = true;
+        ChkUploadDPSReports.Location = new Point(14, 17);
+        ChkUploadDPSReports.Margin = new Padding(4, 3, 4, 3);
+        ChkUploadDPSReports.Name = "ChkUploadDPSReports";
+        ChkUploadDPSReports.Size = new Size(211, 19);
+        ChkUploadDPSReports.TabIndex = 43;
+        ChkUploadDPSReports.Text = "Upload to DPSReports Elite Insights";
+        ChkUploadDPSReports.UseVisualStyleBackColor = true;
+        ChkUploadDPSReports.CheckedChanged += ChkUploadDPSReportsCheckedChanged;
         // 
         // ChkUploadWingman
         // 
-        this.ChkUploadWingman.AutoSize = true;
-        this.ChkUploadWingman.Location = new System.Drawing.Point(12, 64);
-        this.ChkUploadWingman.Name = "ChkUploadWingman";
-        this.ChkUploadWingman.Size = new System.Drawing.Size(222, 17);
-        this.ChkUploadWingman.TabIndex = 45;
-        this.ChkUploadWingman.Text = "Upload to Wingman via uploadProcessed";
-        this.ChkUploadWingman.UseVisualStyleBackColor = true;
-        this.ChkUploadWingman.CheckedChanged += new System.EventHandler(this.ChkUploadWingmanCheckedChanged);
+        ChkUploadWingman.AutoSize = true;
+        ChkUploadWingman.Location = new Point(14, 74);
+        ChkUploadWingman.Margin = new Padding(4, 3, 4, 3);
+        ChkUploadWingman.Name = "ChkUploadWingman";
+        ChkUploadWingman.Size = new Size(244, 19);
+        ChkUploadWingman.TabIndex = 45;
+        ChkUploadWingman.Text = "Upload to Wingman via uploadProcessed";
+        ChkUploadWingman.UseVisualStyleBackColor = true;
+        ChkUploadWingman.CheckedChanged += ChkUploadWingmanCheckedChanged;
         // 
         // TxtDPSReportUserToken
         // 
-        this.TxtDPSReportUserToken.Location = new System.Drawing.Point(91, 38);
-        this.TxtDPSReportUserToken.Name = "TxtDPSReportUserToken";
-        this.TxtDPSReportUserToken.Size = new System.Drawing.Size(225, 20);
-        this.TxtDPSReportUserToken.TabIndex = 15;
-        this.TxtDPSReportUserToken.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-        this.TxtDPSReportUserToken.TextChanged += new System.EventHandler(this.ChkDPSReportUserTokenTextChanged);
+        TxtDPSReportUserToken.Location = new Point(106, 44);
+        TxtDPSReportUserToken.Margin = new Padding(4, 3, 4, 3);
+        TxtDPSReportUserToken.Name = "TxtDPSReportUserToken";
+        TxtDPSReportUserToken.Size = new Size(262, 23);
+        TxtDPSReportUserToken.TabIndex = 15;
+        TxtDPSReportUserToken.TextAlign = HorizontalAlignment.Right;
+        TxtDPSReportUserToken.TextChanged += ChkDPSReportUserTokenTextChanged;
         // 
         // ChkUploadWebhook
         // 
-        this.ChkUploadWebhook.AutoSize = true;
-        this.ChkUploadWebhook.Location = new System.Drawing.Point(12, 20);
-        this.ChkUploadWebhook.Name = "ChkUploadWebhook";
-        this.ChkUploadWebhook.Size = new System.Drawing.Size(185, 17);
-        this.ChkUploadWebhook.TabIndex = 45;
-        this.ChkUploadWebhook.Text = "Send Embed to Discord webhook";
-        this.ChkUploadWebhook.UseVisualStyleBackColor = true;
-        this.ChkUploadWebhook.CheckedChanged += new System.EventHandler(this.ChkUploadWebhookCheckedChanged);
+        ChkUploadWebhook.AutoSize = true;
+        ChkUploadWebhook.Location = new Point(14, 23);
+        ChkUploadWebhook.Margin = new Padding(4, 3, 4, 3);
+        ChkUploadWebhook.Name = "ChkUploadWebhook";
+        ChkUploadWebhook.Size = new Size(201, 19);
+        ChkUploadWebhook.TabIndex = 45;
+        ChkUploadWebhook.Text = "Send Embed to Discord webhook";
+        ChkUploadWebhook.UseVisualStyleBackColor = true;
+        ChkUploadWebhook.CheckedChanged += ChkUploadWebhookCheckedChanged;
         // 
         // ChkUploadSimpleMessageWebhook
         // 
-        this.ChkUploadSimpleMessageWebhook.AutoSize = true;
-        this.ChkUploadSimpleMessageWebhook.Location = new System.Drawing.Point(12, 68);
-        this.ChkUploadSimpleMessageWebhook.Name = "ChkUploadSimpleMessageWebhook";
-        this.ChkUploadSimpleMessageWebhook.Size = new System.Drawing.Size(92, 17);
-        this.ChkUploadSimpleMessageWebhook.TabIndex = 45;
-        this.ChkUploadSimpleMessageWebhook.Text = "Send link only";
-        this.ChkUploadSimpleMessageWebhook.UseVisualStyleBackColor = true;
-        this.ChkUploadSimpleMessageWebhook.CheckedChanged += new System.EventHandler(this.ChkUploadSimpleMessageWebhookCheckedChanged);
+        ChkUploadSimpleMessageWebhook.AutoSize = true;
+        ChkUploadSimpleMessageWebhook.Location = new Point(14, 78);
+        ChkUploadSimpleMessageWebhook.Margin = new Padding(4, 3, 4, 3);
+        ChkUploadSimpleMessageWebhook.Name = "ChkUploadSimpleMessageWebhook";
+        ChkUploadSimpleMessageWebhook.Size = new Size(100, 19);
+        ChkUploadSimpleMessageWebhook.TabIndex = 45;
+        ChkUploadSimpleMessageWebhook.Text = "Send link only";
+        ChkUploadSimpleMessageWebhook.UseVisualStyleBackColor = true;
+        ChkUploadSimpleMessageWebhook.CheckedChanged += ChkUploadSimpleMessageWebhookCheckedChanged;
         // 
         // TxtUploadWebhookUrl
         // 
-        this.TxtUploadWebhookUrl.Location = new System.Drawing.Point(110, 43);
-        this.TxtUploadWebhookUrl.Name = "TxtUploadWebhookUrl";
-        this.TxtUploadWebhookUrl.Size = new System.Drawing.Size(288, 20);
-        this.TxtUploadWebhookUrl.TabIndex = 15;
-        this.TxtUploadWebhookUrl.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-        this.TxtUploadWebhookUrl.TextChanged += new System.EventHandler(this.TxtWebhookURLChanged);
+        TxtUploadWebhookUrl.Location = new Point(128, 50);
+        TxtUploadWebhookUrl.Margin = new Padding(4, 3, 4, 3);
+        TxtUploadWebhookUrl.Name = "TxtUploadWebhookUrl";
+        TxtUploadWebhookUrl.Size = new Size(335, 23);
+        TxtUploadWebhookUrl.TabIndex = 15;
+        TxtUploadWebhookUrl.TextAlign = HorizontalAlignment.Right;
+        TxtUploadWebhookUrl.TextChanged += TxtWebhookURLChanged;
         // 
         // ChkOutputJson
         // 
-        this.ChkOutputJson.AutoSize = true;
-        this.ChkOutputJson.Location = new System.Drawing.Point(12, 12);
-        this.ChkOutputJson.Name = "ChkOutputJson";
-        this.ChkOutputJson.Size = new System.Drawing.Size(103, 17);
-        this.ChkOutputJson.TabIndex = 43;
-        this.ChkOutputJson.Text = "Output as JSON";
-        this.ChkOutputJson.UseVisualStyleBackColor = true;
-        this.ChkOutputJson.CheckedChanged += new System.EventHandler(this.ChkOutputJSONCheckedChanged);
+        ChkOutputJson.AutoSize = true;
+        ChkOutputJson.Location = new Point(14, 14);
+        ChkOutputJson.Margin = new Padding(4, 3, 4, 3);
+        ChkOutputJson.Name = "ChkOutputJson";
+        ChkOutputJson.Size = new Size(109, 19);
+        ChkOutputJson.TabIndex = 43;
+        ChkOutputJson.Text = "Output as JSON";
+        ChkOutputJson.UseVisualStyleBackColor = true;
+        ChkOutputJson.CheckedChanged += ChkOutputJSONCheckedChanged;
         // 
         // ChkIndentJSON
         // 
-        this.ChkIndentJSON.AutoSize = true;
-        this.ChkIndentJSON.Location = new System.Drawing.Point(3, 3);
-        this.ChkIndentJSON.Name = "ChkIndentJSON";
-        this.ChkIndentJSON.Size = new System.Drawing.Size(87, 17);
-        this.ChkIndentJSON.TabIndex = 44;
-        this.ChkIndentJSON.Text = "Indent JSON";
-        this.ChkIndentJSON.UseVisualStyleBackColor = true;
-        this.ChkIndentJSON.CheckedChanged += new System.EventHandler(this.ChkIndentJSONCheckedChanged);
+        ChkIndentJSON.AutoSize = true;
+        ChkIndentJSON.Location = new Point(4, 3);
+        ChkIndentJSON.Margin = new Padding(4, 3, 4, 3);
+        ChkIndentJSON.Name = "ChkIndentJSON";
+        ChkIndentJSON.Size = new Size(91, 19);
+        ChkIndentJSON.TabIndex = 44;
+        ChkIndentJSON.Text = "Indent JSON";
+        ChkIndentJSON.UseVisualStyleBackColor = true;
+        ChkIndentJSON.CheckedChanged += ChkIndentJSONCheckedChanged;
         // 
         // TlpSettings
         // 
-        this.TlpSettings.ToolTipTitle = "Setting description";
+        TlpSettings.ToolTipTitle = "Setting description";
         // 
         // GroupWebhookSettings
         // 
-        this.GroupWebhookSettings.Controls.Add(this.LblWebhookUrl);
-        this.GroupWebhookSettings.Controls.Add(this.TxtUploadWebhookUrl);
-        this.GroupWebhookSettings.Controls.Add(this.ChkUploadWebhook);
-        this.GroupWebhookSettings.Controls.Add(this.ChkUploadSimpleMessageWebhook);
-        this.GroupWebhookSettings.Location = new System.Drawing.Point(12, 103);
-        this.GroupWebhookSettings.Name = "GroupWebhookSettings";
-        this.GroupWebhookSettings.Size = new System.Drawing.Size(404, 92);
-        this.GroupWebhookSettings.TabIndex = 45;
-        this.GroupWebhookSettings.TabStop = false;
-        this.GroupWebhookSettings.Text = "Webhook Settings";
-        this.TlpSettings.SetToolTip(this.GroupWebhookSettings, "Disabled when not uploading to dps.reports");
+        GroupWebhookSettings.Controls.Add(LblWebhookUrl);
+        GroupWebhookSettings.Controls.Add(TxtUploadWebhookUrl);
+        GroupWebhookSettings.Controls.Add(ChkUploadWebhook);
+        GroupWebhookSettings.Controls.Add(ChkUploadSimpleMessageWebhook);
+        GroupWebhookSettings.Location = new Point(14, 119);
+        GroupWebhookSettings.Margin = new Padding(4, 3, 4, 3);
+        GroupWebhookSettings.Name = "GroupWebhookSettings";
+        GroupWebhookSettings.Padding = new Padding(4, 3, 4, 3);
+        GroupWebhookSettings.Size = new Size(471, 106);
+        GroupWebhookSettings.TabIndex = 45;
+        GroupWebhookSettings.TabStop = false;
+        GroupWebhookSettings.Text = "Webhook Settings";
+        TlpSettings.SetToolTip(GroupWebhookSettings, "Disabled when not uploading to dps.reports");
         // 
         // LblWebhookUrl
         // 
-        this.LblWebhookUrl.AutoSize = true;
-        this.LblWebhookUrl.Location = new System.Drawing.Point(31, 46);
-        this.LblWebhookUrl.Name = "LblWebhookUrl";
-        this.LblWebhookUrl.Size = new System.Drawing.Size(73, 13);
-        this.LblWebhookUrl.TabIndex = 47;
-        this.LblWebhookUrl.Text = "Webhook Url:";
+        LblWebhookUrl.AutoSize = true;
+        LblWebhookUrl.Location = new Point(36, 53);
+        LblWebhookUrl.Margin = new Padding(4, 0, 4, 0);
+        LblWebhookUrl.Name = "LblWebhookUrl";
+        LblWebhookUrl.Size = new Size(79, 15);
+        LblWebhookUrl.TabIndex = 47;
+        LblWebhookUrl.Text = "Webhook Url:";
         // 
         // ChkMultiLogs
         // 
-        this.ChkMultiLogs.AutoSize = true;
-        this.ChkMultiLogs.Location = new System.Drawing.Point(6, 42);
-        this.ChkMultiLogs.Name = "ChkMultiLogs";
-        this.ChkMultiLogs.Size = new System.Drawing.Size(194, 17);
-        this.ChkMultiLogs.TabIndex = 20;
-        this.ChkMultiLogs.Text = "Parse Multiple logs at the same time";
-        this.TlpSettings.SetToolTip(this.ChkMultiLogs, "Keep default value if unsure.");
-        this.ChkMultiLogs.UseVisualStyleBackColor = true;
-        this.ChkMultiLogs.CheckedChanged += new System.EventHandler(this.ChkMultiLogsCheckedChanged);
+        ChkMultiLogs.AutoSize = true;
+        ChkMultiLogs.Location = new Point(7, 48);
+        ChkMultiLogs.Margin = new Padding(4, 3, 4, 3);
+        ChkMultiLogs.Name = "ChkMultiLogs";
+        ChkMultiLogs.Size = new Size(217, 19);
+        ChkMultiLogs.TabIndex = 20;
+        ChkMultiLogs.Text = "Parse Multiple logs at the same time";
+        TlpSettings.SetToolTip(ChkMultiLogs, "Keep default value if unsure.");
+        ChkMultiLogs.UseVisualStyleBackColor = true;
+        ChkMultiLogs.CheckedChanged += ChkMultiLogsCheckedChanged;
         // 
         // ChkAnonymous
         // 
-        this.ChkAnonymous.AutoSize = true;
-        this.ChkAnonymous.Location = new System.Drawing.Point(210, 24);
-        this.ChkAnonymous.Name = "ChkAnonymous";
-        this.ChkAnonymous.Size = new System.Drawing.Size(118, 17);
-        this.ChkAnonymous.TabIndex = 20;
-        this.ChkAnonymous.Text = "Anonymous Players";
-        this.TlpSettings.SetToolTip(this.ChkAnonymous, "Replaces Players\' account names and character names by generic names");
-        this.ChkAnonymous.UseVisualStyleBackColor = true;
-        this.ChkAnonymous.CheckedChanged += new System.EventHandler(this.ChkAnonymousCheckedChanged);
+        ChkAnonymous.AutoSize = true;
+        ChkAnonymous.Location = new Point(245, 28);
+        ChkAnonymous.Margin = new Padding(4, 3, 4, 3);
+        ChkAnonymous.Name = "ChkAnonymous";
+        ChkAnonymous.Size = new Size(131, 19);
+        ChkAnonymous.TabIndex = 20;
+        ChkAnonymous.Text = "Anonymous Players";
+        TlpSettings.SetToolTip(ChkAnonymous, "Replaces Players' account names and character names by generic names");
+        ChkAnonymous.UseVisualStyleBackColor = true;
+        ChkAnonymous.CheckedChanged += ChkAnonymousCheckedChanged;
         // 
         // ChkHtmlExternalScripts
         // 
-        this.ChkHtmlExternalScripts.AutoSize = true;
-        this.ChkHtmlExternalScripts.Location = new System.Drawing.Point(12, 12);
-        this.ChkHtmlExternalScripts.Name = "ChkHtmlExternalScripts";
-        this.ChkHtmlExternalScripts.Size = new System.Drawing.Size(99, 17);
-        this.ChkHtmlExternalScripts.TabIndex = 46;
-        this.ChkHtmlExternalScripts.Text = "External Scripts";
-        this.TlpSettings.SetToolTip(this.ChkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs." +
-    " Log file size decreases, but the script files have to be kept along with the ht" +
-    "ml if you dont set a CDN Path");
-        this.ChkHtmlExternalScripts.UseVisualStyleBackColor = true;
-        this.ChkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.ChkHtmlExternalScriptsCheckedChanged);
+        ChkHtmlExternalScripts.AutoSize = true;
+        ChkHtmlExternalScripts.Location = new Point(14, 14);
+        ChkHtmlExternalScripts.Margin = new Padding(4, 3, 4, 3);
+        ChkHtmlExternalScripts.Name = "ChkHtmlExternalScripts";
+        ChkHtmlExternalScripts.Size = new Size(105, 19);
+        ChkHtmlExternalScripts.TabIndex = 46;
+        ChkHtmlExternalScripts.Text = "External Scripts";
+        TlpSettings.SetToolTip(ChkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html if you dont set a CDN Path");
+        ChkHtmlExternalScripts.UseVisualStyleBackColor = true;
+        ChkHtmlExternalScripts.CheckedChanged += ChkHtmlExternalScriptsCheckedChanged;
         // 
         // ChkHtmlCompressJson
         // 
-        this.ChkHtmlCompressJson.AutoSize = true;
-        this.ChkHtmlCompressJson.Location = new System.Drawing.Point(117, 13);
-        this.ChkHtmlCompressJson.Name = "ChkHtmlCompressJson";
-        this.ChkHtmlCompressJson.Size = new System.Drawing.Size(97, 17);
-        this.ChkHtmlCompressJson.TabIndex = 46;
-        this.ChkHtmlCompressJson.Text = "Compress Json";
-        this.TlpSettings.SetToolTip(this.ChkHtmlCompressJson, "Put the json inside the html file in a compressed state.");
-        this.ChkHtmlCompressJson.UseVisualStyleBackColor = true;
-        this.ChkHtmlCompressJson.CheckedChanged += new System.EventHandler(this.ChkHtmlCompressCheckedChanged);
+        ChkHtmlCompressJson.AutoSize = true;
+        ChkHtmlCompressJson.Location = new Point(136, 15);
+        ChkHtmlCompressJson.Margin = new Padding(4, 3, 4, 3);
+        ChkHtmlCompressJson.Name = "ChkHtmlCompressJson";
+        ChkHtmlCompressJson.Size = new Size(105, 19);
+        ChkHtmlCompressJson.TabIndex = 46;
+        ChkHtmlCompressJson.Text = "Compress Json";
+        TlpSettings.SetToolTip(ChkHtmlCompressJson, "Put the json inside the html file in a compressed state.");
+        ChkHtmlCompressJson.UseVisualStyleBackColor = true;
+        ChkHtmlCompressJson.CheckedChanged += ChkHtmlCompressCheckedChanged;
         // 
         // ChkDetailledWvW
         // 
-        this.ChkDetailledWvW.AutoSize = true;
-        this.ChkDetailledWvW.Location = new System.Drawing.Point(6, 88);
-        this.ChkDetailledWvW.Name = "ChkDetailledWvW";
-        this.ChkDetailledWvW.Size = new System.Drawing.Size(134, 17);
-        this.ChkDetailledWvW.TabIndex = 41;
-        this.ChkDetailledWvW.Text = "Detailed WvW Parsing";
-        this.TlpSettings.SetToolTip(this.ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slowe" +
-    "r and the generated files bigger");
-        this.ChkDetailledWvW.UseVisualStyleBackColor = true;
-        this.ChkDetailledWvW.CheckedChanged += new System.EventHandler(this.ChkDetailledWvWCheckedChange);
+        ChkDetailledWvW.AutoSize = true;
+        ChkDetailledWvW.Location = new Point(7, 102);
+        ChkDetailledWvW.Margin = new Padding(4, 3, 4, 3);
+        ChkDetailledWvW.Name = "ChkDetailledWvW";
+        ChkDetailledWvW.Size = new Size(142, 19);
+        ChkDetailledWvW.TabIndex = 41;
+        ChkDetailledWvW.Text = "Detailed WvW Parsing";
+        TlpSettings.SetToolTip(ChkDetailledWvW, "Keep default value if unsure. Enabling this will make parsing significantly slower and the generated files bigger");
+        ChkDetailledWvW.UseVisualStyleBackColor = true;
+        ChkDetailledWvW.CheckedChanged += ChkDetailledWvWCheckedChange;
         // 
         // LblHtmlExternalScriptsCdn
         // 
-        this.LblHtmlExternalScriptsCdn.AutoSize = true;
-        this.LblHtmlExternalScriptsCdn.Location = new System.Drawing.Point(9, 57);
-        this.LblHtmlExternalScriptsCdn.Name = "LblHtmlExternalScriptsCdn";
-        this.LblHtmlExternalScriptsCdn.Size = new System.Drawing.Size(29, 13);
-        this.LblHtmlExternalScriptsCdn.TabIndex = 56;
-        this.LblHtmlExternalScriptsCdn.Text = "Cdn:";
-        this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsCdn, resources.GetString("LblHtmlExternalScriptsCdn.ToolTip"));
+        LblHtmlExternalScriptsCdn.AutoSize = true;
+        LblHtmlExternalScriptsCdn.Location = new Point(10, 66);
+        LblHtmlExternalScriptsCdn.Margin = new Padding(4, 0, 4, 0);
+        LblHtmlExternalScriptsCdn.Name = "LblHtmlExternalScriptsCdn";
+        LblHtmlExternalScriptsCdn.Size = new Size(32, 15);
+        LblHtmlExternalScriptsCdn.TabIndex = 56;
+        LblHtmlExternalScriptsCdn.Text = "Cdn:";
+        TlpSettings.SetToolTip(LblHtmlExternalScriptsCdn, resources.GetString("LblHtmlExternalScriptsCdn.ToolTip"));
         // 
         // LblHtmlExternalScriptsPath
         // 
-        this.LblHtmlExternalScriptsPath.AutoSize = true;
-        this.LblHtmlExternalScriptsPath.Location = new System.Drawing.Point(9, 34);
-        this.LblHtmlExternalScriptsPath.Name = "LblHtmlExternalScriptsPath";
-        this.LblHtmlExternalScriptsPath.Size = new System.Drawing.Size(79, 13);
-        this.LblHtmlExternalScriptsPath.TabIndex = 55;
-        this.LblHtmlExternalScriptsPath.Text = "Absolute Path: ";
-        this.TlpSettings.SetToolTip(this.LblHtmlExternalScriptsPath, "Fill in an absolute path of a directory here to place the external scripts at a d" +
-    "ifferent location then the report file.");
+        LblHtmlExternalScriptsPath.AutoSize = true;
+        LblHtmlExternalScriptsPath.Location = new Point(10, 39);
+        LblHtmlExternalScriptsPath.Margin = new Padding(4, 0, 4, 0);
+        LblHtmlExternalScriptsPath.Name = "LblHtmlExternalScriptsPath";
+        LblHtmlExternalScriptsPath.Size = new Size(87, 15);
+        LblHtmlExternalScriptsPath.TabIndex = 55;
+        LblHtmlExternalScriptsPath.Text = "Absolute Path: ";
+        TlpSettings.SetToolTip(LblHtmlExternalScriptsPath, "Fill in an absolute path of a directory here to place the external scripts at a different location then the report file.");
         // 
         // TxtHtmlExternalScriptsCdn
         // 
-        this.TxtHtmlExternalScriptsCdn.Location = new System.Drawing.Point(37, 54);
-        this.TxtHtmlExternalScriptsCdn.Name = "TxtHtmlExternalScriptsCdn";
-        this.TxtHtmlExternalScriptsCdn.Size = new System.Drawing.Size(201, 20);
-        this.TxtHtmlExternalScriptsCdn.TabIndex = 57;
-        this.TxtHtmlExternalScriptsCdn.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptCdnUrlTextChanged);
+        TxtHtmlExternalScriptsCdn.Location = new Point(43, 62);
+        TxtHtmlExternalScriptsCdn.Margin = new Padding(4, 3, 4, 3);
+        TxtHtmlExternalScriptsCdn.Name = "TxtHtmlExternalScriptsCdn";
+        TxtHtmlExternalScriptsCdn.Size = new Size(234, 23);
+        TxtHtmlExternalScriptsCdn.TabIndex = 57;
+        TxtHtmlExternalScriptsCdn.TextChanged += TxtHtmlExternalScriptCdnUrlTextChanged;
         // 
         // TxtHtmlExternalScriptsPath
         // 
-        this.TxtHtmlExternalScriptsPath.Location = new System.Drawing.Point(90, 31);
-        this.TxtHtmlExternalScriptsPath.Name = "TxtHtmlExternalScriptsPath";
-        this.TxtHtmlExternalScriptsPath.Size = new System.Drawing.Size(103, 20);
-        this.TxtHtmlExternalScriptsPath.TabIndex = 54;
-        this.TxtHtmlExternalScriptsPath.TextChanged += new System.EventHandler(this.TxtHtmlExternalScriptsPathTextChanged);
+        TxtHtmlExternalScriptsPath.Location = new Point(105, 36);
+        TxtHtmlExternalScriptsPath.Margin = new Padding(4, 3, 4, 3);
+        TxtHtmlExternalScriptsPath.Name = "TxtHtmlExternalScriptsPath";
+        TxtHtmlExternalScriptsPath.Size = new Size(119, 23);
+        TxtHtmlExternalScriptsPath.TabIndex = 54;
+        TxtHtmlExternalScriptsPath.TextChanged += TxtHtmlExternalScriptsPathTextChanged;
         // 
         // ChkSaveOutTrace
         // 
-        this.ChkSaveOutTrace.AutoSize = true;
-        this.ChkSaveOutTrace.Location = new System.Drawing.Point(330, 24);
-        this.ChkSaveOutTrace.Name = "ChkSaveOutTrace";
-        this.ChkSaveOutTrace.Size = new System.Drawing.Size(108, 17);
-        this.ChkSaveOutTrace.TabIndex = 40;
-        this.ChkSaveOutTrace.Text = "Save Log Traces";
-        this.ChkSaveOutTrace.UseVisualStyleBackColor = true;
-        this.ChkSaveOutTrace.CheckedChanged += new System.EventHandler(this.ChkSaveOutTraceCheckedChanged);
+        ChkSaveOutTrace.AutoSize = true;
+        ChkSaveOutTrace.Location = new Point(385, 28);
+        ChkSaveOutTrace.Margin = new Padding(4, 3, 4, 3);
+        ChkSaveOutTrace.Name = "ChkSaveOutTrace";
+        ChkSaveOutTrace.Size = new Size(109, 19);
+        ChkSaveOutTrace.TabIndex = 40;
+        ChkSaveOutTrace.Text = "Save Log Traces";
+        ChkSaveOutTrace.UseVisualStyleBackColor = true;
+        ChkSaveOutTrace.CheckedChanged += ChkSaveOutTraceCheckedChanged;
         // 
         // ChkDamageMods
         // 
-        this.ChkDamageMods.AutoSize = true;
-        this.ChkDamageMods.Checked = true;
-        this.ChkDamageMods.CheckState = System.Windows.Forms.CheckState.Checked;
-        this.ChkDamageMods.Location = new System.Drawing.Point(6, 65);
-        this.ChkDamageMods.Name = "ChkDamageMods";
-        this.ChkDamageMods.Size = new System.Drawing.Size(156, 17);
-        this.ChkDamageMods.TabIndex = 20;
-        this.ChkDamageMods.Text = "Compute Damage Modifiers";
-        this.ChkDamageMods.UseVisualStyleBackColor = true;
-        this.ChkDamageMods.CheckedChanged += new System.EventHandler(this.ChkComputeDamageModsCheckedChanged);
+        ChkDamageMods.AutoSize = true;
+        ChkDamageMods.Checked = true;
+        ChkDamageMods.CheckState = CheckState.Checked;
+        ChkDamageMods.Location = new Point(7, 75);
+        ChkDamageMods.Margin = new Padding(4, 3, 4, 3);
+        ChkDamageMods.Name = "ChkDamageMods";
+        ChkDamageMods.Size = new Size(176, 19);
+        ChkDamageMods.TabIndex = 20;
+        ChkDamageMods.Text = "Compute Damage Modifiers";
+        ChkDamageMods.UseVisualStyleBackColor = true;
+        ChkDamageMods.CheckedChanged += ChkComputeDamageModsCheckedChanged;
         // 
         // ChkRawTimelineArrays
         // 
-        this.ChkRawTimelineArrays.AutoSize = true;
-        this.ChkRawTimelineArrays.Location = new System.Drawing.Point(6, 45);
-        this.ChkRawTimelineArrays.Name = "ChkRawTimelineArrays";
-        this.ChkRawTimelineArrays.Size = new System.Drawing.Size(119, 17);
-        this.ChkRawTimelineArrays.TabIndex = 20;
-        this.ChkRawTimelineArrays.Text = "Add Timeline Arrays";
-        this.ChkRawTimelineArrays.UseVisualStyleBackColor = true;
-        this.ChkRawTimelineArrays.CheckedChanged += new System.EventHandler(this.ChkRawTimelineArraysCheckedChanged);
+        ChkRawTimelineArrays.AutoSize = true;
+        ChkRawTimelineArrays.Location = new Point(7, 52);
+        ChkRawTimelineArrays.Margin = new Padding(4, 3, 4, 3);
+        ChkRawTimelineArrays.Name = "ChkRawTimelineArrays";
+        ChkRawTimelineArrays.Size = new Size(133, 19);
+        ChkRawTimelineArrays.TabIndex = 20;
+        ChkRawTimelineArrays.Text = "Add Timeline Arrays";
+        ChkRawTimelineArrays.UseVisualStyleBackColor = true;
+        ChkRawTimelineArrays.CheckedChanged += ChkRawTimelineArraysCheckedChanged;
         // 
         // TabControl
         // 
-        this.TabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-        | System.Windows.Forms.AnchorStyles.Left) 
-        | System.Windows.Forms.AnchorStyles.Right)));
-        this.TabControl.Controls.Add(this.TabGeneral);
-        this.TabControl.Controls.Add(this.TabHTML);
-        this.TabControl.Controls.Add(this.TabCSV);
-        this.TabControl.Controls.Add(this.TabRaw);
-        this.TabControl.Controls.Add(this.TabUpload);
-        this.TabControl.Controls.Add(this.TabAPI);
-        this.TabControl.HotTrack = true;
-        this.TabControl.Location = new System.Drawing.Point(12, 12);
-        this.TabControl.Multiline = true;
-        this.TabControl.Name = "TabControl";
-        this.TabControl.SelectedIndex = 0;
-        this.TabControl.Size = new System.Drawing.Size(479, 368);
-        this.TabControl.TabIndex = 47;
+        TabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        TabControl.Controls.Add(TabGeneral);
+        TabControl.Controls.Add(TabHTML);
+        TabControl.Controls.Add(TabCSV);
+        TabControl.Controls.Add(TabRaw);
+        TabControl.Controls.Add(TabUpload);
+        TabControl.Controls.Add(TabAPI);
+        TabControl.HotTrack = true;
+        TabControl.Location = new Point(14, 14);
+        TabControl.Margin = new Padding(4, 3, 4, 3);
+        TabControl.Multiline = true;
+        TabControl.Name = "TabControl";
+        TabControl.SelectedIndex = 0;
+        TabControl.Size = new Size(559, 425);
+        TabControl.TabIndex = 47;
         // 
         // TabGeneral
         // 
-        this.TabGeneral.Controls.Add(this.GroupParsing);
-        this.TabGeneral.Controls.Add(this.GroupOutput);
-        this.TabGeneral.Controls.Add(this.GroupLog);
-        this.TabGeneral.Controls.Add(this.LblMemoryLimit);
-        this.TabGeneral.Controls.Add(this.NumericMemoryLimit);
-        this.TabGeneral.Location = new System.Drawing.Point(4, 22);
-        this.TabGeneral.Name = "TabGeneral";
-        this.TabGeneral.Padding = new System.Windows.Forms.Padding(3);
-        this.TabGeneral.Size = new System.Drawing.Size(471, 342);
-        this.TabGeneral.TabIndex = 0;
-        this.TabGeneral.Text = "General";
-        this.TabGeneral.UseVisualStyleBackColor = true;
+        TabGeneral.Controls.Add(GroupParsing);
+        TabGeneral.Controls.Add(GroupOutput);
+        TabGeneral.Controls.Add(GroupLog);
+        TabGeneral.Controls.Add(LblMemoryLimit);
+        TabGeneral.Controls.Add(NumericMemoryLimit);
+        TabGeneral.Location = new Point(4, 24);
+        TabGeneral.Margin = new Padding(4, 3, 4, 3);
+        TabGeneral.Name = "TabGeneral";
+        TabGeneral.Padding = new Padding(4, 3, 4, 3);
+        TabGeneral.Size = new Size(551, 397);
+        TabGeneral.TabIndex = 0;
+        TabGeneral.Text = "General";
+        TabGeneral.UseVisualStyleBackColor = true;
         // 
         // GroupParsing
         // 
-        this.GroupParsing.Controls.Add(this.ChkSingleThreaded);
-        this.GroupParsing.Controls.Add(this.ChkMultiLogs);
-        this.GroupParsing.Controls.Add(this.ChkAutoParse);
-        this.GroupParsing.Controls.Add(this.ChkAutoAdd);
-        this.GroupParsing.Controls.Add(this.ChkSkipFailedTries);
-        this.GroupParsing.Controls.Add(this.NumericCustomTooShort);
-        this.GroupParsing.Controls.Add(this.LblCustomTooShort);
-        this.GroupParsing.Location = new System.Drawing.Point(205, 8);
-        this.GroupParsing.Name = "GroupParsing";
-        this.GroupParsing.Size = new System.Drawing.Size(251, 160);
-        this.GroupParsing.TabIndex = 41;
-        this.GroupParsing.TabStop = false;
-        this.GroupParsing.Text = "Parsing";
+        GroupParsing.Controls.Add(ChkSingleThreaded);
+        GroupParsing.Controls.Add(ChkMultiLogs);
+        GroupParsing.Controls.Add(ChkAutoParse);
+        GroupParsing.Controls.Add(ChkAutoAdd);
+        GroupParsing.Controls.Add(ChkSkipFailedTries);
+        GroupParsing.Controls.Add(NumericCustomTooShort);
+        GroupParsing.Controls.Add(LblCustomTooShort);
+        GroupParsing.Location = new Point(239, 9);
+        GroupParsing.Margin = new Padding(4, 3, 4, 3);
+        GroupParsing.Name = "GroupParsing";
+        GroupParsing.Padding = new Padding(4, 3, 4, 3);
+        GroupParsing.Size = new Size(293, 185);
+        GroupParsing.TabIndex = 41;
+        GroupParsing.TabStop = false;
+        GroupParsing.Text = "Parsing";
         // 
         // ChkAutoParse
         // 
-        this.ChkAutoParse.AutoSize = true;
-        this.ChkAutoParse.Location = new System.Drawing.Point(6, 111);
-        this.ChkAutoParse.Name = "ChkAutoParse";
-        this.ChkAutoParse.Size = new System.Drawing.Size(171, 17);
-        this.ChkAutoParse.TabIndex = 39;
-        this.ChkAutoParse.Text = "Automatically parse added files";
-        this.ChkAutoParse.UseVisualStyleBackColor = true;
-        this.ChkAutoParse.CheckedChanged += new System.EventHandler(this.ChkAutoParseCheckedChanged);
+        ChkAutoParse.AutoSize = true;
+        ChkAutoParse.Location = new Point(7, 128);
+        ChkAutoParse.Margin = new Padding(4, 3, 4, 3);
+        ChkAutoParse.Name = "ChkAutoParse";
+        ChkAutoParse.Size = new Size(191, 19);
+        ChkAutoParse.TabIndex = 39;
+        ChkAutoParse.Text = "Automatically parse added files";
+        ChkAutoParse.UseVisualStyleBackColor = true;
+        ChkAutoParse.CheckedChanged += ChkAutoParseCheckedChanged;
         // 
         // ChkAutoAdd
         // 
-        this.ChkAutoAdd.AutoSize = true;
-        this.ChkAutoAdd.Location = new System.Drawing.Point(6, 88);
-        this.ChkAutoAdd.Name = "ChkAutoAdd";
-        this.ChkAutoAdd.Size = new System.Drawing.Size(154, 17);
-        this.ChkAutoAdd.TabIndex = 40;
-        this.ChkAutoAdd.Text = "Automatically add new logs";
-        this.ChkAutoAdd.UseVisualStyleBackColor = true;
-        this.ChkAutoAdd.CheckedChanged += new System.EventHandler(this.ChkAutoAddCheckedChanged);
+        ChkAutoAdd.AutoSize = true;
+        ChkAutoAdd.Location = new Point(7, 102);
+        ChkAutoAdd.Margin = new Padding(4, 3, 4, 3);
+        ChkAutoAdd.Name = "ChkAutoAdd";
+        ChkAutoAdd.Size = new Size(173, 19);
+        ChkAutoAdd.TabIndex = 40;
+        ChkAutoAdd.Text = "Automatically add new logs";
+        ChkAutoAdd.UseVisualStyleBackColor = true;
+        ChkAutoAdd.CheckedChanged += ChkAutoAddCheckedChanged;
         // 
         // ChkSkipFailedTries
         // 
-        this.ChkSkipFailedTries.AutoSize = true;
-        this.ChkSkipFailedTries.Location = new System.Drawing.Point(6, 65);
-        this.ChkSkipFailedTries.Name = "ChkSkipFailedTries";
-        this.ChkSkipFailedTries.Size = new System.Drawing.Size(153, 17);
-        this.ChkSkipFailedTries.TabIndex = 38;
-        this.ChkSkipFailedTries.Text = "Skip log generation if failed";
-        this.ChkSkipFailedTries.UseVisualStyleBackColor = true;
-        this.ChkSkipFailedTries.CheckedChanged += new System.EventHandler(this.ChkSkipFailedTriesCheckedChanged);
+        ChkSkipFailedTries.AutoSize = true;
+        ChkSkipFailedTries.Location = new Point(7, 75);
+        ChkSkipFailedTries.Margin = new Padding(4, 3, 4, 3);
+        ChkSkipFailedTries.Name = "ChkSkipFailedTries";
+        ChkSkipFailedTries.Size = new Size(170, 19);
+        ChkSkipFailedTries.TabIndex = 38;
+        ChkSkipFailedTries.Text = "Skip log generation if failed";
+        ChkSkipFailedTries.UseVisualStyleBackColor = true;
+        ChkSkipFailedTries.CheckedChanged += ChkSkipFailedTriesCheckedChanged;
         // 
         // GroupOutput
         // 
-        this.GroupOutput.Controls.Add(this.ChkAnonymous);
-        this.GroupOutput.Controls.Add(this.ChkAddDuration);
-        this.GroupOutput.Controls.Add(this.ChkAddPoVProf);
-        this.GroupOutput.Controls.Add(this.ChkSaveOutTrace);
-        this.GroupOutput.Controls.Add(this.ChkDefaultOutputLoc);
-        this.GroupOutput.Controls.Add(this.BtnCustomSaveLocSelect);
-        this.GroupOutput.Controls.Add(this.TxtCustomSaveLocation);
-        this.GroupOutput.Controls.Add(this.LblCustomSaveLoc);
-        this.GroupOutput.Location = new System.Drawing.Point(12, 174);
-        this.GroupOutput.Name = "GroupOutput";
-        this.GroupOutput.Size = new System.Drawing.Size(444, 129);
-        this.GroupOutput.TabIndex = 37;
-        this.GroupOutput.TabStop = false;
-        this.GroupOutput.Text = "Output";
+        GroupOutput.Controls.Add(ChkAnonymous);
+        GroupOutput.Controls.Add(ChkAddDuration);
+        GroupOutput.Controls.Add(ChkAddPoVProf);
+        GroupOutput.Controls.Add(ChkSaveOutTrace);
+        GroupOutput.Controls.Add(ChkDefaultOutputLoc);
+        GroupOutput.Controls.Add(BtnCustomSaveLocSelect);
+        GroupOutput.Controls.Add(TxtCustomSaveLocation);
+        GroupOutput.Controls.Add(LblCustomSaveLoc);
+        GroupOutput.Location = new Point(14, 201);
+        GroupOutput.Margin = new Padding(4, 3, 4, 3);
+        GroupOutput.Name = "GroupOutput";
+        GroupOutput.Padding = new Padding(4, 3, 4, 3);
+        GroupOutput.Size = new Size(518, 149);
+        GroupOutput.TabIndex = 37;
+        GroupOutput.TabStop = false;
+        GroupOutput.Text = "Output";
         // 
         // ChkAddDuration
         // 
-        this.ChkAddDuration.AutoSize = true;
-        this.ChkAddDuration.Location = new System.Drawing.Point(240, 98);
-        this.ChkAddDuration.Name = "ChkAddDuration";
-        this.ChkAddDuration.Size = new System.Drawing.Size(194, 17);
-        this.ChkAddDuration.TabIndex = 19;
-        this.ChkAddDuration.Text = "Add log duration to file name";
-        this.ChkAddDuration.UseVisualStyleBackColor = true;
-        this.ChkAddDuration.CheckedChanged += new System.EventHandler(this.ChkAddDurationCheckedChanged);
+        ChkAddDuration.AutoSize = true;
+        ChkAddDuration.Location = new Point(280, 113);
+        ChkAddDuration.Margin = new Padding(4, 3, 4, 3);
+        ChkAddDuration.Name = "ChkAddDuration";
+        ChkAddDuration.Size = new Size(182, 19);
+        ChkAddDuration.TabIndex = 19;
+        ChkAddDuration.Text = "Add log duration to file name";
+        ChkAddDuration.UseVisualStyleBackColor = true;
+        ChkAddDuration.CheckedChanged += ChkAddDurationCheckedChanged;
         // 
         // ChkAddPoVProf
         // 
-        this.ChkAddPoVProf.AutoSize = true;
-        this.ChkAddPoVProf.Location = new System.Drawing.Point(12, 98);
-        this.ChkAddPoVProf.Name = "ChkAddPoVProf";
-        this.ChkAddPoVProf.Size = new System.Drawing.Size(176, 17);
-        this.ChkAddPoVProf.TabIndex = 18;
-        this.ChkAddPoVProf.Text = "Add PoV profession to file name";
-        this.ChkAddPoVProf.UseVisualStyleBackColor = true;
-        this.ChkAddPoVProf.CheckedChanged += new System.EventHandler(this.ChkAddPoVProfCheckedChanged);
+        ChkAddPoVProf.AutoSize = true;
+        ChkAddPoVProf.Location = new Point(14, 113);
+        ChkAddPoVProf.Margin = new Padding(4, 3, 4, 3);
+        ChkAddPoVProf.Name = "ChkAddPoVProf";
+        ChkAddPoVProf.Size = new Size(196, 19);
+        ChkAddPoVProf.TabIndex = 18;
+        ChkAddPoVProf.Text = "Add PoV profession to file name";
+        ChkAddPoVProf.UseVisualStyleBackColor = true;
+        ChkAddPoVProf.CheckedChanged += ChkAddPoVProfCheckedChanged;
         // 
-        // GroupEncounter
+        // GroupLog
         // 
-        this.GroupLog.Controls.Add(this.ChkDetailledWvW);
-        this.GroupLog.Controls.Add(this.ChkPhaseParsing);
-        this.GroupLog.Controls.Add(this.ChkCombatReplay);
-        this.GroupLog.Controls.Add(this.ChkDamageMods);
-        this.GroupLog.Location = new System.Drawing.Point(12, 8);
-        this.GroupLog.Name = "GroupLog";
-        this.GroupLog.Size = new System.Drawing.Size(187, 160);
-        this.GroupLog.TabIndex = 36;
-        this.GroupLog.TabStop = false;
-        this.GroupLog.Text = "Log";
+        GroupLog.Controls.Add(ChkDetailledWvW);
+        GroupLog.Controls.Add(ChkPhaseParsing);
+        GroupLog.Controls.Add(ChkCombatReplay);
+        GroupLog.Controls.Add(ChkDamageMods);
+        GroupLog.Location = new Point(14, 9);
+        GroupLog.Margin = new Padding(4, 3, 4, 3);
+        GroupLog.Name = "GroupLog";
+        GroupLog.Padding = new Padding(4, 3, 4, 3);
+        GroupLog.Size = new Size(218, 185);
+        GroupLog.TabIndex = 36;
+        GroupLog.TabStop = false;
+        GroupLog.Text = "Log";
         // 
         // TabHTML
         // 
-        this.TabHTML.Controls.Add(this.PictureTheme);
-        this.TabHTML.Controls.Add(this.PanelHtml);
-        this.TabHTML.Controls.Add(this.ChkOutputHtml);
-        this.TabHTML.Location = new System.Drawing.Point(4, 22);
-        this.TabHTML.Name = "TabHTML";
-        this.TabHTML.Padding = new System.Windows.Forms.Padding(3);
-        this.TabHTML.Size = new System.Drawing.Size(471, 313);
-        this.TabHTML.TabIndex = 1;
-        this.TabHTML.Text = "HTML";
-        this.TabHTML.UseVisualStyleBackColor = true;
+        TabHTML.Controls.Add(PictureTheme);
+        TabHTML.Controls.Add(PanelHtml);
+        TabHTML.Controls.Add(ChkOutputHtml);
+        TabHTML.Location = new Point(4, 24);
+        TabHTML.Margin = new Padding(4, 3, 4, 3);
+        TabHTML.Name = "TabHTML";
+        TabHTML.Padding = new Padding(4, 3, 4, 3);
+        TabHTML.Size = new Size(551, 397);
+        TabHTML.TabIndex = 1;
+        TabHTML.Text = "HTML";
+        TabHTML.UseVisualStyleBackColor = true;
         // 
         // PictureTheme
         // 
-        this.PictureTheme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        this.PictureTheme.Location = new System.Drawing.Point(346, 30);
-        this.PictureTheme.Name = "PictureTheme";
-        this.PictureTheme.Size = new System.Drawing.Size(110, 74);
-        this.PictureTheme.TabIndex = 49;
-        this.PictureTheme.TabStop = false;
+        PictureTheme.BorderStyle = BorderStyle.FixedSingle;
+        PictureTheme.Location = new Point(404, 35);
+        PictureTheme.Margin = new Padding(4, 3, 4, 3);
+        PictureTheme.Name = "PictureTheme";
+        PictureTheme.Size = new Size(128, 85);
+        PictureTheme.TabIndex = 49;
+        PictureTheme.TabStop = false;
         // 
         // PanelHtml
         // 
-        this.PanelHtml.Controls.Add(this.BtnHtmlExternalScriptPathSelect);
-        this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsCdn);
-        this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsCdn);
-        this.PanelHtml.Controls.Add(this.LblHtmlExternalScriptsPath);
-        this.PanelHtml.Controls.Add(this.TxtHtmlExternalScriptsPath);
-        this.PanelHtml.Controls.Add(this.PanelTheme);
-        this.PanelHtml.Controls.Add(this.ChkHtmlExternalScripts);
-        this.PanelHtml.Controls.Add(this.ChkHtmlCompressJson);
-        this.PanelHtml.Location = new System.Drawing.Point(0, 36);
-        this.PanelHtml.Name = "PanelHtml";
-        this.PanelHtml.Size = new System.Drawing.Size(468, 87);
-        this.PanelHtml.TabIndex = 54;
+        PanelHtml.Controls.Add(BtnHtmlExternalScriptPathSelect);
+        PanelHtml.Controls.Add(TxtHtmlExternalScriptsCdn);
+        PanelHtml.Controls.Add(LblHtmlExternalScriptsCdn);
+        PanelHtml.Controls.Add(LblHtmlExternalScriptsPath);
+        PanelHtml.Controls.Add(TxtHtmlExternalScriptsPath);
+        PanelHtml.Controls.Add(PanelTheme);
+        PanelHtml.Controls.Add(ChkHtmlExternalScripts);
+        PanelHtml.Controls.Add(ChkHtmlCompressJson);
+        PanelHtml.Location = new Point(0, 42);
+        PanelHtml.Margin = new Padding(4, 3, 4, 3);
+        PanelHtml.Name = "PanelHtml";
+        PanelHtml.Size = new Size(546, 100);
+        PanelHtml.TabIndex = 54;
         // 
         // BtnHtmlExternalScriptPathSelect
         // 
-        this.BtnHtmlExternalScriptPathSelect.Location = new System.Drawing.Point(194, 30);
-        this.BtnHtmlExternalScriptPathSelect.Name = "BtnHtmlExternalScriptPathSelect";
-        this.BtnHtmlExternalScriptPathSelect.Size = new System.Drawing.Size(45, 22);
-        this.BtnHtmlExternalScriptPathSelect.TabIndex = 58;
-        this.BtnHtmlExternalScriptPathSelect.Text = "Select";
-        this.BtnHtmlExternalScriptPathSelect.UseVisualStyleBackColor = true;
-        this.BtnHtmlExternalScriptPathSelect.Click += new System.EventHandler(this.BtnHtmlExternalScriptPathSelectClick);
+        BtnHtmlExternalScriptPathSelect.Location = new Point(226, 35);
+        BtnHtmlExternalScriptPathSelect.Margin = new Padding(4, 3, 4, 3);
+        BtnHtmlExternalScriptPathSelect.Name = "BtnHtmlExternalScriptPathSelect";
+        BtnHtmlExternalScriptPathSelect.Size = new Size(52, 25);
+        BtnHtmlExternalScriptPathSelect.TabIndex = 58;
+        BtnHtmlExternalScriptPathSelect.Text = "Select";
+        BtnHtmlExternalScriptPathSelect.UseVisualStyleBackColor = true;
+        BtnHtmlExternalScriptPathSelect.Click += BtnHtmlExternalScriptPathSelectClick;
         // 
         // PanelTheme
         // 
-        this.PanelTheme.Controls.Add(this.RadioThemeLight);
-        this.PanelTheme.Controls.Add(this.RadioThemeDark);
-        this.PanelTheme.Location = new System.Drawing.Point(252, 12);
-        this.PanelTheme.Name = "PanelTheme";
-        this.PanelTheme.Size = new System.Drawing.Size(156, 60);
-        this.PanelTheme.TabIndex = 53;
+        PanelTheme.Controls.Add(RadioThemeLight);
+        PanelTheme.Controls.Add(RadioThemeDark);
+        PanelTheme.Location = new Point(294, 14);
+        PanelTheme.Margin = new Padding(4, 3, 4, 3);
+        PanelTheme.Name = "PanelTheme";
+        PanelTheme.Size = new Size(182, 69);
+        PanelTheme.TabIndex = 53;
         // 
         // RadioThemeLight
         // 
-        this.RadioThemeLight.AutoSize = true;
-        this.RadioThemeLight.Location = new System.Drawing.Point(0, 0);
-        this.RadioThemeLight.Name = "RadioThemeLight";
-        this.RadioThemeLight.Size = new System.Drawing.Size(84, 17);
-        this.RadioThemeLight.TabIndex = 47;
-        this.RadioThemeLight.TabStop = true;
-        this.RadioThemeLight.Text = "Light Theme";
-        this.RadioThemeLight.UseVisualStyleBackColor = true;
-        this.RadioThemeLight.CheckedChanged += new System.EventHandler(this.RadioThemeLightCheckedChanged);
+        RadioThemeLight.AutoSize = true;
+        RadioThemeLight.Location = new Point(0, 0);
+        RadioThemeLight.Margin = new Padding(4, 3, 4, 3);
+        RadioThemeLight.Name = "RadioThemeLight";
+        RadioThemeLight.Size = new Size(92, 19);
+        RadioThemeLight.TabIndex = 47;
+        RadioThemeLight.TabStop = true;
+        RadioThemeLight.Text = "Light Theme";
+        RadioThemeLight.UseVisualStyleBackColor = true;
+        RadioThemeLight.CheckedChanged += RadioThemeLightCheckedChanged;
         // 
         // RadioThemeDark
         // 
-        this.RadioThemeDark.AutoSize = true;
-        this.RadioThemeDark.Location = new System.Drawing.Point(0, 24);
-        this.RadioThemeDark.Name = "RadioThemeDark";
-        this.RadioThemeDark.Size = new System.Drawing.Size(84, 17);
-        this.RadioThemeDark.TabIndex = 48;
-        this.RadioThemeDark.TabStop = true;
-        this.RadioThemeDark.Text = "Dark Theme";
-        this.RadioThemeDark.UseVisualStyleBackColor = true;
-        this.RadioThemeDark.CheckedChanged += new System.EventHandler(this.RadioThemeDarkCheckedChanged);
+        RadioThemeDark.AutoSize = true;
+        RadioThemeDark.Location = new Point(0, 28);
+        RadioThemeDark.Margin = new Padding(4, 3, 4, 3);
+        RadioThemeDark.Name = "RadioThemeDark";
+        RadioThemeDark.Size = new Size(89, 19);
+        RadioThemeDark.TabIndex = 48;
+        RadioThemeDark.TabStop = true;
+        RadioThemeDark.Text = "Dark Theme";
+        RadioThemeDark.UseVisualStyleBackColor = true;
+        RadioThemeDark.CheckedChanged += RadioThemeDarkCheckedChanged;
         // 
         // TabCSV
         // 
-        this.TabCSV.Controls.Add(this.ChkOutputCsv);
-        this.TabCSV.Location = new System.Drawing.Point(4, 22);
-        this.TabCSV.Name = "TabCSV";
-        this.TabCSV.Size = new System.Drawing.Size(471, 313);
-        this.TabCSV.TabIndex = 2;
-        this.TabCSV.Text = "CSV";
-        this.TabCSV.UseVisualStyleBackColor = true;
+        TabCSV.Controls.Add(ChkOutputCsv);
+        TabCSV.Location = new Point(4, 24);
+        TabCSV.Margin = new Padding(4, 3, 4, 3);
+        TabCSV.Name = "TabCSV";
+        TabCSV.Size = new Size(551, 397);
+        TabCSV.TabIndex = 2;
+        TabCSV.Text = "CSV";
+        TabCSV.UseVisualStyleBackColor = true;
         // 
         // TabRaw
         // 
-        this.TabRaw.Controls.Add(this.PanelJson);
-        this.TabRaw.Controls.Add(this.ChkOutputJson);
-        this.TabRaw.Controls.Add(this.GroupRawSettings);
-        this.TabRaw.Location = new System.Drawing.Point(4, 22);
-        this.TabRaw.Name = "TabRaw";
-        this.TabRaw.Size = new System.Drawing.Size(471, 313);
-        this.TabRaw.TabIndex = 3;
-        this.TabRaw.Text = "Raw formats";
-        this.TabRaw.UseVisualStyleBackColor = true;
+        TabRaw.Controls.Add(PanelJson);
+        TabRaw.Controls.Add(ChkOutputJson);
+        TabRaw.Controls.Add(GroupRawSettings);
+        TabRaw.Location = new Point(4, 24);
+        TabRaw.Margin = new Padding(4, 3, 4, 3);
+        TabRaw.Name = "TabRaw";
+        TabRaw.Size = new Size(551, 397);
+        TabRaw.TabIndex = 3;
+        TabRaw.Text = "Raw formats";
+        TabRaw.UseVisualStyleBackColor = true;
         // 
         // PanelJson
         // 
-        this.PanelJson.Controls.Add(this.ChkIndentJSON);
-        this.PanelJson.Location = new System.Drawing.Point(14, 35);
-        this.PanelJson.Name = "PanelJson";
-        this.PanelJson.Size = new System.Drawing.Size(127, 35);
-        this.PanelJson.TabIndex = 45;
+        PanelJson.Controls.Add(ChkIndentJSON);
+        PanelJson.Location = new Point(16, 40);
+        PanelJson.Margin = new Padding(4, 3, 4, 3);
+        PanelJson.Name = "PanelJson";
+        PanelJson.Size = new Size(148, 40);
+        PanelJson.TabIndex = 45;
         // 
         // GroupRawSettings
         // 
-        this.GroupRawSettings.Controls.Add(this.ChkRawTimelineArrays);
-        this.GroupRawSettings.Controls.Add(this.ChkCompressRaw);
-        this.GroupRawSettings.Location = new System.Drawing.Point(17, 87);
-        this.GroupRawSettings.Name = "GroupRawSettings";
-        this.GroupRawSettings.Size = new System.Drawing.Size(150, 68);
-        this.GroupRawSettings.TabIndex = 45;
-        this.GroupRawSettings.TabStop = false;
-        this.GroupRawSettings.Text = "Raw Format Settings";
+        GroupRawSettings.Controls.Add(ChkRawTimelineArrays);
+        GroupRawSettings.Controls.Add(ChkCompressRaw);
+        GroupRawSettings.Location = new Point(20, 100);
+        GroupRawSettings.Margin = new Padding(4, 3, 4, 3);
+        GroupRawSettings.Name = "GroupRawSettings";
+        GroupRawSettings.Padding = new Padding(4, 3, 4, 3);
+        GroupRawSettings.Size = new Size(175, 78);
+        GroupRawSettings.TabIndex = 45;
+        GroupRawSettings.TabStop = false;
+        GroupRawSettings.Text = "Raw Format Settings";
         // 
         // ChkCompressRaw
         // 
-        this.ChkCompressRaw.AutoSize = true;
-        this.ChkCompressRaw.Location = new System.Drawing.Point(6, 22);
-        this.ChkCompressRaw.Name = "ChkCompressRaw";
-        this.ChkCompressRaw.Size = new System.Drawing.Size(118, 17);
-        this.ChkCompressRaw.TabIndex = 18;
-        this.ChkCompressRaw.Text = "Compress Raw files";
-        this.ChkCompressRaw.UseVisualStyleBackColor = true;
-        this.ChkCompressRaw.CheckedChanged += new System.EventHandler(this.ChkCompressRawCheckedChanged);
+        ChkCompressRaw.AutoSize = true;
+        ChkCompressRaw.Location = new Point(7, 25);
+        ChkCompressRaw.Margin = new Padding(4, 3, 4, 3);
+        ChkCompressRaw.Name = "ChkCompressRaw";
+        ChkCompressRaw.Size = new Size(128, 19);
+        ChkCompressRaw.TabIndex = 18;
+        ChkCompressRaw.Text = "Compress Raw files";
+        ChkCompressRaw.UseVisualStyleBackColor = true;
+        ChkCompressRaw.CheckedChanged += ChkCompressRawCheckedChanged;
         // 
         // TabUpload
         // 
-        this.TabUpload.Controls.Add(this.DPSReportUserTokenLabel);
-        this.TabUpload.Controls.Add(this.ChkUploadDPSReports);
-        this.TabUpload.Controls.Add(this.TxtDPSReportUserToken);
-        this.TabUpload.Controls.Add(this.ChkUploadWingman);
-        this.TabUpload.Controls.Add(this.GroupWebhookSettings);
-        this.TabUpload.Location = new System.Drawing.Point(4, 22);
-        this.TabUpload.Name = "TabUpload";
-        this.TabUpload.Size = new System.Drawing.Size(471, 313);
-        this.TabUpload.TabIndex = 4;
-        this.TabUpload.Text = "Upload";
-        this.TabUpload.UseVisualStyleBackColor = true;
+        TabUpload.Controls.Add(DPSReportUserTokenLabel);
+        TabUpload.Controls.Add(ChkUploadDPSReports);
+        TabUpload.Controls.Add(TxtDPSReportUserToken);
+        TabUpload.Controls.Add(ChkUploadWingman);
+        TabUpload.Controls.Add(GroupWebhookSettings);
+        TabUpload.Location = new Point(4, 24);
+        TabUpload.Margin = new Padding(4, 3, 4, 3);
+        TabUpload.Name = "TabUpload";
+        TabUpload.Size = new Size(551, 397);
+        TabUpload.TabIndex = 4;
+        TabUpload.Text = "Upload";
+        TabUpload.UseVisualStyleBackColor = true;
         // 
         // DPSReportUserTokenLabel
         // 
-        this.DPSReportUserTokenLabel.AutoSize = true;
-        this.DPSReportUserTokenLabel.Location = new System.Drawing.Point(19, 41);
-        this.DPSReportUserTokenLabel.Name = "DPSReportUserTokenLabel";
-        this.DPSReportUserTokenLabel.Size = new System.Drawing.Size(66, 13);
-        this.DPSReportUserTokenLabel.TabIndex = 46;
-        this.DPSReportUserTokenLabel.Text = "User Token:";
+        DPSReportUserTokenLabel.AutoSize = true;
+        DPSReportUserTokenLabel.Location = new Point(22, 47);
+        DPSReportUserTokenLabel.Margin = new Padding(4, 0, 4, 0);
+        DPSReportUserTokenLabel.Name = "DPSReportUserTokenLabel";
+        DPSReportUserTokenLabel.Size = new Size(68, 15);
+        DPSReportUserTokenLabel.TabIndex = 46;
+        DPSReportUserTokenLabel.Text = "User Token:";
         // 
         // TabAPI
         // 
-        this.TabAPI.Controls.Add(this.LblResetSkill);
-        this.TabAPI.Controls.Add(this.LblResetTrait);
-        this.TabAPI.Controls.Add(this.LblResetSpec);
-        this.TabAPI.Controls.Add(this.BtnResetSpecList);
-        this.TabAPI.Controls.Add(this.BtnResetTraitList);
-        this.TabAPI.Controls.Add(this.BtnResetSkillList);
-        this.TabAPI.Location = new System.Drawing.Point(4, 22);
-        this.TabAPI.Name = "TabAPI";
-        this.TabAPI.Size = new System.Drawing.Size(471, 313);
-        this.TabAPI.TabIndex = 5;
-        this.TabAPI.Text = "Maintenance";
-        this.TabAPI.UseVisualStyleBackColor = true;
+        TabAPI.Controls.Add(LblResetMap);
+        TabAPI.Controls.Add(LblResetSkill);
+        TabAPI.Controls.Add(LblResetTrait);
+        TabAPI.Controls.Add(LblResetSpec);
+        TabAPI.Controls.Add(BtnResetSpecList);
+        TabAPI.Controls.Add(BtnResetTraitList);
+        TabAPI.Controls.Add(BtnResetSkillList);
+        TabAPI.Controls.Add(BtnResetMapList);
+        TabAPI.Location = new Point(4, 24);
+        TabAPI.Margin = new Padding(4, 3, 4, 3);
+        TabAPI.Name = "TabAPI";
+        TabAPI.Size = new Size(551, 397);
+        TabAPI.TabIndex = 5;
+        TabAPI.Text = "Maintenance";
+        TabAPI.UseVisualStyleBackColor = true;
+        // 
+        // LblResetMap
+        // 
+        LblResetMap.AutoSize = true;
+        LblResetMap.Location = new Point(31, 192);
+        LblResetMap.Margin = new Padding(4, 0, 4, 0);
+        LblResetMap.Name = "LblResetMap";
+        LblResetMap.Size = new Size(324, 15);
+        LblResetMap.TabIndex = 29;
+        LblResetMap.Text = "Resets the local map list and loads all maps from the GW2 API";
         // 
         // LblResetSkill
         // 
-        this.LblResetSkill.AutoSize = true;
-        this.LblResetSkill.Location = new System.Drawing.Point(24, 116);
-        this.LblResetSkill.Name = "LblResetSkill";
-        this.LblResetSkill.Size = new System.Drawing.Size(294, 13);
-        this.LblResetSkill.TabIndex = 27;
-        this.LblResetSkill.Text = "Resets the local skill list and loads all skills from the GW2 API";
+        LblResetSkill.AutoSize = true;
+        LblResetSkill.Location = new Point(28, 134);
+        LblResetSkill.Margin = new Padding(4, 0, 4, 0);
+        LblResetSkill.Name = "LblResetSkill";
+        LblResetSkill.Size = new Size(324, 15);
+        LblResetSkill.TabIndex = 27;
+        LblResetSkill.Text = "Resets the local skill list and loads all skills from the GW2 API";
         // 
         // LblResetTrait
         // 
-        this.LblResetTrait.AutoSize = true;
-        this.LblResetTrait.Location = new System.Drawing.Point(24, 62);
-        this.LblResetTrait.Name = "LblResetTrait";
-        this.LblResetTrait.Size = new System.Drawing.Size(289, 13);
-        this.LblResetTrait.TabIndex = 28;
-        this.LblResetTrait.Text = "Resets the local trait list and loads all trait from the GW2 API";
+        LblResetTrait.AutoSize = true;
+        LblResetTrait.Location = new Point(28, 72);
+        LblResetTrait.Margin = new Padding(4, 0, 4, 0);
+        LblResetTrait.Name = "LblResetTrait";
+        LblResetTrait.Size = new Size(321, 15);
+        LblResetTrait.TabIndex = 28;
+        LblResetTrait.Text = "Resets the local trait list and loads all trait from the GW2 API";
         // 
         // LblResetSpec
         // 
-        this.LblResetSpec.AutoSize = true;
-        this.LblResetSpec.Location = new System.Drawing.Point(24, 11);
-        this.LblResetSpec.Name = "LblResetSpec";
-        this.LblResetSpec.Size = new System.Drawing.Size(306, 13);
-        this.LblResetSpec.TabIndex = 26;
-        this.LblResetSpec.Text = "Resets the local spec list and loads all specs from the GW2 API";
+        LblResetSpec.AutoSize = true;
+        LblResetSpec.Location = new Point(28, 13);
+        LblResetSpec.Margin = new Padding(4, 0, 4, 0);
+        LblResetSpec.Name = "LblResetSpec";
+        LblResetSpec.Size = new Size(332, 15);
+        LblResetSpec.TabIndex = 26;
+        LblResetSpec.Text = "Resets the local spec list and loads all specs from the GW2 API";
         // 
         // BtnClose
         // 
-        this.BtnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-        this.BtnClose.Location = new System.Drawing.Point(412, 403);
-        this.BtnClose.Name = "BtnClose";
-        this.BtnClose.Size = new System.Drawing.Size(84, 24);
-        this.BtnClose.TabIndex = 48;
-        this.BtnClose.Text = "Close";
-        this.BtnClose.UseVisualStyleBackColor = true;
-        this.BtnClose.Click += new System.EventHandler(this.BtnCloseClick);
+        BtnClose.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        BtnClose.Location = new Point(481, 465);
+        BtnClose.Margin = new Padding(4, 3, 4, 3);
+        BtnClose.Name = "BtnClose";
+        BtnClose.Size = new Size(98, 28);
+        BtnClose.TabIndex = 48;
+        BtnClose.Text = "Close";
+        BtnClose.UseVisualStyleBackColor = true;
+        BtnClose.Click += BtnCloseClick;
         // 
         // BtnDumpSettings
         // 
-        this.BtnDumpSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-        this.BtnDumpSettings.Location = new System.Drawing.Point(322, 403);
-        this.BtnDumpSettings.Name = "BtnDumpSettings";
-        this.BtnDumpSettings.Size = new System.Drawing.Size(84, 24);
-        this.BtnDumpSettings.TabIndex = 49;
-        this.BtnDumpSettings.Text = "Save Settings";
-        this.BtnDumpSettings.UseVisualStyleBackColor = true;
-        this.BtnDumpSettings.Click += new System.EventHandler(this.BtnDumpSettingsClicked);
+        BtnDumpSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        BtnDumpSettings.Location = new Point(376, 465);
+        BtnDumpSettings.Margin = new Padding(4, 3, 4, 3);
+        BtnDumpSettings.Name = "BtnDumpSettings";
+        BtnDumpSettings.Size = new Size(98, 28);
+        BtnDumpSettings.TabIndex = 49;
+        BtnDumpSettings.Text = "Save Settings";
+        BtnDumpSettings.UseVisualStyleBackColor = true;
+        BtnDumpSettings.Click += BtnDumpSettingsClicked;
         // 
         // BtnLoadSettings
         // 
-        this.BtnLoadSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-        this.BtnLoadSettings.Location = new System.Drawing.Point(232, 403);
-        this.BtnLoadSettings.Name = "BtnLoadSettings";
-        this.BtnLoadSettings.Size = new System.Drawing.Size(84, 24);
-        this.BtnLoadSettings.TabIndex = 50;
-        this.BtnLoadSettings.Text = "Load Settings";
-        this.BtnLoadSettings.UseVisualStyleBackColor = true;
-        this.BtnLoadSettings.Click += new System.EventHandler(this.BtnLoadSettingsClicked);
+        BtnLoadSettings.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        BtnLoadSettings.Location = new Point(271, 465);
+        BtnLoadSettings.Margin = new Padding(4, 3, 4, 3);
+        BtnLoadSettings.Name = "BtnLoadSettings";
+        BtnLoadSettings.Size = new Size(98, 28);
+        BtnLoadSettings.TabIndex = 50;
+        BtnLoadSettings.Text = "Load Settings";
+        BtnLoadSettings.UseVisualStyleBackColor = true;
+        BtnLoadSettings.Click += BtnLoadSettingsClicked;
         // 
         // SettingsForm
         // 
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.AutoScroll = true;
-        this.ClientSize = new System.Drawing.Size(503, 439);
-        this.Controls.Add(this.BtnLoadSettings);
-        this.Controls.Add(this.BtnDumpSettings);
-        this.Controls.Add(this.BtnClose);
-        this.Controls.Add(this.TabControl);
-        this.Controls.Add(this.LblSettingsInfoMsg);
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-        this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-        this.MaximizeBox = false;
-        this.Name = "SettingsForm";
-        this.Text = "Parse settings";
-        this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsFormFormClosing);
-        this.VisibleChanged += new System.EventHandler(this.SettingsFormLoad);
-        ((System.ComponentModel.ISupportInitialize)(this.NumericCustomTooShort)).EndInit();
-        ((System.ComponentModel.ISupportInitialize)(this.NumericMemoryLimit)).EndInit();
-        this.GroupWebhookSettings.ResumeLayout(false);
-        this.GroupWebhookSettings.PerformLayout();
-        this.TabControl.ResumeLayout(false);
-        this.TabGeneral.ResumeLayout(false);
-        this.TabGeneral.PerformLayout();
-        this.GroupParsing.ResumeLayout(false);
-        this.GroupParsing.PerformLayout();
-        this.GroupOutput.ResumeLayout(false);
-        this.GroupOutput.PerformLayout();
-        this.GroupLog.ResumeLayout(false);
-        this.GroupLog.PerformLayout();
-        this.TabHTML.ResumeLayout(false);
-        this.TabHTML.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)(this.PictureTheme)).EndInit();
-        this.PanelHtml.ResumeLayout(false);
-        this.PanelHtml.PerformLayout();
-        this.PanelTheme.ResumeLayout(false);
-        this.PanelTheme.PerformLayout();
-        this.TabCSV.ResumeLayout(false);
-        this.TabCSV.PerformLayout();
-        this.TabRaw.ResumeLayout(false);
-        this.TabRaw.PerformLayout();
-        this.PanelJson.ResumeLayout(false);
-        this.PanelJson.PerformLayout();
-        this.GroupRawSettings.ResumeLayout(false);
-        this.GroupRawSettings.PerformLayout();
-        this.TabUpload.ResumeLayout(false);
-        this.TabUpload.PerformLayout();
-        this.TabAPI.ResumeLayout(false);
-        this.TabAPI.PerformLayout();
-        this.ResumeLayout(false);
-        this.PerformLayout();
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
+        AutoScroll = true;
+        ClientSize = new Size(587, 507);
+        Controls.Add(BtnLoadSettings);
+        Controls.Add(BtnDumpSettings);
+        Controls.Add(BtnClose);
+        Controls.Add(TabControl);
+        Controls.Add(LblSettingsInfoMsg);
+        FormBorderStyle = FormBorderStyle.FixedSingle;
+        Icon = (Icon)resources.GetObject("$this.Icon");
+        Margin = new Padding(4, 3, 4, 3);
+        MaximizeBox = false;
+        Name = "SettingsForm";
+        Text = "Parse settings";
+        FormClosing += SettingsFormFormClosing;
+        VisibleChanged += SettingsFormLoad;
+        ((System.ComponentModel.ISupportInitialize)NumericCustomTooShort).EndInit();
+        ((System.ComponentModel.ISupportInitialize)NumericMemoryLimit).EndInit();
+        GroupWebhookSettings.ResumeLayout(false);
+        GroupWebhookSettings.PerformLayout();
+        TabControl.ResumeLayout(false);
+        TabGeneral.ResumeLayout(false);
+        TabGeneral.PerformLayout();
+        GroupParsing.ResumeLayout(false);
+        GroupParsing.PerformLayout();
+        GroupOutput.ResumeLayout(false);
+        GroupOutput.PerformLayout();
+        GroupLog.ResumeLayout(false);
+        GroupLog.PerformLayout();
+        TabHTML.ResumeLayout(false);
+        TabHTML.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)PictureTheme).EndInit();
+        PanelHtml.ResumeLayout(false);
+        PanelHtml.PerformLayout();
+        PanelTheme.ResumeLayout(false);
+        PanelTheme.PerformLayout();
+        TabCSV.ResumeLayout(false);
+        TabCSV.PerformLayout();
+        TabRaw.ResumeLayout(false);
+        TabRaw.PerformLayout();
+        PanelJson.ResumeLayout(false);
+        PanelJson.PerformLayout();
+        GroupRawSettings.ResumeLayout(false);
+        GroupRawSettings.PerformLayout();
+        TabUpload.ResumeLayout(false);
+        TabUpload.PerformLayout();
+        TabAPI.ResumeLayout(false);
+        TabAPI.PerformLayout();
+        ResumeLayout(false);
+        PerformLayout();
 
     }
 
@@ -993,6 +1072,7 @@ partial class SettingsForm
     private System.Windows.Forms.TextBox TxtCustomSaveLocation;
     private System.Windows.Forms.Button BtnCustomSaveLocSelect;
     private System.Windows.Forms.Label LblCustomSaveLoc;
+    private System.Windows.Forms.Button BtnResetMapList;
     private System.Windows.Forms.Button BtnResetSkillList;
     private System.Windows.Forms.Button BtnResetTraitList;
     private System.Windows.Forms.Button BtnResetSpecList;
@@ -1059,4 +1139,5 @@ partial class SettingsForm
     private System.Windows.Forms.TextBox TxtHtmlExternalScriptsCdn;
     private System.Windows.Forms.Label LblHtmlExternalScriptsCdn;
     private System.Windows.Forms.Button BtnHtmlExternalScriptPathSelect;
+    private Label LblResetMap;
 }

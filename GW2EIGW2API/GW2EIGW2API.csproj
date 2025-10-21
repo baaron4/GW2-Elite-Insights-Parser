@@ -6,7 +6,7 @@
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>GW2EIGW2API</RootNamespace>
-        <Version>3.0.1</Version>
+        <Version>4.0.0</Version>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>

@@ -38,6 +38,7 @@ public partial class SettingsForm : Form
         ChkUploadDPSReports.Enabled = !busy;
         ChkUploadWingman.Enabled = !busy;
         TxtDPSReportUserToken.Enabled = !busy;
+        BtnResetMapList.Enabled = !busy;
         BtnResetSkillList.Enabled = !busy;
         BtnResetSpecList.Enabled = !busy;
         BtnResetTraitList.Enabled = !busy;
@@ -161,7 +162,12 @@ public partial class SettingsForm : Form
         _programSettings.WebhookURL = TxtUploadWebhookUrl.Text;
         Settings.Default.WebhookURL = _programSettings.WebhookURL;
     }
-
+    private void BtnResetMapListClick(object sender, EventArgs e)
+    {
+        //Update map list
+        ProgramHelper.APIController.WriteAPIMapsToFile(ProgramHelper.MapAPICacheLocation);
+        MessageBox.Show("Map List has been redone");
+    }
     private void BtnResetSkillListClick(object sender, EventArgs e)
     {
         //Update skill list

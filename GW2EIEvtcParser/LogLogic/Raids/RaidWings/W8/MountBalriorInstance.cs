@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -35,7 +36,7 @@ internal class MountBalriorInstance : MountBalrior
         MechanicList.Add(_ura.Mechanics);
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         return "Mount Balrior";
     }

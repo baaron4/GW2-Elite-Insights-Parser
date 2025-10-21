@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
 using static GW2EIEvtcParser.LogLogic.LogLogicTimeUtils;
@@ -396,7 +397,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
         ];
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         return "Harvest Temple";
     }
@@ -550,7 +551,7 @@ internal class HarvestTemple : EndOfDragonsRaidEncounter
                             // Avoid making the gadget go back to 100% hp on "death"
                             // Regenerating back to full HP
                             // use mid life check to allow hp going back up to 100% around first aware
-                            if (healthPercent > lastHPUpdate && healthPercent > 99 && evt.Time > (to.LastAware + to.FirstAware) / 2)
+                            if (healthPercent > lastHPUpdate && healthPercent > 99 && evt.Time > to.HalfAware)
                             {
                                 return false;
                             }

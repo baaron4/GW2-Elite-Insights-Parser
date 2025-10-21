@@ -27,7 +27,17 @@ internal static class JsonPlayerBuilder
         IReadOnlyList<PhaseData> phases = log.LogData.GetPhases(log);
         //
         jsonPlayer.Account = player.Account;
-        jsonPlayer.Weapons = player.GetWeaponSets(log).ToArray();
+        var weaponSets = player.GetWeaponSets(log);
+        jsonPlayer.Weapons = weaponSets[^1].ToArray().Weapons;
+        jsonPlayer.WeaponSets = weaponSets.Select(x =>
+        {
+            var (Weapons, Timeframe) = x.ToArray();
+            return new JsonWeaponSet()
+            {
+                Weapons = Weapons,
+                Timeframe = Timeframe,
+            };
+        }).ToList();
         jsonPlayer.Group = player.Group;
         jsonPlayer.Profession = player.Spec.ToString();
         jsonPlayer.FriendlyNPC = player is NPC;

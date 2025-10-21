@@ -5,6 +5,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.LogLogic;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIGW2API;
 
 namespace GW2EIEvtcParser;
 
@@ -34,7 +35,7 @@ public class ParsedEvtcLog
     private Dictionary<AgentItem, SingleActor>? _agentToActorDictionary;
 
     internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, LogData logData, AgentData agentData, SkillData skillData,
-            IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
+            IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcParserSettings parserSettings, GW2APIController apiController, ParserController operation)
     {
         LogData = logData;
         AgentData = agentData;
@@ -49,7 +50,7 @@ public class ParsedEvtcLog
         LogData.ProcessLogStatus(CombatData, AgentData);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Setting Log Name");
-        LogData.CompleteLogName(CombatData, AgentData);
+        LogData.CompleteLogName(CombatData, AgentData, apiController);
         
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
         LogData.Logic.CheckSuccess(CombatData, AgentData, LogData, agentData.GetAgentByType(AgentItem.AgentType.Player));

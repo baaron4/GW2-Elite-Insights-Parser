@@ -65,11 +65,12 @@ public sealed class ProgramHelper : IDisposable
 #pragma warning restore CA1823 // Avoid unused private fields
 
     public static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
+    public static readonly string MapAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/MapList.json";
     public static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
     public static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
     public static readonly string EILogPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Logs/";
 
-    public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
+    public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation, MapAPICacheLocation);
 
     private CancellationTokenSource? RunningMemoryCheck = null;
 

@@ -10,6 +10,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SpeciesIDs;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIGW2API;
 
 namespace GW2EIEvtcParser.LogLogic;
 internal class SunquaPeakInstance : SunquaPeak
@@ -27,7 +28,7 @@ internal class SunquaPeakInstance : SunquaPeak
         MechanicList.Add(_aiKeeperOfThePeak.Mechanics);
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         return "Sunqua Peak Fractal";
     }

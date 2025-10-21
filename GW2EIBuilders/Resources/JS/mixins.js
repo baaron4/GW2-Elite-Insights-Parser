@@ -48,6 +48,51 @@ var damageGraphComponent = {
     },
 };
 
+const playerHeaderComponent = {
+    methods: {
+        showWeaponSet: function (weaponSetIndex, weaponSets, encounterPhase) {
+            if (encounterPhase.type === PhaseTypes.INSTANCE) {
+                return weaponSetIndex === 0;
+            }
+            let setToShow = null;
+            for (let i = 0; i < weaponSets.length; i++) {
+                const wepSet = weaponSets[i];
+                const time = encounterPhase.end * 1000;
+                if (wepSet.start <= time && wepSet.end >= time) {
+                    setToShow = i;
+                    break;
+                }
+            }
+            return weaponSetIndex === setToShow;
+        },
+        getIcon: function (path) {
+            return WeaponIcons[path];
+        },
+        getCommanderTooltip: function (player) {
+            if (!player.isCommander) {
+                return false;
+            }
+            let res = 'Commander';
+            for (let i = 0; i < player.commanderStates.length; i++) {
+                res = `
+                        ${res}<br>
+                        From ${player.commanderStates[i][0]} to ${player.commanderStates[i][1]}
+                    `;
+            }
+            return res;
+        },
+    },
+    computed: {
+
+        phase: function () {
+            return logData.phases[this.phaseindex];
+        },
+        UIIcons: function () {
+            return UIIcons;
+        }
+    }
+};
+
 var encounterPhaseComponent = {
     data: function () {
         return {

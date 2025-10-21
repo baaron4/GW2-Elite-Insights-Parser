@@ -4,6 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using GW2EIGW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Decoration;
 using static GW2EIEvtcParser.LogLogic.LogLogicPhaseUtils;
@@ -232,7 +233,7 @@ public abstract class LogLogic
         return [ ];
     }
 
-    internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
+    internal virtual string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
         if (target == null)

@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.ParserHelpers.LogImages;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.SpeciesIDs;
+using GW2EIGW2API;
 
 namespace GW2EIEvtcParser.LogLogic;
 
@@ -154,7 +155,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         return (int)TargetID.HauntingStatue;
     }
 
-    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    internal override string GetLogicName(CombatData combatData, AgentData agentData, GW2APIController apiController)
     {
         return "Twisted Castle";
     }

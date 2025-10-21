@@ -19,16 +19,20 @@
                                 :data-original-title="player.profession">
                             <img v-if="player.health > 0" :src="UIIcons.VitalityChar" alt="Health"
                                 class="icon" :data-original-title="'Health: ' + player.health">
-                        </div>
-                        <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
-                            <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                            <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
-                            <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                        </div>
-                        <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
-                            <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
-                            <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
-                            <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        </div>                      
+                        <div v-for="(weaponSet, weaponSetIndex) in player.weaponSets">
+                            <div v-show="showWeaponSet(weaponSetIndex, player.weaponSets, encounterPhase)">
+                                <div v-if="weaponSet.l1Set.length > 0 || weaponSet.l2Set.length > 0">
+                                    <img v-for="wep in weaponSet.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                                    <span v-if="weaponSet.l1Set.length > 0 && weaponSet.l2Set.length > 0">/</span>
+                                    <img v-for="wep in weaponSet.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                                </div>
+                                <div v-if="weaponSet.a1Set.length > 0 || weaponSet.a2Set.length > 0">
+                                    <img v-for="wep in weaponSet.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                                    <span v-if="weaponSet.a1Set.length > 0 && weaponSet.a2Set.length > 0">/</span>
+                                    <img v-for="wep in weaponSet.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                                </div>
+                            </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
                             <img v-if="player.isCommander"
@@ -50,27 +54,11 @@
 <script>
     Vue.component("player-target-component", {
         props: ["players", "phaseindex"],
-        mixins: [encounterPhaseComponent],
+        mixins: [encounterPhaseComponent, playerHeaderComponent],
         template: `${template}`,
         methods: {
-            getIcon: function (path) {
-                return WeaponIcons[path];
-            },
             select: function (id) {
                 this.players[id].targetActive = !this.players[id].targetActive;
-            },
-            getCommanderTooltip: function(player) {
-                if (!player.isCommander) {
-                    return false;
-                }
-                let res = 'Commander';
-                for (let i = 0; i < player.commanderStates.length; i++) {
-                    res = `
-                        ${res}<br>
-                        From ${player.commanderStates[i][0]} to ${player.commanderStates[i][1]}
-                    `;
-                }
-                return res;
             },
             selectGroup: function (group) {
                 let enable = true;
@@ -83,9 +71,6 @@
             }
         },
         computed: {
-            phase: function() {
-                return logData.phases[this.phaseindex];
-            },
             groups: function () {
                 const aux = [];
                 const players = getActiveNonFakePlayersForPhase(this.encounterPhase);
@@ -111,9 +96,6 @@
                 }
                 return noUndefinedGroups;
             },
-            UIIcons: function() {
-                return UIIcons;
-            }
         }
     });
 </script>
