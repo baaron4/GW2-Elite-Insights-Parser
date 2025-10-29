@@ -251,6 +251,15 @@ internal class DecimaTheStormsinger : MountBalrior
         return phase;
     }
 
+    private static IReadOnlyList<PhaseData> GetAroundBoulderPhases(ParsedEvtcLog log, PhaseData boulderPhase, PhaseData boulderMainPhase, SingleActor decima, int index)
+    {
+        var preBoulderPhase = new SubPhasePhaseData(boulderMainPhase.Start, boulderPhase.Start, $"Pre-Boulders {index}").WithParentPhase(boulderMainPhase);
+        preBoulderPhase.AddTarget(decima, log);
+        var postBoulderPhase = new SubPhasePhaseData(boulderPhase.End, boulderMainPhase.End, $"Post-Boulders {index}").WithParentPhase(boulderMainPhase);
+        postBoulderPhase.AddTarget(decima, log);
+        return [preBoulderPhase, postBoulderPhase];
+    }
+
     internal static List<PhaseData> ComputePhases(ParsedEvtcLog log, SingleActor decima, IReadOnlyList<SingleActor> targets, EncounterPhaseData encounterPhase, bool requirePhases)
     {
         if (!requirePhases)
@@ -261,7 +270,7 @@ internal class DecimaTheStormsinger : MountBalrior
         var phases = new List<PhaseData>(isCM ? 9 : 5);
         // Invul check
         phases.AddRange(GetPhasesByInvul(log, isCM ? NovaShieldCM : NovaShield, decima, true, true, encounterPhase.Start, encounterPhase.End));
-        List<PhaseData> mainPhases = new List<PhaseData>(3);
+        var mainPhases = new List<PhaseData>(3);
         var currentMainPhase = 1;
         for (int i = 0; i < phases.Count; i++)
         {
@@ -318,11 +327,21 @@ internal class DecimaTheStormsinger : MountBalrior
             var firstBoulders = sortedBoulders.Take(new Range(0, 2));
             if (firstBoulders.Any())
             {
-                phases.Add(GetBoulderPhase(log, firstBoulders, "Boulders 1", decima).WithParentPhases(mainPhases));
+                {
+                    var boulderPhase1 = GetBoulderPhase(log, firstBoulders, "Boulders 1", decima);
+                    var boulder1MainPhase = mainPhases.First(x => x.IntersectsWindow(boulderPhase1.Start, boulderPhase1.End));
+                    boulderPhase1.AddParentPhase(boulder1MainPhase);
+                    phases.Add(boulderPhase1);
+                    phases.AddRange(GetAroundBoulderPhases(log, boulderPhase1, boulder1MainPhase, decima, 1));
+                }
                 var secondBoulders = sortedBoulders.Take(new Range(2, 4));
                 if (secondBoulders.Any())
                 {
-                    phases.Add(GetBoulderPhase(log, secondBoulders, "Boulders 2", decima).WithParentPhases(mainPhases));
+                    var boulderPhase2 = GetBoulderPhase(log, secondBoulders, "Boulders 2", decima);
+                    var boulder2MainPhase = mainPhases.First(x => x.IntersectsWindow(boulderPhase2.Start, boulderPhase2.End));
+                    boulderPhase2.AddParentPhase(boulder2MainPhase);
+                    phases.Add(boulderPhase2);
+                    phases.AddRange(GetAroundBoulderPhases(log, boulderPhase2, boulder2MainPhase, decima, 2));
                 }
             }
         }
