@@ -29,7 +29,7 @@ internal static class LuminaryHelper
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "15% strike damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_EmpoweredArmaments, EmpoweredArmaments, "Empowered Armaments", "10% strike damage", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, TraitImages.EmpoweredArmaments, DamageModifierMode.sPvPWvW),
         // Radiant Armaments
-        new BuffOnFoeDamageModifier(Mod_RadiantArmamentsHammer, [Stun, Daze, Knockdown, Fear, Taunt, Immobile], "Radiant Armaments (Hammer)", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsHammer, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_RadiantArmamentsHammer, [Stun, Daze, Knockdown, Fear, Taunt, Immobile], "Radiant Armaments (Hammer)", "15% against controlled or immobilized foes", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsHammer, DamageModifierMode.All)
             .UsingChecker((hde, log) => 
             {
                 if (hde.From.HasAnyBuff(log, [RadiantArmamentsHammer, RadiantArmamentsHammerLingering], hde.Time))
