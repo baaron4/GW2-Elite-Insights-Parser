@@ -5177,7 +5177,7 @@ public static class SkillIDs
     public const long LightningBlitzPetSkill = 76914;
     public const long BeguilingHaze2 = 76917;
     public const long LingeringSpirits = 76920;
-    public const long HaresAgilityBuff = 76922;
+    public const long EletricEnchantment = 76922;
     public const long NightmareWeaponBuff = 76923;
     public const long GleamingBlade = 76924;
     public const long CalcifyPetSkill = 76925;
