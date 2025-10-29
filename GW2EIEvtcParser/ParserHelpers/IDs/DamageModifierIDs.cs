@@ -389,4 +389,5 @@ public static class DamageModifierIDs
     public const int Mod_RadiantArmamentsShieldLingering = 376;
     public const int Mod_FieryMight = 377;
     public const int Mod_PiercingStance = 378;
+    public const int Mod_BirdOfPrey = 379;
 }
