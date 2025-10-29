@@ -19,7 +19,7 @@ sealed class Regression
         var log = parser.ParseLog(new TestHelper.TestOperationController(), file, out var failureReason, false);
         Assert.NotNull(log);
         Assert.Null(failureReason);
-        var data = GW2EIBuilders.JsonModels.JsonLogBuilder.BuildJsonLog(log!, new(true), new Version(), [ ]);
+        var data = GW2EIBuilders.JsonModels.JsonLogBuilder.BuildJsonLog(log!, new(true), new Version(), new GW2EIBuilders.UploadResults(""));
         var player = data.Players![0];
         var mightData = player.BuffUptimes!.First(d => d.Id == 740).BuffData;
         var generationSelf = mightData![0].Generated![player.Name!];

@@ -41,7 +41,7 @@ public class HTMLBuilder
     private readonly string? _externalScriptsCdn;
     private readonly bool _compressJson;
 
-    private readonly string[] _uploadLink;
+    private readonly UploadResults _uploadLink;
 
     // https://point2blog.wordpress.com/2012/12/26/compressdecompress-a-string-in-c/
     private static string CompressAndBase64(string s)
@@ -79,7 +79,7 @@ public class HTMLBuilder
         _scriptVersionRev = parserVersion.Revision;
         _log = log;
 
-        _uploadLink = uploadResults.ToArray();
+        _uploadLink = uploadResults;
 
         _cr = _log.CanCombatReplay;
         _light = settings.HTMLLightTheme;

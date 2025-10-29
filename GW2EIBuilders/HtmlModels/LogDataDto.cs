@@ -86,7 +86,7 @@ internal class LogDataDto
     public List<string>? UsedExtensions;
     public List<List<string>>? PlayersRunningExtensions;
     //
-    private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
+    private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, UploadResults uploadLinks)
     {
         log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
         LogStart = log.LogMetadata.DateStartStd;
@@ -112,7 +112,7 @@ internal class LogDataDto
         RecordedAccountBy = log.LogMetadata.PoVAccount;
         var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
         FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
-        UploadLinks = uploadLinks.ToList();
+        UploadLinks = [uploadLinks.DPSReportEILink];
         if (log.LogMetadata.UsedExtensions.Any())
         {
             UsedExtensions = [];
@@ -454,7 +454,7 @@ internal class LogDataDto
         }
     }
 
-    public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, string[] uploadLinks)
+    public static LogDataDto BuildLogData(ParsedEvtcLog log, bool cr, bool light, Version parserVersion, UploadResults uploadLinks)
     {
         using var _t = new AutoTrace("BuildLogData");
 

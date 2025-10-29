@@ -15,7 +15,7 @@ public class RawFormatBuilder
         {
             throw new InvalidDataException("Missing settings in RawFormatBuilder");
         }
-        _jsonLog = JsonLogBuilder.BuildJsonLog(log, settings, parserVersion, uploadResults.ToArray());
+        _jsonLog = JsonLogBuilder.BuildJsonLog(log, settings, parserVersion, uploadResults);
     }
 
     /// <summary>

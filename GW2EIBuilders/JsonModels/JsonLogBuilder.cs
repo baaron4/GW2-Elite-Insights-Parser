@@ -120,7 +120,7 @@ internal static class JsonLogBuilder
         return damageModDesc;
     }
 
-    public static JsonLog BuildJsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, string[] uploadLinks)
+    public static JsonLog BuildJsonLog(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadLinks)
     {
         var jsonLog = new JsonLog();
         //
@@ -178,7 +178,7 @@ internal static class JsonLogBuilder
         jsonLog.Success = log.LogData.Success;
         jsonLog.Targetless = log.LogData.Logic.Targetless;
         jsonLog.GW2Build = log.LogMetadata.GW2Build;
-        jsonLog.UploadLinks = uploadLinks;
+        jsonLog.UploadLinks = [uploadLinks.DPSReportEILink];
         jsonLog.Language = log.LogMetadata.Language;
         jsonLog.LanguageID = (byte)log.LogMetadata.LanguageID;
         jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;

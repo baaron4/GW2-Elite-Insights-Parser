@@ -16,7 +16,7 @@ public class CSVBuilder
     private readonly StatisticsHelper _statistics;
     private StreamWriter _sw;
     private readonly string _delimiter;
-    private readonly string[] _uploadResult;
+    private readonly UploadResults _uploadResult;
 
     private readonly IReadOnlyList<Player> _noFakePlayers;
 
@@ -37,7 +37,7 @@ public class CSVBuilder
 
         _statistics = log.StatisticsHelper;
 
-        _uploadResult = uploadResults.ToArray();
+        _uploadResult = uploadResults;
         _legacyTarget = log.LogData.Logic.Targets.OfType<NPC>().FirstOrDefault()!;
         if (_legacyTarget == null)
         {
@@ -79,9 +79,9 @@ public class CSVBuilder
         WriteLine(["Recorded By", _log.LogMetadata.PoVName]);
         WriteLine(["Time Start", _log.LogMetadata.DateStartStd]);
         WriteLine(["Time End", _log.LogMetadata.DateEndStd]);
-        if (_uploadResult.Any(x => x != null && x.Length > 0))
+        if (_uploadResult.DPSReportEILink != null)
         {
-            WriteLine(["Links", _uploadResult[0], _uploadResult[1]]);
+            WriteLine(["Links", _uploadResult.DPSReportEILink, ""]);
         }
         else
         {

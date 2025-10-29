@@ -18,9 +18,4 @@ public class UploadResults
     {
         DPSReportEILink = dpsReportEI ?? "";
     }
-
-    internal string[] ToArray()
-    {
-        return [DPSReportEILink];
-    }
 }
