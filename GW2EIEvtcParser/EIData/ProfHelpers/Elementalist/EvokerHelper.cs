@@ -22,6 +22,17 @@ internal static class EvokerHelper
             .UsingSecondaryEffectChecker(EffectGUIDs.EvokerOttersCompassion2),
     ];
 
+    private static bool ZapChecker(HealthDamageEvent hde, ParsedEvtcLog log)
+    {
+        if (hde.HasCrit)
+        {
+            var src = log.FindActor(hde.From);
+            var dst = log.FindActor(hde.To);
+            return dst.HasBuff(log, src, ZapBuffPlayerToTarget, hde.Time);
+        }
+        return false;
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = 
     [
         // Elemental Balance
@@ -42,44 +53,17 @@ internal static class EvokerHelper
         // Zap
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.PvE)
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
-            .UsingChecker((hde, log) =>
-            {
-                if (hde.HasCrit)
-                {
-                    var src = log.FindActor(hde.From);
-                    var dst = log.FindActor(hde.To);
-                    return dst.HasBuff(log, src, ZapBuffPlayerToTarget, hde.Time);
-                }
-                return false;
-            })
+            .UsingChecker(ZapChecker)
             .UsingApproximate()
             .WithBuilds(GW2Builds.August2025VoEBeta, GW2Builds.OctoberVoERelease),
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "4% crit damage", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.PvE)
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
-            .UsingChecker((hde, log) =>
-            {
-                if (hde.HasCrit)
-                {
-                    var src = log.FindActor(hde.From);
-                    var dst = log.FindActor(hde.To);
-                    return dst.HasBuff(log, src, ZapBuffPlayerToTarget, hde.Time);
-                }
-                return false;
-            })
+            .UsingChecker(ZapChecker)
             .UsingApproximate()
             .WithBuilds(GW2Builds.OctoberVoERelease),
         new BuffOnFoeDamageModifier(Mod_Zap, ZapBuffPlayerToTarget, "Zap", "5% crit damage", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, SkillImages.Zap, DamageModifierMode.sPvPWvW)
             .UsingEarlyExit((actor, log) => !actor.GetBuffStatus(log, ZapBuffTargetToPlayer).Any(x => x.Value > 0))
-            .UsingChecker((hde, log) =>
-            {
-                if (hde.HasCrit)
-                {
-                    var src = log.FindActor(hde.From);
-                    var dst = log.FindActor(hde.To);
-                    return dst.HasBuff(log, src, ZapBuffPlayerToTarget, hde.Time);
-                }
-                return false;
-            })
+            .UsingChecker(ZapChecker)
             .UsingApproximate(),
         // Adept
         new BuffOnFoeDamageModifier(Mod_FieryMight, Burning, "Fiery Might", "10% strike damage against burning foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Evoker, ByPresence, TraitImages.FieryMight, DamageModifierMode.All),
