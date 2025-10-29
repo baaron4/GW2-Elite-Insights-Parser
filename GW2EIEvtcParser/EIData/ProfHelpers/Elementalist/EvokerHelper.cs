@@ -113,7 +113,7 @@ internal static class EvokerHelper
         new Buff("Evoker's Stone Spirit Aura (3)", EvokerStoneSpiritAura3, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (4)", EvokerStoneSpiritAura4, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Evoker's Stone Spirit Aura (5)", EvokerStoneSpiritAura5, Source.Evoker, BuffClassification.Other, BuffImages.Unknown),
-        new Buff("Eletric Enchantment", EletricEnchantment, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
+        new Buff("Electric Enchantment", ElectricEnchantment, Source.Evoker, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.HaresAgility),
         new Buff("Zap (To Target)", ZapBuffPlayerToTarget, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Zap (To Player)", ZapBuffTargetToPlayer, Source.Evoker, BuffStackType.StackingUniquePerSrc, 999, BuffClassification.Other, SkillImages.Zap),
         new Buff("Toad Block", ToadBlock, Source.Evoker, BuffClassification.Other, SkillImages.ToadsFortitude),
