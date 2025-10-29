@@ -43,13 +43,16 @@ internal static class RitualistHelper
         new Buff("Ritualist's Storm Spirit Aura (1)", RitualistStormSpiritAura1, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Ritualist's Storm Spirit Aura (2)", RitualistStormSpiritAura2, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Ritualist's Storm Spirit Aura (3)", RitualistStormSpiritAura3, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
+        // Weapons
         new Buff("Weapon of Remedy", WeaponOfRemedyBuff, Source.Ritualist, BuffClassification.Defensive, SkillImages.WeaponOfRemedy),
         new Buff("Weapon of Warding", WeaponOfWardingBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Defensive, SkillImages.WeaponOfWarding),
         new Buff("Nightmare Weapon", NightmareWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, SkillImages.NightmareWeapon),
         new Buff("Xinrae's Weapon", XinraesWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Defensive, SkillImages.XinraesWeapon),
         new Buff("Resilient Weapon", ResilientWeaponBuff, Source.Ritualist, BuffClassification.Defensive, SkillImages.ResilientWeapon),
         new Buff("Splinter Weapon", SplinterWeaponBuff, Source.Ritualist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, SkillImages.SplinterWeapon),
+        //
         new Buff("Lingering Spirits", LingeringSpirits, Source.Ritualist, BuffClassification.Other, TraitImages.LingeringSpirits),
+        // Spirits
         new Buff("Detonate Anguish", DetonateAnguish, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Detonate Shelter", DetonateShelter, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
         new Buff("Detonate Sorrow", DetonateSorrow, Source.Ritualist, BuffClassification.Other, BuffImages.Unknown),
