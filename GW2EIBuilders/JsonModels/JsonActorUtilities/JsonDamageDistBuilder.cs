@@ -10,7 +10,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonDamageDistBuilder
 {
-    private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonDamageDist = new JsonDamageDist
         {
@@ -41,6 +41,10 @@ internal static class JsonDamageDistBuilder
             }
         }
         jsonDamageDist.Id = id;
+        if (downContributionPerSkillID != null && downContributionPerSkillID.TryGetValue(id, out var downContribution))
+        {
+            jsonDamageDist.DownContribution = downContribution;
+        }
         jsonDamageDist.Min = int.MaxValue;
         jsonDamageDist.Max = int.MinValue;
         foreach (HealthDamageEvent dmgEvt in dmList)
@@ -95,7 +99,7 @@ internal static class JsonDamageDistBuilder
         return jsonDamageDist;
     }
 
-    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, IReadOnlyDictionary<long, int>? downContributionPerSkillID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonDamageDist>(dlsByID.Count + brlsByID.Count);
 
@@ -106,7 +110,7 @@ internal static class JsonDamageDistBuilder
                 brls = [];
             }
 
-            res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillMap, buffMap));
+            res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, downContributionPerSkillID, log, skillMap, buffMap));
         }
 
         foreach (var (key, brls) in brlsByID)

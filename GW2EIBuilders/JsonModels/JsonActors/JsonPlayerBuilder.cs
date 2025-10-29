@@ -94,6 +94,7 @@ internal static class JsonPlayerBuilder
                 targetDamageDistList[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
                     player.GetJustActorDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                     player.GetJustActorBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                    player.GetOffensiveStats(target, log, phase.Start, phase.End).DownContributionPerSkillID,
                     log,
                     skillMap,
                     buffMap

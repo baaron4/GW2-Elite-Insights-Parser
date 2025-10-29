@@ -115,6 +115,7 @@ internal static class JsonActorBuilder
             res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
                 actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                actor.GetOffensiveStats(null, log, phase.Start, phase.End).DownContributionPerSkillID,
                 log,
                 skillMap,
                 buffMap
@@ -132,6 +133,7 @@ internal static class JsonActorBuilder
             res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
                 actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
                 actor.GetBreakbarDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList()),
+                null,
                 log,
                 skillMap,
                 buffMap
