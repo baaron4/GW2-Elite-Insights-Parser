@@ -226,5 +226,8 @@ public static class GW2Builds
     // https://wiki.guildwars2.com/wiki/Game_updates/2025-08-19
     public const ulong August2025VoEBeta = 186019;
 
+    // https://wiki.guildwars2.com/wiki/Game_updates/2025-10-28
+    public const ulong OctoberVoERelease = 190000;
+
     public const ulong EndOfLife = ulong.MaxValue;
 }
