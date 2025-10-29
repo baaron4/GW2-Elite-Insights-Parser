@@ -5072,7 +5072,7 @@ public static class SkillIDs
     public const long LegendaryEntityStanceSkill = 76610;
     public const long TaleOfTheHonorableRogue = 76611;
     public const long SymbioticShielding = 76613;
-    public const long ExitRadiantShroud = 76616;
+    public const long ExitRadiantForge = 76616;
     public const long LightningBlitzPetSequentialSkill = 76618;
     public const long Whirlwind = 76619;
     public const long ResoluteStanceSkill = 76621;
@@ -5228,7 +5228,7 @@ public static class SkillIDs
     public const long InnervatingAlloy = 77062;
     public const long TaleOfTheTorturedMastermind = 77066;
     public const long SolidStateSkill = 77069;
-    public const long EnterRadiantShroud = 77073;
+    public const long EnterRadiantForge = 77073;
     public const long ConflagrationPetSkill = 77074;
     public const long HarmoniousHarp = 77077;
     public const long PiercingStanceSkill = 77078;
@@ -5250,7 +5250,7 @@ public static class SkillIDs
     public const long PainfulBond = 77128;
     public const long RestorativeGlowSkill = 77136;
     public const long BeguilingHaze3 = 77141;
-    public const long RadiantShroud = 77142;
+    public const long RadiantForge = 77142;
     public const long PiercingStanceBuff = 77143;
     public const long Mayhem = 77148;
     public const long KryptisTurretBuff2 = 77150; // Buff applied by Antiquary to Kryptis Turret minion gadget

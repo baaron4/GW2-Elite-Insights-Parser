@@ -12,9 +12,9 @@ internal static class LuminaryHelper
 {
     internal static readonly List<InstantCastFinder> InstantCastFinder = 
     [
-        new BuffGainCastFinder(EnterRadiantShroud, RadiantShroud)
+        new BuffGainCastFinder(EnterRadiantForge, RadiantForge)
             .UsingBeforeWeaponSwap(),
-        new BuffLossCastFinder(ExitRadiantShroud, RadiantShroud)
+        new BuffLossCastFinder(ExitRadiantForge, RadiantForge)
             .UsingBeforeWeaponSwap(),
         // Stances
         new BuffGainCastFinder(StalwartStanceSkill, StalwartStanceBuff),
@@ -50,8 +50,9 @@ internal static class LuminaryHelper
         new BuffOnActorDamageModifier(Mod_RadiantArmamentsShieldLingering, RadiantArmamentsHammerLingering, "Radiant Armaments (Shield Lingering)", "-10% strike damage", DamageSource.Incoming, -10.0, DamageType.Strike, DamageType.All, Source.Luminary, ByPresence, BuffImages.RadiantArmamentsShield, DamageModifierMode.All),
     ];
 
-    internal static readonly IReadOnlyList<Buff> Buffs = 
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
+        new Buff("Radiant Forge", RadiantForge, Source.Luminary, BuffClassification.Other, BuffImages.RadiantForge),
         // Radiant Armaments
         new Buff("Radiant Armaments (Hammer)", RadiantArmamentsHammer, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
         new Buff("Radiant Armaments (Hammer Lingering)", RadiantArmamentsHammerLingering, Source.Luminary, BuffClassification.Other, BuffImages.RadiantArmamentsHammer),
