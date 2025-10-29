@@ -11,6 +11,7 @@ internal class DamageDistributionDto
     public static readonly DamageDistributionDto EmptyInstance = new();
 
     public long            ContributedDamage;
+    public long            ContributedDownContribution;
     public double          ContributedBreakbarDamage;
     public long            ContributedShieldDamage;
     public long            TotalDamage;
@@ -59,7 +60,7 @@ internal class DamageDistributionDto
         return (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted);
     }
 
-    private static DistributionItem GetDamageEventtoItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static DistributionItem GetDamageEventToItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, IReadOnlyDictionary<long, int>? downContributionPerSkillID, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totaldamage = 0,
             mindamage = int.MaxValue,
@@ -161,7 +162,8 @@ internal class DamageDistributionDto
             IsIndirectDamage ? 0 : minTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : maxTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : timeSpentCastingNoInterrupt,
-            IsIndirectDamage ? 0 : numberOfCastNoInterrupt
+            IsIndirectDamage ? 0 : numberOfCastNoInterrupt,
+            downContributionPerSkillID == null ? -1 : (downContributionPerSkillID.TryGetValue(skill.ID, out var contrib) ? contrib : 0)
         ];
     }
 
@@ -173,7 +175,7 @@ internal class DamageDistributionDto
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         foreach (var group in damageLogs.GroupBy(x => x.Skill))
         {
-            list.Add(GetDamageEventtoItem(group.Key, group.ToList(), [], breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+            list.Add(GetDamageEventToItem(group.Key, group.ToList(), [], breakbarLogsBySkill, null, usedSkills, usedBuffs, log.Buffs, phase));
         }
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
@@ -203,13 +205,14 @@ internal class DamageDistributionDto
                 0,
                 0,
                 0,
-                0
+                0,
+                -1
            ]);
         }
         return list;
     }
 
-    private static List<DistributionItem> BuildDamageDistributionBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<DistributionItem> BuildDamageDistributionBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, IReadOnlyDictionary<long, int>? downContributionPerSkillID, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
         var list = new List<DistributionItem>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -217,7 +220,7 @@ internal class DamageDistributionDto
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         foreach (var group in damageLogs.GroupBy(x => x.Skill))
         {
-            list.Add(GetDamageEventtoItem(group.Key, group.ToList(), castLogsBySkill, breakbarLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+            list.Add(GetDamageEventToItem(group.Key, group.ToList(), castLogsBySkill, breakbarLogsBySkill, downContributionPerSkillID, usedSkills, usedBuffs, log.Buffs, phase));
         }
         // non damaging
         foreach (var pair in castLogsBySkill)
@@ -254,7 +257,8 @@ internal class DamageDistributionDto
                 minTimeSpentCastingNoInterrupt,
                 maxTimeSpentCastingNoInterrupt,
                 timeSpentCastingNoInterrupt,
-                numberOfCastNoInterrupt
+                numberOfCastNoInterrupt,
+                downContributionPerSkillID == null ? -1 : 0
                 ]);
         }
         // breakbar only
@@ -286,7 +290,8 @@ internal class DamageDistributionDto
                 0,
                 0,
                 0,
-                0
+                0,
+                downContributionPerSkillID == null ? -1 : 0
            ]);
         }
         return list;
@@ -304,10 +309,11 @@ internal class DamageDistributionDto
             ContributedDamage = dps.ActorDamage,
             ContributedShieldDamage = dps.ActorBarrierDamage,
             ContributedBreakbarDamage = dps.ActorBreakbarDamage,
+            ContributedDownContribution = actor.GetOffensiveStats(target, log, phase.Start, phase.End).DownContribution,
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
             TotalCasting = actor.GetGameplayStats(log, phase.Start, phase.End).SkillCastTime,
-            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, breakbarLogs, usedSkills, usedBuffs, phase)
+            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, breakbarLogs, actor.GetOffensiveStats(target, log, phase.Start, phase.End).DownContributionPerSkillID, usedSkills, usedBuffs, phase)
         };
         return dto;
     }
@@ -342,7 +348,7 @@ internal class DamageDistributionDto
             TotalDamage = dps.Damage,
             TotalBreakbarDamage = dps.BreakbarDamage,
             TotalCasting = minions.GetIntersectingCastTime(log, phase.Start, phase.End),
-            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, brkDamageLogs, usedSkills, usedBuffs, phase)
+            Distribution = BuildDamageDistributionBodyData(log, casting, damageLogs, brkDamageLogs, null, usedSkills, usedBuffs, phase)
         };
         return dto;
     }

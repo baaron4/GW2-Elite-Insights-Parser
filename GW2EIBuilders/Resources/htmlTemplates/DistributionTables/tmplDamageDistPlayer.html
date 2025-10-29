@@ -65,6 +65,7 @@
                 }
                 const dist = {
                     contributedDamage: 0,
+                    contributedDownContribution: 0,
                     contributedBreakbarDamage: 0,
                     contributedShieldDamage: 0,
                     totalDamage: 0,
@@ -80,6 +81,7 @@
                         this.player.details.minions[this.distmode].dmgDistributionsTargets[this.phaseindex][targetid];
                     dist.contributedDamage += targetDist.contributedDamage;
                     dist.contributedBreakbarDamage += targetDist.contributedBreakbarDamage;
+                    dist.contributedDownContribution += targetDist.contributedDownContribution;
                     dist.totalDamage += targetDist.totalDamage;
                     dist.totalBreakbarDamage += targetDist.totalBreakbarDamage;
                     dist.contributedShieldDamage += targetDist.contributedShieldDamage;
@@ -115,6 +117,7 @@
                             // skip 19
                             // skip 20
                             // skip 21
+                            row[22] += targetDistribution[22];   
                         } else {
                             rows.set(targetDistribution[1], targetDistribution.slice(0));
                         }
