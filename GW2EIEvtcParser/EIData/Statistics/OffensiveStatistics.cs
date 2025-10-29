@@ -50,6 +50,7 @@ public class OffensiveStatistics
     public readonly int AgainstDownedDamage;
 
     public readonly int DownContribution;
+    public readonly IReadOnlyDictionary<long, int> DownContributionPerSkillID;
     public readonly int AppliedCrowdControlDownContribution;
     public readonly double AppliedCrowdControlDurationDownContribution;
 
@@ -60,6 +61,8 @@ public class OffensiveStatistics
     internal OffensiveStatistics(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         var dls = actor.GetDamageEvents(target, log, start, end);
+        var downContributionPerSkillID = new Dictionary<long, int>();
+        DownContributionPerSkillID = downContributionPerSkillID;
         foreach (HealthDamageEvent dl in dls)
         {
             if (dl.From.Is(actor.AgentItem))
@@ -93,6 +96,14 @@ public class OffensiveStatistics
                         if (dl.To.IsDownedBeforeNext90(log, dl.Time))
                         {
                             DownContribution += dl.HealthDamage;
+                            if (downContributionPerSkillID.TryGetValue(dl.SkillID, out var value))
+                            {
+                                downContributionPerSkillID[dl.SkillID] = value + dl.HealthDamage;
+                            } 
+                            else
+                            {
+                                downContributionPerSkillID[dl.SkillID] = dl.HealthDamage;
+                            }
                         }
                     }
                     if (dl.ConditionDamageBased(log))
